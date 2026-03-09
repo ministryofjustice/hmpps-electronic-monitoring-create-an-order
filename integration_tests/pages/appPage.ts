@@ -5,11 +5,14 @@ import PageHeaderComponent from './components/PageHeaderComponent'
 export default class AppPage extends Page {
   protected helpText
 
+  protected section
+
   header = new PageHeaderComponent()
 
-  constructor(title: string, uri?: string | RegExp, subtitle?: string, helpText?: string) {
+  constructor(title: string, uri?: string | RegExp, subtitle?: string, helpText?: string, section?: string) {
     super(title, uri, subtitle)
     this.helpText = helpText
+    this.section = section
   }
 
   get backButton(): PageElement {
@@ -32,5 +35,9 @@ export default class AppPage extends Page {
     super.checkOnPage()
 
     this.header.checkHasHeader()
+
+    if (this.section) {
+      cy.get('.govuk-caption-l', { log: false }).contains(this.section)
+    }
   }
 }

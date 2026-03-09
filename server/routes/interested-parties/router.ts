@@ -4,6 +4,7 @@ import ResponsibleOfficerController from './responsible-officer/controller'
 import ProbationDeliveryUnitController from './pdu/controller'
 import ResponsibleOrganisationController from './responsible-organisation/controller'
 import { Services } from '../../services'
+import NationalSecurityDirectorateController from './national-security-directorate/controller'
 
 const createInterestedPartiesRouter = (
   services: Pick<
@@ -24,6 +25,8 @@ const createInterestedPartiesRouter = (
   )
   const probationDeliveryUnitController = new ProbationDeliveryUnitController(services.probationDeliveryUnitService)
 
+  const nationalSecurityDirectorateController = new NationalSecurityDirectorateController()
+
   router.get('/notifying-organisation', notifyingOrganisationController.view)
   router.post('/notifying-organisation', notifyingOrganisationController.update)
 
@@ -36,6 +39,8 @@ const createInterestedPartiesRouter = (
   router.get('/probation-delivery-unit', probationDeliveryUnitController.view)
   router.post('/probation-delivery-unit', probationDeliveryUnitController.update)
 
+  router.get('/national-security-directorate', nationalSecurityDirectorateController.view)
+  router.post('/national-security-directorate', nationalSecurityDirectorateController.update)
   return router
 }
 
