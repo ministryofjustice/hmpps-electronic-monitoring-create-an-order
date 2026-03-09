@@ -326,6 +326,34 @@ context('Search', () => {
 
           cy.get('.govuk-table__cell').contains('Youth').should('exist')
         })
+
+        it('should not show active caseload info in search if probation', () => {
+          cy.task('reset')
+          cy.task('stubSignIn', {
+            name: 'john smith',
+            roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+            stubCohort: false,
+            userId: '123456781',
+          })
+          cy.task('stubCemoRequest', {
+            httpStatus: 200,
+            method: 'GET',
+            subPath: 'user-cohort',
+            response: { cohort: 'PROBATION', activeCaseload: 'Probation Test' },
+          })
+
+          cy.signIn()
+
+          cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [mockOrder] })
+          page = Page.visit(SearchPage)
+
+          page.searchBox.type('Bob Builder')
+          page.searchButton.click()
+
+          cy.get('body').should('not.contain', 'Youth')
+          cy.get('body').should('not.contain', 'Showing:')
+          cy.get('body').find('a').should('not.contain', 'Change location')
+        })
       })
     })
 
