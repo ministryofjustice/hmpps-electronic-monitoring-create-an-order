@@ -18,6 +18,7 @@ const OffenceFormModel = z.object({
 
 export const OffenceFormValidator = (dateRequired: boolean | null) =>
   z.object({
+    id: z.string().optional(),
     offenceType: z.string().min(1, validationErrors.offence.offenceTypeRequired),
     offenceDate: dateRequired ? DateInputModel(validationErrors.offence.offenceDate) : z.string().optional(),
   })

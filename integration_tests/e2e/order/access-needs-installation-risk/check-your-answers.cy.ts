@@ -4,6 +4,7 @@ import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/instal
 import OrderTasksPage from '../../../pages/order/summary'
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import paths from '../../../../server/constants/paths'
+import OffencePage from './offences/offence/offencePage'
 
 const mockOrderId = uuidv4()
 
@@ -626,7 +627,9 @@ context('installation and risk - check your answers', () => {
       ])
     })
 
-    it('change links to correct page for non court', () => {
+    it('offence type change links to correct page for non court with offence selected', () => {
+      const mockOffenceId = 'mock-offence-id-123'
+
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
         id: mockOrderId,
@@ -643,8 +646,8 @@ context('installation and risk - check your answers', () => {
           },
           offences: [
             {
+              id: mockOffenceId,
               offenceType: 'SEXUAL_OFFENCES',
-              offenceDate: new Date(2025, 1, 1),
             },
           ],
           offenceAdditionalDetails: {
@@ -659,7 +662,16 @@ context('installation and risk - check your answers', () => {
       page.changeLinks.should('exist')
       page
         .changeLinkByQuestion('What type of offence did the device wearer commit?')
-        .should('have.attr', 'href', paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM.replace(':orderId', mockOrderId))
+        .should(
+          'have.attr',
+          'href',
+          paths.INSTALLATION_AND_RISK.OFFENCE.replace(':orderId', mockOrderId).replace(':offenceId', mockOffenceId),
+        )
+        .click()
+
+      const offencePage = Page.verifyOnPage(OffencePage)
+
+      offencePage.form.offenceTypeField.shouldHaveValue('Sexual offences')
     })
   })
 })
