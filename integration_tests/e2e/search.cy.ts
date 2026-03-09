@@ -218,7 +218,7 @@ context('Search', () => {
         it('should show correct headings', () => {
           page.ordersList.contains('Name')
           page.ordersList.contains('Date of birth')
-          page.ordersList.contains('Youth')
+          page.ordersList.should('not.contain', 'Youth')
           page.ordersList.contains('Personal ID number')
           page.ordersList.contains('Start date')
           page.ordersList.contains('End date')
@@ -242,11 +242,11 @@ context('Search', () => {
         it('should show correct headings', () => {
           page.ordersList.contains('Name')
           page.ordersList.contains('Date of birth')
-          page.ordersList.contains('Youth')
           page.ordersList.contains('Personal ID number')
           page.ordersList.contains('Start date')
           page.ordersList.contains('End date')
           page.ordersList.contains('Last updated')
+          page.ordersList.contains('Youth').should('not.exist')
         })
 
         it('should show correct order details', () => {
@@ -255,7 +255,6 @@ context('Search', () => {
           page.ordersList.contains('ccrn')
           page.ordersList.contains('Glossop')
           page.ordersList.contains('20/11/2000')
-          cy.get('.govuk-table__cell').contains('Youth').should('not.exist')
         })
       })
 
@@ -304,7 +303,7 @@ context('Search', () => {
           cy.get('.govuk-table__cell').contains('Youth').should('exist')
         })
 
-        it('should show youth status for YOI prison', () => {
+        it('should show youth status for YOI', () => {
           const yoiMockOrder = {
             ...youthMockOrder,
             interestedParties: {
@@ -321,25 +320,6 @@ context('Search', () => {
           page.searchButton.click()
 
           cy.get('.govuk-table__cell').contains('Youth').should('exist')
-        })
-
-        it('should not show youth status for non-YOI prison', () => {
-          const yoiMockOrder = {
-            ...youthMockOrder,
-            interestedParties: {
-              ...youthMockOrder.interestedParties,
-              notifyingOrganisation: 'PRISON',
-              notifyingOrganisationName: 'BEDFORD_PRISON',
-            },
-          }
-
-          cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [yoiMockOrder] })
-          page = Page.visit(SearchPage)
-
-          page.searchBox.type('Bob Builder')
-          page.searchButton.click()
-
-          cy.get('.govuk-table__cell').contains('Youth').should('not.exist')
         })
       })
     })

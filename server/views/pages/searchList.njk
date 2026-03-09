@@ -82,6 +82,14 @@
     </div>
 
   {% elif orders.length > 0 %}
+
+    {% set showYouth = false %}
+    {% for order in orders %}
+      {% if order.isYouthRelatedOrg %}
+        {% set showYouth = true %}
+      {% endif %}
+    {% endfor %}
+
     {% set tableRows = [] %}
     {% for order in orders %}
 
@@ -92,66 +100,51 @@
       {% endset %}
 
       {% set row = [
-        {
-          html: name
-        },
-        {
-          text: order.dob
-        },
-        {
-          text: order.youth
-        },
-        {
-          html: order.pins | join('<\br>')
-        }, 
-        {
-          text: order.location
-        }, 
-        {
-          text: order.startDate
-        }, 
-        {
-          text: order.endDate
-        }, 
-        {
-          text: order.lastUpdated
-        }
+        { html: name },
+        { text: order.dob }
       ] %}
+
+      {% if showYouth %}
+        {% set row = (row.push({ text: order.youth }), row) %}
+      {% endif %}
+
+      {% set row = (row.push(
+        { html: order.pins | join('<\br>') },
+        { text: order.location },
+        { text: order.startDate },
+        { text: order.endDate },
+        { text: order.lastUpdated }
+      ), row) %}
 
       {% set tableRows = (tableRows.push(row), tableRows) %}
     {% endfor %}
 
+    {% set normalHeaders = [
+      { text: "Name" },
+      { text: "Date of birth" },
+      { text: "Personal ID number" },
+      { text: "Town or city" },
+      { text: "Start date" },
+      { text: "End date" },
+      { text: "Last updated" }
+    ] %}
+
+    {% set youthHeaders = [
+      { text: "Name" },
+      { text: "Date of birth" },
+      { text: "Youth" },
+      { text: "Personal ID number" },
+      { text: "Town or city" },
+      { text: "Start date" },
+      { text: "End date" },
+      { text: "Last updated" }
+    ] %}
+
     {{ govukTable({
-    firstCellIsHeader: false,
-    head: [
-      {
-        text: "Name"
-      },
-      {
-        text: "Date of birth"
-      },
-      {
-        text: "Youth"
-      },
-      {
-        text: "Personal ID number"
-      },
-      {
-        text: "Town or city"
-      },
- 
-      {
-        text: "Start date"
-      },
-      {
-        text: "End date"
-      }, 
-      {
-        text: "Last updated"
-      }
-    ],
-    rows: tableRows
-  }) }}
+      firstCellIsHeader: false,
+      head: youthHeaders if showYouth else normalHeaders,
+      rows: tableRows
+    }) }}
 
   {% else %}
     {{ govukDetails({

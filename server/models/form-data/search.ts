@@ -44,17 +44,18 @@ const formatDateTime = (dateToFormat: string): string => {
   return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
 }
 
-const getYouthStatus = (order: Order): string => {
-  const { notifyingOrganisation: notifyingOrg, notifyingOrganisationName: notifyingOrgName } =
-    order.interestedParties || {}
+const isYouthRelatedOrg = (order: Order): boolean => {
+  const { notifyingOrganisation: org, notifyingOrganisationName: orgName } = order.interestedParties || {}
 
-  const isYouthCustody = notifyingOrg === 'YOUTH_CUSTODY_SERVICE'
-  const isYoungOffenderInst =
-    notifyingOrg === 'PRISON' &&
-    notifyingOrgName?.endsWith('YOUNG_OFFENDER_INSTITUTION') &&
-    order.deviceWearer?.adultAtTimeOfInstallation === false
+  const isYCS = org === 'YOUTH_CUSTODY_SERVICE'
+  const isYOI = org === 'PRISON' && orgName?.endsWith('YOUNG_OFFENDER_INSTITUTION')
 
-  return isYouthCustody || isYoungOffenderInst ? 'Youth' : ''
+  return !!(isYCS || isYOI)
+}
+
+export const getYouthStatus = (order: Order): string => {
+  const isMinor = order.deviceWearer?.adultAtTimeOfInstallation === false
+  return isYouthRelatedOrg(order) && isMinor ? 'Youth' : ''
 }
 
 const getIdList = (order: Order) => {
@@ -79,6 +80,7 @@ const createOrderItem = (order: Order) => {
     href: paths.ORDER.SUMMARY.replace(':orderId', order.id),
     dob: order.deviceWearer.dateOfBirth ? formatDateTime(order.deviceWearer.dateOfBirth) : '',
     youth: getYouthStatus(order),
+    isYouthRelatedOrg: isYouthRelatedOrg(order),
     pins: getIdList(order),
     location: currentAddress?.addressLine3 ?? '',
     startDate: order.monitoringConditions?.startDate ? formatDateTime(order.monitoringConditions?.startDate) : '',
