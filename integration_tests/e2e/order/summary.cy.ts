@@ -85,7 +85,7 @@ context('Order Summary', () => {
       Page.visit(OrderTasksPage, { orderId: mockOrderId })
       cy.get('.govuk-task-list__item')
         .first()
-        .contains('.govuk-task-list__name-and-hint', 'About the notifying and responsible organisation')
+        .contains('.govuk-task-list__name-and-hint', 'About the Notifying and Responsible Organisations')
         .should('exist')
     })
 

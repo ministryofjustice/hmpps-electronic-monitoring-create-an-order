@@ -78,6 +78,6 @@ export default class FormRadiosComponent {
   }
 
   shouldHaveHint(message: string): void {
-    this.element.siblings('.govuk-hint').contains(message).should('exist')
+    this.element.find('.govuk-hint').contains(message).should('exist')
   }
 }

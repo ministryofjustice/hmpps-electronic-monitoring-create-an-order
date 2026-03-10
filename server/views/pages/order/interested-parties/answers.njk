@@ -1,9 +1,22 @@
+ {% from "govuk/components/details/macro.njk" import govukDetails %}
+
  <h2 class="govuk-heading-m">Organisation details</h2>
 
 {{ govukSummaryList({
   classes: "govuk-!-margin-bottom-9",
   rows: interestedParties
 }) }}
+
+{% if not containsResponsibleOrgDetails %}
+  {% call govukDetails({
+    summaryText: "How do I change the Responsible Officer or Responsible Organisation?"
+  }) %}
+    Use the service request portal if you have access.
+    </br>
+    </br>
+    If you don't have access email <a href="mailto:EMSEnforcement@ems.co.uk">EMSEnforcement@ems.co.uk</a>.
+  {% endcall %}
+{% endif%}
 
 {% if probationDeliveryUnit | length > 0%}
   <h2 class="govuk-heading-m">Probation delivery unit</h2>

@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid'
 import ResponsibleOrganisationPage from './responsibleOrganisationPage'
 import Page from '../../../../pages/page'
-import ProbationDeliveryUnitPage from '../probation-delivery-unit/probationDeliveryUnitPage'
 import InterestedPartiesCheckYourAnswersPage from '../check-your-answers/interestedPartiesCheckYourAnswersPage'
+import NationalSecurityDirectoratePage from '../national-security-directorate/nationalSecurityDirectoratePage'
 
 const mockOrderId = uuidv4()
 context('order type', () => {
@@ -49,7 +49,7 @@ context('order type', () => {
         responsibleOrganisationEmail: 'a@b.com',
       },
     }).should('be.true')
-    Page.verifyOnPage(ProbationDeliveryUnitPage)
+    Page.verifyOnPage(NationalSecurityDirectoratePage)
   })
 
   it('Should able to continue without responsible organisation email', () => {
@@ -69,7 +69,7 @@ context('order type', () => {
         responsibleOrganisationEmail: '',
       },
     }).should('be.true')
-    Page.verifyOnPage(ProbationDeliveryUnitPage)
+    Page.verifyOnPage(NationalSecurityDirectoratePage)
   })
 
   it('if responsible organisation is not probation routes to CYA page', () => {

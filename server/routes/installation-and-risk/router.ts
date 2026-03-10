@@ -46,6 +46,7 @@ const createInstallationAndRiskRouter = (
   router.get('/offence', offenceController.view)
   router.get('/offence/:offenceId', offenceController.view)
   router.post('/offence', offenceController.update)
+  router.post('/offence/:offenceId', offenceController.update)
   router.get('/offence-other-info', offenceOtherInfoController.view)
   router.post('/offence-other-info', offenceOtherInfoController.update)
   router.get('/offence-list', offenceListController.view)
