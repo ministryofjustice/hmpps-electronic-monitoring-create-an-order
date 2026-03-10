@@ -4,7 +4,7 @@ import I18n from '../../../types/i18n'
 import { ReferenceCatalogDDv6 } from '../../../types/i18n/reference'
 import { AnswerOptions, createAnswer } from '../../../utils/checkYourAnswers'
 import isOrderDataDictionarySameOrAbove from '../../../utils/dataDictionaryVersionComparer'
-import { lookup } from '../../../utils/utils'
+import { formatDateTime, lookup } from '../../../utils/utils'
 
 const getNotifyingOrganisationNameAnswer = (order: Order, content: I18n, uri: string, answerOpts: AnswerOptions) => {
   const notifyingOrganisation = order.interestedParties?.notifyingOrganisation
@@ -172,7 +172,13 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts:
     ),
   ]
 
-  if (order.interestedParties?.responsibleOfficerFirstName) {
+  const startDate = order.monitoringConditions.startDate
+    ? new Date(order.monitoringConditions.startDate)
+    : new Date(1900, 0, 0)
+
+  const isStartDateInPast = startDate < new Date()
+
+  if (order.interestedParties?.responsibleOfficerFirstName && !(isStartDateInPast && order.status === 'SUBMITTED')) {
     answers.push(
       ...[
         createAnswer(
@@ -197,7 +203,7 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts:
     )
   }
 
-  if (order.interestedParties?.responsibleOrganisation) {
+  if (order.interestedParties?.responsibleOrganisation && !(isStartDateInPast && order.status === 'SUBMITTED')) {
     answers.push(
       ...[
         createAnswer(
@@ -225,9 +231,17 @@ const createProbationDeliveryUnitAnswer = (order: Order, content: I18n, answerOp
 
   const { questions } = content.pages.probationDeliveryUnit
   const answers = []
+
+  const startDate = order.monitoringConditions.startDate
+    ? new Date(order.monitoringConditions.startDate)
+    : new Date(1900, 0, 0)
+
+  const isStartDateInPast = startDate < new Date()
+
   if (
     isOrderDataDictionarySameOrAbove('DDV5', order) &&
-    order.interestedParties?.responsibleOrganisation === 'PROBATION'
+    order.interestedParties?.responsibleOrganisation === 'PROBATION' &&
+    !(isStartDateInPast && order.status === 'SUBMITTED')
   ) {
     answers.push(
       createAnswer(
@@ -245,9 +259,17 @@ const construct = (order: Order, content: I18n) => {
   const answerOpts = {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
   }
+
+  const interestedParties = createInterestedPartiesAnswers(order, content, answerOpts)
+  const probationDeliveryUnit = createProbationDeliveryUnitAnswer(order, content, answerOpts)
+
   return {
-    interestedParties: createInterestedPartiesAnswers(order, content, answerOpts),
-    probationDeliveryUnit: createProbationDeliveryUnitAnswer(order, content, answerOpts),
+    interestedParties,
+    probationDeliveryUnit,
+    containsResponsibleOrgDetails: interestedParties.some(
+      item => item.key?.text === "What is the Responsible Officer's organisation?",
+    ),
+    submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
   }
 }
 
