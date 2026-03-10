@@ -5,7 +5,7 @@ const nationalSecurityDirectoratePageConetent: NationalSecurityDirectoratePageCo
   legend: '',
   questions: {
     nationalSecurityDirectorate: {
-      text: 'Is the device weearer being managed by the Nation Security Directorate(NSD)?',
+      text: 'Is the device wearer being managed by the Nation Security Directorate (NSD)?',
       hint: 'The National Security Directorate manage Critical Public Protection cases, Serious Organised Crime cases, those convicted of Terrorist Offences, or assessed as Terrorist Connected and Terrorist Risk cases',
     },
   },
