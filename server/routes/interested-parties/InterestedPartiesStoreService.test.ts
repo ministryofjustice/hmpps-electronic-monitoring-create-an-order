@@ -40,7 +40,7 @@ describe('store service', () => {
       oldData = await service.getInterestedParties(mockOrder)
     })
 
-    it('notifyingOrganisation', async () => {
+    it('should clear responsible officer details if notifying organisation is court', async () => {
       await service.updateNotifyingOrganisation(mockOrder, {
         notifyingOrganisation: 'CROWN_COURT',
         notifyingOrganisationName: 'LEEDS_CROWN_COURT',
@@ -56,9 +56,9 @@ describe('store service', () => {
         responsibleOfficerFirstName: undefined,
         responsibleOfficerLastName: undefined,
         responsibleOfficerEmail: undefined,
-        responsibleOrganisation: undefined,
-        responsibleOrganisationRegion: undefined,
-        responsibleOrganisationEmail: undefined,
+        responsibleOrganisation: 'PROBATION',
+        responsibleOrganisationRegion: 'CHESHIRE',
+        responsibleOrganisationEmail: 'probation@b.com',
       }
 
       expect(newData).toEqual(expectedData)
