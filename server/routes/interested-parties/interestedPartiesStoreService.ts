@@ -1,6 +1,7 @@
 import InterestedPartiesModel, { InterestedParties } from './model'
 import { Order } from '../../models/Order'
 import Store from '../store/store'
+import { notifyingOrganisationCourts } from '../../models/NotifyingOrganisation'
 
 export default class InterestedPartiesStoreService {
   constructor(private readonly dataStore: Store) {}
@@ -53,14 +54,14 @@ export default class InterestedPartiesStoreService {
     data: Pick<InterestedParties, 'notifyingOrganisation' | 'notifyingOrganisationName' | 'notifyingOrganisationEmail'>,
   ) {
     let interestedParties = await this.getInterestedParties(order)
-    if (data.notifyingOrganisation && interestedParties.notifyingOrganisation !== data.notifyingOrganisation) {
-      interestedParties = this.getClearedData(interestedParties, 'notifyingOrganisation')
+
+    if ((notifyingOrganisationCourts as readonly string[]).indexOf(data.notifyingOrganisation!) > -1) {
+      interestedParties = this.getClearedData(interestedParties, 'notifyingOrganisation', 'responsibleOrganisation')
     }
 
     interestedParties.notifyingOrganisation = data.notifyingOrganisation
     interestedParties.notifyingOrganisationName = data.notifyingOrganisationName
     interestedParties.notifyingOrganisationEmail = data.notifyingOrganisationEmail
-
     await this.updateInterestedParties(order, interestedParties)
   }
 
@@ -96,10 +97,15 @@ export default class InterestedPartiesStoreService {
     await this.updateInterestedParties(order, interestedParties)
   }
 
-  private getClearedData(currentData: InterestedParties, updatedField: keyof InterestedParties) {
+  private getClearedData(
+    currentData: InterestedParties,
+    updatedField: keyof InterestedParties,
+    keepField?: keyof InterestedParties,
+  ) {
     const updatedIndex = this.FIELD_HIERARCHY.indexOf(updatedField)
 
-    const fieldsToClear = this.FIELD_HIERARCHY.slice(updatedIndex + 1)
+    const keepIndex = keepField ? this.FIELD_HIERARCHY.indexOf(keepField) : this.FIELD_HIERARCHY.length - 1
+    const fieldsToClear = this.FIELD_HIERARCHY.slice(updatedIndex + 1, keepIndex)
 
     const newData = { ...currentData }
 

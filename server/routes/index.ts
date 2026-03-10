@@ -42,6 +42,7 @@ import createInstallationAndRiskRouter from './installation-and-risk/router'
 import createAttachmentRouter from './attachments/router'
 import createInterestedPartiesRouter from './interested-parties/router'
 import InterestedPartiesCheckYourAnswersController from './interested-parties/check-your-answers/controller'
+import SpecialOrderController from './special-order/controller'
 
 export default function routes({
   alcoholMonitoringService,
@@ -201,6 +202,7 @@ export default function routes({
   const isRejectionController = new IsRejectionController(isRejectionService)
 
   const serviceRequestTypeController = new ServiceRequestTypeController(serviceRequestTypeService)
+  const specialOrderController = new SpecialOrderController()
   router.param('orderId', populateOrder(orderService))
 
   get('/', orderSearchController.list)
@@ -228,7 +230,8 @@ export default function routes({
   get(paths.ORDER.DOWNLOAD_FMS_DW_REQUEST, receiptController.downloadFmsDeviceWearerRequest)
   get(paths.ORDER.DOWNLOAD_FMS_MO_REQUEST, receiptController.downloadFmsMonitoringOrderRequest)
   get(paths.ORDER.RECEIPT_DOWNLOAD, receiptController.downloadReceipt)
-
+  get(paths.ORDER.SPECIAL_ORDER, specialOrderController.view)
+  post(paths.ORDER.SPECIAL_ORDER, specialOrderController.update)
   /**
    * ABOUT THE DEVICE WEARER
    */

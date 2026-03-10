@@ -157,6 +157,9 @@ interface ValidationErrors {
   postcodeLookup: {
     postcodeRequired: string
   }
+  nationalSecurityDirectorate: {
+    nationalSecurityDirectorateRequired: string
+  }
 }
 
 export interface DateErrorMessages {
@@ -432,6 +435,9 @@ const validationErrors: ValidationErrors = {
   },
   postcodeLookup: {
     postcodeRequired: 'Enter the postcode',
+  },
+  nationalSecurityDirectorate: {
+    nationalSecurityDirectorateRequired: 'Select yes if the device wearer is being managed by the NSD',
   },
 }
 

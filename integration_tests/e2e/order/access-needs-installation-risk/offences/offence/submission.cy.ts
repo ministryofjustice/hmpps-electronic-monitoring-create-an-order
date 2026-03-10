@@ -3,6 +3,7 @@ import Page from '../../../../../pages/page'
 import OffencePage from './offencePage'
 import OffenceListPage from '../offence-list/offenceListPage'
 import OffenceOtherInfoPage from '../offence-other-info/offenceOtherInfoPage'
+import SpecialOrderPage from '../../../special-order/specialOrderPage'
 
 const apiPath = '/offence'
 const mockOrderId = uuidv4()
@@ -87,6 +88,15 @@ context('Offence submissions', () => {
         },
       })
       cy.signIn()
+    })
+
+    it('Should redirect to special order hard stop page if Terrorism offence is selected', () => {
+      const page = Page.visit(OffencePage, { orderId: mockOrderId })
+      page.form.fillInWith({
+        offenceType: 'Terrorism offence',
+      })
+      page.form.saveAndContinueButton.click()
+      Page.verifyOnPage(SpecialOrderPage, { orderId: mockOrderId }, undefined, 'Access needs and installation risk')
     })
 
     it('Submitting valid offence', () => {
