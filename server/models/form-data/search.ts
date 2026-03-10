@@ -44,13 +44,9 @@ const formatDateTime = (dateToFormat: string): string => {
 }
 
 const getYouthStatus = (order: Order): string => {
-  const { notifyingOrganisation: org, notifyingOrganisationName: orgName } = order.interestedParties || {}
-
-  const isYCS = org === 'YOUTH_CUSTODY_SERVICE'
-  const isYOI = org === 'PRISON' && orgName?.endsWith('YOUNG_OFFENDER_INSTITUTION')
   const isMinor = order.deviceWearer?.adultAtTimeOfInstallation === false
 
-  return !!(isYCS || isYOI) && isMinor ? 'Youth' : ''
+  return isMinor ? 'Youth' : ''
 }
 
 const getIdList = (order: Order) => {

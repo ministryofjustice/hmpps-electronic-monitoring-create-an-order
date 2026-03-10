@@ -11,7 +11,11 @@
 </ul>
 {% endset %}
 
-{% set showYouth = user.cohort.cohort == 'PRISON' %}
+{% set showYouth = false %}
+
+{% if user.cohort.cohort == 'PRISON' %}
+  {% set showYouth = true %}
+{% endif %}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">

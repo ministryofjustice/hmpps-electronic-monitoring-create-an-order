@@ -229,6 +229,7 @@ context('Search', () => {
           page.ordersList.contains('some id')
           page.ordersList.contains('Glossop')
           page.ordersList.contains('20/11/2000')
+          page.ordersList.find('tbody td').should('not.contain', 'Youth')
         })
       })
 
@@ -253,6 +254,7 @@ context('Search', () => {
           page.ordersList.contains('ccrn')
           page.ordersList.contains('Glossop')
           page.ordersList.contains('20/11/2000')
+          page.ordersList.find('tbody td').should('not.contain', 'Youth')
         })
       })
 
@@ -261,18 +263,9 @@ context('Search', () => {
           ...mockOrder,
           deviceWearer: {
             ...mockOrder.deviceWearer,
-            dateOfBirth: new Date(2010, 10, 20).toISOString(),
+            firstName: 'Bianca',
+            dateOfBirth: new Date(2016, 10, 20).toISOString(),
             adultAtTimeOfInstallation: false,
-          },
-          interestedParties: {
-            notifyingOrganisation: '',
-            notifyingOrganisationName: '',
-            notifyingOrganisationEmail: 'test@test',
-            responsibleOfficerName: 'John Smith',
-            responsibleOfficerPhoneNumber: '01234567890',
-            responsibleOrganisation: 'HOME_OFFICE',
-            responsibleOrganisationEmail: 'test@test.com',
-            responsibleOrganisationRegion: '',
           },
           deviceWearerResponsibleAdult: {
             relationship: 'other',
@@ -282,19 +275,11 @@ context('Search', () => {
           },
         }
 
-        it('should show youth status for YCS', () => {
-          const ycsMockOrder = {
-            ...youthMockOrder,
-            interestedParties: {
-              ...youthMockOrder.interestedParties,
-              notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE',
-            },
-          }
-
-          cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [ycsMockOrder] })
+        it('should show youth status and caseload info', () => {
+          cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [youthMockOrder] })
           page = Page.visit(SearchPage)
 
-          page.searchBox.type('Bob Builder')
+          page.searchBox.type('Bianca Builder')
           page.searchButton.click()
 
           cy.contains('Showing: HMP ABC').should('be.visible')
@@ -305,29 +290,10 @@ context('Search', () => {
           )
 
           page.ordersList.contains('Youth')
-          cy.get('.govuk-table__cell').contains('Youth').should('exist')
+          page.ordersList.find('tbody td').should('contain', 'Youth')
         })
 
-        it('should show youth status for YOI', () => {
-          const yoiMockOrder = {
-            ...youthMockOrder,
-            interestedParties: {
-              ...youthMockOrder.interestedParties,
-              notifyingOrganisation: 'PRISON',
-              notifyingOrganisationName: 'WERRINGTON_YOUNG_OFFENDER_INSTITUTION',
-            },
-          }
-
-          cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [yoiMockOrder] })
-          page = Page.visit(SearchPage)
-
-          page.searchBox.type('Bob Builder')
-          page.searchButton.click()
-
-          cy.get('.govuk-table__cell').contains('Youth').should('exist')
-        })
-
-        it('should not show active caseload info in search if probation', () => {
+        it('should not show youth status and caseload info if probation', () => {
           cy.task('reset')
           cy.task('stubSignIn', {
             name: 'john smith',
@@ -344,7 +310,7 @@ context('Search', () => {
 
           cy.signIn()
 
-          cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [mockOrder] })
+          cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [youthMockOrder] })
           page = Page.visit(SearchPage)
 
           page.searchBox.type('Bob Builder')
