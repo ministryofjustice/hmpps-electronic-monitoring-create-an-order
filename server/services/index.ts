@@ -48,6 +48,7 @@ import DetailsOfInstallationService from '../routes/installation-and-risk/detail
 import OffenceOtherInfoService from '../routes/installation-and-risk/offence-other-info/service'
 import InterestedPartiesStoreService from '../routes/interested-parties/interestedPartiesStoreService'
 import UpdateInterestedPartiesService from '../routes/interested-parties/interestedPartiesService'
+import PostcodeService from '../routes/postcode-lookup/postcodeService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -100,6 +101,8 @@ export const services = () => {
 
   const updateInterestedPartiesService = new UpdateInterestedPartiesService(cemoApiClient)
 
+  const postcodeService = new PostcodeService()
+
   const userCohortService = new UserCohortService(
     cemoApiClient,
     config.redis.enabled
@@ -150,6 +153,7 @@ export const services = () => {
     detailsOfInstallationService,
     interestedPartiesStoreService,
     updateInterestedPartiesService,
+    postcodeService,
   }
 }
 

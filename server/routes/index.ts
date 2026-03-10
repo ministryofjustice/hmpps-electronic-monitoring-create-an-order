@@ -84,6 +84,7 @@ export default function routes({
   offenceOtherInfoService,
   interestedPartiesStoreService,
   updateInterestedPartiesService,
+  postcodeService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -398,7 +399,7 @@ export default function routes({
     }),
   )
 
-  router.use(paths.ORDER.BASE_URL, createPostcodeLookupRouter())
+  router.use(paths.ORDER.BASE_URL, createPostcodeLookupRouter({ postcodeService }))
 
   router.use(
     paths.INTEREST_PARTIES.BASE_PATH,

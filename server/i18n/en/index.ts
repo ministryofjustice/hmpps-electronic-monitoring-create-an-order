@@ -48,6 +48,10 @@ import dapaClauseListPageContent from './pages/dapoClauseListPage'
 import notifyingOrganisationPageContent from './pages/notifyingOrganisation'
 import responsibleOrganisationPageContent from './pages/responsibleOrganisation'
 import responsibleOfficerPageContent from './pages/responsibleOfficer'
+import deviceWearerAddressPageContent from './pages/deviceWearerAddress'
+import tagAtSourceAddressPageContent from './pages/tagAtSourceAddress'
+import curfewAddressPageContent from './pages/curfewAddress'
+import appointmentAddressPageContent from './pages/appointmentAddress'
 import nationalSecurityDirectoratePageConetent from './pages/national-security-directorate'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
@@ -100,6 +104,10 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       notifyingOrganisation: notifyingOrganisationPageContent,
       responsibleOrganisation: responsibleOrganisationPageContent,
       responsibleOfficer: responsibleOfficerPageContent,
+      deviceWearerAddress: deviceWearerAddressPageContent,
+      tagAtSourceAddress: tagAtSourceAddressPageContent,
+      curfewAddress: curfewAddressPageContent,
+      appointmentAddress: appointmentAddressPageContent,
       nationalSecurityDirectorate: nationalSecurityDirectoratePageConetent,
     },
     reference: getReferenceData(ddVersion),

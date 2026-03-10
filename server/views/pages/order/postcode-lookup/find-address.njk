@@ -1,0 +1,44 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% set section = content.section %}
+{% set heading = content.title %}
+{% set questions = content.questions %}
+{% set continueButtonText = "Find address" %}
+
+
+{% block formInputs %}
+    {{ govukInput({
+      label: { 
+        text: questions.postcode.text,
+        classes: "govuk-fieldset__legend--s"
+      },
+      id: "postcode",
+      name: "postcode",
+      hint: {
+	text: questions.postcode.hint
+      },
+      value: postcode.value,
+      errorMessage: postcode.error,
+      disabled: disabled
+    }) }}
+ 
+    {{ govukInput({
+      label: { 
+        text: questions.buildingId.text,
+        classes: "govuk-fieldset__legend--s"
+      },
+      id: "buildingId",
+      name: "buildingId",
+      hint: {
+	text: questions.buildingId.hint
+      },
+      value: buildingId.value,
+      disabled: disabled
+    }) }}
+
+    <a href={{ manualAddressLink }} class="govuk-link"> Enter address manually </a>
+    <br>
+    <br>
+{% endblock %}

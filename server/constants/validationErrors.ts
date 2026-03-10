@@ -154,6 +154,9 @@ interface ValidationErrors {
   probationDeliveryUnit: {
     pduRequired: string
   }
+  postcodeLookup: {
+    postcodeRequired: string
+  }
   nationalSecurityDirectorate: {
     nationalSecurityDirectorateRequired: string
   }
@@ -429,6 +432,9 @@ const validationErrors: ValidationErrors = {
   },
   probationDeliveryUnit: {
     pduRequired: "Select the Responsible Organisation's PDU",
+  },
+  postcodeLookup: {
+    postcodeRequired: 'Enter the postcode',
   },
   nationalSecurityDirectorate: {
     nationalSecurityDirectorateRequired: 'Select yes if the device wearer is being managed by the NSD',

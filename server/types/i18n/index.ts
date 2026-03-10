@@ -38,6 +38,7 @@ import DapoClauseListPageConent from './pages/dapoClauseListPage'
 import NotifyingOrganisationPageContent from './pages/notifyingOrganisation'
 import ResponsibleOrganisationPageContent from './pages/responsibleOrganisation'
 import ResponsibleOfficerPageContent from './pages/responsibleOfficer'
+import PostcodeLookupPageContent from './pages/postcodeLookup'
 import NationalSecurityDirectoratePageConetent from './pages/national-security-directorate'
 
 type I18n = {
@@ -89,6 +90,10 @@ type I18n = {
     responsibleOrganisation: ResponsibleOrganisationPageContent
     responsibleOfficer: ResponsibleOfficerPageContent
     pdu: ProbationDeliveryUnit
+    deviceWearerAddress: PostcodeLookupPageContent
+    tagAtSourceAddress: PostcodeLookupPageContent
+    curfewAddress: PostcodeLookupPageContent
+    appointmentAddress: PostcodeLookupPageContent
     nationalSecurityDirectorate: NationalSecurityDirectoratePageConetent
   }
   reference: ReferenceData
