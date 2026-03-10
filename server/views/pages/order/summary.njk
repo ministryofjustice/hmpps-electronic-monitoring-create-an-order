@@ -83,7 +83,9 @@
       {% set allChecked = true %}
       {% for section in sections %}
         {% set name = section.name | replace("_", " ") | capitalize %}
-
+        {% if section.name == 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS' %}
+          {% set name = 'About the Notifying and Responsible Organisations' %}
+        {% endif %}
         {% if not isOrderEditable %}
           {% set statusArgs = {} %}
         {% elif not section.isReady %}
