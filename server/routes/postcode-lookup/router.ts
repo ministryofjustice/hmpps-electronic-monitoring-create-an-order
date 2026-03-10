@@ -5,11 +5,12 @@ import AddressResultController from './address-result/controller'
 import ConfirmAddressController from './confirm-address/controller'
 import AddressListController from './address-list/controller'
 import EnterAddressController from './enter-address/controller'
+import { Services } from '../../services'
 
-const createPostcodeLookupRouter = (): Router => {
+const createPostcodeLookupRouter = (services: Pick<Services, 'postcodeService'>): Router => {
   const router = Router()
 
-  const findAddressController = new FindAddressController()
+  const findAddressController = new FindAddressController(services.postcodeService)
   const addressResultController = new AddressResultController()
   const confirmAddressController = new ConfirmAddressController()
   const addressListController = new AddressListController()

@@ -99,7 +99,7 @@
               }) }}
           {% elseif isOrderEditable %}
             {{ govukButton({
-                text: "Save and continue" ,
+                text: "Save and continue" if not continueButtonText else continueButtonText,
                 name: "action",
                 value: "continue"
             }) }}
