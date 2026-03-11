@@ -153,7 +153,7 @@ const stubCohortSenario = (): Request =>
         username: 'mockUser',
         active: true,
         accountType: 'mock account',
-        activeCaseload: { id: 'ABC', name: 'HMP ABC' },
+        activeCaseload: { id: 'ACI', name: 'HMP ABC' },
         caseLoads: [],
       },
     },
