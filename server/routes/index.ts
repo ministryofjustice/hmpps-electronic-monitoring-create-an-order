@@ -45,6 +45,7 @@ import InterestedPartiesCheckYourAnswersController from './interested-parties/ch
 import SpecialOrderController from './special-order/controller'
 import IsAddressChangeController from './variations/is-address-change/controller'
 import NoRefitsController from './variations/no-refits/controller'
+import NoChangeResponsibleOfficerController from './variations/no-change-responsible-officer/controller'
 
 export default function routes({
   alcoholMonitoringService,
@@ -209,6 +210,7 @@ export default function routes({
   const isAddressChangeController = new IsAddressChangeController(serviceRequestTypeService)
 
   const noRefitsController = new NoRefitsController()
+  const noChangeResonsibleOfficer = new NoChangeResponsibleOfficerController()
   router.param('orderId', populateOrder(orderService))
 
   get('/', orderSearchController.list)
@@ -241,6 +243,7 @@ export default function routes({
   get(paths.ORDER.IS_ADDRESS_CHANGE, isAddressChangeController.view)
   post(paths.ORDER.IS_ADDRESS_CHANGE, isAddressChangeController.update)
   get(paths.ORDER.NO_REFITS, noRefitsController.view)
+  get(paths.ORDER.NO_CHANGE_RESPONSIBLE_OFFICER, noChangeResonsibleOfficer.view)
   /**
    * ABOUT THE DEVICE WEARER
    */
