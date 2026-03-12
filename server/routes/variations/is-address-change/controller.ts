@@ -6,22 +6,29 @@ import ServiceRequestTypeService from '../serviceRequestTypeService'
 
 export default class IsAddressChangeController extends YesNoQuestionPageController {
   constructor(private readonly service: ServiceRequestTypeService) {
-    super(paths.ORDER.IS_ADDRESS_CHANGE, paths.ORDER.SUMMARY, validationErrors.isAddressChange.isAddressChangeRequired)
+    super()
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {
     return super.getView(
       req,
-      res, 
+      res,
       res.locals.content!.pages.isAddressChange.questions.isAddressChange.text,
       res.locals.content!.pages.isAddressChange.title,
-      undefined)
+      undefined,
+    )
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
 
-    const formData = super.tryGetValidFormData(req, res)
+    const formData = super.tryGetValidFormData(
+      req,
+      res,
+      paths.ORDER.IS_ADDRESS_CHANGE,
+      paths.ORDER.SUMMARY,
+      validationErrors.isAddressChange.isAddressChangeRequired,
+    )
     if (formData !== undefined) {
       if (formData.answer === 'yes') {
         await this.service.createVariationFromExisting({
