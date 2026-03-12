@@ -10,9 +10,16 @@ export default abstract class YesNoQuestionPageController {
     private validationError: string,
   ) {}
 
-  protected async getView(req: Request, res: Response, value?: string) {
+  protected async getView(
+    req: Request, 
+    res: Response, 
+    question: string,
+    pageTitle:string,
+    value: string|undefined = undefined,
+   
+    ) {
     const errors = req.flash('validationErrors') as unknown as ValidationResult
-    res.render('pages/order/edit/is-address-change', constructModel(value, errors))
+    res.render('pages/shared-pages/yes-no-question-page', constructModel(value, errors,question,pageTitle))
   }
 
   protected tryGetValidFormData(req: Request, res: Response): YesNoQuestionFormData | undefined {

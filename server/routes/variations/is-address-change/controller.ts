@@ -10,7 +10,12 @@ export default class IsAddressChangeController extends YesNoQuestionPageControll
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    return super.getView(req, res, undefined)
+    return super.getView(
+      req,
+      res, 
+      res.locals.content!.pages.isAddressChange.questions.isAddressChange.text,
+      res.locals.content!.pages.isAddressChange.title,
+      undefined)
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
