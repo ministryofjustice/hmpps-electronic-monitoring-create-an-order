@@ -64,7 +64,7 @@ describe('GET 403', () => {
   it('Forbidden errors hsow restricted order access page', () => {
     const mockError = new Error() as SanitisedError
     mockError.status = 403
-    mockError.message = 'Forbidden'
+    mockError.data = { errorCode: '40301' }
     getOrderMock.mockRejectedValueOnce(mockError)
 
     return request(app)
@@ -81,7 +81,6 @@ describe('GET 403', () => {
   it('Other 403 leads to sign out redirect', () => {
     const mockError = new Error() as SanitisedError
     mockError.status = 403
-    mockError.message = 'Some other message'
     getOrderMock.mockRejectedValueOnce(mockError)
 
     return request(app)

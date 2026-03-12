@@ -4,7 +4,7 @@ export interface SanitisedError extends Error {
   text?: string
   status?: number
   headers?: unknown
-  data?: unknown
+  data?: { [k: string]: string }
   stack: string
   message: string
 }
