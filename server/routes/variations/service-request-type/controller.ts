@@ -36,6 +36,16 @@ export default class ServiceRequestTypeController {
       return
     }
 
+    if (formData.serviceRequestType === 'NEEDS_CHECKING_OR_REFITTED') {
+      res.redirect(paths.ORDER.NO_REFITS)
+      return
+    }
+
+    if (formData.serviceRequestType === 'RESPONSIBLE_OFFICER_CHANGED') {
+      res.redirect(paths.ORDER.NO_CHANGE_RESPONSIBLE_OFFICER)
+      return
+    }
+
     if (order !== undefined) {
       await this.service.createVariationFromExisting({
         orderId: order.id,

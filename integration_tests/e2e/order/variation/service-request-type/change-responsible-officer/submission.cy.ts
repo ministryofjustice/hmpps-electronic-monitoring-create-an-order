@@ -3,7 +3,6 @@ import Page from '../../../../../pages/page'
 import OrderTasksPage from '../../../../../pages/order/summary'
 import NoChangeResponsibleOfficerPage from './noChangeResponsibleOfficerPage'
 
-
 const mockOrderId = uuidv4()
 
 context('No change in responsible officer', () => {

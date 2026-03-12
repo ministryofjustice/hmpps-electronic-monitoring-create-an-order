@@ -1,6 +1,8 @@
 import { v4 as uuidv4 } from 'uuid'
 import ServiceRequestTypePage from './serviceRequestTypePage'
 import Page from '../../../../pages/page'
+import NoRefitsPage from './no-refits/noRefitsPage'
+import NoChangeResponsibleOfficerPage from './change-responsible-officer/noChangeResponsibleOfficerPage'
 
 const mockOrderId = uuidv4()
 const amendPath = '/amend-order'
@@ -35,19 +37,6 @@ context('order type', () => {
       },
     }).should('be.true')
   })
-
-  // it('Should call amend endpoint with service request type of REINSTALL_DEVICE', () => {
-  //   const page = Page.visit(ServiceRequestTypePage, { orderId: mockOrderId })
-
-  //   page.form.fillInWith('I need monitoring equipment reinstalled')
-  //   page.form.continueButton.click()
-  //   cy.task('stubCemoVerifyRequestReceived', {
-  //     uri: `/orders/${mockOrderId}/amend-order`,
-  //     body: {
-  //       type: 'REINSTALL_DEVICE',
-  //     },
-  //   }).should('be.true')
-  // })
 
   it('Should call amend endpoint with service request type of REVOCATION', () => {
     const page = Page.visit(ServiceRequestTypePage, { orderId: mockOrderId })
@@ -88,7 +77,19 @@ context('order type', () => {
     }).should('be.true')
   })
 
-  // TODO There is an issue with the equipment and it needs checking or refitted
+  it('Should go to no refits page with service request type of NEEDS_CHECKING_OR_REFITTED', () => {
+    const page = Page.visit(ServiceRequestTypePage, { orderId: mockOrderId })
 
-  // TODO The Responsible Officer has changed
+    page.form.fillInWith('There is an issue with the equipment and it needs checking or refitted')
+    page.form.continueButton.click()
+    Page.verifyOnPage(NoRefitsPage)
+  })
+
+  it('Should go to no change responsible officer page with service request type of RESPONSIBLE_OFFICER_CHANGED', () => {
+    const page = Page.visit(ServiceRequestTypePage, { orderId: mockOrderId })
+
+    page.form.fillInWith('The Responsible Officer has changed')
+    page.form.continueButton.click()
+    Page.verifyOnPage(NoChangeResponsibleOfficerPage)
+  })
 })

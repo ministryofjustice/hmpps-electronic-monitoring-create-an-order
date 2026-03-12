@@ -1,7 +1,6 @@
-import paths from "../../../../../../server/constants/paths"
-import AppPage from "../../../../../pages/appPage"
-import { PageElement } from "../../../../../pages/page"
-
+import paths from '../../../../../../server/constants/paths'
+import AppPage from '../../../../../pages/appPage'
+import { PageElement } from '../../../../../pages/page'
 
 export default class NoRefitsPage extends AppPage {
   constructor() {

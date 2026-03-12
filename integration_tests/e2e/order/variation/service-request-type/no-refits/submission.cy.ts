@@ -3,7 +3,6 @@ import Page from '../../../../../pages/page'
 import OrderTasksPage from '../../../../../pages/order/summary'
 import NoRefitsPage from './noRefitsPage'
 
-
 const mockOrderId = uuidv4()
 
 context('No refits', () => {

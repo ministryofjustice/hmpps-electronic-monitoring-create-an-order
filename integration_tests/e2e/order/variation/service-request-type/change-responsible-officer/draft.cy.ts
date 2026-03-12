@@ -19,9 +19,7 @@ context('No Change Responsible Officer', () => {
   it('Should display the page', () => {
     const page = Page.visit(NoChangeResponsibleOfficerPage, { orderId: mockOrderId })
 
-    cy.get('p')
-      .contains('To notify EMS of a change in Responsible Officer:')
-      .should('exist')  
+    cy.get('p').contains('To notify EMS of a change in Responsible Officer:').should('exist')
     cy.get('ul').children().get('li').contains('Use the service request portal if you have access.').should('exist')
     cy.get('ul')
       .children()

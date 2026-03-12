@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from 'uuid'
-import SpecialOrderPage from './noRefitsPage'
 import Page from '../../../../../pages/page'
 import NoRefitsPage from './noRefitsPage'
 
@@ -21,8 +20,10 @@ context('No Refits', () => {
     const page = Page.visit(NoRefitsPage, { orderId: mockOrderId })
 
     cy.get('p')
-      .contains('If you need a visit for an equipment refit (for example, if the battery is not working or there is a medical reason for a refit):')
-      .should('exist')  
+      .contains(
+        'If you need a visit for an equipment refit (for example, if the battery is not working or there is a medical reason for a refit):',
+      )
+      .should('exist')
     cy.get('ul').children().get('li').contains('Use the service request portal if you have access.').should('exist')
     cy.get('ul')
       .children()
