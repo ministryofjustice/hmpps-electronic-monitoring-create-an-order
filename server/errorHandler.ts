@@ -12,6 +12,10 @@ export default function createErrorHandler(production: boolean) {
     res.locals.status = error.status
     res.locals.stack = production ? null : error.stack
 
+    if (error.status === 403 && error.message === 'Forbidden') {
+      return res.status(403).render('pages/error-pages/403')
+    }
+
     if (error.status === 401 || error.status === 403) {
       logger.info('Logging user out')
       return res.redirect('/sign-out')
