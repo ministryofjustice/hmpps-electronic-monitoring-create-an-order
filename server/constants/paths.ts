@@ -21,6 +21,8 @@ const paths = {
     IS_ADDRESS_CHANGE: '/order/:orderId/is-address-change',
     VARIATION: '/order/:orderId/variation',
     SPECIAL_ORDER: '/order/:orderId/special-order',
+    NO_REFITS:'/order/:orderId/no-refits',
+    NO_CHANGE_RESPONSIBLE_OFFICER:'/order/:orderId/no-change-responsible-officer'
   },
 
   INTEREST_PARTIES: {

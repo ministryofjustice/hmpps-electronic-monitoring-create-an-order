@@ -44,6 +44,7 @@ import createInterestedPartiesRouter from './interested-parties/router'
 import InterestedPartiesCheckYourAnswersController from './interested-parties/check-your-answers/controller'
 import SpecialOrderController from './special-order/controller'
 import IsAddressChangeController from './variations/is-address-change/controller'
+import NoRefitsController from './variations/no-refits/controller'
 
 export default function routes({
   alcoholMonitoringService,
@@ -206,6 +207,8 @@ export default function routes({
   const specialOrderController = new SpecialOrderController()
 
   const isAddressChangeController = new IsAddressChangeController(serviceRequestTypeService)
+
+  const noRefitsController = new NoRefitsController()
   router.param('orderId', populateOrder(orderService))
 
   get('/', orderSearchController.list)
@@ -237,6 +240,7 @@ export default function routes({
   post(paths.ORDER.SPECIAL_ORDER, specialOrderController.update)
   get(paths.ORDER.IS_ADDRESS_CHANGE, isAddressChangeController.view)
   post(paths.ORDER.IS_ADDRESS_CHANGE, isAddressChangeController.update)
+  get(paths.ORDER.NO_REFITS, noRefitsController.view)
   /**
    * ABOUT THE DEVICE WEARER
    */

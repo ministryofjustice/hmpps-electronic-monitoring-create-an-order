@@ -1,0 +1,39 @@
+{% extends "../../../partials/layout.njk" %}
+
+{% set pageTitle = "Create variation failed - " + applicationName %}
+{% set mainClasses = "app-container govuk-body" %}
+{% set formDownloadIcon = '/assets/images/form_download.svg' %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "#"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l">{{ section }}</span>
+      <h1 class="govuk-heading-l">You cannot use this service to request visits for refits or equipment checks</h1>
+
+      <p class="govuk-body">If you need a visit for an equipment refit (for example, if the battery is not working or there is a medical reason for a refit):</p>     
+
+      <ul class="govuk-list govuk-list--bullet">
+          <li>Use the service request portal if you have access.</li>
+          <li>Email your request to <a href="mailto:EMSEnforcement@ems.co.uk">EMSEnforcement@ems.co.uk</a> if you do not have access</li>
+      </ul>
+     
+
+     {{ govukButton({
+        text: "Back to start",
+        href: "/order/" + orderId + "/summary",
+        classes: "govuk-button--secondary",
+        id: "back-to-start-button"
+      }) }}
+
+    </div>
+  </div>
+{% endblock %}
