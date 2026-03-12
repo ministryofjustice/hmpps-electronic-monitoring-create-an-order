@@ -4,7 +4,7 @@ import { ServiceRequestTypeFormDataModel } from './formModel'
 import { validationErrors } from '../../../constants/validationErrors'
 import { ValidationResult } from '../../../models/Validation'
 import { createGovukErrorSummary } from '../../../utils/errors'
-import ServiceRequestTypeService from './service'
+import ServiceRequestTypeService from '../serviceRequestTypeService'
 import getContent from '../../../i18n'
 import { Locales } from '../../../types/i18n/locale'
 

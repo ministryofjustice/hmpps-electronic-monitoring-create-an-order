@@ -43,6 +43,7 @@ import createAttachmentRouter from './attachments/router'
 import createInterestedPartiesRouter from './interested-parties/router'
 import InterestedPartiesCheckYourAnswersController from './interested-parties/check-your-answers/controller'
 import SpecialOrderController from './special-order/controller'
+import IsAddressChangeController from './variations/is-address-change/controller'
 
 export default function routes({
   alcoholMonitoringService,
@@ -203,6 +204,8 @@ export default function routes({
 
   const serviceRequestTypeController = new ServiceRequestTypeController(serviceRequestTypeService)
   const specialOrderController = new SpecialOrderController()
+
+  const isAddressChangeController = new IsAddressChangeController(serviceRequestTypeService)
   router.param('orderId', populateOrder(orderService))
 
   get('/', orderSearchController.list)
@@ -232,6 +235,8 @@ export default function routes({
   get(paths.ORDER.RECEIPT_DOWNLOAD, receiptController.downloadReceipt)
   get(paths.ORDER.SPECIAL_ORDER, specialOrderController.view)
   post(paths.ORDER.SPECIAL_ORDER, specialOrderController.update)
+  get(paths.ORDER.IS_ADDRESS_CHANGE, isAddressChangeController.view)
+  post(paths.ORDER.IS_ADDRESS_CHANGE, isAddressChangeController.update)
   /**
    * ABOUT THE DEVICE WEARER
    */

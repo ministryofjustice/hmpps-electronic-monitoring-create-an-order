@@ -18,6 +18,7 @@ const paths = {
     DOWNLOAD_FMS_MO_REQUEST: '/order/:orderId/fmsMonitoringOrderRequests',
     EDIT: '/order/:orderId/edit',
     IS_REJECTION: '/order/:orderId/is-rejection',
+    IS_ADDRESS_CHANGE: '/order/:orderId/is-address-change',
     VARIATION: '/order/:orderId/variation',
     SPECIAL_ORDER: '/order/:orderId/special-order',
   },

@@ -1,6 +1,6 @@
-import RestClient from '../../../data/restClient'
-import { AuthenticatedRequestInput } from '../../../interfaces/request'
-import OrderModel, { Order } from '../../../models/Order'
+import RestClient from '../../data/restClient'
+import { AuthenticatedRequestInput } from '../../interfaces/request'
+import OrderModel, { Order } from '../../models/Order'
 
 type CreateOrderInput = AuthenticatedRequestInput & {
   type: string
