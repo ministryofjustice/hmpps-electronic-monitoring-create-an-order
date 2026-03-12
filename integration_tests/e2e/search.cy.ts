@@ -229,6 +229,7 @@ context('Search', () => {
           page.ordersList.contains('some id')
           page.ordersList.contains('Glossop')
           page.ordersList.contains('20/11/2000')
+          page.ordersList.find('tbody td').should('not.contain', 'Youth')
         })
       })
 
@@ -253,6 +254,71 @@ context('Search', () => {
           page.ordersList.contains('ccrn')
           page.ordersList.contains('Glossop')
           page.ordersList.contains('20/11/2000')
+          page.ordersList.find('tbody td').should('not.contain', 'Youth')
+        })
+      })
+
+      describe('when showing search results for different organisations', () => {
+        const youthMockOrder = {
+          ...mockOrder,
+          deviceWearer: {
+            ...mockOrder.deviceWearer,
+            firstName: 'Bianca',
+            dateOfBirth: new Date(2016, 10, 20).toISOString(),
+            adultAtTimeOfInstallation: false,
+          },
+          deviceWearerResponsibleAdult: {
+            relationship: 'other',
+            otherRelationshipDetails: 'Parent',
+            fullName: 'Audrey Builder',
+            contactNumber: '07101 123 456',
+          },
+        }
+
+        it('should show youth status and caseload info', () => {
+          cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [youthMockOrder] })
+          page = Page.visit(SearchPage)
+
+          page.searchBox.type('Bianca Builder')
+          page.searchButton.click()
+
+          cy.contains('Showing: HMP ABC').should('be.visible')
+          cy.contains('a', 'Change location').should(
+            'have.attr',
+            'href',
+            'https://digital.prison.service.justice.gov.uk/change-caseload',
+          )
+
+          page.ordersList.contains('Youth')
+          page.ordersList.find('tbody td').should('contain', 'Youth')
+        })
+
+        it('should not show youth status and caseload info if probation', () => {
+          cy.task('reset')
+          cy.task('stubSignIn', {
+            name: 'john smith',
+            roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+            stubCohort: false,
+            userId: '123456781',
+          })
+          cy.task('stubCemoRequest', {
+            httpStatus: 200,
+            method: 'GET',
+            subPath: 'user-cohort',
+            response: { cohort: 'PROBATION', activeCaseload: 'Probation Test' },
+          })
+
+          cy.signIn()
+
+          cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [youthMockOrder] })
+          page = Page.visit(SearchPage)
+
+          page.searchBox.type('Bob Builder')
+          page.searchButton.click()
+
+          cy.get('body').should('not.contain', 'Youth')
+          cy.get('body').should('not.contain', 'Showing:')
+          cy.get('body').find('a').should('not.contain', 'Change location')
         })
       })
     })

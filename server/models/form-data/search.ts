@@ -43,6 +43,12 @@ const formatDateTime = (dateToFormat: string): string => {
   return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
 }
 
+const getYouthStatus = (order: Order): string => {
+  const isMinor = order.deviceWearer?.adultAtTimeOfInstallation === false
+
+  return isMinor ? 'Youth' : ''
+}
+
 const getIdList = (order: Order) => {
   const { nomisId, pncId, deliusId, prisonNumber, complianceAndEnforcementPersonReference, courtCaseReferenceNumber } =
     order.deviceWearer
@@ -64,6 +70,7 @@ const createOrderItem = (order: Order) => {
     name: getDisplayName(order),
     href: paths.ORDER.SUMMARY.replace(':orderId', order.id),
     dob: order.deviceWearer.dateOfBirth ? formatDateTime(order.deviceWearer.dateOfBirth) : '',
+    youth: getYouthStatus(order),
     pins: getIdList(order),
     location: currentAddress?.addressLine3 ?? '',
     startDate: order.monitoringConditions?.startDate ? formatDateTime(order.monitoringConditions?.startDate) : '',
