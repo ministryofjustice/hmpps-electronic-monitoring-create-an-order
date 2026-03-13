@@ -61,7 +61,7 @@ describe('GET 403', () => {
     app = appWithAllRoutes({ services: { orderService: mockOrderService } })
   })
 
-  it('Forbidden errors hsow restricted order access page', () => {
+  it('Forbidden errors show restricted order access page', () => {
     const mockError = new Error() as SanitisedError
     mockError.status = 403
     mockError.data = { errorCode: '40301' }
