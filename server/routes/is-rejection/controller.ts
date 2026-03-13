@@ -4,6 +4,7 @@ import { validationErrors } from '../../constants/validationErrors'
 import IsRejectionService from './service'
 import FeatureFlags from '../../utils/featureFlags'
 import YesNoQuestionPageController from '../baseControllers/yes-no-question-page/controller'
+import { Order } from '../../models/Order'
 
 export default class IsRejectionController extends YesNoQuestionPageController {
   constructor(private readonly service: IsRejectionService) {
@@ -22,7 +23,6 @@ export default class IsRejectionController extends YesNoQuestionPageController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
-
     const formData = super.tryGetValidFormData(
       req,
       res,
@@ -37,8 +37,11 @@ export default class IsRejectionController extends YesNoQuestionPageController {
           accessToken: res.locals.user.token,
         })
       } else {
-        if (FeatureFlags.getInstance().get('SERVICE_REQUEST_TYPE_ENABLED')) {
-          res.redirect(paths.VARIATION.SERVICE_REQUEST_TYPE.replace(':orderId', orderId))
+        if (
+          FeatureFlags.getInstance().get('SERVICE_REQUEST_TYPE_ENABLED') &&
+          this.shouldShowIsAddressChangePage(req.order!)
+        ) {
+          res.redirect(paths.ORDER.IS_ADDRESS_CHANGE.replace(':orderId', orderId))
           return
         }
 
@@ -49,5 +52,19 @@ export default class IsRejectionController extends YesNoQuestionPageController {
       }
       res.redirect(`/order/${orderId}/summary`)
     }
+  }
+
+  private shouldShowIsAddressChangePage = (order: Order): boolean => {
+    const startDate = order.monitoringConditions.startDate
+      ? new Date(order.monitoringConditions.startDate)
+      : new Date(1900, 0, 0)
+
+    const inputDate = new Date(startDate).getTime()
+    const now = new Date().getTime()
+
+    const thirtyDaysInMs = 30 * 24 * 60 * 60 * 1000
+    const threshold = now - thirtyDaysInMs
+
+    return inputDate >= threshold
   }
 }

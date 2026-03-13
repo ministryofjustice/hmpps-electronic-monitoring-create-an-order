@@ -6,6 +6,9 @@ export default class IsAddressChangePage extends AppFormPage {
   public form = new IsAddressChangeFormComponent()
 
   constructor() {
-    super('', paths.ORDER.IS_ADDRESS_CHANGE)
+    super(
+      "Are you amending this form because the device wearer's primary address has changed?",
+      paths.ORDER.IS_ADDRESS_CHANGE,
+    )
   }
 }
