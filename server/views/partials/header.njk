@@ -41,7 +41,7 @@
               
               <a data-qa="changeCaseLoad" class="hmpps-header__link hmpps-header-change-case-load" href="https://digital.prison.service.justice.gov.uk/change-caseload" data-test="change-case-load-link" referrerpolicy="no-referrer-when-downgrade">
                {{ caseloadSwitcherSvg | safe }}
-              <span data-qa="userCohort"  class="hmpps-header__link__sub-text" >{{user.cohort.activeCaseLoad}}</span>
+              <span data-qa="userCohort"  class="hmpps-header__link__sub-text" >{{user.cohort.activeCaseLoadName}}</span>
               </a>
             </li>
             {% else %}
