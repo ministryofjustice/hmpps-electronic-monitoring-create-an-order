@@ -136,7 +136,7 @@ const userCohort = (): Request =>
     response: {
       status: 200,
       headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-      jsonBody: { cohort: 'PRISON', activeCaseLoad: 'HMP ABC' },
+      jsonBody: { cohort: 'PRISON', activeCaseLoadName: 'HMP ABC' },
     },
   })
 
