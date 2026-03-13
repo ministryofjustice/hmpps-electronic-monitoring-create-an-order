@@ -16,7 +16,7 @@
           classes: "govuk-fieldset__legend--l"
         }
       },
-      items: content.reference.serviceRequestTypes | toOptions(),
+      items: content.reference.serviceRequestTypes | toOptions()| addDivider(),
       value: serviceRequestType.value,
       errorMessage: serviceRequestType.error
     }) }}

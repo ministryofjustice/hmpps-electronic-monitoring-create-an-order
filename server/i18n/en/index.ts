@@ -53,6 +53,7 @@ import tagAtSourceAddressPageContent from './pages/tagAtSourceAddress'
 import curfewAddressPageContent from './pages/curfewAddress'
 import appointmentAddressPageContent from './pages/appointmentAddress'
 import nationalSecurityDirectoratePageConetent from './pages/national-security-directorate'
+import isAddressChangePageContent from './pages/isAddressChange'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
   return {
@@ -109,6 +110,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       curfewAddress: curfewAddressPageContent,
       appointmentAddress: appointmentAddressPageContent,
       nationalSecurityDirectorate: nationalSecurityDirectoratePageConetent,
+      isAddressChange: isAddressChangePageContent,
     },
     reference: getReferenceData(ddVersion),
   }

@@ -4,7 +4,7 @@ import { ServiceRequestTypeFormDataModel } from './formModel'
 import { validationErrors } from '../../../constants/validationErrors'
 import { ValidationResult } from '../../../models/Validation'
 import { createGovukErrorSummary } from '../../../utils/errors'
-import ServiceRequestTypeService from './service'
+import ServiceRequestTypeService from '../serviceRequestTypeService'
 import getContent from '../../../i18n'
 import { Locales } from '../../../types/i18n/locale'
 
@@ -36,19 +36,22 @@ export default class ServiceRequestTypeController {
       return
     }
 
-    if (order !== undefined) {
-      await this.service.createVariationFromExisting({
-        orderId: order.id,
-        accessToken: res.locals.user.token,
-        type: formData.serviceRequestType!,
-      })
-      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
-    } else {
-      const newOrder = await this.service.createVariation({
-        accessToken: res.locals.user.token,
-        type: formData.serviceRequestType!,
-      })
-      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', newOrder.id))
+    if (formData.serviceRequestType === 'NEEDS_CHECKING_OR_REFITTED') {
+      res.redirect(paths.ORDER.NO_REFITS)
+      return
     }
+
+    if (formData.serviceRequestType === 'RESPONSIBLE_OFFICER_CHANGED') {
+      res.redirect(paths.ORDER.NO_CHANGE_RESPONSIBLE_OFFICER)
+      return
+    }
+
+    const input = {
+      orderId: req.order?.id,
+      accessToken: res.locals.user.token,
+      type: formData.serviceRequestType!,
+    }
+    const id = await this.service.createNewVariation(input, req.order)
+    res.redirect(paths.ORDER.SUMMARY.replace(':orderId', id))
   }
 }
