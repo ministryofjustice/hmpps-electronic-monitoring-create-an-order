@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../../pages/page'
-import OrderTasksPage from '../../../../../pages/order/summary'
 import NoChangeResponsibleOfficerPage from './noChangeResponsibleOfficerPage'
+import IndexPage from '../../../../../pages'
 
 const mockOrderId = uuidv4()
 
@@ -17,7 +17,7 @@ context('No change in responsible officer', () => {
   it('Should go back to order summary page', () => {
     const page = Page.visit(NoChangeResponsibleOfficerPage, { orderId: mockOrderId })
     page.returnToStartButton().click()
-
-    Page.verifyOnPage(OrderTasksPage)
+    cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+    Page.verifyOnPage(IndexPage)
   })
 })

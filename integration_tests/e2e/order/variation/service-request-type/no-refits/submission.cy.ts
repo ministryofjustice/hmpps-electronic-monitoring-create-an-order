@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../../pages/page'
-import OrderTasksPage from '../../../../../pages/order/summary'
 import NoRefitsPage from './noRefitsPage'
+import IndexPage from '../../../../../pages'
 
 const mockOrderId = uuidv4()
 
@@ -18,6 +18,6 @@ context('No refits', () => {
     const page = Page.visit(NoRefitsPage, { orderId: mockOrderId })
     page.returnToStartButton().click()
 
-    Page.verifyOnPage(OrderTasksPage)
+    Page.verifyOnPage(IndexPage)
   })
 })
