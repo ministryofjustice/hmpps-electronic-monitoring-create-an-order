@@ -20,6 +20,7 @@ import ContactDetailsPage from '../../../pages/order/contact-information/contact
 import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
 import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
 import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
+import IsAddressChangePage from '../../../e2e/order/edit-order/is-address-change/isAddressChangePage'
 
 context('Service-Request-Types', () => {
   let orderSummaryPage: OrderSummaryPage
@@ -124,9 +125,15 @@ context('Service-Request-Types', () => {
   }
 
   const fillInVariations = (variationType: string, receiptType: string, variation = variationDetails) => {
-    const page = Page.verifyOnPage(ServiceRequestTypePage)
-    page.form.fillInWith(variationType)
-    page.form.continueButton.click()
+    const isAddressChange = variationType === 'Address Change'
+    const isAddressChangePage = Page.verifyOnPage(IsAddressChangePage)
+    isAddressChangePage.form.fillInWith(isAddressChange ? 'Yes' : 'No')
+    isAddressChangePage.form.saveAndContinueButton.click()
+    if (!isAddressChange) {
+      const page = Page.verifyOnPage(ServiceRequestTypePage)
+      page.form.fillInWith(variationType)
+      page.form.continueButton.click()
+    }
 
     orderSummaryPage.fillInVariationsDetails({ variationDetails: variation })
     orderSummaryPage.aboutTheDeviceWearerTask.click()
@@ -203,19 +210,25 @@ context('Service-Request-Types', () => {
   })
 
   it('Should able to make REINSTALL_AT_DIFFERENT_ADDRESS change', () => {
-    fillInVariations('I need monitoring equipment installed at an additional address', 'Reinstall at different address')
+    fillInVariations(
+      'The device wearer needs to remain at a second or third address during curfew hours.',
+      'Reinstall at different address',
+    )
   })
 
   it('Should able to make REINSTALL_DEVICE change', () => {
-    fillInVariations('I need monitoring equipment reinstalled', 'Reinstall device')
+    fillInVariations('Address Change', 'Reinstall device')
   })
 
   it('Should able to make END_MONITORING change', () => {
-    fillInVariations('I need to end all monitoring for a device wearer', 'End all monitoring')
+    fillInVariations(
+      "The device wearer's circumstances have changed and all monitoring needs to end.",
+      'End all monitoring',
+    )
   })
 
   it('Should able to make REVOCATION change', () => {
-    fillInVariations('I need to revoke monitoring for the device wearer', 'Revocation')
+    fillInVariations('The device wearer has been recalled to prison.', 'Revocation')
   })
 
   it('Should able to make VARIATION change', () => {

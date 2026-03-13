@@ -394,8 +394,8 @@ export default function routes({
   post(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.update)
   get(paths.VARIATION.SERVICE_REQUEST_TYPE, serviceRequestTypeController.view)
   post(paths.VARIATION.SERVICE_REQUEST_TYPE, serviceRequestTypeController.update)
-  get(paths.VARIATION.CREATE_VARIATION, serviceRequestTypeController.view)
-  post(paths.VARIATION.CREATE_VARIATION, serviceRequestTypeController.update)
+  get(paths.VARIATION.CREATE_VARIATION, isAddressChangeController.view)
+  post(paths.VARIATION.CREATE_VARIATION, isAddressChangeController.update)
 
   get(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS_VERSION, interestedPartiesController.view)
   post(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS_VERSION, interestedPartiesController.update)

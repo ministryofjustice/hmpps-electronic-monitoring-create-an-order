@@ -4,6 +4,6 @@ export default class NoRefitsController {
   constructor() {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    res.render('pages/order/variation/no-refits',{orderId: req.order?.id})
+    res.render('pages/order/variation/no-refits', { orderId: req.order?.id })
   }
 }

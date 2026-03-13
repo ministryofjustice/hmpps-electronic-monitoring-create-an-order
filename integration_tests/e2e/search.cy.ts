@@ -4,7 +4,7 @@ import Page from '../pages/page'
 import { mockApiOrder } from '../mockApis/cemo'
 import OrderTasksPage from '../pages/order/summary'
 import IndexPage from '../pages'
-import ServiceRequestTypePage from './order/variation/service-request-type/serviceRequestTypePage'
+import IsAddressChangePage from './order/edit-order/is-address-change/isAddressChangePage'
 
 const mockOrderId = uuidv4()
 
@@ -145,7 +145,7 @@ context('Search', () => {
           .should('exist')
           .should('contain.text', 'Tell us about a change to a form sent by email')
         page.variationFormButton.click()
-        Page.verifyOnPage(ServiceRequestTypePage)
+        Page.verifyOnPage(IsAddressChangePage)
       })
     })
 

@@ -60,8 +60,6 @@ export default class OrderController {
 
   summary: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    console.log('order')
-    console.log(order)
     const { versionId } = req.params
     const createNewOrderVersionEnabled = FeatureFlags.getInstance().get('CREATE_NEW_ORDER_VERSION_ENABLED')
     const error = req.flash('submissionError')

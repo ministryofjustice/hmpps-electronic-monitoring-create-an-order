@@ -46,19 +46,12 @@ export default class ServiceRequestTypeController {
       return
     }
 
-    if (order !== undefined) {
-      await this.service.createVariationFromExisting({
-        orderId: order.id,
-        accessToken: res.locals.user.token,
-        type: formData.serviceRequestType!,
-      })
-      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
-    } else {
-      const newOrder = await this.service.createVariation({
-        accessToken: res.locals.user.token,
-        type: formData.serviceRequestType!,
-      })
-      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', newOrder.id))
+    const input = {
+      orderId: req.order?.id,
+      accessToken: res.locals.user.token,
+      type: formData.serviceRequestType!,
     }
+    const id = await this.service.createNewVariation(input, req.order)
+    res.redirect(paths.ORDER.SUMMARY.replace(':orderId', id))
   }
 }
