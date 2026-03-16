@@ -58,13 +58,8 @@ export default class IsRejectionController extends YesNoQuestionPageController {
     const startDate = order.monitoringConditions.startDate
       ? new Date(order.monitoringConditions.startDate)
       : new Date(1900, 0, 0)
+    const today = new Date()
 
-    const inputDate = new Date(startDate).getTime()
-    const now = new Date().getTime()
-
-    const thirtyDaysInMs = 30 * 24 * 60 * 60 * 1000
-    const threshold = now - thirtyDaysInMs
-
-    return inputDate >= threshold
+    return startDate <= today
   }
 }

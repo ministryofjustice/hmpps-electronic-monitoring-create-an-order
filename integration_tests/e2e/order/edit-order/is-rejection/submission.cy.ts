@@ -106,14 +106,29 @@ context('Edit Order', () => {
       afterEach(() => {
         cy.task('resetFeatureFlags')
       })
-      it('Should call copy-as-variation endpoint if no is selected and start date is less than 30 days in the past', () => {
+      it('Should call copy-as-variation endpoint if no is selected and start date is less than 30 days in the future', () => {
+        const fmsResultDate = new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 15 days after today
+        const startDate = new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 15 days after today
+        stubVariationOrder(fmsResultDate, startDate)
+        const page = Page.visit(IsRejectionPage, { orderId: mockOrderId })
+        page.form.fillInWith('No')
+        page.form.saveAndContinueButton.click()
+
+        cy.task('stubCemoVerifyRequestReceived', {
+          uri: `/orders/${mockOrderId}/copy-as-variation`,
+          body: {},
+        }).should('be.true')
+
+        Page.verifyOnPage(OrderTasksPage)
+      })
+
+      it('Should go to is address changed page if no is selected and start date is in the past', () => {
         const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 15 days before today
         const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 15 days before today
         stubVariationOrder(fmsResultDate, startDate)
         const page = Page.visit(IsRejectionPage, { orderId: mockOrderId })
         page.form.fillInWith('No')
         page.form.saveAndContinueButton.click()
-
         Page.verifyOnPage(IsAddressChangePage)
       })
     })
