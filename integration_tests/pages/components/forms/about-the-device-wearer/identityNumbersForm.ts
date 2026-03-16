@@ -17,7 +17,7 @@ export default class IdentityNumbersFormComponent extends FormComponent {
       'Police National Computer (PNC)',
       'National Offender Management Information System (NOMIS)',
       'Prison Number',
-      'NDelius ID',
+      'Case Reference Number (CRN)',
       'Compliance and Enforcement Person Reference (CEPR)',
       'Court Case Reference Number (CCRN)',
     ])
@@ -33,7 +33,7 @@ export default class IdentityNumbersFormComponent extends FormComponent {
   }
 
   get deliusIdField(): FormInputComponent {
-    return new FormInputComponent(this.form, 'Enter NDelius ID')
+    return new FormInputComponent(this.form, 'Enter CRN')
   }
 
   get prisonNumberField(): FormInputComponent {
@@ -62,7 +62,7 @@ export default class IdentityNumbersFormComponent extends FormComponent {
     }
 
     if (profile.deliusId) {
-      this.checkboxes.set('NDelius ID')
+      this.checkboxes.set('Case Reference Number (CRN)')
       this.deliusIdField.set(profile.deliusId)
     }
 
