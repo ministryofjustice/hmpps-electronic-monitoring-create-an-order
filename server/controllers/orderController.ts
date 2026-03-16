@@ -37,7 +37,7 @@ export default class OrderController {
       if (this.shouldShowIsRejectionPage(order)) {
         res.redirect(paths.ORDER.IS_REJECTION.replace(':orderId', orderId))
       } else if (FeatureFlags.getInstance().get('SERVICE_REQUEST_TYPE_ENABLED')) {
-        res.redirect(paths.VARIATION.SERVICE_REQUEST_TYPE.replace(':orderId', orderId))
+        res.redirect(paths.ORDER.IS_ADDRESS_CHANGE.replace(':orderId', orderId))
       } else {
         await this.orderService.createVariationFromExisting({
           orderId,

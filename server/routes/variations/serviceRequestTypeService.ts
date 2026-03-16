@@ -1,17 +1,29 @@
-import RestClient from '../../../data/restClient'
-import { AuthenticatedRequestInput } from '../../../interfaces/request'
-import OrderModel, { Order } from '../../../models/Order'
+import RestClient from '../../data/restClient'
+import { AuthenticatedRequestInput } from '../../interfaces/request'
+import OrderModel, { Order } from '../../models/Order'
 
 type CreateOrderInput = AuthenticatedRequestInput & {
   type: string
 }
 
 type OrderRequestInput = CreateOrderInput & {
-  orderId: string
+  orderId: string | undefined
 }
 
 export default class ServiceRequestTypeService {
   constructor(private readonly apiClient: RestClient) {}
+
+  async createNewVariation(input: OrderRequestInput, order: Order | undefined): Promise<string> {
+    let id
+    if (order !== undefined) {
+      await this.createVariationFromExisting(input)
+      id = order.id
+    } else {
+      const newOrder = await this.createVariation(input)
+      id = newOrder.id
+    }
+    return id
+  }
 
   async createVariationFromExisting(input: OrderRequestInput): Promise<void> {
     return this.apiClient.post({

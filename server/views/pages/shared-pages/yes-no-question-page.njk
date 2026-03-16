@@ -1,0 +1,44 @@
+{% extends "../../partials/form-layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+
+{% set questions = content.pages.isAddressChange.questions %}
+{% set questionName = questionTitle%}
+{% block beforeContent %}
+    {{ govukBackLink({
+    text: "Back",
+    href: "/order/" + order.id + "/edit"
+  }) }}
+{% endblock %}
+
+{% set isOrderEditable = true %}
+{% set backButtonText = 'Cancel and return back to form' %}
+
+{% block formInputs %}
+
+    {{ govukRadios({
+  classes: "govuk-radios--inline",
+  name: "answer",  
+  fieldset: {
+    legend: {
+      text: question,
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--l"
+    }
+  }, 
+  items: [
+    {
+      value: "yes",
+      text: "Yes"
+    },
+    {
+      value: "no",
+      text: "No"
+    }
+  ],
+  value: answer.value,
+  errorMessage: answer.error
+})}}
+
+{% endblock %}
