@@ -50,7 +50,7 @@ context('Service-Request-Types', () => {
   }
 
   const trail = {
-    startDate: new Date(currentDate.getFullYear(), 11, 1),
+    startDate: new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)),
     endDate: new Date(currentDate.getFullYear() + 1, 11, 1, 23, 59, 0),
   }
 
