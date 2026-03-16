@@ -12,11 +12,9 @@ context('Start', () => {
       page.signInButton().should('exist')
 
       cy.contains('h2', 'Use this service to:').should('have.class', 'govuk-heading-s')
-      cy.get('#use-service-list')
-        .children()
-        .should('contain', 'submit an EMO application form electronically to EMS replacing sending it by email')
-        .should('contain', 'view and download your submitted application forms')
-        .should('contain', 'submit a change to an EMO application form')
+      page.useServiceList.hasItem('submit an EMO application form electronically to EMS replacing sending it by email')
+      page.useServiceList.hasItem('view and download your submitted application forms')
+      page.useServiceList.hasItem('submit a change to an EMO application form')
 
       cy.contains('h2', "If you don't have an account:").should('have.class', 'govuk-heading-s')
       cy.get('#no-account-list')
