@@ -1,9 +1,9 @@
 import type { Request, Response, NextFunction } from 'express'
-import type { HTTPError } from 'superagent'
 import logger from '../logger'
+import { SanitisedError } from './sanitisedError'
 
 export default function createErrorHandler(production: boolean) {
-  return (error: HTTPError, req: Request, res: Response, next: NextFunction): void => {
+  return (error: SanitisedError, req: Request, res: Response, next: NextFunction): void => {
     logger.error(`Error handling request for '${req.originalUrl}', user '${res.locals.user?.username}'`, error)
 
     res.locals.message = production
@@ -11,6 +11,10 @@ export default function createErrorHandler(production: boolean) {
       : error.message
     res.locals.status = error.status
     res.locals.stack = production ? null : error.stack
+
+    if (error.status === 403 && error.data?.errorCode === '40301') {
+      return res.status(403).render('pages/error-pages/403')
+    }
 
     if (error.status === 401 || error.status === 403) {
       logger.info('Logging user out')
