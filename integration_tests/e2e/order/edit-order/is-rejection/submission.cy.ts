@@ -62,9 +62,9 @@ context('Edit Order', () => {
       Page.verifyOnPage(OrderTasksPage)
     })
 
-    it('Should call copy-as-variation endpoint if no is selected and start date is in the future', () => {
-      const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 32).setHours(0, 0, 0, 0)) // 32 days before today
-      const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 45).setHours(0, 0, 0, 0)) // 45 days before today
+    it('Should call copy-as-variation endpoint if no is selected and start date is in the past', () => {
+      const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 32).setHours(0, 0, 0, 0)) // 32 days after today
+      const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 45).setHours(0, 0, 0, 0)) // 45 days after today
       stubVariationOrder(fmsResultDate, startDate)
       const page = Page.visit(IsRejectionPage, { orderId: mockOrderId })
       page.form.fillInWith('No')
