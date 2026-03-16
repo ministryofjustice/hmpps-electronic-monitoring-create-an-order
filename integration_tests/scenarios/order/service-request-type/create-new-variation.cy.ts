@@ -8,6 +8,7 @@ import SearchPage from '../../../pages/search'
 import ServiceRequestTypePage from '../../../e2e/order/variation/service-request-type/serviceRequestTypePage'
 import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
 import ReceiptPage from '../../../pages/order/receipt'
+import IsAddressChangePage from '../../../e2e/order/edit-order/is-address-change/isAddressChangePage'
 
 context('Service-Request-Types', () => {
   const testFlags = {
@@ -72,9 +73,15 @@ context('Service-Request-Types', () => {
     searchPage.searchButton.click()
     searchPage.variationFormButton.click()
 
-    const page = Page.verifyOnPage(ServiceRequestTypePage)
-    page.form.fillInWith(option)
-    page.form.continueButton.click()
+    const isAddressChange = option === 'Address Change'
+    const isAddressChangePage = Page.verifyOnPage(IsAddressChangePage)
+    isAddressChangePage.form.fillInWith(isAddressChange ? 'Yes' : 'No')
+    isAddressChangePage.form.saveAndContinueButton.click()
+    if (!isAddressChange) {
+      const page = Page.verifyOnPage(ServiceRequestTypePage)
+      page.form.fillInWith(option)
+      page.form.continueButton.click()
+    }
 
     let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
     orderSummaryPage.fillInVariationsDetails({ variationDetails: variation })
@@ -138,19 +145,25 @@ context('Service-Request-Types', () => {
   })
 
   it('Should able to create new REINSTALL_AT_DIFFERENT_ADDRESS', () => {
-    fillInNewOrder('I need monitoring equipment installed at an additional address', 'Reinstall at different address')
+    fillInNewOrder(
+      'The device wearer needs to remain at a second or third address during curfew hours.',
+      'Reinstall at different address',
+    )
   })
 
   it('Should able to create new REINSTALL_DEVICE', () => {
-    fillInNewOrder('I need monitoring equipment reinstalled', 'Reinstall device')
+    fillInNewOrder('Address Change', 'Reinstall device')
   })
 
   it('Should able to create new END_MONITORING', () => {
-    fillInNewOrder('I need to end all monitoring for a device wearer', 'End all monitoring')
+    fillInNewOrder(
+      "The device wearer's circumstances have changed and all monitoring needs to end.",
+      'End all monitoring',
+    )
   })
 
   it('Should able to make REVOCATION change', () => {
-    fillInNewOrder('I need to revoke monitoring for the device wearer', 'Revocation')
+    fillInNewOrder('The device wearer has been recalled to prison.', 'Revocation')
   })
 
   it('Should able to create new VARIATION', () => {

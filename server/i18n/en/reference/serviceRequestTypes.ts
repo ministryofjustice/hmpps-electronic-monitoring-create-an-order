@@ -1,23 +1,16 @@
 import ServiceRequestTypes from '../../../types/i18n/reference/serviceRequestTypes'
 
 const serviceRequestTypes: ServiceRequestTypes = {
-  REINSTALL_DEVICE: {
-    text: 'I need monitoring equipment reinstalled',
-    description: "The device wearer's primary, secondary or tertiary address has changed.",
-  },
-  REINSTALL_AT_DIFFERENT_ADDRESS: {
-    text: 'I need monitoring equipment installed at an additional address',
-    description:
-      'The device wearer needs to remain at a second or third address during curfew hours. This is a new address where there was no second or third address previously.',
-  },
-  REVOCATION: {
-    text: 'I need to revoke monitoring for the device wearer',
-    description: 'The device wearer has been recalled to prison.',
-  },
-  END_MONITORING: {
-    text: 'I need to end all monitoring for a device wearer',
-    description: "The device wearer's circumstances have changed and all monitoring needs to end early.",
-  },
+  // SR 11 if civil or immigration else SR21
+  REVOCATION: 'The device wearer has been recalled to prison.',
+  // SR 11 if civil or immigration else SR21
+  END_MONITORING: "The device wearer's circumstances have changed and all monitoring needs to end.",
+  // SR 05
+  REINSTALL_AT_DIFFERENT_ADDRESS: 'The device wearer needs to remain at a second or third address during curfew hours.',
+  // Hard stop options
+  NEEDS_CHECKING_OR_REFITTED: 'There is an issue with the equipment and it needs checking or refitted',
+  RESPONSIBLE_OFFICER_CHANGED: 'The Responsible Officer has changed',
+  // SR 08
   VARIATION: 'I need to change something else in the form',
 }
 

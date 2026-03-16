@@ -2,7 +2,7 @@ import Page from '../../../pages/page'
 import ConfirmVariationPage from '../../../pages/order/variation/confirmVariation'
 import OrderTasksPage from '../../../pages/order/summary'
 import IsRejectionPage from '../edit-order/is-rejection/isRejectionPage'
-import ServiceRequestTypePage from './service-request-type/serviceRequestTypePage'
+import IsAddressChangePage from '../edit-order/is-address-change/isAddressChangePage'
 
 const mockOriginalId = '00a00000-79cd-49f9-a498-b1f07c543b8a'
 const mockVariationId = '11a11111-79cd-49f9-a498-b1f07c543b8a'
@@ -162,7 +162,7 @@ context('Variation', () => {
         afterEach(() => {
           cy.task('resetFeatureFlags')
         })
-        it('should proceed to the order tasks page when fms result date after start date and current date is after 30 days of fms result date', () => {
+        it('should proceed to the is address changed page when fms result date after start date and current date is after 30 days of fms result date', () => {
           cy.visit(`/order/${mockOriginalId}/edit`)
           const page = Page.verifyOnPage(ConfirmVariationPage)
 
@@ -174,10 +174,10 @@ context('Variation', () => {
 
           page.confirmButton().click()
 
-          Page.verifyOnPage(ServiceRequestTypePage)
+          Page.verifyOnPage(IsAddressChangePage)
         })
 
-        it('should proceed to the order tasks page when fms result date before start date and current date is after 30 days of fms result date', () => {
+        it('should proceed to the is address changed page when fms result date before start date and current date is after 30 days of fms result date', () => {
           cy.visit(`/order/${mockOriginalId}/edit`)
           const page = Page.verifyOnPage(ConfirmVariationPage)
 
@@ -188,7 +188,7 @@ context('Variation', () => {
 
           page.confirmButton().click()
 
-          Page.verifyOnPage(ServiceRequestTypePage)
+          Page.verifyOnPage(IsAddressChangePage)
         })
       })
     })
