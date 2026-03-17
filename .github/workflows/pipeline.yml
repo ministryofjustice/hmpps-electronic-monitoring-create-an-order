@@ -33,11 +33,19 @@ jobs:
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_unit_tests.yml@v2 # WORKFLOW_VERSION
     needs: [node_build]
     secrets: inherit
+    with:
+      timezoneLinux: "Europe/London"
+      timezoneWindows: "Europe/London"
+      timezoneMaxos: "Europe/London"
   node_integration_tests:
     name: node integration tests
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_integration_tests.yml@v2 # WORKFLOW_VERSION
     needs: [node_build]
     secrets: inherit
+    with:
+        timezoneLinux: "Europe/London"
+        timezoneWindows: "Europe/London"
+        timezoneMaxos: "Europe/London"
   helm_lint:
     strategy:
       matrix:
