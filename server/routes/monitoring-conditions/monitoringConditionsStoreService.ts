@@ -20,7 +20,7 @@ export default class MonitoringConditionsStoreService {
   ]
 
   private keyFromOrder(order: Order): string {
-    return `${order.id}+${order.versionId}`
+    return `${order.id}+${order.versionId}+monitoringConditions`
   }
 
   public async updateMonitoringConditions(order: Order, data: MonitoringConditions) {
@@ -30,7 +30,6 @@ export default class MonitoringConditionsStoreService {
   public async getMonitoringConditions(order: Order): Promise<MonitoringConditions> {
     const key = this.keyFromOrder(order)
     let result = await this.dataStore.get(key)
-
     if (result === null) {
       result = JSON.stringify(order.monitoringConditions ? order.monitoringConditions : {})
     }
