@@ -19,7 +19,7 @@ export default class InterestedPartiesStoreService {
   ]
 
   private keyFromOrder(order: Order): string {
-    return `${order.id}+${order.versionId}`
+    return `${order.id}+${order.versionId}+interestedParties`
   }
 
   public async updateInterestedParties(order: Order, data: InterestedParties) {
