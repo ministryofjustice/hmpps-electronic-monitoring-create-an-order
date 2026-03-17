@@ -14,6 +14,7 @@ export interface BaseUser {
   userRoles: string[]
   token: string
   cohort?: UserCohort
+  cohortDisaplyName?: string
 }
 
 /**
