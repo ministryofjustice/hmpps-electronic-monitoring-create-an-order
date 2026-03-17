@@ -3,7 +3,7 @@ import FormRadiosComponent from '../../../../../pages/components/formRadiosCompo
 
 export default class DapolMissedInErrorComponent extends SingleQuestionFormComponent {
   get dapolMissedInErrorField(): FormRadiosComponent {
-    const label = 'Are you submitting this form becasue DAPOL was missed in error at point of release?'
+    const label = 'Are you submitting this form because DAPOL was missed in error at point of release?'
     return new FormRadiosComponent(this.form, label, ['Yes', 'No'])
   }
 

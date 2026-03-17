@@ -60,7 +60,7 @@ const monitoringConditionsPageContent: MonitoringConditionsPageContent = {
       text: 'Are you sure that you want to delete this electronic monitoring type?',
     },
     dapolMissedInError: {
-      text: 'Are you submitting this form becasue DAPOL was missed in error at point of release?',
+      text: 'Are you submitting this form because DAPOL was missed in error at point of release?',
     },
   },
   section: 'Electronic monitoring required',
