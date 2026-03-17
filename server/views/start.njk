@@ -27,11 +27,34 @@
           <li>if your team is using this service, <a href="https://ministryofjustice.github.io/hmpps-electronic-monitoring-create-an-order-docs/getting-an-account.html#getting-an-account" target="_blank">follow the instructions to get a new account</a></li>
         </ul>
 
-        <h2 class="govuk-heading-s">What you need to create an EMO</h2>
+        <h2 class="govuk-heading-s">This service does not yet allow you to:</h2>
 
-        <p>This service does not yet allow you see and use information from other services such as Digital Prison Services (DPS) and Create and Vary a Licence (CVL).</p>
-        <p>You will need to have and enter information about the device wearer and the monitoring requirements from the licence.</p>
-        <p>To help plan installation you will be asked risk information about the device wearer. Answer questions based on what you know about the device wearers previous offence and behaviour. If you do not have this information you can ask Probation.</p>
+        <ul class="govuk-list govuk-list--bullet" id="restrictions-list">
+          <li>request a visit for refits or equipment checks. For example, if the battery is not working or there is a medical reason for a refit</li>
+          <li>notify EMS of a change to the responsible officer</li>
+          <li>notify EMS of a change to the curfew hours or address for a device wearer serving a community sentence</li>
+          <li>submit a 'Special' EMO application for a Serious Organised Crime case, those convicted of Terrorist Offences, or assessed as Terrorist Connected and Terrorist Risk cases</li>
+        </ul>
+        <details class="govuk-details" id="notification-dropdown">
+          <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">How do I notify EMS of things that are not in the service?</span>
+          </summary>
+          <div class="govuk-details__text">
+            <h2 class="govuk-heading-s">How do I request a visit for refits or equipment checks or change the Responsible Officer?</h2>
+            <p>Use the service request portal if you have access</p>
+            <p>If you don’t have access mail <a href="mailto:EMSEnforcement@ems.co.uk">EMSEnforcement@ems.co.uk.</a></p>
+
+            <h2 class="govuk-heading-s">How do I notify EMS for a change in curfew hours or address for a device wearer serving a community sentence?</h2>
+            <p>Complete the 'PCSC address change form' Word document and send it to <a href="mailto:LPAdmin@ems.co.uk">LPAdmin@ems.co.uk.</a></p>
+
+            <h2 class="govuk-heading-s">How do I send a 'Special' order for a high-risk device wearer?</h2>
+            <ul class="govuk-list govuk-list--bullet" id="special-order-list">
+              <li>complete the EMS NSD CPPC SOC order form</li>
+              <li>send the completed form by email to <a href="mailto:emCCSpecialCase@ems.co.uk">emCCSpecialCase@ems.co.uk</a></li>
+            </ul>
+          </div>
+
+        </details>
 
         {{ govukButton({
           text: "Start now",
