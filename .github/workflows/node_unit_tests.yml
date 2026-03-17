@@ -50,14 +50,14 @@ jobs:
         uses: szenius/set-timezone@v2.0
         with:
           timezoneLinux: ${{ inputs.timezone }}
-      - uses: ministryofjustice/hmpps-github-actions/.github/actions/checkout@v6
+      - uses: actions/checkout@v6
       - name: Use Node.js ${{ inputs.node_version_file }}
-        uses: ministryofjustice/hmpps-github-actions/.github/actions/setup-node@v6
+        uses: actions/setup-node@v6
         with:
           node-version-file: ${{ inputs.node_version_file }}
       - name: restore cache
         id: restore-cache
-        uses: ministryofjustice/hmpps-github-actions/.github/actions/cache/restore@v5
+        uses: actions/cache/restore@v5
         env:
           cache-name: node-modules
         with:
@@ -66,7 +66,7 @@ jobs:
             ~/.cache/Cypress
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json', '!**/node_modules/**') }}
       - name: download the artifacts
-        uses: ministryofjustice/hmpps-github-actions/.github/actions/download-artifact@v8
+        uses: actions/download-artifact@v8
         with:
           name: npm_build_artifacts
       - name: unit tests
@@ -78,7 +78,7 @@ jobs:
         # Replacing the above with if: always()
       - name: upload the artifacts
         if: ${{ !cancelled() }}
-        uses: ministryofjustice/hmpps-github-actions/.github/actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ inputs.test_results_artifact_name }}
           path: test_results
@@ -96,7 +96,7 @@ jobs:
           list-tests: 'failed'
       - name: fail the action if the tests failed
         if: ${{ steps.unit-tests.outcome == 'failure' }}
-        uses: ministryofjustice/hmpps-github-actions/.github/actions/github-script@v8
+        uses: actions/github-script@v8
         with:
           script: |
             core.setFailed('Unit tests failed')
