@@ -126,7 +126,7 @@ context('Index', () => {
         httpStatus: 200,
         method: 'GET',
         subPath: 'user-cohort',
-        response: { cohort: 'PRISON', activeCaseLoad: 'HMP ABC' },
+        response: { cohort: 'PRISON', activeCaseLoadName: 'HMP ABC' },
       })
       cy.signIn()
 

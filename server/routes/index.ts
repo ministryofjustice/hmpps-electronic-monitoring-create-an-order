@@ -43,6 +43,9 @@ import createAttachmentRouter from './attachments/router'
 import createInterestedPartiesRouter from './interested-parties/router'
 import InterestedPartiesCheckYourAnswersController from './interested-parties/check-your-answers/controller'
 import SpecialOrderController from './special-order/controller'
+import IsAddressChangeController from './variations/is-address-change/controller'
+import NoRefitsController from './variations/no-refits/controller'
+import NoChangeResponsibleOfficerController from './variations/no-change-responsible-officer/controller'
 
 export default function routes({
   alcoholMonitoringService,
@@ -203,6 +206,11 @@ export default function routes({
 
   const serviceRequestTypeController = new ServiceRequestTypeController(serviceRequestTypeService)
   const specialOrderController = new SpecialOrderController()
+
+  const isAddressChangeController = new IsAddressChangeController(serviceRequestTypeService)
+
+  const noRefitsController = new NoRefitsController()
+  const noChangeResonsibleOfficer = new NoChangeResponsibleOfficerController()
   router.param('orderId', populateOrder(orderService))
 
   get('/', orderSearchController.list)
@@ -232,6 +240,10 @@ export default function routes({
   get(paths.ORDER.RECEIPT_DOWNLOAD, receiptController.downloadReceipt)
   get(paths.ORDER.SPECIAL_ORDER, specialOrderController.view)
   post(paths.ORDER.SPECIAL_ORDER, specialOrderController.update)
+  get(paths.ORDER.IS_ADDRESS_CHANGE, isAddressChangeController.view)
+  post(paths.ORDER.IS_ADDRESS_CHANGE, isAddressChangeController.update)
+  get(paths.ORDER.NO_REFITS, noRefitsController.view)
+  get(paths.ORDER.NO_CHANGE_RESPONSIBLE_OFFICER, noChangeResonsibleOfficer.view)
   /**
    * ABOUT THE DEVICE WEARER
    */
@@ -382,8 +394,8 @@ export default function routes({
   post(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.update)
   get(paths.VARIATION.SERVICE_REQUEST_TYPE, serviceRequestTypeController.view)
   post(paths.VARIATION.SERVICE_REQUEST_TYPE, serviceRequestTypeController.update)
-  get(paths.VARIATION.CREATE_VARIATION, serviceRequestTypeController.view)
-  post(paths.VARIATION.CREATE_VARIATION, serviceRequestTypeController.update)
+  get(paths.VARIATION.CREATE_VARIATION, isAddressChangeController.view)
+  post(paths.VARIATION.CREATE_VARIATION, isAddressChangeController.update)
 
   get(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS_VERSION, interestedPartiesController.view)
   post(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS_VERSION, interestedPartiesController.update)

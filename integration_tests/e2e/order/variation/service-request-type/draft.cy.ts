@@ -29,22 +29,17 @@ context('orderType', () => {
     page.form.serviceRequestTypeField.shouldExist()
     page.form.serviceRequestTypeField.shouldNotBeDisabled()
 
-    page.form.serviceRequestTypeField.shouldHaveDescription(
-      'I need monitoring equipment installed at an additional address',
-      'The device wearer needs to remain at a second or third address during curfew hours. This is a new address where there was no second or third address previously.',
+    page.form.serviceRequestTypeField.shouldHaveOption('The device wearer has been recalled to prison.')
+    page.form.serviceRequestTypeField.shouldHaveOption(
+      "The device wearer's circumstances have changed and all monitoring needs to end.",
     )
-    page.form.serviceRequestTypeField.shouldHaveDescription(
-      'I need monitoring equipment reinstalled',
-      "The device wearer's primary, secondary or tertiary address has changed.",
+    page.form.serviceRequestTypeField.shouldHaveOption(
+      'The device wearer needs to remain at a second or third address during curfew hours.',
     )
-    page.form.serviceRequestTypeField.shouldHaveDescription(
-      'I need to revoke monitoring for the device wearer',
-      'The device wearer has been recalled to prison.',
+    page.form.serviceRequestTypeField.shouldHaveOption(
+      'There is an issue with the equipment and it needs checking or refitted',
     )
-    page.form.serviceRequestTypeField.shouldHaveDescription(
-      'I need to end all monitoring for a device wearer',
-      "The device wearer's circumstances have changed and all monitoring needs to end early.",
-    )
+    page.form.serviceRequestTypeField.shouldHaveOption('The Responsible Officer has changed')
     page.form.serviceRequestTypeField.shouldHaveOption('I need to change something else in the form')
 
     page.form.continueButton.should('exist')

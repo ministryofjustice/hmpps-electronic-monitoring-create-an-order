@@ -160,6 +160,9 @@ interface ValidationErrors {
   nationalSecurityDirectorate: {
     nationalSecurityDirectorateRequired: string
   }
+  isAddressChange: {
+    isAddressChangeRequired: string
+  }
 }
 
 export interface DateErrorMessages {
@@ -438,6 +441,9 @@ const validationErrors: ValidationErrors = {
   },
   nationalSecurityDirectorate: {
     nationalSecurityDirectorateRequired: 'Select yes if the device wearer is being managed by the NSD',
+  },
+  isAddressChange: {
+    isAddressChangeRequired: 'Select Yes if the device wearer’s primary address has changed',
   },
 }
 

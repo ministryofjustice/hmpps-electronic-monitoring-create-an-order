@@ -40,6 +40,7 @@ import ResponsibleOrganisationPageContent from './pages/responsibleOrganisation'
 import ResponsibleOfficerPageContent from './pages/responsibleOfficer'
 import PostcodeLookupPageContent from './pages/postcodeLookup'
 import NationalSecurityDirectoratePageConetent from './pages/national-security-directorate'
+import IsAddressChangePageContent from './pages/isAddressChange'
 
 type I18n = {
   pages: {
@@ -95,6 +96,7 @@ type I18n = {
     curfewAddress: PostcodeLookupPageContent
     appointmentAddress: PostcodeLookupPageContent
     nationalSecurityDirectorate: NationalSecurityDirectoratePageConetent
+    isAddressChange: IsAddressChangePageContent
   }
   reference: ReferenceData
 }
