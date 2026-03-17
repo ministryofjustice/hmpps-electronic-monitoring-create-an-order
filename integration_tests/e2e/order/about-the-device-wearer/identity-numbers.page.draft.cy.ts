@@ -53,7 +53,7 @@ context('About the device wearer', () => {
         page.form.checkboxes.shouldHaveOption('Police National Computer (PNC)')
         page.form.checkboxes.shouldHaveOption('National Offender Management Information System (NOMIS)')
         page.form.checkboxes.shouldHaveOption('Prison Number')
-        page.form.checkboxes.shouldHaveOption('NDelius ID')
+        page.form.checkboxes.shouldHaveOption('Case Reference Number (CRN)')
         page.form.checkboxes.shouldHaveOption('Compliance and Enforcement Person Reference (CEPR)')
         page.form.checkboxes.shouldHaveOption('Court Case Reference Number (CCRN)')
       })
@@ -65,7 +65,7 @@ context('About the device wearer', () => {
         page.form.checkboxes.shouldHaveValue('Police National Computer (PNC)')
         page.form.checkboxes.shouldHaveValue('Compliance and Enforcement Person Reference (CEPR)')
 
-        page.form.checkboxes.shouldNotHaveValueChecked('NDelius ID')
+        page.form.checkboxes.shouldNotHaveValueChecked('Case Reference Number (CRN)')
         page.form.nomisIdField.shouldHaveValue('nomis')
         page.form.pncIdField.shouldHaveValue('pnc')
         page.form.complianceField.shouldHaveValue('cepr')

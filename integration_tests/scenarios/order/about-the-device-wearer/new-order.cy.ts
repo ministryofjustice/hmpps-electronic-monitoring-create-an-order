@@ -73,7 +73,7 @@ context('New about device wearer flow', () => {
       { key: 'Police National Computer (PNC)', value: deviceWearerDetails.pncId },
       { key: 'National Offender Management Information System (NOMIS)', value: deviceWearerDetails.nomisId },
       { key: 'Prison Number', value: deviceWearerDetails.prisonNumber },
-      { key: 'NDelius ID', value: deviceWearerDetails.deliusId },
+      { key: 'Case Reference Number (CRN)', value: deviceWearerDetails.deliusId },
       {
         key: 'Compliance and Enforcement Person Reference (CEPR)',
         value: deviceWearerDetails.complianceAndEnforcementPersonReference,
