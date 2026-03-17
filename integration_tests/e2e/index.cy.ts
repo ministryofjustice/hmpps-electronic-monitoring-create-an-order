@@ -150,10 +150,10 @@ context('Index', () => {
 
       cy.signIn()
       const page = Page.visit(IndexPage)
-      page.header.cohort().should('contain.text', 'PROBATION')
+      page.header.cohort().should('contain.text', 'Probation')
     })
 
-    it('Should show other as cohort if user is in other cohort', () => {
+    it('Should show Home Office as cohort if user is in HOME_OFFICE cohort', () => {
       cy.task('stubSignIn', {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
@@ -164,12 +164,50 @@ context('Index', () => {
         httpStatus: 200,
         method: 'GET',
         subPath: 'user-cohort',
+        response: { cohort: 'HOME_OFFICE' },
+      })
+
+      cy.signIn()
+      const page = Page.visit(IndexPage)
+      page.header.cohort().should('contain.text', 'Home Office')
+    })
+
+    it('Should show Court as cohort if user is in COURT cohort', () => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '123456783',
+      })
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: { cohort: 'COURT' },
+      })
+
+      cy.signIn()
+      const page = Page.visit(IndexPage)
+      page.header.cohort().should('contain.text', 'Court')
+    })
+
+    it('Should show other as cohort if user is in other cohort', () => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '123456784',
+      })
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
         response: { cohort: 'OTHER' },
       })
 
       cy.signIn()
       const page = Page.visit(IndexPage)
-      page.header.cohort().should('contain.text', 'OTHER')
+      page.header.cohort().should('contain.text', 'Other')
     })
   })
 

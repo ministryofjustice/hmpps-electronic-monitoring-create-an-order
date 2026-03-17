@@ -21,7 +21,6 @@ export default function populateCurrentUser(userCohortService: UserCohortService
         throw new Error('There was a problem decoding the JWT')
       }
       const cohort = await userCohortService.getUserCohort(res.locals.user.token)
-
       res.locals.user = {
         ...res.locals.user,
         userId,
@@ -29,6 +28,7 @@ export default function populateCurrentUser(userCohortService: UserCohortService
         displayName: convertToTitleCase(name),
         userRoles: roles.map(role => role.substring(role.indexOf('_') + 1)),
         cohort,
+        cohortDisaplyName: convertToTitleCase(cohort.cohort.replace('_', ' ')),
       }
 
       if (res.locals.user.authSource === 'nomis') {

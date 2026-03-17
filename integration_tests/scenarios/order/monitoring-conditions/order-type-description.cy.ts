@@ -139,7 +139,7 @@ context('Order type descriptions', () => {
     // Dapol missed in error
     verifyValueInCheckYourAnswerPage(
       page,
-      'Are you submitting this form becasue DAPOL was missed in error at point of release?',
+      'Are you submitting this form because DAPOL was missed in error at point of release?',
       monitoringOrderTypeDescription.dapolMissedInError,
     )
   }
