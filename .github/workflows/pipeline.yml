@@ -30,7 +30,7 @@ jobs:
       install_command: 'npm run setup'
   node_unit_tests:
     name: node unit tests
-    uses: .github/workflows/node_unit_tests.yml@v2 # WORKFLOW_VERSION
+    uses: ./node_unit_tests.yml@v2 # WORKFLOW_VERSION
     needs: [node_build]
     secrets: inherit
     with:
