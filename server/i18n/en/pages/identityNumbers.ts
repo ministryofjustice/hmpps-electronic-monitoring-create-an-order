@@ -24,7 +24,7 @@ const identityNumbersPageContent: IdentityNumbersPageContent = {
     },
   },
   section: 'About the device wearer',
-  title: '',
+  title: 'What identity numbers do you have for the device wearer?',
 }
 
 export default identityNumbersPageContent
