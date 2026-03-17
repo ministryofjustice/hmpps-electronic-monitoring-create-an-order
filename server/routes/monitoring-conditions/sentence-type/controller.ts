@@ -19,7 +19,6 @@ export default class SentenceTypeController extends MonitoringConditionsBaseCont
   view: RequestHandler = async (req: Request, res: Response): Promise<void> => {
     const order = req.order!
     let monitoringConditions = await this.montoringConditionsStoreService.getMonitoringConditions(order)
-
     if (!monitoringConditions.orderType) {
       const notifyingOrganisation = req.order?.interestedParties?.notifyingOrganisation
       if (notifyingOrganisation === 'PRISON' || notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE') {

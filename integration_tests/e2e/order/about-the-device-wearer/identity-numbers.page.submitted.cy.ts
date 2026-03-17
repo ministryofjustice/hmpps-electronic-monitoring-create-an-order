@@ -72,7 +72,7 @@ context('About the device wearer', () => {
         page.form.checkboxes.shouldHaveValue('Police National Computer (PNC)')
         page.form.checkboxes.shouldHaveValue('National Offender Management Information System (NOMIS)')
         page.form.checkboxes.shouldHaveValue('Prison Number')
-        page.form.checkboxes.shouldHaveValue('NDelius ID')
+        page.form.checkboxes.shouldHaveValue('Case Reference Number (CRN)')
         page.form.checkboxes.shouldHaveValue('Compliance and Enforcement Person Reference (CEPR)')
         page.form.checkboxes.shouldHaveValue('Court Case Reference Number (CCRN)')
 

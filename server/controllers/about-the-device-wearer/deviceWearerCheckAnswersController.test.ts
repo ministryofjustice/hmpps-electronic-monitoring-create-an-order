@@ -305,7 +305,7 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
         {
           key: {
-            text: 'NDelius ID',
+            text: 'Case Reference Number (CRN)',
           },
           value: {
             text: '',
@@ -315,7 +315,7 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'ndelius id',
+                visuallyHiddenText: 'case reference number (crn)',
               },
             ],
           },
@@ -652,7 +652,7 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
         {
           key: {
-            text: 'NDelius ID',
+            text: 'Case Reference Number (CRN)',
           },
           value: {
             text: 'delius',
@@ -662,7 +662,7 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'ndelius id',
+                visuallyHiddenText: 'case reference number (crn)',
               },
             ],
           },
@@ -999,7 +999,7 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
         {
           key: {
-            text: 'NDelius ID',
+            text: 'Case Reference Number (CRN)',
           },
           value: {
             text: 'delius',
@@ -1009,7 +1009,7 @@ describe('DeviceWearerCheckAnswersController', () => {
               {
                 href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: 'ndelius id',
+                visuallyHiddenText: 'case reference number (crn)',
               },
             ],
           },

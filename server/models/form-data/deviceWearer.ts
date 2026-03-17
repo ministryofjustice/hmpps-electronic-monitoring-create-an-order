@@ -99,7 +99,7 @@ const IdentityNumbersFormDataValidator = z
       ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['pncId'], message: 'Enter PNC ID' })
     }
     if (data.identityNumbers.includes('DELIUS') && !data.deliusId) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['deliusId'], message: 'Enter NDelius ID' })
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['deliusId'], message: 'Enter CRN' })
     }
     if (data.identityNumbers.includes('PRISON_NUMBER') && !data.prisonNumber) {
       ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['prisonNumber'], message: 'Enter Prison Number' })
