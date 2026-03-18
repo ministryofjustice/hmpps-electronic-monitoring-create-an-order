@@ -16,7 +16,8 @@ on:
         default: false
         type: boolean
 env:
-    TZ: Europe/London
+  timezone: Europe/London
+  TZ: Europe/London
 permissions:
   contents: read
   packages: write
