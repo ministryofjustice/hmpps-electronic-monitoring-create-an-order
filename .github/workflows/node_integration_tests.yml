@@ -27,16 +27,23 @@ on:
         required: false
         type: number
         default: 9091
-      timeZone:
-        description: 'Optionally, set timezone of the running node'
-        required: false
+      spec-file-patterns:
         type: string
-        default: "UTC"
+        default: 'integration_tests/e2e/**/*.cy.ts'
 
 permissions:
   contents: read
 
 jobs:
+  get-timings:
+    name: Get timings
+    uses: ministryofjustice/hmpps-assess-risks-and-needs-github-actions/.github/workflows/cypress_get_timings.yml@v1
+    with:
+      repository: ministryofjustice/hmpps-activities-management
+      spec-file-patterns: ${{ inputs.spec-file-patterns }}
+    permissions:
+      contents: read
+
   integration_test:
     name: ${{ inputs.npm_script == 'int-test' && 'Run the integration tests' || format('Run the integration tests – {0}', inputs.npm_script) }}
     runs-on: ubuntu-latest
@@ -50,8 +57,23 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+    strategy:
+      fail-fast: false
+      matrix:
+        container: [ 1, 2, 3, 4, 5, 6, 7 ]
+    utputs:
+      timings-1: ${{ steps.timings.outputs.t1 }}
+      timings-2: ${{ steps.timings.outputs.t2 }}
+      timings-3: ${{ steps.timings.outputs.t3 }}
+      timings-4: ${{ steps.timings.outputs.t4 }}
+      timings-5: ${{ steps.timings.outputs.t5 }}
+      timings-6: ${{ steps.timings.outputs.t6 }}
+      timings-7: ${{ steps.timings.outputs.t7 }}
     steps:
       - uses: actions/checkout@v6
+      - uses: ministryofjustice/hmpps-assess-risks-and-needs-github-actions/.github/actions/cypress/create_timings_file@v1
+        with:
+          timings: ${{ needs.get-timings.outputs.timings }}
       - name: Use Node.js ${{ inputs.node_version_file }}
         uses: actions/setup-node@v6
         with:
@@ -88,7 +110,15 @@ jobs:
           nohup java -jar wiremock.jar --port ${{ inputs.wiremock_port }} &
           nohup npm run start-feature &
           sleep 5
-          npm run ${{ inputs.npm_script }}
+      - name: Run split Cypress tests 🧪
+        uses: cypress-io/github-action@v7.1.5
+        with:
+          browser: chrome
+        env:
+          SPEC: ${{ inputs.spec-file-patterns }}
+          SPLIT: ${{ strategy.job-total }}
+          SPLIT_INDEX: ${{ strategy.job-index }}
+          SPLIT_FILE: 'timings.json'
       - name: upload results
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
@@ -100,21 +130,15 @@ jobs:
             coverage/
             test_results/
             ctrf/
-      - name: publish test report
-        if: ${{ !cancelled() && github.event.repository.visibility == 'public' }}
-        uses: dorny/test-reporter@v2
-        with:
-          artifact: ${{ inputs.test_results_artifact_name }}
-          name: Test Report
-          path: 'test_results/**/*.xml'
-          reporter: java-junit
-          fail-on-empty: false
-          fail-on-error: false
-          list-suites: 'failed'
-          list-tests: 'failed'
-      - name: fail the action if the tests failed
-        if: ${{ steps.integration-tests.outcome == 'failure' }}
-        uses: actions/github-script@v8
-        with:
-          script: |
-            core.setFailed('Integration tests failed')
+
+  save-timings:
+  name: Save timings
+  uses: ministryofjustice/hmpps-assess-risks-and-needs-github-actions/.github/workflows/cypress_save_timings.yml@v1
+  if: success() || failure()
+  needs:
+    - get-timings
+    - cypress-test
+  with:
+    repository: ministryofjustice/hmpps-activities-management
+    initial-timings: ${{ needs.get-timings.outputs.timings }}
+    updated-timings: ${{ toJSON(needs.cypress-test.outputs) }}
