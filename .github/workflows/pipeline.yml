@@ -29,18 +29,18 @@ jobs:
     secrets: inherit
     with:
       install_command: 'npm run setup'
-  # node_unit_tests:
-  #   name: node unit tests
-  #   uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_unit_tests.yml@v2 # WORKFLOW_VERSION
-  #   needs: [node_build]
-  #   secrets: inherit    
-  # node_integration_tests:   
-  #   name: node integration tests
-  #   uses: ./.github/workflows/node_integration_tests.yml # WORKFLOW_VERSION
-  #   needs: [node_build]
-  #   secrets: inherit
-  #   with:      
-  #     spec-file-patterns: 'integration_tests/e2e/**/*'
+  node_unit_tests:
+    name: node unit tests
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_unit_tests.yml@v2 # WORKFLOW_VERSION
+    needs: [node_build]
+    secrets: inherit    
+  node_integration_tests:   
+    name: node integration tests
+    uses: ./.github/workflows/node_integration_tests.yml # WORKFLOW_VERSION
+    needs: [node_build]
+    secrets: inherit
+    with:      
+      spec-file-patterns: 'integration_tests/e2e/**/*'
   node_scenario_tests:   
     name: node scenario tests
     uses: ./.github/workflows/node_scenario_tests.yml # WORKFLOW_VERSION
@@ -57,11 +57,11 @@ jobs:
       environment: ${{ matrix.environments }}
   build:
     name: Build docker image from hmpps-github-actions
-    # if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@v2 # WORKFLOW_VERSION
-    # needs:
-    #   - node_integration_tests
-    #   - node_unit_tests
+    needs:
+      - node_integration_tests
+      - node_unit_tests
     with:
       docker_registry: 'ghcr.io'
       registry_org: 'ministryofjustice'
@@ -70,7 +70,7 @@ jobs:
       docker_multiplatform: false
   deploy_dev:
     name: Deploy to the dev environment
-    # if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     needs:
     - build
     - helm_lint

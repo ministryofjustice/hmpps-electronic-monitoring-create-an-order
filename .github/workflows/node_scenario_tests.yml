@@ -32,7 +32,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        container: [ 1, 2, 3, 4, 5, 6, 7 ]
+        container: [ 1, 2, 3, 4, 5, 6 ]
     outputs:
       timings-1: ${{ steps.timings.outputs.t1 }}
       timings-2: ${{ steps.timings.outputs.t2 }}
@@ -40,7 +40,6 @@ jobs:
       timings-4: ${{ steps.timings.outputs.t4 }}
       timings-5: ${{ steps.timings.outputs.t5 }}
       timings-6: ${{ steps.timings.outputs.t6 }}
-      timings-7: ${{ steps.timings.outputs.t7 }}
     steps:
       - uses: actions/checkout@v6
 
@@ -93,7 +92,7 @@ jobs:
           SPEC: ${{ inputs.spec-file-patterns }}
           SPLIT: ${{ strategy.job-total }}
           SPLIT_INDEX: ${{ strategy.job-index }}
-          SPLIT_FILE: 'scenario_timings.json'
+          SPLIT_FILE: 'timings.json'
 
       - name: Upload any screenshots due to failure
         uses: actions/upload-artifact@v6
@@ -106,7 +105,7 @@ jobs:
       - name: Output updated timings
         if: success() || failure()
         id: timings
-        run: echo "t${{ matrix.container }}=$(jq -c . < scenario_timings.json)" >> $GITHUB_OUTPUT
+        run: echo "t${{ matrix.container }}=$(jq -c . < timings.json)" >> $GITHUB_OUTPUT
 
       - name: upload results
         if: ${{ !cancelled() }}
