@@ -21,7 +21,7 @@ context('Submit notifying organisations', () => {
       cy.signIn()
     })
 
-    it('not a court routes to responsbile office page', () => {
+    it('not a court routes to responsible office page', () => {
       const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
 
       page.form.fillInWith({
@@ -34,7 +34,7 @@ context('Submit notifying organisations', () => {
       Page.verifyOnPage(ResponsibleOfficerPage)
     })
 
-    it('a court routes to responsbile organisation page', () => {
+    it('a court routes to responsible organisation page', () => {
       const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
 
       page.form.fillInWith({
@@ -154,7 +154,7 @@ context('Submit notifying organisations', () => {
       Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
     })
 
-    it('monitoring start date is in the future, not a court routes to responsbile office page', () => {
+    it('monitoring start date is in the future, not a court routes to responsible office page', () => {
       const startDate = new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 15 days after today
       stubVariationOrder(startDate)
       const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
