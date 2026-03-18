@@ -52,10 +52,6 @@ jobs:
           --health-retries 5
     steps:
       - uses: actions/checkout@v6
-      - name: set timezone
-        uses: szenius/set-timezone@v2.0
-        with:
-          timezoneLinux: ${{ inputs.timezone }}
       - name: Use Node.js ${{ inputs.node_version_file }}
         uses: actions/setup-node@v6
         with:
@@ -76,6 +72,11 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json', '!**/node_modules/**') }}
       - name: Init testing framework if necessary
         run: npm run int-test-init:ci --if-present
+      - name: Start Gotenberg service
+        run : |
+          docker compose -f ./.github/docker-compose-gotenberg.yml up -d
+          sleep 5 # Give it a few seconds to start
+          docker ps
       - name: Get wiremock
         shell: bash
         run: |
