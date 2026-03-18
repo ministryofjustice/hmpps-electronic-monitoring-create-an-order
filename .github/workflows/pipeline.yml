@@ -37,9 +37,12 @@ jobs:
       timezone: 'Europe/London'
   node_integration_tests:
     name: node integration tests
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_integration_tests.yml@v2 # WORKFLOW_VERSION
+    uses: ./.github/workflows/node_integration_tests.yml@v2 # WORKFLOW_VERSION
     needs: [node_build]
     secrets: inherit
+    with:
+      timezone: 'Europe/London'
+      npm_script: 'int-test:parallel'
   helm_lint:
     strategy:
       matrix:
