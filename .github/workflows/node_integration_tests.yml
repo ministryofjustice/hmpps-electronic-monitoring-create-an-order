@@ -34,7 +34,7 @@ on:
         default: "UTC"
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   integration_test:
