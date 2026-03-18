@@ -135,18 +135,14 @@ jobs:
         run: |
           cat timings.json
           echo "t${{ matrix.container }}=$(jq -c . < timings.json)" >> $GITHUB_OUTPUT
-          
+
       - name: upload results
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
         with:
           name: npm_integration_test_artifacts
-          path: |
-            integration_tests/videos/
-            integration_tests/screenshots/
+          path: |            
             coverage/
-            test_results/
-            ctrf/
 
   save-timings:
     name: Save timings
