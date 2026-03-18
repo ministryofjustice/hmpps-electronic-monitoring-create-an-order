@@ -2,24 +2,15 @@ name: Integration tests
 
 on:
   workflow_call:
-    inputs:    
+    inputs:
       node_version_file:
         description: "Passed to setup-node action to specify where to source the version of node from"
         required: false
         type: string
-        default: ".nvmrc"
-      redis_tag:
-        description: 'Optionally, start a redis service with this tag'
-        required: false
-        type: string
-      wiremock_port:
-        description: 'The port number to run wiremock on'
-        required: false
-        type: number
-        default: 9091
+        default: ".nvmrc"           
       spec-file-patterns:
         type: string
-        default: 'integration_tests/e2e/**/*.cy.ts'
+        default: 'integration_tests/scenarios/**/*.cy.ts'
 
 permissions:
   contents: read
@@ -35,19 +26,9 @@ jobs:
     permissions:
       contents: read
 
-  integration_test:
-    name: Run Integration Tests
-    runs-on: ubuntu-latest
-    services:
-      redis:
-        image: ${{ inputs.redis_tag && format('redis:{0}', inputs.redis_tag) || '' }}
-        ports:
-          - 6379:6379
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+  scenario_test:
+    name: Run Scenario Tests
+    runs-on: ubuntu-latest    
     strategy:
       fail-fast: false
       matrix:
@@ -62,17 +43,21 @@ jobs:
       timings-7: ${{ steps.timings.outputs.t7 }}
     steps:
       - uses: actions/checkout@v6
+
       - uses: ministryofjustice/hmpps-assess-risks-and-needs-github-actions/.github/actions/cypress/create_timings_file@v1
         with:
           timings: ${{ needs.get-timings.outputs.timings }}
+
       - name: Use Node.js ${{ inputs.node_version_file }}
         uses: actions/setup-node@v6
         with:
           node-version-file: ${{ inputs.node_version_file }}
+
       - name: download artifacts
         uses: actions/download-artifact@v8
         with:
           name: npm_build_artifacts
+
       - name: restore cache
         id: restore-cache
         uses: actions/cache/restore@v5
@@ -83,23 +68,21 @@ jobs:
             ./node_modules
             ~/.cache/Cypress
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json', '!**/node_modules/**') }}
+
       - name: Init testing framework if necessary
         run: npm run int-test-init:ci --if-present
-      - name: Start Gotenberg service
+
+      - name: Docker compose up
         run : |
-          docker compose -f ./.github/docker-compose-gotenberg.yml up -d
+          docker compose -f ./.github/docker-compose-scenarios.yml up -d
           sleep 5 # Give it a few seconds to start
           docker ps
-      - name: Get wiremock
-        shell: bash
-        run: |
-          curl -o wiremock.jar https://repo1.maven.org/maven2/org/wiremock/wiremock-standalone/3.9.1/wiremock-standalone-3.9.1.jar
+    
       - name: Prepare and run integration tests
         id: integration-tests
         shell: bash
-        run: |
-          nohup java -jar wiremock.jar --port ${{ inputs.wiremock_port }} &
-          nohup npm run start-feature &
+        run: |          
+          nohup npm run start-scenarios &
           sleep 5
       - name: Run split Cypress tests 🧪
         uses: cypress-io/github-action@v7.1.5
@@ -130,7 +113,7 @@ jobs:
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
         with:
-          name: npm_integration_test_artifacts
+          name: npm_scenario_test_artifacts
           path: |            
             coverage/
 
@@ -140,8 +123,8 @@ jobs:
     if: success() || failure()
     needs:
       - get-timings
-      - integration_test
+      - scenario_test
     with:
       repository: ministryofjustice/hmpps-electronic-monitoring-create-an-order
       initial-timings: ${{ needs.get-timings.outputs.timings }}
-      updated-timings: ${{ toJSON(needs.integration_test.outputs) }}
+      updated-timings: ${{ toJSON(needs.scenario_test.outputs) }}
