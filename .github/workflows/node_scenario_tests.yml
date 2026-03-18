@@ -84,6 +84,7 @@ jobs:
         run: |          
           nohup npm run start-scenarios &
           sleep 5
+          
       - name: Run split Cypress tests 🧪
         uses: cypress-io/github-action@v7.1.5
         with:

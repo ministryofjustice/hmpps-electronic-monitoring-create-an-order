@@ -34,6 +34,7 @@ services:
       - SETTINGS_DATA_DICTIONARY_VERSION=DDV6
       - CEMO_FMS_INTEGRATION_ENABLED=true
       - DDV6_COURT_MAPPINGS=true
+      - HMPPS_S3_BUCKETNAME=test_bucket
       - MANAGE_USER_URL=http://cemo-wiremock:8080/manage-user
   cemo-db:
     container_name: cemo-db
