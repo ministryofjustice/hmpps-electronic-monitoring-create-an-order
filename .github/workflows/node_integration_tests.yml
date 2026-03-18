@@ -120,11 +120,27 @@ jobs:
           SPLIT: ${{ strategy.job-total }}
           SPLIT_INDEX: ${{ strategy.job-index }}
           SPLIT_FILE: 'timings.json'
+
+      - name: Upload any screenshots due to failure
+        uses: actions/upload-artifact@v6
+        if: failure()
+        with:
+          name: Upload screenshots
+          path: integration_tests/screenshots
+          if-no-files-found: ignore
+
+      - name: Output updated timings
+        if: success() || failure()
+        id: timings
+        run: |
+          cat timings.json
+          echo "t${{ matrix.container }}=$(jq -c . < timings.json)" >> $GITHUB_OUTPUT
+          
       - name: upload results
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ inputs.test_results_artifact_name }}
+          name: npm_integration_test_artifacts
           path: |
             integration_tests/videos/
             integration_tests/screenshots/
