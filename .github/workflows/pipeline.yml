@@ -16,7 +16,7 @@ on:
         default: false
         type: boolean
 permissions:
-  contents: read
+  contents: write
   packages: write
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && github.sha || github.ref }}
