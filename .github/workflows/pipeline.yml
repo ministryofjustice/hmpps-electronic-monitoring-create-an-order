@@ -15,9 +15,6 @@ on:
         required: true
         default: false
         type: boolean
-env:
-  timezone: Europe/London
-  TZ: Europe/London
 permissions:
   contents: read
   packages: write
@@ -36,21 +33,13 @@ jobs:
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_unit_tests.yml@v2 # WORKFLOW_VERSION
     needs: [node_build]
     secrets: inherit    
-  node_integration_tests:
-    strategy:
-        fail-fast: false
-        matrix:
-          test_batch:
-            - integration-test-1
-            - integration-test-2
-            - integration-test-3
+  node_integration_tests:   
     name: node integration tests
-    uses: ./.github/workflows/node_integration_tests.yml # WORKFLOW_VERSION
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_integration_tests.yml@v2 # WORKFLOW_VERSION
     needs: [node_build]
     secrets: inherit
     with:
-      timezone: 'Europe/London'
-      npm_script: 'int-test:parallel'
+      npm_script: 'int-test'
   helm_lint:
     strategy:
       matrix:
