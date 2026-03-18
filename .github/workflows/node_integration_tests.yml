@@ -39,7 +39,7 @@ jobs:
     name: Get timings
     uses: ministryofjustice/hmpps-assess-risks-and-needs-github-actions/.github/workflows/cypress_get_timings.yml@v1
     with:
-      repository: ministryofjustice/hmpps-activities-management
+      repository: ministryofjustice/hmpps-electronic-monitoring-create-an-order
       spec-file-patterns: ${{ inputs.spec-file-patterns }}
     permissions:
       contents: read
@@ -137,8 +137,8 @@ jobs:
   if: success() || failure()
   needs:
     - get-timings
-    - cypress-test
+    - integration_test
   with:
-    repository: ministryofjustice/hmpps-activities-management
+    repository: ministryofjustice/hmpps-electronic-monitoring-create-an-order
     initial-timings: ${{ needs.get-timings.outputs.timings }}
-    updated-timings: ${{ toJSON(needs.cypress-test.outputs) }}
+    updated-timings: ${{ toJSON(needs.integration_test.outputs) }}
