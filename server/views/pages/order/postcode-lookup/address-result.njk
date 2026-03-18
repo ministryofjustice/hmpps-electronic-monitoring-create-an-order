@@ -1,0 +1,49 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set section = "About the device wearer" %}
+{% set heading = "Select the device wearer's address" %}
+{% set questions = content.questions %}
+{% set continueButtonText = "Use this address" %}
+
+
+{% block formInputs %}
+    {{ govukRadios({
+      name: "address",
+      id: "address",
+      fieldset: {
+	legend: {
+	  text: "Select an address",
+	  isPageHeading: true,
+	  classes: "govuk-visually-hidden"
+	}
+      },
+      hint: {
+	html: addressCount + ' addresses found for <b>' + postcode + '</b> and <b>' + buildingId + '</b>. <a href="postcode" class="govuk-link">Search again</a>'
+      },
+      items: [
+	{
+	  value: "england",
+	  text: "England"
+	},
+	{
+    	  value: "scotland",
+    	  text: "Scotland"
+    	},
+	{
+    	  value: "wales",
+    	  text: "Wales"
+    	},
+    	{
+    	  value: "northern-ireland",
+    	  text: "Northern Ireland"
+    	}
+      ],
+      disabled: disabled
+      }) }}
+
+    <a href={{ manualAddressLink }} class="govuk-link"> Enter address manually </a>
+    <br>
+    <br>
+{% endblock %}

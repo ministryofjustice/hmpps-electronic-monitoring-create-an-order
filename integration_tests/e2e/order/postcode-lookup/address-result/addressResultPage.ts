@@ -6,6 +6,6 @@ export default class AddressResultPage extends AppFormPage {
   public form = new AddressResultComponent()
 
   constructor() {
-    super('WIP Address Result', paths.POSTCODE_LOOKUP.FIND_ADDRESS)
+    super("Select the device wearer's address", paths.POSTCODE_LOOKUP.ADDRESS_RESULT)
   }
 }

@@ -11,6 +11,7 @@ import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import cemo from './integration_tests/mockApis/cemo'
 import fms from './integration_tests/mockApis/fms'
 import hmppsDocumentManagement from './integration_tests/mockApis/hmppsDocumentManagement'
+import osDataHub from './integration_tests/mockApis/osDataHub'
 
 const featureFlagFilePath = path.join(process.cwd(), 'data', 'feature-flags.json')
 const defaultFeatureFlagFilePath = path.join(process.cwd(), 'data', 'default-feature-flags.json')
@@ -39,6 +40,7 @@ export default defineConfig({
         ...cemo,
         ...fms,
         ...hmppsDocumentManagement,
+        ...osDataHub,
         /*
          * used to output summary accessibility testing issues found to console during integration testing
          */

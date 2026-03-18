@@ -1,14 +1,14 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
+import PostcodeService from '../postcodeService'
 
 export default class AddressResultController {
-  constructor() {}
+  constructor(private readonly service: PostcodeService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    res.render('pages/WIP', {
-      pageName: 'Address Result',
-      errorSummary: null,
-    })
+    // const addresses = await this.service.lookupPostcode('SA111AA')
+    await this.service.lookupPostcode('SA111AA')
+    res.render('pages/order/postcode-lookup/address-result', {})
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {

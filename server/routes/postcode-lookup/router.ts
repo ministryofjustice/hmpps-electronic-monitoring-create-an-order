@@ -11,7 +11,7 @@ const createPostcodeLookupRouter = (services: Pick<Services, 'postcodeService'>)
   const router = Router()
 
   const findAddressController = new FindAddressController(services.postcodeService)
-  const addressResultController = new AddressResultController()
+  const addressResultController = new AddressResultController(services.postcodeService)
   const confirmAddressController = new ConfirmAddressController()
   const addressListController = new AddressListController()
   const enterAddressController = new EnterAddressController()
