@@ -33,6 +33,7 @@ on:
 
 permissions:
   contents: read
+  actions: write
 
 jobs:
   get-timings:
