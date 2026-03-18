@@ -8,7 +8,7 @@ const expectedValidationErrors = {
   noSelection: 'Select all identity numbers that you have for the device wearer',
   nomisId: 'Enter NOMIS ID',
   pncId: 'Enter PNC',
-  deliusId: 'Enter NDelius ID',
+  deliusId: 'Enter CRN',
   prisonNumber: 'Enter Prison Number',
   complianceAndEnforcementPersonReference: 'Enter Compliance and Enforcement Person Reference',
   courtCaseReferenceNumber: 'Enter Court Case Reference Number',
@@ -44,7 +44,7 @@ context('About the device wearer', () => {
           'Police National Computer (PNC)',
           'National Offender Management Information System (NOMIS)',
           'Prison Number',
-          'NDelius ID',
+          'Case Reference Number (CRN)',
           'Compliance and Enforcement Person Reference (CEPR)',
           'Court Case Reference Number (CCRN)',
         ])

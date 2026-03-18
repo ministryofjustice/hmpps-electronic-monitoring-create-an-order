@@ -5,7 +5,7 @@ const identityNumbersPageContent: IdentityNumbersPageContent = {
   legend: 'What identity numbers do you have for the device wearer?',
   questions: {
     deliusId: {
-      text: 'NDelius ID',
+      text: 'Case Reference Number (CRN)',
     },
     nomisId: {
       text: 'National Offender Management Information System (NOMIS)',
@@ -24,7 +24,7 @@ const identityNumbersPageContent: IdentityNumbersPageContent = {
     },
   },
   section: 'About the device wearer',
-  title: '',
+  title: 'What identity numbers do you have for the device wearer?',
 }
 
 export default identityNumbersPageContent

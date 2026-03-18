@@ -132,7 +132,7 @@ describe('Device wearer service', () => {
 
       expect(result).toEqual([
         { field: 'nomisId', error: 'Enter NOMIS ID' },
-        { field: 'deliusId', error: 'Enter NDelius ID' },
+        { field: 'deliusId', error: 'Enter CRN' },
       ])
       expect(mockRestClient.put).not.toHaveBeenCalled()
     })
