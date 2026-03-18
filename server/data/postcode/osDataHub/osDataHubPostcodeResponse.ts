@@ -1,7 +1,7 @@
 export type OSDataHubAddress = {
   DPA: {
     ORGANISATION_NAME?: string
-    BUILDING_NUMBER?: string
+    BUILDING_NUMBER?: number
     BUILDING_NAME?: string
     THOROUGHFARE_NAME?: string
     SUB_BUILDING_NAME?: string

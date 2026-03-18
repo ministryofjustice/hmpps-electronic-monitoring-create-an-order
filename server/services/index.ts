@@ -49,6 +49,8 @@ import OffenceOtherInfoService from '../routes/installation-and-risk/offence-oth
 import InterestedPartiesStoreService from '../routes/interested-parties/interestedPartiesStoreService'
 import UpdateInterestedPartiesService from '../routes/interested-parties/interestedPartiesService'
 import PostcodeService from '../routes/postcode-lookup/postcodeService'
+import OSDataHubClient from '../data/postcode/osDataHub/osDataHubClient'
+import AddressMapper from '../data/postcode/osDataHub/addressMapper'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
@@ -101,7 +103,7 @@ export const services = () => {
 
   const updateInterestedPartiesService = new UpdateInterestedPartiesService(cemoApiClient)
 
-  const postcodeService = new PostcodeService()
+  const postcodeService = new PostcodeService(new OSDataHubClient(new AddressMapper()))
 
   const userCohortService = new UserCohortService(
     cemoApiClient,

@@ -2,7 +2,7 @@ import { ValidationResult } from '../../models/Validation'
 import { FindAddressForm, FindAddressValidator } from './find-address/formModel'
 import { convertZodErrorToValidationError } from '../../utils/errors'
 import { AddressWithoutType } from '../../models/Address'
-import { PostcodeLookupClient } from '../../data/postcode/postcodeClient'
+import { PostcodeLookupClient } from '../../data/postcode/PostcodeLookupClient'
 
 export default class PostcodeService {
   constructor(private readonly client: PostcodeLookupClient) {}
