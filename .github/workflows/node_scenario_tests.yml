@@ -74,7 +74,7 @@ jobs:
 
       - name: Docker compose up
         run : |
-          docker compose -f ./.github/docker-compose-scenarios.yml up -d
+          docker compose -f ./.github/docker-compose-scenario.yml up -d
           sleep 5 # Give it a few seconds to start
           docker ps
     
