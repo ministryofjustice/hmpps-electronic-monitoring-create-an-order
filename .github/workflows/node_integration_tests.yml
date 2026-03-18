@@ -132,13 +132,13 @@ jobs:
             ctrf/
 
   save-timings:
-  name: Save timings
-  uses: ministryofjustice/hmpps-assess-risks-and-needs-github-actions/.github/workflows/cypress_save_timings.yml@v1
-  if: success() || failure()
-  needs:
-    - get-timings
-    - integration_test
-  with:
-    repository: ministryofjustice/hmpps-electronic-monitoring-create-an-order
-    initial-timings: ${{ needs.get-timings.outputs.timings }}
-    updated-timings: ${{ toJSON(needs.integration_test.outputs) }}
+    name: Save timings
+    uses: ministryofjustice/hmpps-assess-risks-and-needs-github-actions/.github/workflows/cypress_save_timings.yml@v1
+    if: success() || failure()
+    needs:
+      - get-timings
+      - integration_test
+    with:
+      repository: ministryofjustice/hmpps-electronic-monitoring-create-an-order
+      initial-timings: ${{ needs.get-timings.outputs.timings }}
+      updated-timings: ${{ toJSON(needs.integration_test.outputs) }}
