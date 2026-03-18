@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
+import path from 'path'
 import Page from '../../pages/page'
 import ReceiptPage from '../../pages/order/receipt'
 import AttachmentType from '../../../server/models/AttachmentType'
@@ -57,8 +58,10 @@ context('Receipt', () => {
 
       page.pdfDownloadButton().click()
       const date = new Date().toISOString().slice(0, 10)
-      const filename = `${mockOrder.deviceWearer.firstName}-${mockOrder.deviceWearer.lastName}-${date}`
-      cy.readFile(`cypress/downloads/${filename}.pdf`).should('exist')
+      const filename = `${mockOrder.deviceWearer.firstName}-${mockOrder.deviceWearer.lastName}-${date}.pdf`
+      const downloadsFolder = Cypress.config('downloadsFolder')
+      const downloadPath = path.join(downloadsFolder, filename)
+      cy.readFile(downloadPath).should('exist')
     })
 
     context('Download FMS requests', () => {
