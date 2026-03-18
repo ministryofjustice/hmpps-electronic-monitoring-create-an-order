@@ -40,6 +40,12 @@ jobs:
   integration_test:
     name: ${{ inputs.npm_script == 'int-test' && 'Run the integration tests' || format('Run the integration tests – {0}', inputs.npm_script) }}
     runs-on: ubuntu-latest
+    strategy:
+      # don't fail the entire matrix on failure
+      fail-fast: true
+      matrix:
+        # run copies of the current job in parallel
+        containers: [1, 2, 3, 4]
     services:
       redis:
         image: ${{ inputs.redis_tag && format('redis:{0}', inputs.redis_tag) || '' }}
