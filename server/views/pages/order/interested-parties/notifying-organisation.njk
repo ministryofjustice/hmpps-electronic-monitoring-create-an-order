@@ -205,13 +205,6 @@
             disabled: org.disabled
           }), notifyingOrgOptions) %}
 
-        {% elif DDv5 and org.value == 'PROBATION' %}
-          {% set notifyingOrgOptions = (notifyingOrgOptions.push({
-            value: org.value,
-            text: org.text,
-            disabled: org.disabled
-          }), notifyingOrgOptions) %}
-
         {% elif DDv5 and org.value == 'YOUTH_COURT' %}
           {% set notifyingOrgOptions = (notifyingOrgOptions.push({
             value: org.value,
@@ -232,21 +225,24 @@
 {% block formInputs %}
 
    the cohort is: {{ cohort }}
+   the notifying org value is: {{ notifyingOrganisation.value }}
 
-    {{ govukRadios({
-      name: "notifyingOrganisation",
-      fieldset: {
-        legend: {
-          text: questions.notifyingOrganisation.text,
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      items: notifyingOrgOptions,
-      value: notifyingOrganisation.value,
-      errorMessage: notifyingOrganisation.error,
-      disabled: not isOrderEditable
-    }) }}
+    {% if cohort != "PROBATION" %}
+      {{ govukRadios({
+        name: "notifyingOrganisation",
+        fieldset: {
+          legend: {
+            text: questions.notifyingOrganisation.text,
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        items: notifyingOrgOptions,
+        value: notifyingOrganisation.value,
+        errorMessage: notifyingOrganisation.error,
+        disabled: not isOrderEditable
+      }) }}
+    {% endif %}
 
     {{ govukInput({
       label: {

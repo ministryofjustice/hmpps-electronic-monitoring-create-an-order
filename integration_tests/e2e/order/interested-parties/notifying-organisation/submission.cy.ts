@@ -10,23 +10,6 @@ context('Submit notifying organisations', () => {
   context('New orders', () => {
     beforeEach(() => {
       cy.task('reset')
-      cy.task('stubSignIn', {
-        name: 'john smith',
-        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
-        stubCohort: false,
-        userId: '123',
-      })
-    })
-    it('not a court routes to responsible office page', () => {
-      cy.task('reset')
-      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-
-      cy.task('stubCemoRequest', {
-        httpStatus: 200,
-        method: 'GET',
-        subPath: 'user-cohort',
-        response: { cohort: 'PRISON', activeCaseLoadName: 'HMP ABC' },
-      })
 
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
@@ -35,6 +18,22 @@ context('Submit notifying organisations', () => {
         order: {
           dataDictionaryVersion: 'DDV6',
         },
+      })
+    })
+
+    it('not a court routes to responsible office page', () => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '123456780',
+      })
+
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: { cohort: 'PRISON', activeCaseLoadName: 'HMP ABC' },
       })
 
       cy.signIn()
@@ -52,20 +51,18 @@ context('Submit notifying organisations', () => {
     })
 
     it('a court routes to responsible organisation page', () => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '123456781',
+      })
+
       cy.task('stubCemoRequest', {
         httpStatus: 200,
         method: 'GET',
         subPath: 'user-cohort',
         response: { cohort: 'COURT' },
-      })
-
-      cy.task('stubCemoGetOrder', {
-        httpStatus: 200,
-        id: mockOrderId,
-        status: 'IN_PROGRESS',
-        order: {
-          dataDictionaryVersion: 'DDV6',
-        },
       })
 
       cy.signIn()
@@ -82,21 +79,46 @@ context('Submit notifying organisations', () => {
       Page.verifyOnPage(ResponsibleOrganisationPage)
     })
 
+    it('probation routes to responsible organisation page', () => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '123456782',
+      })
+
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: { cohort: 'PROBATION' },
+      })
+
+      cy.signIn()
+
+      const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
+
+      page.form.fillInWith({
+        notifyingOrganisationEmailAddress: 'a@b.com',
+      })
+      page.form.continueButton.click()
+
+      Page.verifyOnPage(ResponsibleOrganisationPage)
+    })
+
     it('navigating back to the page after submission shows values without org name', () => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '123456783',
+      })
+
       cy.task('stubCemoRequest', {
         httpStatus: 200,
         method: 'GET',
         subPath: 'user-cohort',
         response: { cohort: 'COURT' },
-      })
-
-      cy.task('stubCemoGetOrder', {
-        httpStatus: 200,
-        id: mockOrderId,
-        status: 'IN_PROGRESS',
-        order: {
-          dataDictionaryVersion: 'DDV6',
-        },
       })
 
       cy.signIn()
@@ -118,23 +140,18 @@ context('Submit notifying organisations', () => {
     })
 
     it('navigating back to the page after submission shows values with org name', () => {
-      cy.task('reset')
-      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '123456784',
+      })
 
       cy.task('stubCemoRequest', {
         httpStatus: 200,
         method: 'GET',
         subPath: 'user-cohort',
         response: { cohort: 'PRISON', activeCaseLoadName: 'HMP ABC' },
-      })
-
-      cy.task('stubCemoGetOrder', {
-        httpStatus: 200,
-        id: mockOrderId,
-        status: 'IN_PROGRESS',
-        order: {
-          dataDictionaryVersion: 'DDV6',
-        },
       })
 
       cy.signIn()

@@ -72,18 +72,7 @@ context('notifying organisation page', () => {
 
       const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
 
-      page.form.organisationField.shouldExist()
-      page.form.organisationField.shouldNotHaveOption('Prison service')
-      page.form.organisationField.shouldNotHaveOption('Youth Custody Service (YCS)')
-      page.form.organisationField.shouldHaveOption('Probation service')
-      page.form.organisationField.shouldHaveOption('Crown Court')
-      page.form.organisationField.shouldHaveOption('Magistrates Court')
-      page.form.organisationField.shouldHaveOption('Family Court')
-      page.form.organisationField.shouldHaveOption('Civil and County Court')
-      page.form.organisationField.shouldHaveOption('Youth Court')
-      page.form.organisationField.shouldHaveOption('Scottish Court')
-      page.form.organisationField.shouldHaveOption('Military Court')
-      page.form.organisationField.shouldHaveOption('Home Office')
+      cy.get('form').should('not.contain', 'What organisation or related organisation are you part of?')
 
       page.form.emailField.shouldExist()
 

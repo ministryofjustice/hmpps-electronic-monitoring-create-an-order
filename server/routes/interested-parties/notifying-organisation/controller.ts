@@ -35,7 +35,17 @@ export default class NotifingOrganisationController extends InterestedPartiesBas
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const formData = NotifyingOrganisationFormModel.parse(req.body)
+
+    const cohort = res.locals.user.cohort?.cohort
+
+    let formData = NotifyingOrganisationFormModel.parse(req.body)
+
+    if (cohort === 'PROBATION') {
+      formData = {
+        ...formData,
+        notifyingOrganisation: cohort,
+      }
+    }
 
     const validationResult = NotifyingOrganisationValidator.safeParse(formData)
 
