@@ -17,7 +17,7 @@ const buildUrl = (template: string, params: object = {}, query: object = {}) => 
     querystring.push(`${key}=${query[key]}`)
   })
 
-  return `${uri}${querystring.length > 0 ? '&' : ''}${querystring.join('&')}`
+  return `${uri}${querystring.length > 0 ? '?' : ''}${querystring.join('&')}`
 }
 
 export default abstract class Page {

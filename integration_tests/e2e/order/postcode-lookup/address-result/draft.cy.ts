@@ -16,11 +16,24 @@ context('address results', () => {
 
     cy.task('stubOSDataHub', {
       httpStatus: 200,
-      postcode: 'SA111AA',
+      postcode: 'SW1A2AA',
       body: {
         results: [
           {
-            DPA: { BUILDING_NUMBER: 10, THROUGHFARE_NAME: 'DOWNING STREET', POST_TOWN: 'LONDON', POSTCODE: 'SA11 1AA' },
+            DPA: {
+              BUILDING_NUMBER: 10,
+              THOROUGHFARE_NAME: 'DOWNING STREET',
+              POST_TOWN: 'LONDON',
+              POSTCODE: 'SW1A 2AA',
+            },
+          },
+          {
+            DPA: {
+              BUILDING_NUMBER: 11,
+              THOROUGHFARE_NAME: 'DOWNING STREET',
+              POST_TOWN: 'LONDON',
+              POSTCODE: 'SW1A 2AA',
+            },
           },
         ],
       },
@@ -30,9 +43,12 @@ context('address results', () => {
   })
 
   it('has correct elements', () => {
-    Page.visit(AddressResultPage, { orderId: mockOrderId, addressType: 'primary' })
-
-    // TODO: next time
-    // page.form.addressResultsField.shouldHaveOption('10 Downing Street, London, SW11 A11')
+    const page = Page.visit(
+      AddressResultPage,
+      { orderId: mockOrderId, addressType: 'PRIMARY' },
+      { postcode: 'SW1A 2AA' },
+    )
+    page.form.addressResultsField.shouldHaveOption('10 Downing Street, London, SW1A 2AA')
+    page.form.addressResultsField.shouldHaveOption('11 Downing Street, London, SW1A 2AA')
   })
 })

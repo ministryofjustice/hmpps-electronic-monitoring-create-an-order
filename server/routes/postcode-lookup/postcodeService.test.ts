@@ -18,13 +18,14 @@ describe('postcode service', () => {
     }
 
     it('returns addresses given postcode', async () => {
-      postcodeLookupStub.lookup.mockResolvedValueOnce(addresses)
+      postcodeLookupStub.lookup.mockResolvedValue(addresses)
 
       const service = new PostcodeService(postcodeLookupStub)
 
-      const result = await service.lookupPostcode('SA11 1AA')
+      const result = await service.lookupPostcode('SA11 1AA', 'PRIMARY')
 
-      expect(result).toEqual(addresses)
+      expect(result).toEqual([{ ...addresses[0], addressType: 'PRIMARY' }])
+      expect(postcodeLookupStub.lookup).toHaveBeenCalledWith('SA111AA')
     })
   })
 })
