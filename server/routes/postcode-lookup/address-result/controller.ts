@@ -3,6 +3,7 @@ import paths from '../../../constants/paths'
 import PostcodeService from '../postcodeService'
 import Model from './model'
 import { AddressType } from '../../../models/Address'
+import I18n from '../../../types/i18n'
 
 export default class AddressResultController {
   constructor(private readonly service: PostcodeService) {}
@@ -17,7 +18,7 @@ export default class AddressResultController {
 
     res.render(
       'pages/order/postcode-lookup/address-result',
-      Model.construct(addresses, { orderId, addressType, postcode, buildingId }),
+      Model.construct(addresses, res.locals.content as I18n, { orderId, addressType, postcode, buildingId }),
     )
   }
 

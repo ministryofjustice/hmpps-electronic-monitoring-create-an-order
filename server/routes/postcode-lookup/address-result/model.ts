@@ -1,5 +1,7 @@
 import paths from '../../../constants/paths'
 import { Address, AddressType } from '../../../models/Address'
+import I18n from '../../../types/i18n'
+import { AddressResultPageContent } from '../../../types/i18n/pages/postcodeLookup'
 import { createAddressPreview } from '../../../utils/utils'
 
 type AddressResultViewModel = {
@@ -8,10 +10,12 @@ type AddressResultViewModel = {
   postcode: string
   addressCount: number
   buildingId?: string
+  content: AddressResultPageContent
 }
 
 const construct = (
   addresses: Address[],
+  content: I18n,
   opts: { orderId: string; addressType: AddressType; postcode?: string; buildingId?: string },
 ): AddressResultViewModel => {
   const items = addresses.map((a, index) => ({
@@ -28,6 +32,8 @@ const construct = (
     postcode: opts.postcode || '',
     addressCount: items.length,
     buildingId: opts.buildingId,
+    // TODO: dynamic content
+    content: content.pages.deviceWearerAddressResult,
   }
 }
 

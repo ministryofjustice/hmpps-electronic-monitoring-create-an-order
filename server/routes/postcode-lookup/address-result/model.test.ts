@@ -3,8 +3,10 @@ import Model from './model'
 import { Address } from '../../../models/Address'
 import { createAddressPreview } from '../../../utils/utils'
 import paths from '../../../constants/paths'
+import getContent from '../../../i18n'
 
 const mockOrderId = uuidv4()
+const content = getContent('en', 'DDV6')
 describe('model', () => {
   const addresses: Address[] = [
     {
@@ -18,7 +20,11 @@ describe('model', () => {
   ]
 
   it('gives correct model', () => {
-    const model = Model.construct(addresses, { orderId: mockOrderId, addressType: 'PRIMARY', postcode: 'SW1A 2AA' })
+    const model = Model.construct(addresses, content, {
+      orderId: mockOrderId,
+      addressType: 'PRIMARY',
+      postcode: 'SW1A 2AA',
+    })
 
     expect(model.items).toHaveLength(1)
     const expectedText = createAddressPreview(addresses[0])
@@ -33,7 +39,7 @@ describe('model', () => {
   })
 
   it('has buildingId if provided', async () => {
-    const model = Model.construct(addresses, {
+    const model = Model.construct(addresses, content, {
       orderId: mockOrderId,
       addressType: 'PRIMARY',
       postcode: 'SW1A 2AA',

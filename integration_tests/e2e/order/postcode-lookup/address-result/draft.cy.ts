@@ -15,62 +15,86 @@ context('address results', () => {
       status: 'IN_PROGRESS',
     })
 
-    cy.task('stubOSDataHub', {
-      httpStatus: 200,
-      postcode: 'SW1A2AA',
-      body: {
-        results: [
-          {
-            DPA: {
-              BUILDING_NUMBER: 10,
-              THOROUGHFARE_NAME: 'DOWNING STREET',
-              POST_TOWN: 'LONDON',
-              POSTCODE: 'SW1A 2AA',
-            },
-          },
-          {
-            DPA: {
-              BUILDING_NUMBER: 11,
-              THOROUGHFARE_NAME: 'DOWNING STREET',
-              POST_TOWN: 'LONDON',
-              POSTCODE: 'SW1A 2AA',
-            },
-          },
-        ],
-      },
-    })
-
     cy.signIn()
   })
 
-  it('has correct elements when searching by postcode', () => {
-    const page = Page.visit(
-      AddressResultPage,
-      { orderId: mockOrderId, addressType: 'PRIMARY' },
-      { postcode: 'SW1A 2AA' },
-    )
-    page.form.addressResultsField.element.contains('2 addresses found for SW1A 2AA. Search again')
-    page.form.addressResultsField.shouldHaveOption('10 Downing Street, London, SW1A 2AA')
-    page.form.addressResultsField.shouldHaveOption('11 Downing Street, London, SW1A 2AA')
+  context('multiple results', () => {
+    beforeEach(() => {
+      cy.task('stubOSDataHub', {
+        httpStatus: 200,
+        postcode: 'SW1A2AA',
+        body: {
+          results: [
+            {
+              DPA: {
+                BUILDING_NUMBER: 10,
+                THOROUGHFARE_NAME: 'DOWNING STREET',
+                POST_TOWN: 'LONDON',
+                POSTCODE: 'SW1A 2AA',
+              },
+            },
+            {
+              DPA: {
+                BUILDING_NUMBER: 11,
+                THOROUGHFARE_NAME: 'DOWNING STREET',
+                POST_TOWN: 'LONDON',
+                POSTCODE: 'SW1A 2AA',
+              },
+            },
+          ],
+        },
+      })
+    })
 
-    page.form.addressResultsField.element
-      .get('a')
-      .contains('Search again')
-      .should(
-        'have.attr',
-        'href',
-        paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'PRIMARY'),
+    it('has correct elements when searching by postcode', () => {
+      const page = Page.visit(
+        AddressResultPage,
+        { orderId: mockOrderId, addressType: 'PRIMARY' },
+        { postcode: 'SW1A 2AA' },
       )
-  })
+      page.form.addressResultsField.element.contains('2 addresses found for SW1A 2AA. Search again')
+      page.form.addressResultsField.shouldHaveOption('10 Downing Street, London, SW1A 2AA')
+      page.form.addressResultsField.shouldHaveOption('11 Downing Street, London, SW1A 2AA')
 
-  it('has correct elements when searching by postcode and building id', () => {
-    const page = Page.visit(
-      AddressResultPage,
-      { orderId: mockOrderId, addressType: 'PRIMARY' },
-      { postcode: 'SW1A 2AA', buildingId: 10 },
-    )
-    page.form.addressResultsField.element.contains('1 address found for SW1A 2AA and 10. Search again')
-    page.form.addressResultsField.shouldHaveOption('10 Downing Street, London, SW1A 2AA')
-    page.form.addressResultsField.shouldNotHaveOption('11 Downing Street, London, SW1A 2AA')
+      page.form.addressResultsField.element
+        .get('a')
+        .contains('Search again')
+        .should(
+          'have.attr',
+          'href',
+          paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'PRIMARY'),
+        )
+    })
+
+    it('has correct elements when searching by postcode and building id', () => {
+      const page = Page.visit(
+        AddressResultPage,
+        { orderId: mockOrderId, addressType: 'PRIMARY' },
+        { postcode: 'SW1A 2AA', buildingId: 10 },
+      )
+      page.form.addressResultsField.element.contains('1 address found for SW1A 2AA and 10. Search again')
+      page.form.addressResultsField.shouldHaveOption('10 Downing Street, London, SW1A 2AA')
+      page.form.addressResultsField.shouldNotHaveOption('11 Downing Street, London, SW1A 2AA')
+    })
+
+    it('primary address', () => {
+      Page.visit(
+        AddressResultPage,
+        { orderId: mockOrderId, addressType: 'PRIMARY' },
+        { postcode: 'SW1A 2AA', buildingId: 10 },
+      )
+      cy.contains('About the device wearer')
+      cy.contains("Select the device wearer's address")
+    })
+
+    it('primary address', () => {
+      Page.visit(
+        AddressResultPage,
+        { orderId: mockOrderId, addressType: 'SECONDARY' },
+        { postcode: 'SW1A 2AA', buildingId: 10 },
+      )
+      cy.contains('About the device wearer')
+      cy.contains('Select the curfew address')
+    })
   })
 })
