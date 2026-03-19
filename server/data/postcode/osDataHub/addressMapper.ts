@@ -12,9 +12,13 @@ export default class AddressMapper {
     const address = dataHubAddress.DPA
 
     const buildingId = this.addressLineOne(address.ORGANISATION_NAME, address.BUILDING_NUMBER, address.BUILDING_NAME)
+    const addressLine1 =
+      address.THOROUGHFARE_NAME === undefined
+        ? buildingId
+        : `${buildingId} ${toTitleCase(address.THOROUGHFARE_NAME || '')}`
 
     return {
-      addressLine1: `${buildingId} ${toTitleCase(address.THOROUGHFARE_NAME || '')}`,
+      addressLine1,
       addressLine2: toTitleCase(address.SUB_BUILDING_NAME || ''),
       addressLine3: toTitleCase(address.POST_TOWN || ''),
       addressLine4: toTitleCase(address.LOCAL_CUSTODIAN_CODE_DESCRIPTION || ''),

@@ -101,4 +101,28 @@ describe('address mapper', () => {
 
     expect(result).toEqual(expected)
   })
+
+  it('correct if no throughfare name', () => {
+    const data: OSDataHubPostcodeResponse = createData({
+      BUILDING_NUMBER: 1,
+      SUB_BUILDING_NAME: 'SUB BUILDING NAME',
+      POST_TOWN: 'LONDON',
+      LOCAL_CUSTODIAN_CODE_DESCRIPTION: 'COUNTY',
+      POSTCODE: 'SW1A 2AA',
+    })
+
+    const expected: AddressWithoutType[] = [
+      {
+        addressLine1: '1',
+        addressLine2: 'Sub Building Name',
+        addressLine3: 'London',
+        addressLine4: 'County',
+        postcode: 'SW1A 2AA',
+      },
+    ]
+
+    const result = addressMapper.mapToAddresses(data)
+
+    expect(result).toEqual(expected)
+  })
 })
