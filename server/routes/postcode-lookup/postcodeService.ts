@@ -7,11 +7,17 @@ import { PostcodeLookupClient } from '../../data/postcode/PostcodeLookupClient'
 export default class PostcodeService {
   constructor(private readonly client: PostcodeLookupClient) {}
 
-  async lookupPostcode(postcode: string, addressType: AddressType): Promise<Address[]> {
-    const addresses = await this.client.lookup(this.normalisePostcode(postcode))
-    return addresses.map((address): Address => {
+  async lookupPostcode(postcode: string, addressType: AddressType, buildingId?: string): Promise<Address[]> {
+    const data = await this.client.lookup(this.normalisePostcode(postcode))
+    let addresses = data.map((address): Address => {
       return { ...address, addressType }
     })
+
+    if (buildingId) {
+      addresses = addresses.filter(address => address.addressLine1.includes(buildingId))
+    }
+
+    return addresses
   }
 
   validateFindAddressData = (data: FindAddressForm): FindAddressForm | ValidationResult => {

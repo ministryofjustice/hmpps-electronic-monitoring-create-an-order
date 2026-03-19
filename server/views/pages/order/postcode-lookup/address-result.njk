@@ -7,10 +7,16 @@
 {% set questions = content.questions %}
 {% set continueButtonText = "Use this address" %}
 
-{% if buildingId %}
-  {% set hint = addressCount + ' addresses found for <b>' + postcode + '</b> and <b>' + buildingId + '</b>. <a href="postcode" class="govuk-link">Search again</a>' %}
+{% if addressCount > 1 %}
+  {% set addressText = " addresses" %}
 {% else %}
-  {% set hint = addressCount + ' addresses found for <b>' + postcode + '</b>. <a href="postcode" class="govuk-link">Search again</a>' %}
+  {% set addressText = " address" %}
+{% endif %}
+
+{% if buildingId %}
+  {% set hint = addressCount + addressText + ' found for <b>' + postcode + '</b> and <b>' + buildingId + '</b>. <a href="' + searchAgainLink + '" class="govuk-link">Search again</a>' %}
+{% else %}
+  {% set hint = addressCount + ' addresses found for <b>' + postcode + '</b>. <a href="' + searchAgainLink + '" class="govuk-link">Search again</a>' %}
 {% endif %}
 
 {% block formInputs %}

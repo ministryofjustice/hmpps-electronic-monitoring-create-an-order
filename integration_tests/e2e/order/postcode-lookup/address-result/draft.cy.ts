@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../pages/page'
 import AddressResultPage from './addressResultPage'
+import paths from '../../../../../server/constants/paths'
 
 context('address results', () => {
   const mockOrderId = uuidv4()
@@ -42,7 +43,7 @@ context('address results', () => {
     cy.signIn()
   })
 
-  it('has correct elements', () => {
+  it('has correct elements when searching by postcode', () => {
     const page = Page.visit(
       AddressResultPage,
       { orderId: mockOrderId, addressType: 'PRIMARY' },
@@ -51,5 +52,25 @@ context('address results', () => {
     page.form.addressResultsField.element.contains('2 addresses found for SW1A 2AA. Search again')
     page.form.addressResultsField.shouldHaveOption('10 Downing Street, London, SW1A 2AA')
     page.form.addressResultsField.shouldHaveOption('11 Downing Street, London, SW1A 2AA')
+
+    page.form.addressResultsField.element
+      .get('a')
+      .contains('Search again')
+      .should(
+        'have.attr',
+        'href',
+        paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'PRIMARY'),
+      )
+  })
+
+  it('has correct elements when searching by postcode and building id', () => {
+    const page = Page.visit(
+      AddressResultPage,
+      { orderId: mockOrderId, addressType: 'PRIMARY' },
+      { postcode: 'SW1A 2AA', buildingId: 10 },
+    )
+    page.form.addressResultsField.element.contains('1 address found for SW1A 2AA and 10. Search again')
+    page.form.addressResultsField.shouldHaveOption('10 Downing Street, London, SW1A 2AA')
+    page.form.addressResultsField.shouldNotHaveOption('11 Downing Street, London, SW1A 2AA')
   })
 })
