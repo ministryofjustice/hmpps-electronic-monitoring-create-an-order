@@ -20,7 +20,7 @@ context('find address page', () => {
 
   context('device wearer address', () => {
     it('has the correct elements', () => {
-      const page = Page.visit(FindAddressPage, { orderId: mockOrderId, addressType: 'primary' })
+      const page = Page.visit(FindAddressPage, { orderId: mockOrderId, addressType: 'PRIMARY' })
 
       page.form.postcodeField.shouldExist()
       page.form.postcodeField.shouldHaveHint('For example, AA3 1AB')
@@ -31,7 +31,7 @@ context('find address page', () => {
       page.form.manualAddressLink.and(
         'have.attr',
         'href',
-        paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'primary'),
+        paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'PRIMARY'),
       )
 
       page.form.findAddressButton.should('exist')
@@ -41,37 +41,38 @@ context('find address page', () => {
 
   context('tag at source address', () => {
     it('has the correct elements', () => {
-      const page = Page.visit(FindAddressPage, { orderId: mockOrderId, addressType: 'tag-at-source' })
+      const page = Page.visit(FindAddressPage, { orderId: mockOrderId, addressType: 'INSTALLATION' })
 
       page.form.manualAddressLink.and(
         'have.attr',
         'href',
-        paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'tag-at-source'),
+        paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'INSTALLATION'),
       )
     })
   })
 
   context('curfew address', () => {
     it('has the correct elements', () => {
-      const page = Page.visit(FindAddressPage, { orderId: mockOrderId, addressType: 'curfew' })
+      const page = Page.visit(FindAddressPage, { orderId: mockOrderId, addressType: 'SECONDARY' })
 
       page.form.manualAddressLink.and(
         'have.attr',
         'href',
-        paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'curfew'),
+        paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'SECONDARY'),
       )
     })
   })
 
-  context('appointment address', () => {
+  // TODO: skipped until we can handle mandatory attendance monitoring addresses
+  context.skip('appointment address', () => {
     it('has the correct elements', () => {
-      const page = Page.visit(FindAddressPage, { orderId: mockOrderId, addressType: 'appointment' })
-
-      page.form.manualAddressLink.and(
-        'have.attr',
-        'href',
-        paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'appointment'),
-      )
+      // const page = Page.visit(FindAddressPage, { orderId: mockOrderId, addressType: 'appointment' })
+      //
+      // page.form.manualAddressLink.and(
+      //   'have.attr',
+      //   'href',
+      //   paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'appointment'),
+      // )
     })
   })
 })

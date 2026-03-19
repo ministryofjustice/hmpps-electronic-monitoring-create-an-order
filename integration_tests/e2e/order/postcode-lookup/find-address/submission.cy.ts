@@ -21,7 +21,7 @@ context('find address page', () => {
     })
 
     it('navigates to correct manual entry if user clicks link', () => {
-      const page = Page.visit(FindAddressPage, { orderId: mockOrderId, addressType: 'primary' })
+      const page = Page.visit(FindAddressPage, { orderId: mockOrderId, addressType: 'PRIMARY' })
 
       page.form.manualAddressLink.click()
 
@@ -29,7 +29,7 @@ context('find address page', () => {
     })
 
     it('navigates to the results page after entering postcode', () => {
-      const page = Page.visit(FindAddressPage, { orderId: mockOrderId, addressType: 'primary' })
+      const page = Page.visit(FindAddressPage, { orderId: mockOrderId, addressType: 'PRIMARY' })
 
       page.form.fillInWith({ postcode: 'sa11 1aa' })
 

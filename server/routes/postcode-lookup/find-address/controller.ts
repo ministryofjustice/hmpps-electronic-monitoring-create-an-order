@@ -1,9 +1,10 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
-import ViewModel, { AddressType } from './viewModel'
+import ViewModel from './viewModel'
 import FindAddressFormData, { FindAddressForm } from './formModel'
 import PostcodeService from '../postcodeService'
 import { isValidationResult, ValidationResult } from '../../../models/Validation'
+import { AddressType } from '../../../models/Address'
 
 export default class FindAddressController {
   constructor(private readonly service: PostcodeService) {}
