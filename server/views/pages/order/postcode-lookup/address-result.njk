@@ -7,6 +7,11 @@
 {% set questions = content.questions %}
 {% set continueButtonText = "Use this address" %}
 
+{% if buildingId %}
+  {% set hint = addressCount + ' addresses found for <b>' + postcode + '</b> and <b>' + buildingId + '</b>. <a href="postcode" class="govuk-link">Search again</a>' %}
+{% else %}
+  {% set hint = addressCount + ' addresses found for <b>' + postcode + '</b>. <a href="postcode" class="govuk-link">Search again</a>' %}
+{% endif %}
 
 {% block formInputs %}
     {{ govukRadios({
@@ -20,7 +25,7 @@
 	}
       },
       hint: {
-	html: addressCount + ' addresses found for <b>' + postcode + '</b> and <b>' + buildingId + '</b>. <a href="postcode" class="govuk-link">Search again</a>'
+	html: hint
       },
       items: items,
       disabled: disabled

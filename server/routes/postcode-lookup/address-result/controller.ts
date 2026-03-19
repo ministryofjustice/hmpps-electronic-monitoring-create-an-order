@@ -9,10 +9,11 @@ export default class AddressResultController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const { addressType } = req.params
-    const { postcode } = req.query
-    const addresses = await this.service.lookupPostcode(postcode as string, addressType as AddressType)
+    const postcode = req.query.postcode as string
 
-    res.render('pages/order/postcode-lookup/address-result', Model.construct(addresses))
+    const addresses = await this.service.lookupPostcode(postcode, addressType as AddressType)
+
+    res.render('pages/order/postcode-lookup/address-result', Model.construct(addresses, { postcode }))
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {

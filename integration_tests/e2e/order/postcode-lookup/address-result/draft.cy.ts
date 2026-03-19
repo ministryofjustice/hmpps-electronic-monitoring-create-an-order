@@ -48,6 +48,7 @@ context('address results', () => {
       { orderId: mockOrderId, addressType: 'PRIMARY' },
       { postcode: 'SW1A 2AA' },
     )
+    page.form.addressResultsField.element.contains('2 addresses found for SW1A 2AA. Search again')
     page.form.addressResultsField.shouldHaveOption('10 Downing Street, London, SW1A 2AA')
     page.form.addressResultsField.shouldHaveOption('11 Downing Street, London, SW1A 2AA')
   })
