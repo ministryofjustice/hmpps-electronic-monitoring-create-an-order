@@ -227,7 +227,7 @@ context.skip('Scenarios', () => {
               order_request_type: 'New Order',
               order_start: formatAsFmsDateTime(attendanceMonitoringOrder.startDate, 0, 0),
               order_type: 'Post Release',
-              order_type_description: null,
+              order_type_description: '',
               order_type_detail: '',
               order_variation_date: '',
               order_variation_details: '',
