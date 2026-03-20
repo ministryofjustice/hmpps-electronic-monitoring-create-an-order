@@ -112,4 +112,32 @@ context('notifying organisation page', () => {
       page.form.continueButton.should('exist')
     })
   })
+
+  describe('when user cohort is home office', () => {
+    it('has no radio buttons for notifying org as inferred from auth', () => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '444',
+      })
+
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: { cohort: 'HOME_OFFICE' },
+      })
+
+      cy.signIn()
+
+      const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
+
+      cy.get('form').should('not.contain', 'What organisation or related organisation are you part of?')
+
+      page.form.emailField.shouldExist()
+
+      page.form.continueButton.should('exist')
+    })
+  })
 })

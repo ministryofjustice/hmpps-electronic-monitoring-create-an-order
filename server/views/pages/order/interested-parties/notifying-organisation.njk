@@ -15,6 +15,8 @@
   <span class="govuk-visually-hidden"> Selecting this will reveal an additional input</span>
 {% endset %}
 
+{% set showNotifyingOrgQuestion = (cohort != "PROBATION" and cohort != "HOME_OFFICE") %}
+
 {% set crownCourtHtml %}
   {{ accessibleAutocomplete({
     id: 'crownCourt',
@@ -115,9 +117,7 @@
 {% endif %}
 
 {% set notifyingOrgOptions = [] %}
-
 {% for org in content.reference.notifyingOrganisations | toOptions(not isOrderEditable) %}
-
   {% if org.value == 'PRISON' and (cohort == 'PRISON' or cohort == 'OTHER') %}
     {% set notifyingOrgOptions = (notifyingOrgOptions.push({
       value: org.value,
@@ -227,7 +227,7 @@
    the cohort is: {{ cohort }}
    the notifying org value is: {{ notifyingOrganisation.value }}
 
-    {% if cohort != "PROBATION" %}
+    {% if showNotifyingOrgQuestion %}
       {{ govukRadios({
         name: "notifyingOrganisation",
         fieldset: {

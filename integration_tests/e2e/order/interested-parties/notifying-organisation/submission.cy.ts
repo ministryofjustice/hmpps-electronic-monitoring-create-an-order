@@ -71,15 +71,16 @@ context('Submit notifying organisations', () => {
 
       page.form.fillInWith({
         notifyingOrganisation: 'Family Court',
+        familyCourt: 'Swansea Family Court',
         notifyingOrganisationEmailAddress: 'a@b.com',
-        familyCourt: 'Aberystwyth Family Court',
       })
       page.form.continueButton.click()
 
       Page.verifyOnPage(ResponsibleOrganisationPage)
+      cy.contains("What is the Responsible Officer's organisation?")
     })
 
-    it('probation routes to responsible organisation page', () => {
+    it('probation routes to responsible officer page', () => {
       cy.task('stubSignIn', {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
@@ -103,15 +104,44 @@ context('Submit notifying organisations', () => {
       })
       page.form.continueButton.click()
 
-      Page.verifyOnPage(ResponsibleOrganisationPage)
+      Page.verifyOnPage(ResponsibleOfficerPage)
+      cy.contains('Contact details for the Responsible Officer')
     })
 
-    it('other routes to responsible organisation page', () => {
+    it('home office routes to responsible officer page', () => {
       cy.task('stubSignIn', {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
         stubCohort: false,
         userId: '123456783',
+      })
+
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: { cohort: 'HOME_OFFICE' },
+      })
+
+      cy.signIn()
+
+      const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
+
+      page.form.fillInWith({
+        notifyingOrganisationEmailAddress: 'homeoffice@homeoffice.com',
+      })
+      page.form.continueButton.click()
+
+      Page.verifyOnPage(ResponsibleOfficerPage)
+      cy.contains('Contact details for the Responsible Officer')
+    })
+
+    it('other cohort can select options', () => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '123456784',
       })
 
       cy.task('stubCemoRequest', {
@@ -132,40 +162,7 @@ context('Submit notifying organisations', () => {
       })
       page.form.continueButton.click()
 
-      Page.verifyOnPage(ResponsibleOrganisationPage)
-    })
-
-    it('navigating back to the page after submission shows values without org name', () => {
-      cy.task('stubSignIn', {
-        name: 'john smith',
-        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
-        stubCohort: false,
-        userId: '123456784',
-      })
-
-      cy.task('stubCemoRequest', {
-        httpStatus: 200,
-        method: 'GET',
-        subPath: 'user-cohort',
-        response: { cohort: 'COURT' },
-      })
-
-      cy.signIn()
-
-      let page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
-
-      page.form.fillInWith({
-        notifyingOrganisation: 'Family Court',
-        familyCourt: 'Swansea Family Court',
-        notifyingOrganisationEmailAddress: 'a@b.com',
-      })
-      page.form.continueButton.click()
-
-      Page.verifyOnPage(ResponsibleOrganisationPage)
-
-      page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
-      page.form.organisationField.shouldHaveValue('Family Court')
-      page.form.emailField.shouldHaveValue('a@b.com')
+      Page.verifyOnPage(ResponsibleOfficerPage)
     })
 
     it('navigating back to the page after submission shows values with org name', () => {

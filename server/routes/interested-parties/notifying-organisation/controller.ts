@@ -40,7 +40,7 @@ export default class NotifingOrganisationController extends InterestedPartiesBas
 
     let formData = NotifyingOrganisationFormModel.parse(req.body)
 
-    if (cohort === 'PROBATION') {
+    if (cohort === 'PROBATION' || cohort === 'HOME_OFFICE') {
       formData = {
         ...formData,
         notifyingOrganisation: cohort,
