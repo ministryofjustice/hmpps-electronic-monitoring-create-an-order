@@ -21,7 +21,7 @@ context('Submit notifying organisations', () => {
       })
     })
 
-    it('not a court routes to responsible office page', () => {
+    it('prison routes to responsible officer page', () => {
       cy.task('stubSignIn', {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
@@ -50,7 +50,7 @@ context('Submit notifying organisations', () => {
       Page.verifyOnPage(ResponsibleOfficerPage)
     })
 
-    it('a court routes to responsible organisation page', () => {
+    it('court routes to responsible organisation page', () => {
       cy.task('stubSignIn', {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
@@ -274,7 +274,7 @@ context('Submit notifying organisations', () => {
       Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
     })
 
-    it('monitoring start date is in the future, not a court routes to responsible office page', () => {
+    it('monitoring start date is in the future, not a court routes to responsible officer page', () => {
       const startDate = new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 15 days after today
       stubVariationOrder(startDate)
       const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
