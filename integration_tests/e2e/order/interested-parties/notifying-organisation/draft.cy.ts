@@ -4,8 +4,50 @@ import NotifyingOrganisationPage from './notifyingOrganisationPage'
 
 const mockOrderId = uuidv4()
 context('notifying organisation page', () => {
+  beforeEach(() => {
+    cy.task('reset')
+
+    cy.task('stubCemoGetOrder', {
+      httpStatus: 200,
+      id: mockOrderId,
+      status: 'IN_PROGRESS',
+      order: {
+        dataDictionaryVersion: 'DDV6',
+      },
+    })
+  })
+
+  describe('when user cohort is other', () => {
+    it('has all radio buttons', () => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '333',
+      })
+
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: { cohort: 'OTHER' },
+      })
+
+      cy.signIn()
+
+      const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
+
+      page.form.organisationField.shouldExist()
+      page.form.organisationField.shouldHaveAllOptions()
+
+      page.form.emailField.shouldExist()
+
+      page.form.continueButton.should('exist')
+    })
+  })
+
   describe('when user cohort is prison', () => {
-    it('has correct elements', () => {
+    it('only has prison and ycs radio buttons', () => {
       cy.task('stubSignIn', {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
@@ -18,15 +60,6 @@ context('notifying organisation page', () => {
         method: 'GET',
         subPath: 'user-cohort',
         response: { cohort: 'PRISON', activeCaseLoadName: 'HMP ABC' },
-      })
-
-      cy.task('stubCemoGetOrder', {
-        httpStatus: 200,
-        id: mockOrderId,
-        status: 'IN_PROGRESS',
-        order: {
-          dataDictionaryVersion: 'DDV6',
-        },
       })
 
       cy.signIn()
@@ -53,7 +86,7 @@ context('notifying organisation page', () => {
   })
 
   describe('when user cohort is probation', () => {
-    it('has correct elements', () => {
+    it('has no radio buttons for notifying org as inferred from auth', () => {
       cy.task('stubSignIn', {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
