@@ -23,7 +23,7 @@ context('notifying organisation page', () => {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
         stubCohort: false,
-        userId: '333',
+        userId: '111',
       })
 
       cy.task('stubCemoRequest', {
@@ -52,7 +52,7 @@ context('notifying organisation page', () => {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
         stubCohort: false,
-        userId: '111',
+        userId: '222',
       })
 
       cy.task('stubCemoRequest', {
@@ -91,7 +91,7 @@ context('notifying organisation page', () => {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
         stubCohort: false,
-        userId: '222',
+        userId: '333',
       })
 
       cy.task('stubCemoRequest', {

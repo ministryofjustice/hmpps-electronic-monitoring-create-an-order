@@ -106,12 +106,41 @@ context('Submit notifying organisations', () => {
       Page.verifyOnPage(ResponsibleOrganisationPage)
     })
 
-    it('navigating back to the page after submission shows values without org name', () => {
+    it('other routes to responsible organisation page', () => {
       cy.task('stubSignIn', {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
         stubCohort: false,
         userId: '123456783',
+      })
+
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: { cohort: 'OTHER' },
+      })
+
+      cy.signIn()
+
+      const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
+
+      page.form.fillInWith({
+        notifyingOrganisation: 'Prison service',
+        notifyingOrganisationEmailAddress: 'a@b.com',
+        prison: 'Altcourse Prison',
+      })
+      page.form.continueButton.click()
+
+      Page.verifyOnPage(ResponsibleOrganisationPage)
+    })
+
+    it('navigating back to the page after submission shows values without org name', () => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '123456784',
       })
 
       cy.task('stubCemoRequest', {
@@ -144,7 +173,7 @@ context('Submit notifying organisations', () => {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
         stubCohort: false,
-        userId: '123456784',
+        userId: '123456785',
       })
 
       cy.task('stubCemoRequest', {
