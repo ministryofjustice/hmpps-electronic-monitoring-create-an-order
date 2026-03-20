@@ -1,0 +1,145 @@
+name: Integration tests
+
+on:
+  workflow_call:
+    inputs:    
+      node_version_file:
+        description: "Passed to setup-node action to specify where to source the version of node from"
+        required: false
+        type: string
+        default: ".nvmrc"
+      redis_tag:
+        description: 'Optionally, start a redis service with this tag'
+        required: false
+        type: string
+      wiremock_port:
+        description: 'The port number to run wiremock on'
+        required: false
+        type: number
+        default: 9091
+      spec-file-patterns:
+        type: string
+        default: 'integration_tests/e2e/**/*.cy.ts'
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  get-timings:
+    name: Get timings
+    uses: ministryofjustice/hmpps-assess-risks-and-needs-github-actions/.github/workflows/cypress_get_timings.yml@v1
+    with:
+      repository: ministryofjustice/hmpps-electronic-monitoring-create-an-order
+      spec-file-patterns: ${{ inputs.spec-file-patterns }}
+    permissions:
+      contents: read
+
+  integration_test:
+    name: Run Integration Tests
+    runs-on: ubuntu-latest
+    needs: get-timings
+    services:
+      redis:
+        image: ${{ inputs.redis_tag && format('redis:{0}', inputs.redis_tag) || '' }}
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    strategy:
+      fail-fast: false
+      matrix:
+        container: [ 1, 2, 3, 4]
+    outputs:
+      timings-1: ${{ steps.timings.outputs.t1 }}
+      timings-2: ${{ steps.timings.outputs.t2 }}
+      timings-3: ${{ steps.timings.outputs.t3 }}
+      timings-4: ${{ steps.timings.outputs.t4 }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ministryofjustice/hmpps-assess-risks-and-needs-github-actions/.github/actions/cypress/create_timings_file@v1
+        with:
+          timings: ${{ needs.get-timings.outputs.timings }}
+      - name: Use Node.js ${{ inputs.node_version_file }}
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: ${{ inputs.node_version_file }}
+      - name: download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: npm_build_artifacts
+      - name: restore cache
+        id: restore-cache
+        uses: actions/cache/restore@v5
+        env:
+          cache-name: node-modules
+        with:
+          path: |
+            ./node_modules
+            ~/.cache/Cypress
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json', '!**/node_modules/**') }}
+      - name: Init testing framework if necessary
+        run: npm run int-test-init:ci --if-present
+      - name: Start Gotenberg service
+        run : |
+          docker compose -f ./.github/docker-compose-gotenberg.yml up -d
+          sleep 5 # Give it a few seconds to start
+          docker ps
+      - name: Get wiremock
+        shell: bash
+        run: |
+          curl -o wiremock.jar https://repo1.maven.org/maven2/org/wiremock/wiremock-standalone/3.9.1/wiremock-standalone-3.9.1.jar
+      - name: Prepare and run integration tests
+        id: integration-tests
+        shell: bash
+        run: |
+          nohup java -jar wiremock.jar --port ${{ inputs.wiremock_port }} &
+          nohup npm run start-feature &
+          sleep 5
+      - name: Run split Cypress tests
+        uses: cypress-io/github-action@v7.1.5
+        with:
+          browser: chrome
+        env:
+          SPEC: ${{ inputs.spec-file-patterns }}
+          SPLIT: ${{ strategy.job-total }}
+          SPLIT_INDEX: ${{ strategy.job-index }}
+          SPLIT_FILE: 'timings.json'
+
+      - name: Upload any screenshots due to failure
+        uses: actions/upload-artifact@v6
+        if: failure()
+        with:
+          name: Upload screenshots
+          path: integration_tests/screenshots
+          if-no-files-found: ignore
+
+      - name: Output updated timings
+        if: success() || failure()
+        id: timings
+        run: |
+          cat timings.json
+          echo "t${{ matrix.container }}=$(jq -c . < timings.json)" >> $GITHUB_OUTPUT
+
+      - name: upload results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: npm_integration_test_artifacts
+          path: |            
+            coverage/
+
+  save-timings:
+    name: Save timings
+    uses: ministryofjustice/hmpps-assess-risks-and-needs-github-actions/.github/workflows/cypress_save_timings.yml@v1
+    if: success() || failure()
+    needs:
+      - get-timings
+      - integration_test
+    with:
+      repository: ministryofjustice/hmpps-electronic-monitoring-create-an-order
+      initial-timings: ${{ needs.get-timings.outputs.timings }}
+      updated-timings: ${{ toJSON(needs.integration_test.outputs) }}

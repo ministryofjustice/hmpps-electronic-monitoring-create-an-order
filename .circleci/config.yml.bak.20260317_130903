@@ -1,16 +1,26 @@
 version: 2.1
+
 orbs:
   hmpps: ministryofjustice/hmpps@10
   slack: circleci/slack@5
   cypress: cypress-io/cypress@3.4.2
+
 parameters:
+  alerts-slack-channel:
+    type: string
+    # Normally team specific alert channel e.g. hmpps_tech_alerts, syscon-alerts, dps_sed_alerts
+    # This is to avoid a general alert dumping ground that no-one then monitors
+    default: em-engineers-moj-madetech
+
   releases-slack-channel:
     type: string
     # Normally dps-releases for most teams / projects
     default: em-engineers-moj-madetech
+
   node-version:
     type: string
     default: 24.11-browsers
+
 executors:
   scenario-testing:
     docker:
@@ -46,8 +56,9 @@ executors:
           HMPPS_S3_BUCKETNAME: test_bucket
           SETTINGS_DATA_DICTIONARY_VERSION: DDV6
           MANAGE_USER_URL: http://localhost:9091/manage-user
+
   intgration-testing:
-    docker:
+     docker:
       - image: cimg/node:20.19.0-browsers
       - image: redis:7.2
       - image: wiremock/wiremock:latest
@@ -91,6 +102,7 @@ jobs:
             - node_modules
             - build
             - dist
+
   unit_test:
     executor:
       name: hmpps/node
@@ -108,6 +120,7 @@ jobs:
           path: test_results
       - store_artifacts:
           path: test_results/unit-test-reports.html
+
   integration_test:
     executor: intgration-testing
     parallelism: 4
@@ -143,6 +156,7 @@ jobs:
           path: integration_tests/videos
       - store_artifacts:
           path: integration_tests/screenshots
+
   scenario_test:
     executor: scenario-testing
     parallelism: 6
@@ -182,7 +196,12 @@ jobs:
             fi
       - run:
           name: Archive requests
-          command: "if [ -d integration_tests/requests ]; then\n  tar -czf integration_tests/requests.tar.gz integration_tests/requests\nelse\n  echo \"No requests to archive\"\nfi \n"
+          command: |
+            if [ -d integration_tests/requests ]; then
+              tar -czf integration_tests/requests.tar.gz integration_tests/requests
+            else
+              echo "No requests to archive"
+            fi 
       - store_test_results:
           path: test_results
       - store_artifacts:
@@ -191,4 +210,115 @@ jobs:
           path: integration_tests/screenshots.tar.gz
       - store_artifacts:
           path: integration_tests/requests.tar.gz
-workflows: {}
+
+workflows:
+  build-test-and-deploy:
+    jobs:
+      - build:
+          filters:
+            tags:
+              ignore: /.*/
+      - unit_test:
+          requires:
+            - build
+      - integration_test:
+          requires:
+            - build
+      - scenario_test:
+          requires:
+            - build
+      - hmpps/helm_lint:
+          name: helm_lint
+      - hmpps/build_docker:
+          name: build_docker
+          filters:
+            branches:
+              only:
+                - main
+      - hmpps/deploy_env:
+          name: deploy_dev
+          env: 'dev'
+          jira_update: true
+          pipeline_id: <<pipeline.id>>
+          pipeline_number: <<pipeline.number>>
+          context: hmpps-common-vars
+          filters:
+            branches:
+              only:
+                - main
+          requires:
+            - helm_lint
+            - unit_test
+            - integration_test
+            - build_docker
+          helm_timeout: 5m
+      - hmpps/deploy_env:
+          name: deploy_preprod
+          env: 'preprod'
+          jira_update: true
+          jira_env_type: staging
+          pipeline_id: <<pipeline.id>>
+          pipeline_number: <<pipeline.number>>
+          context:
+            - hmpps-common-vars
+            - hmpps-ems-cemo-ui-preprod
+          filters:
+            branches:
+              only:
+                - main
+          requires:
+            - deploy_dev
+          helm_timeout: 5m
+      - hmpps/deploy_env:
+          name: deploy_prod
+          env: 'prod'
+          jira_update: true
+          jira_env_type: production
+          pipeline_id: <<pipeline.id>>
+          pipeline_number: <<pipeline.number>>
+          slack_notification: true
+          slack_channel_name: hmpps-ems-cemo-notifications
+          context:
+            - hmpps-common-vars
+            - hmpps-ems-cemo-ui-prod
+          requires:
+            - deploy_preprod
+          helm_timeout: 5m
+
+  security:
+    triggers:
+      - schedule:
+          cron: '30 5 * * 1-5'
+          filters:
+            branches:
+              only:
+                - main
+    jobs:
+      - hmpps/npm_security_audit:
+          slack_channel: << pipeline.parameters.alerts-slack-channel >>
+          node_tag: << pipeline.parameters.node-version >>
+          context:
+            - hmpps-common-vars
+      - hmpps/trivy_latest_scan:
+          slack_channel: << pipeline.parameters.alerts-slack-channel >>
+          context:
+            - hmpps-common-vars
+      - hmpps/veracode_pipeline_scan:
+          slack_channel: << pipeline.parameters.alerts-slack-channel >>
+          context:
+            - veracode-credentials
+            - hmpps-common-vars
+  security-weekly:
+    triggers:
+      - schedule:
+          cron: '0 5 * * 1'
+          filters:
+            branches:
+              only:
+                - main
+    jobs:
+      - hmpps/veracode_policy_scan:
+          slack_channel: << pipeline.parameters.alerts-slack-channel >>
+          context:
+            - veracode-credentials
+            - hmpps-common-vars
