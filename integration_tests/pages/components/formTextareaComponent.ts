@@ -30,6 +30,7 @@ export default class FormTextareaComponent {
   }
 
   set(value?: string | number | boolean) {
+    this.element.clear()
     this.element.type(value as string)
   }
 
