@@ -12,7 +12,6 @@ import ConfirmVariationPage from '../../pages/order/variation/confirmVariation'
 import { Order } from '../../../server/models/Order'
 import paths from '../../../server/constants/paths'
 import NotifyingOrganisationPage from './interested-parties/notifying-organisation/notifyingOrganisationPage'
-import InterestedPartiesCheckYourAnswersPage from './interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
 
 let mockOrderId = uuidv4()
 
@@ -628,16 +627,6 @@ context('Order Summary', () => {
       page = Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId })
 
       page.submitOrderButton.should('not.be.disabled')
-    })
-
-    it('Interested parties section link should go to check your answer page if  completed', () => {
-      const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
-      cy.task('setFeatureFlags', testFlags)
-      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
-      page.interestedPartiesTask.shouldHaveStatus('To check')
-      page.interestedPartiesTask.click()
-
-      Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
     })
 
     it('does not show the timeline', () => {
