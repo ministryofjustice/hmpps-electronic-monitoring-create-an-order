@@ -863,6 +863,7 @@ export default class TaskListService {
         order.mandatoryAttendanceConditions?.length !== 0
       return tasksCompleted && anyConditionCompleted
     }
+
     return tasksCompleted
   }
 
@@ -931,6 +932,13 @@ export default class TaskListService {
   getCheckYourAnswersPathForSection = (sectionTasks: Task[]) => {
     if (sectionTasks[0].section === SECTIONS.additionalDocuments) {
       return sectionTasks[sectionTasks.length - 1].path // TODO: refactor path so that additional docs includes string
+    }
+
+    if (
+      sectionTasks[0].section === SECTIONS.interestParties &&
+      FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')
+    ) {
+      return paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION
     }
     return (sectionTasks.find(task => task.path.includes('check-your-answers')) || sectionTasks[0]).path
   }
