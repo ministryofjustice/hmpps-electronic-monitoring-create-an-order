@@ -18,7 +18,7 @@ const SECTIONS = {
   riskInformation: 'RISK_INFORMATION',
   electronicMonitoringCondition: 'ELECTRONIC_MONITORING_CONDITIONS',
   additionalDocuments: 'ADDITIONAL_DOCUMENTS',
-  variationDetails: 'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM'
+  variationDetails: 'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM',
 } as const
 
 type Section = (typeof SECTIONS)[keyof typeof SECTIONS]

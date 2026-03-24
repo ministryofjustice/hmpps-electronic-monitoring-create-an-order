@@ -1072,7 +1072,7 @@ describe('TaskListService', () => {
           name: 'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM',
           path: paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id),
           isReady: true,
-        }
+        },
       ])
     })
     it('should return links to the check your answers pages if the order has been submitted', async () => {
