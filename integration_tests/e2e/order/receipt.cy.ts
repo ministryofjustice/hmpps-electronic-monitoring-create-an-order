@@ -325,7 +325,7 @@ context('Receipt', () => {
       page.variationDetailsSection.shouldExist()
       page.variationDetailsSection.shouldHaveItems([
         { key: 'What is the date you want the changes to take effect?', value: '01/01/2025' },
-        { key: 'Enter information on what you have changed', value: 'some variation details' },
+        { key: 'Enter details of all the changes you have made', value: 'some variation details' },
       ])
     })
 
