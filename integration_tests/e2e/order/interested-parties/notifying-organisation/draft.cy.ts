@@ -85,13 +85,52 @@ context('notifying organisation page', () => {
     })
   })
 
+  describe('when user cohort is court', () => {
+    it('only has family, civil county court radio buttons', () => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '333',
+      })
+
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: { cohort: 'COURT' },
+      })
+
+      cy.signIn()
+
+      const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
+
+      page.form.organisationField.shouldExist()
+      page.form.organisationField.shouldHaveOption('Family Court')
+      page.form.organisationField.shouldHaveOption('Civil and County Court')
+      page.form.organisationField.shouldNotHaveOption('Prison service')
+      page.form.organisationField.shouldNotHaveOption('Youth Custody Service (YCS)')
+      page.form.organisationField.shouldNotHaveOption('Probation service')
+      page.form.organisationField.shouldNotHaveOption('Crown Court')
+      page.form.organisationField.shouldNotHaveOption('Magistrates Court')
+      page.form.organisationField.shouldNotHaveOption('Youth Court')
+      page.form.organisationField.shouldNotHaveOption('Scottish Court')
+      page.form.organisationField.shouldNotHaveOption('Military Court')
+      page.form.organisationField.shouldNotHaveOption('Home Office')
+
+      page.form.emailField.shouldExist()
+
+      page.form.continueButton.should('exist')
+    })
+  })
+
   describe('when user cohort is probation', () => {
     it('has no radio buttons for notifying org as inferred from auth', () => {
       cy.task('stubSignIn', {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
         stubCohort: false,
-        userId: '333',
+        userId: '444',
       })
 
       cy.task('stubCemoRequest', {
@@ -119,7 +158,7 @@ context('notifying organisation page', () => {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
         stubCohort: false,
-        userId: '444',
+        userId: '555',
       })
 
       cy.task('stubCemoRequest', {
