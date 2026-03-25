@@ -228,9 +228,6 @@
 
 {% block formInputs %}
 
-   the cohort is: {{ cohort }}
-   the notifying org value is: {{ notifyingOrganisation.value }}
-
     {% if showNotifyingOrgQuestion %}
       {{ govukRadios({
         name: "notifyingOrganisation",
