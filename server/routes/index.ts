@@ -411,7 +411,7 @@ export default function routes({
     }),
   )
 
-  router.use(paths.ORDER.BASE_URL, createPostcodeLookupRouter({ postcodeService }))
+  router.use(paths.ORDER.BASE_URL, createPostcodeLookupRouter({ postcodeService, addressService }))
 
   router.use(
     paths.INTEREST_PARTIES.BASE_PATH,
