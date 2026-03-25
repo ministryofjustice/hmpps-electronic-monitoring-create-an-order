@@ -20,7 +20,7 @@ context('address results', () => {
 
   context('multiple results', () => {
     beforeEach(() => {
-      cy.task('stubOSDataHub', {
+      cy.task('stubOSDataHubPostcode', {
         httpStatus: 200,
         postcode: 'SW1A2AA',
         body: {
@@ -46,6 +46,38 @@ context('address results', () => {
           ],
         },
       })
+
+      cy.task('stubOSDataHubUPRN', {
+        httpStatus: 200,
+        uprn: '101',
+        body: {
+          results: [
+            {
+              DPA: {
+                BUILDING_NUMBER: 10,
+                THOROUGHFARE_NAME: 'DOWNING STREET',
+                POST_TOWN: 'LONDON',
+                POSTCODE: 'SW1A 2AA',
+                UPRN: '101',
+              },
+            },
+          ],
+        },
+      })
+
+      cy.task('stubCemoSubmitOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        subPath: '/address',
+        response: {
+          addressType: 'PRIMARY',
+          addressLine1: '',
+          addressLine2: '',
+          addressLine3: '',
+          addressLine4: '',
+          postcode: '',
+        },
+      })
     })
 
     it('can select the correct address', () => {
@@ -59,6 +91,19 @@ context('address results', () => {
       page.form.useAddressButton.click()
 
       Page.verifyOnPage(ConfirmAddressPage)
+
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOrderId}/address`,
+        body: {
+          addressType: 'PRIMARY',
+          addressLine1: '10 Downing Street',
+          addressLine2: '',
+          addressLine3: 'London',
+          addressLine4: '',
+          postcode: 'SW1A 2AA',
+          hasAnotherAddress: false,
+        },
+      }).should('be.true')
     })
   })
 })

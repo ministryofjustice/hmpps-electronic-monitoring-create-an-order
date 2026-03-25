@@ -6,7 +6,7 @@ type CreateStubOptions = {
   postcode: string
 }
 
-const stubOSDataHub = (options: CreateStubOptions) =>
+const stubOSDataHubPostcode = (options: CreateStubOptions) =>
   stubFor({
     request: {
       method: 'GET',
@@ -23,4 +23,26 @@ const stubOSDataHub = (options: CreateStubOptions) =>
     },
   })
 
-export default { stubOSDataHub }
+type CreateUPRNStubOptions = {
+  httpStatus: number
+  body: string
+  uprn: string
+}
+
+const stubOSDataHubUPRN = (options: CreateUPRNStubOptions) =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPath: '/osDataHub/search/places/v1/uprn',
+      queryParameters: {
+        uprn: { equalTo: options.uprn },
+      },
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: options.body,
+    },
+  })
+
+export default { stubOSDataHubPostcode, stubOSDataHubUPRN }

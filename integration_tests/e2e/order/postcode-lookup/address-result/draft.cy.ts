@@ -20,7 +20,7 @@ context('address results', () => {
 
   context('multiple results', () => {
     beforeEach(() => {
-      cy.task('stubOSDataHub', {
+      cy.task('stubOSDataHubPostcode', {
         httpStatus: 200,
         postcode: 'SW1A2AA',
         body: {
