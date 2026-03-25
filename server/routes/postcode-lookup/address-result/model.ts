@@ -11,6 +11,7 @@ type AddressResultViewModel = {
   addressCount: number
   buildingId?: string
   content: AddressResultPageContent
+  manualAddressLink: string
 }
 
 const construct = (
@@ -33,6 +34,10 @@ const construct = (
     addressCount: items.length,
     buildingId: opts.buildingId,
     content: getContent(content, opts.addressType),
+    manualAddressLink: paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', opts.orderId).replace(
+      ':addressType',
+      opts.addressType,
+    ),
   }
 }
 
