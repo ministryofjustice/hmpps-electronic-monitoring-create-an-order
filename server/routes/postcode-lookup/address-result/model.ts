@@ -1,5 +1,5 @@
 import paths from '../../../constants/paths'
-import { Address, AddressType } from '../../../models/Address'
+import { AddressType, AddressWithUPRN } from '../../../models/Address'
 import I18n from '../../../types/i18n'
 import { AddressResultPageContent } from '../../../types/i18n/pages/postcodeLookup'
 import { createAddressPreview } from '../../../utils/utils'
@@ -15,12 +15,12 @@ type AddressResultViewModel = {
 }
 
 const construct = (
-  addresses: Address[],
+  addresses: AddressWithUPRN[],
   content: I18n,
   opts: { orderId: string; addressType: AddressType; postcode?: string; buildingId?: string },
 ): AddressResultViewModel => {
-  const items = addresses.map((a, index) => ({
-    value: index.toString(),
+  const items = addresses.map(a => ({
+    value: a.uprn,
     text: createAddressPreview(a),
   }))
 

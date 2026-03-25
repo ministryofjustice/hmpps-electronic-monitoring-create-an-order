@@ -31,6 +31,7 @@ context('address results', () => {
                 THOROUGHFARE_NAME: 'DOWNING STREET',
                 POST_TOWN: 'LONDON',
                 POSTCODE: 'SW1A 2AA',
+                UPRN: '101',
               },
             },
             {
@@ -39,6 +40,7 @@ context('address results', () => {
                 THOROUGHFARE_NAME: 'DOWNING STREET',
                 POST_TOWN: 'LONDON',
                 POSTCODE: 'SW1A 2AA',
+                UPRN: '102',
               },
             },
           ],

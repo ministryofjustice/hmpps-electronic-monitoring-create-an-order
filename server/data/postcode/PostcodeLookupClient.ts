@@ -1,5 +1,5 @@
-import { AddressWithoutType } from '../../models/Address'
+import { AddressWithoutTypeUPRN } from '../../models/Address'
 
 export interface PostcodeLookupClient {
-  lookup: (postcode: string) => Promise<AddressWithoutType[]>
+  lookup: (postcode: string) => Promise<AddressWithoutTypeUPRN[]>
 }

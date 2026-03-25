@@ -1,14 +1,14 @@
-import { AddressWithoutType } from '../../../models/Address'
+import { AddressWithoutTypeUPRN } from '../../../models/Address'
 import { OSDataHubAddress, OSDataHubPostcodeResponse } from './osDataHubPostcodeResponse'
 import { toTitleCase } from '../../../utils/utils'
 import logger from '../../../../logger'
 
 export default class AddressMapper {
-  mapToAddresses(data: OSDataHubPostcodeResponse): AddressWithoutType[] {
+  mapToAddresses(data: OSDataHubPostcodeResponse): AddressWithoutTypeUPRN[] {
     return data.results.map(address => this.mapToAddress(address))
   }
 
-  private mapToAddress(dataHubAddress: OSDataHubAddress): AddressWithoutType {
+  private mapToAddress(dataHubAddress: OSDataHubAddress): AddressWithoutTypeUPRN {
     const address = dataHubAddress.DPA
 
     const buildingId = this.addressLineOne(address.ORGANISATION_NAME, address.BUILDING_NUMBER, address.BUILDING_NAME)
@@ -23,6 +23,7 @@ export default class AddressMapper {
       addressLine3: toTitleCase(address.POST_TOWN || ''),
       addressLine4: toTitleCase(address.LOCAL_CUSTODIAN_CODE_DESCRIPTION || ''),
       postcode: address.POSTCODE,
+      uprn: address.UPRN,
     }
   }
 

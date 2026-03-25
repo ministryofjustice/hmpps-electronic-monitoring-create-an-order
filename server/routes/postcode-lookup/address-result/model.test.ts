@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import Model from './model'
-import { Address } from '../../../models/Address'
+import { AddressWithUPRN } from '../../../models/Address'
 import { createAddressPreview } from '../../../utils/utils'
 import paths from '../../../constants/paths'
 import getContent from '../../../i18n'
@@ -8,7 +8,7 @@ import getContent from '../../../i18n'
 const mockOrderId = uuidv4()
 const content = getContent('en', 'DDV6')
 describe('model', () => {
-  const addresses: Address[] = [
+  const addresses: AddressWithUPRN[] = [
     {
       addressType: 'PRIMARY',
       addressLine1: '10 Downing Street',
@@ -16,6 +16,7 @@ describe('model', () => {
       addressLine3: 'London',
       addressLine4: '',
       postcode: 'SW1A 2AA',
+      uprn: '101',
     },
   ]
 
@@ -28,7 +29,7 @@ describe('model', () => {
 
     expect(model.items).toHaveLength(1)
     const expectedText = createAddressPreview(addresses[0])
-    expect(model.items[0]).toEqual({ text: expectedText, value: '0' })
+    expect(model.items[0]).toEqual({ text: expectedText, value: '101' })
     expect(model.postcode).toBe('SW1A 2AA')
     expect(model.addressCount).toBe(1)
     expect(model.buildingId).toBeUndefined()

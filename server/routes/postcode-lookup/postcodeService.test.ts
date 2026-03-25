@@ -1,15 +1,16 @@
-import { AddressWithoutType } from '../../models/Address'
+import { AddressWithoutTypeUPRN } from '../../models/Address'
 import PostcodeService from './postcodeService'
 
 describe('postcode service', () => {
   describe('get addresses', () => {
-    const addresses: AddressWithoutType[] = [
+    const addresses: AddressWithoutTypeUPRN[] = [
       {
         addressLine1: '10 Downing Street',
         addressLine2: '',
         addressLine3: 'London',
         addressLine4: '',
         postcode: 'SW1A 2AB',
+        uprn: '101',
       },
       {
         addressLine1: '11 Downing Street',
@@ -17,6 +18,7 @@ describe('postcode service', () => {
         addressLine3: 'London',
         addressLine4: '',
         postcode: 'SW1A 2AB',
+        uprn: '102',
       },
     ]
 
