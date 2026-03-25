@@ -2,8 +2,8 @@
 
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% set section = "About the device wearer" %}
-{% set heading = "Select the device wearer's address" %}
+{% set section = content.section %}
+{% set heading = content.title %}
 {% set questions = content.questions %}
 {% set continueButtonText = "Use this address" %}
 

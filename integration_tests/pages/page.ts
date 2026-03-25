@@ -86,7 +86,7 @@ export default abstract class Page {
   }
 
   constructor(
-    public readonly title?: string,
+    public readonly title?: string | RegExp,
     public readonly uri?: string | RegExp,
     public readonly subtitle?: string,
   ) {}

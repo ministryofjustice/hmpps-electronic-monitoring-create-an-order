@@ -87,7 +87,7 @@ context('address results', () => {
       cy.contains("Select the device wearer's address")
     })
 
-    it('primary address', () => {
+    it('curfew address', () => {
       Page.visit(
         AddressResultPage,
         { orderId: mockOrderId, addressType: 'SECONDARY' },
@@ -95,6 +95,16 @@ context('address results', () => {
       )
       cy.contains('About the device wearer')
       cy.contains('Select the curfew address')
+    })
+
+    it('installation address', () => {
+      Page.visit(
+        AddressResultPage,
+        { orderId: mockOrderId, addressType: 'INSTALLATION' },
+        { postcode: 'SW1A 2AA', buildingId: 10 },
+      )
+      cy.contains('Electronic monitoring required')
+      cy.contains('Select the installation address')
     })
   })
 })

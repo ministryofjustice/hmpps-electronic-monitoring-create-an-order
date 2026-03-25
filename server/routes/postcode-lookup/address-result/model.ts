@@ -32,9 +32,25 @@ const construct = (
     postcode: opts.postcode || '',
     addressCount: items.length,
     buildingId: opts.buildingId,
-    // TODO: dynamic content
-    content: content.pages.deviceWearerAddressResult,
+    content: getContent(content, opts.addressType),
   }
+}
+
+function getContent(content: I18n, addressType: AddressType): AddressResultPageContent {
+  const mapping: Record<AddressType, AddressResultPageContent> = {
+    PRIMARY: content.pages.deviceWearerAddressResult,
+    INSTALLATION: content.pages.tagAtSourceAddressResult,
+    TERTIARY: content.pages.curfewAddressResult,
+    SECONDARY: content.pages.curfewAddressResult,
+
+    // These are also not used currently, can potentially be removed
+    RESPONSIBLE_ADULT: content.pages.deviceWearerAddressResult,
+    RESPONSIBLE_ORGANISATION: content.pages.deviceWearerAddressResult,
+    // Currently, mandatory attendence monitoring address is not stored as a separate address
+    // appointment: content.pages.appointmentAddress,
+  }
+
+  return mapping[addressType]
 }
 
 export default { construct }
