@@ -307,7 +307,7 @@ export default class TaskListService {
         tasks.push({
           section: SECTIONS.contactInformation,
           name: PAGES.primaryAddress,
-          path: paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':addressType', 'primary'),
+          path: paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':addressType', 'PRIMARY'),
           state: convertBooleanToEnum<State>(
             order.deviceWearer.noFixedAbode,
             STATES.cantBeStarted,

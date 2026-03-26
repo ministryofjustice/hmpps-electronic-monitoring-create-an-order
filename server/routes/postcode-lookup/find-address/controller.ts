@@ -39,8 +39,13 @@ export default class FindAddressController {
       return
     }
 
-    res.redirect(
-      paths.POSTCODE_LOOKUP.ADDRESS_RESULT.replace(':orderId', order.id).replace(':addressType', addressType),
+    const redirectUrl = this.service.buildUrl(
+      paths.POSTCODE_LOOKUP.ADDRESS_RESULT,
+      order.id,
+      addressType,
+      result.postcode,
+      result.buildingId,
     )
+    res.redirect(redirectUrl)
   }
 }

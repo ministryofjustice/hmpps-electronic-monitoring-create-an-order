@@ -1,5 +1,5 @@
 import { ValidationResult } from '../../models/Validation'
-import { FindAddressForm, FindAddressValidator } from './find-address/formModel'
+import { FindAddress, FindAddressForm, FindAddressValidator } from './find-address/formModel'
 import { convertZodErrorToValidationError } from '../../utils/errors'
 import { AddressType, AddressWithoutTypeUPRN, AddressWithUPRN } from '../../models/Address'
 import { PostcodeLookupClient } from '../../data/postcode/PostcodeLookupClient'
@@ -28,13 +28,24 @@ export default class PostcodeService {
     return postcode.replace(' ', '')
   }
 
-  validateFindAddressData = (data: FindAddressForm): FindAddressForm | ValidationResult => {
+  buildUrl(path: string, orderId: string, addressType: string, postcode: string, buildingId?: string) {
+    const url = path.replace(':orderId', orderId).replace(':addressType', addressType)
+
+    const query = new URLSearchParams({ postcode })
+    if (typeof buildingId === 'string' && buildingId.length) {
+      query.set('buildingId', buildingId)
+    }
+
+    return `${url}?${query.toString()}`
+  }
+
+  validateFindAddressData = (data: FindAddressForm): FindAddress | ValidationResult => {
     const result = FindAddressValidator.safeParse(data)
 
     if (!result.success) {
       return convertZodErrorToValidationError(result.error)
     }
 
-    return data
+    return result.data
   }
 }

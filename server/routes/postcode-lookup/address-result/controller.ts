@@ -56,17 +56,14 @@ export default class AddressResultController {
         },
       ])
 
-      const path = paths.POSTCODE_LOOKUP.ADDRESS_RESULT.replace(':orderId', order.id).replace(
-        ':addressType',
+      const redirectUrl = this.postcodeService.buildUrl(
+        paths.POSTCODE_LOOKUP.ADDRESS_RESULT,
+        order.id,
         addressType,
-      )
-
-      const query = new URLSearchParams({
         postcode,
         buildingId,
-      }).toString()
-
-      res.redirect(`${path}?${query}`)
+      )
+      res.redirect(redirectUrl)
 
       return
     }
@@ -74,7 +71,7 @@ export default class AddressResultController {
     const address = await this.postcodeService.lookupByUPRN(uprn)
 
     await this.addressService.updateAddress({
-      accessToken: '1',
+      accessToken: res.locals.user.token,
       orderId: order.id,
       data: { ...address, addressType },
     })
