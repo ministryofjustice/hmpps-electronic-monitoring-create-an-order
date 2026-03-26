@@ -109,4 +109,49 @@ context('address results', () => {
       cy.contains('Select the installation address')
     })
   })
+
+  context('no results', () => {
+    beforeEach(() => {
+      cy.task('stubOSDataHubPostcode', {
+        httpStatus: 200,
+        postcode: 'SW1A2AA',
+        body: {
+          results: [],
+        },
+      })
+    })
+    it('has correct elements', () => {
+      Page.visit(AddressResultPage, { orderId: mockOrderId, addressType: 'PRIMARY' }, { postcode: 'SW1A 2AA' })
+      cy.contains(
+        'We could not find an address that matches SW1A 2AA. You can search again or enter the address manually.',
+      )
+
+      cy.get('a')
+        .contains('Search again')
+        .should(
+          'have.attr',
+          'href',
+          paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'PRIMARY'),
+        )
+
+      cy.get('a')
+        .contains('Enter address manually')
+        .should(
+          'have.attr',
+          'href',
+          paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'PRIMARY'),
+        )
+    })
+
+    it('has correct elements buildingId', () => {
+      Page.visit(
+        AddressResultPage,
+        { orderId: mockOrderId, addressType: 'PRIMARY' },
+        { postcode: 'SW1A 2AA', buildingId: '10' },
+      )
+      cy.contains(
+        'We could not find an address that matches SW1A 2AA and 10. You can search again or enter the address manually.',
+      )
+    })
+  })
 })
