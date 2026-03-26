@@ -9,7 +9,7 @@ describe('postcode service', () => {
       addressLine3: 'London',
       addressLine4: '',
       postcode: 'SW1A 2AB',
-      uprn: '101',
+      uprn: 101,
     },
     {
       addressLine1: '11 Downing Street',
@@ -17,7 +17,7 @@ describe('postcode service', () => {
       addressLine3: 'London',
       addressLine4: '',
       postcode: 'SW1A 2AB',
-      uprn: '102',
+      uprn: 102,
     },
   ]
 

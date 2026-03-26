@@ -154,4 +154,49 @@ context('address results', () => {
       )
     })
   })
+
+  context('too many results', () => {
+    beforeEach(() => {
+      const addresses = []
+      for (let i = 1; i <= 26; i += 1) {
+        addresses.push({
+          DPA: {
+            BUILDING_NUMBER: i,
+            THOROUGHFARE_NAME: 'DOWNING STREET',
+            POST_TOWN: 'LONDON',
+            POSTCODE: 'SW1A 2AA',
+            UPRN: i + 100,
+          },
+        })
+      }
+
+      cy.task('stubOSDataHubPostcode', {
+        httpStatus: 200,
+        postcode: 'SW1A2AA',
+        body: {
+          results: addresses,
+        },
+      })
+    })
+    it('has correct elements', () => {
+      Page.visit(AddressResultPage, { orderId: mockOrderId, addressType: 'PRIMARY' }, { postcode: 'SW1A 2AA' })
+      cy.contains('To reduce the number of results search again using postcode and building number or name.')
+
+      cy.get('a')
+        .contains('Search again')
+        .should(
+          'have.attr',
+          'href',
+          paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'PRIMARY'),
+        )
+
+      cy.get('a')
+        .contains('Enter address manually')
+        .should(
+          'have.attr',
+          'href',
+          paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'PRIMARY'),
+        )
+    })
+  })
 })

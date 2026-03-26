@@ -14,7 +14,7 @@ describe('address mapper', () => {
       THOROUGHFARE_NAME: 'DOWNING STREET',
       POST_TOWN: 'LONDON',
       POSTCODE: 'SW1A 2AA',
-      UPRN: '101',
+      UPRN: 101,
     })
 
     const expected: AddressWithoutTypeUPRN[] = [
@@ -24,7 +24,7 @@ describe('address mapper', () => {
         addressLine3: 'London',
         addressLine4: '',
         postcode: 'SW1A 2AA',
-        uprn: '101',
+        uprn: 101,
       },
     ]
 
@@ -39,7 +39,7 @@ describe('address mapper', () => {
       THOROUGHFARE_NAME: 'DOWNING STREET',
       POST_TOWN: 'LONDON',
       POSTCODE: 'SW1A 2AA',
-      UPRN: '102',
+      UPRN: 102,
     })
 
     const expected: AddressWithoutTypeUPRN[] = [
@@ -49,7 +49,7 @@ describe('address mapper', () => {
         addressLine3: 'London',
         addressLine4: '',
         postcode: 'SW1A 2AA',
-        uprn: '102',
+        uprn: 102,
       },
     ]
 
@@ -64,7 +64,7 @@ describe('address mapper', () => {
       THOROUGHFARE_NAME: 'DOWNING STREET',
       POST_TOWN: 'LONDON',
       POSTCODE: 'SW1A 2AA',
-      UPRN: '103',
+      UPRN: 103,
     })
 
     const expected: AddressWithoutTypeUPRN[] = [
@@ -74,7 +74,7 @@ describe('address mapper', () => {
         addressLine3: 'London',
         addressLine4: '',
         postcode: 'SW1A 2AA',
-        uprn: '103',
+        uprn: 103,
       },
     ]
 
@@ -91,7 +91,7 @@ describe('address mapper', () => {
       POST_TOWN: 'LONDON',
       LOCAL_CUSTODIAN_CODE_DESCRIPTION: 'COUNTY',
       POSTCODE: 'SW1A 2AA',
-      UPRN: '104',
+      UPRN: 104,
     })
 
     const expected: AddressWithoutTypeUPRN[] = [
@@ -101,7 +101,7 @@ describe('address mapper', () => {
         addressLine3: 'London',
         addressLine4: 'County',
         postcode: 'SW1A 2AA',
-        uprn: '104',
+        uprn: 104,
       },
     ]
 
@@ -117,7 +117,7 @@ describe('address mapper', () => {
       POST_TOWN: 'LONDON',
       LOCAL_CUSTODIAN_CODE_DESCRIPTION: 'COUNTY',
       POSTCODE: 'SW1A 2AA',
-      UPRN: '105',
+      UPRN: 105,
     })
 
     const expected: AddressWithoutTypeUPRN[] = [
@@ -127,7 +127,7 @@ describe('address mapper', () => {
         addressLine3: 'London',
         addressLine4: 'County',
         postcode: 'SW1A 2AA',
-        uprn: '105',
+        uprn: 105,
       },
     ]
 

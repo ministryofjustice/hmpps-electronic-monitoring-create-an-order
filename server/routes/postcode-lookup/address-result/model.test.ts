@@ -16,7 +16,7 @@ describe('model', () => {
       addressLine3: 'London',
       addressLine4: '',
       postcode: 'SW1A 2AA',
-      uprn: '101',
+      uprn: 101,
     },
   ]
 

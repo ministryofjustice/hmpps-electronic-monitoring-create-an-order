@@ -34,6 +34,11 @@ export default class AddressResultController {
       return
     }
 
+    if (addresses.length > 25) {
+      res.render('pages/order/postcode-lookup/too-many-results', model)
+      return
+    }
+
     res.render('pages/order/postcode-lookup/address-result', model)
   }
 

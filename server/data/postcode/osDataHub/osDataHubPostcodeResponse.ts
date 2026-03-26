@@ -8,7 +8,7 @@ export type OSDataHubAddress = {
     POST_TOWN?: string
     LOCAL_CUSTODIAN_CODE_DESCRIPTION?: string
     POSTCODE: string
-    UPRN: string
+    UPRN: number
   }
 }
 

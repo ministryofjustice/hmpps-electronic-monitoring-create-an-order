@@ -1,20 +1,14 @@
 {% extends "../../../partials/form-layout.njk" %}
 
 {% set section = content.section %}
-{% set heading = 'No results found' %}
+{% set heading = 'Too many results found' %}
 {% set questions = content.questions %}
-
-{% if buildingId %}
-  {% set hint = 'We could not find an address that matches <b>' + postcode + '</b> and <b>' + buildingId + '</b>. You can search again or enter the address manually.' %}
-{% else %}
-  {% set hint = 'We could not find an address that matches <b>' + postcode + '</b>. You can search again or enter the address manually.' %}
-{% endif %}
 
 {% set searchText = '<a href="' + searchAgainLink + '" class="govuk-link">Search again</a>' %}
 
 
 {% block formInputs %}
-    <p class="govuk-body">{{ hint | safe }}</p>
+    <p class="govuk-body">To reduce the number of results search again using postcode and building number or name.</p>
 
     <p class="govuk-body">
       <a href="{{ searchAgainLink }}" class="govuk-link">Search again</a>
