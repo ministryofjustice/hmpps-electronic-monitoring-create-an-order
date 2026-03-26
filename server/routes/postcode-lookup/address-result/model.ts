@@ -1,8 +1,12 @@
 import paths from '../../../constants/paths'
 import { AddressType, AddressWithUPRN } from '../../../models/Address'
+import { ValidationResult } from '../../../models/Validation'
+import { ErrorMessage } from '../../../models/view-models/utils'
 import I18n from '../../../types/i18n'
 import { AddressResultPageContent } from '../../../types/i18n/pages/postcodeLookup'
-import { createAddressPreview } from '../../../utils/utils'
+import { createGovukErrorSummary } from '../../../utils/errors'
+import { ErrorSummary } from '../../../utils/govukFrontEndTypes/errorSummary'
+import { createAddressPreview, getError } from '../../../utils/utils'
 
 type AddressResultViewModel = {
   items: { value: string; text: string }[]
@@ -12,11 +16,14 @@ type AddressResultViewModel = {
   buildingId?: string
   content: AddressResultPageContent
   manualAddressLink: string
+  addressError?: ErrorMessage
+  errorSummary: ErrorSummary | null
 }
 
 const construct = (
   addresses: AddressWithUPRN[],
   content: I18n,
+  errors: ValidationResult,
   opts: { orderId: string; addressType: AddressType; postcode?: string; buildingId?: string },
 ): AddressResultViewModel => {
   const items = addresses.map(a => ({
@@ -38,6 +45,8 @@ const construct = (
       ':addressType',
       opts.addressType,
     ),
+    addressError: getError(errors, 'address'),
+    errorSummary: createGovukErrorSummary(errors),
   }
 }
 

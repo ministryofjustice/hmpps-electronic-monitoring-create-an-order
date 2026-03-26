@@ -21,7 +21,7 @@ describe('model', () => {
   ]
 
   it('gives correct model', () => {
-    const model = Model.construct(addresses, content, {
+    const model = Model.construct(addresses, content, [], {
       orderId: mockOrderId,
       addressType: 'PRIMARY',
       postcode: 'SW1A 2AA',
@@ -40,7 +40,7 @@ describe('model', () => {
   })
 
   it('has buildingId if provided', async () => {
-    const model = Model.construct(addresses, content, {
+    const model = Model.construct(addresses, content, [], {
       orderId: mockOrderId,
       addressType: 'PRIMARY',
       postcode: 'SW1A 2AA',
@@ -50,7 +50,7 @@ describe('model', () => {
   })
 
   describe('address type is device wearer', () => {
-    const model = Model.construct(addresses, content, {
+    const model = Model.construct(addresses, content, [], {
       orderId: mockOrderId,
       addressType: 'PRIMARY',
       postcode: 'SW1A 2AA',
@@ -63,7 +63,7 @@ describe('model', () => {
   })
 
   describe('address type is curfew', () => {
-    const model = Model.construct(addresses, content, {
+    const model = Model.construct(addresses, content, [], {
       orderId: mockOrderId,
       addressType: 'SECONDARY',
       postcode: 'SW1A 2AA',
@@ -76,7 +76,7 @@ describe('model', () => {
   })
 
   describe('address type is installation', () => {
-    const model = Model.construct(addresses, content, {
+    const model = Model.construct(addresses, content, [], {
       orderId: mockOrderId,
       addressType: 'INSTALLATION',
       postcode: 'SW1A 2AA',
@@ -85,6 +85,20 @@ describe('model', () => {
 
     it('has correct content', () => {
       expect(model.content).toEqual(content.pages.tagAtSourceAddressResult)
+    })
+  })
+
+  describe('handlers errors', () => {
+    const model = Model.construct(addresses, content, [{ field: 'address', error: 'some error' }], {
+      orderId: mockOrderId,
+      addressType: 'INSTALLATION',
+      postcode: 'SW1A 2AA',
+      buildingId: '10',
+    })
+
+    it('has correct content', () => {
+      expect(model.addressError?.text).toBe('some error')
+      expect(model.errorSummary).toBeDefined()
     })
   })
 })

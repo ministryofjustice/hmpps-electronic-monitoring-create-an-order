@@ -20,6 +20,8 @@
 {% endif %}
 
 {% block formInputs %}
+    <input type="hidden" name="postcode" value="{{ postcode }}">
+    <input type="hidden" name="buildingId" value="{{ buildingId }}">
     {{ govukRadios({
       name: "address",
       id: "address",
@@ -34,6 +36,7 @@
 	html: hint
       },
       items: items,
+      errorMessage: addressError,
       disabled: disabled
       }) }}
 

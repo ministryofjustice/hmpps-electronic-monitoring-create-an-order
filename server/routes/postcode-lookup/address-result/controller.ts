@@ -5,6 +5,7 @@ import Model from './model'
 import { AddressType } from '../../../models/Address'
 import I18n from '../../../types/i18n'
 import AddressService from '../../../services/addressService'
+import { ValidationResult } from '../../../models/Validation'
 
 export default class AddressResultController {
   constructor(
@@ -17,12 +18,13 @@ export default class AddressResultController {
     const addressType = req.params.addressType as AddressType
     const postcode = req.query.postcode as string
     const buildingId = req.query.buildingId as string | undefined
+    const errors = req.flash('validationErrors') as unknown as ValidationResult
 
     const addresses = await this.postcodeService.lookupByPostcode(postcode, addressType, buildingId)
 
     res.render(
       'pages/order/postcode-lookup/address-result',
-      Model.construct(addresses, res.locals.content as I18n, { orderId, addressType, postcode, buildingId }),
+      Model.construct(addresses, res.locals.content as I18n, errors, { orderId, addressType, postcode, buildingId }),
     )
   }
 
@@ -30,9 +32,33 @@ export default class AddressResultController {
     const order = req.order!
     const { addressType } = req.params
     const uprn = req.body.address as string
+    const { postcode, buildingId } = req.body
 
-    // save to backend
-    // next page can use the backend to show the selected address
+    if (uprn === undefined) {
+      req.flash('validationErrors', [
+        {
+          error: 'Select the address',
+          field: 'address',
+        },
+      ])
+
+      const path = paths.POSTCODE_LOOKUP.ADDRESS_RESULT.replace(':orderId', order.id).replace(
+        ':addressType',
+        addressType,
+      )
+
+      const query = new URLSearchParams({
+        postcode,
+        buildingId,
+      }).toString()
+
+      const url = `${path}?${query}`
+
+      res.redirect(url)
+
+      return
+    }
+
     const address = await this.postcodeService.lookupByUPRN(uprn)
 
     await this.addressService.updateAddress({
