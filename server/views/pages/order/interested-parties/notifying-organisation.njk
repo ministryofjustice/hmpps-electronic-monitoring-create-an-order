@@ -219,11 +219,12 @@
         }), notifyingOrgOptions) %}
 
       {% else %}
+
         {% set notifyingOrgOptions = (notifyingOrgOptions.push(org), notifyingOrgOptions) %}
+
       {% endif %}
     {% endif %}
   {% endif %}
-
 {% endfor %}
 
 {% block formInputs %}
