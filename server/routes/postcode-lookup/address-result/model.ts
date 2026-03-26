@@ -27,7 +27,7 @@ const construct = (
   opts: { orderId: string; addressType: AddressType; postcode?: string; buildingId?: string },
 ): AddressResultViewModel => {
   const items = addresses.map(a => ({
-    value: a.uprn.toString(),
+    value: a.uprn,
     text: createAddressPreview(a),
   }))
 

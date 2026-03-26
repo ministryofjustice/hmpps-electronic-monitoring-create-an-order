@@ -24,7 +24,7 @@ describe('address mapper', () => {
         addressLine3: 'London',
         addressLine4: '',
         postcode: 'SW1A 2AA',
-        uprn: 101,
+        uprn: '101',
       },
     ]
 
@@ -49,7 +49,7 @@ describe('address mapper', () => {
         addressLine3: 'London',
         addressLine4: '',
         postcode: 'SW1A 2AA',
-        uprn: 102,
+        uprn: '102',
       },
     ]
 
@@ -74,7 +74,7 @@ describe('address mapper', () => {
         addressLine3: 'London',
         addressLine4: '',
         postcode: 'SW1A 2AA',
-        uprn: 103,
+        uprn: '103',
       },
     ]
 
@@ -101,7 +101,7 @@ describe('address mapper', () => {
         addressLine3: 'London',
         addressLine4: 'County',
         postcode: 'SW1A 2AA',
-        uprn: 104,
+        uprn: '104',
       },
     ]
 
@@ -127,7 +127,7 @@ describe('address mapper', () => {
         addressLine3: 'London',
         addressLine4: 'County',
         postcode: 'SW1A 2AA',
-        uprn: 105,
+        uprn: '105',
       },
     ]
 

@@ -23,7 +23,7 @@ export default class AddressMapper {
       addressLine3: toTitleCase(address.POST_TOWN || ''),
       addressLine4: toTitleCase(address.LOCAL_CUSTODIAN_CODE_DESCRIPTION || ''),
       postcode: address.POSTCODE,
-      uprn: address.UPRN,
+      uprn: address.UPRN.toString(),
     }
   }
 

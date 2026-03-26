@@ -9,7 +9,7 @@ describe('postcode service', () => {
       addressLine3: 'London',
       addressLine4: '',
       postcode: 'SW1A 2AB',
-      uprn: 101,
+      uprn: '101',
     },
     {
       addressLine1: '11 Downing Street',
@@ -17,7 +17,7 @@ describe('postcode service', () => {
       addressLine3: 'London',
       addressLine4: '',
       postcode: 'SW1A 2AB',
-      uprn: 102,
+      uprn: '102',
     },
   ]
 
@@ -31,7 +31,7 @@ describe('postcode service', () => {
 
       const service = new PostcodeService(postcodeLookupStub)
 
-      const result = await service.lookupByPostcode('SA11 1AA', 'PRIMARY')
+      const result = await service.lookupByPostcode('   SA11  1AA  ', 'PRIMARY')
 
       expect(result.length).toBe(2)
       expect(result).toContainEqual({ ...addresses[0], addressType: 'PRIMARY' })

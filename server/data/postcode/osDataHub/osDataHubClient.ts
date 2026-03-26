@@ -5,14 +5,11 @@ import { OSDataHubPostcodeResponse } from './osDataHubPostcodeResponse'
 import RestClient from '../../restClient'
 
 export default class OSDataHubClient implements PostcodeLookupClient {
-  private apiKey?: string
-
   constructor(
     private readonly apiClient: RestClient,
     private readonly addressMapper: AddressMapper,
-  ) {
-    this.apiKey = process.env.OS_PLACES_API_KEY
-  }
+    private readonly apiKey: string,
+  ) {}
 
   async lookupByPostcode(postcode: string): Promise<AddressWithoutTypeUPRN[]> {
     const results = await this.apiClient.getWithoutBearer({

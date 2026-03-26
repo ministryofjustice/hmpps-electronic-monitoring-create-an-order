@@ -25,7 +25,7 @@ export default class PostcodeService {
   }
 
   private normalisePostcode(postcode: string): string {
-    return postcode.replace(' ', '')
+    return postcode.replace(/\s+/g, '')
   }
 
   buildUrl(path: string, orderId: string, addressType: string, postcode: string, buildingId?: string) {

@@ -29,7 +29,11 @@ export const dataAccess = () => ({
   ),
   hmppsAuditClient: new HmppsAuditClient(config.sqs.audit),
   cemoApiClient: new RestClient('CemoAPI', config.apis.cemoApi),
-  osDataHubClient: new OSDataHubClient(new RestClient('osDataHub', config.apis.osDataHub), new AddressMapper()),
+  osDataHubClient: new OSDataHubClient(
+    new RestClient('osDataHub', config.apis.osDataHub),
+    new AddressMapper(),
+    config.apis.osDataHub.key,
+  ),
 })
 
 export type DataAccess = ReturnType<typeof dataAccess>
