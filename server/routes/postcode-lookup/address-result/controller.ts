@@ -66,9 +66,7 @@ export default class AddressResultController {
         buildingId,
       }).toString()
 
-      const url = `${path}?${query}`
-
-      res.redirect(url)
+      res.redirect(`${path}?${query}`)
 
       return
     }
