@@ -371,6 +371,8 @@ context('The kitchen sink', () => {
                 offence_date: '',
               },
             ],
+            dapo_order_clause_numbers: [],
+            offences: [],
           },
         }).should('be.true')
       })
