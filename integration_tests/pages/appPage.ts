@@ -9,7 +9,7 @@ export default class AppPage extends Page {
 
   header = new PageHeaderComponent()
 
-  constructor(title: string, uri?: string | RegExp, subtitle?: string, helpText?: string, section?: string) {
+  constructor(title: string | RegExp, uri?: string | RegExp, subtitle?: string, helpText?: string, section?: string) {
     super(title, uri, subtitle)
     this.helpText = helpText
     this.section = section

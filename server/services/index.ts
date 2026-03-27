@@ -51,7 +51,7 @@ import UpdateInterestedPartiesService from '../routes/interested-parties/interes
 import PostcodeService from '../routes/postcode-lookup/postcodeService'
 
 export const services = () => {
-  const { applicationInfo, hmppsAuditClient, cemoApiClient } = dataAccess()
+  const { applicationInfo, hmppsAuditClient, cemoApiClient, osDataHubClient } = dataAccess()
 
   const alcoholMonitoringService = new AlcoholMonitoringService(cemoApiClient)
   const attachmentService = new AttachmentService(cemoApiClient)
@@ -101,7 +101,7 @@ export const services = () => {
 
   const updateInterestedPartiesService = new UpdateInterestedPartiesService(cemoApiClient)
 
-  const postcodeService = new PostcodeService()
+  const postcodeService = new PostcodeService(osDataHubClient)
 
   const userCohortService = new UserCohortService(
     cemoApiClient,

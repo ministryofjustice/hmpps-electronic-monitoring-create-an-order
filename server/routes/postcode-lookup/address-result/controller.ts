@@ -1,19 +1,80 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
+import PostcodeService from '../postcodeService'
+import Model from './model'
+import { AddressType } from '../../../models/Address'
+import I18n from '../../../types/i18n'
+import AddressService from '../../../services/addressService'
+import { ValidationResult } from '../../../models/Validation'
 
 export default class AddressResultController {
-  constructor() {}
+  constructor(
+    private readonly postcodeService: PostcodeService,
+    private readonly addressService: AddressService,
+  ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    res.render('pages/WIP', {
-      pageName: 'Address Result',
-      errorSummary: null,
+    const orderId = req.order!.id
+    const addressType = req.params.addressType as AddressType
+    const postcode = req.query.postcode as string
+    const buildingId = req.query.buildingId as string | undefined
+    const errors = req.flash('validationErrors') as unknown as ValidationResult
+
+    const addresses = await this.postcodeService.lookupByPostcode(postcode, addressType, buildingId)
+
+    const model = Model.construct(addresses, res.locals.content as I18n, errors, {
+      orderId,
+      addressType,
+      postcode,
+      buildingId,
     })
+
+    if (addresses.length === 0) {
+      res.render('pages/order/postcode-lookup/no-results', model)
+      return
+    }
+
+    if (addresses.length > 25) {
+      res.render('pages/order/postcode-lookup/too-many-results', model)
+      return
+    }
+
+    res.render('pages/order/postcode-lookup/address-result', model)
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
     const { addressType } = req.params
+    const uprn = req.body.address as string
+    const { postcode, buildingId } = req.body
+
+    if (uprn === undefined) {
+      req.flash('validationErrors', [
+        {
+          error: 'Select the address',
+          field: 'address',
+        },
+      ])
+
+      const redirectUrl = this.postcodeService.buildUrl(
+        paths.POSTCODE_LOOKUP.ADDRESS_RESULT,
+        order.id,
+        addressType,
+        postcode,
+        buildingId,
+      )
+      res.redirect(redirectUrl)
+
+      return
+    }
+
+    const address = await this.postcodeService.lookupByUPRN(uprn)
+
+    await this.addressService.updateAddress({
+      accessToken: res.locals.user.token,
+      orderId: order.id,
+      data: { ...address, addressType },
+    })
 
     res.redirect(
       paths.POSTCODE_LOOKUP.CONFIRM_ADDRESS.replace(':orderId', order.id).replace(':addressType', addressType),

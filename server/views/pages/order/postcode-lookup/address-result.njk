@@ -1,0 +1,47 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set section = content.section %}
+{% set heading = content.title %}
+{% set questions = content.questions %}
+{% set continueButtonText = "Use this address" %}
+
+{% if addressCount > 1 %}
+  {% set addressText = " addresses" %}
+{% else %}
+  {% set addressText = " address" %}
+{% endif %}
+
+{% if buildingId %}
+  {% set hint = addressCount + addressText + ' found for <b>' + postcode + '</b> and <b>' + buildingId + '</b>. <a href="' + searchAgainLink + '" class="govuk-link">Search again</a>' %}
+{% else %}
+  {% set hint = addressCount + ' addresses found for <b>' + postcode + '</b>. <a href="' + searchAgainLink + '" class="govuk-link">Search again</a>' %}
+{% endif %}
+
+{% block formInputs %}
+    <input type="hidden" name="postcode" value="{{ postcode }}">
+    <input type="hidden" name="buildingId" value="{{ buildingId }}">
+    {{ govukRadios({
+      name: "address",
+      id: "address",
+      fieldset: {
+	legend: {
+	  text: "Select an address",
+	  isPageHeading: true,
+	  classes: "govuk-visually-hidden"
+	}
+      },
+      hint: {
+	html: hint
+      },
+      items: items,
+      errorMessage: addressError,
+      disabled: disabled,
+      classes: "govuk-radios--small"
+      }) }}
+
+    <a href={{ manualAddressLink }} class="govuk-link"> Enter address manually </a>
+    <br>
+    <br>
+{% endblock %}

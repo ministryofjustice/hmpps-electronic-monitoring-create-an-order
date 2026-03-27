@@ -16,7 +16,8 @@ export default function fillinAddress({ findAddress }) {
 
   if (findAddress.postcode) {
     const addressResultPage = Page.verifyOnPage(AddressResultPage)
-    addressResultPage.form.continueButton.click()
+    addressResultPage.form.addressResultsField.set('10')
+    addressResultPage.form.useAddressButton.click()
   } else {
     const enterAddressPage = Page.verifyOnPage(EnterAddressPage)
     enterAddressPage.form.continueButton.click()

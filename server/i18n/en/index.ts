@@ -48,9 +48,9 @@ import dapaClauseListPageContent from './pages/dapoClauseListPage'
 import notifyingOrganisationPageContent from './pages/notifyingOrganisation'
 import responsibleOrganisationPageContent from './pages/responsibleOrganisation'
 import responsibleOfficerPageContent from './pages/responsibleOfficer'
-import deviceWearerAddressPageContent from './pages/deviceWearerAddress'
-import tagAtSourceAddressPageContent from './pages/tagAtSourceAddress'
-import curfewAddressPageContent from './pages/curfewAddress'
+import deviceWearerAddressPageContent, { deviceWearerAddressResultPageContent } from './pages/deviceWearerAddress'
+import tagAtSourceAddressPageContent, { tagAtSourceAddressResultPageContent } from './pages/tagAtSourceAddress'
+import curfewAddressPageContent, { curfewAddressResultPageContent } from './pages/curfewAddress'
 import appointmentAddressPageContent from './pages/appointmentAddress'
 import nationalSecurityDirectoratePageConetent from './pages/national-security-directorate'
 import isAddressChangePageContent from './pages/isAddressChange'
@@ -106,8 +106,11 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       responsibleOrganisation: responsibleOrganisationPageContent,
       responsibleOfficer: responsibleOfficerPageContent,
       deviceWearerAddress: deviceWearerAddressPageContent,
+      deviceWearerAddressResult: deviceWearerAddressResultPageContent,
       tagAtSourceAddress: tagAtSourceAddressPageContent,
+      tagAtSourceAddressResult: tagAtSourceAddressResultPageContent,
       curfewAddress: curfewAddressPageContent,
+      curfewAddressResult: curfewAddressResultPageContent,
       appointmentAddress: appointmentAddressPageContent,
       nationalSecurityDirectorate: nationalSecurityDirectoratePageConetent,
       isAddressChange: isAddressChangePageContent,

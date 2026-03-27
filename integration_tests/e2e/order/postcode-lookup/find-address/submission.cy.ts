@@ -17,11 +17,29 @@ context('find address page', () => {
         status: 'IN_PROGRESS',
       })
 
+      cy.task('stubOSDataHubPostcode', {
+        httpStatus: 200,
+        postcode: 'sa111aa',
+        body: {
+          results: [
+            {
+              DPA: {
+                BUILDING_NUMBER: 10,
+                THOROUGHFARE_NAME: 'DOWNING STREET',
+                POST_TOWN: 'LONDON',
+                POSTCODE: 'SW1A 2AA',
+                UPRN: '101',
+              },
+            },
+          ],
+        },
+      })
+
       cy.signIn()
     })
 
     it('navigates to correct manual entry if user clicks link', () => {
-      const page = Page.visit(FindAddressPage, { orderId: mockOrderId, addressType: 'primary' })
+      const page = Page.visit(FindAddressPage, { orderId: mockOrderId, addressType: 'PRIMARY' })
 
       page.form.manualAddressLink.click()
 
@@ -29,7 +47,7 @@ context('find address page', () => {
     })
 
     it('navigates to the results page after entering postcode', () => {
-      const page = Page.visit(FindAddressPage, { orderId: mockOrderId, addressType: 'primary' })
+      const page = Page.visit(FindAddressPage, { orderId: mockOrderId, addressType: 'PRIMARY' })
 
       page.form.fillInWith({ postcode: 'sa11 1aa' })
 
