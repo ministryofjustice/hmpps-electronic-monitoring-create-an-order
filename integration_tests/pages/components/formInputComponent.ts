@@ -22,6 +22,7 @@ export default class FormInputComponent {
   }
 
   set(value?: string | number | boolean) {
+    this.element.clear()
     this.element.type(value as string)
   }
 

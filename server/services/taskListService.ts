@@ -12,13 +12,13 @@ import { notifyingOrganisationCourts } from '../models/NotifyingOrganisation'
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
 const SECTIONS = {
-  variationDetails: 'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM',
   interestParties: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
   aboutTheDeviceWearer: 'ABOUT_THE_DEVICE_WEARER',
   contactInformation: 'CONTACT_INFORMATION',
   riskInformation: 'RISK_INFORMATION',
   electronicMonitoringCondition: 'ELECTRONIC_MONITORING_CONDITIONS',
   additionalDocuments: 'ADDITIONAL_DOCUMENTS',
+  variationDetails: 'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM',
 } as const
 
 type Section = (typeof SECTIONS)[keyof typeof SECTIONS]
@@ -863,6 +863,7 @@ export default class TaskListService {
         order.mandatoryAttendanceConditions?.length !== 0
       return tasksCompleted && anyConditionCompleted
     }
+
     return tasksCompleted
   }
 
@@ -931,6 +932,13 @@ export default class TaskListService {
   getCheckYourAnswersPathForSection = (sectionTasks: Task[]) => {
     if (sectionTasks[0].section === SECTIONS.additionalDocuments) {
       return sectionTasks[sectionTasks.length - 1].path // TODO: refactor path so that additional docs includes string
+    }
+
+    if (
+      sectionTasks[0].section === SECTIONS.interestParties &&
+      FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')
+    ) {
+      return paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION
     }
     return (sectionTasks.find(task => task.path.includes('check-your-answers')) || sectionTasks[0]).path
   }

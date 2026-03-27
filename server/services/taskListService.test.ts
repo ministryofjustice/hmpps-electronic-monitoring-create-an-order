@@ -1031,13 +1031,6 @@ describe('TaskListService', () => {
         {
           checked: false,
           completed: false,
-          name: 'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM',
-          path: paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id),
-          isReady: true,
-        },
-        {
-          checked: false,
-          completed: false,
           name: 'ABOUT_THE_DEVICE_WEARER',
           path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
           isReady: true,
@@ -1071,6 +1064,13 @@ describe('TaskListService', () => {
             ':fileType(photo_Id|licence|court_order|grant_of_bail)',
             'licence',
           ),
+          isReady: true,
+        },
+        {
+          checked: false,
+          completed: false,
+          name: 'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM',
+          path: paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id),
           isReady: true,
         },
       ])
