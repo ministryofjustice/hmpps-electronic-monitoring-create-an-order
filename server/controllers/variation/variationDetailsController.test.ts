@@ -138,7 +138,7 @@ describe('VariationDetailsController', () => {
           .mockReturnValueOnce([
             { error: 'Select what you have changed', field: 'variationType' },
             { error: 'Enter the date you want the changes to take effect', field: 'variationDate' },
-            { error: 'Enter information on what you have changed', field: 'variationDetails' },
+            { error: 'Enter details of all the changes you have made', field: 'variationDetails' },
           ])
           .mockReturnValueOnce([
             {
@@ -179,7 +179,7 @@ describe('VariationDetailsController', () => {
         variationDetails: {
           value: '',
           error: {
-            text: 'Enter information on what you have changed',
+            text: 'Enter details of all the changes you have made',
           },
         },
         type: 'VARIATION',
@@ -188,7 +188,7 @@ describe('VariationDetailsController', () => {
           errorList: [
             { href: '#variationType', text: 'Select what you have changed' },
             { href: '#variationDate', text: 'Enter the date you want the changes to take effect' },
-            { href: '#variationDetails', text: 'Enter information on what you have changed' },
+            { href: '#variationDetails', text: 'Enter details of all the changes you have made' },
           ],
         },
       })
@@ -325,7 +325,7 @@ describe('VariationDetailsController', () => {
           focusTarget: 'variationDate-day',
         },
         { error: 'Select what you have changed', field: 'variationType' },
-        { error: 'Enter information on what you have changed', field: 'variationDetails' },
+        { error: 'Enter details of all the changes you have made', field: 'variationDetails' },
       ])
       expect(taskListService.getNextPage).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id))

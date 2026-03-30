@@ -16,7 +16,7 @@ const expectedValidationErrors = {
       'Date is in an incorrect format. Enter the date in the format DD/MM/YYYY (Day/Month/Year). For example, 24/10/2024.',
   },
   variationDetails: {
-    required: 'Enter information on what you have changed',
+    required: 'Enter details of all the changes you have made',
   },
 }
 
