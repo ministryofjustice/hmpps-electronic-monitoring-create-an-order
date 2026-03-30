@@ -3,9 +3,8 @@ import SingleQuestionFormComponent from '../../../../pages/components/SingleQues
 import { PageElement } from '../../../../pages/page'
 
 export default class AddressResultComponent extends SingleQuestionFormComponent {
-  fillInWith(value: string) {
-    // TODO implement fillInWith method
-    throw new Error(`Method not implemented.${value}`)
+  fillInWith(address: string) {
+    this.addressResultsField.set(address)
   }
 
   get addressResultsField(): FormRadiosComponent {
