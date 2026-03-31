@@ -147,7 +147,7 @@ const getResponsibleOrganisationRegionAnswer = (
   return []
 }
 
-const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
+const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions, cohort?: string) => {
   const notifyingOrgUri = paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', order.id)
   const resOfficerUri = paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER.replace(':orderId', order.id)
   const resOrgUri = paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION.replace(':orderId', order.id)
@@ -156,13 +156,22 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts:
   const responsibleOfficerQuestions = content.pages.responsibleOfficer.questions
   const responsibleOrganisationQuestions = content.pages.responsibleOrganisation.questions
 
-  const answers = [
-    createAnswer(
-      notifyingOrgQuestions.notifyingOrganisation.text,
-      lookup(content.reference.notifyingOrganisations, order.interestedParties?.notifyingOrganisation),
-      notifyingOrgUri,
-      answerOpts,
-    ),
+  const answers = []
+
+  if (cohort !== 'HOME_OFFICE' && cohort !== 'PROBATION') {
+    answers.push(
+      ...[
+        createAnswer(
+          notifyingOrgQuestions.notifyingOrganisation.text,
+          lookup(content.reference.notifyingOrganisations, order.interestedParties?.notifyingOrganisation),
+          notifyingOrgUri,
+          answerOpts,
+        ),
+      ],
+    )
+  }
+
+  answers.push(
     ...getNotifyingOrganisationNameAnswer(order, content, notifyingOrgUri, answerOpts),
     createAnswer(
       notifyingOrgQuestions.notifyingOrganisationEmail.text,
@@ -170,7 +179,7 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts:
       notifyingOrgUri,
       answerOpts,
     ),
-  ]
+  )
 
   const startDate = order.monitoringConditions.startDate
     ? new Date(order.monitoringConditions.startDate)
@@ -260,14 +269,7 @@ const construct = (order: Order, content: I18n, cohort?: string) => {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
   }
 
-  const interestedParties = createInterestedPartiesAnswers(order, content, answerOpts)
-
-  if (cohort === 'HOME_OFFICE' || cohort === 'PROBATION') {
-    if (interestedParties[0].key.text === 'What organisation or related organisation are you part of?') {
-      interestedParties.shift()
-    }
-  }
-
+  const interestedParties = createInterestedPartiesAnswers(order, content, answerOpts, cohort)
   const probationDeliveryUnit = createProbationDeliveryUnitAnswer(order, content, answerOpts)
 
   return {
