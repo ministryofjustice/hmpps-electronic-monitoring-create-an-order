@@ -6,6 +6,9 @@ export default class AddressResultPage extends AppFormPage {
   public form = new AddressResultComponent()
 
   constructor() {
-    super('WIP Address Result', paths.POSTCODE_LOOKUP.FIND_ADDRESS)
+    super(
+      /(Select the .* address) | (No results found) | (Too many results found)/gm,
+      paths.POSTCODE_LOOKUP.ADDRESS_RESULT,
+    )
   }
 }

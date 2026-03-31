@@ -1,9 +1,10 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
-import ViewModel, { AddressType } from './viewModel'
+import ViewModel from './viewModel'
 import FindAddressFormData, { FindAddressForm } from './formModel'
 import PostcodeService from '../postcodeService'
 import { isValidationResult, ValidationResult } from '../../../models/Validation'
+import { AddressType } from '../../../models/Address'
 
 export default class FindAddressController {
   constructor(private readonly service: PostcodeService) {}
@@ -38,8 +39,13 @@ export default class FindAddressController {
       return
     }
 
-    res.redirect(
-      paths.POSTCODE_LOOKUP.ADDRESS_RESULT.replace(':orderId', order.id).replace(':addressType', addressType),
+    const redirectUrl = this.service.buildUrl(
+      paths.POSTCODE_LOOKUP.ADDRESS_RESULT,
+      order.id,
+      addressType,
+      result.postcode,
+      result.buildingId,
     )
+    res.redirect(redirectUrl)
   }
 }

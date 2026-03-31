@@ -26,6 +26,43 @@ context('Postcode Lookup', () => {
       name: 'Cemor Stubs',
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
+
+    cy.task('stubOSDataHubPostcode', {
+      httpStatus: 200,
+      postcode: 'SA111AA',
+      body: {
+        results: [
+          {
+            DPA: {
+              BUILDING_NUMBER: 10,
+              THOROUGHFARE_NAME: 'DOWNING STREET',
+              POST_TOWN: 'LONDON',
+              POSTCODE: 'SA11 1AA',
+              UPRN: '101',
+            },
+          },
+        ],
+      },
+    })
+
+    cy.task('stubOSDataHubUPRN', {
+      httpStatus: 200,
+      uprn: '101',
+      body: {
+        results: [
+          {
+            DPA: {
+              BUILDING_NUMBER: 10,
+              THOROUGHFARE_NAME: 'DOWNING STREET',
+              POST_TOWN: 'LONDON',
+              POSTCODE: 'SW1A 2AA',
+              UPRN: '101',
+            },
+          },
+        ],
+      },
+    })
+
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     indexPage.newOrderFormButton.click()
@@ -44,7 +81,7 @@ context('Postcode Lookup', () => {
       deviceWearerDetails,
     })
 
-    fillinAddress({ findAddress: { postcode: 'SA11 1AA' } })
+    fillinAddress({ findAddress: { postcode: 'SA11 1AA' }, addressResult: { address: '10' } })
     // TODO Check answer
   })
 
@@ -53,7 +90,7 @@ context('Postcode Lookup', () => {
       deviceWearerDetails,
     })
 
-    fillinAddress({ findAddress: {} })
+    fillinAddress({ findAddress: {}, addressResult: {} })
     // TODO Check answer
   })
 })

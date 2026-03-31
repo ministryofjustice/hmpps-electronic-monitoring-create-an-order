@@ -1,0 +1,104 @@
+import { v4 as uuidv4 } from 'uuid'
+import Model from './model'
+import { AddressWithUPRN } from '../../../models/Address'
+import { createAddressPreview } from '../../../utils/utils'
+import paths from '../../../constants/paths'
+import getContent from '../../../i18n'
+
+const mockOrderId = uuidv4()
+const content = getContent('en', 'DDV6')
+describe('model', () => {
+  const addresses: AddressWithUPRN[] = [
+    {
+      addressType: 'PRIMARY',
+      addressLine1: '10 Downing Street',
+      addressLine2: '',
+      addressLine3: 'London',
+      addressLine4: '',
+      postcode: 'SW1A 2AA',
+      uprn: '101',
+    },
+  ]
+
+  it('gives correct model', () => {
+    const model = Model.construct(addresses, content, [], {
+      orderId: mockOrderId,
+      addressType: 'PRIMARY',
+      postcode: 'SW1A 2AA',
+    })
+
+    expect(model.items).toHaveLength(1)
+    const expectedText = createAddressPreview(addresses[0])
+    expect(model.items[0]).toEqual({ text: expectedText, value: '101' })
+    expect(model.postcode).toBe('SW1A 2AA')
+    expect(model.addressCount).toBe(1)
+    expect(model.buildingId).toBeUndefined()
+
+    expect(model.searchAgainLink).toBe(
+      paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'PRIMARY'),
+    )
+  })
+
+  it('has buildingId if provided', async () => {
+    const model = Model.construct(addresses, content, [], {
+      orderId: mockOrderId,
+      addressType: 'PRIMARY',
+      postcode: 'SW1A 2AA',
+      buildingId: '10',
+    })
+    expect(model.buildingId).toBe('10')
+  })
+
+  describe('address type is device wearer', () => {
+    const model = Model.construct(addresses, content, [], {
+      orderId: mockOrderId,
+      addressType: 'PRIMARY',
+      postcode: 'SW1A 2AA',
+      buildingId: '10',
+    })
+
+    it('has correct content', () => {
+      expect(model.content).toEqual(content.pages.deviceWearerAddressResult)
+    })
+  })
+
+  describe('address type is curfew', () => {
+    const model = Model.construct(addresses, content, [], {
+      orderId: mockOrderId,
+      addressType: 'SECONDARY',
+      postcode: 'SW1A 2AA',
+      buildingId: '10',
+    })
+
+    it('has correct content', () => {
+      expect(model.content).toEqual(content.pages.curfewAddressResult)
+    })
+  })
+
+  describe('address type is installation', () => {
+    const model = Model.construct(addresses, content, [], {
+      orderId: mockOrderId,
+      addressType: 'INSTALLATION',
+      postcode: 'SW1A 2AA',
+      buildingId: '10',
+    })
+
+    it('has correct content', () => {
+      expect(model.content).toEqual(content.pages.tagAtSourceAddressResult)
+    })
+  })
+
+  describe('handlers errors', () => {
+    const model = Model.construct(addresses, content, [{ field: 'address', error: 'some error' }], {
+      orderId: mockOrderId,
+      addressType: 'INSTALLATION',
+      postcode: 'SW1A 2AA',
+      buildingId: '10',
+    })
+
+    it('has correct content', () => {
+      expect(model.addressError?.text).toBe('some error')
+      expect(model.errorSummary).toBeDefined()
+    })
+  })
+})
