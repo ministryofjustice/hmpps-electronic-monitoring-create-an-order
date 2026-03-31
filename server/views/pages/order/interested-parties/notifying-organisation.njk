@@ -15,6 +15,8 @@
   <span class="govuk-visually-hidden"> Selecting this will reveal an additional input</span>
 {% endset %}
 
+{% set showNotifyingOrgQuestion = (cohort != "PROBATION" and cohort != "HOME_OFFICE") %}
+
 {% set crownCourtHtml %}
   {{ accessibleAutocomplete({
     id: 'crownCourt',
@@ -116,123 +118,133 @@
 
 {% set notifyingOrgOptions = [] %}
 {% for org in content.reference.notifyingOrganisations | toOptions(not isOrderEditable) %}
-  {% if org.value == 'CIVIL_COUNTY_COURT' %}
-    {% set notifyingOrgOptions = (notifyingOrgOptions.push({
-      value: org.value,
-      text: org.text,
-      conditional: {
-        html: civilCountyCourtHtml
-      },
-      disabled: org.disabled
-    }), notifyingOrgOptions) %}
 
-  {% elif org.value == 'CROWN_COURT' %}
-    {% set notifyingOrgOptions = (notifyingOrgOptions.push({
-      value: org.value,
-      text: org.text,
-      hint: {
-        html: visuallyHiddenHint
-      },
-      conditional: {
-        html: crownCourtHtml
-      },
-      disabled: org.disabled
-    }), notifyingOrgOptions) %}
+  {% if cohort != 'COURT' or org.value in ['CIVIL_COUNTY_COURT', 'FAMILY_COURT'] %}
 
-  {% elif org.value == 'FAMILY_COURT' %}
-    {% set notifyingOrgOptions = (notifyingOrgOptions.push({
-      value: org.value,
-      text: org.text,
-      conditional: {
-        html: familyCourtHtml
-      },
-      disabled: org.disabled
-    }), notifyingOrgOptions) %}
+    {% if org.value == 'PRISON' and (cohort == 'PRISON' or cohort == 'OTHER') %}
+      {% set notifyingOrgOptions = (notifyingOrgOptions.push({
+        value: org.value,
+        text: org.text,
+        hint: {
+          html: visuallyHiddenHint
+        },
+        conditional: {
+          html: prisonHtml
+        },
+        disabled: org.disabled
+      }), notifyingOrgOptions) %}
 
-  {% elif org.value == 'MAGISTRATES_COURT' %}
-    {% set notifyingOrgOptions = (notifyingOrgOptions.push({
-      value: org.value,
-      text: org.text,
-      hint: {
-        html: visuallyHiddenHint
-      },
-      conditional: {
-        html: magistratesCourtHtml
-      },
-      disabled: org.disabled
-    }), notifyingOrgOptions) %}
+    {% elif DDv5 and org.value == 'YOUTH_CUSTODY_SERVICE' and (cohort == 'PRISON' or cohort == 'OTHER') %}
+      {% set notifyingOrgOptions = (notifyingOrgOptions.push({
+        value: org.value,
+        text: org.text,
+        conditional: {
+          html: youthCustodyServiceRegionHtml
+        },
+        disabled: org.disabled
+      }), notifyingOrgOptions) %}
 
-  {% elif DDv5 and org.value == 'MILITARY_COURT' %}
-    {% set notifyingOrgOptions = (notifyingOrgOptions.push({
-      value: org.value,
-      text: org.text,
-      conditional: {
-        html: militaryCourtHtml
-      },
-      disabled: org.disabled
-    }), notifyingOrgOptions) %}
+    {% elif cohort != 'PRISON' %}
+      {% if org.value == 'CIVIL_COUNTY_COURT' %}
+        {% set notifyingOrgOptions = (notifyingOrgOptions.push({
+          value: org.value,
+          text: org.text,
+          conditional: {
+            html: civilCountyCourtHtml
+          },
+          disabled: org.disabled
+        }), notifyingOrgOptions) %}
 
-  {% elif org.value == 'PRISON' %}
-    {% set notifyingOrgOptions = (notifyingOrgOptions.push({
-      value: org.value,
-      text: org.text,
-      hint: {
-        html: visuallyHiddenHint
-      },
-      conditional: {
-        html: prisonHtml
-      },
-      disabled: org.disabled
-    }), notifyingOrgOptions) %}
+      {% elif org.value == 'CROWN_COURT' %}
+        {% set notifyingOrgOptions = (notifyingOrgOptions.push({
+          value: org.value,
+          text: org.text,
+          hint: {
+            html: visuallyHiddenHint
+          },
+          conditional: {
+            html: crownCourtHtml
+          },
+          disabled: org.disabled
+        }), notifyingOrgOptions) %}
 
-  {% elif DDv5 and org.value == 'PROBATION' %}
-    {% set notifyingOrgOptions = (notifyingOrgOptions.push({
-      value: org.value,
-      text: org.text,
-      disabled: org.disabled
-    }), notifyingOrgOptions) %}
+      {% elif org.value == 'FAMILY_COURT' %}
+        {% set notifyingOrgOptions = (notifyingOrgOptions.push({
+          value: org.value,
+          text: org.text,
+          conditional: {
+            html: familyCourtHtml
+          },
+          disabled: org.disabled
+        }), notifyingOrgOptions) %}
 
-  {% elif DDv5 and org.value == 'YOUTH_COURT' %}
-    {% set notifyingOrgOptions = (notifyingOrgOptions.push({
-      value: org.value,
-      text: org.text,
-      conditional: {
-        html: youthCourtHtml
-      },
-      disabled: org.disabled
-    }), notifyingOrgOptions) %}
+      {% elif org.value == 'MAGISTRATES_COURT' %}
+        {% set notifyingOrgOptions = (notifyingOrgOptions.push({
+          value: org.value,
+          text: org.text,
+          hint: {
+            html: visuallyHiddenHint
+          },
+          conditional: {
+            html: magistratesCourtHtml
+          },
+          disabled: org.disabled
+        }), notifyingOrgOptions) %}
 
-  {% elif DDv5 and org.value == 'YOUTH_CUSTODY_SERVICE' %}
-    {% set notifyingOrgOptions = (notifyingOrgOptions.push({
-      value: org.value,
-      text: org.text,
-      conditional: {
-        html: youthCustodyServiceRegionHtml
-      },
-      disabled: org.disabled
-    }), notifyingOrgOptions) %}
+      {% elif DDv5 and org.value == 'MILITARY_COURT' %}
+        {% set notifyingOrgOptions = (notifyingOrgOptions.push({
+          value: org.value,
+          text: org.text,
+          conditional: {
+            html: militaryCourtHtml
+          },
+          disabled: org.disabled
+        }), notifyingOrgOptions) %}
 
-  {% else %}
-    {% set notifyingOrgOptions = (notifyingOrgOptions.push(org), notifyingOrgOptions) %}
+      {% elif DDv5 and org.value == 'PROBATION' %}
+        {% set notifyingOrgOptions = (notifyingOrgOptions.push({
+          value: org.value,
+          text: org.text,
+          disabled: org.disabled
+        }), notifyingOrgOptions) %}
+
+      {% elif DDv5 and org.value == 'YOUTH_COURT' %}
+        {% set notifyingOrgOptions = (notifyingOrgOptions.push({
+          value: org.value,
+          text: org.text,
+          conditional: {
+            html: youthCourtHtml
+          },
+          disabled: org.disabled
+        }), notifyingOrgOptions) %}
+
+      {% else %}
+
+        {% set notifyingOrgOptions = (notifyingOrgOptions.push(org), notifyingOrgOptions) %}
+
+      {% endif %}
+    {% endif %}
   {% endif %}
 {% endfor %}
 
 {% block formInputs %}
 
-    {{ govukRadios({
-      name: "notifyingOrganisation",
-      fieldset: {
-        legend: {
-          text: questions.notifyingOrganisation.text,
-          isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
-        }
-      },
-      items: notifyingOrgOptions,
-      value: notifyingOrganisation.value,
-      errorMessage: notifyingOrganisation.error,
-      disabled: not isOrderEditable
-    }) }}
+    {% if showNotifyingOrgQuestion %}
+      {{ govukRadios({
+        name: "notifyingOrganisation",
+        fieldset: {
+          legend: {
+            text: questions.notifyingOrganisation.text,
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        items: notifyingOrgOptions,
+        value: notifyingOrganisation.value,
+        errorMessage: notifyingOrganisation.error,
+        disabled: not isOrderEditable
+      }) }}
+    {% endif %}
 
     {{ govukInput({
       label: {
