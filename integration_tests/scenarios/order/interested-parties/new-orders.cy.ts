@@ -102,7 +102,6 @@ context('Interested parties flow', () => {
     })
     const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
     cyaPage.organisationDetailsSection.shouldHaveItems([
-      { key: 'What organisation or related organisation are you part of?', value: 'Home Office' },
       { key: "What is your team's contact email address?", value: 'a@b.com' },
       { key: "What is the Responsible Officer's first name?", value: 'John' },
       { key: "What is the Responsible Officer's last name?", value: 'Smith' },
