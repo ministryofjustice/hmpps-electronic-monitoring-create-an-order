@@ -160,14 +160,12 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts:
 
   if (cohort !== 'HOME_OFFICE' && cohort !== 'PROBATION') {
     answers.push(
-      ...[
-        createAnswer(
-          notifyingOrgQuestions.notifyingOrganisation.text,
-          lookup(content.reference.notifyingOrganisations, order.interestedParties?.notifyingOrganisation),
-          notifyingOrgUri,
-          answerOpts,
-        ),
-      ],
+      createAnswer(
+        notifyingOrgQuestions.notifyingOrganisation.text,
+        lookup(content.reference.notifyingOrganisations, order.interestedParties?.notifyingOrganisation),
+        notifyingOrgUri,
+        answerOpts,
+      ),
     )
   }
 
