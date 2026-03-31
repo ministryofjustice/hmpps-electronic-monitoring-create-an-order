@@ -25,15 +25,27 @@ export default class NotifingOrganisationController extends InterestedPartiesBas
     const formData = req.flash('formData') as unknown as NotifyingOrganisationInput[]
     const errors = req.flash('validationErrors') as unknown as ValidationResult
 
+    const cohort = res.locals.user.cohort?.cohort
+
     res.render(
       'pages/order/interested-parties/notifying-organisation',
-      ViewModel.construct(storedData, formData[0], errors, order),
+      ViewModel.construct(storedData, formData[0], errors, order, cohort),
     )
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const formData = NotifyingOrganisationFormModel.parse(req.body)
+
+    const cohort = res.locals.user.cohort?.cohort
+
+    let formData = NotifyingOrganisationFormModel.parse(req.body)
+
+    if (cohort === 'PROBATION' || cohort === 'HOME_OFFICE') {
+      formData = {
+        ...formData,
+        notifyingOrganisation: cohort,
+      }
+    }
 
     const validationResult = NotifyingOrganisationValidator.safeParse(formData)
 
