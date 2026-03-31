@@ -255,12 +255,19 @@ const createProbationDeliveryUnitAnswer = (order: Order, content: I18n, answerOp
   return answers
 }
 
-const construct = (order: Order, content: I18n) => {
+const construct = (order: Order, content: I18n, cohort?: string) => {
   const answerOpts = {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
   }
 
   const interestedParties = createInterestedPartiesAnswers(order, content, answerOpts)
+
+  if (cohort === 'HOME_OFFICE' || cohort === 'PROBATION') {
+    if (interestedParties[0].key.text === 'What organisation or related organisation are you part of?') {
+      interestedParties.shift()
+    }
+  }
+
   const probationDeliveryUnit = createProbationDeliveryUnitAnswer(order, content, answerOpts)
 
   return {
