@@ -70,6 +70,9 @@ export default class MonitoringConditionsStoreService {
         monitoringConditions.conditionType = 'REQUIREMENT_OF_A_COMMUNITY_ORDER'
         break
       case 'CIVIL':
+        monitoringConditions.conditionType = 'BAIL_ORDER'
+        monitoringConditions.pilot = 'DOMESTIC_ABUSE_PROTECTION_ORDER'
+        break
       case 'IMMIGRATION':
       case 'BAIL':
         monitoringConditions.conditionType = 'BAIL_ORDER'
