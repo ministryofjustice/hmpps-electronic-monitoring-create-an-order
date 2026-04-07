@@ -158,7 +158,10 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts:
 
   const answers = []
 
-  if (cohort !== 'HOME_OFFICE' && cohort !== 'PROBATION') {
+  const isHomeOffice = cohort === 'HOME_OFFICE'
+  const isProbation = cohort === 'PROBATION'
+
+  if (!isHomeOffice && !isProbation) {
     answers.push(
       createAnswer(
         notifyingOrgQuestions.notifyingOrganisation.text,
@@ -185,7 +188,11 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts:
 
   const isStartDateInPast = startDate < new Date()
 
-  if (order.interestedParties?.responsibleOfficerFirstName && !(isStartDateInPast && order.status === 'SUBMITTED')) {
+  if (
+    order.interestedParties?.responsibleOfficerFirstName &&
+    !(isStartDateInPast && order.status === 'SUBMITTED') &&
+    !isHomeOffice
+  ) {
     answers.push(
       ...[
         createAnswer(
