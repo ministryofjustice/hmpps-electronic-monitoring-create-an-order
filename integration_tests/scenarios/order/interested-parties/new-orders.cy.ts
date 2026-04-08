@@ -86,11 +86,6 @@ context('Interested parties flow', () => {
       notifyingOrganisation: {
         notifyingOrganisationEmailAddress: 'a@b.com',
       },
-      responsibleOfficer: {
-        firstName: 'John',
-        lastName: 'Smith',
-        email: 'John@Smith.com',
-      },
       responsibleOrganisation: {
         responsibleOrganisation: 'Home Office',
         responsibleOrganisationEmailAddress: 'a@b.com',
@@ -103,9 +98,6 @@ context('Interested parties flow', () => {
     const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
     cyaPage.organisationDetailsSection.shouldHaveItems([
       { key: "What is your team's contact email address?", value: 'a@b.com' },
-      { key: "What is the Responsible Officer's first name?", value: 'John' },
-      { key: "What is the Responsible Officer's last name?", value: 'Smith' },
-      { key: "What is the Responsible Officer's email address?", value: 'John@Smith.com' },
       { key: "What is the Responsible Officer's organisation?", value: 'Home Office' },
       { key: "What is the Responsible Organisation's email address? (optional)", value: 'a@b.com' },
     ])
