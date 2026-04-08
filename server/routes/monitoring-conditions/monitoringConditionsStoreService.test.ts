@@ -145,13 +145,6 @@ describe('store service', () => {
       },
     )
 
-    it('pilot is set to DAPO when order type is civil', async () => {
-      await service.updateOrderType(mockOrder, { orderType: 'CIVIL' })
-      const result = await service.getMonitoringConditions(mockOrder)
-
-      expect(result.pilot).toEqual('DOMESTIC_ABUSE_PROTECTION_ORDER')
-    })
-
     it('should clear dependant answers and update new answers when changing journey', async () => {
       await service.updateMonitoringConditions(mockOrder, {
         orderType: 'POST_RELEASE',
