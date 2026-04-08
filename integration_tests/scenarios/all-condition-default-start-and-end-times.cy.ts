@@ -194,7 +194,6 @@ context('The kitchen sink', () => {
           risk_details: 'No risk',
           mappa: null,
           mappa_case_type: null,
-          mappa_category: null,
           risk_categories: [
             {
               category: 'Sexual Offences',
