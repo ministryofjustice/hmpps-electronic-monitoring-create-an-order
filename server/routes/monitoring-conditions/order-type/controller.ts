@@ -44,6 +44,7 @@ export default class OrderTypeController extends MonitoringConditionsBaseControl
     }
     if (notifyingOrganisationCourts.includes(notifyingOrganisation)) {
       await this.montoringConditionsStoreService.updateOrderType(order, { orderType: 'BAIL' })
+      await this.montoringConditionsStoreService.updateField(order, 'pilot', 'DOMESTIC_ABUSE_PROTECTION_ORDER')
       await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, req, res)
       return
     }
