@@ -336,6 +336,7 @@ context('Order type descriptions', () => {
         alcohol: false,
         startDate: null,
         endDate: null,
+        pilot: 'DOMESTIC_ABUSE_PROTECTION_ORDER',
       },
     }).should('be.true')
   })

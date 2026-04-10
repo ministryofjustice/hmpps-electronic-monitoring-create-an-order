@@ -85,7 +85,7 @@ const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n
     )
   }
 
-  if (data.pilot !== undefined && data.pilot !== null) {
+  if (data.pilot !== undefined && data.pilot !== null && data.pilot !== 'DOMESTIC_ABUSE_PROTECTION_ORDER') {
     let text = lookup(content.reference.pilots, data.pilot)
     const pilotPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT
     if (data.pilot === 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW' || data.pilot === 'GPS_ACQUISITIVE_CRIME_PAROLE') {
