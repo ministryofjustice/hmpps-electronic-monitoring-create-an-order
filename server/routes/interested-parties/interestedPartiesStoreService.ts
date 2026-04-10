@@ -52,6 +52,7 @@ export default class InterestedPartiesStoreService {
   public async updateNotifyingOrganisation(
     order: Order,
     data: Pick<InterestedParties, 'notifyingOrganisation' | 'notifyingOrganisationName' | 'notifyingOrganisationEmail'>,
+    responsibleOfficerData?: Pick<InterestedParties, 'responsibleOfficerFirstName' | 'responsibleOfficerLastName'>,
   ) {
     let interestedParties = await this.getInterestedParties(order)
 
@@ -62,6 +63,12 @@ export default class InterestedPartiesStoreService {
     interestedParties.notifyingOrganisation = data.notifyingOrganisation
     interestedParties.notifyingOrganisationName = data.notifyingOrganisationName
     interestedParties.notifyingOrganisationEmail = data.notifyingOrganisationEmail
+
+    if (responsibleOfficerData) {
+      interestedParties.responsibleOfficerFirstName = responsibleOfficerData.responsibleOfficerFirstName
+      interestedParties.responsibleOfficerLastName = responsibleOfficerData.responsibleOfficerLastName
+    }
+
     await this.updateInterestedParties(order, interestedParties)
   }
 

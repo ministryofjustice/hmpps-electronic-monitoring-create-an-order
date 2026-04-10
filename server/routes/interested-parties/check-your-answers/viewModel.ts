@@ -161,7 +161,7 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts:
   const isHomeOffice = cohort === 'HOME_OFFICE'
   const isProbation = cohort === 'PROBATION'
 
-  if (!isHomeOffice && !isProbation) {
+  if (!(isHomeOffice || isProbation)) {
     answers.push(
       createAnswer(
         notifyingOrgQuestions.notifyingOrganisation.text,
