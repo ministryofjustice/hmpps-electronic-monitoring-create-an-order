@@ -29,8 +29,7 @@ const createPrimaryAddressView = (addresses: Address[]): string => {
 }
 
 const hasFixedAddress = (order: Order): boolean => {
-  const primaryAddress = order.addresses.find(({ addressType }) => addressType === 'PRIMARY')
-  return primaryAddress !== undefined
+  return !order.deviceWearer.noFixedAbode || false
 }
 
 const showImmigrationRemovalCente = (order: Order): boolean => {
