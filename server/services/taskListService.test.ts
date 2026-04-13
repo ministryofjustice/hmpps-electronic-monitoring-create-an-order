@@ -689,7 +689,7 @@ describe('TaskListService', () => {
       // Then
       expect(nextPage).toBe(
         paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
-          ':fileType(photo_Id|licence|court_order|grant_of_bail)',
+          ':fileType(photo_Id|licence|court_order)',
           'licence',
         ),
       )
@@ -765,7 +765,7 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
-            ':fileType(photo_Id|licence|court_order|grant_of_bail)',
+            ':fileType(photo_Id|licence|court_order)',
             'licence',
           ),
           isReady: true,
@@ -990,7 +990,7 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
-            ':fileType(photo_Id|licence|court_order|grant_of_bail)',
+            ':fileType(photo_Id|licence|court_order)',
             'licence',
           ),
           isReady: true,
@@ -1061,7 +1061,7 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
-            ':fileType(photo_Id|licence|court_order|grant_of_bail)',
+            ':fileType(photo_Id|licence|court_order)',
             'licence',
           ),
           isReady: true,

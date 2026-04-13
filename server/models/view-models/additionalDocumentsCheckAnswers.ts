@@ -33,10 +33,10 @@ const createViewModel = (order: Order, content: I18n | undefined) => {
         createAttachmentAnswer(
           courtOrder,
           content?.pages.uploadCourtOrder.questions.file.text || '',
-          paths.ATTACHMENT.FILE_VIEW.replace(
-            ':fileType(photo_Id|licence|court_order|grant_of_bail)',
-            'court_order',
-          ).replace(':orderId', order.id),
+          paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'court_order').replace(
+            ':orderId',
+            order.id,
+          ),
           order,
         ),
       )
@@ -46,7 +46,7 @@ const createViewModel = (order: Order, content: I18n | undefined) => {
       createAttachmentAnswer(
         licence,
         content?.pages.uploadLicense.questions.file.text || '',
-        paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order|grant_of_bail)', 'licence').replace(
+        paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'licence').replace(
           ':orderId',
           order.id,
         ),
@@ -69,7 +69,7 @@ const createViewModel = (order: Order, content: I18n | undefined) => {
       createAttachmentAnswer(
         photo,
         content?.pages.uploadPhotoId.questions.file.text || '',
-        paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order|grant_of_bail)', 'photo_Id').replace(
+        paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'photo_Id').replace(
           ':orderId',
           order.id,
         ),
