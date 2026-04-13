@@ -65,7 +65,7 @@ export const createInstallationAndRisk = (overrideProperties?: Partial<Installat
 })
 
 export const createInterestedParties = (overrideProperties?: Partial<InterestedParties>): InterestedParties => ({
-  notifyingOrganisation: 'HOME_OFFICE',
+  notifyingOrganisation: 'PRISON',
   notifyingOrganisationName: '',
   notifyingOrganisationEmail: '',
   responsibleOfficerName: '',
@@ -266,6 +266,10 @@ export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order =
   isValid: false,
   installationLocation: {
     location: 'INSTALLATION',
+  },
+  installationAppointment: {
+    placeName: 'place',
+    appointmentDate: 'date',
   },
   orderParameters: null,
   versionId: randomUUID(),

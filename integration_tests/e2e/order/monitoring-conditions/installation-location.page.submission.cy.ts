@@ -5,7 +5,6 @@ import InstallationAppointmentPage from '../../../pages/order/monitoring-conditi
 
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import CheckYourAnswersPage from '../../../pages/checkYourAnswersPage'
-import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
 
 const mockOrderId = uuidv4()
 const apiPath = '/installation-location'
@@ -219,7 +218,7 @@ context('Monitoring conditions', () => {
           Page.verifyOnPage(InstallationAppointmentPage)
         })
 
-        it('no selecting at another address', () => {
+        it('when selecting at another address', () => {
           const orderWithoutFixedAddress = { ...mockDefaultOrder }
           orderWithoutFixedAddress.addresses = []
           orderWithoutFixedAddress.deviceWearer.noFixedAbode = true
@@ -245,7 +244,7 @@ context('Monitoring conditions', () => {
           }
           page.form.fillInWith(validFormData)
           page.form.saveAndContinueButton.click()
-          Page.verifyOnPage(InstallationAddressPage)
+          Page.verifyOnPage(InstallationAppointmentPage)
 
           cy.task('stubCemoVerifyRequestReceived', {
             uri: `/orders/${mockOrderId}${apiPath}`,
@@ -253,6 +252,47 @@ context('Monitoring conditions', () => {
               location: 'INSTALLATION',
             },
           }).should('be.true')
+        })
+
+        context('when home office', () => {
+          it('and I select primary address', () => {
+            const homeOfficeOrder = {
+              ...mockDefaultOrder,
+              interestedParties: {
+                notifyingOrganisation: 'HOME_OFFICE',
+                notifyingOrganisationName: '',
+                notifyingOrganisationEmail: 'notifying@organisation',
+                responsibleOrganisation: 'POLICE',
+                responsibleOfficerPhoneNumber: '01234567891',
+                responsibleOrganisationEmail: 'responsible@organisation',
+                responsibleOrganisationRegion: '',
+                responsibleOfficerName: 'name',
+              },
+            }
+            cy.task('stubCemoGetOrder', {
+              httpStatus: 200,
+              id: mockOrderId,
+              status: 'IN_PROGRESS',
+              order: homeOfficeOrder,
+            })
+
+            cy.task('stubCemoSubmitOrder', {
+              httpStatus: 200,
+              id: mockOrderId,
+              subPath: apiPath,
+              response: {
+                location: 'PRIMARY',
+              },
+            })
+
+            const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
+            const validFormData = {
+              location: '10',
+            }
+            page.form.fillInWith(validFormData)
+            page.form.saveAndContinueButton.click()
+            Page.verifyOnPage(InstallationAppointmentPage)
+          })
         })
       })
 
