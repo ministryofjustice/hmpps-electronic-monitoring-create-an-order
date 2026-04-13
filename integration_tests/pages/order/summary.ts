@@ -32,8 +32,6 @@ import fillInAttendanceMonitoringDetailsWith from '../../utils/scenario-flows/at
 import Timeline from '../components/timeline'
 import HaveCourtOrderPage from '../../e2e/order/attachments/have-court-order/courtOrderDocumentPage'
 import UploadCourtOrderPage from '../../e2e/order/attachments/upload-court-order/uploadCourtOrderPage'
-import HaveGrantOfBailPage from '../../e2e/order/attachments/have-grant-of-bail/haveGrantOfBailPage'
-import UploadGrantOfBailPage from '../../e2e/order/attachments/upload-grant-of-bail/uploadGrantOfBailPage'
 
 export default class OrderTasksPage extends AppPage {
   constructor(isOldVersionPage: boolean = false) {
@@ -646,20 +644,6 @@ export default class OrderTasksPage extends AppPage {
           file: files.courtOrder,
         })
         uploadCourtOrderPage.form.saveAndContinueButton.click()
-      }
-    }
-
-    if (files.grantOfBail !== undefined) {
-      const haveGrantOfBailPage = Page.verifyOnPage(HaveGrantOfBailPage)
-      haveGrantOfBailPage.form.fillInWith(files.grantOfBail.fileRequired)
-      haveGrantOfBailPage.form.saveAndContinueButton.click()
-
-      if (files.grantOfBail.fileRequired === 'Yes') {
-        const uploadGrantOfBail = Page.verifyOnPage(UploadGrantOfBailPage)
-        uploadGrantOfBail.form.fillInWith({
-          file: files.grantOfBail,
-        })
-        uploadGrantOfBail.form.saveAndContinueButton.click()
       }
     }
 
