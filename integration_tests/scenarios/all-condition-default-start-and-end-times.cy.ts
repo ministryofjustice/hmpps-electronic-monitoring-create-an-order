@@ -193,7 +193,6 @@ context('The kitchen sink', () => {
           risk_self_harm: '',
           risk_details: 'No risk',
           mappa: null,
-          mappa_category: null,
           mappa_case_type: null,
           risk_categories: [
             {
