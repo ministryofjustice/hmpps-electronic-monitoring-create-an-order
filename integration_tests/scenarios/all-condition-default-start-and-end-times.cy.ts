@@ -270,7 +270,7 @@ context('The kitchen sink', () => {
             no_name: interestedParties.notifyingOrganisationName,
             no_phone_number: '',
             offence: installationAndRisk.offence,
-            offence_additional_details: 'PFA: Avon and Somerset',
+            offence_additional_details: 'PFA: Avon and Somerset Constabulary',
             offence_date: '',
             order_end: formatAsFmsDateTime(trailMonitoringOrder.endDate, 23, 59),
             order_id: orderId,
