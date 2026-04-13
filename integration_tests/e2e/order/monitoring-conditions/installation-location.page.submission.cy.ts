@@ -254,6 +254,47 @@ context('Monitoring conditions', () => {
             },
           }).should('be.true')
         })
+
+        context('when home office', () => {
+          it('and I select primary address', () => {
+            const homeOfficeOrder = {
+              ...mockDefaultOrder,
+              interestedParties: {
+                notifyingOrganisation: 'HOME_OFFICE',
+                notifyingOrganisationName: '',
+                notifyingOrganisationEmail: 'notifying@organisation',
+                responsibleOrganisation: 'POLICE',
+                responsibleOfficerPhoneNumber: '01234567891',
+                responsibleOrganisationEmail: 'responsible@organisation',
+                responsibleOrganisationRegion: '',
+                responsibleOfficerName: 'name',
+              },
+            }
+            cy.task('stubCemoGetOrder', {
+              httpStatus: 200,
+              id: mockOrderId,
+              status: 'IN_PROGRESS',
+              order: homeOfficeOrder,
+            })
+
+            cy.task('stubCemoSubmitOrder', {
+              httpStatus: 200,
+              id: mockOrderId,
+              subPath: apiPath,
+              response: {
+                location: 'PRIMARY',
+              },
+            })
+
+            const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
+            const validFormData = {
+              location: '10',
+            }
+            page.form.fillInWith(validFormData)
+            page.form.saveAndContinueButton.click()
+            Page.verifyOnPage(InstallationAppointmentPage)
+          })
+        })
       })
 
       context('When changing an answer from the Check your Answers page', () => {
