@@ -48,8 +48,6 @@ export default class AttachmentsController {
     switch (attachmentType) {
       case AttachmentType.COURT_ORDER:
         return PAGES.courtOrderUpload
-      case AttachmentType.GRANT_OF_BAIL:
-        return PAGES.grantOfBailUpload
       case AttachmentType.LICENCE:
         return PAGES.licenceUpload
       case AttachmentType.PHOTO_ID:

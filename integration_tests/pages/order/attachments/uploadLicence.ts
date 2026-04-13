@@ -9,7 +9,7 @@ export default class UploadLicencePage extends AppFormPage {
   constructor() {
     super(
       '',
-      paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order|grant_of_bail)', 'licence'),
+      paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'licence'),
       'Additional documents',
     )
   }

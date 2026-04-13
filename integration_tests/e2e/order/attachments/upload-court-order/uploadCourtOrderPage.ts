@@ -8,7 +8,7 @@ export default class UploadCourtOrderPage extends AppFormPage {
   constructor() {
     super(
       '',
-      paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order|grant_of_bail)', 'court_order'),
+      paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'court_order'),
       'Additional documents',
     )
   }
