@@ -1,6 +1,7 @@
 import paths from '../../constants/paths'
 import I18n from '../../types/i18n'
 import { createAnswer, createDateAnswer } from '../../utils/checkYourAnswers'
+import isVariationType from '../../utils/isVariationType'
 import { Order } from '../Order'
 
 const createViewModel = (order: Order, content: I18n | undefined) => {
@@ -20,7 +21,7 @@ const createViewModel = (order: Order, content: I18n | undefined) => {
     ),
   ]
 
-  return { variationDetails: answers, isVariation: order.type === 'VARIATION' }
+  return { variationDetails: answers, isVariation: isVariationType(order.type) }
 }
 
 export default createViewModel

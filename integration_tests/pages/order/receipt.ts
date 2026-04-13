@@ -23,7 +23,7 @@ export default class ReceiptPage extends AppPage {
   }
 
   get variationDetailsSection(): SummaryListComponent {
-    const label = 'About the changes to this version of the form'
+    const label = 'About the changes in this version of the form'
     return new SummaryListComponent(label)
   }
 
@@ -49,6 +49,11 @@ export default class ReceiptPage extends AppPage {
 
   get monitoringConditionsSection(): SummaryListComponent {
     const label = 'Monitoring conditions'
+    return new SummaryListComponent(label)
+  }
+
+  get interestedPartiesSection(): SummaryListComponent {
+    const label = 'About the Notifying and Responsible Organisations'
     return new SummaryListComponent(label)
   }
 }
