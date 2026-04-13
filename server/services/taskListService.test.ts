@@ -800,6 +800,10 @@ describe('TaskListService', () => {
         curfewConditions: createCurfewConditions(),
         curfewTimeTable: createCurfewTimeTable(),
         installationLocation: { location: 'INSTALLATION' },
+        installationAppointment: {
+          placeName: 'primary',
+          appointmentDate: 'date',
+        },
         additionalDocuments: [createAttatchment(), createAttatchment({ fileType: AttachmentType.PHOTO_ID })],
         orderParameters: { havePhoto: true },
       })
@@ -875,6 +879,10 @@ describe('TaskListService', () => {
         curfewConditions: createCurfewConditions(),
         curfewTimeTable: createCurfewTimeTable(),
         installationLocation: { location: 'INSTALLATION' },
+        installationAppointment: {
+          placeName: 'primary',
+          appointmentDate: 'date',
+        },
         additionalDocuments: [createAttatchment(), createAttatchment({ fileType: AttachmentType.PHOTO_ID })],
         orderParameters: { havePhoto: true },
       })

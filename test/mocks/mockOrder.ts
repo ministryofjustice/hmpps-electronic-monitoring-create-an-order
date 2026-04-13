@@ -267,6 +267,10 @@ export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order =
   installationLocation: {
     location: 'INSTALLATION',
   },
+  installationAppointment: {
+    placeName: 'place',
+    appointmentDate: 'date',
+  },
   orderParameters: null,
   versionId: randomUUID(),
   dapoClauses: [],
