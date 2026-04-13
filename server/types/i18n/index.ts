@@ -26,7 +26,6 @@ import ReferenceData from './reference'
 import IsRejectionPageContent from './pages/isRejection'
 import ServiceRequestTypePageContent from './pages/serviceRequestType'
 import HaveCourtOrderPageContent from './pages/haveCourtOrder'
-import HaveGrantOfBailPageContent from './pages/haveGrantOfBail'
 import DapoContent from './pages/dapo'
 import OffenceContent from './pages/offence'
 import MappaPageContent from './pages/mappa'
@@ -57,7 +56,6 @@ type I18n = {
     exclusionZone: ExclusionZonePageContent
     havePhoto: HavePhotoPageContent
     haveCourtOrder: HaveCourtOrderPageContent
-    haveGrantOfBail: HaveGrantOfBailPageContent
     identityNumbers: IdentityNumbersPageContent
     installationAddress: AddressPageContent
     installationAndRisk: InstallationAndRiskPageContent
@@ -76,7 +74,6 @@ type I18n = {
     uploadLicense: UploadDocumentPageContent
     uploadPhotoId: UploadDocumentPageContent
     uploadCourtOrder: UploadDocumentPageContent
-    uploadGrantOfBail: UploadDocumentPageContent
     variationDetails: VariationDetailsPageContent
     isRejection: IsRejectionPageContent
     serviceRequestType: ServiceRequestTypePageContent
