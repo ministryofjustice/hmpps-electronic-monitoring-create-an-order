@@ -655,33 +655,7 @@ export default class TaskListService {
       completed: true,
     })
 
-    if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE') {
-      tasks.push({
-        section: SECTIONS.additionalDocuments,
-        name: PAGES.haveGrantOfBail,
-        path: paths.ATTACHMENT.HAVE_GRANT_OF_BAIL,
-        state: STATES.required,
-        completed: isNotNullOrUndefined(order.orderParameters?.haveGrantOfBail),
-      })
-
-      tasks.push({
-        section: SECTIONS.additionalDocuments,
-        name: PAGES.grantOfBailUpload,
-        path: paths.ATTACHMENT.FILE_VIEW.replace(
-          ':fileType(photo_Id|licence|court_order|grant_of_bail)',
-          'grant_of_bail',
-        ),
-        state: convertBooleanToEnum<State>(
-          order.orderParameters?.haveGrantOfBail || null,
-          STATES.cantBeStarted,
-          STATES.required,
-          STATES.notRequired,
-        ),
-        completed:
-          doesOrderHaveDocument(order, AttachmentType.GRANT_OF_BAIL) ||
-          order.orderParameters?.haveGrantOfBail === false,
-      })
-    } else if (
+    if (
       isNotNullOrUndefined(order.interestedParties?.notifyingOrganisation) &&
       (notifyingOrganisationCourts as readonly string[]).includes(order.interestedParties?.notifyingOrganisation)
     ) {
