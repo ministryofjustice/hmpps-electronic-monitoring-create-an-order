@@ -12,33 +12,10 @@ const createViewModel = (order: Order, content: I18n | undefined) => {
   const licence = order.additionalDocuments.find(x => x.fileType === AttachmentType.LICENCE)
   const photo = order.additionalDocuments.find(x => x.fileType === AttachmentType.PHOTO_ID)
   const courtOrder = order.additionalDocuments.find(x => x.fileType === AttachmentType.COURT_ORDER)
-  const grantOfBail = order.additionalDocuments.find(x => x.fileType === AttachmentType.GRANT_OF_BAIL)
   const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
   const answers = []
 
-  if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE') {
-    answers.push(
-      createAnswer(
-        content?.pages.haveGrantOfBail.questions.haveGrantOfBail.text || '',
-        order.orderParameters?.haveGrantOfBail ? 'Yes' : 'No',
-        paths.ATTACHMENT.HAVE_GRANT_OF_BAIL.replace(':orderId', order.id),
-        answerOpts,
-      ),
-    )
-    if (order.orderParameters?.haveGrantOfBail) {
-      answers.push(
-        createAttachmentAnswer(
-          grantOfBail,
-          content?.pages.uploadGrantOfBail.questions.file.text || '',
-          paths.ATTACHMENT.FILE_VIEW.replace(
-            ':fileType(photo_Id|licence|court_order|grant_of_bail)',
-            'grant_of_bail',
-          ).replace(':orderId', order.id),
-          order,
-        ),
-      )
-    }
-  } else if (
+  if (
     isNotNullOrUndefined(order.interestedParties?.notifyingOrganisation) &&
     (notifyingOrganisationCourts as readonly string[]).includes(order.interestedParties?.notifyingOrganisation)
   ) {
