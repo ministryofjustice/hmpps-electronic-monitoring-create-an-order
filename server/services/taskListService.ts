@@ -680,7 +680,7 @@ export default class TaskListService {
         completed:
           doesOrderHaveDocument(order, AttachmentType.COURT_ORDER) || order.orderParameters?.haveCourtOrder === false,
       })
-    } else {
+    } else if (order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE') {
       tasks.push({
         section: SECTIONS.additionalDocuments,
         name: PAGES.licenceUpload,
