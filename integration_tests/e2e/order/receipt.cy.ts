@@ -128,8 +128,6 @@ context('Receipt', () => {
     })
 
     it('Should should show all sections', () => {
-      const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: false }
-      cy.task('setFeatureFlags', testFlags)
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
         id: mockOrderId,
@@ -240,7 +238,8 @@ context('Receipt', () => {
     })
 
     it('Should show about notifying and responsible organisations when interested parties flow enabled', () => {
-      cy.task('setFeatureFlags', { INTERESTED_PARTIES_FLOW_ENABLED: true })
+      const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
+      cy.task('setFeatureFlags', testFlags)
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
         id: mockOrderId,
@@ -344,7 +343,8 @@ context('Receipt', () => {
     })
 
     it('should show all sections for variation', () => {
-      cy.task('setFeatureFlags', { INTERESTED_PARTIES_FLOW_ENABLED: true })
+      const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
+      cy.task('setFeatureFlags', testFlags)
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
         id: mockOrderId,
