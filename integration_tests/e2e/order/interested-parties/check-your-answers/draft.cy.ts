@@ -174,7 +174,7 @@ context('interested parties check answers page', () => {
     })
 
     describe('when user cohort is home office', () => {
-      it('does not show notifying org question', () => {
+      it('does not show notifying org or responsible officer questions', () => {
         cy.task('stubCemoGetOrder', {
           httpStatus: 200,
           id: mockOrderId,
@@ -217,6 +217,9 @@ context('interested parties check answers page', () => {
         page.organisationDetailsSection.shouldExist()
         page.organisationDetailsSection.shouldNotHaveItems([
           'What organisation or related organisation are you part of?',
+          "What is the Responsible Officer's first name?",
+          "What is the Responsible Officer's last name?",
+          "What is the Responsible Officer's email address?",
         ])
       })
     })

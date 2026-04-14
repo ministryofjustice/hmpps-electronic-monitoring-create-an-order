@@ -69,7 +69,10 @@ export default class NotifingOrganisationController extends InterestedPartiesBas
       }
     }
 
-    if ((notifyingOrganisationCourts as readonly string[]).indexOf(validationResult.data.notifyingOrganisation!) > -1) {
+    if (
+      (notifyingOrganisationCourts as readonly string[]).indexOf(validationResult.data.notifyingOrganisation!) > -1 ||
+      validationResult.data.notifyingOrganisation === 'HOME_OFFICE'
+    ) {
       res.redirect(paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION.replace(':orderId', order.id))
       return
     }
