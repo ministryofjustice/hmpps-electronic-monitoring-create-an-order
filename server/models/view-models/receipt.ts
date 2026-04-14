@@ -68,12 +68,8 @@ const getOrderTypeName = (
 const createViewModel = (order: Order, content: I18n) => {
   const statusDetails = createOrderStatusAnswers(order)
   const isInterestedPartiesFlowEnabled = FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')
-  const contactInformation = isInterestedPartiesFlowEnabled
-    ? undefined
-    : ContactInformationCheckAnswers.default(order, content)
-  const interestedParties = isInterestedPartiesFlowEnabled
-    ? InterestedPartiesCheckAnswers.construct(order, content)
-    : undefined
+  const interestedParties = InterestedPartiesCheckAnswers.construct(order, content)
+  const contactInformation = ContactInformationCheckAnswers.default(order, content)
   const devicewearer = DeviceWearerCheckAnswers.default(order, content)
   const monitoringConditions = MonitoringConditionsCheckAnswers.default(order, content)
   const riskDetails = RiskInformationCheckAnswers.default(order, content)
@@ -82,8 +78,7 @@ const createViewModel = (order: Order, content: I18n) => {
 
   return {
     statusDetails,
-    ...(contactInformation ?? {}),
-    ...(interestedParties ?? {}),
+    ...(isInterestedPartiesFlowEnabled ? interestedParties : contactInformation),
     ...devicewearer,
     ...monitoringConditions,
     ...riskDetails,
