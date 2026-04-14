@@ -41,7 +41,7 @@ const createViewModel = (order: Order, content: I18n | undefined) => {
         ),
       )
     }
-  } else {
+  } else if (order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE') {
     answers.push(
       createAttachmentAnswer(
         licence,

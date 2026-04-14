@@ -43,6 +43,10 @@ context('Receipt', () => {
       cy.signIn()
     })
 
+    afterEach(() => {
+      cy.task('resetFeatureFlags')
+    })
+
     it('Should display the page', () => {
       cy.visit(`/order/${mockOrderId}/receipt`)
       const page = Page.verifyOnPage(ReceiptPage)
@@ -233,7 +237,114 @@ context('Receipt', () => {
       page.monitoringConditionsSection.shouldExist()
     })
 
+    it('Should show about notifying and responsible organisations when interested parties flow enabled', () => {
+      const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
+      cy.task('setFeatureFlags', testFlags)
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          contactDetails: {
+            contactNumber: '01234567890',
+            phoneNumberAvailable: true,
+          },
+          deviceWearer: {
+            nomisId: 'nomis',
+            pncId: 'pnc',
+            deliusId: 'delius',
+            prisonNumber: 'prison',
+            homeOfficeReferenceNumber: '',
+            complianceAndEnforcementPersonReference: 'cepr',
+            courtCaseReferenceNumber: 'ccrn',
+            firstName: 'test',
+            lastName: 'tester',
+            alias: 'tes',
+            dateOfBirth: '2000-01-01T00:00:00Z',
+            adultAtTimeOfInstallation: true,
+            sex: 'FEMALE',
+            gender: 'Prefer to self-describe',
+            disabilities: 'OTHER',
+            otherDisability: 'Broken arm',
+            noFixedAbode: true,
+            interpreterRequired: false,
+          },
+          addresses: [
+            {
+              addressType: 'RESPONSIBLE_ORGANISATION',
+              addressLine1: 'addressLine1',
+              addressLine2: 'addressLine2',
+              addressLine3: 'addressLine3',
+              addressLine4: 'addressLine4',
+              postcode: 'postcode',
+            },
+          ],
+          interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: 'notifying@organisation',
+            responsibleOrganisation: 'POLICE',
+            responsibleOrganisationPhoneNumber: '01234567890',
+            responsibleOrganisationEmail: 'responsible@organisation',
+            responsibleOrganisationRegion: 'CHESHIRE',
+            responsibleOrganisationAddress: {
+              addressType: 'RESPONSIBLE_ORGANISATION',
+              addressLine1: 'addressLine1',
+              addressLine2: 'addressLine2',
+              addressLine3: 'addressLine3',
+              addressLine4: 'addressLine4',
+              postcode: 'postcode',
+            },
+            responsibleOfficerFirstName: 'officer',
+            responsibleOfficerLastName: 'name',
+            responsibleOfficerPhoneNumber: '01234567891',
+            responsibleOfficerEmail: 'officer@email',
+          },
+          installationAndRisk: {
+            offence: 'SEXUAL_OFFENCES',
+            offenceAdditionalDetails: 'Information about offence',
+            riskCategory: ['RISK_TO_GENDER'],
+            riskDetails: 'Information about potential risks',
+            mappaLevel: null,
+            mappaCaseType: null,
+          },
+          additionalDocuments: [
+            {
+              id: mockOrderId,
+              fileType: AttachmentType.LICENCE,
+              fileName: 'Mock Licence',
+            },
+          ],
+          orderParameters: {
+            havePhoto: false,
+          },
+          submittedBy: 'test name',
+          fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0),
+        },
+      })
+      cy.visit(`/order/${mockOrderId}/receipt`)
+      const page = Page.verifyOnPage(ReceiptPage)
+
+      page.contactInformationSection.shouldNotExist()
+      page.orderStatusSection.shouldExist()
+      page.deviceWearerSection.shouldExist()
+      page.riskInformationSection.shouldExist()
+      page.monitoringConditionsSection.shouldExist()
+      page.additionalDocumentsSection.shouldExist()
+      page.interestedPartiesSection.shouldHaveItems([
+        { key: 'What organisation or related organisation are you part of?', value: 'Home Office' },
+        { key: "What is the Responsible Officer's first name?", value: 'officer' },
+        { key: "What is the Responsible Officer's last name?", value: 'name' },
+        { key: "What is the Responsible Officer's email address?", value: 'officer@email' },
+        { key: "What is the Responsible Officer's organisation?", value: 'Police' },
+        { key: 'Select the Police force area', value: 'Cheshire' },
+        { key: "What is the Responsible Organisation's email address? (optional)", value: 'responsible@organisation' },
+      ])
+    })
+
     it('should show all sections for variation', () => {
+      const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
+      cy.task('setFeatureFlags', testFlags)
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
         id: mockOrderId,
@@ -322,6 +433,8 @@ context('Receipt', () => {
       })
       cy.visit(`/order/${mockOrderId}/receipt`)
       const page = Page.verifyOnPage(ReceiptPage)
+      page.interestedPartiesSection.shouldExist()
+      page.contactInformationSection.shouldNotExist()
       page.variationDetailsSection.shouldExist()
       page.variationDetailsSection.shouldHaveItems([
         { key: 'What is the date you want the changes to take effect?', value: '01/01/2025' },
