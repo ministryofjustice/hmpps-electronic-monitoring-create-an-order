@@ -108,7 +108,7 @@ context('Submit notifying organisations', () => {
       cy.contains('Contact details for the Responsible Officer')
     })
 
-    it('home office routes to responsible officer page', () => {
+    it('home office routes to responsible organisation page', () => {
       cy.task('stubSignIn', {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
@@ -132,8 +132,8 @@ context('Submit notifying organisations', () => {
       })
       page.form.continueButton.click()
 
-      Page.verifyOnPage(ResponsibleOfficerPage)
-      cy.contains('Contact details for the Responsible Officer')
+      Page.verifyOnPage(ResponsibleOrganisationPage)
+      cy.contains("What is the Responsible Officer's organisation?")
     })
 
     it('other cohort can select options', () => {
