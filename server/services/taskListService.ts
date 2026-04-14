@@ -60,9 +60,7 @@ const PAGES = {
   photoUpload: 'PHOTO_ATTACHMENT',
   havePhoto: 'ATTACHMENTS_HAVE_PHOTO',
   courtOrderUpload: 'COURT_ORDER_ATTACHMENT',
-  grantOfBailUpload: 'GRANT_OF_BAIL_ATTACHMENT',
   haveCourtOrder: 'ATTACHMENTS_HAVE_COURT_ORDER',
-  haveGrantOfBail: 'ATTACHMENTS_HAVE_GRANT_OF_BAIL',
   attachments: 'CHECK_ANSWERS_ATTACHMENTS',
   variationDetails: 'VARIATION_DETAILS',
   installationLocation: 'INSTALLATION_LOCATION',
@@ -622,7 +620,9 @@ export default class TaskListService {
       state: convertBooleanToEnum<State>(
         order.installationLocation?.location === 'PRISON' ||
           order.installationLocation?.location === 'PROBATION_OFFICE' ||
-          order.installationLocation?.location === 'IMMIGRATION_REMOVAL_CENTRE',
+          order.installationLocation?.location === 'IMMIGRATION_REMOVAL_CENTRE' ||
+          order.installationLocation?.location === 'INSTALLATION' ||
+          order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE',
         STATES.cantBeStarted,
         STATES.required,
         STATES.notRequired,
@@ -655,33 +655,7 @@ export default class TaskListService {
       completed: true,
     })
 
-    if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE') {
-      tasks.push({
-        section: SECTIONS.additionalDocuments,
-        name: PAGES.haveGrantOfBail,
-        path: paths.ATTACHMENT.HAVE_GRANT_OF_BAIL,
-        state: STATES.required,
-        completed: isNotNullOrUndefined(order.orderParameters?.haveGrantOfBail),
-      })
-
-      tasks.push({
-        section: SECTIONS.additionalDocuments,
-        name: PAGES.grantOfBailUpload,
-        path: paths.ATTACHMENT.FILE_VIEW.replace(
-          ':fileType(photo_Id|licence|court_order|grant_of_bail)',
-          'grant_of_bail',
-        ),
-        state: convertBooleanToEnum<State>(
-          order.orderParameters?.haveGrantOfBail || null,
-          STATES.cantBeStarted,
-          STATES.required,
-          STATES.notRequired,
-        ),
-        completed:
-          doesOrderHaveDocument(order, AttachmentType.GRANT_OF_BAIL) ||
-          order.orderParameters?.haveGrantOfBail === false,
-      })
-    } else if (
+    if (
       isNotNullOrUndefined(order.interestedParties?.notifyingOrganisation) &&
       (notifyingOrganisationCourts as readonly string[]).includes(order.interestedParties?.notifyingOrganisation)
     ) {
@@ -696,10 +670,7 @@ export default class TaskListService {
       tasks.push({
         section: SECTIONS.additionalDocuments,
         name: PAGES.courtOrderUpload,
-        path: paths.ATTACHMENT.FILE_VIEW.replace(
-          ':fileType(photo_Id|licence|court_order|grant_of_bail)',
-          'court_order',
-        ),
+        path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'court_order'),
         state: convertBooleanToEnum<State>(
           order.orderParameters?.haveCourtOrder || null,
           STATES.cantBeStarted,
@@ -709,11 +680,11 @@ export default class TaskListService {
         completed:
           doesOrderHaveDocument(order, AttachmentType.COURT_ORDER) || order.orderParameters?.haveCourtOrder === false,
       })
-    } else {
+    } else if (order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE') {
       tasks.push({
         section: SECTIONS.additionalDocuments,
         name: PAGES.licenceUpload,
-        path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order|grant_of_bail)', 'licence'),
+        path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'licence'),
         state: STATES.required,
         completed: doesOrderHaveDocument(order, AttachmentType.LICENCE),
       })
@@ -730,7 +701,7 @@ export default class TaskListService {
     tasks.push({
       section: SECTIONS.additionalDocuments,
       name: PAGES.photoUpload,
-      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order|grant_of_bail)', 'photo_Id'),
+      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'photo_Id'),
       state: convertBooleanToEnum<State>(
         order.orderParameters?.havePhoto || null,
         STATES.cantBeStarted,

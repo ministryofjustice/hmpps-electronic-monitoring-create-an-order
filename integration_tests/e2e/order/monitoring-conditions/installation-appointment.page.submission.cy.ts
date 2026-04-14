@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import InstallationAppointmentPage from '../../../pages/order/monitoring-conditions/installation-appointment'
 import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
+import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 
 const mockOrderId = uuidv4()
 const apiPath = '/installation-appointment'
@@ -49,6 +50,26 @@ context('Monitoring conditions', () => {
           },
         }).should('be.true')
         Page.verifyOnPage(InstallationAddressPage)
+      })
+
+      context('when the address is primary', () => {
+        it('should continue to check your answers', () => {
+          cy.task('stubCemoGetOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            status: 'IN_PROGRESS',
+            order: {
+              installationLocation: {
+                location: 'PRIMARY',
+              },
+            },
+          })
+          const page = Page.visit(InstallationAppointmentPage, { orderId: mockOrderId })
+          page.form.fillInWith(validFormData)
+          page.form.saveAndContinueButton.click()
+
+          Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers')
+        })
       })
     })
   })

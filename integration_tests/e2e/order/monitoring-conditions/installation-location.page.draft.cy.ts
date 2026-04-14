@@ -118,6 +118,14 @@ context('Installation location page', () => {
     page.form.locationField.shouldNotHaveOption('At an immigration removal centre')
   })
 
+  it('should show options for another address', () => {
+    const page = Page.visit(InstallationLocationPage, {
+      orderId: mockOrderId,
+    })
+
+    page.form.locationField.shouldHaveOption('At another address')
+  })
+
   context('when no fixed address', () => {
     beforeEach(() =>
       stubGetOrder({
@@ -136,9 +144,7 @@ context('Installation location page', () => {
       const page = Page.visit(InstallationLocationPage, {
         orderId: mockOrderId,
       })
-      page.form.locationField.shouldHaveOption(
-        "At another address (for example, a relatives address they don't live at)",
-      )
+      page.form.locationField.shouldHaveOption('At another address')
     })
   })
 
