@@ -9,7 +9,6 @@ import { ValidationResult } from '../../../models/Validation'
 import { convertZodErrorToValidationError } from '../../../utils/errors'
 import InterestedPartiesBaseController from '../base/interestedPartiesBaseController'
 import UpdateInterestedPartiesService from '../interestedPartiesService'
-import { InterestedParties } from '../model'
 
 export default class NotifingOrganisationController extends InterestedPartiesBaseController {
   constructor(
@@ -41,10 +40,6 @@ export default class NotifingOrganisationController extends InterestedPartiesBas
 
     let formData = NotifyingOrganisationFormModel.parse(req.body)
 
-    let responsibleOfficerData:
-      | Pick<InterestedParties, 'responsibleOfficerFirstName' | 'responsibleOfficerLastName'>
-      | undefined
-
     if (cohort === 'PROBATION' || cohort === 'HOME_OFFICE') {
       formData = {
         ...formData,
@@ -61,14 +56,7 @@ export default class NotifingOrganisationController extends InterestedPartiesBas
       return
     }
 
-    if (validationResult.data.notifyingOrganisation === 'HOME_OFFICE') {
-      responsibleOfficerData = {
-        responsibleOfficerFirstName: 'Home',
-        responsibleOfficerLastName: 'Office',
-      }
-    }
-
-    await this.store.updateNotifyingOrganisation(order, validationResult.data, responsibleOfficerData)
+    await this.store.updateNotifyingOrganisation(order, validationResult.data)
 
     if (isVariationType(order.type)) {
       const startDate = order.monitoringConditions.startDate

@@ -64,9 +64,9 @@ export default class InterestedPartiesStoreService {
     interestedParties.notifyingOrganisationName = data.notifyingOrganisationName
     interestedParties.notifyingOrganisationEmail = data.notifyingOrganisationEmail
 
-    if (responsibleOfficerData) {
-      interestedParties.responsibleOfficerFirstName = responsibleOfficerData.responsibleOfficerFirstName
-      interestedParties.responsibleOfficerLastName = responsibleOfficerData.responsibleOfficerLastName
+    if (interestedParties.notifyingOrganisation === 'HOME_OFFICE') {
+      interestedParties.responsibleOfficerFirstName = 'Home'
+      interestedParties.responsibleOfficerLastName = 'Office'
     }
 
     await this.updateInterestedParties(order, interestedParties)
