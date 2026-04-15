@@ -1,6 +1,8 @@
-import ManualAddressPageContent from '../../../types/i18n/pages/manualAddress'
+import AddressPageContent from '../../../types/i18n/pages/address'
 
-const deviceWearerAddressPageContent: ManualAddressPageContent = {
+const deviceWearerAddressPageContent: Omit<AddressPageContent, 'questions'> & {
+  questions: Omit<AddressPageContent['questions'], 'hasAnotherAddress'>
+} = {
   title: "What is the device wearer's address?",
   section: 'About the device wearer',
   legend: '',
