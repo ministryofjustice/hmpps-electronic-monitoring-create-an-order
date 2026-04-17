@@ -4,6 +4,7 @@ import * as MonitoringConditionsCheckAnswers from './monitoringConditionsCheckAn
 import * as RiskInformationCheckAnswers from './riskInformationCheckAnswers'
 import * as AdditionalDocumentsCheckAnswers from './additionalDocumentsCheckAnswers'
 import * as VariationDetailsCheckAnswers from './variationDetailsCheckAnswers'
+import InterestedPartiesCheckAnswers from '../../routes/interested-parties/check-your-answers/viewModel'
 import { createAnswer, createDateTimeAnswer } from '../../utils/checkYourAnswers'
 
 import { Order } from '../Order'
@@ -66,6 +67,8 @@ const getOrderTypeName = (
 
 const createViewModel = (order: Order, content: I18n) => {
   const statusDetails = createOrderStatusAnswers(order)
+  const isInterestedPartiesFlowEnabled = FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')
+  const interestedParties = InterestedPartiesCheckAnswers.construct(order, content)
   const contactInformation = ContactInformationCheckAnswers.default(order, content)
   const devicewearer = DeviceWearerCheckAnswers.default(order, content)
   const monitoringConditions = MonitoringConditionsCheckAnswers.default(order, content)
@@ -75,13 +78,14 @@ const createViewModel = (order: Order, content: I18n) => {
 
   return {
     statusDetails,
-    ...contactInformation,
+    ...(isInterestedPartiesFlowEnabled ? interestedParties : contactInformation),
     ...devicewearer,
     ...monitoringConditions,
     ...riskDetails,
     ...variationDetails,
     additionalDocumentDetails,
     showDownloadJsonButtons: FeatureFlags.getInstance().get('DOWNLOAD_FMS_REQUEST_JSON_ENABLED'),
+    isInterestedPartiesFlowEnabled,
   }
 }
 
