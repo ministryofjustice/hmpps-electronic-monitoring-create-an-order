@@ -1299,6 +1299,33 @@ describe('TaskListService', () => {
       jest.restoreAllMocks()
     })
 
+    it('should navigate to risk at installation page when offence flow is enabled and notifyingOrganisation is HOME_OFFICE', async () => {
+      const mockGet = jest.fn((flag: string) => flag === 'OFFENCE_FLOW_ENABLED')
+      const mockGetValue = jest.fn(() => '')
+      jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
+        get: mockGet,
+        getValue: mockGetValue,
+      } as never)
+
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({
+          notifyingOrganisation: 'HOME_OFFICE',
+        }),
+      })
+
+      const taskListService = new TaskListService(mockOrderChecklistService)
+
+      const sections = await taskListService.getSections(order)
+
+      const riskInformationSection = sections.find(section => section.name === 'RISK_INFORMATION')
+
+      expect(riskInformationSection?.path).toBe(
+        paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id),
+      )
+
+      jest.restoreAllMocks()
+    })
+
     it('should mark RISK_INFORMATION section as complete when offence flow is enabled and section is filled in, offence flow', async () => {
       const mockGet = jest.fn((flag: string) => flag === 'OFFENCE_FLOW_ENABLED')
       const mockGetValue = jest.fn(() => '')

@@ -14,6 +14,8 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
   const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
   const answers = []
 
+  const isHomeOfficeUser = order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE'
+
   const isNewOffenceFlow =
     isOrderDataDictionarySameOrAbove('DDV6', order) && FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')
 
@@ -44,7 +46,7 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
           paths.INSTALLATION_AND_RISK.OFFENCE_LIST.replace(':orderId', order.id),
         ),
       )
-    } else {
+    } else if (!isHomeOfficeUser) {
       answers.push(
         createAnswer(
           questions.offence.text,
@@ -55,14 +57,16 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
       )
     }
 
-    answers.push(
-      createAnswer(
-        'Any other information to be aware of about the offence committed?',
-        order.offenceAdditionalDetails?.additionalDetails || '',
-        paths.INSTALLATION_AND_RISK.OFFENCE_OTHER_INFO.replace(':orderId', order.id),
-        answerOpts,
-      ),
-    )
+    if (!isHomeOfficeUser) {
+      answers.push(
+        createAnswer(
+          'Any other information to be aware of about the offence committed?',
+          order.offenceAdditionalDetails?.additionalDetails || '',
+          paths.INSTALLATION_AND_RISK.OFFENCE_OTHER_INFO.replace(':orderId', order.id),
+          answerOpts,
+        ),
+      )
+    }
   } else {
     answers.push(
       createAnswer(
@@ -124,7 +128,7 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
 
   answers.push(createAnswer(questions.riskDetails.text, riskDetailsFromOrder, riskDetailsUri, answerOpts))
 
-  if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE') {
+  if (isHomeOfficeUser) {
     const isMappaQuestions = content.pages.isMappa.questions
     const mappaQuestions = content.pages.mappa.questions
     answers.push(

@@ -397,7 +397,8 @@ export default class TaskListService {
         name: PAGES.offence,
         path: paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM,
         state: convertBooleanToEnum<State>(
-          order.interestedParties?.notifyingOrganisation !== 'FAMILY_COURT',
+          order.interestedParties?.notifyingOrganisation !== 'FAMILY_COURT' &&
+            order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE',
           STATES.cantBeStarted,
           STATES.required,
           STATES.notRequired,
@@ -409,7 +410,8 @@ export default class TaskListService {
         name: PAGES.offenceOtherInfo,
         path: paths.INSTALLATION_AND_RISK.OFFENCE_OTHER_INFO,
         state: convertBooleanToEnum<State>(
-          order.interestedParties?.notifyingOrganisation !== 'FAMILY_COURT',
+          order.interestedParties?.notifyingOrganisation !== 'FAMILY_COURT' &&
+            order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE',
           STATES.cantBeStarted,
           STATES.required,
           STATES.notRequired,
