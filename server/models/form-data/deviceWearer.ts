@@ -5,6 +5,7 @@ import { validationErrors } from '../../constants/validationErrors'
 
 const DeviceWearerFormDataParser = FormDataModel.extend({
   firstName: z.string(),
+  middleName: z.string().optional(),
   lastName: z.string(),
   alias: z.string(),
   dateOfBirth: z.object({
@@ -34,6 +35,8 @@ const DeviceWearerFormDataValidator = z.object({
     .string()
     .min(1, validationErrors.deviceWearer.firstNameRequired)
     .max(200, validationErrors.deviceWearer.firstNameMaxLength),
+  // middleName: z.string().optional().max(200, validationErrors.deviceWearer.firstNameMaxLength),
+  middleName: z.string().optional(),
   lastName: z
     .string()
     .min(1, validationErrors.deviceWearer.lastNameRequired)

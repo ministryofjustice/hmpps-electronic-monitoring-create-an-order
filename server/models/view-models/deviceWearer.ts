@@ -10,6 +10,7 @@ type DeviceWearerViewModel = ViewModel<
     Pick<
       DeviceWearer,
       | 'firstName'
+      | 'middleName'
       | 'lastName'
       | 'alias'
       | 'adultAtTimeOfInstallation'
@@ -33,6 +34,9 @@ const constructFromFormData = (
     firstName: {
       value: formData.firstName,
       error: getError(validationErrors, 'firstName'),
+    },
+    middleName: {
+      value: formData.middleName || '',
     },
     lastName: {
       value: formData.lastName,
@@ -82,6 +86,9 @@ const createFromEntity = (deviceWearer: DeviceWearer): DeviceWearerViewModel => 
   return {
     firstName: {
       value: deviceWearer.firstName || '',
+    },
+    middleName: {
+      value: deviceWearer.middleName || '',
     },
     lastName: {
       value: deviceWearer.lastName || '',
