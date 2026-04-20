@@ -27,5 +27,59 @@ describe('view model', () => {
     it('sets error text if postcode error', () => {
       expect(model.postcode.error?.text).toBe(validationErrors.postcodeLookup.postcodeRequired)
     })
+
+    it('error summary exists', () => {
+      expect(model.errorSummary).not.toBeNull()
+    })
+  })
+
+  describe('address population', () => {
+    const addresses: Address[] = [
+      {
+        addressType: 'PRIMARY',
+        addressLine1: '90 High Road',
+        addressLine2: '',
+        addressLine3: 'Bath',
+        addressLine4: '',
+        postcode: 'AB12 3CD',
+      },
+    ]
+
+    const model = ViewModel.construct('PRIMARY', addresses, {} as AddressFormData, [])
+
+    it('populates values when present', () => {
+      expect(model.addressLine1.value).toBe('90 High Road')
+      expect(model.addressLine2.value).toBe('')
+      expect(model.addressLine3.value).toBe('Bath')
+      expect(model.addressLine4.value).toBe('')
+      expect(model.postcode.value).toBe('AB12 3CD')
+    })
+
+    it('has null error summary', () => {
+      expect(model.errorSummary).toBeNull()
+    })
+  })
+
+  describe('no matching address', () => {
+    const addresses: Address[] = [
+      {
+        addressType: 'SECONDARY',
+        addressLine1: '20 Main Street',
+        addressLine2: '',
+        addressLine3: 'Hertfordshire',
+        addressLine4: '',
+        postcode: 'HH12 3CD',
+      },
+    ]
+
+    const model = ViewModel.construct('PRIMARY', addresses, {} as AddressFormData, [])
+
+    it('returns blank value for fields if no match', () => {
+      expect(model.addressLine1.value).toBe('')
+      expect(model.addressLine2.value).toBe('')
+      expect(model.addressLine3.value).toBe('')
+      expect(model.addressLine4.value).toBe('')
+      expect(model.postcode.value).toBe('')
+    })
   })
 })
