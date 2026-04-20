@@ -35,8 +35,7 @@ const DeviceWearerFormDataValidator = z.object({
     .string()
     .min(1, validationErrors.deviceWearer.firstNameRequired)
     .max(200, validationErrors.deviceWearer.firstNameMaxLength),
-  // middleName: z.string().optional().max(200, validationErrors.deviceWearer.firstNameMaxLength),
-  middleName: z.string().optional(),
+  middleName: z.string().max(200, validationErrors.deviceWearer.middleNameMaxLength).optional(),
   lastName: z
     .string()
     .min(1, validationErrors.deviceWearer.lastNameRequired)

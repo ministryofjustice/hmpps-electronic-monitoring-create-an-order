@@ -24,12 +24,12 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
 
   // NAMES
 
-  get firstNamesField(): FormInputComponent {
+  get firstNameField(): FormInputComponent {
     const label = "What is the device wearer's first name?"
     return new FormInputComponent(this.form, label)
   }
 
-  get middleNamesField(): FormInputComponent {
+  get middleNameField(): FormInputComponent {
     const label = "What is the device wearer's middle name? (optional)"
     return new FormInputComponent(this.form, label)
   }
@@ -251,11 +251,11 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
 
   fillInWith = (profile: AboutDeviceWearerFormData): undefined => {
     if (profile.firstName) {
-      this.firstNamesField.set(profile.firstName)
+      this.firstNameField.set(profile.firstName)
     }
 
     if (profile.middleName) {
-      this.middleNamesField.set(profile.middleName)
+      this.middleNameField.set(profile.middleName)
     }
 
     if (profile.lastName) {
@@ -300,8 +300,8 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
   }
 
   shouldBeValid(): void {
-    this.firstNamesField.shouldNotHaveValidationMessage()
-    this.middleNamesField.shouldNotHaveValidationMessage()
+    this.firstNameField.shouldNotHaveValidationMessage()
+    this.middleNameField.shouldNotHaveValidationMessage()
     this.lastNameField.shouldNotHaveValidationMessage()
     this.aliasField.shouldNotHaveValidationMessage()
     this.dateOfBirthField.shouldNotHaveValidationMessage()
@@ -313,8 +313,8 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
   }
 
   shouldBeDisabled(): void {
-    this.firstNamesField.shouldBeDisabled()
-    this.middleNamesField.shouldBeDisabled()
+    this.firstNameField.shouldBeDisabled()
+    this.middleNameField.shouldBeDisabled()
     this.lastNameField.shouldBeDisabled()
     this.aliasField.shouldBeDisabled()
     this.dateOfBirthField.shouldBeDisabled()
@@ -325,8 +325,8 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
   }
 
   shouldNotBeDisabled(): void {
-    this.firstNamesField.shouldNotBeDisabled()
-    this.middleNamesField.shouldNotBeDisabled()
+    this.firstNameField.shouldNotBeDisabled()
+    this.middleNameField.shouldNotBeDisabled()
     this.lastNameField.shouldNotBeDisabled()
     this.aliasField.shouldNotBeDisabled()
     this.dateOfBirthField.shouldNotBeDisabled()

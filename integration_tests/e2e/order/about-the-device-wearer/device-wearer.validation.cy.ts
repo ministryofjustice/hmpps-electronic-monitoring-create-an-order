@@ -16,16 +16,15 @@ const expectedValidationErrors = {
 
 context('About the device wearer', () => {
   context('Device wearer', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+
+      cy.signIn()
+    })
     context('Submitting an invalid order', () => {
-      beforeEach(() => {
-        cy.task('reset')
-        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-
-        cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
-
-        cy.signIn()
-      })
-
       it('Should display validation error messages', () => {
         const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
 
@@ -41,7 +40,7 @@ context('About the device wearer', () => {
         page.errorSummary.shouldHaveError(expectedValidationErrors.sex)
         page.errorSummary.shouldHaveError(expectedValidationErrors.gender)
         page.errorSummary.shouldHaveError(expectedValidationErrors.interpreter)
-        page.form.firstNamesField.shouldHaveValidationMessage(expectedValidationErrors.firstName)
+        page.form.firstNameField.shouldHaveValidationMessage(expectedValidationErrors.firstName)
         page.form.lastNameField.shouldHaveValidationMessage(expectedValidationErrors.lastName)
         page.form.dateOfBirthField.shouldHaveValidationMessage(expectedValidationErrors.dob)
         page.form.responsibleAdultRequiredField.shouldHaveValidationMessage(expectedValidationErrors.is18)
@@ -49,6 +48,36 @@ context('About the device wearer', () => {
         page.form.genderIdentityField.shouldHaveValidationMessage(expectedValidationErrors.gender)
         page.form.disabilityField.shouldHaveValidationMessage(expectedValidationErrors.disabilities)
         page.form.interpreterRequiredField.shouldHaveValidationMessage(expectedValidationErrors.interpreter)
+      })
+    })
+
+    context('When I enter values with too many characters', () => {
+      it('should display relevant errors', () => {
+        const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
+        const invalidValue = 'a'.repeat(201)
+
+        page.form.fillInWith({
+          firstName: invalidValue,
+          middleName: invalidValue,
+          lastName: invalidValue,
+          alias: 'Barty',
+          dob: new Date('2020-01-01T00:00:00.000Z'),
+          is18: false,
+          sex: 'Male',
+          genderIdentity: 'Male',
+          disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+          interpreterRequired: false,
+        })
+
+        page.form.saveAndContinueButton.click()
+
+        page.errorSummary.shouldHaveError('First name must be 200 characters or less')
+        page.errorSummary.shouldHaveError('Middle name must be 200 characters or less')
+        page.errorSummary.shouldHaveError('Last name must be 200 characters or less')
+
+        page.form.firstNameField.shouldHaveValidationMessage('First name must be 200 characters or less')
+        page.form.middleNameField.shouldHaveValidationMessage('Middle name must be 200 characters or less')
+        page.form.lastNameField.shouldHaveValidationMessage('Last name must be 200 characters or less')
       })
     })
   })

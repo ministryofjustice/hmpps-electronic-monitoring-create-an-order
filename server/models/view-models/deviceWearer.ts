@@ -37,6 +37,7 @@ const constructFromFormData = (
     },
     middleName: {
       value: formData.middleName || '',
+      error: getError(validationErrors, 'middleName'),
     },
     lastName: {
       value: formData.lastName,
