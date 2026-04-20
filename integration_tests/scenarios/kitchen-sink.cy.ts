@@ -409,7 +409,7 @@ context('The kitchen sink', () => {
       if (takeScreenshots) cy.screenshot('27. searchPageAfterSubmission', { overwrite: true })
       searchPage.searchBox.type(deviceWearerDetails.lastName)
       searchPage.searchButton.click()
-      searchPage.ordersList.contains(deviceWearerDetails.fullName)
+      searchPage.ordersList.contains(`${deviceWearerDetails.firstName} ${deviceWearerDetails.lastName}`)
     })
   })
 })

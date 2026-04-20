@@ -226,7 +226,7 @@ context.skip('Scenarios', () => {
         httpStatus: 200,
         body: {
           title: '',
-          first_name: deviceWearerDetails.firstNames,
+          first_name: deviceWearerDetails.firstName,
           middle_name: '',
           last_name: deviceWearerDetails.lastName,
           alias: deviceWearerDetails.alias,
