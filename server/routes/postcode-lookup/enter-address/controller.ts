@@ -22,7 +22,13 @@ export default class EnterAddressController {
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
     const { addresses } = req.order!
-    const viewModel = ViewModel.construct(addressType as AddressType, addresses, formData[0] as never, errors as never)
+    const viewModel = ViewModel.construct(
+      addressType as AddressType,
+      addresses,
+      formData[0] as never,
+      res.locals.content!,
+      errors as never,
+    )
 
     res.render('pages/order/postcode-lookup/enter-address', viewModel)
   }

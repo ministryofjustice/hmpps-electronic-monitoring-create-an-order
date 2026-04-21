@@ -1,0 +1,62 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set section = pageContent.section %}
+{% set heading = pageContent.title %}
+{% set legend = pageContent.legend %}
+{% set helpText = pageContent.helpText %}
+
+{% block formInputs %}
+
+  {{ govukInput({
+    label: { text: questions.addressLine1.text },
+    id: "addressLine1",
+    name: "addressLine1",
+    value: addressLine1.value,
+    errorMessage: addressLine1.error,
+    disabled: not isOrderEditable
+  }) }}
+
+  {{ govukInput({
+    label: { text: questions.addressLine2.text },
+    id: "addressLine2",
+    name: "addressLine2",
+    value: addressLine2.value,
+    errorMessage: addressLine2.error,
+    disabled: not isOrderEditable
+  }) }}
+
+  {{ govukInput({
+    label: { text: questions.addressLine3.text },
+    classes: "govuk-!-width-two-thirds",
+    id: "addressLine3",
+    name: "addressLine3",
+    value: addressLine3.value,
+    errorMessage: addressLine3.error,
+    disabled: not isOrderEditable
+  }) }}
+
+  {{ govukInput({
+    label: { text: questions.addressLine4.text },
+    classes: "govuk-!-width-two-thirds",
+    id: "addressLine4",
+    name: "addressLine4",
+    value: addressLine4.value,
+    errorMessage: addressLine4.error,
+    disabled: not isOrderEditable
+  }) }}
+
+  {{ govukInput({
+    label: { text: questions.postcode.text },
+    classes: "govuk-input--width-10",
+    id: "postcode",
+    name: "postcode",
+    value: postcode.value,
+    errorMessage: postcode.error,
+    disabled: not isOrderEditable
+  }) }}
+
+{% endblock %}

@@ -1,12 +1,12 @@
 import AddressPageContent from '../../../types/i18n/pages/address'
 
-const manualDeviceWearerAddressPageContent: Omit<AddressPageContent, 'questions'> & {
+const manualTagAtSourceAddressPageContent: Omit<AddressPageContent, 'questions'> & {
   questions: Omit<AddressPageContent['questions'], 'hasAnotherAddress'>
 } = {
-  title: "What is the device wearer's address?",
-  section: 'About the device wearer',
+  title: 'What is the installation address?',
+  section: 'Electronic monitoring required',
   legend: '',
-  helpText: '',
+  helpText: 'For installation at source this is the address of the prison or probation office.',
   questions: {
     addressLine1: {
       text: 'Address line 1',
@@ -26,4 +26,4 @@ const manualDeviceWearerAddressPageContent: Omit<AddressPageContent, 'questions'
   },
 }
 
-export default manualDeviceWearerAddressPageContent
+export default manualTagAtSourceAddressPageContent

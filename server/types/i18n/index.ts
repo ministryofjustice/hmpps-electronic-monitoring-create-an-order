@@ -90,10 +90,13 @@ type I18n = {
     pdu: ProbationDeliveryUnit
     deviceWearerAddress: PostcodeLookupPageContent
     deviceWearerAddressResult: AddressResultPageContent
+    manualDeviceWearerAddress: AddressPageContent
     tagAtSourceAddress: PostcodeLookupPageContent
     tagAtSourceAddressResult: AddressResultPageContent
+    manualTagAtSourceAddress: AddressPageContent
     curfewAddress: PostcodeLookupPageContent
     curfewAddressResult: AddressResultPageContent
+    manualCurfewAddress: AddressPageContent
     appointmentAddress: PostcodeLookupPageContent
     nationalSecurityDirectorate: NationalSecurityDirectoratePageConetent
     isAddressChange: IsAddressChangePageContent

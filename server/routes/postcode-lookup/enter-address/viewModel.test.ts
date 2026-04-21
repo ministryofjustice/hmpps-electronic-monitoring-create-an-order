@@ -3,9 +3,11 @@ import { validationErrors } from '../../../constants/validationErrors'
 import ViewModel from './viewModel'
 import { AddressFormData } from '../../../models/form-data/address'
 import { Address } from '../../../models/Address'
+import getContent from '../../../i18n'
 
 describe('view model', () => {
   describe('errors', () => {
+    const content = getContent('en', 'DDV6')
     const mockErrors: ValidationResult = [
       { error: validationErrors.address.addressLine1Required, field: 'addressLine1' },
       { error: validationErrors.address.addressLine3Required, field: 'addressLine3' },
@@ -14,7 +16,7 @@ describe('view model', () => {
     const mockFormData = {} as AddressFormData
     const addresses = [] as Array<Address>
 
-    const model = ViewModel.construct('PRIMARY', addresses, mockFormData, mockErrors)
+    const model = ViewModel.construct('PRIMARY', addresses, mockFormData, content, mockErrors)
 
     it('sets error text if address line 1 error', () => {
       expect(model.addressLine1.error?.text).toBe(validationErrors.address.addressLine1Required)
@@ -34,6 +36,8 @@ describe('view model', () => {
   })
 
   describe('address population', () => {
+    const content = getContent('en', 'DDV6')
+
     const addresses: Address[] = [
       {
         addressType: 'PRIMARY',
@@ -45,7 +49,7 @@ describe('view model', () => {
       },
     ]
 
-    const model = ViewModel.construct('PRIMARY', addresses, {} as AddressFormData, [])
+    const model = ViewModel.construct('PRIMARY', addresses, {} as AddressFormData, content, [])
 
     it('populates values when present', () => {
       expect(model.addressLine1.value).toBe('90 High Road')
@@ -61,6 +65,8 @@ describe('view model', () => {
   })
 
   describe('no matching address', () => {
+    const content = getContent('en', 'DDV6')
+
     const addresses: Address[] = [
       {
         addressType: 'SECONDARY',
@@ -72,7 +78,7 @@ describe('view model', () => {
       },
     ]
 
-    const model = ViewModel.construct('PRIMARY', addresses, {} as AddressFormData, [])
+    const model = ViewModel.construct('PRIMARY', addresses, {} as AddressFormData, content, [])
 
     it('returns blank value for fields if no match', () => {
       expect(model.addressLine1.value).toBe('')

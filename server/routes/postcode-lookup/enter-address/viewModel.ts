@@ -4,8 +4,12 @@ import { getError } from '../../../utils/utils'
 import { createGovukErrorSummary } from '../../../utils/errors'
 import { Address, AddressType } from '../../../models/Address'
 import { AddressFormData } from '../../../models/form-data/address'
+import I18n from '../../../types/i18n'
+import AddressPageContent from '../../../types/i18n/pages/address'
 
-type AddressViewModel = ViewModel<Address>
+type AddressViewModel = ViewModel<Address> & {
+  content?: AddressPageContent
+}
 
 const constructFromFormData = (
   addressType: AddressType,
@@ -40,7 +44,7 @@ const constructFromFormData = (
   }
 }
 
-const constructFromEntity = (addressType: AddressType, addresses: Array<Address>): AddressViewModel => {
+const constructFromEntity = (addressType: AddressType, addresses: Array<Address>, content: I18n): AddressViewModel => {
   const currentAddress = addresses.find(address => address.addressType === addressType.toUpperCase())
 
   return {
@@ -62,6 +66,7 @@ const constructFromEntity = (addressType: AddressType, addresses: Array<Address>
     postcode: {
       value: currentAddress?.postcode ?? '',
     },
+    content: getContent(content, addressType),
     errorSummary: null,
   }
 }
@@ -70,13 +75,31 @@ const construct = (
   addressType: AddressType,
   addresses: Array<Address>,
   formData: AddressFormData,
+  content: I18n,
   validationErrors: ValidationResult,
 ): AddressViewModel => {
   if (validationErrors.length > 0) {
     return constructFromFormData(addressType, formData, validationErrors)
   }
 
-  return constructFromEntity(addressType, addresses)
+  return constructFromEntity(addressType, addresses, content)
+}
+
+function getContent(content: I18n, addressType: AddressType): AddressPageContent {
+  const mapping: Record<AddressType, AddressPageContent> = {
+    PRIMARY: content.pages.manualDeviceWearerAddress,
+    INSTALLATION: content.pages.manualTagAtSourceAddress,
+    TERTIARY: content.pages.manualCurfewAddress,
+    SECONDARY: content.pages.manualCurfewAddress,
+
+    // These are also not used currently, can potentially be removed
+    RESPONSIBLE_ADULT: content.pages.manualDeviceWearerAddress,
+    RESPONSIBLE_ORGANISATION: content.pages.manualDeviceWearerAddress,
+    // Currently, mandatory attendance monitoring address is not stored as a separate address
+    // appointment: content.pages.appointmentAddress,
+  }
+
+  return mapping[addressType]
 }
 
 export default { construct }
