@@ -99,6 +99,23 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
         {
           key: {
+            text: "What is the device wearer's middle name? (optional)",
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's middle name? (optional)",
+              },
+            ],
+          },
+        },
+        {
+          key: {
             text: "What is the device wearer's last name?",
           },
           value: {
@@ -446,6 +463,23 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
         {
           key: {
+            text: "What is the device wearer's middle name? (optional)",
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's middle name? (optional)",
+              },
+            ],
+          },
+        },
+        {
+          key: {
             text: "What is the device wearer's last name?",
           },
           value: {
@@ -787,6 +821,23 @@ describe('DeviceWearerCheckAnswersController', () => {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's first name?",
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's middle name? (optional)",
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's middle name? (optional)",
               },
             ],
           },

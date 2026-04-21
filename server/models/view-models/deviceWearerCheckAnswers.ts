@@ -34,6 +34,7 @@ const createDeviceWearerAnswers = (order: Order, content: I18n, answerOpts: Answ
 
   return [
     createAnswer(content.pages.deviceWearer.questions.firstName.text, order.deviceWearer.firstName, uri, answerOpts),
+    createAnswer(content.pages.deviceWearer.questions.middleName.text, order.deviceWearer.middleName, uri, answerOpts),
     createAnswer(content.pages.deviceWearer.questions.lastName.text, order.deviceWearer.lastName, uri, answerOpts),
     createAnswer(content.pages.deviceWearer.questions.alias.text, order.deviceWearer.alias, uri, answerOpts),
     createDateAnswer(

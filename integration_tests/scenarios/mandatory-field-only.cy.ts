@@ -80,9 +80,9 @@ context('Mandatory fields only', () => {
   context('Fill in adult mandatory only fields and screenshot', () => {
     const fullDeviceWearerDetails = createFakeAdultDeviceWearer()
     const deviceWearerDetails = {
-      firstNames: fullDeviceWearerDetails.firstNames,
+      firstName: fullDeviceWearerDetails.firstName,
       lastName: fullDeviceWearerDetails.lastName,
-      fullName: fullDeviceWearerDetails.fullName,
+      fullName: `${fullDeviceWearerDetails.firstName} ${fullDeviceWearerDetails.lastName}`,
       dob: fullDeviceWearerDetails.dob,
       is18: true,
       sex: fullDeviceWearerDetails.sex,
@@ -393,9 +393,9 @@ context('Mandatory fields only', () => {
   context('Fill in youth mandatory only fields and screenshot', () => {
     const fullDeviceWearerDetails = createFakeYouthDeviceWearer()
     const deviceWearerDetails = {
-      firstNames: fullDeviceWearerDetails.firstNames,
+      firstName: fullDeviceWearerDetails.firstName,
       lastName: fullDeviceWearerDetails.lastName,
-      fullName: fullDeviceWearerDetails.fullName,
+      fullName: `${fullDeviceWearerDetails.firstName} ${fullDeviceWearerDetails.lastName}`,
       dob: fullDeviceWearerDetails.dob,
       is18: false,
       sex: fullDeviceWearerDetails.sex,
