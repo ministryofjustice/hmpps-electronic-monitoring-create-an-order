@@ -14,6 +14,7 @@ interface ValidationErrors {
     dateOfBirth: DateErrorMessages
     firstNameMaxLength: string
     firstNameRequired: string
+    middleNameMaxLength: string
     genderRequired: string
     interpreterRequired: string
     languageRequired: string
@@ -258,6 +259,7 @@ const validationErrors: ValidationErrors = {
     },
     firstNameMaxLength: 'First name must be 200 characters or less',
     firstNameRequired: "Enter device wearer's first name",
+    middleNameMaxLength: 'Middle name must be 200 characters or less',
     genderRequired: "Select the device wearer's gender, or select 'Not able to provide this information'",
     interpreterRequired: 'Select yes if the device wearer requires an interpreter',
     languageRequired: 'Select the language required',

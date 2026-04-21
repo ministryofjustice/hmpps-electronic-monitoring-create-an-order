@@ -158,8 +158,8 @@ context('The kitchen sink', () => {
         httpStatus: 200,
         body: {
           title: '',
-          first_name: deviceWearerDetails.firstNames,
-          middle_name: '',
+          first_name: deviceWearerDetails.firstName,
+          middle_name: deviceWearerDetails.middleName,
           last_name: deviceWearerDetails.lastName,
           alias: deviceWearerDetails.alias,
           date_of_birth: formatAsFmsDate(deviceWearerDetails.dob),

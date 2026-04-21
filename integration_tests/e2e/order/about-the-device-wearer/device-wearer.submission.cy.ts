@@ -28,6 +28,7 @@ context('About the device wearer', () => {
             complianceAndEnforcementPersonReference: null,
             courtCaseReferenceNumber: null,
             firstName: null,
+            middleName: null,
             lastName: null,
             alias: null,
             adultAtTimeOfInstallation: null,
@@ -71,6 +72,7 @@ context('About the device wearer', () => {
             complianceAndEnforcementPersonReference: '1234567',
             courtCaseReferenceNumber: '1234567',
             firstName: 'Barton',
+            middleName: 'Mid',
             lastName: 'Fink',
             alias: 'Barty',
             adultAtTimeOfInstallation: false,
@@ -87,7 +89,8 @@ context('About the device wearer', () => {
         const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
 
         const validFormData = {
-          firstNames: 'Barton',
+          firstName: 'Barton',
+          middleName: 'Mid',
           lastName: 'Fink',
           alias: 'Barty',
 
@@ -107,6 +110,7 @@ context('About the device wearer', () => {
           uri: `/orders/${mockOrderId}${apiPath}`,
           body: {
             firstName: 'Barton',
+            middleName: 'Mid',
             lastName: 'Fink',
             alias: 'Barty',
             adultAtTimeOfInstallation: false,
@@ -153,7 +157,7 @@ context('About the device wearer', () => {
         const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
 
         const validFormData = {
-          firstNames: 'Barton',
+          firstName: 'Barton',
           lastName: 'Fink',
           alias: 'Barty',
 
@@ -174,6 +178,7 @@ context('About the device wearer', () => {
           uri: `/orders/${mockOrderId}${apiPath}`,
           body: {
             firstName: 'Barton',
+            middleName: '',
             lastName: 'Fink',
             alias: 'Barty',
             adultAtTimeOfInstallation: false,
@@ -220,7 +225,7 @@ context('About the device wearer', () => {
         const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
 
         const validFormData = {
-          firstNames: 'Sigmund',
+          firstName: 'Sigmund',
           lastName: 'Ora',
           alias: 'Sig',
           dob: new Date('2020-01-01T00:00:00.000Z'),
@@ -238,6 +243,7 @@ context('About the device wearer', () => {
           uri: `/orders/${mockOrderId}${apiPath}`,
           body: {
             firstName: 'Sigmund',
+            middleName: '',
             lastName: 'Ora',
             alias: 'Sig',
             adultAtTimeOfInstallation: false,
@@ -285,7 +291,7 @@ context('About the device wearer', () => {
         const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
 
         const validFormData = {
-          firstNames: 'Sebastien',
+          firstName: 'Sebastien',
           lastName: 'Eden',
           alias: 'Bastien',
           dob: new Date('2020-01-01T00:00:00.000Z'),
@@ -304,6 +310,7 @@ context('About the device wearer', () => {
           uri: `/orders/${mockOrderId}${apiPath}`,
           body: {
             firstName: 'Sebastien',
+            middleName: '',
             lastName: 'Eden',
             alias: 'Bastien',
             adultAtTimeOfInstallation: false,
@@ -351,7 +358,7 @@ context('About the device wearer', () => {
         const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
 
         const validFormData = {
-          firstNames: 'Nadir',
+          firstName: 'Nadir',
           lastName: 'Adnan',
           alias: '',
           dob: new Date('2020-01-01T00:00:00.000Z'),
@@ -376,6 +383,7 @@ context('About the device wearer', () => {
           uri: `/orders/${mockOrderId}${apiPath}`,
           body: {
             firstName: 'Nadir',
+            middleName: '',
             lastName: 'Adnan',
             alias: '',
             adultAtTimeOfInstallation: false,
@@ -396,7 +404,7 @@ context('About the device wearer', () => {
         const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
 
         const validFormData = {
-          firstNames: 'Barton',
+          firstName: 'Barton',
           lastName: 'Fink',
           alias: 'Barty',
 

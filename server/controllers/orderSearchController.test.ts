@@ -47,6 +47,7 @@ describe('OrderSearchController', () => {
         complianceAndEnforcementPersonReference: null,
         courtCaseReferenceNumber: null,
         firstName: 'first',
+        middleName: null,
         lastName: 'last',
         alias: null,
         dateOfBirth: mockDate,

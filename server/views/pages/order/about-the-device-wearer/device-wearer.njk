@@ -44,6 +44,19 @@
       errorMessage: firstName.error,
       disabled: not isOrderEditable
     }) }}
+    
+  {{ govukInput({
+      label: {
+        text: content.pages.deviceWearer.questions.middleName.text,
+        classes: "govuk-fieldset__legend--s"
+      },
+      classes: "govuk-input--width-10",
+      id: "middleName",
+      name: "middleName",
+      value: middleName.value,
+      errorMessage: middleName.error,
+      disabled: not isOrderEditable
+    }) }}
 
   {{ govukInput({
       label: {

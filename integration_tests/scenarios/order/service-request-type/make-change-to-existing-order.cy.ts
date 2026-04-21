@@ -115,7 +115,7 @@ context('Service-Request-Types', () => {
     const searchPage = Page.verifyOnPage(SearchPage)
     searchPage.searchBox.type(deviceWearerDetails.lastName)
     searchPage.searchButton.click()
-    searchPage.ordersList.contains(deviceWearerDetails.fullName).click()
+    searchPage.ordersList.contains(`${deviceWearerDetails.firstName} ${deviceWearerDetails.lastName}`).click()
 
     Page.verifyOnPage(OrderSummaryPage).makeChanges()
 

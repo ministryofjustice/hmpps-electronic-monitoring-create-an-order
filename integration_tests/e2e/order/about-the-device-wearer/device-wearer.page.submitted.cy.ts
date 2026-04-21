@@ -13,6 +13,7 @@ const mockDeviceWearer = {
   complianceAndEnforcementPersonReference: null,
   courtCaseReferenceNumber: null,
   firstName: 'test',
+  middleName: 'teste',
   lastName: 'tester',
   alias: 'tes',
   dateOfBirth: '2000-01-01T00:00:00Z',
@@ -54,7 +55,8 @@ context('About the device wearer', () => {
         page.submittedBanner.should('contain', 'You are viewing a submitted order.')
 
         // Should display the saved data
-        page.form.firstNamesField.shouldHaveValue('test')
+        page.form.firstNameField.shouldHaveValue('test')
+        page.form.middleNameField.shouldHaveValue('teste')
         page.form.lastNameField.shouldHaveValue('tester')
         page.form.aliasField.shouldHaveValue('tes')
         page.form.dateOfBirthField.shouldHaveValue(new Date(2000, 0, 1))

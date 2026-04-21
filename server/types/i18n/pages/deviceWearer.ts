@@ -6,10 +6,11 @@ type DeviceWearerPageContent = QuestionPageContent<
   | 'dateOfBirth'
   | 'disabilities'
   | 'firstName'
+  | 'middleName'
+  | 'lastName'
   | 'gender'
   | 'interpreterRequired'
   | 'language'
-  | 'lastName'
   | 'otherDisability'
   | 'sex'
 >
