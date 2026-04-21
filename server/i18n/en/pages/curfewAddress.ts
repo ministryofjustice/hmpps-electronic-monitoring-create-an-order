@@ -1,4 +1,4 @@
-import PostcodeLookupPageContent from '../../../types/i18n/pages/postcodeLookup'
+import PostcodeLookupPageContent, { AddressResultPageContent } from '../../../types/i18n/pages/postcodeLookup'
 
 const curfewAddressPageContent: PostcodeLookupPageContent = {
   title: 'Find the curfew address',
@@ -15,6 +15,13 @@ const curfewAddressPageContent: PostcodeLookupPageContent = {
       hint: 'For example, 15 or Prospect Cottage',
     },
   },
+}
+
+export const curfewAddressResultPageContent: AddressResultPageContent = {
+  title: 'Select the curfew address',
+  section: 'About the device wearer',
+  legend: '',
+  helpText: '',
 }
 
 export default curfewAddressPageContent

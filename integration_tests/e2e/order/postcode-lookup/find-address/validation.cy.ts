@@ -19,7 +19,7 @@ context('find address page', () => {
     })
 
     it('shows errors when no postcode is entered', () => {
-      const page = Page.visit(FindAddressPage, { orderId: mockOrderId, addressType: 'primary' })
+      const page = Page.visit(FindAddressPage, { orderId: mockOrderId, addressType: 'PRIMARY' })
 
       page.form.findAddressButton.click()
 
@@ -28,7 +28,7 @@ context('find address page', () => {
     })
 
     it('still shows the building id if entered', () => {
-      const page = Page.visit(FindAddressPage, { orderId: mockOrderId, addressType: 'primary' })
+      const page = Page.visit(FindAddressPage, { orderId: mockOrderId, addressType: 'PRIMARY' })
 
       page.form.fillInWith({ id: 'some id' })
 

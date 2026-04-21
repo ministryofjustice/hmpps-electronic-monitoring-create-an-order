@@ -138,6 +138,12 @@ export const camelCaseToSentenceCase = (input: string): string => {
   return sentenceCaseKey.trim()
 }
 
+export const toTitleCase = (input: string): string => {
+  if (typeof input !== 'string') return input
+
+  return input.replace(/\w\S*/g, text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase())
+}
+
 export const checkType = (input: unknown): string => {
   if (Array.isArray(input)) {
     return 'array'

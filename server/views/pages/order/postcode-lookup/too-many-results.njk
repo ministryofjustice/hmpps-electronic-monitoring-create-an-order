@@ -1,0 +1,20 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% set section = content.section %}
+{% set heading = 'Too many results found' %}
+{% set questions = content.questions %}
+
+{% set searchText = '<a href="' + searchAgainLink + '" class="govuk-link">Search again</a>' %}
+
+
+{% block formInputs %}
+    <p class="govuk-body">To reduce the number of results search again using postcode and building number or name.</p>
+
+    <p class="govuk-body">
+      <a href="{{ searchAgainLink }}" class="govuk-link">Search again</a>
+    </p>
+
+    <p class="govuk-body">
+      <a href="{{ manualAddressLink }}" class="govuk-link">Enter address manually</a>
+    </p>
+{% endblock %}

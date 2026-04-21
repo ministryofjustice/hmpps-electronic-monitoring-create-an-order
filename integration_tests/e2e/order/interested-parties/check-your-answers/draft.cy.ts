@@ -167,4 +167,109 @@ context('interested parties check answers page', () => {
       ])
     })
   })
+
+  context('does not show notifying org question if cohort inferred by auth', () => {
+    beforeEach(() => {
+      cy.task('reset')
+    })
+
+    describe('when user cohort is home office', () => {
+      it('does not show notifying org or responsible officer questions', () => {
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: {
+            dataDictionaryVersion: 'DDV6',
+            interestedParties: {
+              notifyingOrganisation: 'HOME_OFFICE',
+              notifyingOrganisationEmail: 'notifying@organisation',
+              notifyingOrganisationName: '',
+
+              responsibleOfficerFirstName: 'officer',
+              responsibleOfficerLastName: 'name',
+              responsibleOfficerEmail: 'officer@email',
+
+              responsibleOrganisation: 'HOME_OFFICE',
+              responsibleOrganisationEmail: 'responsible@organisation',
+            },
+          },
+        })
+
+        cy.task('stubSignIn', {
+          name: 'john smith',
+          roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+          stubCohort: false,
+          userId: '1',
+        })
+
+        cy.task('stubCemoRequest', {
+          httpStatus: 200,
+          method: 'GET',
+          subPath: 'user-cohort',
+          response: { cohort: 'HOME_OFFICE' },
+        })
+
+        cy.signIn()
+
+        const page = Page.visit(InterestedPartiesCheckYourAnswersPage, { orderId: mockOrderId })
+
+        page.organisationDetailsSection.shouldExist()
+        page.organisationDetailsSection.shouldNotHaveItems([
+          'What organisation or related organisation are you part of?',
+          "What is the Responsible Officer's first name?",
+          "What is the Responsible Officer's last name?",
+          "What is the Responsible Officer's email address?",
+        ])
+      })
+    })
+
+    describe('when user cohort is probation', () => {
+      it('does not show notifying org question', () => {
+        cy.task('reset')
+
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: {
+            dataDictionaryVersion: 'DDV6',
+            interestedParties: {
+              notifyingOrganisation: 'PROBATION',
+              notifyingOrganisationName: '',
+              notifyingOrganisationEmail: 'test@test.com',
+              responsibleOfficerName: 'John Smith',
+              responsibleOfficerPhoneNumber: '01234567890',
+              responsibleOrganisation: 'PROBATION',
+              responsibleOrganisationRegion: 'GREATER_MANCHESTER',
+              responsibleOrganisationEmail: 'test2@test.com',
+            },
+          },
+        })
+
+        cy.task('stubSignIn', {
+          name: 'john smith',
+          roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+          stubCohort: false,
+          userId: '2',
+        })
+
+        cy.task('stubCemoRequest', {
+          httpStatus: 200,
+          method: 'GET',
+          subPath: 'user-cohort',
+          response: { cohort: 'PROBATION' },
+        })
+
+        cy.signIn()
+
+        const page = Page.visit(InterestedPartiesCheckYourAnswersPage, { orderId: mockOrderId })
+
+        page.organisationDetailsSection.shouldExist()
+        page.organisationDetailsSection.shouldNotHaveItems([
+          'What organisation or related organisation are you part of?',
+        ])
+      })
+    })
+  })
 })

@@ -14,11 +14,20 @@ context('Interested parties flow', () => {
     cy.task('setFeatureFlags', testFlags)
     cy.task('resetDB')
     cy.task('reset')
+  })
 
+  afterEach(() => {
+    cy.task('resetFeatureFlags')
+  })
+
+  it('Notifying organisation is court', () => {
     cy.task('stubSignIn', {
-      name: 'Cemor Stubs',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
+      name: 'john smith',
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'ROLE_EM_CEMO_COURT'],
+      stubCohort: false,
+      userId: '123456780',
     })
+
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     indexPage.newOrderFormButton.click()
@@ -26,12 +35,7 @@ context('Interested parties flow', () => {
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
     orderSummaryPage.interestedPartiesTask.click()
-  })
-  afterEach(() => {
-    cy.task('resetFeatureFlags')
-  })
 
-  it('Notifying organisation is court', () => {
     const input = {
       notifyingOrganisation: {
         notifyingOrganisation: 'Family Court',
@@ -61,15 +65,26 @@ context('Interested parties flow', () => {
   })
 
   it('Notifying organisation is Home Office and responsible organisation is Home Office', () => {
+    cy.task('stubSignIn', {
+      name: 'john smith',
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'ROLE_EM_CEMO_HOME_OFFICE'],
+      stubCohort: false,
+      userId: '123456781',
+    })
+
+    cy.signIn()
+
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    indexPage.newOrderFormButton.click()
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+
+    orderSummaryPage.interestedPartiesTask.click()
+
     const input = {
       notifyingOrganisation: {
-        notifyingOrganisation: 'Home Office',
         notifyingOrganisationEmailAddress: 'a@b.com',
-      },
-      responsibleOfficer: {
-        firstName: 'John',
-        lastName: 'Smith',
-        email: 'John@Smith.com',
       },
       responsibleOrganisation: {
         responsibleOrganisation: 'Home Office',
@@ -82,17 +97,25 @@ context('Interested parties flow', () => {
     })
     const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
     cyaPage.organisationDetailsSection.shouldHaveItems([
-      { key: 'What organisation or related organisation are you part of?', value: 'Home Office' },
       { key: "What is your team's contact email address?", value: 'a@b.com' },
-      { key: "What is the Responsible Officer's first name?", value: 'John' },
-      { key: "What is the Responsible Officer's last name?", value: 'Smith' },
-      { key: "What is the Responsible Officer's email address?", value: 'John@Smith.com' },
       { key: "What is the Responsible Officer's organisation?", value: 'Home Office' },
       { key: "What is the Responsible Organisation's email address? (optional)", value: 'a@b.com' },
     ])
   })
 
-  it('Notifying organisation is prison and resonsible organisation is probation', () => {
+  it('Notifying organisation is prison and responsible organisation is probation', () => {
+    cy.task('stubSignIn', {
+      name: 'Cemor Stubs',
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
+    })
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    indexPage.newOrderFormButton.click()
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+
+    orderSummaryPage.interestedPartiesTask.click()
+
     const input = {
       notifyingOrganisation: {
         notifyingOrganisation: 'Prison service',
@@ -128,6 +151,18 @@ context('Interested parties flow', () => {
   })
 
   it('clears downstream responsible officer data when notifying organisation is changed to court', () => {
+    cy.task('stubSignIn', {
+      name: 'Cemor Stubs',
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'OTHER_ROLE'],
+    })
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    indexPage.newOrderFormButton.click()
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+
+    orderSummaryPage.interestedPartiesTask.click()
+
     const input = {
       notifyingOrganisation: {
         notifyingOrganisation: 'Prison service',

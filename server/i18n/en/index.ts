@@ -35,8 +35,6 @@ import isRejectionPageContent from './pages/isRejection'
 import serviceRequestTypePageContent from './pages/serviceRequestType'
 import haveCourtOrderPageContent from './pages/haveCourtOrder'
 import uploadCourtOrderPageContent from './pages/uploadCourtOrder'
-import uploadGrantOfBailPageContent from './pages/uploadGrantOfBail'
-import haveGrantOfBailPageContent from './pages/haveGrantOfBail'
 import dapoContent from './pages/dapo'
 import offenceContent from './pages/offence'
 import mappaPageContent from './pages/mappa'
@@ -48,9 +46,9 @@ import dapaClauseListPageContent from './pages/dapoClauseListPage'
 import notifyingOrganisationPageContent from './pages/notifyingOrganisation'
 import responsibleOrganisationPageContent from './pages/responsibleOrganisation'
 import responsibleOfficerPageContent from './pages/responsibleOfficer'
-import deviceWearerAddressPageContent from './pages/deviceWearerAddress'
-import tagAtSourceAddressPageContent from './pages/tagAtSourceAddress'
-import curfewAddressPageContent from './pages/curfewAddress'
+import deviceWearerAddressPageContent, { deviceWearerAddressResultPageContent } from './pages/deviceWearerAddress'
+import tagAtSourceAddressPageContent, { tagAtSourceAddressResultPageContent } from './pages/tagAtSourceAddress'
+import curfewAddressPageContent, { curfewAddressResultPageContent } from './pages/curfewAddress'
 import appointmentAddressPageContent from './pages/appointmentAddress'
 import nationalSecurityDirectoratePageConetent from './pages/national-security-directorate'
 import isAddressChangePageContent from './pages/isAddressChange'
@@ -84,10 +82,8 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       uploadLicense: uploadLicencePageContent,
       uploadPhotoId: uploadPhotoIdPageContent,
       uploadCourtOrder: uploadCourtOrderPageContent,
-      uploadGrantOfBail: uploadGrantOfBailPageContent,
       havePhoto: havePhotoPageContent,
       haveCourtOrder: haveCourtOrderPageContent,
-      haveGrantOfBail: haveGrantOfBailPageContent,
       variationDetails: variationDetailsPageContent,
       probationDeliveryUnit: probationDeliveryUnitPageContent,
       pdu: pduPageContent,
@@ -106,8 +102,11 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       responsibleOrganisation: responsibleOrganisationPageContent,
       responsibleOfficer: responsibleOfficerPageContent,
       deviceWearerAddress: deviceWearerAddressPageContent,
+      deviceWearerAddressResult: deviceWearerAddressResultPageContent,
       tagAtSourceAddress: tagAtSourceAddressPageContent,
+      tagAtSourceAddressResult: tagAtSourceAddressResultPageContent,
       curfewAddress: curfewAddressPageContent,
+      curfewAddressResult: curfewAddressResultPageContent,
       appointmentAddress: appointmentAddressPageContent,
       nationalSecurityDirectorate: nationalSecurityDirectoratePageConetent,
       isAddressChange: isAddressChangePageContent,

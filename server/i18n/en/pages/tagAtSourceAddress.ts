@@ -1,4 +1,4 @@
-import PostcodeLookupPageContent from '../../../types/i18n/pages/postcodeLookup'
+import PostcodeLookupPageContent, { AddressResultPageContent } from '../../../types/i18n/pages/postcodeLookup'
 
 const tagAtSourceAddressPageContent: PostcodeLookupPageContent = {
   title: 'Find the installation address',
@@ -15,6 +15,13 @@ const tagAtSourceAddressPageContent: PostcodeLookupPageContent = {
       hint: 'For example, 15 or Prospect Cottage',
     },
   },
+}
+
+export const tagAtSourceAddressResultPageContent: AddressResultPageContent = {
+  title: 'Select the installation address',
+  section: 'Electronic monitoring required',
+  legend: '',
+  helpText: '',
 }
 
 export default tagAtSourceAddressPageContent

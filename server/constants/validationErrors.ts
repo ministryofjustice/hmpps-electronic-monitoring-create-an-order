@@ -348,7 +348,7 @@ const validationErrors: ValidationErrors = {
       yearMustIncludeFourNumbers: 'Year must include 4 numbers',
     },
     variationTypeRequired: 'Select what you have changed',
-    variationDetailsRequired: 'Enter information on what you have changed',
+    variationDetailsRequired: 'Enter details of all the changes you have made',
     variationDetailsTooLong: 'Information on what you have changed must be 200 characters or less',
   },
   installationLocation: {

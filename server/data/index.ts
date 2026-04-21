@@ -17,6 +17,8 @@ import InMemoryTokenStore from './tokenStore/inMemoryTokenStore'
 import config from '../config'
 import HmppsAuditClient from './hmppsAuditClient'
 import RestClient from './restClient'
+import OSDataHubClient from './postcode/osDataHub/osDataHubClient'
+import AddressMapper from './postcode/osDataHub/addressMapper'
 
 type RestClientBuilder<T> = (token: string) => T
 
@@ -27,6 +29,11 @@ export const dataAccess = () => ({
   ),
   hmppsAuditClient: new HmppsAuditClient(config.sqs.audit),
   cemoApiClient: new RestClient('CemoAPI', config.apis.cemoApi),
+  osDataHubClient: new OSDataHubClient(
+    new RestClient('osDataHub', config.apis.osDataHub),
+    new AddressMapper(),
+    config.apis.osDataHub.key,
+  ),
 })
 
 export type DataAccess = ReturnType<typeof dataAccess>

@@ -10,18 +10,34 @@ context('Submit notifying organisations', () => {
   context('New orders', () => {
     beforeEach(() => {
       cy.task('reset')
-      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
         id: mockOrderId,
+        status: 'IN_PROGRESS',
         order: {
           dataDictionaryVersion: 'DDV6',
         },
       })
-      cy.signIn()
     })
 
-    it('not a court routes to responsbile office page', () => {
+    it('prison routes to responsible officer page', () => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '123456780',
+      })
+
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: { cohort: 'PRISON', activeCaseLoadName: 'HMP ABC' },
+      })
+
+      cy.signIn()
+
       const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
 
       page.form.fillInWith({
@@ -34,36 +50,137 @@ context('Submit notifying organisations', () => {
       Page.verifyOnPage(ResponsibleOfficerPage)
     })
 
-    it('a court routes to responsbile organisation page', () => {
+    it('court routes to responsible organisation page', () => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '123456781',
+      })
+
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: { cohort: 'COURT' },
+      })
+
+      cy.signIn()
+
       const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
 
       page.form.fillInWith({
         notifyingOrganisation: 'Family Court',
+        familyCourt: 'Swansea Family Court',
         notifyingOrganisationEmailAddress: 'a@b.com',
-        familyCourt: 'Aberystwyth Family Court',
       })
       page.form.continueButton.click()
 
       Page.verifyOnPage(ResponsibleOrganisationPage)
+      cy.contains("What is the Responsible Officer's organisation?")
     })
 
-    it('navigating back to the page after submission shows values without org name', () => {
-      let page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
+    it('probation routes to responsible officer page', () => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '123456782',
+      })
+
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: { cohort: 'PROBATION' },
+      })
+
+      cy.signIn()
+
+      const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
 
       page.form.fillInWith({
-        notifyingOrganisation: 'Scottish Court',
         notifyingOrganisationEmailAddress: 'a@b.com',
       })
       page.form.continueButton.click()
 
-      Page.verifyOnPage(ResponsibleOrganisationPage)
+      Page.verifyOnPage(ResponsibleOfficerPage)
+      cy.contains('Contact details for the Responsible Officer')
+    })
 
-      page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
-      page.form.organisationField.shouldHaveValue('Scottish Court')
-      page.form.emailField.shouldHaveValue('a@b.com')
+    it('home office routes to responsible organisation page', () => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '123456783',
+      })
+
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: { cohort: 'HOME_OFFICE' },
+      })
+
+      cy.signIn()
+
+      const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
+
+      page.form.fillInWith({
+        notifyingOrganisationEmailAddress: 'homeoffice@homeoffice.com',
+      })
+      page.form.continueButton.click()
+
+      Page.verifyOnPage(ResponsibleOrganisationPage)
+      cy.contains("What is the Responsible Officer's organisation?")
+    })
+
+    it('other cohort can select options', () => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '123456784',
+      })
+
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: { cohort: 'OTHER' },
+      })
+
+      cy.signIn()
+
+      const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
+
+      page.form.fillInWith({
+        notifyingOrganisation: 'Prison service',
+        notifyingOrganisationEmailAddress: 'a@b.com',
+        prison: 'Altcourse Prison',
+      })
+      page.form.continueButton.click()
+
+      Page.verifyOnPage(ResponsibleOfficerPage)
     })
 
     it('navigating back to the page after submission shows values with org name', () => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '123456785',
+      })
+
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: { cohort: 'PRISON', activeCaseLoadName: 'HMP ABC' },
+      })
+
+      cy.signIn()
       let page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
 
       page.form.fillInWith({
@@ -154,7 +271,7 @@ context('Submit notifying organisations', () => {
       Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
     })
 
-    it('monitoring start date is in the future, not a court routes to responsbile office page', () => {
+    it('monitoring start date is in the future, not a court routes to responsible officer page', () => {
       const startDate = new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 15 days after today
       stubVariationOrder(startDate)
       const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
