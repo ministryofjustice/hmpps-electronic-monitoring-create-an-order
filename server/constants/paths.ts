@@ -121,12 +121,11 @@ const paths = {
   ATTACHMENT: {
     ATTACHMENTS: '/order/:orderId/attachments',
     ATTACHMENTS_VERSION: '/order/:orderId/version/:versionId/attachments',
-    FILE_VIEW: '/order/:orderId/attachments/:fileType(photo_Id|licence|court_order|grant_of_bail)',
-    DOWNLOAD_FILE: '/order/:orderId/attachments/:fileType(photo_Id|licence|court_order|grant_of_bail)/:filename',
-    DELETE_FILE: '/order/:orderId/attachments/:fileType(photo_Id|licence|court_order|grant_of_bail)/delete',
+    FILE_VIEW: '/order/:orderId/attachments/:fileType(photo_Id|licence|court_order)',
+    DOWNLOAD_FILE: '/order/:orderId/attachments/:fileType(photo_Id|licence|court_order)/:filename',
+    DELETE_FILE: '/order/:orderId/attachments/:fileType(photo_Id|licence|court_order)/delete',
     HAVE_PHOTO: '/order/:orderId/attachments/have-photo',
     HAVE_COURT_ORDER: '/order/:orderId/attachments/have-court-order',
-    HAVE_GRANT_OF_BAIL: '/order/:orderId/attachments/have-grant-of-bail',
   },
 
   VARIATION: {

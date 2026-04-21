@@ -23,7 +23,7 @@ export default class VariationDetailsFormComponent extends FormComponent {
   }
 
   get variationDetailsField(): FormTextareaComponent {
-    const label = 'Enter information on what you have changed'
+    const label = 'Enter details of all the changes you have made'
     return new FormTextareaComponent(this.form, label)
   }
 

@@ -12,7 +12,7 @@ import ConfirmVariationPage from '../../pages/order/variation/confirmVariation'
 import { Order } from '../../../server/models/Order'
 import paths from '../../../server/constants/paths'
 import NotifyingOrganisationPage from './interested-parties/notifying-organisation/notifyingOrganisationPage'
-import InterestedPartiesCheckYourAnswersPage from './interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
+import DetailsOfInstallationPage from './access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
 
 let mockOrderId = uuidv4()
 
@@ -111,6 +111,42 @@ context('Order Summary', () => {
       cy.get('.govuk-task-list__item')
         .contains('.govuk-task-list__name-and-hint', 'Contact information')
         .should('not.exist')
+    })
+
+    it('Home Officers users go to risk at installation from task list when offence flow is enabled', () => {
+      const testFlags = { OFFENCE_FLOW_ENABLED: true }
+      cy.task('setFeatureFlags', testFlags)
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          dataDictionaryVersion: 'DDV6',
+          interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: 'test@test.com',
+            responsibleOfficerName: 'John Smith',
+            responsibleOfficerPhoneNumber: '01234567890',
+            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+            responsibleOrganisationRegion: '',
+            responsibleOrganisationEmail: '',
+          },
+        },
+      })
+
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.riskInformationTask.shouldHaveStatus('Incomplete')
+      page.riskInformationTask.link.should(
+        'have.attr',
+        'href',
+        `/order/${mockOrderId}/installation-and-risk/details-of-installation`,
+      )
+      page.riskInformationTask.click()
+
+      Page.verifyOnPage(DetailsOfInstallationPage)
     })
   })
 
@@ -628,16 +664,6 @@ context('Order Summary', () => {
       page = Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId })
 
       page.submitOrderButton.should('not.be.disabled')
-    })
-
-    it('Interested parties section link should go to check your answer page if  completed', () => {
-      const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
-      cy.task('setFeatureFlags', testFlags)
-      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
-      page.interestedPartiesTask.shouldHaveStatus('To check')
-      page.interestedPartiesTask.click()
-
-      Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
     })
 
     it('does not show the timeline', () => {

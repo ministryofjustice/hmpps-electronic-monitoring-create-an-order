@@ -84,6 +84,35 @@ export default class RestClient {
     }
   }
 
+  async getWithoutBearer<Response = unknown>({
+    path,
+    query = {},
+    headers = {},
+    responseType = '',
+    raw = false,
+  }: Omit<Request, 'token'>): Promise<Response> {
+    logger.info(`${this.name} GET: ${this.apiUrl()}${path}`)
+    try {
+      const result = await superagent
+        .get(`${this.apiUrl()}${path}`)
+        .query(query)
+        .agent(this.agent)
+        .retry(2, (err, res) => {
+          if (err) logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
+          return undefined // retry handler only for logging retries, not to influence retry logic
+        })
+        .set(headers)
+        .responseType(responseType)
+        .timeout(this.timeoutConfig())
+
+      return raw ? (result as Response) : result.body
+    } catch (error) {
+      const sanitisedError = sanitiseError(error as UnsanitisedError)
+      logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'GET'`)
+      throw sanitisedError
+    }
+  }
+
   async getRawResponse({ path, query = {}, headers = {}, responseType = '', token }: Request): Promise<string> {
     logger.info(`${this.name} GET: ${this.apiUrl()}${path}`)
     try {

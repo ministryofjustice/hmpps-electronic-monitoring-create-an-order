@@ -57,13 +57,12 @@
       disabled: not isOrderEditable
     }]) %}
   {% endif %}
-  {% if not fixedAddressExist %}
-    {% set items = items.concat([{
-      value: "INSTALLATION",
-      text: "At another address (for example, a relatives address they don't live at)",
-      disabled: not isOrderEditable
-    }]) %}
-  {% endif %}
+
+  {% set items = items.concat([{
+    value: "INSTALLATION",
+    text: "At another address",
+    disabled: not isOrderEditable
+  }]) %}
 
   {{ govukRadios({
     name: "location",

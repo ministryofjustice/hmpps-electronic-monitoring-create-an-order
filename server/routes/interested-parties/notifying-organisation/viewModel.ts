@@ -10,20 +10,24 @@ import { Order } from '../../../models/Order'
 
 type NotifyingOrganisationViewModel = ViewModel<
   Pick<InterestedParties, 'notifyingOrganisation' | 'notifyingOrganisationName' | 'notifyingOrganisationEmail'>
-> & { DDv5: boolean }
+> & {
+  DDv5: boolean
+  cohort?: string
+}
 
 const construct = (
   data: InterestedParties,
   formData: NotifyingOrganisationInput | undefined,
   errors: ValidationResult,
   order: Order,
+  cohort?: string,
 ): NotifyingOrganisationViewModel => {
-  if (formData) return constructFromFormData(formData, errors, order)
+  if (formData) return constructFromFormData(formData, errors, order, cohort)
 
-  return constructFromData(data, order)
+  return constructFromData(data, order, cohort)
 }
 
-const constructFromData = (data: InterestedParties, order: Order): NotifyingOrganisationViewModel => {
+const constructFromData = (data: InterestedParties, order: Order, cohort?: string): NotifyingOrganisationViewModel => {
   return {
     notifyingOrganisation: {
       value: data.notifyingOrganisation || '',
@@ -36,6 +40,7 @@ const constructFromData = (data: InterestedParties, order: Order): NotifyingOrga
     },
     errorSummary: null,
     DDv5: isOrderDataDictionarySameOrAbove('DDV5', order),
+    cohort,
   }
 }
 
@@ -43,6 +48,7 @@ const constructFromFormData = (
   formData: NotifyingOrganisationInput,
   errors: ValidationResult,
   order: Order,
+  cohort?: string,
 ): NotifyingOrganisationViewModel => {
   return {
     notifyingOrganisation: {
@@ -59,6 +65,7 @@ const constructFromFormData = (
     },
     errorSummary: createGovukErrorSummary(errors),
     DDv5: isOrderDataDictionarySameOrAbove('DDV5', order),
+    cohort,
   }
 }
 

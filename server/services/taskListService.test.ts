@@ -689,7 +689,7 @@ describe('TaskListService', () => {
       // Then
       expect(nextPage).toBe(
         paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
-          ':fileType(photo_Id|licence|court_order|grant_of_bail)',
+          ':fileType(photo_Id|licence|court_order)',
           'licence',
         ),
       )
@@ -765,7 +765,7 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
-            ':fileType(photo_Id|licence|court_order|grant_of_bail)',
+            ':fileType(photo_Id|licence|court_order)',
             'licence',
           ),
           isReady: true,
@@ -800,6 +800,10 @@ describe('TaskListService', () => {
         curfewConditions: createCurfewConditions(),
         curfewTimeTable: createCurfewTimeTable(),
         installationLocation: { location: 'INSTALLATION' },
+        installationAppointment: {
+          placeName: 'primary',
+          appointmentDate: 'date',
+        },
         additionalDocuments: [createAttatchment(), createAttatchment({ fileType: AttachmentType.PHOTO_ID })],
         orderParameters: { havePhoto: true },
       })
@@ -875,6 +879,10 @@ describe('TaskListService', () => {
         curfewConditions: createCurfewConditions(),
         curfewTimeTable: createCurfewTimeTable(),
         installationLocation: { location: 'INSTALLATION' },
+        installationAppointment: {
+          placeName: 'primary',
+          appointmentDate: 'date',
+        },
         additionalDocuments: [createAttatchment(), createAttatchment({ fileType: AttachmentType.PHOTO_ID })],
         orderParameters: { havePhoto: true },
       })
@@ -990,7 +998,7 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
-            ':fileType(photo_Id|licence|court_order|grant_of_bail)',
+            ':fileType(photo_Id|licence|court_order)',
             'licence',
           ),
           isReady: true,
@@ -1031,13 +1039,6 @@ describe('TaskListService', () => {
         {
           checked: false,
           completed: false,
-          name: 'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM',
-          path: paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id),
-          isReady: true,
-        },
-        {
-          checked: false,
-          completed: false,
           name: 'ABOUT_THE_DEVICE_WEARER',
           path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
           isReady: true,
@@ -1068,9 +1069,16 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
-            ':fileType(photo_Id|licence|court_order|grant_of_bail)',
+            ':fileType(photo_Id|licence|court_order)',
             'licence',
           ),
+          isReady: true,
+        },
+        {
+          checked: false,
+          completed: false,
+          name: 'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM',
+          path: paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id),
           isReady: true,
         },
       ])
@@ -1286,6 +1294,33 @@ describe('TaskListService', () => {
 
       expect(riskInformationSection?.path).toBe(
         paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM.replace(':orderId', order.id),
+      )
+
+      jest.restoreAllMocks()
+    })
+
+    it('should navigate to risk at installation page when offence flow is enabled and notifyingOrganisation is HOME_OFFICE', async () => {
+      const mockGet = jest.fn((flag: string) => flag === 'OFFENCE_FLOW_ENABLED')
+      const mockGetValue = jest.fn(() => '')
+      jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
+        get: mockGet,
+        getValue: mockGetValue,
+      } as never)
+
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({
+          notifyingOrganisation: 'HOME_OFFICE',
+        }),
+      })
+
+      const taskListService = new TaskListService(mockOrderChecklistService)
+
+      const sections = await taskListService.getSections(order)
+
+      const riskInformationSection = sections.find(section => section.name === 'RISK_INFORMATION')
+
+      expect(riskInformationSection?.path).toBe(
+        paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id),
       )
 
       jest.restoreAllMocks()

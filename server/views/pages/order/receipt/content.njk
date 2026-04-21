@@ -46,19 +46,28 @@
   }) }}
 
     
-  {% if isVariation == true %}
-    <h2 class="govuk-heading-l">About the changes to this version of the form</h2>
+  {% if isVariation %}
+    <h2 class="govuk-heading-l">About the changes in this version of the form</h2>
     
     {% include "../variation/answers.njk" %}
   {% endif %}
 
+  {% if isInterestedPartiesFlowEnabled %}
+    <h2 class="govuk-heading-l">About the Notifying and Responsible Organisations</h2>
+
+    {% include "../interested-parties/answers.njk" %}
+  {% endif %}  
+
   <h2 class="govuk-heading-l">About the device wearer</h2>
   
   {% include "../about-the-device-wearer/answers.njk" %}
-      
-  <h2 class="govuk-heading-l">Contact information</h2>
   
-  {% include "../contact-information/answers.njk" %}
+  {% if not isInterestedPartiesFlowEnabled %}
+    <h2 class="govuk-heading-l">Contact information</h2>
+  
+    {% include "../contact-information/answers.njk" %}
+  {% endif %}
+ 
 
   <h2 class="govuk-heading-l">Risk information</h2>
   

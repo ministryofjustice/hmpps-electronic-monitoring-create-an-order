@@ -109,6 +109,15 @@ export default {
       },
       agent: new AgentConfig(Number(get('CEMO_API_TIMEOUT_RESPONSE', 25000))),
     },
+    osDataHub: {
+      url: get('OS_DATA_HUB_API_URL', 'http://localhost:9091/osDataHub', requiredInProduction),
+      timeout: {
+        response: Number(get('CEMO_API_TIMEOUT_RESPONSE', 25000)),
+        deadline: Number(get('CEMO_VERIFICATION_API_TIMEOUT_DEADLINE', 25000)),
+      },
+      agent: new AgentConfig(Number(get('CEMO_API_TIMEOUT_RESPONSE', 25000))),
+      key: get('OS_PLACES_API_KEY', 'os_places_api_key', requiredInProduction),
+    },
   },
   sqs: {
     audit: auditConfig(),

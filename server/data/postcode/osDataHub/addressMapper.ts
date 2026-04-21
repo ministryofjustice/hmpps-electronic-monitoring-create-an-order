@@ -1,0 +1,44 @@
+import { AddressWithoutTypeUPRN } from '../../../models/Address'
+import { OSDataHubAddress, OSDataHubPostcodeResponse } from './osDataHubPostcodeResponse'
+import { toTitleCase } from '../../../utils/utils'
+import logger from '../../../../logger'
+
+export default class AddressMapper {
+  mapToAddresses(data: OSDataHubPostcodeResponse): AddressWithoutTypeUPRN[] {
+    return data.results.map(address => this.mapToAddress(address))
+  }
+
+  private mapToAddress(dataHubAddress: OSDataHubAddress): AddressWithoutTypeUPRN {
+    const address = dataHubAddress.DPA
+
+    const buildingId = this.addressLineOne(address.ORGANISATION_NAME, address.BUILDING_NUMBER, address.BUILDING_NAME)
+    const addressLine1 =
+      address.THOROUGHFARE_NAME === undefined
+        ? buildingId
+        : `${buildingId} ${toTitleCase(address.THOROUGHFARE_NAME || '')}`
+
+    return {
+      addressLine1,
+      addressLine2: toTitleCase(address.SUB_BUILDING_NAME || ''),
+      addressLine3: toTitleCase(address.POST_TOWN || ''),
+      addressLine4: toTitleCase(address.LOCAL_CUSTODIAN_CODE_DESCRIPTION || ''),
+      postcode: address.POSTCODE,
+      uprn: address.UPRN.toString(),
+    }
+  }
+
+  private addressLineOne(
+    orgName: string | undefined,
+    buildingNumber: number | undefined,
+    buildingName: string | undefined,
+  ): string {
+    const value = orgName || buildingNumber?.toString() || buildingName
+
+    if (value === undefined) {
+      logger.error('Unabled to map address')
+      return ''
+    }
+
+    return value
+  }
+}
