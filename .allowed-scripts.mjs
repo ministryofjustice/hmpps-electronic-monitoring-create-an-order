@@ -3,7 +3,7 @@ import { configureAllowedScripts } from '@ministryofjustice/hmpps-npm-script-all
 export default configureAllowedScripts({
    allowlist: {
       "node_modules/cypress@14.5.4": "ALLOW",
-      "node_modules/protobufjs@7.5.4": "ALLOW",
+      "node_modules/protobufjs@7.5.5": "ALLOW",
       // Needed by esbuild for watching files during development
       'node_modules/@parcel/watcher@2.5.1': 'ALLOW',
       // Provides native integration, supporting ability to write dtrace probes for bunyan
