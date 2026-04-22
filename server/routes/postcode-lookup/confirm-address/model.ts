@@ -3,7 +3,7 @@ import { AddressType, AddressWithoutType } from '../../../models/Address'
 import I18n from '../../../types/i18n'
 import { ConfirmAddressPageContent } from '../../../types/i18n/pages/postcodeLookup'
 
-type ConfirmationAddressType = AddressType | 'APPOINTMENT'
+type ConfirmationAddressType = AddressType
 
 type ConfirmAddressModel = {
   content: ConfirmAddressPageContent
@@ -65,8 +65,6 @@ function getContent(content: I18n, addressType: ConfirmationAddressType): Confir
     // These are also not used currently, can potentially be removed
     RESPONSIBLE_ADULT: content.pages.deviceWearerAddressConfirm,
     RESPONSIBLE_ORGANISATION: content.pages.deviceWearerAddressConfirm,
-    // Currently, mandatory attendence monitoring address is not stored as a separate address
-    APPOINTMENT: content.pages.appointmentAddressConfirm,
   }
 
   return mapping[addressType]

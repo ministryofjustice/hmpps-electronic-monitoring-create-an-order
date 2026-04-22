@@ -129,33 +129,6 @@ context('confirm address page submission', () => {
         },
       })
 
-      cy.task('stubOSDataHubPostcode', {
-        httpStatus: 200,
-        postcode: 'SW1A2AA',
-        body: {
-          results: [
-            {
-              DPA: {
-                BUILDING_NUMBER: 10,
-                THOROUGHFARE_NAME: 'DOWNING STREET',
-                POST_TOWN: 'LONDON',
-                POSTCODE: 'SW1A 2AA',
-                UPRN: '101',
-              },
-            },
-            {
-              DPA: {
-                BUILDING_NUMBER: 11,
-                THOROUGHFARE_NAME: 'DOWNING STREET',
-                POST_TOWN: 'LONDON',
-                POSTCODE: 'SW1A 2AA',
-                UPRN: '102',
-              },
-            },
-          ],
-        },
-      })
-
       cy.signIn()
     })
 
