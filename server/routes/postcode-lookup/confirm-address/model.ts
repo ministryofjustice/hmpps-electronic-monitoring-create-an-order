@@ -8,9 +8,8 @@ type ConfirmationAddressType = AddressType | 'APPOINTMENT'
 type ConfirmAddressModel = {
   content: ConfirmAddressPageContent
   postcode: string
-  addressCount: number
   buildingId?: string
-  address: AddressWithoutType
+  addressLines: string[]
   searchAgainLink: string
   manualAddressLink: string
   useDifferentAddressLink: string
@@ -24,7 +23,6 @@ const construct = (
     addressType: ConfirmationAddressType
     postcode?: string
     buildingId?: string
-    addressCount: number
     useDifferentAddressLink: string
   },
 ): ConfirmAddressModel => {
@@ -38,18 +36,19 @@ const construct = (
     addressType,
   )
 
+  const addressLines = [
+    address.addressLine1,
+    address.addressLine2,
+    address.addressLine3,
+    address.addressLine4,
+    address.postcode,
+  ].filter(line => line !== '')
+
   return {
     content: getContent(content, addressType),
     postcode: opts.postcode || '',
-    addressCount: opts.addressCount,
     buildingId: opts.buildingId,
-    address: {
-      addressLine1: address.addressLine1,
-      addressLine2: address.addressLine2,
-      addressLine3: address.addressLine3,
-      addressLine4: address.addressLine4,
-      postcode: address.postcode,
-    },
+    addressLines,
     searchAgainLink,
     manualAddressLink,
     useDifferentAddressLink: opts.useDifferentAddressLink,

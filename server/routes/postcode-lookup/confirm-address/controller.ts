@@ -24,11 +24,10 @@ export default class ConfirmAddressController {
       res.send(404)
       return
     }
-    const addresses = postcode ? await this.postcodeService.lookupByPostcode(postcode, addressType, buildingId) : []
 
     const useDifferentAddressLink =
       postcode === undefined
-        ? paths.POSTCODE_LOOKUP.ADDRESS_RESULT.replace(':orderId', order.id).replace(':addressType', addressType)
+        ? paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', order.id).replace(':addressType', addressType)
         : this.postcodeService.buildUrl(
             paths.POSTCODE_LOOKUP.ADDRESS_RESULT,
             order.id,
@@ -42,7 +41,6 @@ export default class ConfirmAddressController {
       addressType,
       postcode,
       buildingId,
-      addressCount: addresses.length,
       useDifferentAddressLink,
     })
 

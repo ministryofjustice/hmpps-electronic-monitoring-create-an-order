@@ -21,21 +21,13 @@ describe('confirm address model', () => {
       addressType: 'PRIMARY',
       postcode: 'wr11nl',
       buildingId: '1',
-      addressCount: 6,
       useDifferentAddressLink: `${paths.POSTCODE_LOOKUP.ADDRESS_RESULT.replace(':orderId', orderId).replace(':addressType', 'PRIMARY')}?postcode=wr11nl&buildingId=1`,
     })
 
     expect(model.content).toEqual(content.pages.deviceWearerAddressConfirm)
     expect(model.postcode).toBe('wr11nl')
-    expect(model.addressCount).toBe(6)
     expect(model.buildingId).toBe('1')
-    expect(model.address).toEqual({
-      addressLine1: '1 Washington Street',
-      addressLine2: '',
-      addressLine3: 'Worcester',
-      addressLine4: '',
-      postcode: 'WR1 1NL',
-    })
+    expect(model.addressLines).toEqual(['1 Washington Street', 'Worcester', 'WR1 1NL'])
 
     expect(model.searchAgainLink).toBe(
       paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', orderId).replace(':addressType', 'PRIMARY'),
@@ -56,7 +48,6 @@ describe('confirm address model', () => {
       addressType: 'SECONDARY',
       postcode: 'wr11nl',
       buildingId: '1',
-      addressCount: 6,
       useDifferentAddressLink: `${paths.POSTCODE_LOOKUP.ADDRESS_RESULT.replace(':orderId', orderId).replace(':addressType', 'SECONDARY')}?postcode=wr11nl&buildingId=1`,
     })
 
@@ -69,7 +60,6 @@ describe('confirm address model', () => {
       addressType: 'INSTALLATION',
       postcode: 'wr11nl',
       buildingId: '1',
-      addressCount: 6,
       useDifferentAddressLink: `${paths.POSTCODE_LOOKUP.ADDRESS_RESULT.replace(':orderId', orderId).replace(':addressType', 'INSTALLATION')}?postcode=wr11nl&buildingId=1`,
     })
 

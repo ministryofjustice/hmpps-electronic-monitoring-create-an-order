@@ -7,44 +7,24 @@
 {% set legend = "" %}
 {% set continueButtonText = "Use this address" %}
 
-{% if addressCount > 1 %}
-  {% set addressText = " addresses" %}
-{% else %}
-  {% set addressText = " address" %}
-{% endif %}
-
-{% set addressHtml = address.addressLine1 %}
-{% if address.addressLine2 %}
-    {% set addressHtml = addressHtml + "<br>" + address.addressLine2 %}
-{% endif %}
-{% if address.addressLine3 %}
-    {% set addressHtml = addressHtml + "<br>" + address.addressLine3 %}
-{% endif %}
-{% if address.addressLine4 %}
-    {% set addressHtml = addressHtml + "<br>" + address.addressLine4 %}
-{% endif %}
-{% set addressHtml = addressHtml + "<br>" + address.postcode %}
+{% set addressHtml %}
+  {% for line in addressLines %}
+    {{ line }}{% if not loop.last %}<br>{% endif %}
+  {% endfor %}
+{% endset %}
 
 {% block formInputs %}
-    <p class="govuk-body">
-        {% if postcode and buildingId %}
-            {{ addressCount }} {{addressText }} found for <b>{{ postcode }}</b> and <b>{{ buildingId}}</b>. <a href="{{ searchAgainLink }}" class="govuk-link">Search again</a>
-        {% elseif postcode %}
-            {{ addressCount }} {{addressText }} found for <b>{{ postcode }}</b>. <a href="{{ searchAgainLink }}" class="govuk-link">Search again</a>
-        {% else %}
-            <a href="{{ searchAgainLink}}" class="govuk-link">Search again</a>
-        {% endif %}
-    </p>
 
     {{ govukInsetText({
-    html: addressHtml
+      html: addressHtml
     }) }}
 
     <p class="govuk-body">
-        <a href="{{ useDifferentAddressLink}}" class="govuk-link">Use a different address</a>
+      <a href="{{ useDifferentAddressLink}}" class="govuk-link">Use a different address</a>
     </p>
 
     <p class="govuk-body">
-        <a href="{{ manualAddressLink }}" class="govuk-link">Enter address manually</a>
+      <a href="{{ manualAddressLink }}" class="govuk-link">Enter address manually</a>
     </p>
+
 {% endblock %}

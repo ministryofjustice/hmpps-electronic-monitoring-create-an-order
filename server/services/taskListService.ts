@@ -301,6 +301,7 @@ export default class TaskListService {
         state: STATES.required,
         completed: isNotNullOrUndefined(order.deviceWearer.noFixedAbode),
       })
+
       if (FeatureFlags.getInstance().get('POSTCODE_LOOKUP_ENABLED')) {
         tasks.push({
           section: SECTIONS.contactInformation,

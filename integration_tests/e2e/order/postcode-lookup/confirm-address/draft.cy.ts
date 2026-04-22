@@ -25,7 +25,7 @@ context('confirm address page', () => {
           },
           {
             addressType: 'SECONDARY',
-            addressLine1: '10 Downing Street',
+            addressLine1: '11 Downing Street',
             addressLine2: '',
             addressLine3: 'London',
             addressLine4: 'ENGLAND',
@@ -33,38 +33,11 @@ context('confirm address page', () => {
           },
           {
             addressType: 'INSTALLATION',
-            addressLine1: '10 Downing Street',
+            addressLine1: '12 Downing Street',
             addressLine2: '',
             addressLine3: 'London',
             addressLine4: 'ENGLAND',
             postcode: 'SW1A 2AA',
-          },
-        ],
-      },
-    })
-
-    cy.task('stubOSDataHubPostcode', {
-      httpStatus: 200,
-      postcode: 'SW1A2AA',
-      body: {
-        results: [
-          {
-            DPA: {
-              BUILDING_NUMBER: 10,
-              THOROUGHFARE_NAME: 'DOWNING STREET',
-              POST_TOWN: 'LONDON',
-              POSTCODE: 'SW1A 2AA',
-              UPRN: '101',
-            },
-          },
-          {
-            DPA: {
-              BUILDING_NUMBER: 11,
-              THOROUGHFARE_NAME: 'DOWNING STREET',
-              POST_TOWN: 'LONDON',
-              POSTCODE: 'SW1A 2AA',
-              UPRN: '102',
-            },
           },
         ],
       },
@@ -82,8 +55,6 @@ context('confirm address page', () => {
 
     cy.contains('About the device wearer')
     cy.contains("Confirm the device wearer's address")
-    cy.contains('1 address found for SW1A 2AA and 10.')
-    cy.contains('Search again')
     cy.contains('10 Downing Street')
     cy.contains('London')
     cy.contains('SW1A 2AA')
@@ -110,9 +81,7 @@ context('confirm address page', () => {
 
     cy.contains('About the device wearer')
     cy.contains('Confirm the curfew address')
-    cy.contains('1 address found for SW1A 2AA and 10.')
-    cy.contains('Search again')
-    cy.contains('10 Downing Street')
+    cy.contains('11 Downing Street')
     cy.contains('London')
     cy.contains('SW1A 2AA')
 
@@ -129,7 +98,7 @@ context('confirm address page', () => {
     )
   })
 
-  it('has correct elements for instlalation address confirmation', () => {
+  it('has correct elements for installation address confirmation', () => {
     const page = Page.visit(
       ConfirmAddressPage,
       { orderId: mockOrderId, addressType: 'INSTALLATION' },
@@ -138,9 +107,7 @@ context('confirm address page', () => {
 
     cy.contains('Electronic monitoring required')
     cy.contains('Confirm the installation address')
-    cy.contains('1 address found for SW1A 2AA and 10.')
-    cy.contains('Search again')
-    cy.contains('10 Downing Street')
+    cy.contains('12 Downing Street')
     cy.contains('London')
     cy.contains('SW1A 2AA')
 

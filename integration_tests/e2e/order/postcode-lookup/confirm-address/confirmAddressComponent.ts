@@ -1,11 +1,7 @@
-import SingleQuestionFormComponent from '../../../../pages/components/SingleQuestionFormComponent'
+import FormComponent from '../../../../pages/components/formComponent'
 import { PageElement } from '../../../../pages/page'
 
-export default class ConfirmAddressComponent extends SingleQuestionFormComponent {
-  fillInWith(value: string) {
-    throw new Error(`Method not implemented.${value}`)
-  }
-
+export default class ConfirmAddressComponent extends FormComponent {
   get useDifferentAddressLink(): PageElement {
     return this.form.contains('Use a different address')
   }
