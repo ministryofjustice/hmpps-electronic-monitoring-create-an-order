@@ -10,7 +10,7 @@ import { Services } from '../../services'
 const createPostcodeLookupRouter = (
   services: Pick<Services, 'postcodeService' | 'addressService' | 'auditService'>,
 ): Router => {
-  const router = Router()
+  const router = Router({ mergeParams: true })
 
   const findAddressController = new FindAddressController(services.postcodeService)
   const addressResultController = new AddressResultController(services.postcodeService, services.addressService)
