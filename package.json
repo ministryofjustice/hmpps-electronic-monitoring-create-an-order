@@ -19,8 +19,8 @@
     "lint": "eslint . --cache --max-warnings 0",
     "lint-fix": "eslint . --cache --max-warnings 0 --fix",
     "typecheck": "tsc && tsc -p integration_tests",
-    "test": "jest --runInBand",
-    "test:ci": "jest --runInBand",
+    "test": "TZ=Europe/London jest --runInBand",
+    "test:ci": "TZ=Europe/London jest --runInBand",
     "security_audit": "npx audit-ci --config audit-ci.json",
     "cy:run": "cypress run --config video=false",
     "cy:open": "cypress open --e2e --browser chrome",
@@ -129,7 +129,7 @@
   "devDependencies": {
     "@faker-js/faker": "^10.0.0",
     "@jgoz/esbuild-plugin-typecheck": "^4.0.4",
-    "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.3",
+    "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.4",
     "@secretlint/secretlint-rule-preset-recommend": "^11.2.5",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
@@ -207,6 +207,11 @@
     },
     "@aws-sdk/client-sqs": {
       "fast-xml-parser": "^5.3.6"
-    }
+    },
+    "mocha": {
+      "serialize-javascript": "^7.0.2",
+      "diff": "^8.0.3"
+    },
+    "picomatch": "^4.0.4"
   }
 }
