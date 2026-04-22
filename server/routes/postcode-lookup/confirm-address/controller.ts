@@ -1,20 +1,70 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
+import PostcodeService from '../postcodeService'
+import Model from './model'
+import { AddressType, AddressWithoutType } from '../../../models/Address'
+import I18n from '../../../types/i18n'
+import TaskListService from '../../../services/taskListService'
 
 export default class ConfirmAddressController {
-  constructor() {}
+  constructor(
+    private readonly postcodeService: PostcodeService,
+    private readonly tasklistService: TaskListService,
+  ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    res.render('pages/WIP', {
-      pageName: 'Confirm Address',
-      errorSummary: null,
+    const order = req.order!
+    const addressType = req.params.addressType as AddressType
+    const postcode = req.query.postcode as string
+    const buildingId = req.query.buildingId as string | undefined
+
+    const address = order.addresses.find(item => item.addressType === addressType) as AddressWithoutType | undefined
+
+    if (!address) {
+      res.send(404)
+      return
+    }
+    const addresses = postcode ? await this.postcodeService.lookupByPostcode(postcode, addressType, buildingId) : []
+
+    const useDifferentAddressLink =
+      postcode === undefined
+        ? paths.POSTCODE_LOOKUP.ADDRESS_RESULT.replace(':orderId', order.id).replace(':addressType', addressType)
+        : this.postcodeService.buildUrl(
+            paths.POSTCODE_LOOKUP.ADDRESS_RESULT,
+            order.id,
+            addressType,
+            postcode,
+            buildingId,
+          )
+
+    const model = Model.construct(address, res.locals.content as I18n, {
+      orderId: order.id,
+      addressType,
+      postcode,
+      buildingId,
+      addressCount: addresses.length,
+      useDifferentAddressLink,
     })
+
+    res.render('pages/order/postcode-lookup/confirm-address', model)
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const { addressType } = req.params
+    const addressType = req.params.addressType.toUpperCase()
 
-    res.redirect(paths.POSTCODE_LOOKUP.ADDRESS_LIST.replace(':orderId', order.id).replace(':addressType', addressType))
+    const { action } = req.body
+
+    if (action === 'continue') {
+      if (addressType === 'INSTALLATION') {
+        res.redirect(this.tasklistService.getNextPage('INSTALLATION_ADDRESS', order))
+        return
+      }
+
+      res.redirect(paths.POSTCODE_LOOKUP.ADDRESS_LIST.replace(':orderId', order.id))
+      return
+    }
+
+    res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
   }
 }

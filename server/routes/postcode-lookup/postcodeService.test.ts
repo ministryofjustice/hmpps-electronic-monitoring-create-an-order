@@ -60,4 +60,15 @@ describe('postcode service', () => {
       expect(postcodeLookupStub.lookupByUPRN).toHaveBeenCalledWith('101')
     })
   })
+
+  describe('build url', () => {
+    it('adds postcode and building id query params when given', async () => {
+      postcodeLookupStub.lookupByUPRN.mockResolvedValue(addresses[0])
+      const service = new PostcodeService(postcodeLookupStub)
+
+      expect(
+        service.buildUrl('/order/:orderId/address-result/:addressType', 'mockOrderId', 'PRIMARY', 'wr11nl', '1'),
+      ).toBe('/order/mockOrderId/address-result/PRIMARY?postcode=wr11nl&buildingId=1')
+    })
+  })
 })

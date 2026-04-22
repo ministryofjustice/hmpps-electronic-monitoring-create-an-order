@@ -1,4 +1,7 @@
-import PostcodeLookupPageContent, { AddressResultPageContent } from '../../../types/i18n/pages/postcodeLookup'
+import PostcodeLookupPageContent, {
+  AddressResultPageContent,
+  ConfirmAddressPageContent,
+} from '../../../types/i18n/pages/postcodeLookup'
 
 const deviceWearerAddressPageContent: PostcodeLookupPageContent = {
   title: "Find the device wearer's address",
@@ -19,6 +22,13 @@ const deviceWearerAddressPageContent: PostcodeLookupPageContent = {
 
 export const deviceWearerAddressResultPageContent: AddressResultPageContent = {
   title: "Select the device wearer's address",
+  section: 'About the device wearer',
+  legend: '',
+  helpText: '',
+}
+
+export const deviceWearerAddressConfirmPageContent: ConfirmAddressPageContent = {
+  title: "Confirm the device wearer's address",
   section: 'About the device wearer',
   legend: '',
   helpText: '',
