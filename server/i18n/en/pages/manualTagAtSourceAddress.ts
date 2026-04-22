@@ -1,8 +1,6 @@
-import AddressPageContent from '../../../types/i18n/pages/address'
+import ManualAddressPageContent from '../../../types/i18n/pages/manualAddress'
 
-const manualTagAtSourceAddressPageContent: Omit<AddressPageContent, 'questions'> & {
-  questions: Omit<AddressPageContent['questions'], 'hasAnotherAddress'>
-} = {
+const manualTagAtSourceAddressPageContent: ManualAddressPageContent = {
   title: 'What is the installation address?',
   section: 'Electronic monitoring required',
   legend: '',

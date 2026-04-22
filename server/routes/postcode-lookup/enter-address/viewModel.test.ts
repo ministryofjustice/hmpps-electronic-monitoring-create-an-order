@@ -88,4 +88,61 @@ describe('view model', () => {
       expect(model.postcode.value).toBe('')
     })
   })
+
+  describe('address type is device wearer', () => {
+    const content = getContent('en', 'DDV6')
+    const addresses: Address[] = [
+      {
+        addressType: 'PRIMARY',
+        addressLine1: '90 High Road',
+        addressLine2: '',
+        addressLine3: 'Bath',
+        addressLine4: '',
+        postcode: 'AB12 3CD',
+      },
+    ]
+
+    const model = ViewModel.construct('PRIMARY', addresses, {} as AddressFormData, content, [])
+    it('content has correct headings', () => {
+      expect(model.content).toEqual(content.pages.manualDeviceWearerAddress)
+    })
+  })
+
+  describe('address type is tag-at-source', () => {
+    const content = getContent('en', 'DDV6')
+    const addresses: Address[] = [
+      {
+        addressType: 'INSTALLATION',
+        addressLine1: '90 High Road',
+        addressLine2: '',
+        addressLine3: 'Bath',
+        addressLine4: '',
+        postcode: 'AB12 3CD',
+      },
+    ]
+
+    const model = ViewModel.construct('INSTALLATION', addresses, {} as AddressFormData, content, [])
+    it('content has correct headings', () => {
+      expect(model.content).toEqual(content.pages.manualTagAtSourceAddress)
+    })
+  })
+
+  describe('address type is curfew', () => {
+    const content = getContent('en', 'DDV6')
+    const addresses: Address[] = [
+      {
+        addressType: 'SECONDARY',
+        addressLine1: '90 High Road',
+        addressLine2: '',
+        addressLine3: 'Bath',
+        addressLine4: '',
+        postcode: 'AB12 3CD',
+      },
+    ]
+
+    const model = ViewModel.construct('SECONDARY', addresses, {} as AddressFormData, content, [])
+    it('content has correct headings', () => {
+      expect(model.content).toEqual(content.pages.manualCurfewAddress)
+    })
+  })
 })

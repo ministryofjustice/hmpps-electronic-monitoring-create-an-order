@@ -1,12 +1,10 @@
-import AddressPageContent from '../../../types/i18n/pages/address'
+import ManualAddressPageContent from '../../../types/i18n/pages/manualAddress'
 
-const manualCurfewAddressPageContent: Omit<AddressPageContent, 'questions'> & {
-  questions: Omit<AddressPageContent['questions'], 'hasAnotherAddress'>
-} = {
+const manualCurfewAddressPageContent: ManualAddressPageContent = {
   title: 'What is the curfew address?',
   section: 'Electronic monitoring required',
   legend: '',
-  helpText: 'For installation at source this is the address of the prison or probation office.',
+  helpText: '',
   questions: {
     addressLine1: {
       text: 'Address line 1',

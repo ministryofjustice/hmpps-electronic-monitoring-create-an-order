@@ -40,6 +40,7 @@ import ResponsibleOfficerPageContent from './pages/responsibleOfficer'
 import PostcodeLookupPageContent, { AddressResultPageContent } from './pages/postcodeLookup'
 import NationalSecurityDirectoratePageConetent from './pages/national-security-directorate'
 import IsAddressChangePageContent from './pages/isAddressChange'
+import ManualAddressPageContent from './pages/manualAddress'
 
 type I18n = {
   pages: {
@@ -90,13 +91,13 @@ type I18n = {
     pdu: ProbationDeliveryUnit
     deviceWearerAddress: PostcodeLookupPageContent
     deviceWearerAddressResult: AddressResultPageContent
-    manualDeviceWearerAddress: AddressPageContent
+    manualDeviceWearerAddress: ManualAddressPageContent
     tagAtSourceAddress: PostcodeLookupPageContent
     tagAtSourceAddressResult: AddressResultPageContent
-    manualTagAtSourceAddress: AddressPageContent
+    manualTagAtSourceAddress: ManualAddressPageContent
     curfewAddress: PostcodeLookupPageContent
     curfewAddressResult: AddressResultPageContent
-    manualCurfewAddress: AddressPageContent
+    manualCurfewAddress: ManualAddressPageContent
     appointmentAddress: PostcodeLookupPageContent
     nationalSecurityDirectorate: NationalSecurityDirectoratePageConetent
     isAddressChange: IsAddressChangePageContent

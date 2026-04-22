@@ -52,6 +52,9 @@ import curfewAddressPageContent, { curfewAddressResultPageContent } from './page
 import appointmentAddressPageContent from './pages/appointmentAddress'
 import nationalSecurityDirectoratePageConetent from './pages/national-security-directorate'
 import isAddressChangePageContent from './pages/isAddressChange'
+import manualDeviceWearerAddressPageContent from './pages/manualDeviceWearerAddress'
+import manualTagAtSourceAddressPageContent from './pages/manualTagAtSourceAddress'
+import manualCurfewAddressPageContent from './pages/manualCurfewAddress'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
   return {
@@ -107,6 +110,9 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       tagAtSourceAddressResult: tagAtSourceAddressResultPageContent,
       curfewAddress: curfewAddressPageContent,
       curfewAddressResult: curfewAddressResultPageContent,
+      manualDeviceWearerAddress: manualDeviceWearerAddressPageContent,
+      manualTagAtSourceAddress: manualTagAtSourceAddressPageContent,
+      manualCurfewAddress: manualCurfewAddressPageContent,
       appointmentAddress: appointmentAddressPageContent,
       nationalSecurityDirectorate: nationalSecurityDirectoratePageConetent,
       isAddressChange: isAddressChangePageContent,

@@ -4,10 +4,11 @@
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% set section = pageContent.section %}
-{% set heading = pageContent.title %}
-{% set legend = pageContent.legend %}
-{% set helpText = pageContent.helpText %}
+{% set section = content.section %}
+{% set heading = content.title %}
+{% set legend = content.legend %}
+{% set helpText = content.helpText %}
+{% set questions = content.questions %}
 
 {% block formInputs %}
 

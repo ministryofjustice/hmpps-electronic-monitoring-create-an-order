@@ -5,15 +5,16 @@ import { createGovukErrorSummary } from '../../../utils/errors'
 import { Address, AddressType } from '../../../models/Address'
 import { AddressFormData } from '../../../models/form-data/address'
 import I18n from '../../../types/i18n'
-import AddressPageContent from '../../../types/i18n/pages/address'
+import ManualAddressPageContent from '../../../types/i18n/pages/manualAddress'
 
 type AddressViewModel = ViewModel<Address> & {
-  content?: AddressPageContent
+  content: ManualAddressPageContent
 }
 
 const constructFromFormData = (
   addressType: AddressType,
   formData: AddressFormData,
+  content: I18n,
   validationErrors: ValidationResult,
 ): AddressViewModel => {
   return {
@@ -40,6 +41,7 @@ const constructFromFormData = (
       value: formData.postcode,
       error: getError(validationErrors, 'postcode'),
     },
+    content: getContent(content, addressType),
     errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
@@ -79,18 +81,18 @@ const construct = (
   validationErrors: ValidationResult,
 ): AddressViewModel => {
   if (validationErrors.length > 0) {
-    return constructFromFormData(addressType, formData, validationErrors)
+    return constructFromFormData(addressType, formData, content, validationErrors)
   }
 
   return constructFromEntity(addressType, addresses, content)
 }
 
-function getContent(content: I18n, addressType: AddressType): AddressPageContent {
-  const mapping: Record<AddressType, AddressPageContent> = {
+function getContent(content: I18n, addressType: AddressType): ManualAddressPageContent {
+  const mapping: Record<AddressType, ManualAddressPageContent> = {
     PRIMARY: content.pages.manualDeviceWearerAddress,
-    INSTALLATION: content.pages.manualTagAtSourceAddress,
-    TERTIARY: content.pages.manualCurfewAddress,
     SECONDARY: content.pages.manualCurfewAddress,
+    TERTIARY: content.pages.manualCurfewAddress,
+    INSTALLATION: content.pages.manualTagAtSourceAddress,
 
     // These are also not used currently, can potentially be removed
     RESPONSIBLE_ADULT: content.pages.manualDeviceWearerAddress,
