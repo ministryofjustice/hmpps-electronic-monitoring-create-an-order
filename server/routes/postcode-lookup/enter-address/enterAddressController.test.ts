@@ -21,6 +21,24 @@ const primaryAddress = {
   postcode: '',
 }
 
+const secondaryAddress = {
+  addressType: AddressTypeEnum.Enum.SECONDARY,
+  addressLine1: '',
+  addressLine2: '',
+  addressLine3: '',
+  addressLine4: '',
+  postcode: '',
+}
+
+const tertiaryAddress = {
+  addressType: AddressTypeEnum.Enum.TERTIARY,
+  addressLine1: '',
+  addressLine2: '',
+  addressLine3: '',
+  addressLine4: '',
+  postcode: '',
+}
+
 const installationAddress = {
   addressType: AddressTypeEnum.Enum.INSTALLATION,
   addressLine1: '',
@@ -32,7 +50,7 @@ const installationAddress = {
 
 const mockOrder = getMockOrder({
   deviceWearer: createDeviceWearer({ noFixedAbode: false }),
-  addresses: [primaryAddress, installationAddress],
+  addresses: [primaryAddress, secondaryAddress, tertiaryAddress, installationAddress],
 })
 
 describe('EnterAddressController', () => {
@@ -63,6 +81,8 @@ describe('EnterAddressController', () => {
   describe('getEnterAddress', () => {
     it.each([
       ['Primary', 'primary', true],
+      ['Secondary', 'secondary', true],
+      ['Tertiary', 'tertiary', false],
       ['Installation', 'installation', false],
     ])('it should render the %s address form with the correct address', async (_: string, param: string) => {
       // Given
