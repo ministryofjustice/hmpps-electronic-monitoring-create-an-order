@@ -41,5 +41,8 @@ context('address list', () => {
     page.form.summaryList.shouldExist()
     page.form.summaryList.shouldHaveItem('Main address', '10 Downing Street, London, ENGLAND, SW1A 2AA')
     page.form.summaryList.shouldHaveItem('Second curfew address', '11 Downing Street, London, ENGLAND, SW1A 2AA')
+
+    page.form.additionalAddresses.shouldExist()
+    page.form.additionalAddresses.shouldHaveAllOptions()
   })
 })
