@@ -6,6 +6,6 @@ export default class AddressListPage extends AppFormPage {
   public form = new AddressListComponent()
 
   constructor() {
-    super('WIP Address List', paths.POSTCODE_LOOKUP.FIND_ADDRESS)
+    super('WIP Address List', paths.POSTCODE_LOOKUP.ADDRESS_LIST)
   }
 }
