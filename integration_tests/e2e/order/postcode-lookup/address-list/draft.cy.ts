@@ -36,6 +36,10 @@ context('address list', () => {
   })
 
   it('has the correct elements', () => {
-    Page.visit(AddressListPage, { orderId: mockOrderId })
+    const page = Page.visit(AddressListPage, { orderId: mockOrderId })
+
+    page.form.summaryList.shouldExist()
+    page.form.summaryList.shouldHaveItem('Main address', '10 Downing Street, London, ENGLAND, SW1A 2AA')
+    page.form.summaryList.shouldHaveItem('Second curfew address', '11 Downing Street, London, ENGLAND, SW1A 2AA')
   })
 })
