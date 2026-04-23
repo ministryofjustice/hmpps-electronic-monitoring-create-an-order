@@ -1,4 +1,4 @@
-import PostcodeLookupPageContent from '../../../types/i18n/pages/postcodeLookup'
+import PostcodeLookupPageContent, { ConfirmAddressPageContent } from '../../../types/i18n/pages/postcodeLookup'
 
 const appointmentAddressPageContent: PostcodeLookupPageContent = {
   title: 'Find the appointment address',
@@ -15,6 +15,13 @@ const appointmentAddressPageContent: PostcodeLookupPageContent = {
       hint: 'For example, 15 or Prospect Cottage',
     },
   },
+}
+
+export const appointmentAddressConfirmPageContent: ConfirmAddressPageContent = {
+  title: 'Confirm the appointment address',
+  section: 'Electronic monitoring required',
+  legend: '',
+  helpText: '',
 }
 
 export default appointmentAddressPageContent

@@ -76,8 +76,13 @@ export default class AddressResultController {
       data: { ...address, addressType },
     })
 
-    res.redirect(
-      paths.POSTCODE_LOOKUP.CONFIRM_ADDRESS.replace(':orderId', order.id).replace(':addressType', addressType),
+    const redirectUrl = this.postcodeService.buildUrl(
+      paths.POSTCODE_LOOKUP.CONFIRM_ADDRESS,
+      order.id,
+      addressType,
+      postcode,
+      buildingId,
     )
+    res.redirect(redirectUrl)
   }
 }

@@ -13,6 +13,18 @@ context('address results', () => {
       httpStatus: 200,
       id: mockOrderId,
       status: 'IN_PROGRESS',
+      order: {
+        addresses: [
+          {
+            addressType: 'PRIMARY',
+            addressLine1: '10 Downing Street',
+            addressLine2: '',
+            addressLine3: 'London',
+            addressLine4: 'ENGLAND',
+            postcode: 'SW1A 2AA',
+          },
+        ],
+      },
     })
 
     cy.signIn()

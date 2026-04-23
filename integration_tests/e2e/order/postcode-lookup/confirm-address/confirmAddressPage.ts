@@ -6,6 +6,6 @@ export default class ConfirmAddressPage extends AppFormPage {
   public form = new ConfirmAddressComponent()
 
   constructor() {
-    super('WIP Confirm Address', paths.POSTCODE_LOOKUP.FIND_ADDRESS)
+    super(/Confirm the .* address/, paths.POSTCODE_LOOKUP.CONFIRM_ADDRESS)
   }
 }
