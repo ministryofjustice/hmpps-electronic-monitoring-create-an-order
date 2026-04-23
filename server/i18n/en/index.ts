@@ -46,10 +46,19 @@ import dapaClauseListPageContent from './pages/dapoClauseListPage'
 import notifyingOrganisationPageContent from './pages/notifyingOrganisation'
 import responsibleOrganisationPageContent from './pages/responsibleOrganisation'
 import responsibleOfficerPageContent from './pages/responsibleOfficer'
-import deviceWearerAddressPageContent, { deviceWearerAddressResultPageContent } from './pages/deviceWearerAddress'
-import tagAtSourceAddressPageContent, { tagAtSourceAddressResultPageContent } from './pages/tagAtSourceAddress'
-import curfewAddressPageContent, { curfewAddressResultPageContent } from './pages/curfewAddress'
-import appointmentAddressPageContent from './pages/appointmentAddress'
+import deviceWearerAddressPageContent, {
+  deviceWearerAddressConfirmPageContent,
+  deviceWearerAddressResultPageContent,
+} from './pages/deviceWearerAddress'
+import tagAtSourceAddressPageContent, {
+  tagAtSourceAddressConfirmPageContent,
+  tagAtSourceAddressResultPageContent,
+} from './pages/tagAtSourceAddress'
+import curfewAddressPageContent, {
+  curfewAddressConfirmPageContent,
+  curfewAddressResultPageContent,
+} from './pages/curfewAddress'
+import appointmentAddressPageContent, { appointmentAddressConfirmPageContent } from './pages/appointmentAddress'
 import nationalSecurityDirectoratePageConetent from './pages/national-security-directorate'
 import isAddressChangePageContent from './pages/isAddressChange'
 import manualDeviceWearerAddressPageContent from './pages/manualDeviceWearerAddress'
@@ -106,14 +115,18 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       responsibleOfficer: responsibleOfficerPageContent,
       deviceWearerAddress: deviceWearerAddressPageContent,
       deviceWearerAddressResult: deviceWearerAddressResultPageContent,
+      deviceWearerAddressConfirm: deviceWearerAddressConfirmPageContent,
       tagAtSourceAddress: tagAtSourceAddressPageContent,
       tagAtSourceAddressResult: tagAtSourceAddressResultPageContent,
+      tagAtSourceAddressConfirm: tagAtSourceAddressConfirmPageContent,
       curfewAddress: curfewAddressPageContent,
       curfewAddressResult: curfewAddressResultPageContent,
+      curfewAddressConfirm: curfewAddressConfirmPageContent,
       manualDeviceWearerAddress: manualDeviceWearerAddressPageContent,
       manualTagAtSourceAddress: manualTagAtSourceAddressPageContent,
       manualCurfewAddress: manualCurfewAddressPageContent,
       appointmentAddress: appointmentAddressPageContent,
+      appointmentAddressConfirm: appointmentAddressConfirmPageContent,
       nationalSecurityDirectorate: nationalSecurityDirectoratePageConetent,
       isAddressChange: isAddressChangePageContent,
     },

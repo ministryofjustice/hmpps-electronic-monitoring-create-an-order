@@ -82,5 +82,5 @@ export default function fillInNewOrder({ startDate = null, files }): void {
   const searchPage = Page.verifyOnPage(SearchPage)
   searchPage.searchBox.type(deviceWearerDetails.lastName)
   searchPage.searchButton.click()
-  searchPage.ordersList.contains(deviceWearerDetails.fullName).click()
+  searchPage.ordersList.contains(`${deviceWearerDetails.firstName} ${deviceWearerDetails.lastName}`).click()
 }

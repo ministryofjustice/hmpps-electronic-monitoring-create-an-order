@@ -8,13 +8,13 @@ import EnterAddressController from './enter-address/controller'
 import { Services } from '../../services'
 
 const createPostcodeLookupRouter = (
-  services: Pick<Services, 'postcodeService' | 'addressService' | 'auditService'>,
+  services: Pick<Services, 'postcodeService' | 'addressService' | 'taskListService' | 'auditService'>,
 ): Router => {
   const router = Router({ mergeParams: true })
 
   const findAddressController = new FindAddressController(services.postcodeService)
   const addressResultController = new AddressResultController(services.postcodeService, services.addressService)
-  const confirmAddressController = new ConfirmAddressController()
+  const confirmAddressController = new ConfirmAddressController(services.postcodeService, services.taskListService)
   const addressListController = new AddressListController()
   const enterAddressController = new EnterAddressController(services.auditService, services.addressService)
   router.get('/find-address/:addressType', asyncMiddleware(findAddressController.view))

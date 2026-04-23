@@ -23,6 +23,7 @@ const mockOrder = getMockOrder({
     complianceAndEnforcementPersonReference: null,
     courtCaseReferenceNumber: null,
     firstName: 'tester',
+    middleName: 'teste',
     lastName: 'testington',
     alias: 'test',
     dateOfBirth: '1980-01-01T00:00:00.000Z',
@@ -83,6 +84,9 @@ describe('DeviceWearerController', () => {
         expect.objectContaining({
           firstName: {
             value: 'tester',
+          },
+          middleName: {
+            value: 'teste',
           },
           lastName: {
             value: 'testington',
@@ -324,6 +328,7 @@ describe('DeviceWearerController', () => {
         complianceAndEnforcementPersonReference: null,
         courtCaseReferenceNumber: null,
         firstName: 'tester',
+        middleName: null,
         lastName: 'testington',
         alias: 'test',
         dateOfBirth: '1980-01-01T00:00:00.000Z',
@@ -389,6 +394,7 @@ describe('DeviceWearerController', () => {
         complianceAndEnforcementPersonReference: null,
         courtCaseReferenceNumber: null,
         firstName: 'tester',
+        middleName: null,
         lastName: 'testington',
         alias: 'test',
         dateOfBirth: '1980-01-01T00:00:00.000Z',
@@ -457,6 +463,7 @@ describe('DeviceWearerController', () => {
         complianceAndEnforcementPersonReference: null,
         courtCaseReferenceNumber: null,
         firstName: 'tester',
+        middleName: null,
         lastName: 'testington',
         alias: 'test',
         dateOfBirth: '1980-01-01T00:00:00.000Z',

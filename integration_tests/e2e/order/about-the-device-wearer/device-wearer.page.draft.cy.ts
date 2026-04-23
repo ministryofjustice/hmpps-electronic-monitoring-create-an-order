@@ -14,6 +14,7 @@ const testOrder = {
     complianceAndEnforcementPersonReference: null,
     courtCaseReferenceNumber: null,
     firstName: 'test',
+    middleName: 'teste',
     lastName: 'tester',
     alias: null,
     dateOfBirth: null,

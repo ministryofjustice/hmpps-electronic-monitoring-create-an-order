@@ -8,7 +8,7 @@ generic-service:
   replicaCount: 4
 
   image:
-    repository: quay.io/hmpps/hmpps-electronic-monitoring-create-an-order
+    repository: ghcr.io/ministryofjustice/hmpps-electronic-monitoring-create-an-order
     tag: app_version # override at deployment time
     port: 3000
 

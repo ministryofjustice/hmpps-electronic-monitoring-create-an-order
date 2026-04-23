@@ -1,4 +1,7 @@
-import PostcodeLookupPageContent, { AddressResultPageContent } from '../../../types/i18n/pages/postcodeLookup'
+import PostcodeLookupPageContent, {
+  AddressResultPageContent,
+  ConfirmAddressPageContent,
+} from '../../../types/i18n/pages/postcodeLookup'
 
 const curfewAddressPageContent: PostcodeLookupPageContent = {
   title: 'Find the curfew address',
@@ -19,6 +22,13 @@ const curfewAddressPageContent: PostcodeLookupPageContent = {
 
 export const curfewAddressResultPageContent: AddressResultPageContent = {
   title: 'Select the curfew address',
+  section: 'About the device wearer',
+  legend: '',
+  helpText: '',
+}
+
+export const curfewAddressConfirmPageContent: ConfirmAddressPageContent = {
+  title: 'Confirm the curfew address',
   section: 'About the device wearer',
   legend: '',
   helpText: '',

@@ -100,7 +100,7 @@ export type PersonOfInterest = {
   courtCaseReferenceNumber?: string
 
   firstName: string
-  firstNames: string
+  middleName: string
   lastName: string
   fullName: string
   alias: string
@@ -136,7 +136,7 @@ export const createFakePerson = (dob: Date, firstNameOverride?: string): Partial
 
   return {
     firstName,
-    firstNames: [firstName, middleName].join(' '),
+    middleName,
     lastName,
     fullName: [firstName, middleName, lastName].join(' '),
     alias,

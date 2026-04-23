@@ -614,6 +614,7 @@ context('Device wearer - check your answers', () => {
             complianceAndEnforcementPersonReference: 'cepr',
             courtCaseReferenceNumber: 'ccrn',
             firstName: 'test',
+            middleName: 'teste',
             lastName: 'tester',
             alias: 'tes',
             dateOfBirth: '2000-01-01T00:00:00Z',
@@ -655,6 +656,7 @@ context('Device wearer - check your answers', () => {
       page.personDetailsSection.shouldExist()
       page.personDetailsSection.shouldHaveItems([
         { key: "What is the device wearer's first name?", value: 'test' },
+        { key: "What is the device wearer's middle name?", value: 'teste' },
         { key: "What is the device wearer's last name?", value: 'tester' },
         { key: "What is the device wearer's preferred name or names? (optional)", value: 'tes' },
         { key: "What is the device wearer's date of birth?", value: '01/01/2000' },

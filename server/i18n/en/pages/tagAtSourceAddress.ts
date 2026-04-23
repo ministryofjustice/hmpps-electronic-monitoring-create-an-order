@@ -1,4 +1,7 @@
-import PostcodeLookupPageContent, { AddressResultPageContent } from '../../../types/i18n/pages/postcodeLookup'
+import PostcodeLookupPageContent, {
+  AddressResultPageContent,
+  ConfirmAddressPageContent,
+} from '../../../types/i18n/pages/postcodeLookup'
 
 const tagAtSourceAddressPageContent: PostcodeLookupPageContent = {
   title: 'Find the installation address',
@@ -19,6 +22,13 @@ const tagAtSourceAddressPageContent: PostcodeLookupPageContent = {
 
 export const tagAtSourceAddressResultPageContent: AddressResultPageContent = {
   title: 'Select the installation address',
+  section: 'Electronic monitoring required',
+  legend: '',
+  helpText: '',
+}
+
+export const tagAtSourceAddressConfirmPageContent: ConfirmAddressPageContent = {
+  title: 'Confirm the installation address',
   section: 'Electronic monitoring required',
   legend: '',
   helpText: '',

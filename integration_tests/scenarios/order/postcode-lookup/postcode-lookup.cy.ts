@@ -85,7 +85,9 @@ context('Postcode Lookup', () => {
     // TODO Check answer
   })
 
-  it('Should able to enter address manually', () => {
+  // disabled as confirm address page relies on address existing
+  // re-enable when manual address page is added
+  it.skip('Should able to enter address manually', () => {
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
     })

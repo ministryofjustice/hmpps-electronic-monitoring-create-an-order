@@ -22,6 +22,12 @@ const deviceWearerPageContent: DeviceWearerPageContent = {
     firstName: {
       text: "What is the device wearer's first name?",
     },
+    middleName: {
+      text: "What is the device wearer's middle name? (optional)",
+    },
+    lastName: {
+      text: "What is the device wearer's last name?",
+    },
     gender: {
       text: "What is the device wearer's gender?",
       hint: 'Gender can be different to their sex registered at birth.',
@@ -32,9 +38,6 @@ const deviceWearerPageContent: DeviceWearerPageContent = {
     language: {
       text: 'What language does the interpreter need to use?',
       hint: 'Select the language the device wearer is most comfortable using.',
-    },
-    lastName: {
-      text: "What is the device wearer's last name?",
     },
     otherDisability: {
       text: "What is the device wearer's disability or health condition?",
