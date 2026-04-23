@@ -40,7 +40,7 @@ context('Enter address page', () => {
 
     page.form.fillInWith({ addressLine1: '70 Maple Street', addressLine3: 'London', postcode: 'SA11 1AA' })
 
-    page.form.saveAndContinueButton.click()
+    page.form.continueButton.click()
 
     Page.verifyOnPage(ConfirmAddressPage)
 

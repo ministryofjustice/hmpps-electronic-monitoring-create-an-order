@@ -10,6 +10,7 @@ const expectedValidationErrors = {
 
 context('Enter address page', () => {
   const mockOrderId = uuidv4()
+  const apiPath = '/address'
 
   beforeEach(() => {
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -29,7 +30,7 @@ context('Enter address page', () => {
       addressType: 'PRIMARY',
     })
 
-    page.form.saveAndContinueButton.click()
+    page.form.continueButton.click()
 
     Page.verifyOnPage(EnterAddressPage)
 
@@ -50,7 +51,7 @@ context('Enter address page', () => {
 
     page.form.fillInWith({ addressLine1: '90 Test Street' })
 
-    page.form.saveAndContinueButton.click()
+    page.form.continueButton.click()
 
     Page.verifyOnPage(EnterAddressPage)
 
@@ -60,5 +61,31 @@ context('Enter address page', () => {
     page.errorSummary.shouldExist()
     page.errorSummary.shouldHaveError(expectedValidationErrors.addressLine3)
     page.errorSummary.shouldHaveError(expectedValidationErrors.postcode)
+  })
+
+  it('Show validation errors from API response if frontend validation passes', () => {
+    cy.task('stubCemoSubmitOrder', {
+      httpStatus: 400,
+      id: mockOrderId,
+      subPath: apiPath,
+      response: [{ field: 'postcode', error: 'Backend postcode validation error' }],
+    })
+    const page = Page.visit(EnterAddressPage, {
+      orderId: mockOrderId,
+      addressType: 'PRIMARY',
+    })
+    const validFormData = {
+      addressLine1: '1 Buckingham Palace',
+      addressLine3: 'London',
+      postcode: 'SW1A 1AA',
+      hasAnotherAddress: 'Yes',
+    }
+    page.form.fillInWith(validFormData)
+    page.form.continueButton.click()
+
+    Page.verifyOnPage(EnterAddressPage)
+    page.errorSummary.shouldExist()
+    page.errorSummary.shouldHaveError('Backend postcode validation error')
+    page.form.postcodeField.shouldHaveValidationMessage('Backend postcode validation error')
   })
 })
