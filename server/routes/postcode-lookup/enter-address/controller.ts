@@ -52,11 +52,12 @@ export default class EnterAddressController {
       req.flash('validationErrors', result)
 
       res.redirect(this.getCurrentPageUrl(addressType, orderId))
-      return
+    } else if (action === 'continue') {
+      res.redirect(
+        paths.POSTCODE_LOOKUP.CONFIRM_ADDRESS.replace(':orderId', order.id).replace(':addressType', addressType),
+      )
+    } else {
+      res.redirect(paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', orderId).replace(':addressType', addressType))
     }
-
-    res.redirect(
-      paths.POSTCODE_LOOKUP.CONFIRM_ADDRESS.replace(':orderId', order.id).replace(':addressType', addressType),
-    )
   }
 }
