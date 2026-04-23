@@ -36,7 +36,6 @@ export default class EnterAddressController {
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId, addressType } = req.params
     const { action, ...formData } = AddressFormDataModel.parse(req.body)
-    const order = req.order!
 
     const result = await this.addressService.updateAddress({
       accessToken: res.locals.user.token,
@@ -53,9 +52,10 @@ export default class EnterAddressController {
 
       res.redirect(this.getCurrentPageUrl(addressType, orderId))
     } else if (action === 'continue') {
-      res.redirect(
-        paths.POSTCODE_LOOKUP.CONFIRM_ADDRESS.replace(':orderId', order.id).replace(':addressType', addressType),
-      )
+      // TO DO: Update confirm address to accept manual address entry
+      // res.redirect(
+      //   paths.POSTCODE_LOOKUP.CONFIRM_ADDRESS.replace(':orderId', order.id).replace(':addressType', addressType),
+      // )
     } else {
       res.redirect(paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', orderId).replace(':addressType', addressType))
     }
