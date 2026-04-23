@@ -38,11 +38,6 @@ export default class EnterAddressController {
     const { action, ...formData } = AddressFormDataModel.parse(req.body)
     const order = req.order!
 
-    if (action === 'back') {
-      res.redirect(paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', orderId).replace(':addressType', addressType))
-      return
-    }
-
     const result = await this.addressService.updateAddress({
       accessToken: res.locals.user.token,
       orderId,

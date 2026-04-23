@@ -41,4 +41,24 @@ context('Enter address page', () => {
     page.errorSummary.shouldHaveError(expectedValidationErrors.addressLine3)
     page.errorSummary.shouldHaveError(expectedValidationErrors.postcode)
   })
+
+  it('Still shows the data entered if other fields empty', () => {
+    const page = Page.visit(EnterAddressPage, {
+      orderId: mockOrderId,
+      addressType: 'PRIMARY',
+    })
+
+    page.form.fillInWith({ addressLine1: '90 Test Street' })
+
+    page.form.saveAndContinueButton.click()
+
+    Page.verifyOnPage(EnterAddressPage)
+
+    page.form.addressLine1Field.shouldHaveValue('90 Test Street')
+    page.form.addressLine3Field.shouldHaveValidationMessage(expectedValidationErrors.addressLine3)
+    page.form.postcodeField.shouldHaveValidationMessage(expectedValidationErrors.postcode)
+    page.errorSummary.shouldExist()
+    page.errorSummary.shouldHaveError(expectedValidationErrors.addressLine3)
+    page.errorSummary.shouldHaveError(expectedValidationErrors.postcode)
+  })
 })
