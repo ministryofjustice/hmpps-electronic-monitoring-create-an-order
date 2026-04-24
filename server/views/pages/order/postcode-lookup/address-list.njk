@@ -12,7 +12,8 @@
       classes: "govuk-!-margin-bottom-9"
   }) }}
 
-  {{ govukRadios({
+  {% if showAddAnother %}
+    {{ govukRadios({
       name: "addAnother",
       classes: "govuk-radios--inline",
       fieldset: {
@@ -36,4 +37,5 @@
       ],
       errorMessage: addAnother.error
     }) }}
+  {% endif %}
 {% endblock %}

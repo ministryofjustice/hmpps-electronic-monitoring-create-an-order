@@ -45,4 +45,46 @@ context('address list', () => {
     page.form.additionalAddresses.shouldExist()
     page.form.additionalAddresses.shouldHaveAllOptions()
   })
+
+  context('when the user has two additional addresses', () => {
+    it('then add address question is hidden', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          addresses: [
+            {
+              addressType: 'PRIMARY',
+              addressLine1: '10 Downing Street',
+              addressLine2: '',
+              addressLine3: 'London',
+              addressLine4: 'ENGLAND',
+              postcode: 'SW1A 2AA',
+            },
+            {
+              addressType: 'SECONDARY',
+              addressLine1: '11 Downing Street',
+              addressLine2: '',
+              addressLine3: 'London',
+              addressLine4: 'ENGLAND',
+              postcode: 'SW1A 2AA',
+            },
+            {
+              addressType: 'TERTIARY',
+              addressLine1: '12 Downing Street',
+              addressLine2: '',
+              addressLine3: 'London',
+              addressLine4: 'ENGLAND',
+              postcode: 'SW1A 2AA',
+            },
+          ],
+        },
+      })
+
+      Page.visit(AddressListPage, { orderId: mockOrderId })
+
+      cy.should('not.contain', 'Are there any other addresses where the device wearer will be during curfew hours?')
+    })
+  })
 })
