@@ -6,32 +6,16 @@ import HmppsAuditClient from '../../../data/hmppsAuditClient'
 import AuditService from '../../../services/auditService'
 import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
 import AddressService from '../../../services/addressService'
+import PostcodeService from '../postcodeService'
 
 jest.mock('../../../services/orderService')
 jest.mock('../../../services/addressService')
 jest.mock('../../../data/hmppsAuditClient')
 jest.mock('../../../data/restClient')
+jest.mock('../postcodeService')
 
 const primaryAddress = {
   addressType: AddressTypeEnum.Enum.PRIMARY,
-  addressLine1: '',
-  addressLine2: '',
-  addressLine3: '',
-  addressLine4: '',
-  postcode: '',
-}
-
-const secondaryAddress = {
-  addressType: AddressTypeEnum.Enum.SECONDARY,
-  addressLine1: '',
-  addressLine2: '',
-  addressLine3: '',
-  addressLine4: '',
-  postcode: '',
-}
-
-const tertiaryAddress = {
-  addressType: AddressTypeEnum.Enum.TERTIARY,
   addressLine1: '',
   addressLine2: '',
   addressLine3: '',
@@ -50,7 +34,7 @@ const installationAddress = {
 
 const mockOrder = getMockOrder({
   deviceWearer: createDeviceWearer({ noFixedAbode: false }),
-  addresses: [primaryAddress, secondaryAddress, tertiaryAddress, installationAddress],
+  addresses: [primaryAddress, installationAddress],
 })
 
 describe('EnterAddressController', () => {
@@ -59,6 +43,7 @@ describe('EnterAddressController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let enterAddressController: EnterAddressController
   let mockAddressService: jest.Mocked<AddressService>
+  let mockPostcodeService: jest.Mocked<PostcodeService>
 
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
@@ -75,14 +60,15 @@ describe('EnterAddressController', () => {
 
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockAddressService = new AddressService(mockRestClient) as jest.Mocked<AddressService>
-    enterAddressController = new EnterAddressController(mockAuditService, mockAddressService)
+    mockPostcodeService = {
+      buildUrl: jest.fn(),
+    } as unknown as jest.Mocked<PostcodeService>
+    enterAddressController = new EnterAddressController(mockAuditService, mockAddressService, mockPostcodeService)
   })
 
   describe('getEnterAddress', () => {
     it.each([
       ['Primary', 'primary', true],
-      ['Secondary', 'secondary', true],
-      ['Tertiary', 'tertiary', false],
       ['Installation', 'installation', false],
     ])('it should render the %s address form with the correct address', async (_: string, param: string) => {
       // Given

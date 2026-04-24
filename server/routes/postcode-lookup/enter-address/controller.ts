@@ -6,16 +6,14 @@ import { isValidationResult } from '../../../models/Validation'
 import { AddressFormDataModel } from '../../../models/form-data/address'
 import { AuditService } from '../../../services'
 import AddressService from '../../../services/addressService'
+import PostcodeService from '../postcodeService'
 
 export default class EnterAddressController {
   constructor(
     private readonly auditService: AuditService,
     private readonly addressService: AddressService,
+    private readonly postcodeService: PostcodeService,
   ) {}
-
-  getCurrentPageUrl(addressType: string, orderId: string) {
-    return paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', orderId).replace(':addressType', addressType)
-  }
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const { addressType } = req.params
@@ -50,12 +48,19 @@ export default class EnterAddressController {
       req.flash('formData', formData)
       req.flash('validationErrors', result)
 
-      res.redirect(this.getCurrentPageUrl(addressType, orderId))
+      res.redirect(
+        paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', orderId).replace(':addressType', addressType),
+      )
     } else if (action === 'continue') {
-      // TO DO: Update confirm address to accept manual address entry
-      // res.redirect(
-      //   paths.POSTCODE_LOOKUP.CONFIRM_ADDRESS.replace(':orderId', order.id).replace(':addressType', addressType),
-      // )
+      res.redirect(
+        this.postcodeService.buildUrl(
+          paths.POSTCODE_LOOKUP.CONFIRM_ADDRESS,
+          orderId,
+          addressType,
+          formData.postcode,
+          '',
+        ),
+      )
     } else {
       res.redirect(paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', orderId).replace(':addressType', addressType))
     }

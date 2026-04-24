@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../pages/page'
 import EnterAddressPage from './enterAddressPage'
+import ConfirmAddressPage from '../confirm-address/confirmAddressPage'
 
 context('Enter address page', () => {
   const mockOrderId = uuidv4()
@@ -12,6 +13,18 @@ context('Enter address page', () => {
       httpStatus: 200,
       id: mockOrderId,
       status: 'IN_PROGRESS',
+      order: {
+        addresses: [
+          {
+            addressType: 'PRIMARY',
+            addressLine1: '70 Maple Street',
+            addressLine2: '',
+            addressLine3: 'London',
+            addressLine4: '',
+            postcode: 'SA11 1AA',
+          },
+        ],
+      },
     })
 
     cy.task('stubCemoSubmitOrder', {
@@ -39,22 +52,24 @@ context('Enter address page', () => {
 
     page.form.fillInWith({ addressLine1: '70 Maple Street', addressLine3: 'London', postcode: 'SA11 1AA' })
 
-    // TO DO: Update confirm address to accept manual address entry
+    page.form.continueButton.click()
+    Page.verifyOnPage(ConfirmAddressPage)
 
-    // page.form.continueButton.click()
-    // Page.verifyOnPage(ConfirmAddressPage)
+    cy.contains('70 Maple Street')
+    cy.contains('London')
+    cy.contains('SA11 1AA')
 
-    // cy.task('stubCemoVerifyRequestReceived', {
-    //   uri: `/orders/${mockOrderId}/address`,
-    //   body: {
-    //     addressType: 'PRIMARY',
-    //     addressLine1: '70 Maple Street',
-    //     addressLine2: '',
-    //     addressLine3: 'London',
-    //     addressLine4: '',
-    //     postcode: 'SA11 1AA',
-    //     hasAnotherAddress: false,
-    //   },
-    // }).should('be.true')
+    cy.task('stubCemoVerifyRequestReceived', {
+      uri: `/orders/${mockOrderId}/address`,
+      body: {
+        addressType: 'PRIMARY',
+        addressLine1: '70 Maple Street',
+        addressLine2: '',
+        addressLine3: 'London',
+        addressLine4: '',
+        postcode: 'SA11 1AA',
+        hasAnotherAddress: false,
+      },
+    }).should('be.true')
   })
 })
