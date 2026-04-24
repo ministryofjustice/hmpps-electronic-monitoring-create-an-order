@@ -2,8 +2,9 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% set section = "About the device wearer" %}
-{% set heading = "Device wearer's addresses" %}
+{% set section = content.pages.addressList.section %}
+{% set heading = content.pages.addressList.title %}
+{% set questions = content.pages.addressList.questions %}
 
 {% block formInputs %}
 
@@ -18,7 +19,7 @@
       classes: "govuk-radios--inline",
       fieldset: {
         legend: {
-          text: 'Are there any other addresses where the device wearer will be during curfew hours?',
+          text: questions.addAnother.text,
           isPageHeading: false,
           classes: "govuk-fieldset__legend--s"
         }

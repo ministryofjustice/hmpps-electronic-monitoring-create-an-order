@@ -43,10 +43,10 @@ context('address list', () => {
     Page.verifyOnPage(AddressListPage, { orderId: mockOrderId })
 
     page.form.additionalAddresses.shouldHaveValidationMessage(
-      'Select Yes if there are any other addresses where the device wearer will be during curfew hours',
+      'Select yes if there are any other addresses where the device wearer will be during curfew hours',
     )
     page.errorSummary.verifyErrorSummary([
-      'Select Yes if there are any other addresses where the device wearer will be during curfew hours',
+      'Select yes if there are any other addresses where the device wearer will be during curfew hours',
     ])
   })
 })

@@ -213,7 +213,7 @@ const createAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOpt
     if (postcodeEnabled) {
       answers.push(
         createAnswer(
-          'Are there any other addresses where the device wearer will be during curfew hours?',
+          content.pages.addressList.questions.addAnother.text,
           'Yes',
           paths.POSTCODE_LOOKUP.ADDRESS_LIST.replace(':orderId', order.id),
         ),

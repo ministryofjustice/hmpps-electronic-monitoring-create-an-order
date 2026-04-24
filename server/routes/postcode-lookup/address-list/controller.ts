@@ -3,6 +3,7 @@ import paths from '../../../constants/paths'
 import ViewModel from './viewModel'
 import TaskListService from '../../../services/taskListService'
 import { ValidationResult } from '../../../models/Validation'
+import { validationErrors } from '../../../constants/validationErrors'
 
 export default class AddressListController {
   constructor(private readonly taskService: TaskListService) {}
@@ -23,7 +24,7 @@ export default class AddressListController {
     if (!addAnother && order.addresses.length < 3) {
       const errors: ValidationResult = [
         {
-          error: 'Select Yes if there are any other addresses where the device wearer will be during curfew hours',
+          error: validationErrors.postcodeLookup.addAnotherRequired,
           field: 'addAnother',
         },
       ]

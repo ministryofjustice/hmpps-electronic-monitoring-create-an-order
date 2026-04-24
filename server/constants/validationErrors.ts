@@ -157,6 +157,7 @@ interface ValidationErrors {
   }
   postcodeLookup: {
     postcodeRequired: string
+    addAnotherRequired: string
   }
   nationalSecurityDirectorate: {
     nationalSecurityDirectorateRequired: string
@@ -440,6 +441,8 @@ const validationErrors: ValidationErrors = {
   },
   postcodeLookup: {
     postcodeRequired: 'Enter the postcode',
+    addAnotherRequired:
+      'Select yes if there are any other addresses where the device wearer will be during curfew hours',
   },
   nationalSecurityDirectorate: {
     nationalSecurityDirectorateRequired: 'Select yes if the device wearer is being managed by the NSD',
