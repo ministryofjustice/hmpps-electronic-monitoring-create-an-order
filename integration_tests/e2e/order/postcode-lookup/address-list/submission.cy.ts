@@ -65,4 +65,49 @@ context('address list', () => {
 
     Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId })
   })
+
+  context('when the user enters two additional addresses', () => {
+    beforeEach(() => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          addresses: [
+            {
+              addressType: 'PRIMARY',
+              addressLine1: '10 Downing Street',
+              addressLine2: '',
+              addressLine3: 'London',
+              addressLine4: 'ENGLAND',
+              postcode: 'SW1A 2AA',
+            },
+            {
+              addressType: 'SECONDARY',
+              addressLine1: '11 Downing Street',
+              addressLine2: '',
+              addressLine3: 'London',
+              addressLine4: 'ENGLAND',
+              postcode: 'SW1A 2AA',
+            },
+            {
+              addressType: 'TERTIARY',
+              addressLine1: '12 Downing Street',
+              addressLine2: '',
+              addressLine3: 'London',
+              addressLine4: 'ENGLAND',
+              postcode: 'SW1A 2AA',
+            },
+          ],
+        },
+      })
+    })
+    it('allows the user to progress without saying no to add another', () => {
+      const page = Page.visit(AddressListPage, { orderId: mockOrderId })
+
+      page.form.saveAndContinueButton.click()
+
+      Page.verifyOnPage(InterestedPartiesPage, { orderId: mockOrderId })
+    })
+  })
 })

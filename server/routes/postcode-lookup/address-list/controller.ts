@@ -20,7 +20,7 @@ export default class AddressListController {
 
     const { addAnother } = req.body
 
-    if (!addAnother) {
+    if (!addAnother && order.addresses.length < 3) {
       const errors: ValidationResult = [
         {
           error: 'Select Yes if there are any other addresses where the device wearer will be during curfew hours',
