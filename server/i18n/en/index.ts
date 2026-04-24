@@ -61,6 +61,7 @@ import curfewAddressPageContent, {
 import appointmentAddressPageContent, { appointmentAddressConfirmPageContent } from './pages/appointmentAddress'
 import nationalSecurityDirectoratePageConetent from './pages/national-security-directorate'
 import isAddressChangePageContent from './pages/isAddressChange'
+import addressListContent from './pages/addressList'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
   return {
@@ -123,6 +124,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       appointmentAddressConfirm: appointmentAddressConfirmPageContent,
       nationalSecurityDirectorate: nationalSecurityDirectoratePageConetent,
       isAddressChange: isAddressChangePageContent,
+      addressList: addressListContent,
     },
     reference: getReferenceData(ddVersion),
   }

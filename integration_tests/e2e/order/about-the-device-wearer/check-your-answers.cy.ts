@@ -198,94 +198,125 @@ context('Device wearer - check your answers', () => {
       ])
     })
 
-    it('should show all addresses section', () => {
-      cy.task('stubCemoGetOrder', {
-        httpStatus: 200,
-        id: mockOrderId,
-        status: 'IN_PROGRESS',
-        order: {
-          contactDetails: {
-            contactNumber: '01234567890',
-            phoneNumberAvailable: true,
-          },
-          deviceWearer: {
-            nomisId: null,
-            pncId: null,
-            deliusId: null,
-            prisonNumber: null,
-            homeOfficeReferenceNumber: null,
-            complianceAndEnforcementPersonReference: null,
-            courtCaseReferenceNumber: null,
-            firstName: null,
-            lastName: null,
-            alias: null,
-            adultAtTimeOfInstallation: null,
-            sex: null,
-            gender: null,
-            dateOfBirth: null,
-            disabilities: null,
-            noFixedAbode: false,
-            interpreterRequired: null,
-          },
-          addresses: [
-            {
-              addressType: 'PRIMARY',
-              addressLine1: '10 downing street',
-              addressLine2: '',
-              addressLine3: 'London',
-              addressLine4: 'ENGLAND',
-              postcode: 'SW1A 2AA',
+    context('when they have all addresses', () => {
+      beforeEach(() => {
+        cy.signIn()
+
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: {
+            contactDetails: {
+              contactNumber: '01234567890',
+              phoneNumberAvailable: true,
             },
-            {
-              addressType: 'SECONDARY',
-              addressLine1: '3 Kelvin Close',
-              addressLine2: 'Birchwood',
-              addressLine3: 'Warrington',
-              addressLine4: 'ENGLAND',
-              postcode: 'WA3 7PB',
+            deviceWearer: {
+              nomisId: null,
+              pncId: null,
+              deliusId: null,
+              prisonNumber: null,
+              homeOfficeReferenceNumber: null,
+              complianceAndEnforcementPersonReference: null,
+              courtCaseReferenceNumber: null,
+              firstName: null,
+              lastName: null,
+              alias: null,
+              adultAtTimeOfInstallation: null,
+              sex: null,
+              gender: null,
+              dateOfBirth: null,
+              disabilities: null,
+              noFixedAbode: false,
+              interpreterRequired: null,
             },
-            {
-              addressType: 'TERTIARY',
-              addressLine1: '2 Dunlin Close',
-              addressLine2: 'Bolton',
-              addressLine3: 'Greater Manchester',
-              addressLine4: 'ENGLAND',
-              postcode: 'BL2 1EW',
+            addresses: [
+              {
+                addressType: 'PRIMARY',
+                addressLine1: '10 downing street',
+                addressLine2: '',
+                addressLine3: 'London',
+                addressLine4: 'ENGLAND',
+                postcode: 'SW1A 2AA',
+              },
+              {
+                addressType: 'SECONDARY',
+                addressLine1: '3 Kelvin Close',
+                addressLine2: 'Birchwood',
+                addressLine3: 'Warrington',
+                addressLine4: 'ENGLAND',
+                postcode: 'WA3 7PB',
+              },
+              {
+                addressType: 'TERTIARY',
+                addressLine1: '2 Dunlin Close',
+                addressLine2: 'Bolton',
+                addressLine3: 'Greater Manchester',
+                addressLine4: 'ENGLAND',
+                postcode: 'BL2 1EW',
+              },
+            ],
+            interestedParties: {
+              notifyingOrganisation: 'HOME_OFFICE',
+              notifyingOrganisationName: '',
+              notifyingOrganisationEmail: 'notifying@organisation',
+              responsibleOrganisation: 'POLICE',
+              responsibleOrganisationEmail: 'responsible@organisation',
+              responsibleOrganisationRegion: '',
+              responsibleOfficerName: 'name',
+              responsibleOfficerPhoneNumber: '01234567891',
             },
-          ],
-          interestedParties: {
-            notifyingOrganisation: 'HOME_OFFICE',
-            notifyingOrganisationName: '',
-            notifyingOrganisationEmail: 'notifying@organisation',
-            responsibleOrganisation: 'POLICE',
-            responsibleOrganisationEmail: 'responsible@organisation',
-            responsibleOrganisationRegion: '',
-            responsibleOfficerName: 'name',
-            responsibleOfficerPhoneNumber: '01234567891',
           },
-        },
+        })
       })
-      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.contactDetailsSection.shouldExist()
-      page.contactDetailsSection.shouldHaveItems([
-        { key: "What is the device wearer's telephone number?", value: '01234567890' },
-        { key: 'Does the device wearer have a contact telephone number?', value: 'Yes' },
-      ])
+      it('should show all addresses section', () => {
+        const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.deviceWearerAddressesSection.shouldExist()
-      page.deviceWearerAddressesSection.shouldHaveItems([
-        { key: 'Does the device wearer have a fixed address?', value: 'Yes' },
-        { key: "What is the device wearer's main address?", value: '10 downing street, London, ENGLAND, SW1A 2AA' },
-        {
-          key: "What is the device wearer's second address?",
-          value: '3 Kelvin Close, Birchwood, Warrington, ENGLAND, WA3 7PB',
-        },
-        {
-          key: "What is the device wearer's third address?",
-          value: '2 Dunlin Close, Bolton, Greater Manchester, ENGLAND, BL2 1EW',
-        },
-      ])
+        page.contactDetailsSection.shouldExist()
+        page.contactDetailsSection.shouldHaveItems([
+          { key: "What is the device wearer's telephone number?", value: '01234567890' },
+          { key: 'Does the device wearer have a contact telephone number?', value: 'Yes' },
+        ])
+
+        page.deviceWearerAddressesSection.shouldExist()
+        page.deviceWearerAddressesSection.shouldHaveItems([
+          { key: 'Does the device wearer have a fixed address?', value: 'Yes' },
+          { key: "What is the device wearer's main address?", value: '10 downing street, London, ENGLAND, SW1A 2AA' },
+          {
+            key: "What is the device wearer's second address?",
+            value: '3 Kelvin Close, Birchwood, Warrington, ENGLAND, WA3 7PB',
+          },
+          {
+            key: "What is the device wearer's third address?",
+            value: '2 Dunlin Close, Bolton, Greater Manchester, ENGLAND, BL2 1EW',
+          },
+        ])
+      })
+      context('postcode flow enabled', () => {
+        it('shows other addresses question', () => {
+          cy.task('setFeatureFlags', { INTERESTED_PARTIES_FLOW_ENABLED: false, POSTCODE_LOOKUP_ENABLED: true })
+
+          const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+          page.deviceWearerAddressesSection.shouldExist()
+          page.deviceWearerAddressesSection.shouldHaveItems([
+            { key: 'Does the device wearer have a fixed address?', value: 'Yes' },
+            { key: "What is the device wearer's main address?", value: '10 downing street, London, ENGLAND, SW1A 2AA' },
+            { key: 'Are there any other addresses where the device wearer will be during curfew hours?', value: 'Yes' },
+            {
+              key: "What is the device wearer's second address?",
+              value: '3 Kelvin Close, Birchwood, Warrington, ENGLAND, WA3 7PB',
+            },
+            {
+              key: "What is the device wearer's third address?",
+              value: '2 Dunlin Close, Bolton, Greater Manchester, ENGLAND, BL2 1EW',
+            },
+          ])
+
+          cy.task('resetFeatureFlags')
+        })
+      })
     })
   })
 
