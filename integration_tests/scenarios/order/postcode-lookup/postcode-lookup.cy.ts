@@ -81,18 +81,21 @@ context('Postcode Lookup', () => {
       deviceWearerDetails,
     })
 
-    fillinAddress({ findAddress: { postcode: 'SA11 1AA' }, addressResult: { address: '10' } })
+    fillinAddress({ findAddress: { postcode: 'SA11 1AA' }, addressResult: { address: '10' }, enterAddress: {} })
     // TODO Check answer
   })
 
-  // disabled as confirm address page relies on address existing
-  // re-enable when manual address page is added
-  it.skip('Should able to enter address manually', () => {
+  it('Should able to enter address manually', () => {
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
     })
 
-    fillinAddress({ findAddress: {}, addressResult: {} })
+    fillinAddress({
+      findAddress: {},
+      addressResult: {},
+      enterAddress: { addressLine1: '90 Hotel Street', addressLine3: 'Bath', postcode: 'BA1 2FJ' },
+    })
+
     // TODO Check answer
   })
 })

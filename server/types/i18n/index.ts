@@ -40,6 +40,7 @@ import ResponsibleOfficerPageContent from './pages/responsibleOfficer'
 import PostcodeLookupPageContent, { AddressResultPageContent, ConfirmAddressPageContent } from './pages/postcodeLookup'
 import NationalSecurityDirectoratePageConetent from './pages/national-security-directorate'
 import IsAddressChangePageContent from './pages/isAddressChange'
+import ManualAddressPageContent from './pages/manualAddress'
 
 type I18n = {
   pages: {
@@ -91,12 +92,15 @@ type I18n = {
     deviceWearerAddress: PostcodeLookupPageContent
     deviceWearerAddressResult: AddressResultPageContent
     deviceWearerAddressConfirm: ConfirmAddressPageContent
+    manualDeviceWearerAddress: ManualAddressPageContent
     tagAtSourceAddress: PostcodeLookupPageContent
     tagAtSourceAddressResult: AddressResultPageContent
     tagAtSourceAddressConfirm: ConfirmAddressPageContent
+    manualTagAtSourceAddress: ManualAddressPageContent
     curfewAddress: PostcodeLookupPageContent
     curfewAddressResult: AddressResultPageContent
     curfewAddressConfirm: ConfirmAddressPageContent
+    manualCurfewAddress: ManualAddressPageContent
     appointmentAddress: PostcodeLookupPageContent
     appointmentAddressConfirm: ConfirmAddressPageContent
     nationalSecurityDirectorate: NationalSecurityDirectoratePageConetent
