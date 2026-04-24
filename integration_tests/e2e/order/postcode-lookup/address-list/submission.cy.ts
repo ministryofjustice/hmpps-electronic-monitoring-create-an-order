@@ -3,6 +3,7 @@ import AddressListPage from './addressListPage'
 import Page from '../../../../pages/page'
 import FindAddressPage from '../find-address/findAddressPage'
 import InterestedPartiesPage from '../../../../pages/order/contact-information/interested-parties'
+import OrderTasksPage from '../../../../pages/order/summary'
 
 context('address list', () => {
   const mockOrderId = uuidv4()
@@ -54,5 +55,14 @@ context('address list', () => {
     page.form.saveAndContinueButton.click()
 
     Page.verifyOnPage(InterestedPartiesPage, { orderId: mockOrderId })
+  })
+
+  it('can save as draft', () => {
+    const page = Page.visit(AddressListPage, { orderId: mockOrderId })
+
+    page.form.fillInWith('No')
+    page.form.saveAsDraftButton.click()
+
+    Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId })
   })
 })

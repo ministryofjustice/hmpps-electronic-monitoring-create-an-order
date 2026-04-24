@@ -32,13 +32,17 @@ export default class AddressListController {
       return
     }
 
+    if (req.body.action === 'back') {
+      res.redirect(res.locals.orderSummaryUri)
+      return
+    }
+
     if (addAnother === 'true') {
       res.redirect(
         paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', order.id).replace(':addressType', 'SECONDARY'),
       )
-      return
+    } else {
+      res.redirect(this.taskService.getNextPage('PRIMARY_ADDRESS', order))
     }
-
-    res.redirect(this.taskService.getNextPage('PRIMARY_ADDRESS', order))
   }
 }
