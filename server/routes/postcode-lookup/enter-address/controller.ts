@@ -4,13 +4,11 @@ import ViewModel from './viewModel'
 import { AddressType } from '../../../models/Address'
 import { isValidationResult } from '../../../models/Validation'
 import { AddressFormDataModel } from '../../../models/form-data/address'
-import { AuditService } from '../../../services'
 import AddressService from '../../../services/addressService'
 import PostcodeService from '../postcodeService'
 
 export default class EnterAddressController {
   constructor(
-    private readonly auditService: AuditService,
     private readonly addressService: AddressService,
     private readonly postcodeService: PostcodeService,
   ) {}

@@ -37,14 +37,6 @@ export default class EnterAddressComponent extends FormComponent {
 
   // FORM HELPERS
 
-  clearAllFields(): void {
-    this.addressLine1Field.clear()
-    this.addressLine2Field.clear()
-    this.addressLine3Field.clear()
-    this.addressLine4Field.clear()
-    this.postcodeField.clear()
-  }
-
   fillInWith(address: AddressFormData): void {
     if (address.addressLine1) {
       this.addressLine1Field.set(address.addressLine1)

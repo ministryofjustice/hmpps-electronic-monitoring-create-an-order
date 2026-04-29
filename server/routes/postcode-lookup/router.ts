@@ -16,11 +16,7 @@ const createPostcodeLookupRouter = (
   const addressResultController = new AddressResultController(services.postcodeService, services.addressService)
   const confirmAddressController = new ConfirmAddressController(services.postcodeService, services.taskListService)
   const addressListController = new AddressListController()
-  const enterAddressController = new EnterAddressController(
-    services.auditService,
-    services.addressService,
-    services.postcodeService,
-  )
+  const enterAddressController = new EnterAddressController(services.addressService, services.postcodeService)
   router.get('/find-address/:addressType', asyncMiddleware(findAddressController.view))
   router.post('/find-address/:addressType', asyncMiddleware(findAddressController.update))
 
