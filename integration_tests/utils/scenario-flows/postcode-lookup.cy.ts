@@ -28,5 +28,6 @@ export default function fillinAddress({ findAddress, addressResult, enterAddress
   confirmAddressPage.form.useAddressButton.click()
 
   const addressListPage = Page.verifyOnPage(AddressListPage)
-  addressListPage.form.continueButton.click()
+  addressListPage.form.fillInWith('No')
+  addressListPage.form.saveAndContinueButton.click()
 }

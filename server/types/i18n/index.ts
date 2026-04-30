@@ -40,6 +40,7 @@ import ResponsibleOfficerPageContent from './pages/responsibleOfficer'
 import PostcodeLookupPageContent, { AddressResultPageContent, ConfirmAddressPageContent } from './pages/postcodeLookup'
 import NationalSecurityDirectoratePageConetent from './pages/national-security-directorate'
 import IsAddressChangePageContent from './pages/isAddressChange'
+import AddressListContent from './pages/addressList'
 import ManualAddressPageContent from './pages/manualAddress'
 
 type I18n = {
@@ -105,6 +106,7 @@ type I18n = {
     appointmentAddressConfirm: ConfirmAddressPageContent
     nationalSecurityDirectorate: NationalSecurityDirectoratePageConetent
     isAddressChange: IsAddressChangePageContent
+    addressList: AddressListContent
   }
   reference: ReferenceData
 }
