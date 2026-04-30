@@ -197,7 +197,7 @@ context('address results', () => {
   context('too many results', () => {
     beforeEach(() => {
       const addresses = []
-      for (let i = 1; i <= 26; i += 1) {
+      for (let i = 1; i <= 31; i += 1) {
         addresses.push({
           DPA: {
             BUILDING_NUMBER: i,
