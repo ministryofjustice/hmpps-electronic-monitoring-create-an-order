@@ -49,18 +49,10 @@ export default class EnterAddressController {
       res.redirect(
         paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', orderId).replace(':addressType', addressType),
       )
-    } else if (action === 'continue') {
-      res.redirect(
-        this.postcodeService.buildUrl(
-          paths.POSTCODE_LOOKUP.CONFIRM_ADDRESS,
-          orderId,
-          addressType,
-          formData.postcode,
-          '',
-        ),
-      )
     } else {
-      res.redirect(paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', orderId).replace(':addressType', addressType))
+      res.redirect(
+        paths.POSTCODE_LOOKUP.CONFIRM_ADDRESS.replace(':orderId', orderId).replace(':addressType', addressType),
+      )
     }
   }
 }
