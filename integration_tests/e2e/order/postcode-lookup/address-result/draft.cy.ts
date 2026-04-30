@@ -153,6 +153,45 @@ context('address results', () => {
         'We could not find an address that matches SW1A 2AA and 10. You can search again or enter the address manually.',
       )
     })
+
+    it('does not show an error summary when navigated from a failed address selection', () => {
+      cy.task('stubOSDataHubPostcode', {
+        httpStatus: 200,
+        postcode: 'SW1A2AA',
+        body: {
+          results: [
+            {
+              DPA: {
+                BUILDING_NUMBER: 11,
+                THOROUGHFARE_NAME: 'DOWNING STREET',
+                POST_TOWN: 'LONDON',
+                POSTCODE: 'SW1A 2AA',
+                UPRN: '101',
+              },
+            },
+          ],
+        },
+      })
+
+      const page = Page.visit(
+        AddressResultPage,
+        { orderId: mockOrderId, addressType: 'PRIMARY' },
+        { postcode: 'SW1A 2AA' },
+      )
+
+      cy.task('stubOSDataHubPostcode', {
+        httpStatus: 200,
+        postcode: 'SW1A2AA',
+        body: {
+          results: [],
+        },
+      })
+
+      page.form.useAddressButton.click()
+
+      cy.contains('No results found')
+      page.errorSummary.shouldNotExist()
+    })
   })
 
   context('too many results', () => {

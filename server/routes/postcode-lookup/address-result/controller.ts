@@ -22,6 +22,17 @@ export default class AddressResultController {
 
     const addresses = await this.postcodeService.lookupByPostcode(postcode, addressType, buildingId)
 
+    if (addresses.length === 0) {
+      const model = Model.construct(addresses, res.locals.content as I18n, [], {
+        orderId,
+        addressType,
+        postcode,
+        buildingId,
+      })
+      res.render('pages/order/postcode-lookup/no-results', model)
+      return
+    }
+
     const model = Model.construct(addresses, res.locals.content as I18n, errors, {
       orderId,
       addressType,
