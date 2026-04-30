@@ -5,7 +5,7 @@ import EnterAddressPage from '../../e2e/order/postcode-lookup/enter-address/ente
 import FindAddressPage from '../../e2e/order/postcode-lookup/find-address/findAddressPage'
 import Page from '../../pages/page'
 
-export default function fillinAddress({ findAddress, addressResult }) {
+export default function fillinAddress({ findAddress, addressResult, enterAddress }) {
   const findAddressPage = Page.verifyOnPage(FindAddressPage)
   if (findAddress.postcode) {
     findAddressPage.form.fillInWith(findAddress)
@@ -20,6 +20,7 @@ export default function fillinAddress({ findAddress, addressResult }) {
     addressResultPage.form.useAddressButton.click()
   } else {
     const enterAddressPage = Page.verifyOnPage(EnterAddressPage)
+    enterAddressPage.form.fillInWith(enterAddress)
     enterAddressPage.form.continueButton.click()
   }
 
