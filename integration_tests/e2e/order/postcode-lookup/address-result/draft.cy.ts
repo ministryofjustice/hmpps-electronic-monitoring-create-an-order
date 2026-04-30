@@ -54,18 +54,15 @@ context('address results', () => {
         { orderId: mockOrderId, addressType: 'PRIMARY' },
         { postcode: 'SW1A 2AA' },
       )
-      page.form.addressResultsField.element.contains('2 addresses found for SW1A 2AA. Search again')
+      cy.contains('2 addresses found for SW1A 2AA. Search again')
       page.form.addressResultsField.shouldHaveOption('10 Downing Street, London, SW1A 2AA')
       page.form.addressResultsField.shouldHaveOption('11 Downing Street, London, SW1A 2AA')
 
-      page.form.addressResultsField.element
-        .get('a')
-        .contains('Search again')
-        .should(
-          'have.attr',
-          'href',
-          paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'PRIMARY'),
-        )
+      cy.contains('a', 'Search again').should(
+        'have.attr',
+        'href',
+        paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'PRIMARY'),
+      )
     })
 
     it('has correct elements when searching by postcode and building id', () => {
@@ -74,7 +71,7 @@ context('address results', () => {
         { orderId: mockOrderId, addressType: 'PRIMARY' },
         { postcode: 'SW1A 2AA', buildingId: 10 },
       )
-      page.form.addressResultsField.element.contains('1 address found for SW1A 2AA and 10. Search again')
+      cy.contains('1 address found for SW1A 2AA and 10. Search again')
       page.form.addressResultsField.shouldHaveOption('10 Downing Street, London, SW1A 2AA')
       page.form.addressResultsField.shouldNotHaveOption('11 Downing Street, London, SW1A 2AA')
     })

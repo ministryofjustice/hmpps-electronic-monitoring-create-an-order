@@ -13,15 +13,16 @@
   {% set addressText = " address" %}
 {% endif %}
 
-{% if buildingId %}
-  {% set hint = addressCount + addressText + ' found for <b>' + postcode + '</b> and <b>' + buildingId + '</b>. <a href="' + searchAgainLink + '" class="govuk-link">Search again</a>' %}
-{% else %}
-  {% set hint = addressCount + ' addresses found for <b>' + postcode + '</b>. <a href="' + searchAgainLink + '" class="govuk-link">Search again</a>' %}
-{% endif %}
-
 {% block formInputs %}
     <input type="hidden" name="postcode" value="{{ postcode }}">
     <input type="hidden" name="buildingId" value="{{ buildingId }}">
+
+    {% if buildingId %}
+      <p class="govuk-body">{{ addressCount }}{{ addressText }} found for <b>{{ postcode }}</b> and <b>{{ buildingId }}</b>. <a href="{{ searchAgainLink }}" class="govuk-link">Search again</a></p>
+    {% else %}
+      <p class="govuk-body">{{ addressCount }}{{ addressText }} found for <b>{{ postcode }}. <a href="{{ searchAgainLink }}" class="govuk-link">Search again</a></p>
+    {% endif %}
+
     {{ govukRadios({
       name: "address",
       id: "address",
@@ -31,9 +32,6 @@
 	  isPageHeading: true,
 	  classes: "govuk-visually-hidden"
 	}
-      },
-      hint: {
-	html: hint
       },
       items: items,
       errorMessage: addressError,
