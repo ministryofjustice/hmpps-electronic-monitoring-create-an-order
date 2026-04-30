@@ -4,6 +4,7 @@ import ViewModel from './viewModel'
 import TaskListService from '../../../services/taskListService'
 import { ValidationResult } from '../../../models/Validation'
 import { validationErrors } from '../../../constants/validationErrors'
+import { AddressType } from '../../../models/Address'
 
 export default class AddressListController {
   constructor(private readonly taskService: TaskListService) {}
@@ -39,8 +40,11 @@ export default class AddressListController {
     }
 
     if (addAnother === 'true') {
+      const addresssType: AddressType = order.addresses.some(address => address.addressType === 'SECONDARY')
+        ? 'TERTIARY'
+        : 'SECONDARY'
       res.redirect(
-        paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', order.id).replace(':addressType', 'SECONDARY'),
+        paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', order.id).replace(':addressType', addresssType),
       )
     } else {
       res.redirect(this.taskService.getNextPage('PRIMARY_ADDRESS', order))

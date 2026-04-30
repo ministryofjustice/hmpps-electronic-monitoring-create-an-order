@@ -45,7 +45,7 @@ context('address list', () => {
     page.form.saveAndContinueButton.click()
 
     const findAddressPage = Page.verifyOnPage(FindAddressPage, { orderId: mockOrderId })
-    findAddressPage.checkUrl({ orderId: mockOrderId, addressType: 'SECONDARY' })
+    findAddressPage.checkUrl({ orderId: mockOrderId, addressType: 'TERTIARY' })
   })
 
   it('can select no to additional addresses', () => {
