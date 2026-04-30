@@ -6,6 +6,6 @@ export default class EnterAddressPage extends AppFormPage {
   public form = new EnterAddressComponent()
 
   constructor() {
-    super('WIP Enter Address ', paths.POSTCODE_LOOKUP.FIND_ADDRESS)
+    super('address', paths.POSTCODE_LOOKUP.ENTER_ADDRESS)
   }
 }
