@@ -6,6 +6,11 @@ import { ValidationResult } from '../../../models/Validation'
 import { validationErrors } from '../../../constants/validationErrors'
 import { AddressType } from '../../../models/Address'
 
+const DEVICE_WEARER_ADDRESS_TYPES = ['PRIMARY', 'SECONDARY', 'TERTIARY'] as const
+
+const isDeviceWearerAddress = ({ addressType }: { addressType: string }) =>
+  (DEVICE_WEARER_ADDRESS_TYPES as readonly string[]).includes(addressType)
+
 export default class AddressListController {
   constructor(private readonly taskService: TaskListService) {}
 
@@ -21,8 +26,9 @@ export default class AddressListController {
     const order = req.order!
 
     const { addAnother } = req.body
+    const deviceWearerAddresses = order.addresses.filter(isDeviceWearerAddress)
 
-    if (!addAnother && order.addresses.length < 3) {
+    if (!addAnother && deviceWearerAddresses.length < 3) {
       const errors: ValidationResult = [
         {
           error: validationErrors.postcodeLookup.addAnotherRequired,
@@ -40,11 +46,11 @@ export default class AddressListController {
     }
 
     if (addAnother === 'true') {
-      const addresssType: AddressType = order.addresses.some(address => address.addressType === 'SECONDARY')
+      const addressType: AddressType = deviceWearerAddresses.some(address => address.addressType === 'SECONDARY')
         ? 'TERTIARY'
         : 'SECONDARY'
       res.redirect(
-        paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', order.id).replace(':addressType', addresssType),
+        paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', order.id).replace(':addressType', addressType),
       )
     } else {
       res.redirect(this.taskService.getNextPage('PRIMARY_ADDRESS', order))

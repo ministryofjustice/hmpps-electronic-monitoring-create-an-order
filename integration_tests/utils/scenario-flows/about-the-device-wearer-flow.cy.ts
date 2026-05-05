@@ -16,6 +16,7 @@ export default function fillInAboutTheDeviceWearer({
   primaryAddressDetails = undefined,
   secondaryAddressDetails = undefined,
   tertiaryAddressDetails = undefined,
+  section = 'About the device wearer',
 }): void {
   const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
   identityNumbersPage.form.fillInWith(deviceWearerDetails)
@@ -31,16 +32,16 @@ export default function fillInAboutTheDeviceWearer({
     responsibleAdultDetailsPage.form.saveAndContinueButton.click()
   }
 
-  const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
+  const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage, section)
   contactDetailsPage.form.fillInWith(deviceWearerDetails)
   contactDetailsPage.form.saveAndContinueButton.click()
 
-  const noFixedAbode = Page.verifyOnPage(NoFixedAbodePage)
+  const noFixedAbode = Page.verifyOnPage(NoFixedAbodePage, section)
   noFixedAbode.form.fillInWith(deviceWearerDetails)
   noFixedAbode.form.saveAndContinueButton.click()
 
   if (primaryAddressDetails) {
-    const primaryAddressPage = Page.verifyOnPage(PrimaryAddressPage)
+    const primaryAddressPage = Page.verifyOnPage(PrimaryAddressPage, section)
     primaryAddressPage.form.fillInWith({
       ...primaryAddressDetails,
       hasAnotherAddress: secondaryAddressDetails === undefined ? 'No' : 'Yes',
@@ -48,7 +49,7 @@ export default function fillInAboutTheDeviceWearer({
     primaryAddressPage.form.saveAndContinueButton.click()
 
     if (secondaryAddressDetails !== undefined) {
-      const secondaryAddressPage = Page.verifyOnPage(SecondaryAddressPage)
+      const secondaryAddressPage = Page.verifyOnPage(SecondaryAddressPage, section)
       secondaryAddressPage.form.fillInWith({
         ...secondaryAddressDetails,
         hasAnotherAddress: tertiaryAddressDetails === undefined ? 'No' : 'Yes',
@@ -57,7 +58,7 @@ export default function fillInAboutTheDeviceWearer({
     }
 
     if (tertiaryAddressDetails !== undefined) {
-      const tertiaryAddressPage = Page.verifyOnPage(TertiaryAddressPage)
+      const tertiaryAddressPage = Page.verifyOnPage(TertiaryAddressPage, section)
       tertiaryAddressPage.form.fillInWith({
         ...tertiaryAddressDetails,
       })

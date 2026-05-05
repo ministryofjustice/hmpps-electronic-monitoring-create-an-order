@@ -6,6 +6,7 @@ import { OrderStatusEnum } from '../models/Order'
 import { OrderService } from '../services'
 import getContent from '../i18n'
 import { Locales } from '../types/i18n/locale'
+import FeatureFlags from '../utils/featureFlags'
 
 const populateOrder =
   (orderService: OrderService): RequestParamHandler =>
@@ -32,6 +33,8 @@ const populateOrder =
         res.locals.orderId = order.id
         res.locals.orderStatus = order.status
         res.locals.isOrderEditable = order.status === OrderStatusEnum.Enum.IN_PROGRESS
+        // for nunjucks template to know which caption to render
+        res.locals.isInterestedPartiesFlowEnabled = FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')
         res.locals.content = getContent(Locales.en, order.dataDictionaryVersion)
       }
 

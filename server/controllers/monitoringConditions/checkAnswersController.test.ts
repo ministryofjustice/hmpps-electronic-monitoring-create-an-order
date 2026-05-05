@@ -14,6 +14,7 @@ import TaskListService from '../../services/taskListService'
 import CheckAnswersController from './checkAnswersController'
 import OrderChecklistModel from '../../models/OrderChecklist'
 import OrderChecklistService from '../../services/orderChecklistService'
+import FeatureFlags from '../../utils/featureFlags'
 
 jest.mock('../../data/hmppsAuditClient')
 jest.mock('../../services/auditService')
@@ -39,6 +40,10 @@ describe('MonitoringConditionsCheckAnswersController', () => {
     }) as jest.Mocked<HmppsAuditClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     controller = new CheckAnswersController(mockAuditService, taskListService, mockOrderChecklistService)
+  })
+
+  afterEach(() => {
+    jest.restoreAllMocks()
   })
 
   describe('view order type description flow', () => {
@@ -89,6 +94,66 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         attendance: [],
         alcohol: [],
       })
+    })
+
+    it('should link installation address changes to postcode lookup when postcode lookup is enabled', async () => {
+      // Given
+      const mockGet = jest.fn((flag: string) => flag === 'POSTCODE_LOOKUP_ENABLED')
+      const mockGetValue = jest.fn(() => '')
+      jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
+        get: mockGet,
+        getValue: mockGetValue,
+      } as never)
+      const order = getMockOrder({
+        addresses: [
+          createAddress({
+            addressType: 'INSTALLATION',
+            addressLine1: 'Line 1',
+            addressLine2: 'Line 2',
+            addressLine3: 'Line 3',
+            postcode: 'Postcode',
+          }),
+        ],
+        installationLocation: {
+          location: 'PRISON',
+        },
+      })
+      const req = createMockRequest({ order })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      // When
+      await controller.view(req, res, next)
+
+      // Then
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/order/monitoring-conditions/check-your-answers',
+        expect.objectContaining({
+          installationAddress: [
+            {
+              key: {
+                text: 'At what address will installation of the electronic monitoring device take place?',
+              },
+              value: {
+                html: 'Line 1, Line 2, Line 3, Postcode',
+              },
+              actions: {
+                items: [
+                  {
+                    href: paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', order.id).replace(
+                      ':addressType',
+                      'INSTALLATION',
+                    ),
+                    text: 'Change',
+                    visuallyHiddenText:
+                      'at what address will installation of the electronic monitoring device take place?',
+                  },
+                ],
+              },
+            },
+          ],
+        }),
+      )
     })
 
     it('should render the check answers with all answers completed feature flag is on', async () => {
