@@ -20,7 +20,7 @@
     {% if buildingId %}
       <p class="govuk-body">{{ addressCount }}{{ addressText }} found for <b>{{ postcode }}</b> and <b>{{ buildingId }}</b>. <a href="{{ searchAgainLink }}" class="govuk-link">Search again</a></p>
     {% else %}
-      <p class="govuk-body">{{ addressCount }}{{ addressText }} found for <b>{{ postcode }}. <a href="{{ searchAgainLink }}" class="govuk-link">Search again</a></p>
+      <p class="govuk-body">{{ addressCount }}{{ addressText }} found for <b>{{ postcode }}</b>. <a href="{{ searchAgainLink }}" class="govuk-link">Search again</a></p>
     {% endif %}
 
     {{ govukRadios({
