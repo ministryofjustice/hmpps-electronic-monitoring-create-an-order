@@ -40,11 +40,6 @@ export default class AddressResultController {
       buildingId,
     })
 
-    if (addresses.length === 0) {
-      res.render('pages/order/postcode-lookup/no-results', model)
-      return
-    }
-
     if (addresses.length > 30) {
       res.render('pages/order/postcode-lookup/too-many-results', model)
       return
