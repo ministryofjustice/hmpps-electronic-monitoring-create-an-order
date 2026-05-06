@@ -89,6 +89,7 @@
         {% if not isOrderEditable %}
           {% set statusArgs = {} %}
         {% elif not section.isReady %}
+          {% set allChecked = false %}
           {% set statusArgs = {             
                   text: "Cannot start yet",
                   classes: "govuk-task-list__status--cannot-start-yet"                
