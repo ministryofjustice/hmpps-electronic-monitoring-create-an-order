@@ -7,8 +7,8 @@ import NoFixedAbodeFormComponent from '../../components/forms/contact-informatio
 export default class NoFixedAbodePage extends AppFormPage {
   public form = new NoFixedAbodeFormComponent()
 
-  constructor() {
-    super('Fixed address', paths.CONTACT_INFORMATION.NO_FIXED_ABODE, 'Contact information')
+  constructor(section: string = 'Contact information') {
+    super('Fixed address', paths.CONTACT_INFORMATION.NO_FIXED_ABODE, section)
   }
 
   checkOnPage(): void {

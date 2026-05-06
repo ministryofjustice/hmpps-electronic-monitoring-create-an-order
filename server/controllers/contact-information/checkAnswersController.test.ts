@@ -10,6 +10,7 @@ import { Locales } from '../../types/i18n/locale'
 import { DataDictionaryVersions } from '../../types/i18n/dataDictionaryVersion'
 import OrderChecklistModel from '../../models/OrderChecklist'
 import OrderChecklistService from '../../services/orderChecklistService'
+import FeatureFlags from '../../utils/featureFlags'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
@@ -40,6 +41,10 @@ describe('ContactDetailsCheckAnswersController', () => {
     }) as jest.Mocked<HmppsAuditClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     controller = new CheckAnswersController(mockAuditService, taskListService, mockOrderChecklistService)
+  })
+
+  afterEach(() => {
+    jest.restoreAllMocks()
   })
 
   it('should render the check answers page without any answers completed', async () => {
@@ -220,6 +225,130 @@ describe('ContactDetailsCheckAnswersController', () => {
       probationDeliveryUnit: [],
       submittedDate: undefined,
     })
+  })
+
+  it('should link address changes to postcode lookup when postcode lookup is enabled', async () => {
+    const mockGet = jest.fn((flag: string) => flag === 'POSTCODE_LOOKUP_ENABLED')
+    const mockGetValue = jest.fn(() => '')
+    jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
+      get: mockGet,
+      getValue: mockGetValue,
+    } as never)
+    const primaryAddress = createAddress({
+      addressType: 'PRIMARY',
+      addressLine1: '10 Downing Street',
+      addressLine3: 'London',
+      addressLine4: 'ENGLAND',
+      postcode: 'SW1A 2AA',
+    })
+    const secondaryAddress = createAddress({
+      addressType: 'SECONDARY',
+      addressLine1: '11 Downing Street',
+      addressLine3: 'London',
+      addressLine4: 'ENGLAND',
+      postcode: 'SW1A 2AA',
+    })
+    const tertiaryAddress = createAddress({
+      addressType: 'TERTIARY',
+      addressLine1: '12 Downing Street',
+      addressLine3: 'London',
+      addressLine4: 'ENGLAND',
+      postcode: 'SW1A 2AA',
+    })
+    const order = getMockOrder({
+      addresses: [primaryAddress, secondaryAddress, tertiaryAddress],
+      dataDictionaryVersion: 'DDV5',
+    })
+    const req = createMockRequest({ order })
+    const res = createMockResponse()
+    const next = jest.fn()
+
+    await controller.view(req, res, next)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'pages/order/contact-information/check-your-answers',
+      expect.objectContaining({
+        addresses: [
+          {
+            key: {
+              text: 'Does the device wearer have a fixed address?',
+            },
+            value: {
+              text: '',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id),
+                  text: 'Change',
+                  visuallyHiddenText: 'does the device wearer have a fixed address?',
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: content.pages.primaryAddress.legend,
+            },
+            value: {
+              html: '10 Downing Street, London, ENGLAND, SW1A 2AA',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', order.id).replace(
+                    ':addressType',
+                    'PRIMARY',
+                  ),
+                  text: 'Change',
+                  visuallyHiddenText: content.pages.primaryAddress.legend.toLowerCase(),
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: content.pages.secondaryAddress.legend,
+            },
+            value: {
+              html: '11 Downing Street, London, ENGLAND, SW1A 2AA',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', order.id).replace(
+                    ':addressType',
+                    'SECONDARY',
+                  ),
+                  text: 'Change',
+                  visuallyHiddenText: content.pages.secondaryAddress.legend.toLowerCase(),
+                },
+              ],
+            },
+          },
+          {
+            key: {
+              text: content.pages.tertiaryAddress.legend,
+            },
+            value: {
+              html: '12 Downing Street, London, ENGLAND, SW1A 2AA',
+            },
+            actions: {
+              items: [
+                {
+                  href: paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', order.id).replace(
+                    ':addressType',
+                    'TERTIARY',
+                  ),
+                  text: 'Change',
+                  visuallyHiddenText: content.pages.tertiaryAddress.legend.toLowerCase(),
+                },
+              ],
+            },
+          },
+        ],
+      }),
+    )
   })
 
   it('should render the check answers page using saved data for an device wearer with no fixed abode', async () => {

@@ -5,6 +5,7 @@ import { Order } from '../Order'
 import I18n from '../../types/i18n'
 import { ReferenceCatalogDDv5 } from '../../types/i18n/reference'
 import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
+import FeatureFlags from '../../utils/featureFlags'
 
 const createContactDetailsAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id)
@@ -26,10 +27,18 @@ const createContactDetailsAnswers = (order: Order, content: I18n, answerOpts: An
 
 const createAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const noFixedAbodeUri = paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id)
+  const postcodeEnabled = FeatureFlags.getInstance().get('POSTCODE_LOOKUP_ENABLED')
   const addressUri = paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', order.id)
-  const primaryAddressUri = addressUri.replace(':addressType(primary|secondary|tertiary)', 'primary')
-  const secondaryAddressUri = addressUri.replace(':addressType(primary|secondary|tertiary)', 'secondary')
-  const tertiaryddressUri = addressUri.replace(':addressType(primary|secondary|tertiary)', 'tertiary')
+  const postcodeLookupUri = paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', order.id)
+  const primaryAddressUri = postcodeEnabled
+    ? postcodeLookupUri.replace(':addressType', 'PRIMARY')
+    : addressUri.replace(':addressType(primary|secondary|tertiary)', 'primary')
+  const secondaryAddressUri = postcodeEnabled
+    ? postcodeLookupUri.replace(':addressType', 'SECONDARY')
+    : addressUri.replace(':addressType(primary|secondary|tertiary)', 'secondary')
+  const tertiaryAddressUri = postcodeEnabled
+    ? postcodeLookupUri.replace(':addressType', 'TERTIARY')
+    : addressUri.replace(':addressType(primary|secondary|tertiary)', 'tertiary')
 
   const primaryAddress = order.addresses.find(({ addressType }) => addressType === 'PRIMARY')
   const secondaryAddress = order.addresses.find(({ addressType }) => addressType === 'SECONDARY')
@@ -58,7 +67,7 @@ const createAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOpt
 
   if (tertiaryAddress) {
     answers.push(
-      createAddressAnswer(content.pages.tertiaryAddress.legend, tertiaryAddress, tertiaryddressUri, answerOpts),
+      createAddressAnswer(content.pages.tertiaryAddress.legend, tertiaryAddress, tertiaryAddressUri, answerOpts),
     )
   }
 

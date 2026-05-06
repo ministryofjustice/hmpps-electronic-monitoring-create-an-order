@@ -3,10 +3,12 @@ import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer } from '../../../mockApis/faker'
 import fillinAddress from '../../../utils/scenario-flows/postcode-lookup.cy'
+import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
+import fillInAboutTheDeviceWearer from '../../../utils/scenario-flows/about-the-device-wearer-flow.cy'
 
 context('Postcode Lookup', () => {
   let orderSummaryPage: OrderSummaryPage
-  const testFlags = { POSTCODE_LOOKUP_ENABLED: true }
+  const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true, POSTCODE_LOOKUP_ENABLED: true }
 
   const deviceWearerDetails = {
     ...createFakeAdultDeviceWearer(),
@@ -77,18 +79,15 @@ context('Postcode Lookup', () => {
   })
 
   it('Should able to search for postcode and select address', () => {
-    orderSummaryPage.fillInGeneralOrderDetailsWith({
-      deviceWearerDetails,
-    })
+    fillInAboutTheDeviceWearer({ deviceWearerDetails })
 
     fillinAddress({ findAddress: { postcode: 'SA11 1AA' }, addressResult: { address: '10' }, enterAddress: {} })
-    // TODO Check answer
+
+    Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
   })
 
   it('Should able to enter address manually', () => {
-    orderSummaryPage.fillInGeneralOrderDetailsWith({
-      deviceWearerDetails,
-    })
+    fillInAboutTheDeviceWearer({ deviceWearerDetails })
 
     fillinAddress({
       findAddress: {},
@@ -96,6 +95,21 @@ context('Postcode Lookup', () => {
       enterAddress: { addressLine1: '90 Hotel Street', addressLine3: 'Bath', postcode: 'BA1 2FJ' },
     })
 
-    // TODO Check answer
+    Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
+  })
+
+  it('Should able to search for a curfew address', () => {
+    fillInAboutTheDeviceWearer({ deviceWearerDetails })
+
+    fillinAddress({
+      findAddress: { postcode: 'SA11 1AA' },
+      addressResult: { address: '10' },
+      enterAddress: {},
+      addAnother: 'Yes',
+    })
+
+    fillinAddress({ findAddress: { postcode: 'SA11 1AA' }, addressResult: { address: '10' }, enterAddress: {} })
+
+    Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
   })
 })

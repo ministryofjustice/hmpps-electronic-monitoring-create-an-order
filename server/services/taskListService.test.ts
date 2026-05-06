@@ -150,6 +150,33 @@ describe('TaskListService', () => {
       )
     })
 
+    it('should return find address when current page is no fixed abode, postcode lookup is enabled and interested parties flow is enabled', () => {
+      // Given
+      const mockGet = jest.fn((flag: string) =>
+        ['INTERESTED_PARTIES_FLOW_ENABLED', 'POSTCODE_LOOKUP_ENABLED'].includes(flag),
+      )
+      const mockGetValue = jest.fn(() => '')
+      jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
+        get: mockGet,
+        getValue: mockGetValue,
+      } as never)
+      const currentPage = 'NO_FIXED_ABODE'
+      const taskListService = new TaskListService(mockOrderChecklistService)
+      const order = getMockOrder({
+        deviceWearer: createDeviceWearer({ noFixedAbode: false }),
+      })
+
+      // When
+      const nextPage = taskListService.getNextPage(currentPage, order)
+
+      // Then
+      expect(nextPage).toBe(
+        paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':addressType', 'PRIMARY').replace(':orderId', order.id),
+      )
+
+      jest.restoreAllMocks()
+    })
+
     it('should return interested parties if current page is primary address and hasAnotherAddress is false', () => {
       // Given
       const currentPage = 'PRIMARY_ADDRESS'
@@ -341,6 +368,30 @@ describe('TaskListService', () => {
           order.id,
         ),
       )
+    })
+
+    it('should return find installation address if current page is installation appointment and postcode lookup is enabled', () => {
+      // Given
+      const mockGet = jest.fn((flag: string) => flag === 'POSTCODE_LOOKUP_ENABLED')
+      const mockGetValue = jest.fn(() => '')
+      jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
+        get: mockGet,
+        getValue: mockGetValue,
+      } as never)
+      const currentPage = 'INSTALLATION_APPOINTMENT'
+      const taskListService = new TaskListService(mockOrderChecklistService)
+      const order = getMockOrder({ installationLocation: { location: 'PRISON' } })
+      order.monitoringConditions.alcohol = true
+
+      // When
+      const nextPage = taskListService.getNextPage(currentPage, order)
+
+      // Then
+      expect(nextPage).toBe(
+        paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':addressType', 'INSTALLATION').replace(':orderId', order.id),
+      )
+
+      jest.restoreAllMocks()
     })
 
     it('should return check your answers page if current page is installation address and alcohol was selected', () => {

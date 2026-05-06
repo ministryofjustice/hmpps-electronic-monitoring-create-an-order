@@ -4,6 +4,7 @@ import Page from '../../../pages/page'
 import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 import OrderTasksPage from '../../../pages/order/summary'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
+import paths from '../../../../server/constants/paths'
 
 const mockOrderId = uuidv4()
 const pagePath = '/contact-information/check-your-answers'
@@ -23,6 +24,10 @@ context('Contact Information - check your answers', () => {
       })
 
       cy.signIn()
+    })
+
+    afterEach(() => {
+      cy.task('resetFeatureFlags')
     })
 
     it('Should display the user name visible in header', () => {
@@ -45,6 +50,57 @@ context('Contact Information - check your answers', () => {
     it('Should be accessible', () => {
       const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
       page.checkIsAccessible()
+    })
+
+    it('should link address changes to postcode lookup when postcode lookup is enabled', () => {
+      cy.task('setFeatureFlags', { POSTCODE_LOOKUP_ENABLED: true })
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          dataDictionaryVersion: 'DDV5',
+          deviceWearer: {
+            nomisId: null,
+            pncId: null,
+            deliusId: null,
+            prisonNumber: null,
+            homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
+            firstName: null,
+            lastName: null,
+            alias: null,
+            adultAtTimeOfInstallation: null,
+            sex: null,
+            gender: null,
+            dateOfBirth: null,
+            disabilities: null,
+            noFixedAbode: false,
+            interpreterRequired: null,
+          },
+          addresses: [
+            {
+              addressType: 'PRIMARY',
+              addressLine1: '10 downing street',
+              addressLine2: '',
+              addressLine3: 'London',
+              addressLine4: 'ENGLAND',
+              postcode: 'SW1A 2AA',
+            },
+          ],
+        },
+      })
+
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+      page
+        .changeLinkByQuestion("What is the device wearer's main address?")
+        .should(
+          'have.attr',
+          'href',
+          paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'PRIMARY'),
+        )
     })
   })
 

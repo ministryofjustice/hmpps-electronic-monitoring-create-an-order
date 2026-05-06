@@ -46,6 +46,50 @@ context('address list', () => {
     page.form.additionalAddresses.shouldHaveAllOptions()
   })
 
+  it('does not count the installation address as a device wearer address', () => {
+    cy.task('stubCemoGetOrder', {
+      httpStatus: 200,
+      id: mockOrderId,
+      status: 'IN_PROGRESS',
+      order: {
+        addresses: [
+          {
+            addressType: 'PRIMARY',
+            addressLine1: '10 Downing Street',
+            addressLine2: '',
+            addressLine3: 'London',
+            addressLine4: 'ENGLAND',
+            postcode: 'SW1A 2AA',
+          },
+          {
+            addressType: 'SECONDARY',
+            addressLine1: '11 Downing Street',
+            addressLine2: '',
+            addressLine3: 'London',
+            addressLine4: 'ENGLAND',
+            postcode: 'SW1A 2AA',
+          },
+          {
+            addressType: 'INSTALLATION',
+            addressLine1: 'Mock Prison',
+            addressLine2: '',
+            addressLine3: 'Mock City',
+            addressLine4: '',
+            postcode: 'SW1A 2AB',
+          },
+        ],
+      },
+    })
+
+    const page = Page.visit(AddressListPage, { orderId: mockOrderId })
+
+    page.form.summaryList.shouldHaveItem('Main address', '10 Downing Street, London, ENGLAND, SW1A 2AA')
+    page.form.summaryList.shouldHaveItem('Second curfew address', '11 Downing Street, London, ENGLAND, SW1A 2AA')
+    page.form.summaryList.element.should('not.contain.text', 'Mock Prison')
+    page.form.additionalAddresses.shouldExist()
+    page.form.additionalAddresses.shouldHaveAllOptions()
+  })
+
   context('when the user has two additional addresses', () => {
     it('then add address question is hidden', () => {
       cy.task('stubCemoGetOrder', {

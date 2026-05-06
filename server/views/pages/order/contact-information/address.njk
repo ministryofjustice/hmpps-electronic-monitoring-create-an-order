@@ -22,7 +22,8 @@
 
 {% endif %}
 
-{% set section = pageContent.section %}
+{% set isDeviceWearerAddress = (addressType.value | lower) != "installation" %}
+{% set section = content.pages.deviceWearer.section if isInterestedPartiesFlowEnabled and isDeviceWearerAddress else pageContent.section %}
 {% set heading = pageContent.title %}
 {% set legend = pageContent.legend %}
 {% set helpText = pageContent.helpText %}
