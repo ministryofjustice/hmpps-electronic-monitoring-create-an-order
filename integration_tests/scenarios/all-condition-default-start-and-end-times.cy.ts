@@ -103,7 +103,7 @@ context('The kitchen sink', () => {
       uploadFile: files.licence,
       description: 'A test description: Lorum ipsum dolar sit amet...',
       duration: 'A test duration: one, two, three...',
-      anotherZone: 'No',
+      name: 'test name',
     }
     const trailMonitoringOrder = {
       startDate: new Date(currentDate.getFullYear(), 11, 1),

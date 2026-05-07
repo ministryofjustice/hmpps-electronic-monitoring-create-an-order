@@ -1,7 +1,6 @@
 import DapolMissedInErrorPage from '../../e2e/order/monitoring-conditions/order-type-description/dapol-missed-in-error/dapolMissedInErrorPage'
 import HdcPage from '../../e2e/order/monitoring-conditions/order-type-description/hdc/hdcPage'
 import IsspPage from '../../e2e/order/monitoring-conditions/order-type-description/issp/isspPage'
-import MonitoringTypePage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-type/MonitoringTypesPage'
 import OffenceTypePage from '../../e2e/order/monitoring-conditions/order-type-description/offence-type/OffenceTypePage'
 // commented out due to ELM-4526
 // import OrderTypePage from '../../e2e/order/monitoring-conditions/order-type-description/order-type/OrderTypePage'
@@ -27,7 +26,6 @@ export default function fillInOrderTypeDescriptionsWith({
   typeOfAcquistiveCrime = undefined,
   policeForceArea = undefined,
   prarr = undefined,
-  monitoringCondition = undefined,
   dapolMissedInError = undefined,
 }): void {
   // commented out due to ELM-4526, page is always redirected from
@@ -82,11 +80,5 @@ export default function fillInOrderTypeDescriptionsWith({
   if (prarr) {
     const prarrPage = Page.verifyOnPage(PrarrPage)
     fillinSingleQuestionFormWith(prarrPage.form, prarr)
-  }
-
-  // Monitoring conditions
-  if (monitoringCondition) {
-    const monitoringConditionPage = Page.verifyOnPage(MonitoringTypePage)
-    fillinSingleQuestionFormWith(monitoringConditionPage.form, monitoringCondition)
   }
 }

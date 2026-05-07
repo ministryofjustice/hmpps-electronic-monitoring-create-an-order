@@ -24,7 +24,7 @@ import TertiaryAddressPage from './contact-information/tertiary-adddress'
 import fillInOrderTypeDescriptionsWith from '../../utils/scenario-flows/orderTypeDescription'
 import fillInTagAtSourceWith from '../../utils/scenario-flows/tag-at-source.cy'
 import fillInCurfewOrderDetailsWith from '../../utils/scenario-flows/curfew.cy'
-import fillInEnforcementZoneOrderDetailsWith from '../../utils/scenario-flows/enforcement-zone.cy'
+import { fillInEnforcementZoneListItemDetailsWith } from '../../utils/scenario-flows/enforcement-zone.cy'
 import fillInAlcoholMonitoringOrderDetailsWith from '../../utils/scenario-flows/alcohol-monitoring.cy'
 import fillInTrailMonitoringOrderDetailsWith from '../../utils/scenario-flows/trail-monitoring.cy'
 import fillInAttendanceMonitoringDetailsWith from '../../utils/scenario-flows/attendance-monitoring.cy'
@@ -38,6 +38,7 @@ import IsMappaPage from '../../e2e/order/access-needs-installation-risk/is-mappa
 import OffenceListPage from '../../e2e/order/access-needs-installation-risk/offences/offence-list/offenceListPage'
 import TypesOfMonitoringNeededPage from '../../e2e/order/monitoring-conditions/order-type-description/types-of-monitoring-needed/TypesOfMonitoringNeededPage'
 import DapoPage from '../../e2e/order/access-needs-installation-risk/offences/dapo/DapoPage'
+import MonitoringTypePage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-type/MonitoringTypesPage'
 
 export default class OrderTasksPage extends AppPage {
   constructor(isOldVersionPage: boolean = false) {
@@ -171,57 +172,70 @@ export default class OrderTasksPage extends AppPage {
       tertiaryAddressDetails,
       monitoringOrderTypeDescription,
     })
-    if (curfewReleaseDetails) {
-      this.fillInCurfewOrderDetailsWith(
-        {
-          curfewConditionDetails,
-          curfewReleaseDetails,
-          curfewTimetable,
-        },
-        false,
-      )
-    }
 
-    if (enforcementZoneDetails) {
-      this.fillInEnforcementZoneOrderDetailsWith(
-        {
-          enforcementZoneDetails,
-        },
-        false,
-      )
-    }
+    monitoringOrderTypeDescription.monitoringCondition.forEach((condition: string, index: number) => {
+      const monitoringConditionPage = Page.verifyOnPage(MonitoringTypePage)
+      monitoringConditionPage.form.fillInWith(condition)
+      monitoringConditionPage.form.continueButton.click()
 
-    if (trailMonitoringDetails) {
-      this.fillInTrailMonitoringOrderDetailsWith(
-        {
-          trailMonitoringDetails,
-        },
-        false,
-      )
-    }
+      if (condition === 'Curfew') {
+        this.fillInCurfewOrderDetailsWith(
+          {
+            curfewConditionDetails,
+            curfewReleaseDetails,
+            curfewTimetable,
+          },
+          false,
+        )
+      }
 
-    if (alcoholMonitoringDetails) {
-      this.fillInAlcoholMonitoringOrderDetailsWith(
-        {
-          alcoholMonitoringDetails,
-          installationAddressDetails,
-        },
-        false,
-      )
-    }
+      if (condition === 'Exclusion zone monitoring') {
+        this.fillInEnforcementZoneOrderDetailsWith(
+          {
+            enforcementZoneDetails,
+          },
+          false,
+        )
+      }
 
-    if (attendanceMonitoringDetails) {
-      this.fillInAttendanceMonitoringDetailsWith(
-        {
-          attendanceMonitoringDetails,
-        },
-        false,
-      )
-    }
+      if (condition === 'Trail monitoring') {
+        this.fillInTrailMonitoringOrderDetailsWith(
+          {
+            trailMonitoringDetails,
+          },
+          false,
+        )
+      }
 
-    const monitoringConditionsListPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)
-    monitoringConditionsListPage.form.fillInWith('No')
-    monitoringConditionsListPage.form.saveAndContinueButton.click()
+      if (condition === 'Alcohol monitoring') {
+        this.fillInAlcoholMonitoringOrderDetailsWith(
+          {
+            alcoholMonitoringDetails,
+            installationAddressDetails,
+          },
+          false,
+        )
+      }
+
+      if (condition === 'Mondatory attendance monitoring') {
+        this.fillInAttendanceMonitoringDetailsWith(
+          {
+            attendanceMonitoringDetails,
+          },
+          false,
+        )
+      }
+
+      if (index === monitoringOrderTypeDescription.monitoringCondition.length - 1) {
+        const monitoringConditionsListPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)
+        monitoringConditionsListPage.form.fillInWith('No')
+        monitoringConditionsListPage.form.saveAndContinueButton.click()
+      } else {
+        const monitoringConditionsListPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)
+        monitoringConditionsListPage.form.fillInWith('Yes')
+        monitoringConditionsListPage.form.saveAndContinueButton.click()
+      }
+    })
 
     if (installationLocation) {
       fillInTagAtSourceWith(installationLocation, installationAppointment, installationAddressDetails)
@@ -638,7 +652,7 @@ export default class OrderTasksPage extends AppPage {
   }
 
   fillInEnforcementZoneOrderDetailsWith({ enforcementZoneDetails }, checkYourAnswerPage = true) {
-    fillInEnforcementZoneOrderDetailsWith(enforcementZoneDetails)
+    fillInEnforcementZoneListItemDetailsWith(enforcementZoneDetails)
 
     if (checkYourAnswerPage) {
       const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
