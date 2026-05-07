@@ -7,7 +7,8 @@ const tagAtSourceAddressPageContent: PostcodeLookupPageContent = {
   title: 'Find the installation address',
   section: 'Electronic monitoring required',
   legend: '',
-  helpText: '',
+  helpText:
+    'For installation at source this is the address of the prison, probation office or immigration removal centre.',
   questions: {
     postcode: {
       text: 'Postcode',
