@@ -40,7 +40,7 @@ const monitoringOrderTypeDescription = {
   typeOfAcquistiveCrime: 'Aggravated Burglary',
   policeForceArea: 'Kent',
   prarr: 'Yes',
-  monitoringCondition: 'Trail monitoring',
+  monitoringCondition: ['Trail monitoring'],
 }
 
 export default function fillInNewOrder({ startDate = null, files }): void {
