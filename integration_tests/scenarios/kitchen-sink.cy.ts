@@ -15,9 +15,7 @@ import InterestedPartiesPage from '../pages/order/contact-information/interested
 import SubmitSuccessPage from '../pages/order/submit-success'
 import CurfewReleaseDatePage from '../pages/order/monitoring-conditions/curfew-release-date'
 import CurfewTimetablePage from '../pages/order/monitoring-conditions/curfew-timetable'
-import InstallationAndRiskPage from '../pages/order/installationAndRisk'
 import CurfewConditionsPage from '../pages/order/monitoring-conditions/curfew-conditions'
-import EnforcementZonePage from '../pages/order/monitoring-conditions/enforcement-zone'
 import TrailMonitoringPage from '../pages/order/monitoring-conditions/trail-monitoring'
 import AttachmentSummaryPage from '../pages/order/attachments/summary'
 import DeviceWearerCheckYourAnswersPage from '../pages/order/about-the-device-wearer/check-your-answers'
@@ -37,7 +35,12 @@ import PilotPage from '../e2e/order/monitoring-conditions/order-type-description
 import OffenceTypePage from '../e2e/order/monitoring-conditions/order-type-description/offence-type/OffenceTypePage'
 import PoliceAreaPage from '../e2e/order/monitoring-conditions/order-type-description/police-area/PoliceAreaPage'
 import PrarrPage from '../e2e/order/monitoring-conditions/order-type-description/prarr/PrarrPage'
-import MonitoringTypesPage from '../e2e/order/monitoring-conditions/order-type-description/monitoring-types/MonitoringTypesPage'
+import DetailsOfInstallationPage from '../e2e/order/access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
+import OffenceOtherInfoPage from '../e2e/order/access-needs-installation-risk/offences/offence-other-info/offenceOtherInfoPage'
+import OffencePage from '../e2e/order/access-needs-installation-risk/offences/offence/offencePage'
+import MonitoringTypePage from '../e2e/order/monitoring-conditions/order-type-description/monitoring-type/MonitoringTypesPage'
+import TypesOfMonitoringNeededPage from '../e2e/order/monitoring-conditions/order-type-description/types-of-monitoring-needed/TypesOfMonitoringNeededPage'
+import EnforcementZoneAddToListPage from '../e2e/order/monitoring-conditions/add-to-list/exclusion-zone/ExclusionZonePage'
 
 context('The kitchen sink', () => {
   const takeScreenshots = config.screenshots_enabled
@@ -97,7 +100,7 @@ context('The kitchen sink', () => {
       sentenceType: 'Standard Determinate Sentence',
       typeOfAcquistiveCrime: 'Aggravated Burglary',
       policeForceArea: 'Kent',
-      monitoringCondition: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring'],
+      monitoringCondition: ['Curfew', 'Exclusion zone monitoring', 'Exclusion zone monitoring', 'Trail monitoring'],
       hdc: 'Yes',
       prarr: 'No',
     }
@@ -134,7 +137,7 @@ context('The kitchen sink', () => {
       uploadFile: files.licence,
       description: 'A test description: Lorum ipsum dolar sit amet...',
       duration: 'A test duration: one, two, three...',
-      anotherZone: 'Yes',
+      name: 'zone name',
     }
     const secondEnforcementZoneDetails = {
       zoneType: 'Exclusion zone',
@@ -143,7 +146,7 @@ context('The kitchen sink', () => {
       uploadFile: files.licence,
       description: 'A second test description: Lorum ipsum dolar sit amet...',
       duration: 'A second test duration: one, two, three...',
-      anotherZone: 'No',
+      name: 'zone two name',
     }
     const installationAndRisk = {
       offence: 'Sexual offences',
@@ -232,9 +235,7 @@ context('The kitchen sink', () => {
       if (takeScreenshots) cy.screenshot('09. tertiaryAddressPage', { overwrite: true })
       tertiaryAddressPage.form.saveAndContinueButton.click()
 
-      // no validation
       const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-      // interestedPartiesPage.form.saveAndContinueButton.click()
       if (takeScreenshots) cy.screenshot('10. interestedPartiesPage - validation', { overwrite: true })
       interestedPartiesPage.form.fillInWith(interestedParties)
       if (takeScreenshots) cy.screenshot('10. interestedPartiesPage', { overwrite: true })
@@ -250,14 +251,30 @@ context('The kitchen sink', () => {
       )
       contactInformationCheckYourAnswersPage.continueButton().click()
 
-      // no validation
-      let installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-      installationAndRiskPage.form.saveAndContinueButton.click()
-      installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-      if (takeScreenshots) cy.screenshot('11. installationAndRiskPage - validation', { overwrite: true })
-      installationAndRiskPage.form.fillInWith(installationAndRisk)
-      if (takeScreenshots) cy.screenshot('11. installationAndRiskPage', { overwrite: true })
-      installationAndRiskPage.form.saveAndContinueButton.click()
+      let offencePage = Page.verifyOnPage(OffencePage)
+      offencePage.form.saveAndContinueButton.click()
+      offencePage = Page.verifyOnPage(OffencePage)
+      if (takeScreenshots) cy.screenshot('11 offencePage - validation', { overwrite: true })
+      offencePage.form.fillInWith({ offenceType: installationAndRisk.offence })
+      offencePage.form.saveAndContinueButton.click()
+
+      let offenceDetailsPage = Page.verifyOnPage(OffenceOtherInfoPage)
+      offenceDetailsPage.form.saveAndContinueButton.click()
+      offenceDetailsPage = Page.verifyOnPage(OffenceOtherInfoPage)
+      if (takeScreenshots) cy.screenshot('12 offencePage - validation', { overwrite: true })
+      offenceDetailsPage.form.fillInWith({ hasOtherInformation: 'No' })
+      offenceDetailsPage.form.saveAndContinueButton.click()
+
+      let detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
+      detailsOfInstallationPage.form.saveAndContinueButton.click()
+      detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
+      if (takeScreenshots) cy.screenshot('13 offencePage - validation', { overwrite: true })
+      detailsOfInstallationPage.form.fillInWith({
+        possibleRisks: [installationAndRisk.possibleRisk],
+        riskCategories: [installationAndRisk.riskCategory],
+        riskDetails: installationAndRisk.riskDetails,
+      })
+      detailsOfInstallationPage.form.saveAndContinueButton.click()
 
       const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(
         InstallationAndRiskCheckYourAnswersPage,
@@ -266,113 +283,162 @@ context('The kitchen sink', () => {
       if (takeScreenshots)
         cy.screenshot('11. installationAndRiskCheckYourAnswersPage - validation', { overwrite: true })
       // installationAndRiskPage.fillInWith()
-      if (takeScreenshots) cy.screenshot('11. installationAndRiskCheckYourAnswersPage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('14. installationAndRiskCheckYourAnswersPage', { overwrite: true })
       installationAndRiskCheckYourAnswersPage.continueButton().click()
 
       let sentenceTypePage = Page.verifyOnPage(SentenceTypePage)
       sentenceTypePage.form.continueButton.click()
       sentenceTypePage = Page.verifyOnPage(SentenceTypePage)
-      if (takeScreenshots) cy.screenshot('12.a sentenceTypePage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('15.a sentenceTypePage - validation', { overwrite: true })
       sentenceTypePage.form.fillInWith(monitoringConditions.sentenceType)
       sentenceTypePage.form.continueButton.click()
 
       let hdcPage = Page.verifyOnPage(HdcPage)
       hdcPage.form.continueButton.click()
       hdcPage = Page.verifyOnPage(HdcPage)
-      if (takeScreenshots) cy.screenshot('12.b hdcPage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('15.b hdcPage - validation', { overwrite: true })
       hdcPage.form.fillInWith(monitoringConditions.hdc)
       hdcPage.form.continueButton.click()
 
       let pilotPage = Page.verifyOnPage(PilotPage)
       pilotPage.form.continueButton.click()
       pilotPage = Page.verifyOnPage(PilotPage)
-      if (takeScreenshots) cy.screenshot('12.c pilotPage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('15.c pilotPage - validation', { overwrite: true })
       pilotPage.form.fillInWith(monitoringConditions.pilot)
       pilotPage.form.continueButton.click()
 
       let offenceTypePage = Page.verifyOnPage(OffenceTypePage)
       offenceTypePage.form.continueButton.click()
       offenceTypePage = Page.verifyOnPage(OffenceTypePage)
-      if (takeScreenshots) cy.screenshot('12.d offenceTypePage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('15.d offenceTypePage - validation', { overwrite: true })
       offenceTypePage.form.fillInWith(monitoringConditions.typeOfAcquistiveCrime)
       offenceTypePage.form.continueButton.click()
 
       let policeAreaPage = Page.verifyOnPage(PoliceAreaPage)
       policeAreaPage.form.continueButton.click()
       policeAreaPage = Page.verifyOnPage(PoliceAreaPage)
-      if (takeScreenshots) cy.screenshot('12.d offenceTypePage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('15.d offenceTypePage - validation', { overwrite: true })
       policeAreaPage.form.fillInWith(monitoringConditions.policeForceArea)
       policeAreaPage.form.continueButton.click()
 
       let prarrPage = Page.verifyOnPage(PrarrPage)
       prarrPage.form.continueButton.click()
       prarrPage = Page.verifyOnPage(PrarrPage)
-      if (takeScreenshots) cy.screenshot('12.e prarrPage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('15.e prarrPage - validation', { overwrite: true })
       prarrPage.form.fillInWith(monitoringConditions.prarr)
       prarrPage.form.continueButton.click()
 
-      let monitoringConditionPage = Page.verifyOnPage(MonitoringTypesPage)
+      let monitoringConditionPage = Page.verifyOnPage(MonitoringTypePage)
       monitoringConditionPage.form.continueButton.click()
-      monitoringConditionPage = Page.verifyOnPage(MonitoringTypesPage)
-      if (takeScreenshots) cy.screenshot('12.f monitoringConditionPage - validation', { overwrite: true })
-      monitoringConditionPage.form.fillInWith(monitoringConditions.monitoringCondition)
+      monitoringConditionPage = Page.verifyOnPage(MonitoringTypePage)
+      if (takeScreenshots) cy.screenshot('16 monitoringConditionPage - validation', { overwrite: true })
+      monitoringConditionPage.form.fillInWith(monitoringConditions.monitoringCondition.pop())
+      monitoringConditionPage.form.continueButton.click()
+
+      let trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
+      trailMonitoringPage.form.saveAndContinueButton.click()
+      trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
+      if (takeScreenshots) cy.screenshot('17. trailMonitoringPage - validation', { overwrite: true })
+      trailMonitoringPage.form.fillInWith(trailMonitoringOrder)
+      if (takeScreenshots) cy.screenshot('17. trailMonitoringPage - minimum', { overwrite: true })
+      trailMonitoringPage.form.saveAndContinueButton.click()
+
+      let monitoringConditionsListPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)
+      monitoringConditionsListPage.form.saveAndContinueButton.click()
+      monitoringConditionsListPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)
+      if (takeScreenshots) cy.screenshot('18 monitoringConditionPage - validation', { overwrite: true })
+      monitoringConditionsListPage.form.fillInWith('Yes')
+      monitoringConditionsListPage.form.saveAndContinueButton.click()
+
+      monitoringConditionPage = Page.verifyOnPage(MonitoringTypePage)
+      monitoringConditionPage.form.continueButton.click()
+      monitoringConditionPage = Page.verifyOnPage(MonitoringTypePage)
+      if (takeScreenshots) cy.screenshot('19 monitoringConditionPage - validation', { overwrite: true })
+      monitoringConditionPage.form.fillInWith(monitoringConditions.monitoringCondition.pop())
+      monitoringConditionPage.form.continueButton.click()
+
+      let enforcementZonePage = Page.verifyOnPage(EnforcementZoneAddToListPage)
+      enforcementZonePage.form.saveAndContinueButton.click()
+      enforcementZonePage = Page.verifyOnPage(EnforcementZoneAddToListPage)
+      if (takeScreenshots) cy.screenshot('20. enforcementZonePage - validation', { overwrite: true })
+      enforcementZonePage.form.fillInWith(primaryEnforcementZoneDetails)
+      if (takeScreenshots) cy.screenshot('20. enforcementZonePage - minimum', { overwrite: true })
+      enforcementZonePage.form.saveAndContinueButton.click()
+
+      monitoringConditionsListPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)
+      monitoringConditionsListPage.form.saveAndContinueButton.click()
+      monitoringConditionsListPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)
+      if (takeScreenshots) cy.screenshot('21 monitoringConditionPage - validation', { overwrite: true })
+      monitoringConditionsListPage.form.fillInWith('Yes')
+      monitoringConditionsListPage.form.saveAndContinueButton.click()
+
+      monitoringConditionPage = Page.verifyOnPage(MonitoringTypePage)
+      monitoringConditionPage.form.continueButton.click()
+      monitoringConditionPage = Page.verifyOnPage(MonitoringTypePage)
+      if (takeScreenshots) cy.screenshot('22 monitoringConditionPage - validation', { overwrite: true })
+      monitoringConditionPage.form.fillInWith(monitoringConditions.monitoringCondition.pop())
+      monitoringConditionPage.form.continueButton.click()
+
+      enforcementZonePage = Page.verifyOnPage(EnforcementZoneAddToListPage)
+      enforcementZonePage.form.saveAndContinueButton.click()
+      enforcementZonePage = Page.verifyOnPage(EnforcementZoneAddToListPage)
+      if (takeScreenshots) cy.screenshot('23. enforcementZonePage - validation', { overwrite: true })
+      enforcementZonePage.form.fillInWith(secondEnforcementZoneDetails)
+      if (takeScreenshots) cy.screenshot('23. enforcementZonePage - minimum', { overwrite: true })
+      enforcementZonePage.form.saveAndContinueButton.click()
+
+      monitoringConditionsListPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)
+      monitoringConditionsListPage.form.saveAndContinueButton.click()
+      monitoringConditionsListPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)
+      if (takeScreenshots) cy.screenshot('24 monitoringConditionPage - validation', { overwrite: true })
+      monitoringConditionsListPage.form.fillInWith('Yes')
+      monitoringConditionsListPage.form.saveAndContinueButton.click()
+
+      monitoringConditionPage = Page.verifyOnPage(MonitoringTypePage)
+      monitoringConditionPage.form.continueButton.click()
+      monitoringConditionPage = Page.verifyOnPage(MonitoringTypePage)
+      if (takeScreenshots) cy.screenshot('25 monitoringConditionPage - validation', { overwrite: true })
+      monitoringConditionPage.form.fillInWith(monitoringConditions.monitoringCondition.pop())
       monitoringConditionPage.form.continueButton.click()
 
       let curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
       curfewConditionsPage.form.saveAndContinueButton.click()
       curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
-      if (takeScreenshots) cy.screenshot('14. curfewConditionsPage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('26. curfewConditionsPage - validation', { overwrite: true })
       curfewConditionsPage.form.fillInWith(curfewConditionDetails)
-      if (takeScreenshots) cy.screenshot('14. curfewConditionsPage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('26. curfewConditionsPage - minimum', { overwrite: true })
       curfewConditionsPage.form.saveAndContinueButton.click()
 
       let curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
       curfewReleaseDatePage.form.saveAndContinueButton.click()
       curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
-      if (takeScreenshots) cy.screenshot('15. curfewReleaseDatePage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('27. curfewReleaseDatePage - validation', { overwrite: true })
       curfewReleaseDatePage.form.fillInWith(curfewReleaseDetails)
-      if (takeScreenshots) cy.screenshot('15. curfewReleaseDatePage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('27. curfewReleaseDatePage - minimum', { overwrite: true })
       curfewReleaseDatePage.form.saveAndContinueButton.click()
 
       let curfewAdditionalDetailsPage = Page.verifyOnPage(CurfewAdditionalDetailsPage)
       curfewAdditionalDetailsPage.form.saveAndContinueButton.click()
       curfewAdditionalDetailsPage = Page.verifyOnPage(CurfewAdditionalDetailsPage)
-      if (takeScreenshots) cy.screenshot('16. curfewAdditionalDetailsPage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('28. curfewAdditionalDetailsPage - validation', { overwrite: true })
       curfewAdditionalDetailsPage.form.fillInWith(curfewConditionDetails)
-      if (takeScreenshots) cy.screenshot('16. curfewAdditionalDetailsPage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('28. curfewAdditionalDetailsPage', { overwrite: true })
       curfewAdditionalDetailsPage.form.saveAndContinueButton.click()
 
       let curfewTimetablePage = Page.verifyOnPage(CurfewTimetablePage)
       curfewTimetablePage.form.saveAndContinueButton.click()
       curfewTimetablePage = Page.verifyOnPage(CurfewTimetablePage)
-      if (takeScreenshots) cy.screenshot('17. curfewTimetablePage - validation', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('26. curfewTimetablePage - validation', { overwrite: true })
       curfewTimetablePage.form.fillInWith(curfewTimetable)
-      if (takeScreenshots) cy.screenshot('17. curfewTimetablePage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('26. curfewTimetablePage - minimum', { overwrite: true })
       curfewTimetablePage.form.saveAndContinueButton.click()
 
-      let enforcementZonePage = Page.verifyOnPage(EnforcementZonePage)
-      enforcementZonePage.form.saveAndContinueButton.click()
-      enforcementZonePage = Page.verifyOnPage(EnforcementZonePage)
-      if (takeScreenshots) cy.screenshot('18. enforcementZonePage - validation', { overwrite: true })
-      enforcementZonePage.form.fillInWith(primaryEnforcementZoneDetails)
-      if (takeScreenshots) cy.screenshot('18. enforcementZonePage', { overwrite: true })
-      enforcementZonePage.form.saveAndContinueButton.click()
-
-      enforcementZonePage = Page.verifyOnPage(EnforcementZonePage)
-      enforcementZonePage.form.saveAndContinueButton.click()
-      enforcementZonePage = Page.verifyOnPage(EnforcementZonePage)
-      if (takeScreenshots) cy.screenshot('19. enforcementZonePage - validation', { overwrite: true })
-      enforcementZonePage.form.fillInWith(secondEnforcementZoneDetails)
-      if (takeScreenshots) cy.screenshot('19. enforcementZonePage', { overwrite: true })
-      enforcementZonePage.form.saveAndContinueButton.click()
-
-      let trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
-      trailMonitoringPage.form.saveAndContinueButton.click()
-      trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
-      if (takeScreenshots) cy.screenshot('20. trailMonitoringPage - validation', { overwrite: true })
-      trailMonitoringPage.form.fillInWith(trailMonitoringOrder)
-      if (takeScreenshots) cy.screenshot('20. trailMonitoringPage', { overwrite: true })
-      trailMonitoringPage.form.saveAndContinueButton.click()
+      monitoringConditionsListPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)
+      monitoringConditionsListPage.form.saveAndContinueButton.click()
+      monitoringConditionsListPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)
+      if (takeScreenshots) cy.screenshot('29 monitoringConditionPage - validation', { overwrite: true })
+      monitoringConditionsListPage.form.fillInWith('No')
+      monitoringConditionsListPage.form.saveAndContinueButton.click()
 
       const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
         MonitoringConditionsCheckYourAnswersPage,
@@ -382,31 +448,31 @@ context('The kitchen sink', () => {
 
       const licencePage = Page.verifyOnPage(UploadLicencePage)
       licencePage.form.uploadField.uploadFile({ fileName: files.licence.fileName, contents: files.licence.contents })
-      if (takeScreenshots) cy.screenshot('22. licencePage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('30. licencePage', { overwrite: true })
       licencePage.form.saveAndContinueButton.click()
 
       const havePhotoPage = Page.verifyOnPage(HavePhotoPage)
-      if (takeScreenshots) cy.screenshot('23. havePhotoPage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('31. havePhotoPage', { overwrite: true })
       havePhotoPage.form.havePhotoField.set('No')
       havePhotoPage.form.saveAndContinueButton.click()
 
       const attachmentPage = Page.verifyOnPage(AttachmentSummaryPage)
-      if (takeScreenshots) cy.screenshot('24. attachmentPage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('32. attachmentPage', { overwrite: true })
       attachmentPage.saveAndReturnButton.click()
 
       orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       orderSummaryPage.submitOrderButton.click()
 
       const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
-      if (takeScreenshots) cy.screenshot('25. submitSuccessPage', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('33. submitSuccessPage', { overwrite: true })
       submitSuccessPage.backToYourApplications.click()
 
       indexPage = Page.verifyOnPage(IndexPage)
-      if (takeScreenshots) cy.screenshot('26. indexPageAfterSubmission', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('34. indexPageAfterSubmission', { overwrite: true })
       indexPage.searchNav.click()
 
       const searchPage = Page.verifyOnPage(SearchPage)
-      if (takeScreenshots) cy.screenshot('27. searchPageAfterSubmission', { overwrite: true })
+      if (takeScreenshots) cy.screenshot('35. searchPageAfterSubmission', { overwrite: true })
       searchPage.searchBox.type(deviceWearerDetails.lastName)
       searchPage.searchButton.click()
       searchPage.ordersList.contains(`${deviceWearerDetails.firstName} ${deviceWearerDetails.lastName}`)
