@@ -62,7 +62,7 @@ context('Service-Request-Types', () => {
     const monitoringOrderTypeDescription = {
       orderType: 'Civil',
 
-      monitoringCondition: 'Trail monitoring',
+      monitoringCondition: ['Trail monitoring'],
     }
 
     const trailMonitoringOrder = {

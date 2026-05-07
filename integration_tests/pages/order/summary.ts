@@ -173,69 +173,71 @@ export default class OrderTasksPage extends AppPage {
       monitoringOrderTypeDescription,
     })
 
-    monitoringOrderTypeDescription.monitoringCondition.forEach((condition: string, index: number) => {
-      const monitoringConditionPage = Page.verifyOnPage(MonitoringTypePage)
-      monitoringConditionPage.form.fillInWith(condition)
-      monitoringConditionPage.form.continueButton.click()
+    if (Array.isArray(monitoringOrderTypeDescription.monitoringCondition)) {
+      monitoringOrderTypeDescription.monitoringCondition.forEach((condition: string, index: number) => {
+        const monitoringConditionPage = Page.verifyOnPage(MonitoringTypePage)
+        monitoringConditionPage.form.fillInWith(condition)
+        monitoringConditionPage.form.continueButton.click()
 
-      if (condition === 'Curfew') {
-        this.fillInCurfewOrderDetailsWith(
-          {
-            curfewConditionDetails,
-            curfewReleaseDetails,
-            curfewTimetable,
-          },
-          false,
-        )
-      }
+        if (condition === 'Curfew') {
+          this.fillInCurfewOrderDetailsWith(
+            {
+              curfewConditionDetails,
+              curfewReleaseDetails,
+              curfewTimetable,
+            },
+            false,
+          )
+        }
 
-      if (condition === 'Exclusion zone monitoring') {
-        this.fillInEnforcementZoneOrderDetailsWith(
-          {
-            enforcementZoneDetails,
-          },
-          false,
-        )
-      }
+        if (condition === 'Exclusion zone monitoring') {
+          this.fillInEnforcementZoneOrderDetailsWith(
+            {
+              enforcementZoneDetails,
+            },
+            false,
+          )
+        }
 
-      if (condition === 'Trail monitoring') {
-        this.fillInTrailMonitoringOrderDetailsWith(
-          {
-            trailMonitoringDetails,
-          },
-          false,
-        )
-      }
+        if (condition === 'Trail monitoring') {
+          this.fillInTrailMonitoringOrderDetailsWith(
+            {
+              trailMonitoringDetails,
+            },
+            false,
+          )
+        }
 
-      if (condition === 'Alcohol monitoring') {
-        this.fillInAlcoholMonitoringOrderDetailsWith(
-          {
-            alcoholMonitoringDetails,
-            installationAddressDetails,
-          },
-          false,
-        )
-      }
+        if (condition === 'Alcohol monitoring') {
+          this.fillInAlcoholMonitoringOrderDetailsWith(
+            {
+              alcoholMonitoringDetails,
+              installationAddressDetails,
+            },
+            false,
+          )
+        }
 
-      if (condition === 'Mondatory attendance monitoring') {
-        this.fillInAttendanceMonitoringDetailsWith(
-          {
-            attendanceMonitoringDetails,
-          },
-          false,
-        )
-      }
+        if (condition === 'Mondatory attendance monitoring') {
+          this.fillInAttendanceMonitoringDetailsWith(
+            {
+              attendanceMonitoringDetails,
+            },
+            false,
+          )
+        }
 
-      if (index === monitoringOrderTypeDescription.monitoringCondition.length - 1) {
-        const monitoringConditionsListPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)
-        monitoringConditionsListPage.form.fillInWith('No')
-        monitoringConditionsListPage.form.saveAndContinueButton.click()
-      } else {
-        const monitoringConditionsListPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)
-        monitoringConditionsListPage.form.fillInWith('Yes')
-        monitoringConditionsListPage.form.saveAndContinueButton.click()
-      }
-    })
+        if (index === monitoringOrderTypeDescription.monitoringCondition.length - 1) {
+          const monitoringConditionsListPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)
+          monitoringConditionsListPage.form.fillInWith('No')
+          monitoringConditionsListPage.form.saveAndContinueButton.click()
+        } else {
+          const monitoringConditionsListPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)
+          monitoringConditionsListPage.form.fillInWith('Yes')
+          monitoringConditionsListPage.form.saveAndContinueButton.click()
+        }
+      })
+    }
 
     if (installationLocation) {
       fillInTagAtSourceWith(installationLocation, installationAppointment, installationAddressDetails)
