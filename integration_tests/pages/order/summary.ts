@@ -36,6 +36,7 @@ import OffenceOtherInfoPage from '../../e2e/order/access-needs-installation-risk
 import DetailsOfInstallationPage from '../../e2e/order/access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
 import IsMappaPage from '../../e2e/order/access-needs-installation-risk/is-mappa/IsMappaPage'
 import OffenceListPage from '../../e2e/order/access-needs-installation-risk/offences/offence-list/offenceListPage'
+import TypesOfMonitoringNeededPage from '../../e2e/order/monitoring-conditions/order-type-description/types-of-monitoring-needed/TypesOfMonitoringNeededPage'
 
 export default class OrderTasksPage extends AppPage {
   constructor(isOldVersionPage: boolean = false) {
@@ -216,6 +217,10 @@ export default class OrderTasksPage extends AppPage {
         false,
       )
     }
+
+    const monitoringConditionsListPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)
+    monitoringConditionsListPage.form.fillInWith('No')
+    monitoringConditionsListPage.form.saveAndContinueButton.click()
 
     if (installationLocation) {
       fillInTagAtSourceWith(installationLocation, installationAppointment, installationAddressDetails)
