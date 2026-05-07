@@ -148,6 +148,47 @@ context('Order Summary', () => {
 
       Page.verifyOnPage(DetailsOfInstallationPage)
     })
+
+    it('Disables submit when risk information is incomplete', () => {
+      const testFlags = { OFFENCE_FLOW_ENABLED: true }
+      cy.task('setFeatureFlags', testFlags)
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          dataDictionaryVersion: 'DDV6',
+          isValid: true,
+          interestedParties: {
+            notifyingOrganisation: 'CROWN_COURT',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: 'test@test.com',
+            responsibleOfficerName: 'John Smith',
+            responsibleOfficerPhoneNumber: '01234567890',
+            responsibleOrganisation: 'PROBATION',
+            responsibleOrganisationRegion: '',
+            responsibleOrganisationEmail: '',
+          },
+          installationAndRisk: {
+            offence: 'SEXUAL_OFFENCES',
+            offenceAdditionalDetails: 'mock offence additional details',
+            riskCategory: null,
+            riskDetails: null,
+            mappaLevel: null,
+            mappaCaseType: null,
+          },
+          offences: [],
+          detailsOfInstallation: { riskCategory: ['some category'], riskDetails: '' },
+          offenceAdditionalDetails: { additionalDetails: 'details' },
+        },
+      })
+
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.riskInformationTask.shouldHaveStatus('Incomplete')
+      page.submitOrderButton.should('be.disabled')
+    })
   })
 
   context('Variation', () => {
