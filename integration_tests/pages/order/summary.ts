@@ -37,6 +37,7 @@ import DetailsOfInstallationPage from '../../e2e/order/access-needs-installation
 import IsMappaPage from '../../e2e/order/access-needs-installation-risk/is-mappa/IsMappaPage'
 import OffenceListPage from '../../e2e/order/access-needs-installation-risk/offences/offence-list/offenceListPage'
 import TypesOfMonitoringNeededPage from '../../e2e/order/monitoring-conditions/order-type-description/types-of-monitoring-needed/TypesOfMonitoringNeededPage'
+import DapoPage from '../../e2e/order/access-needs-installation-risk/offences/dapo/DapoPage'
 
 export default class OrderTasksPage extends AppPage {
   constructor(isOldVersionPage: boolean = false) {
@@ -565,11 +566,15 @@ export default class OrderTasksPage extends AppPage {
 
     if (installationAndRisk) {
       if (interestedParties.notifyingOrganisation !== 'Home Office') {
-        if (interestedParties.notifyingOrganisation !== 'Civil and County Court') {
-          const offencePage = Page.verifyOnPage(OffencePage)
-          offencePage.form.fillInWith({ offenceType: installationAndRisk.offence })
-          offencePage.form.saveAndContinueButton.click()
-        } else {
+        if (interestedParties.notifyingOrganisation === 'Family Court') {
+          const dapoPage = Page.verifyOnPage(DapoPage)
+          dapoPage.form.fillInWith({ dapoClauseNumber: 'dapo clause', dapoDate: new Date(2025, 0, 1) })
+          dapoPage.form.saveAndContinueButton.click()
+
+          const offenceListPage = Page.verifyOnPage(OffenceListPage, undefined, undefined, 'DAPO order clauses')
+          offenceListPage.form.fillInWith({ addDapoClause: 'No' })
+          offenceListPage.form.saveAndContinueButton.click()
+        } else if (interestedParties.notifyingOrganisation === 'Civil and County Court') {
           const offencePage = Page.verifyOnPage(OffencePage)
           offencePage.form.fillInWith({ offenceType: installationAndRisk.offence, offenceDate: new Date(2025, 0, 1) })
           offencePage.form.saveAndContinueButton.click()
@@ -577,11 +582,19 @@ export default class OrderTasksPage extends AppPage {
           const offenceListPage = Page.verifyOnPage(OffenceListPage)
           offenceListPage.form.fillInWith({ addOffence: 'No' })
           offenceListPage.form.saveAndContinueButton.click()
-        }
 
-        const offenceDetailsPage = Page.verifyOnPage(OffenceOtherInfoPage)
-        offenceDetailsPage.form.fillInWith({ hasOtherInformation: 'No' })
-        offenceDetailsPage.form.saveAndContinueButton.click()
+          const offenceDetailsPage = Page.verifyOnPage(OffenceOtherInfoPage)
+          offenceDetailsPage.form.fillInWith({ hasOtherInformation: 'No' })
+          offenceDetailsPage.form.saveAndContinueButton.click()
+        } else {
+          const offencePage = Page.verifyOnPage(OffencePage)
+          offencePage.form.fillInWith({ offenceType: installationAndRisk.offence })
+          offencePage.form.saveAndContinueButton.click()
+
+          const offenceDetailsPage = Page.verifyOnPage(OffenceOtherInfoPage)
+          offenceDetailsPage.form.fillInWith({ hasOtherInformation: 'No' })
+          offenceDetailsPage.form.saveAndContinueButton.click()
+        }
       }
 
       const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
