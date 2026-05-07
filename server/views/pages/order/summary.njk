@@ -105,6 +105,7 @@
                 } %}
                {% endif %}
         {% else %}
+          {% set allChecked = false %}
           {% set statusArgs = { 
             tag: {
               text: 'Incomplete'
