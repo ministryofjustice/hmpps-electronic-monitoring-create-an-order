@@ -5,6 +5,7 @@ import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAdd
 import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import fillInTagAtSourceWith from '../../../utils/scenario-flows/tag-at-source.cy'
+import TypesOfMonitoringNeededPage from '../../../e2e/order/monitoring-conditions/order-type-description/types-of-monitoring-needed/TypesOfMonitoringNeededPage'
 
 context('Order type descriptions', () => {
   const currentDate = new Date()
@@ -77,9 +78,15 @@ context('Order type descriptions', () => {
     const trailMonitoringPage = Page.verifyOnPage(TrailMonitoringPage)
     trailMonitoringPage.form.fillInWith(trailMonitoring)
     trailMonitoringPage.form.saveAndContinueButton.click()
+
+    const monitoringConditionsListPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)
+    monitoringConditionsListPage.form.fillInWith('No')
+    monitoringConditionsListPage.form.saveAndContinueButton.click()
+
     if (installationLocation) {
       fillInTagAtSourceWith(installationLocation, installationAppointment, installationAddressDetails)
     }
+
     const page = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answer')
     const expectedOrderType =
       monitoringOrderTypeDescription.orderType === 'Release from prison'

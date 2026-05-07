@@ -8,7 +8,6 @@ import ContactDetailsPage from './contact-information/contact-details'
 import NoFixedAbodePage from './contact-information/no-fixed-abode'
 import PrimaryAddressPage from './contact-information/primary-address'
 import InterestedPartiesPage from './contact-information/interested-parties'
-import InstallationAndRiskPage from './installationAndRisk'
 import InstallationAndRiskCheckYourAnswersPage from './installation-and-risk/check-your-answers'
 import AttachmentSummaryPage from './attachments/summary'
 import DeviceWearerCheckYourAnswersPage from './about-the-device-wearer/check-your-answers'
@@ -32,6 +31,11 @@ import fillInAttendanceMonitoringDetailsWith from '../../utils/scenario-flows/at
 import Timeline from '../components/timeline'
 import HaveCourtOrderPage from '../../e2e/order/attachments/have-court-order/courtOrderDocumentPage'
 import UploadCourtOrderPage from '../../e2e/order/attachments/upload-court-order/uploadCourtOrderPage'
+import OffencePage from '../../e2e/order/access-needs-installation-risk/offences/offence/offencePage'
+import OffenceOtherInfoPage from '../../e2e/order/access-needs-installation-risk/offences/offence-other-info/offenceOtherInfoPage'
+import DetailsOfInstallationPage from '../../e2e/order/access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
+import IsMappaPage from '../../e2e/order/access-needs-installation-risk/is-mappa/IsMappaPage'
+import OffenceListPage from '../../e2e/order/access-needs-installation-risk/offences/offence-list/offenceListPage'
 
 export default class OrderTasksPage extends AppPage {
   constructor(isOldVersionPage: boolean = false) {
@@ -555,9 +559,39 @@ export default class OrderTasksPage extends AppPage {
     }
 
     if (installationAndRisk) {
-      const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-      installationAndRiskPage.form.fillInWith(installationAndRisk)
-      installationAndRiskPage.form.saveAndContinueButton.click()
+      if (interestedParties.notifyingOrganisation !== 'Home Office') {
+        if (interestedParties.notifyingOrganisation !== 'Civil and County Court') {
+          const offencePage = Page.verifyOnPage(OffencePage)
+          offencePage.form.fillInWith({ offenceType: installationAndRisk.offence })
+          offencePage.form.saveAndContinueButton.click()
+        } else {
+          const offencePage = Page.verifyOnPage(OffencePage)
+          offencePage.form.fillInWith({ offenceType: installationAndRisk.offence, offenceDate: new Date(2025, 0, 1) })
+          offencePage.form.saveAndContinueButton.click()
+
+          const offenceListPage = Page.verifyOnPage(OffenceListPage)
+          offenceListPage.form.fillInWith({ addOffence: 'No' })
+          offenceListPage.form.saveAndContinueButton.click()
+        }
+
+        const offenceDetailsPage = Page.verifyOnPage(OffenceOtherInfoPage)
+        offenceDetailsPage.form.fillInWith({ hasOtherInformation: 'No' })
+        offenceDetailsPage.form.saveAndContinueButton.click()
+      }
+
+      const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
+      detailsOfInstallationPage.form.fillInWith({
+        possibleRisks: [installationAndRisk.possibleRisk],
+        riskCategories: [installationAndRisk.riskCategory],
+        riskDetails: installationAndRisk.riskDetails,
+      })
+      detailsOfInstallationPage.form.saveAndContinueButton.click()
+
+      if (interestedParties.notifyingOrganisation === 'Home Office') {
+        const mappaPage = Page.verifyOnPage(IsMappaPage)
+        mappaPage.form.fillInWith({ isMappa: 'No' })
+        mappaPage.form.saveAndContinueButton.click()
+      }
 
       const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(
         InstallationAndRiskCheckYourAnswersPage,
