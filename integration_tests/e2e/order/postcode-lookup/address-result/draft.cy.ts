@@ -153,7 +153,7 @@ context('address results', () => {
 
     it('shows no results when postcode lookup returns bad request', () => {
       cy.task('stubOSDataHubPostcode', {
-        httpStatus: 200,
+        httpStatus: 400,
         postcode: 'UNKNOWNPOSTCODE',
         body: {
           error: 'Bad request',
@@ -162,10 +162,10 @@ context('address results', () => {
 
       Page.visit(AddressResultPage, { orderId: mockOrderId, addressType: 'PRIMARY' }, { postcode: 'UNKNOWN POSTCODE' })
       cy.contains(
-        'We could not an address that matches UNKNOWN postcode. You can search again or enter the address manually.',
+        'We could not find an address that matches UNKNOWN POSTCODE. You can search again or enter the address manually.',
       )
 
-      cy.contains('a', 'Search again.').should('have.attr', 'href', `/order/${mockOrderId}/find-address/PRIMARY`)
+      cy.contains('a', 'Search again').should('have.attr', 'href', `/order/${mockOrderId}/find-address/PRIMARY`)
 
       cy.contains('a', 'Enter address manually').should(
         'have.attr',

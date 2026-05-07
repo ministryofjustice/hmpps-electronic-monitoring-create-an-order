@@ -24,7 +24,7 @@ describe('osDataHubClient', () => {
     expect(addressMapper.mapToAddresses).not.toHaveBeenCalled()
   })
 
-  it('limit postcode lookup results to 30', async () => {
+  it('requests 31 for postcode lookup results to detect results over 30', async () => {
     apiClient.getWithoutBearer.mockResolvedValue({ results: [] })
     addressMapper.mapToAddresses.mockReturnValue([])
     const client = new OSDataHubClient(apiClient, addressMapper, 'mockApiKey')
