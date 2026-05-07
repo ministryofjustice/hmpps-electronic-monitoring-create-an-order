@@ -151,6 +151,29 @@ context('address results', () => {
       )
     })
 
+    it('shows no results when postcode lookup returns bad request', () => {
+      cy.task('stubOSDataHubPostcode', {
+        httpStatus: 200,
+        postcode: 'UNKNOWNPOSTCODE',
+        body: {
+          error: 'Bad request',
+        },
+      })
+
+      Page.visit(AddressResultPage, { orderId: mockOrderId, addressType: 'PRIMARY' }, { postcode: 'UNKNOWN POSTCODE' })
+      cy.contains(
+        'We could not an address that matches UNKNOWN postcode. You can search again or enter the address manually.',
+      )
+
+      cy.contains('a', 'Search again.').should('have.attr', 'href', `/order/${mockOrderId}/find-address/PRIMARY`)
+
+      cy.contains('a', 'Enter address manually').should(
+        'have.attr',
+        'href',
+        `/order/${mockOrderId}/enter-address/PRIMARY`,
+      )
+    })
+
     it('does not show an error summary when navigated from a failed address selection', () => {
       cy.task('stubOSDataHubPostcode', {
         httpStatus: 200,
