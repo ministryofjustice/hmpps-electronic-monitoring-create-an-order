@@ -48,6 +48,10 @@ context('find address page', () => {
         'href',
         paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'INSTALLATION'),
       )
+
+      cy.contains(
+        'For installation at source this is the address of the prison, probation office or immigration removal centre.',
+      )
     })
   })
 

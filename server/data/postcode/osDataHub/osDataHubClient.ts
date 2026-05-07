@@ -3,6 +3,7 @@ import { PostcodeLookupClient } from '../PostcodeLookupClient'
 import AddressMapper from './addressMapper'
 import { OSDataHubPostcodeResponse } from './osDataHubPostcodeResponse'
 import RestClient from '../../restClient'
+import { SanitisedError } from '../../../sanitisedError'
 
 export default class OSDataHubClient implements PostcodeLookupClient {
   constructor(
@@ -12,15 +13,24 @@ export default class OSDataHubClient implements PostcodeLookupClient {
   ) {}
 
   async lookupByPostcode(postcode: string): Promise<AddressWithoutTypeUPRN[]> {
-    const results = await this.apiClient.getWithoutBearer({
-      path: '/search/places/v1/postcode',
-      query: `postcode=${postcode}&dataset=DPA`,
-      headers: { key: this.apiKey || '' },
-    })
+    try {
+      const results = await this.apiClient.getWithoutBearer({
+        path: '/search/places/v1/postcode',
+        query: `postcode=${postcode}&dataset=DPA&maxresults=31`,
+        headers: { key: this.apiKey || '' },
+      })
 
-    const data = results as OSDataHubPostcodeResponse
+      const data = results as OSDataHubPostcodeResponse
 
-    return this.addressMapper.mapToAddresses(data)
+      return this.addressMapper.mapToAddresses(data)
+    } catch (e) {
+      const sanitisedError = e as SanitisedError
+      if (sanitisedError.status === 400) {
+        return []
+      }
+
+      throw e
+    }
   }
 
   async lookupByUPRN(uprn: string): Promise<AddressWithoutTypeUPRN> {
