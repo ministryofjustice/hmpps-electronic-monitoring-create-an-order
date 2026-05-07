@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import CheckYourAnswers from '../../../pages/order/monitoring-conditions/check-your-answers'
 import OrderTasksPage from '../../../pages/order/summary'
+import paths from '../../../../server/constants/paths'
 
 const mockOrderId = uuidv4()
 
@@ -85,6 +86,10 @@ context('Check your answers', () => {
       })
 
       cy.signIn()
+    })
+
+    afterEach(() => {
+      cy.task('resetFeatureFlags')
     })
 
     const pageHeading = 'Check your answers'
@@ -294,6 +299,41 @@ context('Check your answers', () => {
           value: 'Mock Prison, Mock City, SW1A 2AB',
         },
       ])
+    })
+
+    it('should link installation address changes to postcode lookup when postcode lookup is enabled', () => {
+      cy.task('setFeatureFlags', { POSTCODE_LOOKUP_ENABLED: true })
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          ...mockOrder,
+          addresses: [
+            {
+              addressType: 'INSTALLATION',
+              addressLine1: 'Mock Prison',
+              addressLine2: '',
+              addressLine3: 'Mock City',
+              addressLine4: '',
+              postcode: 'SW1A 2AB',
+            },
+          ],
+          installationLocation: {
+            location: 'PRISON',
+          },
+        },
+      })
+
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
+
+      page
+        .changeLinkByQuestion('At what address will installation of the electronic monitoring device take place?')
+        .should(
+          'have.attr',
+          'href',
+          paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'INSTALLATION'),
+        )
     })
 
     it('shows correct buttons', () => {

@@ -25,7 +25,7 @@ const construct = (order: Order, errors: ValidationResult) => {
       value: '',
       error: getError(errors, 'addAnother'),
     },
-    showAddAnother: order.addresses.length < 3,
+    showAddAnother: items.length < 3,
     errorSummary: createGovukErrorSummary(errors),
   }
 }

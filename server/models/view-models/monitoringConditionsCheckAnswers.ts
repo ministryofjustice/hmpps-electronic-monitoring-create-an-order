@@ -208,10 +208,12 @@ const createInstallationAddressAnswers = (order: Order, content: I18n, answerOpt
   if (!order.installationLocation || order.installationLocation.location === 'PRIMARY') {
     return []
   }
-  const uri = paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id).replace(
-    ':addressType(installation)',
-    'installation',
-  )
+  const uri = FeatureFlags.getInstance().get('POSTCODE_LOOKUP_ENABLED')
+    ? paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', order.id).replace(':addressType', 'INSTALLATION')
+    : paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id).replace(
+        ':addressType(installation)',
+        'installation',
+      )
   const installationAddress = order.addresses.find(
     ({ addressType }) => addressType === AddressTypeEnum.Enum.INSTALLATION,
   )

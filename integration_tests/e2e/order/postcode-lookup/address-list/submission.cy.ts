@@ -4,6 +4,7 @@ import Page from '../../../../pages/page'
 import FindAddressPage from '../find-address/findAddressPage'
 import InterestedPartiesPage from '../../../../pages/order/contact-information/interested-parties'
 import OrderTasksPage from '../../../../pages/order/summary'
+import DeviceWearerCheckYourAnswersPage from '../../../../pages/order/about-the-device-wearer/check-your-answers'
 
 context('address list', () => {
   const mockOrderId = uuidv4()
@@ -38,6 +39,10 @@ context('address list', () => {
     cy.signIn()
   })
 
+  afterEach(() => {
+    cy.task('resetFeatureFlags')
+  })
+
   it('can select yes to additional addresses', () => {
     const page = Page.visit(AddressListPage, { orderId: mockOrderId })
 
@@ -55,6 +60,16 @@ context('address list', () => {
     page.form.saveAndContinueButton.click()
 
     Page.verifyOnPage(InterestedPartiesPage, { orderId: mockOrderId })
+  })
+
+  it('can select no to additional addresses when interested parties flow is enabled', () => {
+    cy.task('setFeatureFlags', { INTERESTED_PARTIES_FLOW_ENABLED: true })
+    const page = Page.visit(AddressListPage, { orderId: mockOrderId })
+
+    page.form.fillInWith('No')
+    page.form.saveAndContinueButton.click()
+
+    Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answer')
   })
 
   it('can save as draft', () => {

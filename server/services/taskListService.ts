@@ -231,44 +231,60 @@ export default class TaskListService {
         state: STATES.required,
         completed: isNotNullOrUndefined(order.deviceWearer.noFixedAbode),
       })
-      tasks.push({
-        section: SECTIONS.aboutTheDeviceWearer,
-        name: PAGES.primaryAddress,
-        path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'primary'),
-        state: convertBooleanToEnum<State>(
-          order.deviceWearer.noFixedAbode,
-          STATES.cantBeStarted,
-          STATES.notRequired,
-          STATES.required,
-        ),
-        completed: isCompletedAddress(order, 'PRIMARY'),
-      })
 
-      tasks.push({
-        section: SECTIONS.aboutTheDeviceWearer,
-        name: PAGES.secondaryAddress,
-        path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'secondary'),
-        state: convertBooleanToEnum<State>(
-          order.deviceWearer.noFixedAbode,
-          STATES.cantBeStarted,
-          STATES.notRequired,
-          STATES.optional,
-        ),
-        completed: isCompletedAddress(order, 'SECONDARY'),
-      })
+      if (FeatureFlags.getInstance().get('POSTCODE_LOOKUP_ENABLED')) {
+        tasks.push({
+          section: SECTIONS.aboutTheDeviceWearer,
+          name: PAGES.primaryAddress,
+          path: paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':addressType', 'PRIMARY'),
+          state: convertBooleanToEnum<State>(
+            order.deviceWearer.noFixedAbode,
+            STATES.cantBeStarted,
+            STATES.notRequired,
+            STATES.required,
+          ),
+          completed: isCompletedAddress(order, 'PRIMARY'),
+        })
+      } else {
+        tasks.push({
+          section: SECTIONS.aboutTheDeviceWearer,
+          name: PAGES.primaryAddress,
+          path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'primary'),
+          state: convertBooleanToEnum<State>(
+            order.deviceWearer.noFixedAbode,
+            STATES.cantBeStarted,
+            STATES.notRequired,
+            STATES.required,
+          ),
+          completed: isCompletedAddress(order, 'PRIMARY'),
+        })
 
-      tasks.push({
-        section: SECTIONS.aboutTheDeviceWearer,
-        name: PAGES.tertiaryAddress,
-        path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'tertiary'),
-        state: convertBooleanToEnum<State>(
-          order.deviceWearer.noFixedAbode,
-          STATES.cantBeStarted,
-          STATES.notRequired,
-          STATES.optional,
-        ),
-        completed: isCompletedAddress(order, 'TERTIARY'),
-      })
+        tasks.push({
+          section: SECTIONS.aboutTheDeviceWearer,
+          name: PAGES.secondaryAddress,
+          path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'secondary'),
+          state: convertBooleanToEnum<State>(
+            order.deviceWearer.noFixedAbode,
+            STATES.cantBeStarted,
+            STATES.notRequired,
+            STATES.optional,
+          ),
+          completed: isCompletedAddress(order, 'SECONDARY'),
+        })
+
+        tasks.push({
+          section: SECTIONS.aboutTheDeviceWearer,
+          name: PAGES.tertiaryAddress,
+          path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'tertiary'),
+          state: convertBooleanToEnum<State>(
+            order.deviceWearer.noFixedAbode,
+            STATES.cantBeStarted,
+            STATES.notRequired,
+            STATES.optional,
+          ),
+          completed: isCompletedAddress(order, 'TERTIARY'),
+        })
+      }
 
       tasks.push({
         section: SECTIONS.aboutTheDeviceWearer,
@@ -636,7 +652,9 @@ export default class TaskListService {
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
       name: PAGES.installationAddress,
-      path: paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':addressType(installation)', 'installation'),
+      path: FeatureFlags.getInstance().get('POSTCODE_LOOKUP_ENABLED')
+        ? paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':addressType', 'INSTALLATION')
+        : paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':addressType(installation)', 'installation'),
       state: convertBooleanToEnum<State>(
         order.installationLocation?.location === 'PRISON' ||
           order.installationLocation?.location === 'PROBATION_OFFICE' ||

@@ -7,8 +7,8 @@ import ContactDetailsFormComponent from '../../components/forms/contact-informat
 export default class ContactDetailsPage extends AppFormPage {
   public form = new ContactDetailsFormComponent()
 
-  constructor() {
-    super('', paths.CONTACT_INFORMATION.CONTACT_DETAILS, 'Contact information')
+  constructor(section: string = 'Contact information') {
+    super('', paths.CONTACT_INFORMATION.CONTACT_DETAILS, section)
   }
 
   checkOnPage(): void {
