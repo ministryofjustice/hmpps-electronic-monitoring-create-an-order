@@ -5,7 +5,7 @@ import logger from '../../../../logger'
 
 export default class AddressMapper {
   mapToAddresses(data: OSDataHubPostcodeResponse): AddressWithoutTypeUPRN[] {
-    return data.results.map(address => this.mapToAddress(address))
+    return data.results ? data.results.map(address => this.mapToAddress(address)) : []
   }
 
   private mapToAddress(dataHubAddress: OSDataHubAddress): AddressWithoutTypeUPRN {
