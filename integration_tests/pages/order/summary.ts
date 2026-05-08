@@ -218,7 +218,7 @@ export default class OrderTasksPage extends AppPage {
           )
         }
 
-        if (condition === 'Mondatory attendance monitoring') {
+        if (condition === 'Mandatory attendance monitoring') {
           this.fillInAttendanceMonitoringDetailsWith(
             {
               attendanceMonitoringDetails,
