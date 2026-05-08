@@ -33,6 +33,14 @@ describe('address mapper', () => {
     expect(result).toEqual(expected)
   })
 
+  it('when postcode service returns with no result for postcode', () => {
+    const data = {} as OSDataHubPostcodeResponse
+
+    const result = addressMapper.mapToAddresses(data)
+
+    expect(result).toEqual([])
+  })
+
   it('can map address with building name', () => {
     const data: OSDataHubPostcodeResponse = createData({
       BUILDING_NAME: 'PM HOUSE',

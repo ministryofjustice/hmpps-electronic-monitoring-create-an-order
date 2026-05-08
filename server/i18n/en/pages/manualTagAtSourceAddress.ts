@@ -4,7 +4,8 @@ const manualTagAtSourceAddressPageContent: ManualAddressPageContent = {
   title: 'What is the installation address?',
   section: 'Electronic monitoring required',
   legend: '',
-  helpText: 'For installation at source this is the address of the prison or probation office.',
+  helpText:
+    'For installation at source this is the address of the prison, probation office or immigration removal centre.',
   questions: {
     addressLine1: {
       text: 'Address line 1',

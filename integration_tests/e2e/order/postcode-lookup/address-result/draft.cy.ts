@@ -54,18 +54,15 @@ context('address results', () => {
         { orderId: mockOrderId, addressType: 'PRIMARY' },
         { postcode: 'SW1A 2AA' },
       )
-      page.form.addressResultsField.element.contains('2 addresses found for SW1A 2AA. Search again')
+      cy.contains('2 addresses found for SW1A 2AA. Search again')
       page.form.addressResultsField.shouldHaveOption('10 Downing Street, London, SW1A 2AA')
       page.form.addressResultsField.shouldHaveOption('11 Downing Street, London, SW1A 2AA')
 
-      page.form.addressResultsField.element
-        .get('a')
-        .contains('Search again')
-        .should(
-          'have.attr',
-          'href',
-          paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'PRIMARY'),
-        )
+      cy.contains('a', 'Search again').should(
+        'have.attr',
+        'href',
+        paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'PRIMARY'),
+      )
     })
 
     it('has correct elements when searching by postcode and building id', () => {
@@ -74,7 +71,7 @@ context('address results', () => {
         { orderId: mockOrderId, addressType: 'PRIMARY' },
         { postcode: 'SW1A 2AA', buildingId: 10 },
       )
-      page.form.addressResultsField.element.contains('1 address found for SW1A 2AA and 10. Search again')
+      cy.contains('1 address found for SW1A 2AA and 10. Search again')
       page.form.addressResultsField.shouldHaveOption('10 Downing Street, London, SW1A 2AA')
       page.form.addressResultsField.shouldNotHaveOption('11 Downing Street, London, SW1A 2AA')
     })
@@ -153,12 +150,74 @@ context('address results', () => {
         'We could not find an address that matches SW1A 2AA and 10. You can search again or enter the address manually.',
       )
     })
+
+    it('shows no results when postcode lookup returns bad request', () => {
+      cy.task('stubOSDataHubPostcode', {
+        httpStatus: 400,
+        postcode: 'UNKNOWNPOSTCODE',
+        body: {
+          error: 'Bad request',
+        },
+      })
+
+      Page.visit(AddressResultPage, { orderId: mockOrderId, addressType: 'PRIMARY' }, { postcode: 'UNKNOWN POSTCODE' })
+      cy.contains(
+        'We could not find an address that matches UNKNOWN POSTCODE. You can search again or enter the address manually.',
+      )
+
+      cy.contains('a', 'Search again').should('have.attr', 'href', `/order/${mockOrderId}/find-address/PRIMARY`)
+
+      cy.contains('a', 'Enter address manually').should(
+        'have.attr',
+        'href',
+        `/order/${mockOrderId}/enter-address/PRIMARY`,
+      )
+    })
+
+    it('does not show an error summary when navigated from a failed address selection', () => {
+      cy.task('stubOSDataHubPostcode', {
+        httpStatus: 200,
+        postcode: 'SW1A2AA',
+        body: {
+          results: [
+            {
+              DPA: {
+                BUILDING_NUMBER: 11,
+                THOROUGHFARE_NAME: 'DOWNING STREET',
+                POST_TOWN: 'LONDON',
+                POSTCODE: 'SW1A 2AA',
+                UPRN: '101',
+              },
+            },
+          ],
+        },
+      })
+
+      const page = Page.visit(
+        AddressResultPage,
+        { orderId: mockOrderId, addressType: 'PRIMARY' },
+        { postcode: 'SW1A 2AA' },
+      )
+
+      cy.task('stubOSDataHubPostcode', {
+        httpStatus: 200,
+        postcode: 'SW1A2AA',
+        body: {
+          results: [],
+        },
+      })
+
+      page.form.useAddressButton.click()
+
+      cy.contains('No results found')
+      page.errorSummary.shouldNotExist()
+    })
   })
 
   context('too many results', () => {
     beforeEach(() => {
       const addresses = []
-      for (let i = 1; i <= 26; i += 1) {
+      for (let i = 1; i <= 31; i += 1) {
         addresses.push({
           DPA: {
             BUILDING_NUMBER: i,

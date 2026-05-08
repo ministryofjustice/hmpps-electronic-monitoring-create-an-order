@@ -44,7 +44,9 @@ context('enter address page', () => {
       page.header.phaseBanner().should('contain.text', 'dev')
 
       cy.contains('What is the installation address?')
-      cy.contains('For installation at source this is the address of the prison or probation office.')
+      cy.contains(
+        'For installation at source this is the address of the prison, probation office or immigration removal centre.',
+      )
     })
   })
 
