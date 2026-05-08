@@ -8,7 +8,6 @@ import ContactDetailsPage from './contact-information/contact-details'
 import NoFixedAbodePage from './contact-information/no-fixed-abode'
 import PrimaryAddressPage from './contact-information/primary-address'
 import InterestedPartiesPage from './contact-information/interested-parties'
-import InstallationAndRiskPage from './installationAndRisk'
 import InstallationAndRiskCheckYourAnswersPage from './installation-and-risk/check-your-answers'
 import AttachmentSummaryPage from './attachments/summary'
 import DeviceWearerCheckYourAnswersPage from './about-the-device-wearer/check-your-answers'
@@ -25,13 +24,21 @@ import TertiaryAddressPage from './contact-information/tertiary-adddress'
 import fillInOrderTypeDescriptionsWith from '../../utils/scenario-flows/orderTypeDescription'
 import fillInTagAtSourceWith from '../../utils/scenario-flows/tag-at-source.cy'
 import fillInCurfewOrderDetailsWith from '../../utils/scenario-flows/curfew.cy'
-import fillInEnforcementZoneOrderDetailsWith from '../../utils/scenario-flows/enforcement-zone.cy'
+import { fillInEnforcementZoneListItemDetailsWith } from '../../utils/scenario-flows/enforcement-zone.cy'
 import fillInAlcoholMonitoringOrderDetailsWith from '../../utils/scenario-flows/alcohol-monitoring.cy'
 import fillInTrailMonitoringOrderDetailsWith from '../../utils/scenario-flows/trail-monitoring.cy'
 import fillInAttendanceMonitoringDetailsWith from '../../utils/scenario-flows/attendance-monitoring.cy'
 import Timeline from '../components/timeline'
 import HaveCourtOrderPage from '../../e2e/order/attachments/have-court-order/courtOrderDocumentPage'
 import UploadCourtOrderPage from '../../e2e/order/attachments/upload-court-order/uploadCourtOrderPage'
+import OffencePage from '../../e2e/order/access-needs-installation-risk/offences/offence/offencePage'
+import OffenceOtherInfoPage from '../../e2e/order/access-needs-installation-risk/offences/offence-other-info/offenceOtherInfoPage'
+import DetailsOfInstallationPage from '../../e2e/order/access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
+import IsMappaPage from '../../e2e/order/access-needs-installation-risk/is-mappa/IsMappaPage'
+import OffenceListPage from '../../e2e/order/access-needs-installation-risk/offences/offence-list/offenceListPage'
+import TypesOfMonitoringNeededPage from '../../e2e/order/monitoring-conditions/order-type-description/types-of-monitoring-needed/TypesOfMonitoringNeededPage'
+import DapoPage from '../../e2e/order/access-needs-installation-risk/offences/dapo/DapoPage'
+import MonitoringTypePage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-type/MonitoringTypesPage'
 
 export default class OrderTasksPage extends AppPage {
   constructor(isOldVersionPage: boolean = false) {
@@ -165,52 +172,71 @@ export default class OrderTasksPage extends AppPage {
       tertiaryAddressDetails,
       monitoringOrderTypeDescription,
     })
-    if (curfewReleaseDetails) {
-      this.fillInCurfewOrderDetailsWith(
-        {
-          curfewConditionDetails,
-          curfewReleaseDetails,
-          curfewTimetable,
-        },
-        false,
-      )
-    }
 
-    if (enforcementZoneDetails) {
-      this.fillInEnforcementZoneOrderDetailsWith(
-        {
-          enforcementZoneDetails,
-        },
-        false,
-      )
-    }
+    if (Array.isArray(monitoringOrderTypeDescription.monitoringCondition)) {
+      monitoringOrderTypeDescription.monitoringCondition.forEach((condition: string, index: number) => {
+        const monitoringConditionPage = Page.verifyOnPage(MonitoringTypePage)
+        monitoringConditionPage.form.fillInWith(condition)
+        monitoringConditionPage.form.continueButton.click()
 
-    if (trailMonitoringDetails) {
-      this.fillInTrailMonitoringOrderDetailsWith(
-        {
-          trailMonitoringDetails,
-        },
-        false,
-      )
-    }
+        if (condition === 'Curfew') {
+          this.fillInCurfewOrderDetailsWith(
+            {
+              curfewConditionDetails,
+              curfewReleaseDetails,
+              curfewTimetable,
+            },
+            false,
+          )
+        }
 
-    if (alcoholMonitoringDetails) {
-      this.fillInAlcoholMonitoringOrderDetailsWith(
-        {
-          alcoholMonitoringDetails,
-          installationAddressDetails,
-        },
-        false,
-      )
-    }
+        if (condition === 'Exclusion zone monitoring') {
+          this.fillInEnforcementZoneOrderDetailsWith(
+            {
+              enforcementZoneDetails,
+            },
+            false,
+          )
+        }
 
-    if (attendanceMonitoringDetails) {
-      this.fillInAttendanceMonitoringDetailsWith(
-        {
-          attendanceMonitoringDetails,
-        },
-        false,
-      )
+        if (condition === 'Trail monitoring') {
+          this.fillInTrailMonitoringOrderDetailsWith(
+            {
+              trailMonitoringDetails,
+            },
+            false,
+          )
+        }
+
+        if (condition === 'Alcohol monitoring') {
+          this.fillInAlcoholMonitoringOrderDetailsWith(
+            {
+              alcoholMonitoringDetails,
+              installationAddressDetails,
+            },
+            false,
+          )
+        }
+
+        if (condition === 'Mandatory attendance monitoring') {
+          this.fillInAttendanceMonitoringDetailsWith(
+            {
+              attendanceMonitoringDetails,
+            },
+            false,
+          )
+        }
+
+        if (index === monitoringOrderTypeDescription.monitoringCondition.length - 1) {
+          const monitoringConditionsListPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)
+          monitoringConditionsListPage.form.fillInWith('No')
+          monitoringConditionsListPage.form.saveAndContinueButton.click()
+        } else {
+          const monitoringConditionsListPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)
+          monitoringConditionsListPage.form.fillInWith('Yes')
+          monitoringConditionsListPage.form.saveAndContinueButton.click()
+        }
+      })
     }
 
     if (installationLocation) {
@@ -555,9 +581,51 @@ export default class OrderTasksPage extends AppPage {
     }
 
     if (installationAndRisk) {
-      const installationAndRiskPage = Page.verifyOnPage(InstallationAndRiskPage)
-      installationAndRiskPage.form.fillInWith(installationAndRisk)
-      installationAndRiskPage.form.saveAndContinueButton.click()
+      if (interestedParties.notifyingOrganisation !== 'Home Office') {
+        if (interestedParties.notifyingOrganisation === 'Family Court') {
+          const dapoPage = Page.verifyOnPage(DapoPage)
+          dapoPage.form.fillInWith({ dapoClauseNumber: 'dapo clause', dapoDate: new Date(2025, 0, 1) })
+          dapoPage.form.saveAndContinueButton.click()
+
+          const offenceListPage = Page.verifyOnPage(OffenceListPage, undefined, undefined, 'DAPO order clauses')
+          offenceListPage.form.fillInWith({ addDapoClause: 'No' })
+          offenceListPage.form.saveAndContinueButton.click()
+        } else if (interestedParties.notifyingOrganisation === 'Civil and County Court') {
+          const offencePage = Page.verifyOnPage(OffencePage)
+          offencePage.form.fillInWith({ offenceType: installationAndRisk.offence, offenceDate: new Date(2025, 0, 1) })
+          offencePage.form.saveAndContinueButton.click()
+
+          const offenceListPage = Page.verifyOnPage(OffenceListPage)
+          offenceListPage.form.fillInWith({ addOffence: 'No' })
+          offenceListPage.form.saveAndContinueButton.click()
+
+          const offenceDetailsPage = Page.verifyOnPage(OffenceOtherInfoPage)
+          offenceDetailsPage.form.fillInWith({ hasOtherInformation: 'No' })
+          offenceDetailsPage.form.saveAndContinueButton.click()
+        } else {
+          const offencePage = Page.verifyOnPage(OffencePage)
+          offencePage.form.fillInWith({ offenceType: installationAndRisk.offence })
+          offencePage.form.saveAndContinueButton.click()
+
+          const offenceDetailsPage = Page.verifyOnPage(OffenceOtherInfoPage)
+          offenceDetailsPage.form.fillInWith({ hasOtherInformation: 'No' })
+          offenceDetailsPage.form.saveAndContinueButton.click()
+        }
+      }
+
+      const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
+      detailsOfInstallationPage.form.fillInWith({
+        possibleRisks: [installationAndRisk.possibleRisk],
+        riskCategories: [installationAndRisk.riskCategory],
+        riskDetails: installationAndRisk.riskDetails,
+      })
+      detailsOfInstallationPage.form.saveAndContinueButton.click()
+
+      if (interestedParties.notifyingOrganisation === 'Home Office') {
+        const mappaPage = Page.verifyOnPage(IsMappaPage)
+        mappaPage.form.fillInWith({ isMappa: 'No' })
+        mappaPage.form.saveAndContinueButton.click()
+      }
 
       const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(
         InstallationAndRiskCheckYourAnswersPage,
@@ -586,7 +654,7 @@ export default class OrderTasksPage extends AppPage {
   }
 
   fillInEnforcementZoneOrderDetailsWith({ enforcementZoneDetails }, checkYourAnswerPage = true) {
-    fillInEnforcementZoneOrderDetailsWith(enforcementZoneDetails)
+    fillInEnforcementZoneListItemDetailsWith(enforcementZoneDetails)
 
     if (checkYourAnswerPage) {
       const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(

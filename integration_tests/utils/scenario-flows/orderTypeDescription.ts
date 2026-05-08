@@ -1,7 +1,7 @@
 import DapolMissedInErrorPage from '../../e2e/order/monitoring-conditions/order-type-description/dapol-missed-in-error/dapolMissedInErrorPage'
 import HdcPage from '../../e2e/order/monitoring-conditions/order-type-description/hdc/hdcPage'
 import IsspPage from '../../e2e/order/monitoring-conditions/order-type-description/issp/isspPage'
-import MonitoringTypesPage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-types/MonitoringTypesPage'
+import MonitoringTypePage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-type/MonitoringTypesPage'
 import OffenceTypePage from '../../e2e/order/monitoring-conditions/order-type-description/offence-type/OffenceTypePage'
 // commented out due to ELM-4526
 // import OrderTypePage from '../../e2e/order/monitoring-conditions/order-type-description/order-type/OrderTypePage'
@@ -85,8 +85,8 @@ export default function fillInOrderTypeDescriptionsWith({
   }
 
   // Monitoring conditions
-  if (monitoringCondition) {
-    const monitoringConditionPage = Page.verifyOnPage(MonitoringTypesPage)
+  if (monitoringCondition && typeof monitoringCondition === 'string') {
+    const monitoringConditionPage = Page.verifyOnPage(MonitoringTypePage)
     fillinSingleQuestionFormWith(monitoringConditionPage.form, monitoringCondition)
   }
 }

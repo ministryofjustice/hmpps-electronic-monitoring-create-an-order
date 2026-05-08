@@ -103,7 +103,7 @@ context('The kitchen sink', () => {
       uploadFile: files.licence,
       description: 'A test description: Lorum ipsum dolar sit amet...',
       duration: 'A test duration: one, two, three...',
-      anotherZone: 'No',
+      name: 'test name',
     }
     const trailMonitoringOrder = {
       startDate: new Date(currentDate.getFullYear(), 11, 1),
@@ -269,7 +269,7 @@ context('The kitchen sink', () => {
             no_email: interestedParties.notifyingOrganisationEmailAddress,
             no_name: interestedParties.notifyingOrganisationName,
             no_phone_number: '',
-            offence: installationAndRisk.offence,
+            offence: '',
             offence_additional_details: 'PFA: Avon and Somerset Constabulary',
             offence_date: '',
             order_end: formatAsFmsDateTime(trailMonitoringOrder.endDate, 23, 59),
@@ -372,7 +372,12 @@ context('The kitchen sink', () => {
               },
             ],
             dapo_order_clause_numbers: [],
-            offences: [],
+            offences: [
+              {
+                offence: installationAndRisk.offence,
+                offence_date: null,
+              },
+            ],
           },
         }).should('be.true')
       })

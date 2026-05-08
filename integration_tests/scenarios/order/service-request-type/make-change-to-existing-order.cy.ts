@@ -70,7 +70,7 @@ context('Service-Request-Types', () => {
     typeOfAcquistiveCrime: 'Aggravated Burglary',
     policeForceArea: 'Kent',
     prarr: 'Yes',
-    monitoringCondition: 'Trail monitoring',
+    monitoringCondition: ['Trail monitoring'],
   }
 
   const variationDetails = {
