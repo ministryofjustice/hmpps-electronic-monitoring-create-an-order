@@ -9,9 +9,9 @@ import Page from '../../pages/page'
 
 export default function fillInInterestedPartiesWith({
   notifyingOrganisation,
-  responsibleOfficer = null,
-  responsibleOrganisation = null,
-  pdu = null,
+  responsibleOfficer = undefined,
+  responsibleOrganisation = undefined,
+  pdu = undefined,
   continueOnCya = true,
 }): void {
   const notifyingOrganisationPage = Page.verifyOnPage(NotifyingOrganisationPage)
