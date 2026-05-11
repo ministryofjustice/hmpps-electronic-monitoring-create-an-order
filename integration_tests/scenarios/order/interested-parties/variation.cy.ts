@@ -107,7 +107,7 @@ context('Interested parties flow', () => {
 
     orderSummaryPage.interestedPartiesTask.click()
     const interestedPartiesCyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
-    interestedPartiesCyaPage.changeLinkByQuestion('What organisation or related organisation are you part of?')
+    interestedPartiesCyaPage.changeLinkByQuestion('What organisation or related organisation are you part of?').click()
 
     const input = {
       notifyingOrganisation: {

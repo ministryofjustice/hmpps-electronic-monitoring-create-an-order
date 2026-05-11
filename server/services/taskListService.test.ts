@@ -1328,6 +1328,31 @@ describe('TaskListService', () => {
         )
       })
 
+      it('should navigate to CYA when notifying and responsible organisations are complete', async () => {
+        const order = getMockOrder({
+          interestedParties: createInterestedParties(),
+        })
+        mockOrderChecklistService.getChecklist.mockResolvedValueOnce({
+          ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS: true,
+          ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM: false,
+          ABOUT_THE_DEVICE_WEARER: false,
+          CONTACT_INFORMATION: false,
+          RISK_INFORMATION: false,
+          ELECTRONIC_MONITORING_CONDITIONS: false,
+          ADDITIONAL_DOCUMENTS: false,
+        })
+        const taskListService = new TaskListService(mockOrderChecklistService)
+
+        const sections = await taskListService.getSections(order)
+
+        const interestedPartiesSection = sections.find(
+          section => section.name === 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+        )
+        expect(interestedPartiesSection?.path).toBe(
+          paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+        )
+      })
+
       it('should navigate to notify organisation when notifying and responsible organisations is incomplete', async () => {
         const order = getMockOrder()
         const taskListService = new TaskListService(mockOrderChecklistService)
@@ -1340,6 +1365,24 @@ describe('TaskListService', () => {
 
         expect(interestedPartiesSection?.path).toBe(
           paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', order.id),
+        )
+      })
+
+      it('should navigate to CYA when viewing notifying and responsible organisations', async () => {
+        const order = getMockOrder({
+          status: 'SUBMITTED',
+        })
+
+        const taskListService = new TaskListService(mockOrderChecklistService)
+
+        const sections = await taskListService.getSections(order)
+
+        const interestedPartiesSection = sections.find(
+          section => section.name === 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+        )
+
+        expect(interestedPartiesSection?.path).toBe(
+          paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
         )
       })
 
