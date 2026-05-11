@@ -172,7 +172,7 @@ const createContactDetailsAnswers = (order: Order, content: I18n, answerOpts: An
 
 const getAddressUri = (addressType: AddressType, orderId: string, postcodeEnabled: boolean) => {
   const uri = postcodeEnabled
-    ? paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', orderId)
+    ? paths.POSTCODE_LOOKUP.ADDRESS_LIST.replace(':orderId', orderId)
     : paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId)
 
   return uri

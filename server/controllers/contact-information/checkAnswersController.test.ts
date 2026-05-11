@@ -296,10 +296,7 @@ describe('ContactDetailsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', order.id).replace(
-                    ':addressType',
-                    'PRIMARY',
-                  ),
+                  href: paths.POSTCODE_LOOKUP.ADDRESS_LIST.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: content.pages.primaryAddress.legend.toLowerCase(),
                 },
@@ -316,10 +313,7 @@ describe('ContactDetailsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', order.id).replace(
-                    ':addressType',
-                    'SECONDARY',
-                  ),
+                  href: paths.POSTCODE_LOOKUP.ADDRESS_LIST.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: content.pages.secondaryAddress.legend.toLowerCase(),
                 },
@@ -336,10 +330,7 @@ describe('ContactDetailsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', order.id).replace(
-                    ':addressType',
-                    'TERTIARY',
-                  ),
+                  href: paths.POSTCODE_LOOKUP.ADDRESS_LIST.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: content.pages.tertiaryAddress.legend.toLowerCase(),
                 },

@@ -16,7 +16,7 @@ export default class OSDataHubClient implements PostcodeLookupClient {
     try {
       const results = await this.apiClient.getWithoutBearer({
         path: '/search/places/v1/postcode',
-        query: `postcode=${postcode}&dataset=DPA&maxresults=31`,
+        query: `postcode=${postcode}&dataset=DPA`,
         headers: { key: this.apiKey || '' },
       })
 
