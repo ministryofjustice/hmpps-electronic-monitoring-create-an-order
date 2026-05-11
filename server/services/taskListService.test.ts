@@ -1385,24 +1385,6 @@ describe('TaskListService', () => {
           paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
         )
       })
-
-      it('should navigate to CYA when viewing notifying and responsible organisations are complete', async () => {
-        const order = getMockOrder({
-          status: 'SUBMITTED',
-        })
-
-        const taskListService = new TaskListService(mockOrderChecklistService)
-
-        const sections = await taskListService.getSections(order)
-
-        const interestedPartiesSection = sections.find(
-          section => section.name === 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
-        )
-
-        expect(interestedPartiesSection?.path).toBe(
-          paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
-        )
-      })
     })
 
     it('should navigate to dapo page when offence flow is enabled and notifyingOrganisation is FAMILY_COURT', async () => {
