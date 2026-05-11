@@ -52,7 +52,7 @@ context('Contact Information - check your answers', () => {
       page.checkIsAccessible()
     })
 
-    it('should link address changes to postcode lookup when postcode lookup is enabled', () => {
+    it('should link address changes to address list when postcode lookup is enabled', () => {
       cy.task('setFeatureFlags', { POSTCODE_LOOKUP_ENABLED: true })
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
@@ -96,11 +96,7 @@ context('Contact Information - check your answers', () => {
 
       page
         .changeLinkByQuestion("What is the device wearer's main address?")
-        .should(
-          'have.attr',
-          'href',
-          paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'PRIMARY'),
-        )
+        .should('have.attr', 'href', paths.POSTCODE_LOOKUP.ADDRESS_LIST.replace(':orderId', mockOrderId))
     })
   })
 
