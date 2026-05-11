@@ -14,7 +14,9 @@ export default class PostcodeService {
     })
 
     if (buildingId) {
-      addresses = addresses.filter(address => address.addressLine1.includes(buildingId))
+      addresses = addresses.filter(address =>
+        address.addressLine1.toUpperCase().trim().includes(buildingId.toUpperCase().trim()),
+      )
     }
 
     return addresses

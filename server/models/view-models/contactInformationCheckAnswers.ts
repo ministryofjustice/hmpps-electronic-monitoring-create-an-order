@@ -29,15 +29,15 @@ const createAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOpt
   const noFixedAbodeUri = paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id)
   const postcodeEnabled = FeatureFlags.getInstance().get('POSTCODE_LOOKUP_ENABLED')
   const addressUri = paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', order.id)
-  const postcodeLookupUri = paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', order.id)
+  const postcodeLookupUri = paths.POSTCODE_LOOKUP.ADDRESS_LIST.replace(':orderId', order.id)
   const primaryAddressUri = postcodeEnabled
-    ? postcodeLookupUri.replace(':addressType', 'PRIMARY')
+    ? postcodeLookupUri
     : addressUri.replace(':addressType(primary|secondary|tertiary)', 'primary')
   const secondaryAddressUri = postcodeEnabled
-    ? postcodeLookupUri.replace(':addressType', 'SECONDARY')
+    ? postcodeLookupUri
     : addressUri.replace(':addressType(primary|secondary|tertiary)', 'secondary')
   const tertiaryAddressUri = postcodeEnabled
-    ? postcodeLookupUri.replace(':addressType', 'TERTIARY')
+    ? postcodeLookupUri
     : addressUri.replace(':addressType(primary|secondary|tertiary)', 'tertiary')
 
   const primaryAddress = order.addresses.find(({ addressType }) => addressType === 'PRIMARY')

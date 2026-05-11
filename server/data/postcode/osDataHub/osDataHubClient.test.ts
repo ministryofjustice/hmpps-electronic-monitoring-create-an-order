@@ -34,7 +34,7 @@ describe('osDataHubClient', () => {
     expect(apiClient.getWithoutBearer).toHaveBeenCalledWith(
       expect.objectContaining({
         path: '/search/places/v1/postcode',
-        query: 'postcode=SW1A2AA&dataset=DPA&maxresults=31',
+        query: 'postcode=SW1A2AA&dataset=DPA',
       }),
     )
   })
