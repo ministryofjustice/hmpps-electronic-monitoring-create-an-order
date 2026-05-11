@@ -106,6 +106,9 @@ context('Interested parties flow', () => {
     const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
     orderSummaryPage.interestedPartiesTask.click()
+    const interestedPartiesCyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
+    interestedPartiesCyaPage.changeLinkByQuestion('What organisation or related organisation are you part of?')
+
     const input = {
       notifyingOrganisation: {
         notifyingOrganisation: 'Prison service',

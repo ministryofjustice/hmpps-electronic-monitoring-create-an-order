@@ -1328,7 +1328,22 @@ describe('TaskListService', () => {
         )
       })
 
-      it('should navigate to CYA when viewing notifying and responsible organisations for submitted order', async () => {
+      it('should navigate to notify organisation when notifying and responsible organisations is incomplete', async () => {
+        const order = getMockOrder()
+        const taskListService = new TaskListService(mockOrderChecklistService)
+
+        const sections = await taskListService.getSections(order)
+
+        const interestedPartiesSection = sections.find(
+          section => section.name === 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+        )
+
+        expect(interestedPartiesSection?.path).toBe(
+          paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', order.id),
+        )
+      })
+
+      it('should navigate to CYA when viewing notifying and responsible organisations are complete', async () => {
         const order = getMockOrder({
           status: 'SUBMITTED',
         })
