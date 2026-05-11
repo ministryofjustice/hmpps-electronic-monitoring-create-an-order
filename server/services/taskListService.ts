@@ -898,7 +898,7 @@ export default class TaskListService {
         const sectionsTasks = this.findTaskBySection(tasks, section)
         const completed = this.isSectionComplete(sectionsTasks, order, section)
         let path: string
-        if (order.status === 'SUBMITTED' || completed) {
+        if (order.status !== 'IN_PROGRESS' || completed) {
           path = this.getCheckYourAnswersPathForSection(sectionsTasks)
         } else {
           const firstAvailableTask = sectionsTasks.find(task => canBeCompleted(task, {}))
@@ -926,12 +926,6 @@ export default class TaskListService {
       return sectionTasks[sectionTasks.length - 1].path // TODO: refactor path so that additional docs includes string
     }
 
-    if (
-      sectionTasks[0].section === SECTIONS.interestParties &&
-      FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')
-    ) {
-      return paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION
-    }
     return (sectionTasks.find(task => task.path.includes('check-your-answers')) || sectionTasks[0]).path
   }
 }

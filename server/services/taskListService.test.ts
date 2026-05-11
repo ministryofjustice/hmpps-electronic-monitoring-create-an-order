@@ -1294,6 +1294,59 @@ describe('TaskListService', () => {
       expect(contactInformationSection?.completed).toBe(false)
     })
 
+    describe('when interested parties flow is enabled', () => {
+      beforeEach(() => {
+        const mockGet = jest.fn((flag: string) => flag === 'INTERESTED_PARTIES_FLOW_ENABLED')
+        const mockGetValue = jest.fn(() => '')
+        jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
+          get: mockGet,
+          getValue: mockGetValue,
+        } as never)
+      })
+
+      afterEach(() => {
+        jest.restoreAllMocks()
+      })
+
+      it('should navigate to CYA when notifying and responsible organisations are to check', async () => {
+        const order = getMockOrder({
+          interestedParties: createInterestedParties(),
+        })
+        const taskListService = new TaskListService(mockOrderChecklistService)
+
+        const sections = await taskListService.getSections(order)
+
+        const interestedPartiesSection = sections.find(
+          section => section.name === 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+        )
+        expect(interestedPartiesSection).toEqual(
+          expect.objectContaining({
+            checked: false,
+            completed: true,
+            path: paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+          }),
+        )
+      })
+
+      it('should navigate to CYA when viewing notifying and responsible organisations for submitted order', async () => {
+        const order = getMockOrder({
+          status: 'SUBMITTED',
+        })
+
+        const taskListService = new TaskListService(mockOrderChecklistService)
+
+        const sections = await taskListService.getSections(order)
+
+        const interestedPartiesSection = sections.find(
+          section => section.name === 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+        )
+
+        expect(interestedPartiesSection?.path).toBe(
+          paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+        )
+      })
+    })
+
     it('should navigate to dapo page when offence flow is enabled and notifyingOrganisation is FAMILY_COURT', async () => {
       const mockGet = jest.fn((flag: string) => flag === 'OFFENCE_FLOW_ENABLED')
       const mockGetValue = jest.fn(() => '')
