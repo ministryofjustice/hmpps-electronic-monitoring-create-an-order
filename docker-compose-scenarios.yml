@@ -1,7 +1,7 @@
 services:
   cemo-api:
     container_name: cemo-api
-    image: quay.io/hmpps/hmpps-electronic-monitoring-create-an-order-api:latest
+    image: ghcr.io/ministryofjustice/hmpps-electronic-monitoring-create-an-order-api:latest
     networks:
       - hmpps_integration
     ports:
