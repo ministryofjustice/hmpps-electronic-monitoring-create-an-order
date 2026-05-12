@@ -209,7 +209,7 @@ const createInstallationAddressAnswers = (order: Order, content: I18n, answerOpt
     return []
   }
   const uri = FeatureFlags.getInstance().get('POSTCODE_LOOKUP_ENABLED')
-    ? paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', order.id).replace(':addressType', 'INSTALLATION')
+    ? paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION.replace(':orderId', order.id)
     : paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id).replace(
         ':addressType(installation)',
         'installation',

@@ -329,11 +329,7 @@ context('Check your answers', () => {
 
       page
         .changeLinkByQuestion('At what address will installation of the electronic monitoring device take place?')
-        .should(
-          'have.attr',
-          'href',
-          paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'INSTALLATION'),
-        )
+        .should('have.attr', 'href', paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION.replace(':orderId', mockOrderId))
     })
 
     it('shows correct buttons', () => {

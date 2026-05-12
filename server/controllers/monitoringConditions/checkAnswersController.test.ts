@@ -140,10 +140,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               actions: {
                 items: [
                   {
-                    href: paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', order.id).replace(
-                      ':addressType',
-                      'INSTALLATION',
-                    ),
+                    href: paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION.replace(':orderId', order.id),
                     text: 'Change',
                     visuallyHiddenText:
                       'at what address will installation of the electronic monitoring device take place?',
