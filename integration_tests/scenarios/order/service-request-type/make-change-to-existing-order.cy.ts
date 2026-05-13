@@ -16,10 +16,6 @@ import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
 import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
 import IsRejectionPage from '../../../e2e/order/edit-order/is-rejection/isRejectionPage'
 import ReceiptPage from '../../../pages/order/receipt'
-import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
-import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
-import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
-import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
 import IsAddressChangePage from '../../../e2e/order/edit-order/is-address-change/isAddressChangePage'
 
 context('Service-Request-Types', () => {
@@ -139,24 +135,6 @@ context('Service-Request-Types', () => {
     orderSummaryPage.aboutTheDeviceWearerTask.click()
 
     Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').continue()
-    const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
-    contactDetailsPage.form.saveAndContinueButton.click()
-
-    const noFixedAbodePage = Page.verifyOnPage(NoFixedAbodePage)
-    noFixedAbodePage.form.saveAndContinueButton.click()
-
-    const primaryAddressPage = Page.verifyOnPage(PrimaryAddressPage)
-    primaryAddressPage.form.saveAndContinueButton.click()
-
-    const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-
-    interestedPartiesPage.form.fillInWith({
-      notifyingOrganisation: interestedParties.notifyingOrganisation,
-      prison: interestedParties.notifyingOrganisationName,
-      notifyingOrganisationEmailAddress: interestedParties.notifyingOrganisationEmailAddress,
-    })
-
-    interestedPartiesPage.form.saveAndContinueButton.click()
     Page.verifyOnPage(ContactInformationCheckYourAnswersPage, 'Check your answers').continue()
     Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers').continue()
     Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers').continue()
@@ -186,6 +164,11 @@ context('Service-Request-Types', () => {
     cy.task('stubFMSCreateMonitoringOrder', {
       httpStatus: 200,
       response: { result: [{ id: uuidv4(), message: '' }] },
+    })
+
+    cy.task('stubFMSGetCaseState', {
+      httpStatus: 200,
+      response: { result: { state: '1' } },
     })
 
     cy.task('stubFMSUpdateDeviceWearer', {
