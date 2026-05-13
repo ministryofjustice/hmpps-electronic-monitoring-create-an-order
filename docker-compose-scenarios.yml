@@ -36,7 +36,7 @@ services:
       - SERCO_PASSWORD=serco
       - SERCO_URL=http://cemo-wiremock:8080/fms
       - SETTINGS_DATA_DICTIONARY_VERSION=DDV6
-
+      - DDV6_COURT_MAPPINGS=true
       - CEMO_FMS_INTEGRATION_ENABLED=true
 
       - HMPPS_S3_BUCKETNAME=test_bucket
