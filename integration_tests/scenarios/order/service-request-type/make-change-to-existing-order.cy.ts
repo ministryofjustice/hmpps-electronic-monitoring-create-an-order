@@ -166,11 +166,6 @@ context('Service-Request-Types', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
-    cy.task('stubFMSGetCaseState', {
-      httpStatus: 200,
-      response: { result: { state: '1' } },
-    })
-
     cy.task('stubFMSUpdateDeviceWearer', {
       httpStatus: 200,
       response: { result: [{ id: fmsCaseId, message: '' }] },
