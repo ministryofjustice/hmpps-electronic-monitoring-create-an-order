@@ -208,17 +208,26 @@ const createInstallationAddressAnswers = (order: Order, content: I18n, answerOpt
   if (!order.installationLocation || order.installationLocation.location === 'PRIMARY') {
     return []
   }
-  const uri = FeatureFlags.getInstance().get('POSTCODE_LOOKUP_ENABLED')
-    ? paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', order.id).replace(':addressType', 'INSTALLATION')
-    : paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id).replace(
-        ':addressType(installation)',
-        'installation',
-      )
+  const uri = getInstallationAddressLink(order)
   const installationAddress = order.addresses.find(
     ({ addressType }) => addressType === AddressTypeEnum.Enum.INSTALLATION,
   )
 
   return [createAddressAnswer(content.pages.installationAddress.title, installationAddress, uri, answerOpts)]
+}
+
+const getInstallationAddressLink = (order: Order) => {
+  if (FeatureFlags.getInstance().get('POSTCODE_LOOKUP_ENABLED')) {
+    if (order.installationLocation?.location === 'PRIMARY') {
+      return paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION.replace(':orderId', order.id)
+    }
+    return paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', order.id).replace(':addressType', 'INSTALLATION')
+  }
+
+  return paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id).replace(
+    ':addressType(installation)',
+    'installation',
+  )
 }
 
 const createSchedulePreview = (schedule: CurfewSchedule) =>
