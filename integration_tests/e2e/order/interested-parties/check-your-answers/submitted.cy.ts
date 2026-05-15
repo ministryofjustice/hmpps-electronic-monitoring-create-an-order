@@ -56,38 +56,6 @@ context('interested parties check answers page', () => {
       })
     })
 
-    it('shows notification answers for checking if start date of order in past', () => {
-      const page = Page.visit(InterestedPartiesCheckYourAnswersPage, { orderId: mockOrderId }, {}, 'View answers')
-
-      page.organisationDetailsSection.shouldHaveItems([
-        { key: 'What organisation or related organisation are you part of?', value: 'Prison service' },
-        { key: 'Select the name of the Prison', value: 'Altcourse Prison' },
-        { key: "What is your team's contact email address?", value: 'notifying@organisation' },
-      ])
-
-      page.organisationDetailsSection.shouldNotHaveItems([
-        "What is the Responsible Officer's first name?",
-        "What is the Responsible Officer's last name?",
-        "What is the Responsible Officer's email address?",
-        "What is the Responsible Officer's organisation?",
-        'Select the Probation region',
-        "What is the Responsible Organisation's email address? (optional)",
-      ])
-
-      page.probationDeliveryUnitSection.shouldNotExist()
-
-      page.changeLinks.should('not.exist')
-
-      cy.contains('How do I change the Responsible Officer or Responsible Organisation?').click()
-
-      cy.get('.govuk-details__text').contains('Use the service request portal if you have access.')
-
-      cy.get('.govuk-details__text').contains("If you don't have access email EMSEnforcement@ems.co.uk.")
-
-      cy.contains('EMSEnforcement@ems.co.uk').and('have.attr', 'href', 'mailto:EMSEnforcement@ems.co.uk')
-    })
-  })
-
   context('with full information in the future', () => {
     beforeEach(() => {
       cy.task('stubCemoGetOrder', {
@@ -138,9 +106,6 @@ context('interested parties check answers page', () => {
       const page = Page.visit(InterestedPartiesCheckYourAnswersPage, { orderId: mockOrderId }, {}, 'View answers')
 
       page.organisationDetailsSection.shouldHaveItems([
-        { key: 'What organisation or related organisation are you part of?', value: 'Prison service' },
-        { key: 'Select the name of the Prison', value: 'Altcourse Prison' },
-        { key: "What is your team's contact email address?", value: 'notifying@organisation' },
         { key: "What is the Responsible Officer's first name?", value: 'officer' },
         { key: "What is the Responsible Officer's last name?", value: 'name' },
         { key: "What is the Responsible Officer's email address?", value: 'officer@email' },
@@ -160,4 +125,5 @@ context('interested parties check answers page', () => {
       cy.get('.govuk-details__text').should('not.exist')
     })
   })
+})
 })

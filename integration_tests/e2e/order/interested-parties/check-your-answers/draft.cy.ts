@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../pages/page'
 import InterestedPartiesCheckYourAnswersPage from './interestedPartiesCheckYourAnswersPage'
+import { start } from 'repl'
 
 const mockOrderId = uuidv4()
 context('interested parties check answers page', () => {
@@ -19,10 +20,6 @@ context('interested parties check answers page', () => {
         order: {
           dataDictionaryVersion: 'DDV5',
           interestedParties: {
-            notifyingOrganisation: 'PRISON',
-            notifyingOrganisationName: 'ALTCOURSE_PRISON',
-            notifyingOrganisationEmail: 'notifying@organisation',
-
             responsibleOfficerFirstName: 'officer',
             responsibleOfficerLastName: 'name',
             responsibleOfficerEmail: 'officer@email',
@@ -39,9 +36,6 @@ context('interested parties check answers page', () => {
 
       page.organisationDetailsSection.shouldExist()
       page.organisationDetailsSection.shouldHaveItems([
-        { key: 'What organisation or related organisation are you part of?', value: 'Prison Service' },
-        { key: 'Select the name of the Prison', value: 'Altcourse Prison' },
-        { key: "What is your team's contact email address?", value: 'notifying@organisation' },
         { key: "What is the Responsible Officer's first name?", value: 'officer' },
         { key: "What is the Responsible Officer's last name?", value: 'name' },
         { key: "What is the Responsible Officer's email address?", value: 'officer@email' },
@@ -66,9 +60,9 @@ context('interested parties check answers page', () => {
         order: {
           dataDictionaryVersion: 'DDV5',
           interestedParties: {
-            notifyingOrganisation: 'PRISON',
-            notifyingOrganisationName: 'ALTCOURSE_PRISON',
-            notifyingOrganisationEmail: 'notifying@organisation',
+            // notifyingOrganisation: 'PRISON',
+            // notifyingOrganisationName: 'ALTCOURSE_PRISON',
+            // notifyingOrganisationEmail: 'notifying@organisation',
 
             responsibleOfficerFirstName: 'officer',
             responsibleOfficerLastName: 'name',
@@ -168,62 +162,55 @@ context('interested parties check answers page', () => {
     })
   })
 
-  context('does not show notifying org question if cohort inferred by auth', () => {
+  context('does not show notifying org questions', () => {
     beforeEach(() => {
       cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+      cy.signIn()
     })
-
-    describe('when user cohort is home office', () => {
-      it('does not show notifying org or responsible officer questions', () => {
+    describe('when order start date is in the past', () => {
+      it('does not show notifying org questions', () => {
         cy.task('stubCemoGetOrder', {
           httpStatus: 200,
           id: mockOrderId,
           status: 'IN_PROGRESS',
           order: {
-            dataDictionaryVersion: 'DDV6',
+            dataDictionaryVersion: 'DDV5',
+            startDate: '1999-01-01',
             interestedParties: {
-              notifyingOrganisation: 'HOME_OFFICE',
+              notifyingOrganisation: 'PRISON',
+              notifyingOrganisationName: 'ALTCOURSE_PRISON',
               notifyingOrganisationEmail: 'notifying@organisation',
-              notifyingOrganisationName: '',
 
-              responsibleOfficerFirstName: 'officer',
-              responsibleOfficerLastName: 'name',
-              responsibleOfficerEmail: 'officer@email',
+              responsibleOfficerFirstName: null,
+              responsibleOfficerLastName: null,
+              responsibleOfficerEmail: null,
 
-              responsibleOrganisation: 'HOME_OFFICE',
+              responsibleOrganisation: 'PROBATION',
               responsibleOrganisationEmail: 'responsible@organisation',
+              responsibleOrganisationRegion: 'NORTH_WEST',
+            },
+            probationDeliveryUnit: {
+              unit: 'COUNTY_DURHAM_AND_DARLINGTON',
             },
           },
         })
-
-        cy.task('stubSignIn', {
-          name: 'john smith',
-          roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
-          stubCohort: false,
-          userId: '1',
-        })
-
-        cy.task('stubCemoRequest', {
-          httpStatus: 200,
-          method: 'GET',
-          subPath: 'user-cohort',
-          response: { cohort: 'HOME_OFFICE' },
-        })
-
-        cy.signIn()
-
         const page = Page.visit(InterestedPartiesCheckYourAnswersPage, { orderId: mockOrderId })
 
         page.organisationDetailsSection.shouldExist()
         page.organisationDetailsSection.shouldNotHaveItems([
-          'What organisation or related organisation are you part of?',
-          "What is the Responsible Officer's first name?",
-          "What is the Responsible Officer's last name?",
-          "What is the Responsible Officer's email address?",
+          "What organisation or related organisation are you part of?",
+          "Select the name of the Prison",
+          "What is your team's contact email address?",
         ])
       })
-    })
+  })
+  })
 
+  context('does not show notifying org question if cohort inferred by auth', () => {
+    beforeEach(() => {
+      cy.task('reset')
+    })
     describe('when user cohort is probation', () => {
       it('does not show notifying org question', () => {
         cy.task('reset')

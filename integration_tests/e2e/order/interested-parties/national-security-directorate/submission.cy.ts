@@ -27,7 +27,7 @@ context('National security directorate page', () => {
       SpecialOrderPage,
       { orderId: mockOrderId },
       undefined,
-      'About the Notifying and Responsible Organisations',
+      'About the Responsible Organisation',
     )
   })
 
