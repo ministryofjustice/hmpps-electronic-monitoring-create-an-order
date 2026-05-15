@@ -127,6 +127,7 @@ describe('EnforcementZoneAddToListController', () => {
         file: {
           value: '',
         },
+        showEndate: true,
         errorSummary: null,
         startDate: {
           value: {
@@ -189,6 +190,7 @@ describe('EnforcementZoneAddToListController', () => {
             minutes: '00',
           },
         },
+        showEndate: true,
         errorSummary: {
           errorList: [
             {
@@ -260,6 +262,7 @@ describe('EnforcementZoneAddToListController', () => {
             minutes: '00',
           },
         },
+        showEndate: true,
         errorSummary: {
           errorList: [
             {
