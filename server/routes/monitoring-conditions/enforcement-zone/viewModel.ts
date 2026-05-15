@@ -4,19 +4,22 @@ import { EnforcementZone } from '../../../models/EnforcementZone'
 import { ValidationResult } from '../../../models/Validation'
 import { DateTimeField, TextField, ViewModel } from '../../../models/view-models/utils'
 import { EnforcementZoneAddToListFormData } from './formModel'
+import { Order } from '../../../models/Order'
 
 type EnforcementZoneAddToListViewModel = ViewModel<Pick<EnforcementZone, 'description' | 'duration'>> & {
-  endDate: DateTimeField
+  endDate?: DateTimeField
   startDate: DateTimeField
   file: TextField
   name?: TextField
+  showEndate: boolean
 }
 
 const constructFromFormData = (
   formData: EnforcementZoneAddToListFormData,
   validationErrors: ValidationResult,
+  order: Order,
 ): EnforcementZoneAddToListViewModel => {
-  return {
+  const viewModel: EnforcementZoneAddToListViewModel = {
     description: {
       value: formData.description,
       error: getError(validationErrors, 'description'),
@@ -28,16 +31,6 @@ const constructFromFormData = (
     name: {
       value: formData.name,
       error: getError(validationErrors, 'name'),
-    },
-    endDate: {
-      value: {
-        day: formData.endDate.day,
-        month: formData.endDate.month,
-        year: formData.endDate.year,
-        hours: formData.endDate.hours,
-        minutes: formData.endDate.minutes,
-      },
-      error: getError(validationErrors, 'endDate'),
     },
     file: {
       value: '',
@@ -53,14 +46,26 @@ const constructFromFormData = (
       },
       error: getError(validationErrors, 'startDate'),
     },
+    showEndate: order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE',
     errorSummary: createGovukErrorSummary(validationErrors),
   }
+  if (formData.endDate) {
+    viewModel.endDate = {
+      value: {
+        day: formData.endDate.day,
+        month: formData.endDate.month,
+        year: formData.endDate.year,
+        hours: formData.endDate.hours,
+        minutes: formData.endDate.minutes,
+      },
+      error: getError(validationErrors, 'endDate'),
+    }
+  }
+  return viewModel
 }
 
-const createFromEntity = (
-  zoneId: number,
-  enforcementZones: Array<EnforcementZone>,
-): EnforcementZoneAddToListViewModel => {
+const createFromEntity = (zoneId: number, order: Order): EnforcementZoneAddToListViewModel => {
+  const enforcementZones = order!.enforcementZoneConditions
   const currentZone = enforcementZones.find(zone => zone.zoneId === zoneId)
 
   return {
@@ -82,21 +87,22 @@ const createFromEntity = (
     startDate: {
       value: deserialiseDateTime(currentZone?.startDate || ''),
     },
+    showEndate: order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE',
     errorSummary: null,
   }
 }
 
 const construct = (
   zoneId: number,
-  enforcementZones: Array<EnforcementZone>,
+  order: Order,
   formData: EnforcementZoneAddToListFormData,
   errors: ValidationResult,
 ): EnforcementZoneAddToListViewModel => {
   if (errors.length > 0) {
-    return constructFromFormData(formData, errors)
+    return constructFromFormData(formData, errors, order)
   }
 
-  return createFromEntity(zoneId, enforcementZones)
+  return createFromEntity(zoneId, order)
 }
 
 export default {
