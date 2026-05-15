@@ -6,9 +6,11 @@ import { ValidationResult } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
 import { CurfewConditionsFormData, CurfewConditionsFormDataValidator } from '../models/form-data/curfewConditions'
 import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../utils/errors'
+import { NotifyingOrganisation } from '../models/NotifyingOrganisation'
 
 type CurfewConditionsInput = AuthenticatedRequestInput & {
   orderId: string
+  notifyingOrganisation: NotifyingOrganisation | null
   data: CurfewConditionsFormData
 }
 
@@ -17,7 +19,7 @@ export default class CurfewConditionsService {
 
   async update(input: CurfewConditionsInput): Promise<CurfewConditions | ValidationResult> {
     try {
-      const requestBody = CurfewConditionsFormDataValidator.parse(input.data)
+      const requestBody = CurfewConditionsFormDataValidator(input.notifyingOrganisation).parse(input.data)
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/monitoring-conditions-curfew-conditions`,
         data: requestBody,

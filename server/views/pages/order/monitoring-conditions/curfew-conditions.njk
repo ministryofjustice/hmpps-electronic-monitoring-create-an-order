@@ -30,7 +30,7 @@
        defaultHours: "00",
        defaultMinutes: "00"
      })}}
- 
+  {% if showEndate %}
    {{dateTimeInput({
        id: "endDate",
        name: "endDate",
@@ -47,5 +47,5 @@
        defaultHours: 23,
        defaultMinutes: 59
      })}}
-
+   {% endif %}
 {% endblock %}
