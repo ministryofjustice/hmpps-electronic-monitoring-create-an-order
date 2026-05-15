@@ -317,14 +317,16 @@ const createCurfewAnswers = (order: Order, content: I18n, answerOpts: AnswerOpti
   const curfewAdditionalDetailsUri = paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', order.id)
   const { questions } = content.pages.curfewConditions
   const curfewAdditionalDetailsQuestions = content.pages.curfewAdditionalDetails.questions
-
   if (order.curfewConditions?.startDate === undefined) {
     return []
   }
   const answers = [
     createDateAnswer(questions.startDate.text, order.curfewConditions?.startDate, conditionsUri, answerOpts),
-    createDateAnswer(questions.endDate.text, order.curfewConditions?.endDate, conditionsUri, answerOpts),
   ]
+
+  if (order.curfewConditions.endDate) {
+    answers.push(createDateAnswer(questions.endDate.text, order.curfewConditions?.endDate, conditionsUri, answerOpts))
+  }
 
   if (isOrderDataDictionarySameOrAbove('DDV5', order)) {
     const curfewAdditionalDetails = order.curfewConditions?.curfewAdditionalDetails
@@ -359,13 +361,13 @@ const createExclusionZoneAnswers = (order: Order, content: I18n, answerOpts: Ans
       const fileName = enforcementZone.fileName || 'No file selected'
       const zoneId = enforcementZone.zoneId || 0
       const zoneUri = uri ? uri.replace(':zoneId', zoneId.toString()) : ''
-      const items = [
-        createDateAnswer(questions.startDate.text, enforcementZone.startDate, zoneUri, answerOpts),
-        createDateAnswer(questions.endDate.text, enforcementZone.endDate, zoneUri, answerOpts),
-        createAnswer(questions.description.text, enforcementZone.description, zoneUri, answerOpts),
-        createAnswer(questions.duration.text, enforcementZone.duration, zoneUri, answerOpts),
-        createAnswer(questions.file.text, fileName, zoneUri, answerOpts),
-      ]
+      const items = [createDateAnswer(questions.startDate.text, enforcementZone.startDate, zoneUri, answerOpts)]
+      if (enforcementZone.endDate) {
+        items.push(createDateAnswer(questions.endDate.text, enforcementZone.endDate, zoneUri, answerOpts))
+      }
+      items.push(createAnswer(questions.description.text, enforcementZone.description, zoneUri, answerOpts))
+      items.push(createAnswer(questions.duration.text, enforcementZone.duration, zoneUri, answerOpts))
+      items.push(createAnswer(questions.file.text, fileName, zoneUri, answerOpts))
       if (enforcementZone.name) {
         items.push(createAnswer(questions.name.text, enforcementZone.name, zoneUri, answerOpts))
       }
