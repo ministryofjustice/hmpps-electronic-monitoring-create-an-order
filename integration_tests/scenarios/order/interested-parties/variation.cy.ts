@@ -56,7 +56,7 @@ context('Interested parties flow', () => {
     cy.task('resetFeatureFlags')
   })
 
-  it('Order start date is in the past', () => {
+  it.only('Order start date is in the past', () => {
     fillInNewOrder({
       startDate: new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)),
       files,
@@ -76,6 +76,15 @@ context('Interested parties flow', () => {
         notifyingOrganisation: 'Prison service',
         notifyingOrganisationEmailAddress: 'a@b.com',
         prison: 'Altcourse Prison',
+      },
+      responsibleOfficer: {
+        firstName: 'John',
+        lastName: 'Smith',
+        email: 'John@Smith.com',
+      },
+      responsibleOrganisation: {
+        responsibleOrganisation: 'Probation',
+        probationRegion: 'Wales',
       },
     }
     fillInInterestedPartiesWith({

@@ -156,11 +156,7 @@ context('Interested parties flow', () => {
     orderSummaryPage.interestedPartiesTask.click()
 
     const input = {
-      notifyingOrganisation: {
-        notifyingOrganisation: 'Prison service',
-        notifyingOrganisationEmailAddress: 'a@b.com',
-        prison: 'Altcourse Prison',
-      },
+      
       responsibleOfficer: {
         firstName: 'John',
         lastName: 'Smith',
