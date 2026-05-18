@@ -11,7 +11,7 @@ export default class ResponsibleOfficerPage extends AppFormPage {
     super(
       'Contact details for the Responsible Officer',
       paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER,
-      'About the Notifying and Responsible Organisation',
+      'About the Responsible Organisation',
       helpText,
     )
   }
