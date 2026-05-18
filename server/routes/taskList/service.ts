@@ -15,11 +15,22 @@ export type TaskSection = { name: string }
 
 export default class SectionListService {
   getSections(order: Order): TaskSection[] {
-    return [
+    const sections: TaskSection[] = [
       { name: SECTIONS.aboutTheDeviceWearer },
       { name: SECTIONS.riskInformation },
       { name: SECTIONS.electronicMonitoringCondition },
       { name: SECTIONS.additionalDocuments },
     ]
+
+    const startDate = order.monitoringConditions.startDate
+      ? new Date(order.monitoringConditions.startDate)
+      : new Date(1900, 0, 0)
+    const startDateIsInFuture = startDate > new Date()
+
+    if (order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE' && startDateIsInFuture) {
+      sections.push({ name: SECTIONS.responsibleOrg })
+    }
+
+    return sections
   }
 }
