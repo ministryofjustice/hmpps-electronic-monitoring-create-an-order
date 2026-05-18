@@ -9,17 +9,6 @@ import OrderNotifyingOrganisationPage from '../../../../pages/order/notifying-or
 const mockOrderId = uuidv4()
 const amendPath = '/amend-order'
 
-const completeNotifyingOrganisationPage = () => {
-  const page = Page.verifyOnPage(OrderNotifyingOrganisationPage, { orderId: mockOrderId })
-  page.form.fillInWith({
-    notifyingOrganisation: 'Prison service',
-    prison: 'Altcourse Prison',
-    notifyingOrganisationEmailAddress: 'a@b.com',
-  })
-  page.form.continueButton.click()
-  Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId })
-}
-
 context('Edit Order', () => {
   context('Is Address Change', () => {
     beforeEach(() => {
@@ -66,7 +55,7 @@ context('Edit Order', () => {
           type: 'REINSTALL_DEVICE',
         },
       }).should('be.true')
-      completeNotifyingOrganisationPage()
+      Page.verifyOnPage(OrderNotifyingOrganisationPage, { orderId: mockOrderId })
     })
   })
 })

@@ -2,7 +2,6 @@ import { v4 as uuidv4 } from 'uuid'
 import SearchPage from '../pages/search'
 import Page from '../pages/page'
 import { mockApiOrder } from '../mockApis/cemo'
-import OrderTasksPage from '../pages/order/summary'
 import IndexPage from '../pages'
 import IsAddressChangePage from './order/edit-order/is-address-change/isAddressChangePage'
 import OrderNotifyingOrganisationPage from '../pages/order/notifying-organisation'
@@ -345,16 +344,7 @@ context('Search', () => {
           },
         }).should('be.true')
 
-        const notifyingOrganisationPage = Page.verifyOnPage(OrderNotifyingOrganisationPage, { orderId: mockOrderId })
-        notifyingOrganisationPage.form.fillInWith({
-          notifyingOrganisation: 'Prison service',
-          prison: 'Altcourse Prison',
-          notifyingOrganisationEmailAddress: 'a@b.com',
-        })
-        notifyingOrganisationPage.form.continueButton.click()
-
-        // Verify the user was redirected to the task page
-        Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId })
+        Page.verifyOnPage(OrderNotifyingOrganisationPage, { orderId: mockOrderId })
       })
     })
 

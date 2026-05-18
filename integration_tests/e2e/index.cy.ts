@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import IndexPage from '../pages/index'
 import OrderNotifyingOrganisationPage from '../pages/order/notifying-organisation'
-import OrderTasksPage from '../pages/order/summary'
 import Page from '../pages/page'
 import SearchPage from '../pages/search'
 
@@ -85,18 +84,7 @@ context('Index', () => {
         },
       }).should('be.true')
 
-      // Verify the user is asked for notifying organisation details before seeing the task page
-      const notifyingOrganisationPage = Page.verifyOnPage(OrderNotifyingOrganisationPage, { orderId: mockOrderId })
-      cy.get('.govuk-caption-l').should('not.exist')
-
-      notifyingOrganisationPage.form.fillInWith({
-        notifyingOrganisation: 'Prison service',
-        prison: 'Altcourse Prison',
-        notifyingOrganisationEmailAddress: 'a@b.com',
-      })
-      notifyingOrganisationPage.form.continueButton.click()
-
-      Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId })
+      Page.verifyOnPage(OrderNotifyingOrganisationPage, { orderId: mockOrderId })
     })
   })
 

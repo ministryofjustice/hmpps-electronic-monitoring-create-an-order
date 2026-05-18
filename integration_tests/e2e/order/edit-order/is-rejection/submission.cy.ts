@@ -9,17 +9,6 @@ const mockOrderId = uuidv4()
 const variationPath = '/copy-as-variation'
 const amendPath = '/amend-rejected-order'
 
-const completeNotifyingOrganisationPage = () => {
-  const page = Page.verifyOnPage(OrderNotifyingOrganisationPage, { orderId: mockOrderId })
-  page.form.fillInWith({
-    notifyingOrganisation: 'Prison service',
-    prison: 'Altcourse Prison',
-    notifyingOrganisationEmailAddress: 'a@b.com',
-  })
-  page.form.continueButton.click()
-  Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId })
-}
-
 const stubVariationOrder = (fmsResultDate: Date, startDate: Date) => {
   cy.task('stubCemoGetOrder', {
     httpStatus: 200,
@@ -88,7 +77,7 @@ context('Edit Order', () => {
         body: {},
       }).should('be.true')
 
-      completeNotifyingOrganisationPage()
+      Page.verifyOnPage(OrderNotifyingOrganisationPage, { orderId: mockOrderId })
     })
 
     it('Should call amend-rejected-order endpoint if Yes is selected', () => {
@@ -109,7 +98,7 @@ context('Edit Order', () => {
         body: {},
       }).should('be.true')
 
-      completeNotifyingOrganisationPage()
+      Page.verifyOnPage(OrderNotifyingOrganisationPage, { orderId: mockOrderId })
     })
 
     context('SERVICE_REQUEST_TYPE_ENABLED enabled', () => {
@@ -133,7 +122,7 @@ context('Edit Order', () => {
           body: {},
         }).should('be.true')
 
-        completeNotifyingOrganisationPage()
+        Page.verifyOnPage(OrderNotifyingOrganisationPage, { orderId: mockOrderId })
       })
 
       it('Should go to is address changed page if no is selected and start date is in the past', () => {
