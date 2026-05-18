@@ -1353,8 +1353,14 @@ describe('TaskListService', () => {
         )
       })
 
-      it('should navigate to notify organisation when notifying and responsible organisations is incomplete', async () => {
-        const order = getMockOrder()
+      it('should navigate to responsible organisation page when notifying org is court and responsible organisations is incomplete', async () => {
+        const order = getMockOrder({
+          interestedParties: createInterestedParties({
+            notifyingOrganisation: 'FAMILY_COURT',
+            responsibleOrganisation: null,
+          }),
+        })
+
         const taskListService = new TaskListService(mockOrderChecklistService)
 
         const sections = await taskListService.getSections(order)
@@ -1364,7 +1370,7 @@ describe('TaskListService', () => {
         )
 
         expect(interestedPartiesSection?.path).toBe(
-          paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', order.id),
+          paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION.replace(':orderId', order.id),
         )
       })
 

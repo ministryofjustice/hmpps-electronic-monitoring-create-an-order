@@ -65,6 +65,8 @@ const PAGES = {
   variationDetails: 'VARIATION_DETAILS',
   installationLocation: 'INSTALLATION_LOCATION',
   installationAppointment: 'INSTALLATION_APPOINTMENT',
+  responsibleOrganisation: 'RESPONSIBLE_ORGANISATION',
+  responsibleOfficer: 'RESPONSIBLE_OFFICER',
 } as const
 
 type Page = (typeof PAGES)[keyof typeof PAGES]
@@ -170,12 +172,27 @@ export default class TaskListService {
     })
 
     if (FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')) {
+      if (
+        (notifyingOrganisationCourts as readonly string[]).indexOf(
+          order.interestedParties?.notifyingOrganisation ?? '',
+        ) > -1 ||
+        order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE'
+      ) {
+        tasks.push({
+          section: SECTIONS.interestParties,
+          name: PAGES.responsibleOrganisation,
+          path: paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION,
+          state: STATES.required,
+          completed: isNotNullOrUndefined(order.interestedParties?.responsibleOrganisation),
+        })
+      }
+
       tasks.push({
         section: SECTIONS.interestParties,
-        name: PAGES.interestParties,
-        path: paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION,
+        name: PAGES.responsibleOfficer,
+        path: paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER,
         state: STATES.required,
-        completed: isNotNullOrUndefined(order.interestedParties?.notifyingOrganisation),
+        completed: isNotNullOrUndefined(order.interestedParties?.responsibleOfficerFirstName),
       })
 
       tasks.push({

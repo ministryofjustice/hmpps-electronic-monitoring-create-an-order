@@ -74,6 +74,7 @@ export const createInterestedParties = (overrideProperties?: Partial<InterestedP
   responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
   responsibleOrganisationEmail: '',
   responsibleOrganisationRegion: '',
+  responsibleOfficerFirstName: '',
   ...overrideProperties,
 })
 
