@@ -71,7 +71,6 @@ context('Interested parties flow', () => {
     orderSummaryPage.interestedPartiesTask.click()
 
     let cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
-    cyaPage.changeLinkByQuestion('What organisation or related organisation are you part of?').click()
     const input = {
       notifyingOrganisation: {
         notifyingOrganisation: 'Prison service',
@@ -105,8 +104,7 @@ context('Interested parties flow', () => {
     const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
     orderSummaryPage.interestedPartiesTask.click()
-    const interestedPartiesCyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
-    interestedPartiesCyaPage.changeLinkByQuestion('What organisation or related organisation are you part of?').click()
+    Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
 
     const input = {
       notifyingOrganisation: {

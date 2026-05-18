@@ -55,7 +55,6 @@ context('Interested parties flow', () => {
     })
     const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
     cyaPage.organisationDetailsSection.shouldHaveItems([
-      { key: 'Select the name of the Family Court', value: 'Aberystwyth Family Court' },
       { key: "What is the Responsible Officer's organisation?", value: 'Probation' },
       { key: 'Select the Probation region', value: 'Wales' },
       { key: "What is the Responsible Organisation's email address? (optional)", value: 'a@b.com' },
@@ -81,9 +80,6 @@ context('Interested parties flow', () => {
     orderSummaryPage.interestedPartiesTask.click()
 
     const input = {
-      notifyingOrganisation: {
-        notifyingOrganisationEmailAddress: 'a@b.com',
-      },
       responsibleOrganisation: {
         responsibleOrganisation: 'Home Office',
         responsibleOrganisationEmailAddress: 'a@b.com',
@@ -95,7 +91,6 @@ context('Interested parties flow', () => {
     })
     const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
     cyaPage.organisationDetailsSection.shouldHaveItems([
-      { key: "What is your team's contact email address?", value: 'a@b.com' },
       { key: "What is the Responsible Officer's organisation?", value: 'Home Office' },
       { key: "What is the Responsible Organisation's email address? (optional)", value: 'a@b.com' },
     ])
@@ -159,11 +154,6 @@ context('Interested parties flow', () => {
     orderSummaryPage.interestedPartiesTask.click()
 
     const input = {
-      notifyingOrganisation: {
-        notifyingOrganisation: 'Prison service',
-        notifyingOrganisationEmailAddress: 'a@b.com',
-        prison: 'Altcourse Prison',
-      },
       responsibleOfficer: {
         firstName: 'John',
         lastName: 'Smith',
@@ -190,16 +180,6 @@ context('Interested parties flow', () => {
       { key: "What is the Responsible Officer's organisation?", value: 'Probation' },
       { key: 'Select the Probation region', value: 'Wales' },
     ])
-
-    cyaPage.changeLinkByQuestion('What organisation or related organisation are you part of?').click()
-
-    const notifyOrgPage = Page.verifyOnPage(NotifyingOrganisationPage)
-
-    notifyOrgPage.form.fillInWith({
-      notifyingOrganisation: 'Family Court',
-      familyCourt: 'Aberystwyth Family Court',
-    })
-    notifyOrgPage.form.continueButton.click()
 
     const resOrgPage = Page.verifyOnPage(ResponsibleOrganisationPage)
     resOrgPage.form.fillInWith({
