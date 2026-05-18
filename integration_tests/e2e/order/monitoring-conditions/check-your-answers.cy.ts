@@ -336,6 +336,40 @@ context('Check your answers', () => {
         )
     })
 
+    it('should not show end dates for curfew and enforcemnt zone if not exist', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          ...mockOrder,
+          curfewConditions: {
+            curfewAddress: 'PRIMARY,SECONDARY',
+            startDate: '2024-11-11T00:00:00Z',
+            curfewAdditionalDetails: 'some additional details',
+          },
+          enforcementZoneConditions: [
+            {
+              id: '0',
+              zoneType: 'EXCLUSION',
+              name: 'Mock Zone Name',
+              startDate: '2025-07-15T00:00:00Z',
+              description: null,
+              duration: null,
+              fileName: null,
+              fileId: null,
+              zoneId: 0,
+            },
+          ],
+        },
+      })
+
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.curfewSection.shouldNotHaveItem('What date does the curfew end?')
+      page.exclusionZoneMonitoringSections().shouldNotHaveItem('What date does exclusion zone monitoring end?')
+    })
+
     it('shows correct buttons', () => {
       const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
 

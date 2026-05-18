@@ -37,6 +37,31 @@ context('Monitoring conditions - Enforcement Zone', () => {
       page.backButton.should('exist')
       page.errorSummary.shouldNotExist()
       page.form.nameField.element.should('exist')
+      cy.get('#endDate').should('exist')
+      page.checkIsAccessible()
+    })
+
+    it('Should not show end date if notifying organisation is HOME_OFFICE', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: 'Home Office',
+            notifyingOrganisationEmail: 'test@homeoffice.gov.uk',
+            responsibleOfficerName: 'Test Officer',
+            responsibleOfficerPhoneNumber: '01234567890',
+            responsibleOrganisation: 'PROBATION',
+            responsibleOrganisationRegion: 'Test Region',
+            responsibleOrganisationEmail: 'test@probation.gov.uk',
+          },
+        },
+      })
+      const page = Page.visit(EnforcementZoneAddToListPage, { orderId: mockOrderId })
+
+      cy.get('#endDate').should('not.exist')
 
       page.checkIsAccessible()
     })

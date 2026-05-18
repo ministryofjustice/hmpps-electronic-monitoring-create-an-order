@@ -16,6 +16,8 @@ export default class EnforcementZoneAddToListController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId, zoneId } = req.params
+    const { interestedParties } = req.order!
+
     const file = req.file as Express.Multer.File
     const zoneIdInt = Number.parseInt(zoneId, 10)
     req.body.zoneId = zoneIdInt
@@ -27,6 +29,7 @@ export default class EnforcementZoneAddToListController {
       accessToken: res.locals.user.token,
       orderId,
       data: formData,
+      notifyingOrganisation: interestedParties?.notifyingOrganisation ?? null,
     })
     if (result !== null) {
       errorViewModel = getErrorsViewModel(result)
@@ -50,7 +53,7 @@ export default class EnforcementZoneAddToListController {
     }
 
     if (Object.keys(errorViewModel).length !== 0 || errors.length > 0) {
-      const viewModel = enforcementZoneAddToListViewModel.construct(parseInt(zoneId, 10), [], formData, errors)
+      const viewModel = enforcementZoneAddToListViewModel.construct(parseInt(zoneId, 10), req.order!, formData, errors)
       res.render(`pages/order/monitoring-conditions/enforcement-zone-add-to-list`, viewModel)
     } else {
       this.auditService.logAuditEvent({
@@ -82,12 +85,7 @@ export default class EnforcementZoneAddToListController {
   view: RequestHandler = async (req: Request, res: Response) => {
     const { zoneId } = req.params
     const order = req.order!
-    const viewModel = enforcementZoneAddToListViewModel.construct(
-      parseInt(zoneId, 10),
-      order.enforcementZoneConditions,
-      {} as never,
-      [],
-    )
+    const viewModel = enforcementZoneAddToListViewModel.construct(parseInt(zoneId, 10), order, {} as never, [])
 
     res.render(`pages/order/monitoring-conditions/enforcement-zone-add-to-list`, viewModel)
   }
