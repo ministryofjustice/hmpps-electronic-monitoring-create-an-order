@@ -55,9 +55,7 @@ context('Interested parties flow', () => {
     })
     const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
     cyaPage.organisationDetailsSection.shouldHaveItems([
-      { key: 'What organisation or related organisation are you part of?', value: 'Family Court' },
       { key: 'Select the name of the Family Court', value: 'Aberystwyth Family Court' },
-      { key: "What is your team's contact email address?", value: 'a@b.com' },
       { key: "What is the Responsible Officer's organisation?", value: 'Probation' },
       { key: 'Select the Probation region', value: 'Wales' },
       { key: "What is the Responsible Organisation's email address? (optional)", value: 'a@b.com' },
@@ -139,9 +137,6 @@ context('Interested parties flow', () => {
     })
     const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
     cyaPage.organisationDetailsSection.shouldHaveItems([
-      { key: 'What organisation or related organisation are you part of?', value: 'Prison service' },
-      { key: 'Select the name of the Prison', value: 'Altcourse Prison' },
-      { key: "What is your team's contact email address?", value: 'a@b.com' },
       { key: "What is the Responsible Officer's first name?", value: 'John' },
       { key: "What is the Responsible Officer's last name?", value: 'Smith' },
       { key: "What is the Responsible Officer's email address?", value: 'John@Smith.com' },
@@ -189,9 +184,6 @@ context('Interested parties flow', () => {
     const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
 
     cyaPage.organisationDetailsSection.shouldHaveItems([
-      { key: 'What organisation or related organisation are you part of?', value: 'Prison service' },
-      { key: 'Select the name of the Prison', value: 'Altcourse Prison' },
-      { key: "What is your team's contact email address?", value: 'a@b.com' },
       { key: "What is the Responsible Officer's first name?", value: 'John' },
       { key: "What is the Responsible Officer's last name?", value: 'Smith' },
       { key: "What is the Responsible Officer's email address?", value: 'John@Smith.com' },
@@ -219,9 +211,6 @@ context('Interested parties flow', () => {
     Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
 
     cyaPage.organisationDetailsSection.shouldHaveItems([
-      { key: 'What organisation or related organisation are you part of?', value: 'Family Court' },
-      { key: 'Select the name of the Family Court', value: 'Aberystwyth Family Court' },
-      { key: "What is your team's contact email address?", value: 'a@b.com' },
       { key: "What is the Responsible Officer's organisation?", value: 'Field monitoring service' },
       { key: "What is the Responsible Organisation's email address? (optional)", value: 'ro@fms.com' },
     ])

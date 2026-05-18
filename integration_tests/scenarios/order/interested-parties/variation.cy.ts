@@ -85,9 +85,10 @@ context('Interested parties flow', () => {
     })
     cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
     cyaPage.organisationDetailsSection.shouldHaveItems([
-      { key: 'What organisation or related organisation are you part of?', value: 'Prison service' },
-      { key: 'Select the name of the Prison', value: 'Altcourse Prison' },
-      { key: "What is your team's contact email address?", value: 'a@b.com' },
+      { key: "What is the Responsible Officer's first name?", value: 'John' },
+      { key: "What is the Responsible Officer's last name?", value: 'Smith' },
+      { key: "What is the Responsible Officer's email address?", value: 'John@Smith.com' },
+      { key: "What is the Responsible Officer's organisation?", value: 'Probation' },
     ])
   })
 
@@ -131,9 +132,6 @@ context('Interested parties flow', () => {
 
     const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
     cyaPage.organisationDetailsSection.shouldHaveItems([
-      { key: 'What organisation or related organisation are you part of?', value: 'Prison service' },
-      { key: 'Select the name of the Prison', value: 'Altcourse Prison' },
-      { key: "What is your team's contact email address?", value: 'a@b.com' },
       { key: "What is the Responsible Officer's first name?", value: 'John' },
       { key: "What is the Responsible Officer's last name?", value: 'Smith' },
       { key: "What is the Responsible Officer's email address?", value: 'John@Smith.com' },
