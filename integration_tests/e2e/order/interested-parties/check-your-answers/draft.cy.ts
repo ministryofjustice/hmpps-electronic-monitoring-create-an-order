@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../pages/page'
 import InterestedPartiesCheckYourAnswersPage from './interestedPartiesCheckYourAnswersPage'
-import { start } from 'repl'
 
 const mockOrderId = uuidv4()
 context('interested parties check answers page', () => {
@@ -43,6 +42,11 @@ context('interested parties check answers page', () => {
         { key: 'Select the Police force area', value: 'Cheshire' },
         { key: "What is the Responsible Organisation's email address? (optional)", value: 'responsible@organisation' },
       ])
+      page.organisationDetailsSection.shouldNotHaveItems([
+        "What organisation or related organisation are you part of?",
+        "Select the name of the Prison",
+        "What is your team's contact email address?",
+      ])
 
       page.changeLinks.should('exist')
       page.continueButton().should('exist')
@@ -60,9 +64,9 @@ context('interested parties check answers page', () => {
         order: {
           dataDictionaryVersion: 'DDV5',
           interestedParties: {
-            // notifyingOrganisation: 'PRISON',
-            // notifyingOrganisationName: 'ALTCOURSE_PRISON',
-            // notifyingOrganisationEmail: 'notifying@organisation',
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: 'ALTCOURSE_PRISON',
+            notifyingOrganisationEmail: 'notifying@organisation',
 
             responsibleOfficerFirstName: 'officer',
             responsibleOfficerLastName: 'name',
