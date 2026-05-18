@@ -46,6 +46,7 @@ import SpecialOrderController from './special-order/controller'
 import IsAddressChangeController from './variations/is-address-change/controller'
 import NoRefitsController from './variations/no-refits/controller'
 import NoChangeResponsibleOfficerController from './variations/no-change-responsible-officer/controller'
+import NotifingOrganisationController from './interested-parties/notifying-organisation/controller'
 
 export default function routes({
   alcoholMonitoringService,
@@ -148,7 +149,7 @@ export default function routes({
   )
   const removeMonitoringTypeController = new RemoveMonitoringTypeController(removeMonitoringTypeService)
   const noFixedAbodeController = new NoFixedAbodeController(auditService, deviceWearerService, taskListService)
-  const notifyingOrganisationController = new InterestedPartiesController(
+  const interestedPartiesController = new InterestedPartiesController(
     auditService,
     interestedPartiesService,
     taskListService,
@@ -197,7 +198,7 @@ export default function routes({
     taskListService,
   )
 
-  const interestedPartiesController = new InterestedPartiesCheckYourAnswersController(
+  const interestedPartiesCheckYourAsnwerController = new InterestedPartiesCheckYourAnswersController(
     taskListService,
     orderChecklistService,
   )
@@ -283,8 +284,8 @@ export default function routes({
   post(paths.CONTACT_INFORMATION.ADDRESSES, addressController.update)
 
   // Interested parties
-  get(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, notifyingOrganisationController.view)
-  post(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, notifyingOrganisationController.update)
+  get(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, interestedPartiesController.view)
+  post(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, interestedPartiesController.update)
 
   // Probation delivery unit
   get(paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT, probationDeliveryUnitController.view)
@@ -397,10 +398,10 @@ export default function routes({
   get(paths.VARIATION.CREATE_VARIATION, isAddressChangeController.view)
   post(paths.VARIATION.CREATE_VARIATION, isAddressChangeController.update)
 
-  get(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS_VERSION, interestedPartiesController.view)
-  post(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS_VERSION, interestedPartiesController.update)
-  get(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS, interestedPartiesController.view)
-  post(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS, interestedPartiesController.update)
+  get(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS_VERSION, interestedPartiesCheckYourAsnwerController.view)
+  post(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS_VERSION, interestedPartiesCheckYourAsnwerController.update)
+  get(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS, interestedPartiesCheckYourAsnwerController.view)
+  post(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS, interestedPartiesCheckYourAsnwerController.update)
 
   router.use(
     paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.BASE_PATH,
@@ -416,6 +417,13 @@ export default function routes({
     createPostcodeLookupRouter({ postcodeService, addressService, taskListService, auditService }),
   )
 
+  const notifyingOrganisationController = new NotifingOrganisationController(
+    interestedPartiesStoreService,
+    updateInterestedPartiesService,
+    orderService,
+  )
+  get(paths.INTEREST_PARTIES.YOUR_DETAILS, notifyingOrganisationController.view)
+  post(paths.INTEREST_PARTIES.YOUR_DETAILS, notifyingOrganisationController.update)
   router.use(
     paths.INTEREST_PARTIES.BASE_PATH,
     createInterestedPartiesRouter({

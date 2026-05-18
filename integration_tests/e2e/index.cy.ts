@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid'
 import IndexPage from '../pages/index'
-import OrderTasksPage from '../pages/order/summary'
 import Page from '../pages/page'
 import SearchPage from '../pages/search'
+import NotifyingOrganisationPage from './order/interested-parties/notifying-organisation/notifyingOrganisationPage'
 
 const mockOrderId = uuidv4()
 
@@ -67,24 +67,13 @@ context('Index', () => {
       cy.signIn()
     })
 
-    it('should create a new order', () => {
+    it('should go to your details page', () => {
       // Visit the home page
       const page = Page.visit(IndexPage)
 
       // Create a new order
       page.newOrderFormButton.click()
-
-      // Verify the api was called correctly
-      cy.task('stubCemoVerifyRequestReceived', {
-        uri: `/orders`,
-        method: 'POST',
-        body: {
-          type: 'REQUEST',
-        },
-      }).should('be.true')
-
-      // Verify the user was redirected to the task page
-      Page.verifyOnPage(OrderTasksPage)
+      Page.verifyOnPage(NotifyingOrganisationPage)
     })
   })
 

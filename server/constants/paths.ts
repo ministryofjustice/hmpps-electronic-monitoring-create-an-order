@@ -27,7 +27,8 @@ const paths = {
 
   INTEREST_PARTIES: {
     BASE_PATH: '/order/:orderId/interest-parties',
-    NOTIFYING_ORGANISATION: '/order/:orderId/interest-parties/notifying-organisation',
+    // NOTIFYING_ORGANISATION: '/order/:orderId/interest-parties/notifying-organisation',
+    YOUR_DETAILS: '/order/your-details',
     RESPONSIBLE_OFFICER: '/order/:orderId/interest-parties/responsible-officer',
     RESPONSBILE_ORGANISATION: '/order/:orderId/interest-parties/responsible-organisation',
     NSD: '/order/:orderId/interest-parties/national-security-directorate',

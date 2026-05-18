@@ -67,7 +67,7 @@ describe('OrderController', () => {
   })
 
   describe('create', () => {
-    it('should create an order and redirect to view the order', async () => {
+    it('should redirect to your details page', async () => {
       // Given
       const mockOrder = getMockOrder()
       const req = createMockRequest({
@@ -83,11 +83,7 @@ describe('OrderController', () => {
       await orderController.create(req, res, next)
 
       // Then
-      expect(mockOrderService.createOrder).toHaveBeenCalledWith({
-        accessToken: 'fakeUserToken',
-        data: { type: 'REQUEST' },
-      })
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/summary`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/your-details`)
     })
   })
 
