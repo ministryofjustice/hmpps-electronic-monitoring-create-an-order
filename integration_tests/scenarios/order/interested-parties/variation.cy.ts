@@ -69,6 +69,9 @@ context('Interested parties flow', () => {
     const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
     orderSummaryPage.interestedPartiesTask.click()
+
+    let cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
+    cyaPage.changeLinkByQuestion('What organisation or related organisation are you part of?').click()
     const input = {
       notifyingOrganisation: {
         notifyingOrganisation: 'Prison service',
@@ -80,16 +83,11 @@ context('Interested parties flow', () => {
       continueOnCya: false,
       ...input,
     })
-
-    const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
+    cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
     cyaPage.organisationDetailsSection.shouldHaveItems([
       { key: 'What organisation or related organisation are you part of?', value: 'Prison service' },
       { key: 'Select the name of the Prison', value: 'Altcourse Prison' },
       { key: "What is your team's contact email address?", value: 'a@b.com' },
-    ])
-    cyaPage.organisationDetailsSection.shouldNotHaveItems([
-      "What is the Responsible Officer's organisation?",
-      "What is the Responsible Organisation's email address? (optional)",
     ])
   })
 

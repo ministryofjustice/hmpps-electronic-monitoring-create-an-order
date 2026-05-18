@@ -250,8 +250,8 @@ context('The kitchen sink', () => {
               },
               {
                 condition: 'EM Exclusion / Inclusion Zone',
-                start_date: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
-                end_date: formatAsFmsDateTime(trailMonitoringOrder.endDate, 23, 59),
+                start_date: formatAsFmsDateTime(primaryEnforcementZoneDetails.startDate, 0, 0),
+                end_date: formatAsFmsDateTime(primaryEnforcementZoneDetails.endDate, 23, 59),
               },
             ],
             exclusion_allday: '',

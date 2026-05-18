@@ -126,11 +126,11 @@ context('monitoring types', () => {
 
     page.form.monitoringTypesField.shouldExist()
     page.form.monitoringTypesField.shouldNotBeDisabled()
-    page.form.monitoringTypesField.shouldHaveOption('Curfew')
-    page.form.monitoringTypesField.shouldHaveOption('Exclusion zone monitoring')
-    page.form.monitoringTypesField.shouldHaveOption('Trail monitoring')
-    page.form.monitoringTypesField.shouldHaveOption('Mandatory attendance monitoring')
-    page.form.monitoringTypesField.shouldHaveOption('Alcohol monitoring')
+    page.form.monitoringTypesField.shouldHaveEnabledOption('Curfew')
+    page.form.monitoringTypesField.shouldHaveEnabledOption('Exclusion zone monitoring')
+    page.form.monitoringTypesField.shouldHaveEnabledOption('Trail monitoring')
+    page.form.monitoringTypesField.shouldHaveEnabledOption('Mandatory attendance monitoring')
+    page.form.monitoringTypesField.shouldHaveEnabledOption('Alcohol monitoring')
 
     page.form.continueButton.should('exist')
 
@@ -144,7 +144,7 @@ context('monitoring types', () => {
     monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Exclusion zone monitoring')
     monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Trail')
     monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Mandatory attendance monitoring')
-    monitoringTypePage.form.monitoringTypesField.shouldHaveOption('Alcohol')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Alcohol')
     monitoringTypePage.form.message.contains(
       "Some monitoring types can't be selected because the device wearer is not on a Home Detention Curfew (HDC) or part of any pilots.",
     )
@@ -157,7 +157,7 @@ context('monitoring types', () => {
     const monitoringTypePage = Page.visit(MonitoringTypePage, { orderId: mockOrderId })
     monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Curfew')
     monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Exclusion zone monitoring')
-    monitoringTypePage.form.monitoringTypesField.shouldHaveOption('Trail')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Trail')
     monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Mandatory attendance monitoring')
     monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Alcohol')
     monitoringTypePage.form.message.contains(
@@ -195,7 +195,7 @@ context('monitoring types', () => {
     monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Exclusion zone monitoring')
     monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Trail')
     monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Mandatory attendance monitoring')
-    monitoringTypePage.form.monitoringTypesField.shouldHaveOption('Alcohol')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Alcohol')
     monitoringTypePage.form.message.contains(
       "Some monitoring types can't be selected because the device wearer has no fixed address.",
     )
@@ -206,10 +206,10 @@ context('monitoring types', () => {
     const monitoringTypePage = Page.visit(MonitoringTypePage, { orderId: mockOrderId })
 
     monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Curfew')
-    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Exclusion zone monitoring')
-    monitoringTypePage.form.monitoringTypesField.shouldHaveOption('Trail')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Exclusion zone monitoring')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Trail')
     monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Mandatory attendance monitoring')
-    monitoringTypePage.form.monitoringTypesField.shouldHaveOption('Alcohol')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Alcohol')
     monitoringTypePage.form.message.contains(
       "Some monitoring types can't be selected because the device wearer has no fixed address.",
     )
@@ -219,10 +219,10 @@ context('monitoring types', () => {
     stubGetOrder({ notifyingOrg: 'PROBATION', deviceWearer: createDevicerWearer(false) })
     const monitoringTypesPage = Page.visit(MonitoringTypePage, { orderId: mockOrderId })
 
-    monitoringTypesPage.form.monitoringTypesField.shouldHaveOption('Curfew')
-    monitoringTypesPage.form.monitoringTypesField.shouldHaveOption('Exclusion zone monitoring')
-    monitoringTypesPage.form.monitoringTypesField.shouldHaveOption('Trail')
-    monitoringTypesPage.form.monitoringTypesField.shouldHaveOption('Mandatory attendance monitoring')
+    monitoringTypesPage.form.monitoringTypesField.shouldHaveEnabledOption('Curfew')
+    monitoringTypesPage.form.monitoringTypesField.shouldHaveEnabledOption('Exclusion zone monitoring')
+    monitoringTypesPage.form.monitoringTypesField.shouldHaveEnabledOption('Trail')
+    monitoringTypesPage.form.monitoringTypesField.shouldHaveEnabledOption('Mandatory attendance monitoring')
     monitoringTypesPage.form.monitoringTypesField.shouldHaveDisabledOption('Alcohol')
     monitoringTypesPage.form.message.contains(
       'Alcohol monitoring is not an option because the device wearer is not 18 years old or older when the electonic monitoring device is installed.',

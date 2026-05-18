@@ -113,7 +113,7 @@ context('address results', () => {
           addressLine3: 'London',
           addressLine4: '',
           postcode: 'SW1A 2AA',
-          hasAnotherAddress: false,
+          hasAnotherAddress: true,
         },
       }).should('be.true')
     })

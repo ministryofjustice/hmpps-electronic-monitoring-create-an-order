@@ -39,6 +39,9 @@ export default class EnterAddressController {
       data: {
         ...formData,
         addressType,
+        hasAnotherAddress: (
+          addressType.toLowerCase() === 'primary' || addressType.toLowerCase() === 'secondary'
+        ).toString(), // default hasAnotherAddress to true to avoid remove of other address, need to remove after clear old address update
       },
     })
 

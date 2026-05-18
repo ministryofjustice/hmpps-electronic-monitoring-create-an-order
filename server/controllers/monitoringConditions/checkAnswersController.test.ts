@@ -96,7 +96,63 @@ describe('MonitoringConditionsCheckAnswersController', () => {
       })
     })
 
-    it('should link installation address changes to postcode lookup when postcode lookup is enabled', async () => {
+    it('should link installation location page when postcode lookup is enabled and location type is primary', async () => {
+      // Given
+      const mockGet = jest.fn((flag: string) => flag === 'POSTCODE_LOOKUP_ENABLED')
+      const mockGetValue = jest.fn(() => '')
+      jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
+        get: mockGet,
+        getValue: mockGetValue,
+      } as never)
+      const order = getMockOrder({
+        addresses: [
+          createAddress({
+            addressType: 'PRIMARY',
+            addressLine1: 'Line 1',
+            addressLine2: 'Line 2',
+            addressLine3: 'Line 3',
+            postcode: 'Postcode',
+          }),
+        ],
+        installationLocation: {
+          location: 'PRIMARY',
+        },
+      })
+      const req = createMockRequest({ order })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      // When
+      await controller.view(req, res, next)
+
+      // Then
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/order/monitoring-conditions/check-your-answers',
+        expect.objectContaining({
+          installationLocation: [
+            {
+              key: {
+                text: 'Where will installation of the electronic monitoring device take place?',
+              },
+              value: {
+                html: 'Line 1, Line 2, Line 3, Postcode',
+              },
+              actions: {
+                items: [
+                  {
+                    href: paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION.replace(':orderId', order.id),
+                    text: 'Change',
+                    visuallyHiddenText: 'where will installation of the electronic monitoring device take place?',
+                  },
+                ],
+              },
+            },
+          ],
+        }),
+      )
+    })
+
+    it('should link installation address changes to postcode lookup when postcode lookup is enabled and location type is prison', async () => {
       // Given
       const mockGet = jest.fn((flag: string) => flag === 'POSTCODE_LOOKUP_ENABLED')
       const mockGetValue = jest.fn(() => '')

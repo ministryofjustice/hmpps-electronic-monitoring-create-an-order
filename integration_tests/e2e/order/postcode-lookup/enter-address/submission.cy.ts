@@ -68,7 +68,7 @@ context('Enter address page', () => {
         addressLine3: 'London',
         addressLine4: '',
         postcode: 'SA11 1AA',
-        hasAnotherAddress: false,
+        hasAnotherAddress: true,
       },
     }).should('be.true')
   })

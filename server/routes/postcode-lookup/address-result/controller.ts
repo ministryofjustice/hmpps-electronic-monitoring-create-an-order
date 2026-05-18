@@ -79,7 +79,13 @@ export default class AddressResultController {
     await this.addressService.updateAddress({
       accessToken: res.locals.user.token,
       orderId: order.id,
-      data: { ...address, addressType },
+      data: {
+        ...address,
+        addressType,
+        hasAnotherAddress: (
+          addressType.toLowerCase() === 'primary' || addressType.toLowerCase() === 'secondary'
+        ).toString(), // default hasAnotherAddress to true to avoid remove of other address, need to remove after clear old address update
+      },
     })
 
     const redirectUrl = this.postcodeService.buildUrl(

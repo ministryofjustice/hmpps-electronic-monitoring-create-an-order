@@ -99,7 +99,7 @@ const getEnabled = (order: Order): { options: (keyof MonitoringTypes)[]; message
   if (!hasFixedAddress(order)) {
     if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE') {
       return {
-        options: ['trail', 'alcohol'],
+        options: ['trail', 'exclusionZone', 'alcohol'],
         message: "Some monitoring types can't be selected because the device wearer has no fixed address.",
       }
     }
