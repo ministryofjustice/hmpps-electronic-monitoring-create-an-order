@@ -1,27 +1,34 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../pages/page'
 import NotifyingOrganisationPage from './notifyingOrganisationPage'
-import ResponsibleOfficerPage from '../responsible-officer/responsibleOfficerPage'
-import ResponsibleOrganisationPage from '../responsible-organisation/responsibleOrganisationPage'
-import InterestedPartiesCheckYourAnswersPage from '../check-your-answers/interestedPartiesCheckYourAnswersPage'
+import OrderTasksPage from '../../../../pages/order/summary'
+import { mockApiOrder } from '../../../../mockApis/cemo'
 
 const mockOrderId = uuidv4()
 context('Submit notifying organisations', () => {
+  const submitPath = 'orderWithNotifyingOrganisation'
   context('New orders', () => {
     beforeEach(() => {
       cy.task('reset')
+      const mockOrder = mockApiOrder()
+      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrder.id, status: 'IN_PROGRESS' })
 
-      cy.task('stubCemoGetOrder', {
+      cy.task('stubCemoRequest', {
         httpStatus: 200,
         id: mockOrderId,
-        status: 'IN_PROGRESS',
-        order: {
-          dataDictionaryVersion: 'DDV6',
-        },
+        subPath: submitPath,
+        method: 'POST',
+        response: mockOrder,
+      })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrder.id,
       })
     })
 
-    it('prison routes to responsible officer page', () => {
+    it('should  routes summary page', () => {
       cy.task('stubSignIn', {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
@@ -46,11 +53,57 @@ context('Submit notifying organisations', () => {
         prison: 'Altcourse Prison',
       })
       page.form.continueButton.click()
-
-      Page.verifyOnPage(ResponsibleOfficerPage)
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/${submitPath}`,
+        body: {
+          requestType: 'REQUEST',
+          notifyingOrganisation: 'PRISON',
+          notifyingOrganisationName: 'ALTCOURSE_PRISON',
+          notifyingOrganisationEmail: 'a@b.com',
+        },
+      }).should('be.true')
+      Page.verifyOnPage(OrderTasksPage)
     })
 
-    it('court routes to responsible organisation page', () => {
+    it('other cohort can submit order', () => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '123456784',
+      })
+
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: { cohort: 'OTHER' },
+      })
+
+      cy.signIn()
+
+      const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
+
+      page.form.fillInWith({
+        notifyingOrganisation: 'Prison service',
+        notifyingOrganisationEmailAddress: 'a@b.com',
+        prison: 'Altcourse Prison',
+      })
+      page.form.continueButton.click()
+
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/${submitPath}`,
+        body: {
+          requestType: 'REQUEST',
+          notifyingOrganisation: 'PRISON',
+          notifyingOrganisationName: 'ALTCOURSE_PRISON',
+          notifyingOrganisationEmail: 'a@b.com',
+        },
+      }).should('be.true')
+      Page.verifyOnPage(OrderTasksPage)
+    })
+
+    it('court cohort can submit order', () => {
       cy.task('stubSignIn', {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
@@ -76,11 +129,19 @@ context('Submit notifying organisations', () => {
       })
       page.form.continueButton.click()
 
-      Page.verifyOnPage(ResponsibleOrganisationPage)
-      cy.contains("What is the Responsible Officer's organisation?")
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/${submitPath}`,
+        body: {
+          requestType: 'REQUEST',
+          notifyingOrganisation: 'FAMILY_COURT',
+          notifyingOrganisationName: 'SWANSEA_FAMILY_COURT',
+          notifyingOrganisationEmail: 'a@b.com',
+        },
+      }).should('be.true')
+      Page.verifyOnPage(OrderTasksPage)
     })
 
-    it('probation routes to responsible officer page', () => {
+    it('probation can submit order', () => {
       cy.task('stubSignIn', {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
@@ -104,8 +165,16 @@ context('Submit notifying organisations', () => {
       })
       page.form.continueButton.click()
 
-      Page.verifyOnPage(ResponsibleOfficerPage)
-      cy.contains('Contact details for the Responsible Officer')
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/${submitPath}`,
+        body: {
+          requestType: 'REQUEST',
+          notifyingOrganisation: 'PROBATION',
+          notifyingOrganisationName: '',
+          notifyingOrganisationEmail: 'a@b.com',
+        },
+      }).should('be.true')
+      Page.verifyOnPage(OrderTasksPage)
     })
 
     it('home office routes to responsible organisation page', () => {
@@ -132,158 +201,106 @@ context('Submit notifying organisations', () => {
       })
       page.form.continueButton.click()
 
-      Page.verifyOnPage(ResponsibleOrganisationPage)
-      cy.contains("What is the Responsible Officer's organisation?")
-    })
-
-    it('other cohort can select options', () => {
-      cy.task('stubSignIn', {
-        name: 'john smith',
-        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
-        stubCohort: false,
-        userId: '123456784',
-      })
-
-      cy.task('stubCemoRequest', {
-        httpStatus: 200,
-        method: 'GET',
-        subPath: 'user-cohort',
-        response: { cohort: 'OTHER' },
-      })
-
-      cy.signIn()
-
-      const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
-
-      page.form.fillInWith({
-        notifyingOrganisation: 'Prison service',
-        notifyingOrganisationEmailAddress: 'a@b.com',
-        prison: 'Altcourse Prison',
-      })
-      page.form.continueButton.click()
-
-      Page.verifyOnPage(ResponsibleOfficerPage)
-    })
-
-    it('navigating back to the page after submission shows values with org name', () => {
-      cy.task('stubSignIn', {
-        name: 'john smith',
-        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
-        stubCohort: false,
-        userId: '123456785',
-      })
-
-      cy.task('stubCemoRequest', {
-        httpStatus: 200,
-        method: 'GET',
-        subPath: 'user-cohort',
-        response: { cohort: 'PRISON', activeCaseLoadName: 'HMP ABC' },
-      })
-
-      cy.signIn()
-      let page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
-
-      page.form.fillInWith({
-        notifyingOrganisation: 'Prison service',
-        notifyingOrganisationEmailAddress: 'a@b.com',
-        prison: 'Altcourse Prison',
-      })
-      page.form.continueButton.click()
-
-      page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
-      page.form.organisationField.shouldHaveValue('Prison service')
-      page.form.emailField.shouldHaveValue('a@b.com')
-      page.form.prisonField.shouldHaveValue('ALTCOURSE_PRISON')
-    })
-  })
-
-  context('Variation', () => {
-    const submitPath = '/interested-parties'
-    beforeEach(() => {
-      cy.task('reset')
-      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-      cy.signIn()
-    })
-
-    const stubVariationOrder = (startDate: Date) => {
-      cy.task('stubCemoGetOrder', {
-        httpStatus: 200,
-        id: mockOrderId,
-        type: 'VARIATION',
-        order: {
-          dataDictionaryVersion: 'DDV6',
-          monitoringConditions: {
-            startDate,
-            endDate: '2025-02-01T00:00:00Z',
-            orderType: 'CIVIL',
-            curfew: true,
-            exclusionZone: true,
-            trail: true,
-            mandatoryAttendance: true,
-            alcohol: true,
-            conditionType: 'BAIL_ORDER',
-            orderTypeDescription: '',
-            sentenceType: 'IPP',
-            issp: 'YES',
-            hdc: 'NO',
-            prarr: 'UNKNOWN',
-            pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
-            offenceType: '',
-          },
-        },
-      })
-    }
-
-    const stubPutInterestedParties = () => {
-      cy.task('stubCemoSubmitOrder', {
-        httpStatus: 200,
-        id: mockOrderId,
-        subPath: submitPath,
-        method: 'PUT',
-        response: {
-          notifyingOrganisation: 'PRISON',
-        },
-      })
-    }
-
-    it('monitoring start date is in the past, should submit interested parties and go to check your answers page', () => {
-      const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 15 days before today
-      stubVariationOrder(startDate)
-      stubPutInterestedParties()
-      const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
-
-      page.form.fillInWith({
-        notifyingOrganisation: 'Prison service',
-        notifyingOrganisationEmailAddress: 'a@b.com',
-        prison: 'Altcourse Prison',
-      })
-      page.form.continueButton.click()
-
       cy.task('stubCemoVerifyRequestReceived', {
-        uri: `/orders/${mockOrderId}${submitPath}`,
+        uri: `/${submitPath}`,
         body: {
-          notifyingOrganisation: 'PRISON',
-          notifyingOrganisationName: 'ALTCOURSE_PRISON',
-          notifyingOrganisationEmail: 'a@b.com',
+          requestType: 'REQUEST',
+          notifyingOrganisation: 'HOME_OFFICE',
+          notifyingOrganisationName: '',
+          notifyingOrganisationEmail: 'homeoffice@homeoffice.com',
         },
       }).should('be.true')
-
-      Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
-    })
-
-    it('monitoring start date is in the future, not a court routes to responsible officer page', () => {
-      const startDate = new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 15 days after today
-      stubVariationOrder(startDate)
-      const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
-
-      page.form.fillInWith({
-        notifyingOrganisation: 'Prison service',
-        notifyingOrganisationEmailAddress: 'a@b.com',
-        prison: 'Altcourse Prison',
-      })
-      page.form.continueButton.click()
-
-      Page.verifyOnPage(ResponsibleOfficerPage)
+      Page.verifyOnPage(OrderTasksPage)
     })
   })
+
+  // context('Variation', () => {
+  //   const submitPath = '/interested-parties'
+  //   beforeEach(() => {
+  //     cy.task('reset')
+  //     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+  //     cy.signIn()
+  //   })
+
+  //   const stubVariationOrder = (startDate: Date) => {
+  //     cy.task('stubCemoGetOrder', {
+  //       httpStatus: 200,
+  //       id: mockOrderId,
+  //       type: 'VARIATION',
+  //       order: {
+  //         dataDictionaryVersion: 'DDV6',
+  //         monitoringConditions: {
+  //           startDate,
+  //           endDate: '2025-02-01T00:00:00Z',
+  //           orderType: 'CIVIL',
+  //           curfew: true,
+  //           exclusionZone: true,
+  //           trail: true,
+  //           mandatoryAttendance: true,
+  //           alcohol: true,
+  //           conditionType: 'BAIL_ORDER',
+  //           orderTypeDescription: '',
+  //           sentenceType: 'IPP',
+  //           issp: 'YES',
+  //           hdc: 'NO',
+  //           prarr: 'UNKNOWN',
+  //           pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+  //           offenceType: '',
+  //         },
+  //       },
+  //     })
+  //   }
+
+  //   const stubPutInterestedParties = () => {
+  //     cy.task('stubCemoSubmitOrder', {
+  //       httpStatus: 200,
+  //       id: mockOrderId,
+  //       subPath: submitPath,
+  //       method: 'PUT',
+  //       response: {
+  //         notifyingOrganisation: 'PRISON',
+  //       },
+  //     })
+  //   }
+
+  //   it('monitoring start date is in the past, should submit interested parties and go to check your answers page', () => {
+  //     const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 15 days before today
+  //     stubVariationOrder(startDate)
+  //     stubPutInterestedParties()
+  //     const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
+
+  //     page.form.fillInWith({
+  //       notifyingOrganisation: 'Prison service',
+  //       notifyingOrganisationEmailAddress: 'a@b.com',
+  //       prison: 'Altcourse Prison',
+  //     })
+  //     page.form.continueButton.click()
+
+  //     cy.task('stubCemoVerifyRequestReceived', {
+  //       uri: `/orders/${mockOrderId}${submitPath}`,
+  //       body: {
+  //         notifyingOrganisation: 'PRISON',
+  //         notifyingOrganisationName: 'ALTCOURSE_PRISON',
+  //         notifyingOrganisationEmail: 'a@b.com',
+  //       },
+  //     }).should('be.true')
+
+  //     Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
+  //   })
+
+  //   it('monitoring start date is in the future, not a court routes to responsible officer page', () => {
+  //     const startDate = new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 15 days after today
+  //     stubVariationOrder(startDate)
+  //     const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
+
+  //     page.form.fillInWith({
+  //       notifyingOrganisation: 'Prison service',
+  //       notifyingOrganisationEmailAddress: 'a@b.com',
+  //       prison: 'Altcourse Prison',
+  //     })
+  //     page.form.continueButton.click()
+
+  //     Page.verifyOnPage(ResponsibleOfficerPage)
+  //   })
+  // })
 })

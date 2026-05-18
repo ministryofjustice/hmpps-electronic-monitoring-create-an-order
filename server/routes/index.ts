@@ -420,6 +420,7 @@ export default function routes({
   const notifyingOrganisationController = new NotifingOrganisationController(
     interestedPartiesStoreService,
     updateInterestedPartiesService,
+    orderService,
   )
   get(paths.INTEREST_PARTIES.YOUR_DETAILS, notifyingOrganisationController.view)
   post(paths.INTEREST_PARTIES.YOUR_DETAILS, notifyingOrganisationController.update)
