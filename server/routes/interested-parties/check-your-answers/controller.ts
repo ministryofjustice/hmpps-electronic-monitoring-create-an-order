@@ -19,7 +19,7 @@ export default class InterestedPartiesCheckYourAnswersController {
 
     res.render(
       'pages/order/interested-parties/check-your-answers',
-      ViewModel.construct(req.order!, res.locals.content!, cohort),
+      ViewModel.construct(req.order!, res.locals.content!),
     )
   }
 
