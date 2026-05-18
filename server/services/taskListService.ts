@@ -170,12 +170,35 @@ export default class TaskListService {
     })
 
     if (FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')) {
+      // tasks.push({
+      //   section: SECTIONS.interestParties,
+      //   name: PAGES.interestParties,
+      //   path: paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION,
+      //   state: STATES.required,
+      //   completed: isNotNullOrUndefined(order.interestedParties?.notifyingOrganisation),
+      // })
+
+      if (
+        (notifyingOrganisationCourts as readonly string[]).indexOf(
+          order.interestedParties?.notifyingOrganisation ?? '',
+        ) > -1 ||
+        order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE'
+      ) {
+        tasks.push({
+          section: SECTIONS.interestParties,
+          name: PAGES.checkAnswersInterestParties,
+          path: paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION,
+          state: STATES.required,
+          completed: isNotNullOrUndefined(order.interestedParties?.responsibleOrganisation),
+        })
+      }
+
       tasks.push({
         section: SECTIONS.interestParties,
-        name: PAGES.interestParties,
-        path: paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION,
+        name: PAGES.checkAnswersInterestParties,
+        path: paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER,
         state: STATES.required,
-        completed: isNotNullOrUndefined(order.interestedParties?.notifyingOrganisation),
+        completed: isNotNullOrUndefined(order.interestedParties?.responsibleOfficerFirstName),
       })
 
       tasks.push({

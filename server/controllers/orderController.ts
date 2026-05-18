@@ -23,9 +23,7 @@ export default class OrderController {
       return
     }
 
-    const order = await this.orderService.createOrder({ accessToken: res.locals.user.token, data: formData })
-
-    res.redirect(`/order/${order.id}/summary`)
+    res.redirect(`/order/your-details`)
   }
 
   createVariation: RequestHandler = async (req: Request, res: Response) => {

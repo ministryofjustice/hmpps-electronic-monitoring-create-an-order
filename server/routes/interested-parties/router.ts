@@ -41,6 +41,7 @@ const createInterestedPartiesRouter = (
 
   router.get('/national-security-directorate', nationalSecurityDirectorateController.view)
   router.post('/national-security-directorate', nationalSecurityDirectorateController.update)
+
   return router
 }
 

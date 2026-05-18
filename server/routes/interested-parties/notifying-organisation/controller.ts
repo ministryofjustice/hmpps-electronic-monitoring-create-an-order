@@ -9,6 +9,9 @@ import { ValidationResult } from '../../../models/Validation'
 import { convertZodErrorToValidationError } from '../../../utils/errors'
 import InterestedPartiesBaseController from '../base/interestedPartiesBaseController'
 import UpdateInterestedPartiesService from '../interestedPartiesService'
+import FeatureFlags from '../../../utils/featureFlags'
+import getContent from '../../../i18n'
+import { Locales } from '../../../types/i18n/locale'
 
 export default class NotifingOrganisationController extends InterestedPartiesBaseController {
   constructor(
@@ -19,17 +22,14 @@ export default class NotifingOrganisationController extends InterestedPartiesBas
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const order = req.order!
-    const storedData = await this.store.getInterestedParties(order)
-
     const formData = req.flash('formData') as unknown as NotifyingOrganisationInput[]
     const errors = req.flash('validationErrors') as unknown as ValidationResult
-
     const cohort = res.locals.user.cohort?.cohort
-
+    res.locals.isInterestedPartiesFlowEnabled = FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')
+    res.locals.content = getContent(Locales.en, 'DDV6')
     res.render(
       'pages/order/interested-parties/notifying-organisation',
-      ViewModel.construct(storedData, formData[0], errors, order, cohort),
+      ViewModel.construct(formData[0], errors, cohort),
     )
   }
 
@@ -52,7 +52,7 @@ export default class NotifingOrganisationController extends InterestedPartiesBas
     if (!validationResult.success) {
       req.flash('formData', formData)
       req.flash('validationErrors', convertZodErrorToValidationError(validationResult.error))
-      res.redirect(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', order.id))
+      res.redirect(paths.INTEREST_PARTIES.YOUR_DETAILS)
       return
     }
 
