@@ -102,7 +102,7 @@ type SectionBlock = {
 
 type FormData = Record<string, string | boolean>
 
-const canBeCompleted = (task: Task, formData: FormData): boolean => {
+export const canBeCompleted = (task: Task, formData: FormData): boolean => {
   if (([PAGES.secondaryAddress, PAGES.tertiaryAddress] as Page[]).includes(task.name)) {
     if (task.name === PAGES.secondaryAddress) {
       if (!(formData.hasAnotherAddress === true && formData.addressType === 'primary')) {
