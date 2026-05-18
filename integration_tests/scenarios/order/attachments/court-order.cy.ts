@@ -4,6 +4,7 @@ import { stubAttachments } from '../../utils'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages'
+import fillInOrderNotifyingOrganisation from '../../../utils/scenario-flows/order-notifying-organisation.cy'
 import OrderSummaryPage from '../../../pages/order/summary'
 import ReceiptPage from '../../../pages/order/receipt'
 
@@ -86,6 +87,7 @@ context('Service-Request-Types', () => {
 
     const indexPage = Page.verifyOnPage(IndexPage)
     indexPage.newOrderFormButton.click()
+    fillInOrderNotifyingOrganisation()
 
     const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 

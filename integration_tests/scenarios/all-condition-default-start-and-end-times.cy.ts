@@ -3,6 +3,7 @@ import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAdd
 
 import Page from '../pages/page'
 import IndexPage from '../pages/index'
+import fillInOrderNotifyingOrganisation from '../utils/scenario-flows/order-notifying-organisation.cy'
 import OrderSummaryPage from '../pages/order/summary'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from './utils'
 
@@ -128,6 +129,7 @@ context('The kitchen sink', () => {
       cy.signIn()
       const indexPage = Page.verifyOnPage(IndexPage)
       indexPage.newOrderFormButton.click()
+      fillInOrderNotifyingOrganisation()
 
       const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       cacheOrderId()

@@ -23,6 +23,7 @@ const paths = {
     SPECIAL_ORDER: '/order/:orderId/special-order',
     NO_REFITS: '/order/no-refits',
     NO_CHANGE_RESPONSIBLE_OFFICER: '/order/no-change-responsible-officer',
+    NOTIFYING_ORGANISATION: '/order/:orderId/notifying-organisation',
   },
 
   INTEREST_PARTIES: {

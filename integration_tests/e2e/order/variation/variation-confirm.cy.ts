@@ -3,6 +3,7 @@ import ConfirmVariationPage from '../../../pages/order/variation/confirmVariatio
 import OrderTasksPage from '../../../pages/order/summary'
 import IsRejectionPage from '../edit-order/is-rejection/isRejectionPage'
 import IsAddressChangePage from '../edit-order/is-address-change/isAddressChangePage'
+import OrderNotifyingOrganisationPage from '../../../pages/order/notifying-organisation'
 
 const mockOriginalId = '00a00000-79cd-49f9-a498-b1f07c543b8a'
 const mockVariationId = '11a11111-79cd-49f9-a498-b1f07c543b8a'
@@ -98,7 +99,7 @@ context('Variation', () => {
         Page.verifyOnPage(IsRejectionPage)
       })
 
-      it('should proceed to the order tasks page when fms result date after start date and current date is after 30 days of fms result date', () => {
+      it('should proceed to the notifying organisation page when fms result date after start date and current date is after 30 days of fms result date', () => {
         cy.visit(`/order/${mockOriginalId}/edit`)
         const page = Page.verifyOnPage(ConfirmVariationPage)
 
@@ -110,7 +111,7 @@ context('Variation', () => {
 
         page.confirmButton().click()
 
-        Page.verifyOnPage(OrderTasksPage)
+        Page.verifyOnPage(OrderNotifyingOrganisationPage, { orderId: mockOriginalId })
       })
 
       it('should proceed to the is rejection page when fms result date after start date and current date is within 30 days of fms result date', () => {
@@ -127,7 +128,7 @@ context('Variation', () => {
         Page.verifyOnPage(IsRejectionPage)
       })
 
-      it('should proceed to the order tasks page when fms result date before start date and current date is after 30 days of fms result date', () => {
+      it('should proceed to the notifying organisation page when fms result date before start date and current date is after 30 days of fms result date', () => {
         cy.visit(`/order/${mockOriginalId}/edit`)
         const page = Page.verifyOnPage(ConfirmVariationPage)
 
@@ -138,7 +139,7 @@ context('Variation', () => {
 
         page.confirmButton().click()
 
-        Page.verifyOnPage(OrderTasksPage)
+        Page.verifyOnPage(OrderNotifyingOrganisationPage, { orderId: mockOriginalId })
       })
 
       it('should proceed to the is rejection page when fms result date after start date and current date is within 30 days of fms result date', () => {

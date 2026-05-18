@@ -9,6 +9,7 @@ import ServiceRequestTypePage from '../../../e2e/order/variation/service-request
 import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
 import ReceiptPage from '../../../pages/order/receipt'
 import IsAddressChangePage from '../../../e2e/order/edit-order/is-address-change/isAddressChangePage'
+import fillInOrderNotifyingOrganisation from '../../../utils/scenario-flows/order-notifying-organisation.cy'
 
 context('Service-Request-Types', () => {
   const testFlags = {
@@ -83,7 +84,7 @@ context('Service-Request-Types', () => {
       page.form.continueButton.click()
     }
 
-    let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+    let orderSummaryPage = fillInOrderNotifyingOrganisation()
     orderSummaryPage.fillInVariationsDetails({ variationDetails: variation })
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)

@@ -52,6 +52,6 @@ export default class ServiceRequestTypeController {
       type: formData.serviceRequestType!,
     }
     const id = await this.service.createNewVariation(input, req.order)
-    res.redirect(paths.ORDER.SUMMARY.replace(':orderId', id))
+    res.redirect(paths.ORDER.NOTIFYING_ORGANISATION.replace(':orderId', id))
   }
 }

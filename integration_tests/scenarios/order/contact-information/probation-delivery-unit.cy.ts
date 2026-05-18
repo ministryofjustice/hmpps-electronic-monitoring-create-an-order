@@ -1,4 +1,5 @@
 import IndexPage from '../../../pages'
+import fillInOrderNotifyingOrganisation from '../../../utils/scenario-flows/order-notifying-organisation.cy'
 import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
 import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
@@ -13,6 +14,7 @@ context('Probation-Deliever-Units', () => {
     const populateNewOrder = (interestedParties, probationDeliveryUnit) => {
       const indexPage = Page.verifyOnPage(IndexPage)
       indexPage.newOrderFormButton.click()
+      fillInOrderNotifyingOrganisation()
       const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       orderSummaryPage.contactInformationTask.click()
 

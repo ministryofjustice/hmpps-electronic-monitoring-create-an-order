@@ -46,6 +46,7 @@ import SpecialOrderController from './special-order/controller'
 import IsAddressChangeController from './variations/is-address-change/controller'
 import NoRefitsController from './variations/no-refits/controller'
 import NoChangeResponsibleOfficerController from './variations/no-change-responsible-officer/controller'
+import OrderNotifyingOrganisationController from './order/notifying-organisation/controller'
 
 export default function routes({
   alcoholMonitoringService,
@@ -211,6 +212,7 @@ export default function routes({
 
   const noRefitsController = new NoRefitsController()
   const noChangeResonsibleOfficer = new NoChangeResponsibleOfficerController()
+  const orderNotifyingOrganisationController = new OrderNotifyingOrganisationController(interestedPartiesStoreService)
   router.param('orderId', populateOrder(orderService))
 
   get('/', orderSearchController.list)
@@ -218,6 +220,8 @@ export default function routes({
 
   // Order
   post(paths.ORDER.CREATE, orderController.create)
+  get(paths.ORDER.NOTIFYING_ORGANISATION, orderNotifyingOrganisationController.view)
+  post(paths.ORDER.NOTIFYING_ORGANISATION, orderNotifyingOrganisationController.update)
   get(paths.ORDER.DELETE_SUCCESS, orderController.deleteSuccess)
   get(paths.ORDER.DELETE_FAILED, orderController.deleteFailed)
   get(paths.ORDER.SUMMARY, orderController.summary)

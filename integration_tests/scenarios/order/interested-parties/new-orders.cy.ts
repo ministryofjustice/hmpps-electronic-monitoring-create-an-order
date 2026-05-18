@@ -1,5 +1,6 @@
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
+import fillInOrderNotifyingOrganisation from '../../../utils/scenario-flows/order-notifying-organisation.cy'
 import OrderSummaryPage from '../../../pages/order/summary'
 import fillInInterestedPartiesWith from '../../../utils/scenario-flows/interested-parties.cy'
 import InterestedPartiesCheckYourAnswersPage from '../../../e2e/order/interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
@@ -31,6 +32,11 @@ context('Interested parties flow', () => {
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     indexPage.newOrderFormButton.click()
+    fillInOrderNotifyingOrganisation({
+      notifyingOrganisation: 'Family Court',
+      notifyingOrganisationEmailAddress: 'a@b.com',
+      familyCourt: 'Aberystwyth Family Court',
+    })
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
@@ -77,6 +83,9 @@ context('Interested parties flow', () => {
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     indexPage.newOrderFormButton.click()
+    fillInOrderNotifyingOrganisation({
+      notifyingOrganisationEmailAddress: 'a@b.com',
+    })
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
@@ -111,6 +120,7 @@ context('Interested parties flow', () => {
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     indexPage.newOrderFormButton.click()
+    fillInOrderNotifyingOrganisation()
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
@@ -158,6 +168,7 @@ context('Interested parties flow', () => {
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     indexPage.newOrderFormButton.click()
+    fillInOrderNotifyingOrganisation()
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 

@@ -11,7 +11,7 @@
 {% set mainClasses = "app-container govuk-body" %}
 {% if heading %}
   <h1 class="govuk-heading-l">
-    {% set pageTitle = heading + " - " + section + " - " + applicationName %}
+    {% set pageTitle = heading + " - " + section + " - " + applicationName if section else heading + " - " + applicationName %}
   {{ heading }}
   </h1>
 {% else %}
@@ -52,11 +52,15 @@
 
       {% if heading %}
          <h1 class="govuk-heading-l">
-          <span class="govuk-caption-l">{{ section }}</span>
+          {% if section %}
+            <span class="govuk-caption-l">{{ section }}</span>
+          {% endif %}
           {{ heading }}
         </h1>
       {% else %}
-        <span class="govuk-caption-l">{{ section }}</span>
+        {% if section %}
+          <span class="govuk-caption-l">{{ section }}</span>
+        {% endif %}
       {% endif %}
      
 

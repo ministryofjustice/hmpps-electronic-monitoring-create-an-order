@@ -3,6 +3,7 @@ import ServiceRequestTypePage from './serviceRequestTypePage'
 import Page from '../../../../pages/page'
 import NoRefitsPage from './no-refits/noRefitsPage'
 import NoChangeResponsibleOfficerPage from './change-responsible-officer/noChangeResponsibleOfficerPage'
+import OrderNotifyingOrganisationPage from '../../../../pages/order/notifying-organisation'
 
 const mockOrderId = uuidv4()
 const amendPath = '/amend-order'
@@ -36,6 +37,7 @@ context('order type', () => {
         type: 'REINSTALL_AT_DIFFERENT_ADDRESS',
       },
     }).should('be.true')
+    Page.verifyOnPage(OrderNotifyingOrganisationPage, { orderId: mockOrderId })
   })
 
   it('Should call amend endpoint with service request type of REVOCATION', () => {
@@ -49,6 +51,7 @@ context('order type', () => {
         type: 'REVOCATION',
       },
     }).should('be.true')
+    Page.verifyOnPage(OrderNotifyingOrganisationPage, { orderId: mockOrderId })
   })
 
   it('Should call amend endpoint with service request type of END_MONITORING', () => {
@@ -62,6 +65,7 @@ context('order type', () => {
         type: 'END_MONITORING',
       },
     }).should('be.true')
+    Page.verifyOnPage(OrderNotifyingOrganisationPage, { orderId: mockOrderId })
   })
 
   it('Should call amend endpoint with service request type of MAKING_A_CHANGE', () => {
@@ -75,6 +79,7 @@ context('order type', () => {
         type: 'VARIATION',
       },
     }).should('be.true')
+    Page.verifyOnPage(OrderNotifyingOrganisationPage, { orderId: mockOrderId })
   })
 
   it('Should go to no refits page with service request type of NEEDS_CHECKING_OR_REFITTED', () => {

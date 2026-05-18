@@ -50,7 +50,7 @@ export default class IsRejectionController extends YesNoQuestionPageController {
           accessToken: res.locals.user.token,
         })
       }
-      res.redirect(`/order/${orderId}/summary`)
+      res.redirect(paths.ORDER.NOTIFYING_ORGANISATION.replace(':orderId', orderId))
     }
   }
 

@@ -7,6 +7,7 @@ import ConfirmVariationPage from '../../../pages/order/variation/confirmVariatio
 import IsRejectionPage from '../../../e2e/order/edit-order/is-rejection/isRejectionPage'
 import fillInInterestedPartiesWith from '../../../utils/scenario-flows/interested-parties.cy'
 import InterestedPartiesCheckYourAnswersPage from '../../../e2e/order/interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
+import fillInOrderNotifyingOrganisation from '../../../utils/scenario-flows/order-notifying-organisation.cy'
 
 context('Interested parties flow', () => {
   const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
@@ -65,6 +66,7 @@ context('Interested parties flow', () => {
     Page.verifyOnPage(OrderSummaryPage).makeChanges()
     Page.verifyOnPage(ConfirmVariationPage).confirm()
     Page.verifyOnPage(IsRejectionPage).isNotRejection()
+    fillInOrderNotifyingOrganisation()
 
     const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
@@ -100,6 +102,7 @@ context('Interested parties flow', () => {
     Page.verifyOnPage(OrderSummaryPage).makeChanges()
     Page.verifyOnPage(ConfirmVariationPage).confirm()
     Page.verifyOnPage(IsRejectionPage).isNotRejection()
+    fillInOrderNotifyingOrganisation()
 
     const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 

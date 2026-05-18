@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
+import fillInOrderNotifyingOrganisation from '../../../utils/scenario-flows/order-notifying-organisation.cy'
 import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAddress, createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
 import { stubAttachments } from '../../utils'
@@ -77,6 +78,7 @@ context('Service-Request-Types', () => {
   const fillInNewOrder = () => {
     let indexPage = Page.verifyOnPage(IndexPage)
     indexPage.newOrderFormButton.click()
+    fillInOrderNotifyingOrganisation()
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
     orderSummaryPage.fillInNewOrderWith({
@@ -131,6 +133,7 @@ context('Service-Request-Types', () => {
       page.form.continueButton.click()
     }
 
+    orderSummaryPage = fillInOrderNotifyingOrganisation()
     orderSummaryPage.fillInVariationsDetails({ variationDetails: variation })
     orderSummaryPage.aboutTheDeviceWearerTask.click()
 

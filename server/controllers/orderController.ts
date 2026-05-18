@@ -25,7 +25,7 @@ export default class OrderController {
 
     const order = await this.orderService.createOrder({ accessToken: res.locals.user.token, data: formData })
 
-    res.redirect(`/order/${order.id}/summary`)
+    res.redirect(paths.ORDER.NOTIFYING_ORGANISATION.replace(':orderId', order.id))
   }
 
   createVariation: RequestHandler = async (req: Request, res: Response) => {
@@ -43,7 +43,7 @@ export default class OrderController {
           orderId,
           accessToken: res.locals.user.token,
         })
-        res.redirect(`/order/${orderId}/summary`)
+        res.redirect(paths.ORDER.NOTIFYING_ORGANISATION.replace(':orderId', orderId))
       }
     }
   }

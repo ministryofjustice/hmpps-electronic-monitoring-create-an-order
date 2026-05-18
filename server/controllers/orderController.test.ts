@@ -67,7 +67,7 @@ describe('OrderController', () => {
   })
 
   describe('create', () => {
-    it('should create an order and redirect to view the order', async () => {
+    it('should create an order and redirect to notifying organisation', async () => {
       // Given
       const mockOrder = getMockOrder()
       const req = createMockRequest({
@@ -87,7 +87,7 @@ describe('OrderController', () => {
         accessToken: 'fakeUserToken',
         data: { type: 'REQUEST' },
       })
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/summary`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/notifying-organisation`)
     })
   })
 
@@ -115,7 +115,7 @@ describe('OrderController', () => {
   })
 
   describe('createVariation', () => {
-    it('should create a variation order and redirect to its summary page', async () => {
+    it('should create a variation order and redirect to notifying organisation', async () => {
       const orderId = randomUUID()
 
       // Given
@@ -134,7 +134,7 @@ describe('OrderController', () => {
       await orderController.createVariation(req, res, next)
 
       // Then
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/summary`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/notifying-organisation`)
     })
   })
 

@@ -3,10 +3,22 @@ import IsRejectionPage from './isRejectionPage'
 import Page from '../../../../pages/page'
 import OrderTasksPage from '../../../../pages/order/summary'
 import IsAddressChangePage from '../is-address-change/isAddressChangePage'
+import OrderNotifyingOrganisationPage from '../../../../pages/order/notifying-organisation'
 
 const mockOrderId = uuidv4()
 const variationPath = '/copy-as-variation'
 const amendPath = '/amend-rejected-order'
+
+const completeNotifyingOrganisationPage = () => {
+  const page = Page.verifyOnPage(OrderNotifyingOrganisationPage, { orderId: mockOrderId })
+  page.form.fillInWith({
+    notifyingOrganisation: 'Prison service',
+    prison: 'Altcourse Prison',
+    notifyingOrganisationEmailAddress: 'a@b.com',
+  })
+  page.form.continueButton.click()
+  Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId })
+}
 
 const stubVariationOrder = (fmsResultDate: Date, startDate: Date) => {
   cy.task('stubCemoGetOrder', {
@@ -43,6 +55,7 @@ context('Edit Order', () => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
       cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'SUBMITTED' })
+      cy.task('stubCemoGetVersions', { httpStatus: 200, orderId: mockOrderId, versions: [] })
       cy.task('stubCemoSubmitOrder', {
         httpStatus: 200,
         method: 'POST',
@@ -75,10 +88,11 @@ context('Edit Order', () => {
         body: {},
       }).should('be.true')
 
-      Page.verifyOnPage(OrderTasksPage)
+      completeNotifyingOrganisationPage()
     })
 
     it('Should call amend-rejected-order endpoint if Yes is selected', () => {
+      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
       cy.task('stubCemoSubmitOrder', {
         httpStatus: 200,
         method: 'POST',
@@ -95,7 +109,7 @@ context('Edit Order', () => {
         body: {},
       }).should('be.true')
 
-      Page.verifyOnPage(OrderTasksPage)
+      completeNotifyingOrganisationPage()
     })
 
     context('SERVICE_REQUEST_TYPE_ENABLED enabled', () => {
@@ -119,7 +133,7 @@ context('Edit Order', () => {
           body: {},
         }).should('be.true')
 
-        Page.verifyOnPage(OrderTasksPage)
+        completeNotifyingOrganisationPage()
       })
 
       it('Should go to is address changed page if no is selected and start date is in the past', () => {

@@ -4,9 +4,21 @@ import Page from '../../../../pages/page'
 import OrderTasksPage from '../../../../pages/order/summary'
 import IsAddressChangePage from './isAddressChangePage'
 import ServiceRequestTypePage from '../../variation/service-request-type/serviceRequestTypePage'
+import OrderNotifyingOrganisationPage from '../../../../pages/order/notifying-organisation'
 
 const mockOrderId = uuidv4()
 const amendPath = '/amend-order'
+
+const completeNotifyingOrganisationPage = () => {
+  const page = Page.verifyOnPage(OrderNotifyingOrganisationPage, { orderId: mockOrderId })
+  page.form.fillInWith({
+    notifyingOrganisation: 'Prison service',
+    prison: 'Altcourse Prison',
+    notifyingOrganisationEmailAddress: 'a@b.com',
+  })
+  page.form.continueButton.click()
+  Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId })
+}
 
 context('Edit Order', () => {
   context('Is Address Change', () => {
@@ -14,6 +26,7 @@ context('Edit Order', () => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
       cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'SUBMITTED' })
+      cy.task('stubCemoGetVersions', { httpStatus: 200, orderId: mockOrderId, versions: [] })
       cy.task('stubCemoSubmitOrder', {
         httpStatus: 200,
         method: 'POST',
@@ -41,7 +54,8 @@ context('Edit Order', () => {
       Page.verifyOnPage(ServiceRequestTypePage)
     })
 
-    it('Should call amend-rejected-order endpoint and go to order summary page if Yes is selected', () => {
+    it('Should call amend-rejected-order endpoint and go to notifying organisation page if Yes is selected', () => {
+      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
       const page = Page.visit(IsAddressChangePage, { orderId: mockOrderId })
       page.form.fillInWith('Yes')
       page.form.saveAndContinueButton.click()
@@ -52,7 +66,7 @@ context('Edit Order', () => {
           type: 'REINSTALL_DEVICE',
         },
       }).should('be.true')
-      Page.verifyOnPage(OrderTasksPage)
+      completeNotifyingOrganisationPage()
     })
   })
 })

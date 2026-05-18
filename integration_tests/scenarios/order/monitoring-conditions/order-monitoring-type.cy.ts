@@ -1,5 +1,6 @@
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
+import fillInOrderNotifyingOrganisation from '../../../utils/scenario-flows/order-notifying-organisation.cy'
 import OrderSummaryPage from '../../../pages/order/summary'
 import {
   createFakeAdultDeviceWearer,
@@ -127,6 +128,7 @@ context('Monitoring type list flow', () => {
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     indexPage.newOrderFormButton.click()
+    fillInOrderNotifyingOrganisation()
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 

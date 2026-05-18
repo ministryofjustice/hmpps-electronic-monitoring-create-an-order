@@ -5,6 +5,7 @@ import { mockApiOrder } from '../mockApis/cemo'
 import OrderTasksPage from '../pages/order/summary'
 import IndexPage from '../pages'
 import IsAddressChangePage from './order/edit-order/is-address-change/isAddressChangePage'
+import OrderNotifyingOrganisationPage from '../pages/order/notifying-organisation'
 
 const mockOrderId = uuidv4()
 
@@ -122,7 +123,7 @@ context('Search', () => {
 
       page.variationFormButton.should('exist').should('contain.text', 'Tell us about a change to a form sent by email')
       page.variationFormButton.click()
-      Page.verifyOnPage(OrderTasksPage)
+      Page.verifyOnPage(OrderNotifyingOrganisationPage, { orderId: mockOrderId })
     })
 
     context('Service Request Type Enabled', () => {
@@ -166,7 +167,7 @@ context('Search', () => {
         },
       }).should('be.true')
 
-      Page.verifyOnPage(OrderTasksPage)
+      Page.verifyOnPage(OrderNotifyingOrganisationPage, { orderId: mockOrderId })
     })
 
     describe('when rendering an order', () => {
@@ -324,6 +325,10 @@ context('Search', () => {
     })
 
     context('Submitting a create order request', () => {
+      beforeEach(() => {
+        cy.task('stubCemoGetVersions', { httpStatus: 200, orderId: mockOrderId, versions: [] })
+      })
+
       it('should create a new order', () => {
         // Visit the search page
         const page = Page.visit(SearchPage)
@@ -340,8 +345,16 @@ context('Search', () => {
           },
         }).should('be.true')
 
+        const notifyingOrganisationPage = Page.verifyOnPage(OrderNotifyingOrganisationPage, { orderId: mockOrderId })
+        notifyingOrganisationPage.form.fillInWith({
+          notifyingOrganisation: 'Prison service',
+          prison: 'Altcourse Prison',
+          notifyingOrganisationEmailAddress: 'a@b.com',
+        })
+        notifyingOrganisationPage.form.continueButton.click()
+
         // Verify the user was redirected to the task page
-        Page.verifyOnPage(OrderTasksPage)
+        Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId })
       })
     })
 

@@ -1,9 +1,9 @@
 import { createFakeAddress, createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../mockApis/faker'
 import IndexPage from '../../pages'
 import SubmitSuccessPage from '../../pages/order/submit-success'
-import OrderSummaryPage from '../../pages/order/summary'
 import Page from '../../pages/page'
 import SearchPage from '../../pages/search'
+import fillInOrderNotifyingOrganisation from './order-notifying-organisation.cy'
 
 const currentDate = new Date()
 const deviceWearerDetails = {
@@ -48,8 +48,7 @@ export default function fillInNewOrder({ startDate = null, files }): void {
 
   let indexPage = Page.verifyOnPage(IndexPage)
   indexPage.newOrderFormButton.click()
-
-  const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+  const orderSummaryPage = fillInOrderNotifyingOrganisation()
   orderSummaryPage.fillInNewOrderWith({
     deviceWearerDetails,
     responsibleAdultDetails: undefined,

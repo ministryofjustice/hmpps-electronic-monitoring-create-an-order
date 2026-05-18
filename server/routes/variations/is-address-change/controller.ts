@@ -40,7 +40,7 @@ export default class IsAddressChangeController extends YesNoQuestionPageControll
           type: 'REINSTALL_DEVICE',
         }
         const id = await this.service.createNewVariation(input, req.order)
-        res.redirect(paths.ORDER.SUMMARY.replace(':orderId', id))
+        res.redirect(paths.ORDER.NOTIFYING_ORGANISATION.replace(':orderId', id))
       } else {
         res.redirect(paths.VARIATION.SERVICE_REQUEST_TYPE.replace(':orderId', orderId))
       }

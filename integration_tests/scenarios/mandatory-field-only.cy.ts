@@ -10,6 +10,7 @@ import {
 
 import Page from '../pages/page'
 import IndexPage from '../pages/index'
+import fillInOrderNotifyingOrganisation from '../utils/scenario-flows/order-notifying-organisation.cy'
 import OrderSummaryPage from '../pages/order/summary'
 import AboutDeviceWearerPage from '../pages/order/about-the-device-wearer/device-wearer'
 import ContactDetailsPage from '../pages/order/contact-information/contact-details'
@@ -175,6 +176,7 @@ context('Mandatory fields only', () => {
       let indexPage = Page.verifyOnPage(IndexPage)
       if (takeScreenshots) cy.screenshot('01. indexPage', { overwrite: true })
       indexPage.newOrderFormButton.click()
+      fillInOrderNotifyingOrganisation()
 
       let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       if (takeScreenshots) cy.screenshot('02. orderSummaryPage - minimum', { overwrite: true })
@@ -545,6 +547,7 @@ context('Mandatory fields only', () => {
       let indexPage = Page.verifyOnPage(IndexPage)
       if (takeScreenshots) cy.screenshot('01. indexPage', { overwrite: true })
       indexPage.newOrderFormButton.click()
+      fillInOrderNotifyingOrganisation()
 
       let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       if (takeScreenshots) cy.screenshot('02. orderSummaryPage - minimum', { overwrite: true })
