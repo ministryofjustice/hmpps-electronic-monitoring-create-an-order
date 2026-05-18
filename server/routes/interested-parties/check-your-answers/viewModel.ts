@@ -51,7 +51,7 @@ const getResponsibleOrganisationRegionAnswer = (
   return []
 }
 
-const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions, cohort?: string) => {
+const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const resOfficerUri = paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER.replace(':orderId', order.id)
   const resOrgUri = paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION.replace(':orderId', order.id)
 
@@ -81,7 +81,7 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts:
           order.interestedParties?.responsibleOfficerEmail,
           resOfficerUri,
           answerOpts,
-        )
+        ),
       ],
     )
   }
@@ -103,7 +103,6 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts:
       ),
     )
   }
-
 
   return answers
 }
@@ -137,12 +136,12 @@ const createProbationDeliveryUnitAnswer = (order: Order, content: I18n, answerOp
   return answers
 }
 
-const construct = (order: Order, content: I18n, cohort?: string) => {
+const construct = (order: Order, content: I18n) => {
   const answerOpts = {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
   }
 
-  const interestedParties = createInterestedPartiesAnswers(order, content, answerOpts, cohort)
+  const interestedParties = createInterestedPartiesAnswers(order, content, answerOpts)
   const probationDeliveryUnit = createProbationDeliveryUnitAnswer(order, content, answerOpts)
 
   return {

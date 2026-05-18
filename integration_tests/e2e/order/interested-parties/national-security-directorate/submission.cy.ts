@@ -23,12 +23,7 @@ context('National security directorate page', () => {
     page.form.fillInWith('Yes')
     page.form.continueButton.click()
 
-    Page.verifyOnPage(
-      SpecialOrderPage,
-      { orderId: mockOrderId },
-      undefined,
-      'About the Responsible Organisation',
-    )
+    Page.verifyOnPage(SpecialOrderPage, { orderId: mockOrderId }, undefined, 'About the Responsible Organisation')
   })
 
   it('Should go to pdu page if answer is no', () => {

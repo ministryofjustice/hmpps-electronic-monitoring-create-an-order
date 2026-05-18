@@ -43,8 +43,8 @@ context('interested parties check answers page', () => {
         { key: "What is the Responsible Organisation's email address? (optional)", value: 'responsible@organisation' },
       ])
       page.organisationDetailsSection.shouldNotHaveItems([
-        "What organisation or related organisation are you part of?",
-        "Select the name of the Prison",
+        'What organisation or related organisation are you part of?',
+        'Select the name of the Prison',
         "What is your team's contact email address?",
       ])
 
@@ -203,12 +203,12 @@ context('interested parties check answers page', () => {
 
         page.organisationDetailsSection.shouldExist()
         page.organisationDetailsSection.shouldNotHaveItems([
-          "What organisation or related organisation are you part of?",
-          "Select the name of the Prison",
+          'What organisation or related organisation are you part of?',
+          'Select the name of the Prison',
           "What is your team's contact email address?",
         ])
       })
-  })
+    })
   })
 
   context('does not show notifying org question if cohort inferred by auth', () => {

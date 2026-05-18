@@ -226,8 +226,8 @@ context('Receipt', () => {
         { key: 'Date submitted', value: '01/01/2025, 10:30' },
         { key: 'Submitted by', value: 'test name' },
         { key: 'Notifying organisation', value: 'PRISON' },
-        { key: 'Notifying organisation\'s name or region', value: 'MilkShake' },
-        { key: 'Notifying organisation\'s contact email address', value: 'notifying@organisation' },
+        { key: "Notifying organisation's name or region", value: 'MilkShake' },
+        { key: "Notifying organisation's contact email address", value: 'notifying@organisation' },
       ])
       page.riskInformationSection.shouldExist()
       page.riskInformationSection.shouldHaveItems([
