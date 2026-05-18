@@ -79,6 +79,9 @@ context('Interested parties flow', () => {
     orderSummaryPage.interestedPartiesTask.click()
 
     const input = {
+      notifyingOrganisation: {
+        notifyingOrganisationEmailAddress: 'a@b.com',
+      },
       responsibleOrganisation: {
         responsibleOrganisation: 'Home Office',
         responsibleOrganisationEmailAddress: 'a@b.com',
@@ -153,6 +156,11 @@ context('Interested parties flow', () => {
     orderSummaryPage.interestedPartiesTask.click()
 
     const input = {
+      notifyingOrganisation: {
+        notifyingOrganisation: 'Prison service',
+        notifyingOrganisationEmailAddress: 'a@b.com',
+        prison: 'Altcourse Prison',
+      },
       responsibleOfficer: {
         firstName: 'John',
         lastName: 'Smith',
