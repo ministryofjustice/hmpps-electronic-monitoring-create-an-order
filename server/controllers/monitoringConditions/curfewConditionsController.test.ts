@@ -128,6 +128,7 @@ describe('CurfewConditionsController', () => {
           },
           error: undefined,
         },
+        showEndate: true,
         errorSummary: {
           errorList: [
             {
@@ -199,6 +200,7 @@ describe('CurfewConditionsController', () => {
             day: '15',
           },
         },
+        showEndate: true,
         errorSummary: null,
       })
     })

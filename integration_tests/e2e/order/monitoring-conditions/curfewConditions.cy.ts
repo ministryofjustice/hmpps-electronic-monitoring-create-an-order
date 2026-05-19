@@ -32,6 +32,16 @@ const mockEmptyCurfewConditions = {
     endDate: null,
     curfewAdditionalDetails: null,
   },
+  interestedParties: {
+    notifyingOrganisation: 'PRISON',
+    notifyingOrganisationName: '',
+    notifyingOrganisationEmail: '',
+    responsibleOfficerName: '',
+    responsibleOfficerPhoneNumber: '',
+    responsibleOrganisation: 'PROBATION',
+    responsibleOrganisationRegion: '',
+    responsibleOrganisationEmail: 't',
+  },
   id: mockOrderId,
   status: 'IN_PROGRESS',
 }
@@ -52,15 +62,13 @@ context('Curfew conditions', () => {
     cy.task('stubCemoListOrders')
   })
   context('Draft order', () => {
-    beforeEach(() => {
-      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
-    })
-
     it('Should display the form', () => {
+      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/conditions`)
       const page = Page.verifyOnPage(CurfewConditionsPage)
       page.header.userName().should('contain.text', 'J. Smith')
       page.form.startDateField.shouldExist()
+      cy.get('#endDate').should('exist')
       page.form.endDateField.shouldExist()
       page.errorSummary.shouldNotExist()
     })
@@ -192,6 +200,84 @@ context('Curfew conditions', () => {
       })
 
       Page.verifyOnPage(ErrorPage, 'Page not found')
+    })
+  })
+
+  context('Home_Office', () => {
+    it('Should not show end date', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: 'Home Office',
+            notifyingOrganisationEmail: 'test@homeoffice.gov.uk',
+            responsibleOfficerName: 'Test Officer',
+            responsibleOfficerPhoneNumber: '01234567890',
+            responsibleOrganisation: 'PROBATION',
+            responsibleOrganisationRegion: 'Test Region',
+            responsibleOrganisationEmail: 'test@probation.gov.uk',
+          },
+        },
+      })
+      cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/conditions`)
+      const page = Page.verifyOnPage(CurfewConditionsPage)
+      page.header.userName().should('contain.text', 'J. Smith')
+      page.form.startDateField.shouldExist()
+      cy.get('#endDate').should('not.exist')
+      page.errorSummary.shouldNotExist()
+    })
+
+    it('should able to submit without enddate ', () => {
+      cy.task('stubCemoSubmitOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        subPath: '/monitoring-conditions-curfew-conditions',
+        response: mockEmptyCurfewConditions.curfewConditions,
+      })
+
+      const order = {
+        ...mockApiOrder('SUBMITTED'),
+        curfewConditions: {
+          orderId: mockOrderId,
+          startDate: null,
+          endDate: null,
+          curfewAdditionalDetails: null,
+        },
+        interestedParties: {
+          notifyingOrganisation: 'HOME_OFFICE',
+          notifyingOrganisationName: 'Home Office',
+          notifyingOrganisationEmail: 'test@homeoffice.gov.uk',
+          responsibleOfficerName: 'Test Officer',
+          responsibleOfficerPhoneNumber: '01234567890',
+          responsibleOrganisation: 'PROBATION',
+          responsibleOrganisationRegion: 'Test Region',
+          responsibleOrganisationEmail: 'test@probation.gov.uk',
+        },
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+      }
+      order.monitoringConditions.curfew = true
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order,
+      })
+
+      cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/conditions`)
+      const page = Page.verifyOnPage(CurfewConditionsPage)
+      page.fillInStartDate()
+      page.form.saveAndContinueButton.click()
+      cy.task('getStubbedRequest', `/orders/${mockOrderId}/monitoring-conditions-curfew-conditions`).then(requests => {
+        expect(requests).to.have.lengthOf(1)
+        expect(requests[0]).to.deep.equal({
+          startDate: '2025-03-27T00:00:00.000Z',
+        })
+      })
+      Page.verifyOnPage(CurfewReleaseDatePage)
     })
   })
 })

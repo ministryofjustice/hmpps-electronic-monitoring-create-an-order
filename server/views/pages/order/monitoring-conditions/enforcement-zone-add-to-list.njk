@@ -33,24 +33,24 @@
       defaultHours: "00",
       defaultMinutes: "00"
     })}}
-
-  {{dateTimeInput({
-      id: "endDate",
-      name: "endDate",
-      date: endDate.value,
-      dateLabel:  questions.endDate.text,
-      dateHint: questions.endDate.hint,
-      errorMessages: {
-        field: endDate.error,
-        date: errors.dateError,
-        time: errors.timeError
-      },
-      disabled: not isOrderEditable,
-      timesEnabled: false,
-      defaultHours: 23,
-      defaultMinutes: 59
-    })}}
-
+  {% if showEndate %}
+    {{dateTimeInput({
+        id: "endDate",
+        name: "endDate",
+        date: endDate.value,
+        dateLabel:  questions.endDate.text,
+        dateHint: questions.endDate.hint,
+        errorMessages: {
+          field: endDate.error,
+          date: errors.dateError,
+          time: errors.timeError
+        },
+        disabled: not isOrderEditable,
+        timesEnabled: false,
+        defaultHours: 23,
+        defaultMinutes: 59
+      })}}
+  {% endif %}
   {{ govukInput({
     label: {
       classes: "govuk-label--s",

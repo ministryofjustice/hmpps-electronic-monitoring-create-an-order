@@ -4,19 +4,22 @@ import { ValidationResult } from '../Validation'
 import { DateTimeField, ViewModel } from './utils'
 import { CurfewConditionsFormData } from '../form-data/curfewConditions'
 import { createGovukErrorSummary } from '../../utils/errors'
+import { Order } from '../Order'
 
 type CurfewConditionsViewModel = ViewModel<
   Omit<CurfewConditions, 'startDate' | 'endDate' | 'curfewAdditionalDetails'>
 > & {
   startDate: DateTimeField
-  endDate: DateTimeField
+  endDate?: DateTimeField
+  showEndate: boolean
 }
 
 const createViewModelFromFormData = (
   formData: CurfewConditionsFormData,
   validationErrors: ValidationResult,
+  order: Order,
 ): CurfewConditionsViewModel => {
-  return {
+  const viewModel: CurfewConditionsViewModel = {
     startDate: {
       value: {
         day: formData.startDate.day,
@@ -27,7 +30,11 @@ const createViewModelFromFormData = (
       },
       error: getError(validationErrors, 'startDate'),
     },
-    endDate: {
+    showEndate: order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE',
+    errorSummary: createGovukErrorSummary(validationErrors),
+  }
+  if (formData.endDate) {
+    viewModel.endDate = {
       value: {
         day: formData.endDate.day,
         month: formData.endDate.month,
@@ -36,31 +43,32 @@ const createViewModelFromFormData = (
         minutes: formData.endDate.minutes,
       },
       error: getError(validationErrors, 'endDate'),
-    },
-    errorSummary: createGovukErrorSummary(validationErrors),
+    }
   }
+  return viewModel
 }
 
-const createViewModelFromCurfewConditions = (
-  curfewConditions: CurfewConditions | undefined | null,
-): CurfewConditionsViewModel => {
+const createViewModelFromCurfewConditions = (order: Order): CurfewConditionsViewModel => {
+  const { curfewConditions } = order!
+
   return {
     startDate: { value: deserialiseDateTime(curfewConditions?.startDate) },
     endDate: { value: deserialiseDateTime(curfewConditions?.endDate) },
+    showEndate: order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE',
     errorSummary: null,
   }
 }
 
 const construct = (
-  curfewConditions: CurfewConditions | undefined | null,
+  order: Order,
   validationErrors: ValidationResult,
   formData: [CurfewConditionsFormData],
 ): CurfewConditionsViewModel => {
   if (validationErrors.length > 0 && formData.length > 0) {
-    return createViewModelFromFormData(formData[0], validationErrors)
+    return createViewModelFromFormData(formData[0], validationErrors, order)
   }
 
-  return createViewModelFromCurfewConditions(curfewConditions)
+  return createViewModelFromCurfewConditions(order)
 }
 
 export default {
