@@ -89,7 +89,7 @@ context('Order Summary', () => {
         .should('exist')
     })
 
-    it('Interested parties section link should go to responsible officer page if not completed', () => {
+    it('Interested parties section link should go to responsible organisation page if not completed', () => {
       const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
       cy.task('setFeatureFlags', testFlags)
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })

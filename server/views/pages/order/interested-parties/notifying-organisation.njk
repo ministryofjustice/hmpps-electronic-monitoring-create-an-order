@@ -10,7 +10,7 @@
 {% set helpText = content.pages.notifyingOrganisation.helpText %}
 {% set questions = content.pages.notifyingOrganisation.questions %}
 {% set singleQuestionPage = true %}
-{% set isOrderEditable = true %}
+
 {% set visuallyHiddenHint %}
   <span class="govuk-visually-hidden"> Selecting this will reveal an additional input</span>
 {% endset %}
@@ -54,69 +54,70 @@
   }) }}
 {% endset %}
 
-{% set civilCountyCourtHtml %}
-  {{ accessibleAutocomplete({
-    id: 'civilCountyCourt',
-    name: 'civilCountyCourt',
-    label: questions.civilCountyCourt.text,
-    options: content.reference.civilCountyCourts | toOptions(false, true),
-    value: notifyingOrganisationName.value,
-    errorMessage: notifyingOrganisationName.error,
-    nonce: cspNonce
-  }) }}
-{% endset %}
+{% if DDv5 %}
+  {% set civilCountyCourtHtml %}
+    {{ accessibleAutocomplete({
+      id: 'civilCountyCourt',
+      name: 'civilCountyCourt',
+      label: questions.civilCountyCourt.text,
+      options: content.reference.civilCountyCourts | toOptions(false, true),
+      value: notifyingOrganisationName.value,
+      errorMessage: notifyingOrganisationName.error,
+      nonce: cspNonce
+    }) }}
+  {% endset %}
 
-  {% set familyCourtHtml %}
-  {{ accessibleAutocomplete({
-    id: "familyCourt",
-    name: "familyCourt",
-    label: questions.familyCourt.text,
-    options: content.reference.familyCourts | toOptions(false, true),
-    value: notifyingOrganisationName.value,
-    errorMessage: notifyingOrganisationName.error,
-    nonce: cspNonce
-  }) }}
-{% endset %}
+    {% set familyCourtHtml %}
+    {{ accessibleAutocomplete({
+      id: "familyCourt",
+      name: "familyCourt",
+      label: questions.familyCourt.text,
+      options: content.reference.familyCourts | toOptions(false, true),
+      value: notifyingOrganisationName.value,
+      errorMessage: notifyingOrganisationName.error,
+      nonce: cspNonce
+    }) }}
+  {% endset %}
 
-{% set militaryCourtHtml %}
-  {{ accessibleAutocomplete({
-    id: "militaryCourt",
-    name: "militaryCourt",
-    label: questions.militaryCourt.text,
-    options: content.reference.militaryCourts | toOptions(false, true),
-    value: notifyingOrganisationName.value,
-    errorMessage: notifyingOrganisationName.error,
-    nonce: cspNonce
-  }) }}
-{% endset %}
+  {% set militaryCourtHtml %}
+    {{ accessibleAutocomplete({
+      id: "militaryCourt",
+      name: "militaryCourt",
+      label: questions.militaryCourt.text,
+      options: content.reference.militaryCourts | toOptions(false, true),
+      value: notifyingOrganisationName.value,
+      errorMessage: notifyingOrganisationName.error,
+      nonce: cspNonce
+    }) }}
+  {% endset %}
 
-{% set youthCourtHtml %}
-  {{ accessibleAutocomplete({
-    id: 'youthCourt',
-    name: 'youthCourt',
-    label: questions.youthCourt.text,
-    options: content.reference.youthCourts | toOptions(false, true),
-    value: notifyingOrganisationName.value,
-    errorMessage: notifyingOrganisationName.error,
-    nonce: cspNonce
-  }) }}
-{% endset %}
+  {% set youthCourtHtml %}
+    {{ accessibleAutocomplete({
+      id: 'youthCourt',
+      name: 'youthCourt',
+      label: questions.youthCourt.text,
+      options: content.reference.youthCourts | toOptions(false, true),
+      value: notifyingOrganisationName.value,
+      errorMessage: notifyingOrganisationName.error,
+      nonce: cspNonce
+    }) }}
+  {% endset %}
 
-  {% set youthCustodyServiceRegionHtml %}
-  {{ accessibleAutocomplete({
-    id: 'youthCustodyServiceRegion',
-    name: 'youthCustodyServiceRegion',
-    label: questions.youthCustodyServiceRegion.text,
-    options: content.reference.youthCustodyServiceRegions | toOptions(false, true),
-    value: notifyingOrganisationName.value,
-    errorMessage: notifyingOrganisationName.error,
-    nonce: cspNonce
-  }) }}
-{% endset %}
+   {% set youthCustodyServiceRegionHtml %}
+    {{ accessibleAutocomplete({
+      id: 'youthCustodyServiceRegion',
+      name: 'youthCustodyServiceRegion',
+      label: questions.youthCustodyServiceRegion.text,
+      options: content.reference.youthCustodyServiceRegions | toOptions(false, true),
+      value: notifyingOrganisationName.value,
+      errorMessage: notifyingOrganisationName.error,
+      nonce: cspNonce
+    }) }}
+  {% endset %}
+{% endif %}
 
 {% set notifyingOrgOptions = [] %}
-
-{% for org in content.reference.notifyingOrganisations | toOptions() %}
+{% for org in content.reference.notifyingOrganisations | toOptions(not isOrderEditable) %}
 
   {% if cohort != 'COURT' or org.value in ['CIVIL_COUNTY_COURT', 'FAMILY_COURT'] %}
 
@@ -133,7 +134,7 @@
         disabled: org.disabled
       }), notifyingOrgOptions) %}
 
-    {% elif org.value == 'YOUTH_CUSTODY_SERVICE' and (cohort == 'PRISON' or cohort == 'OTHER') %}
+    {% elif DDv5 and org.value == 'YOUTH_CUSTODY_SERVICE' and (cohort == 'PRISON' or cohort == 'OTHER') %}
       {% set notifyingOrgOptions = (notifyingOrgOptions.push({
         value: org.value,
         text: org.text,
@@ -190,7 +191,7 @@
           disabled: org.disabled
         }), notifyingOrgOptions) %}
 
-      {% elif org.value == 'MILITARY_COURT' %}
+      {% elif DDv5 and org.value == 'MILITARY_COURT' %}
         {% set notifyingOrgOptions = (notifyingOrgOptions.push({
           value: org.value,
           text: org.text,
@@ -200,14 +201,14 @@
           disabled: org.disabled
         }), notifyingOrgOptions) %}
 
-      {% elif org.value == 'PROBATION' %}
+      {% elif DDv5 and org.value == 'PROBATION' %}
         {% set notifyingOrgOptions = (notifyingOrgOptions.push({
           value: org.value,
           text: org.text,
           disabled: org.disabled
         }), notifyingOrgOptions) %}
 
-      {% elif  org.value == 'YOUTH_COURT' %}
+      {% elif DDv5 and org.value == 'YOUTH_COURT' %}
         {% set notifyingOrgOptions = (notifyingOrgOptions.push({
           value: org.value,
           text: org.text,
@@ -228,7 +229,7 @@
 
 {% block formInputs %}
 
- {% if showNotifyingOrgQuestion %}
+    {% if showNotifyingOrgQuestion %}
       {{ govukRadios({
         name: "notifyingOrganisation",
         fieldset: {
@@ -240,7 +241,8 @@
         },
         items: notifyingOrgOptions,
         value: notifyingOrganisation.value,
-        errorMessage: notifyingOrganisation.error
+        errorMessage: notifyingOrganisation.error,
+        disabled: not isOrderEditable
       }) }}
     {% endif %}
 
@@ -256,7 +258,8 @@
       id: "notifyingOrganisationEmail",
       name: "notifyingOrganisationEmail",
       value: notifyingOrganisationEmail.value,
-      errorMessage: notifyingOrganisationEmail.error
+      errorMessage: notifyingOrganisationEmail.error,
+      disabled: not isOrderEditable
     }) }}
 
 {% endblock %}

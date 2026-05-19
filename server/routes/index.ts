@@ -46,7 +46,6 @@ import SpecialOrderController from './special-order/controller'
 import IsAddressChangeController from './variations/is-address-change/controller'
 import NoRefitsController from './variations/no-refits/controller'
 import NoChangeResponsibleOfficerController from './variations/no-change-responsible-officer/controller'
-import NotifingOrganisationController from './interested-parties/notifying-organisation/controller'
 
 export default function routes({
   alcoholMonitoringService,
@@ -417,13 +416,6 @@ export default function routes({
     createPostcodeLookupRouter({ postcodeService, addressService, taskListService, auditService }),
   )
 
-  const notifyingOrganisationController = new NotifingOrganisationController(
-    interestedPartiesStoreService,
-    updateInterestedPartiesService,
-    orderService,
-  )
-  get(paths.INTEREST_PARTIES.YOUR_DETAILS, notifyingOrganisationController.view)
-  post(paths.INTEREST_PARTIES.YOUR_DETAILS, notifyingOrganisationController.update)
   router.use(
     paths.INTEREST_PARTIES.BASE_PATH,
     createInterestedPartiesRouter({

@@ -5,35 +5,40 @@ import { getError } from '../../../utils/utils'
 import { NotifyingOrganisationInput } from './formModel'
 import { getNotifyingOrganisationName } from './utils'
 import { createGovukErrorSummary } from '../../../utils/errors'
+import isOrderDataDictionarySameOrAbove from '../../../utils/dataDictionaryVersionComparer'
+import { Order } from '../../../models/Order'
 
 type NotifyingOrganisationViewModel = ViewModel<
   Pick<InterestedParties, 'notifyingOrganisation' | 'notifyingOrganisationName' | 'notifyingOrganisationEmail'>
 > & {
+  DDv5: boolean
   cohort?: string
 }
 
 const construct = (
   formData: NotifyingOrganisationInput | undefined,
   errors: ValidationResult,
+  order: Order,
   cohort?: string,
 ): NotifyingOrganisationViewModel => {
-  if (formData) return constructFromFormData(formData, errors, cohort)
+  if (formData) return constructFromFormData(formData, errors, order, cohort)
 
-  return constructFromData(cohort)
+  return constructFromData(order, cohort)
 }
 
-const constructFromData = (cohort?: string): NotifyingOrganisationViewModel => {
+const constructFromData = (order: Order, cohort?: string): NotifyingOrganisationViewModel => {
   return {
     notifyingOrganisation: {
-      value: '',
+      value: order.interestedParties?.notifyingOrganisation || '',
     },
     notifyingOrganisationName: {
-      value: '',
+      value: order.interestedParties?.notifyingOrganisationName || '',
     },
     notifyingOrganisationEmail: {
-      value: '',
+      value: order.interestedParties?.notifyingOrganisationEmail || '',
     },
     errorSummary: null,
+    DDv5: isOrderDataDictionarySameOrAbove('DDV5', order),
     cohort,
   }
 }
@@ -41,6 +46,7 @@ const constructFromData = (cohort?: string): NotifyingOrganisationViewModel => {
 const constructFromFormData = (
   formData: NotifyingOrganisationInput,
   errors: ValidationResult,
+  order: Order,
   cohort?: string,
 ): NotifyingOrganisationViewModel => {
   return {
@@ -57,6 +63,7 @@ const constructFromFormData = (
       error: getError(errors, 'notifyingOrganisationEmail'),
     },
     errorSummary: createGovukErrorSummary(errors),
+    DDv5: isOrderDataDictionarySameOrAbove('DDV5', order),
     cohort,
   }
 }

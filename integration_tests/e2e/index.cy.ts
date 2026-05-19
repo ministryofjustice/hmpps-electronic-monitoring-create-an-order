@@ -67,12 +67,22 @@ context('Index', () => {
       cy.signIn()
     })
 
-    it('should go to your details page', () => {
+    it('should create a new order and go to your details page', () => {
       // Visit the home page
       const page = Page.visit(IndexPage)
 
       // Create a new order
       page.newOrderFormButton.click()
+
+      // Verify the api was called correctly
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders`,
+        method: 'POST',
+        body: {
+          type: 'REQUEST',
+        },
+      }).should('be.true')
+
       Page.verifyOnPage(NotifyingOrganisationPage)
     })
   })

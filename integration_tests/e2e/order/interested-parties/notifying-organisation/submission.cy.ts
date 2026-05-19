@@ -6,19 +6,29 @@ import { mockApiOrder } from '../../../../mockApis/cemo'
 
 const mockOrderId = uuidv4()
 context('Submit notifying organisations', () => {
-  const submitPath = 'orderWithNotifyingOrganisation'
+  const submitPath = '/interested-parties'
   context('New orders', () => {
     beforeEach(() => {
       cy.task('reset')
       const mockOrder = mockApiOrder()
-      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrder.id, status: 'IN_PROGRESS' })
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          dataDictionaryVersion: 'DDV6',
+        },
+      })
 
-      cy.task('stubCemoRequest', {
+      cy.task('stubCemoSubmitOrder', {
         httpStatus: 200,
         id: mockOrderId,
         subPath: submitPath,
-        method: 'POST',
-        response: mockOrder,
+        method: 'PUT',
+        response: {
+          notifyingOrganisation: 'PRISON',
+          responsibleOrganisation: 'PROBATION',
+        },
       })
 
       cy.task('stubCemoGetVersions', {
@@ -52,11 +62,12 @@ context('Submit notifying organisations', () => {
         notifyingOrganisationEmailAddress: 'a@b.com',
         prison: 'Altcourse Prison',
       })
+
       page.form.continueButton.click()
+
       cy.task('stubCemoVerifyRequestReceived', {
-        uri: `/${submitPath}`,
+        uri: `/orders/${mockOrderId}${submitPath}`,
         body: {
-          requestType: 'REQUEST',
           notifyingOrganisation: 'PRISON',
           notifyingOrganisationName: 'ALTCOURSE_PRISON',
           notifyingOrganisationEmail: 'a@b.com',
@@ -92,9 +103,8 @@ context('Submit notifying organisations', () => {
       page.form.continueButton.click()
 
       cy.task('stubCemoVerifyRequestReceived', {
-        uri: `/${submitPath}`,
+        uri: `/orders/${mockOrderId}${submitPath}`,
         body: {
-          requestType: 'REQUEST',
           notifyingOrganisation: 'PRISON',
           notifyingOrganisationName: 'ALTCOURSE_PRISON',
           notifyingOrganisationEmail: 'a@b.com',
@@ -103,7 +113,7 @@ context('Submit notifying organisations', () => {
       Page.verifyOnPage(OrderTasksPage)
     })
 
-    it('court cohort can submit order', () => {
+    it('court cohort can submit notifying organisation and route to summary page', () => {
       cy.task('stubSignIn', {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
@@ -130,9 +140,8 @@ context('Submit notifying organisations', () => {
       page.form.continueButton.click()
 
       cy.task('stubCemoVerifyRequestReceived', {
-        uri: `/${submitPath}`,
+        uri: `/orders/${mockOrderId}${submitPath}`,
         body: {
-          requestType: 'REQUEST',
           notifyingOrganisation: 'FAMILY_COURT',
           notifyingOrganisationName: 'SWANSEA_FAMILY_COURT',
           notifyingOrganisationEmail: 'a@b.com',
@@ -141,7 +150,7 @@ context('Submit notifying organisations', () => {
       Page.verifyOnPage(OrderTasksPage)
     })
 
-    it('probation can submit order', () => {
+    it('probation can submit notifying organisation and route to summary page', () => {
       cy.task('stubSignIn', {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
@@ -166,9 +175,8 @@ context('Submit notifying organisations', () => {
       page.form.continueButton.click()
 
       cy.task('stubCemoVerifyRequestReceived', {
-        uri: `/${submitPath}`,
+        uri: `/orders/${mockOrderId}${submitPath}`,
         body: {
-          requestType: 'REQUEST',
           notifyingOrganisation: 'PROBATION',
           notifyingOrganisationName: '',
           notifyingOrganisationEmail: 'a@b.com',
@@ -177,7 +185,7 @@ context('Submit notifying organisations', () => {
       Page.verifyOnPage(OrderTasksPage)
     })
 
-    it('home office routes to responsible organisation page', () => {
+    it('home office notifying organisation and route to summary page', () => {
       cy.task('stubSignIn', {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
@@ -202,9 +210,8 @@ context('Submit notifying organisations', () => {
       page.form.continueButton.click()
 
       cy.task('stubCemoVerifyRequestReceived', {
-        uri: `/${submitPath}`,
+        uri: `/orders/${mockOrderId}${submitPath}`,
         body: {
-          requestType: 'REQUEST',
           notifyingOrganisation: 'HOME_OFFICE',
           notifyingOrganisationName: '',
           notifyingOrganisationEmail: 'homeoffice@homeoffice.com',
@@ -214,93 +221,93 @@ context('Submit notifying organisations', () => {
     })
   })
 
-  // context('Variation', () => {
-  //   const submitPath = '/interested-parties'
-  //   beforeEach(() => {
-  //     cy.task('reset')
-  //     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-  //     cy.signIn()
-  //   })
+  context('Variation', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+      cy.signIn()
+    })
 
-  //   const stubVariationOrder = (startDate: Date) => {
-  //     cy.task('stubCemoGetOrder', {
-  //       httpStatus: 200,
-  //       id: mockOrderId,
-  //       type: 'VARIATION',
-  //       order: {
-  //         dataDictionaryVersion: 'DDV6',
-  //         monitoringConditions: {
-  //           startDate,
-  //           endDate: '2025-02-01T00:00:00Z',
-  //           orderType: 'CIVIL',
-  //           curfew: true,
-  //           exclusionZone: true,
-  //           trail: true,
-  //           mandatoryAttendance: true,
-  //           alcohol: true,
-  //           conditionType: 'BAIL_ORDER',
-  //           orderTypeDescription: '',
-  //           sentenceType: 'IPP',
-  //           issp: 'YES',
-  //           hdc: 'NO',
-  //           prarr: 'UNKNOWN',
-  //           pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
-  //           offenceType: '',
-  //         },
-  //       },
-  //     })
-  //   }
+    const stubVariationOrder = (startDate: Date) => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        type: 'VARIATION',
+        order: {
+          dataDictionaryVersion: 'DDV6',
+          monitoringConditions: {
+            startDate,
+            endDate: '2025-02-01T00:00:00Z',
+            orderType: 'CIVIL',
+            curfew: true,
+            exclusionZone: true,
+            trail: true,
+            mandatoryAttendance: true,
+            alcohol: true,
+            conditionType: 'BAIL_ORDER',
+            orderTypeDescription: '',
+            sentenceType: 'IPP',
+            issp: 'YES',
+            hdc: 'NO',
+            prarr: 'UNKNOWN',
+            pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+            offenceType: '',
+          },
+        },
+      })
+    }
 
-  //   const stubPutInterestedParties = () => {
-  //     cy.task('stubCemoSubmitOrder', {
-  //       httpStatus: 200,
-  //       id: mockOrderId,
-  //       subPath: submitPath,
-  //       method: 'PUT',
-  //       response: {
-  //         notifyingOrganisation: 'PRISON',
-  //       },
-  //     })
-  //   }
+    const stubPutInterestedParties = () => {
+      cy.task('stubCemoSubmitOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        subPath: submitPath,
+        method: 'PUT',
+        response: {
+          notifyingOrganisation: 'PRISON',
+        },
+      })
+    }
 
-  //   it('monitoring start date is in the past, should submit interested parties and go to check your answers page', () => {
-  //     const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 15 days before today
-  //     stubVariationOrder(startDate)
-  //     stubPutInterestedParties()
-  //     const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
+    it('monitoring start date is in the past, should submit interested parties and go to summary page', () => {
+      const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 15 days before today
+      stubVariationOrder(startDate)
+      stubPutInterestedParties()
+      const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
 
-  //     page.form.fillInWith({
-  //       notifyingOrganisation: 'Prison service',
-  //       notifyingOrganisationEmailAddress: 'a@b.com',
-  //       prison: 'Altcourse Prison',
-  //     })
-  //     page.form.continueButton.click()
+      page.form.fillInWith({
+        notifyingOrganisation: 'Prison service',
+        notifyingOrganisationEmailAddress: 'a@b.com',
+        prison: 'Altcourse Prison',
+      })
+      page.form.continueButton.click()
 
-  //     cy.task('stubCemoVerifyRequestReceived', {
-  //       uri: `/orders/${mockOrderId}${submitPath}`,
-  //       body: {
-  //         notifyingOrganisation: 'PRISON',
-  //         notifyingOrganisationName: 'ALTCOURSE_PRISON',
-  //         notifyingOrganisationEmail: 'a@b.com',
-  //       },
-  //     }).should('be.true')
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOrderId}${submitPath}`,
+        body: {
+          notifyingOrganisation: 'PRISON',
+          notifyingOrganisationName: 'ALTCOURSE_PRISON',
+          notifyingOrganisationEmail: 'a@b.com',
+        },
+      }).should('be.true')
 
-  //     Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
-  //   })
+      Page.verifyOnPage(OrderTasksPage)
+    })
 
-  //   it('monitoring start date is in the future, not a court routes to responsible officer page', () => {
-  //     const startDate = new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 15 days after today
-  //     stubVariationOrder(startDate)
-  //     const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
+    it('monitoring start date is in the future, not a court routes to summary page', () => {
+      const startDate = new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 15 days after today
+      stubVariationOrder(startDate)
+      stubPutInterestedParties()
+      const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
 
-  //     page.form.fillInWith({
-  //       notifyingOrganisation: 'Prison service',
-  //       notifyingOrganisationEmailAddress: 'a@b.com',
-  //       prison: 'Altcourse Prison',
-  //     })
-  //     page.form.continueButton.click()
+      page.form.fillInWith({
+        notifyingOrganisation: 'Prison service',
+        notifyingOrganisationEmailAddress: 'a@b.com',
+        prison: 'Altcourse Prison',
+      })
+      page.form.continueButton.click()
 
-  //     Page.verifyOnPage(ResponsibleOfficerPage)
-  //   })
-  // })
+      Page.verifyOnPage(OrderTasksPage)
+    })
+  })
 })

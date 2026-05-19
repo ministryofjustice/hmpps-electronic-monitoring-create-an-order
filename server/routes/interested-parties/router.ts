@@ -4,6 +4,7 @@ import ProbationDeliveryUnitController from './pdu/controller'
 import ResponsibleOrganisationController from './responsible-organisation/controller'
 import { Services } from '../../services'
 import NationalSecurityDirectorateController from './national-security-directorate/controller'
+import NotifingOrganisationController from './notifying-organisation/controller'
 
 const createInterestedPartiesRouter = (
   services: Pick<
@@ -13,10 +14,10 @@ const createInterestedPartiesRouter = (
 ): Router => {
   const router = Router({ mergeParams: true })
 
-  // const notifyingOrganisationController = new NotifingOrganisationController(
-  //   services.interestedPartiesStoreService,
-  //   services.updateInterestedPartiesService,
-  // )
+  const notifyingOrganisationController = new NotifingOrganisationController(
+    services.interestedPartiesStoreService,
+    services.updateInterestedPartiesService,
+  )
   const responsibleOfficerController = new ResponsibleOfficerController(services.interestedPartiesStoreService)
   const responsibleOrganisationController = new ResponsibleOrganisationController(
     services.interestedPartiesStoreService,
@@ -26,8 +27,8 @@ const createInterestedPartiesRouter = (
 
   const nationalSecurityDirectorateController = new NationalSecurityDirectorateController()
 
-  // router.get('/notifying-organisation', notifyingOrganisationController.view)
-  // router.post('/notifying-organisation', notifyingOrganisationController.update)
+  router.get('/notifying-organisation', notifyingOrganisationController.view)
+  router.post('/notifying-organisation', notifyingOrganisationController.update)
 
   router.get('/responsible-officer', responsibleOfficerController.view)
   router.post('/responsible-officer', responsibleOfficerController.update)
