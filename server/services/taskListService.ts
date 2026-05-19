@@ -945,6 +945,22 @@ export default class TaskListService {
 
     return (sectionTasks.find(task => task.path.includes('check-your-answers')) || sectionTasks[0]).path
   }
+
+  getNextTaskPath(sectionTasks: Task[], orderId: string, versionId?: string) {
+    let path: string
+
+    const firstAvailableTask = sectionTasks.find(task => canBeCompleted(task, {}))
+
+    path = (firstAvailableTask || sectionTasks[0]).path
+
+    path = path.replace(':orderId', orderId)
+
+    if (versionId) {
+      path = path.replace(`order/${orderId}`, `order/${orderId}/version/${versionId}`)
+    }
+
+    return path
+  }
 }
 
 export { Page, PAGES }

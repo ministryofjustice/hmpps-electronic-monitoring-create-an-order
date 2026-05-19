@@ -1664,4 +1664,81 @@ describe('TaskListService', () => {
       expect(result).toBe(paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK)
     })
   })
+
+  describe('get next task path', () => {
+    it('returns the first completable path', () => {
+      const tasks: Task[] = []
+      tasks.push({
+        section: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+        name: 'INTERESTED_PARTIES',
+        path: paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION,
+        state: 'REQUIRED',
+        completed: true,
+      })
+
+      tasks.push({
+        section: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+        name: 'INTERESTED_PARTIES',
+        path: paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER,
+        state: 'REQUIRED',
+        completed: false,
+      })
+
+      const taskListService = new TaskListService(mockOrderChecklistService)
+
+      const result = taskListService.getNextTaskPath(tasks, 'mockOrderId')
+
+      expect(result).toBe(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', 'mockOrderId'))
+    })
+
+    it('returns the versioned path if version id is provided', () => {
+      const tasks: Task[] = []
+      tasks.push({
+        section: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+        name: 'INTERESTED_PARTIES',
+        path: paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION,
+        state: 'REQUIRED',
+        completed: true,
+      })
+
+      const taskListService = new TaskListService(mockOrderChecklistService)
+
+      const mockOrderId = 'mockOrderId'
+      const mockVersionId = 'mockVersionId'
+      const result = taskListService.getNextTaskPath(tasks, mockOrderId, mockVersionId)
+
+      expect(result).toBe(
+        paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', mockOrderId).replace(
+          `order/${mockOrderId}`,
+          `order/${mockOrderId}/version/${mockVersionId}`,
+        ),
+      )
+    })
+
+    it('defaults to first task if all tasks are not required', () => {
+      const tasks: Task[] = []
+      tasks.push({
+        section: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+        name: 'INTERESTED_PARTIES',
+        path: paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION,
+        state: 'NOT_REQUIRED',
+        completed: true,
+      })
+
+      tasks.push({
+        section: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+        name: 'INTERESTED_PARTIES',
+        path: paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION,
+        state: 'NOT_REQUIRED',
+        completed: true,
+      })
+
+      const taskListService = new TaskListService(mockOrderChecklistService)
+
+      const mockOrderId = 'mockOrderId'
+      const result = taskListService.getNextTaskPath(tasks, mockOrderId)
+
+      expect(result).toBe(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', mockOrderId))
+    })
+  })
 })

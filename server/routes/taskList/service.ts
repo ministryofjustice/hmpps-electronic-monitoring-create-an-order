@@ -44,12 +44,22 @@ export default class SectionListService {
   }
 
   private getDetailsForSection(section: SectionName, tasks: Task[], order: Order): TaskSection {
-    const sectionsTasks = tasks.filter(task => task.section === section)
-    const completed = this.isSectionComplete(sectionsTasks, order, section)
+    const sectionTasks = tasks.filter(task => task.section === section)
+
+    const completed = this.isSectionComplete(sectionTasks, order, section)
+
+    let path: string
+
+    if (completed) {
+      path = this.taskListService.getCheckYourAnswersPathForSection(sectionTasks)
+    } else {
+      path = this.taskListService.getNextTaskPath(sectionTasks, order.id)
+    }
+
     return {
       name: section,
       completed,
-      path: '',
+      path: path,
       isReady: this.isSectionReady(section, tasks, order),
     }
   }
