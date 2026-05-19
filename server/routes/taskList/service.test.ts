@@ -82,26 +82,47 @@ describe('task list service', () => {
     })
 
     describe('section information', () => {
-      const order: Order = { monitoringConditions: { startDate: new Date(2000, 0).toISOString() } } as Order
+      const order: Order = {
+        id: 'mockOrderId',
+        monitoringConditions: { startDate: new Date(2000, 0).toISOString() },
+      } as Order
 
       const sections = service.getSectionsForOrder(order)
 
-      const taskOne: Task = {
-        section: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
-        name: 'INTERESTED_PARTIES',
-        path: paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION,
-        state: 'REQUIRED',
-        completed: true,
-      }
-
-      mockTaskListService.getTasks.mockReturnValue([taskOne])
-
       it('returns section information given task list', () => {
+        const taskOne: Task = {
+          section: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+          name: 'INTERESTED_PARTIES',
+          path: paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION,
+          state: 'REQUIRED',
+          completed: true,
+        }
+
+        mockTaskListService.getTasks.mockReturnValue([taskOne])
+
         const firstSection = sections[0]
 
         expect(firstSection.completed).toBe(true)
         expect(firstSection.path).toBeDefined()
         expect(firstSection.isReady).toBe(true)
+      })
+
+      it.skip('complete section, get cya path', () => {
+        const taskOne: Task = {
+          section: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+          name: 'INTERESTED_PARTIES',
+          path: paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION,
+          state: 'REQUIRED',
+          completed: true,
+        }
+
+        mockTaskListService.getTasks.mockReturnValue([taskOne])
+
+        const interestedPartiesSection = sections[0]
+
+        expect(interestedPartiesSection.path).toBe(
+          paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', order.id),
+        )
       })
     })
   })

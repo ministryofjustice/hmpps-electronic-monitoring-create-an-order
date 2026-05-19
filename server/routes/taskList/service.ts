@@ -56,16 +56,16 @@ export default class SectionListService {
 
   private isSectionComplete(tasks: Task[], order: Order, section: SectionName): boolean {
     const tasksCompleted = tasks.every(task => (canBeCompleted(task, {}) ? task.completed : true))
-
-    if (section === SECTIONS.electronicMonitoringCondition) {
-      const anyConditionCompleted =
-        order.monitoringConditionsAlcohol?.startDate !== undefined ||
-        order.curfewConditions?.startDate !== undefined ||
-        order.monitoringConditionsTrail?.startDate !== undefined ||
-        order.enforcementZoneConditions?.length !== 0 ||
-        order.mandatoryAttendanceConditions?.length !== 0
-      return tasksCompleted && anyConditionCompleted
-    }
+    //
+    // if (section === SECTIONS.electronicMonitoringCondition) {
+    //   const anyConditionCompleted =
+    //     order.monitoringConditionsAlcohol?.startDate !== undefined ||
+    //     order.curfewConditions?.startDate !== undefined ||
+    //     order.monitoringConditionsTrail?.startDate !== undefined ||
+    //     order.enforcementZoneConditions?.length !== 0 ||
+    //     order.mandatoryAttendanceConditions?.length !== 0
+    //   return tasksCompleted && anyConditionCompleted
+    // }
 
     return tasksCompleted
   }
