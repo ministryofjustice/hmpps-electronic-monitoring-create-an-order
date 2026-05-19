@@ -1,5 +1,5 @@
-import { Order } from '../../models/Order'
-import TaskListService, { canBeCompleted, Task } from '../../services/taskListService'
+import { Order } from '../models/Order'
+import TaskListService, { canBeCompleted, Task } from './taskListService'
 
 const SECTIONS = {
   interestParties: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
@@ -19,10 +19,16 @@ export type TaskSection = {
   isReady: boolean
 }
 
-export default class SectionListService {
+export default class SectionsService {
   constructor(private readonly taskListService: TaskListService) {}
 
   getSectionsForOrder(order: Order): TaskSection[] {
+    const sections = this.getRelevantSections(order)
+    const tasks = this.taskListService.getTasks(order)
+    return sections.map(section => this.getDetailsForSection(section, tasks, order))
+  }
+
+  private getRelevantSections(order: Order): SectionName[] {
     const sections: SectionName[] = [
       SECTIONS.aboutTheDeviceWearer,
       SECTIONS.riskInformation,
@@ -39,8 +45,7 @@ export default class SectionListService {
       sections.push(SECTIONS.interestParties)
     }
 
-    const tasks = this.taskListService.getTasks(order)
-    return sections.map(section => this.getDetailsForSection(section, tasks, order))
+    return sections
   }
 
   private getDetailsForSection(section: SectionName, tasks: Task[], order: Order): TaskSection {

@@ -1,7 +1,7 @@
-import paths from '../../constants/paths'
-import { Order } from '../../models/Order'
-import TaskListService, { Task } from '../../services/taskListService'
-import SectionListService, { SectionName, TaskSection } from './service'
+import paths from '../constants/paths'
+import { Order } from '../models/Order'
+import TaskListService, { Task } from './taskListService'
+import SectionsService, { SectionName, TaskSection } from './sectionsService'
 
 const containsSection = (sections: TaskSection[], name: SectionName) => {
   expect(sections.find(section => section.name === name) !== undefined).toBe(true)
@@ -28,7 +28,7 @@ describe('task list service', () => {
     jest.resetAllMocks()
   })
 
-  const service = new SectionListService(mockTaskListService)
+  const service = new SectionsService(mockTaskListService)
 
   describe('get section list', () => {
     it('the notifying organisation is home office', () => {
