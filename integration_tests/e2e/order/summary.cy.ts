@@ -11,8 +11,8 @@ import AttachmentSummaryPage from '../../pages/order/attachments/summary'
 import ConfirmVariationPage from '../../pages/order/variation/confirmVariation'
 import { Order } from '../../../server/models/Order'
 import paths from '../../../server/constants/paths'
-import NotifyingOrganisationPage from './interested-parties/notifying-organisation/notifyingOrganisationPage'
 import DetailsOfInstallationPage from './access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
+import ResponsibleOfficerPage from './interested-parties/responsible-officer/responsibleOfficerPage'
 
 let mockOrderId = uuidv4()
 
@@ -89,14 +89,14 @@ context('Order Summary', () => {
         .should('exist')
     })
 
-    it('Interested parties section link should go to notifying organisation page if not completed', () => {
+    it('Interested parties section link should go to responsible officer page if not completed', () => {
       const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
       cy.task('setFeatureFlags', testFlags)
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.interestedPartiesTask.shouldHaveStatus('Incomplete')
       page.interestedPartiesTask.click()
 
-      Page.verifyOnPage(NotifyingOrganisationPage)
+      Page.verifyOnPage(ResponsibleOfficerPage)
     })
 
     it('Should be accessible', () => {

@@ -13,16 +13,12 @@ type OrderRequestInput = CreateOrderInput & {
 export default class ServiceRequestTypeService {
   constructor(private readonly apiClient: RestClient) {}
 
-  async createNewVariation(input: OrderRequestInput, order: Order | undefined): Promise<string> {
-    let id
+  async createNewVariation(input: OrderRequestInput, order: Order | undefined): Promise<Order> {
     if (order !== undefined) {
       await this.createVariationFromExisting(input)
-      id = order.id
-    } else {
-      const newOrder = await this.createVariation(input)
-      id = newOrder.id
+      return order
     }
-    return id
+    return this.createVariation(input)
   }
 
   async createVariationFromExisting(input: OrderRequestInput): Promise<void> {

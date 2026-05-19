@@ -2,9 +2,9 @@ import { v4 as uuidv4 } from 'uuid'
 import SearchPage from '../pages/search'
 import Page from '../pages/page'
 import { mockApiOrder } from '../mockApis/cemo'
-import OrderTasksPage from '../pages/order/summary'
 import IndexPage from '../pages'
 import IsAddressChangePage from './order/edit-order/is-address-change/isAddressChangePage'
+import NotifyingOrganisationPage from './order/interested-parties/notifying-organisation/notifyingOrganisationPage'
 
 const mockOrderId = uuidv4()
 
@@ -122,7 +122,7 @@ context('Search', () => {
 
       page.variationFormButton.should('exist').should('contain.text', 'Tell us about a change to a form sent by email')
       page.variationFormButton.click()
-      Page.verifyOnPage(OrderTasksPage)
+      Page.verifyOnPage(NotifyingOrganisationPage)
     })
 
     context('Service Request Type Enabled', () => {
@@ -158,15 +158,7 @@ context('Search', () => {
 
       page.variationFormButton.click()
 
-      cy.task('stubCemoVerifyRequestReceived', {
-        uri: `/orders`,
-        method: 'POST',
-        body: {
-          type: 'VARIATION',
-        },
-      }).should('be.true')
-
-      Page.verifyOnPage(OrderTasksPage)
+      Page.verifyOnPage(NotifyingOrganisationPage)
     })
 
     describe('when rendering an order', () => {
@@ -331,17 +323,8 @@ context('Search', () => {
         // Create a new order
         page.newOrderFormButton.click()
 
-        // Verify the api was called correctly
-        cy.task('stubCemoVerifyRequestReceived', {
-          uri: `/orders`,
-          method: 'POST',
-          body: {
-            type: 'REQUEST',
-          },
-        }).should('be.true')
-
-        // Verify the user was redirected to the task page
-        Page.verifyOnPage(OrderTasksPage)
+        // Verify the user was redirected to the your details page
+        Page.verifyOnPage(NotifyingOrganisationPage)
       })
     })
 

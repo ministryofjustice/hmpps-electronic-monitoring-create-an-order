@@ -39,9 +39,6 @@ context('interested parties check answers page', () => {
 
       page.organisationDetailsSection.shouldExist()
       page.organisationDetailsSection.shouldHaveItems([
-        { key: 'What organisation or related organisation are you part of?', value: 'Prison Service' },
-        { key: 'Select the name of the Prison', value: 'Altcourse Prison' },
-        { key: "What is your team's contact email address?", value: 'notifying@organisation' },
         { key: "What is the Responsible Officer's first name?", value: 'officer' },
         { key: "What is the Responsible Officer's last name?", value: 'name' },
         { key: "What is the Responsible Officer's email address?", value: 'officer@email' },

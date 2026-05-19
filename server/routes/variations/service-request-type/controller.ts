@@ -51,7 +51,7 @@ export default class ServiceRequestTypeController {
       accessToken: res.locals.user.token,
       type: formData.serviceRequestType!,
     }
-    const id = await this.service.createNewVariation(input, req.order)
-    res.redirect(paths.ORDER.SUMMARY.replace(':orderId', id))
+    const result = await this.service.createNewVariation(input, req.order)
+    res.redirect(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', result.id))
   }
 }

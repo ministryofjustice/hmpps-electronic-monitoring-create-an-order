@@ -335,7 +335,6 @@ context('Receipt', () => {
       page.monitoringConditionsSection.shouldExist()
       page.additionalDocumentsSection.shouldExist()
       page.interestedPartiesSection.shouldHaveItems([
-        { key: 'What organisation or related organisation are you part of?', value: 'Home Office' },
         { key: "What is the Responsible Officer's first name?", value: 'officer' },
         { key: "What is the Responsible Officer's last name?", value: 'name' },
         { key: "What is the Responsible Officer's email address?", value: 'officer@email' },

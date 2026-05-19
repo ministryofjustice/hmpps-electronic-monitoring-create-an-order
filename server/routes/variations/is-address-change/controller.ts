@@ -39,8 +39,12 @@ export default class IsAddressChangeController extends YesNoQuestionPageControll
           accessToken: res.locals.user.token,
           type: 'REINSTALL_DEVICE',
         }
-        const id = await this.service.createNewVariation(input, req.order)
-        res.redirect(paths.ORDER.SUMMARY.replace(':orderId', id))
+        const order = await this.service.createNewVariation(input, req.order)
+        if (order.interestedParties?.notifyingOrganisation) {
+          res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
+        } else {
+          res.redirect(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', order.id))
+        }
       } else {
         res.redirect(paths.VARIATION.SERVICE_REQUEST_TYPE.replace(':orderId', orderId))
       }
