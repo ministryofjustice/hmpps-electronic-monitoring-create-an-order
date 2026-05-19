@@ -6,10 +6,12 @@ import ErrorResponseModel, { ErrorResponse } from '../../../models/ErrorResponse
 import { SanitisedError } from '../../../sanitisedError'
 import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../../../utils/errors'
 import { EnforcementZoneAddToListFormData, EnforcementZoneAddToListFormDataValidator } from './formModel'
+import { NotifyingOrganisation } from '../../../models/NotifyingOrganisation'
 
 type UpdateZoneRequestInput = AuthenticatedRequestInput & {
   orderId: string
   data: EnforcementZoneAddToListFormData
+  notifyingOrganisation: NotifyingOrganisation | null
 }
 
 type UploadZoneAttachmentRequestInput = AuthenticatedRequestInput & {
@@ -23,7 +25,7 @@ export default class EnforcementZoneAddToListService {
 
   async updateZone(input: UpdateZoneRequestInput): Promise<ValidationResult | null> {
     try {
-      const requestBody = EnforcementZoneAddToListFormDataValidator.parse(input.data)
+      const requestBody = EnforcementZoneAddToListFormDataValidator(input.notifyingOrganisation).parse(input.data)
       await this.apiClient.put({
         path: `/api/orders/${input.orderId}/enforcementZone`,
         data: requestBody,

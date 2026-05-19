@@ -94,6 +94,70 @@ context('Monitoring conditions - Enforcement Zone', () => {
       }).should('be.true')
     })
 
+    it('should submit a correctly without enddate when notifying organisation is HOME_OFFICE', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: 'Home Office',
+            notifyingOrganisationEmail: 'test@homeoffice.gov.uk',
+            responsibleOfficerName: 'Test Officer',
+            responsibleOfficerPhoneNumber: '01234567890',
+            responsibleOrganisation: 'PROBATION',
+            responsibleOrganisationRegion: 'Test Region',
+            responsibleOrganisationEmail: 'test@probation.gov.uk',
+          },
+          monitoringConditions: {
+            orderType: 'IMMIGRATION',
+            orderTypeDescription: null,
+            conditionType: null,
+            acquisitiveCrime: false,
+            dapol: false,
+            curfew: false,
+            exclusionZone: false,
+            trail: false,
+            mandatoryAttendance: true,
+            alcohol: false,
+            startDate: null,
+            endDate: null,
+            sentenceType: null,
+            issp: null,
+            hdc: null,
+            prarr: null,
+            pilot: null,
+            offenceType: null,
+          },
+        },
+      })
+      const page = Page.visit(EnforcementZoneAddToListPage, { orderId: mockOrderId, zoneId: 1 })
+
+      const validFormData = {
+        zoneType,
+        startDate: new Date('2024-12-10T00:00:00.000Z'),
+        name: 'A test name: Lorem ipsum dolor sit amet...',
+        description: 'A test description: Lorem ipsum dolor sit amet...',
+        duration: 'A test duration: Lorem ipsum dolor sit amet...',
+      }
+
+      page.form.fillInWith(validFormData)
+      page.form.saveAndContinueButton.click()
+
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOrderId}${apiPath}`,
+        body: {
+          zoneType: zoneTypeId,
+          zoneId: 1,
+          startDate: '2024-12-10T00:00:00.000Z',
+          name: 'A test name: Lorem ipsum dolor sit amet...',
+          description: 'A test description: Lorem ipsum dolor sit amet...',
+          duration: 'A test duration: Lorem ipsum dolor sit amet...',
+        },
+      }).should('be.true')
+    })
+
     it('should continue to the types of monitoring needed page', () => {
       const page = Page.visit(EnforcementZoneAddToListPage, { orderId: mockOrderId, zoneId: 1 })
 

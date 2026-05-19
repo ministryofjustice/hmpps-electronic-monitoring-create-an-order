@@ -16,10 +16,9 @@ export default class CurfewConditionsController {
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { curfewConditions } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
-    const viewModel = CurfewConditionsViewModel.construct(curfewConditions, errors as never, formData as never)
+    const viewModel = CurfewConditionsViewModel.construct(req.order!, errors as never, formData as never)
 
     res.render(`pages/order/monitoring-conditions/curfew-conditions`, viewModel)
   }
@@ -27,11 +26,13 @@ export default class CurfewConditionsController {
   update: RequestHandler = async (req: Request, res: Response) => {
     const { orderId } = req.params
     const formData = CurfewConditionsFormDataModel.parse(req.body)
+    const { interestedParties } = req.order!
 
     const updateResult = await this.curfewConditionsService.update({
       accessToken: res.locals.user.token,
       orderId,
       data: formData,
+      notifyingOrganisation: interestedParties?.notifyingOrganisation ?? null,
     })
 
     if (isValidationResult(updateResult)) {
