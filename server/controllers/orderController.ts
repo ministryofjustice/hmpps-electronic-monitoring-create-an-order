@@ -60,10 +60,6 @@ export default class OrderController {
   summary: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
 
-    if (order!.status === 'IN_PROGRESS' && !order.interestedParties?.notifyingOrganisation) {
-      res.redirect(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', order.id))
-      return
-    }
     const { versionId } = req.params
     const createNewOrderVersionEnabled = FeatureFlags.getInstance().get('CREATE_NEW_ORDER_VERSION_ENABLED')
     const error = req.flash('submissionError')

@@ -4,6 +4,7 @@ import Page from '../../../../pages/page'
 import OrderTasksPage from '../../../../pages/order/summary'
 import IsAddressChangePage from './isAddressChangePage'
 import ServiceRequestTypePage from '../../variation/service-request-type/serviceRequestTypePage'
+import NotifyingOrganisationPage from '../../interested-parties/notifying-organisation/notifyingOrganisationPage'
 
 const mockOrderId = uuidv4()
 const amendPath = '/amend-order'
@@ -52,7 +53,7 @@ context('Edit Order', () => {
           type: 'REINSTALL_DEVICE',
         },
       }).should('be.true')
-      Page.verifyOnPage(OrderTasksPage)
+      Page.verifyOnPage(NotifyingOrganisationPage)
     })
   })
 })
