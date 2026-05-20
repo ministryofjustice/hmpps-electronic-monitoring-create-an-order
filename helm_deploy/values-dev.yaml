@@ -23,7 +23,12 @@ generic-service:
     OS_DATA_HUB_API_URL: "https://api.os.uk"
 
   allowlist:
-    unrestricted: "0.0.0.0/0"
+    home-office-vpn-1: 52.56.62.128/25
+    groups:
+      - digital_staff_and_mojo
+      - moj_cloud_platform
+      - home_office
+    
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-ems-cemo-ui-dev
