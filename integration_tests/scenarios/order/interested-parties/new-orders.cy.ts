@@ -1,10 +1,8 @@
 import Page from '../../../pages/page'
-import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import fillInInterestedPartiesWith from '../../../utils/scenario-flows/interested-parties.cy'
 import InterestedPartiesCheckYourAnswersPage from '../../../e2e/order/interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
-import NotifyingOrganisationPage from '../../../e2e/order/interested-parties/notifying-organisation/notifyingOrganisationPage'
-import ResponsibleOrganisationPage from '../../../e2e/order/interested-parties/responsible-organisation/responsibleOrganisationPage'
+import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
 
 context('Interested parties flow', () => {
   let orderSummaryPage: OrderSummaryPage
@@ -28,14 +26,6 @@ context('Interested parties flow', () => {
       userId: '123456780',
     })
 
-    cy.signIn()
-    const indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.newOrderFormButton.click()
-
-    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-
-    orderSummaryPage.interestedPartiesTask.click()
-
     const input = {
       notifyingOrganisation: {
         notifyingOrganisation: 'Family Court',
@@ -49,15 +39,19 @@ context('Interested parties flow', () => {
       },
       pdu: 'Dyfed Powys',
     }
+
+    createNewOrder({ notifyingOrganisation: input.notifyingOrganisation })
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+
+    orderSummaryPage.interestedPartiesTask.click()
+
     fillInInterestedPartiesWith({
       continueOnCya: false,
       ...input,
     })
     const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
     cyaPage.organisationDetailsSection.shouldHaveItems([
-      { key: 'What organisation or related organisation are you part of?', value: 'Family Court' },
-      { key: 'Select the name of the Family Court', value: 'Aberystwyth Family Court' },
-      { key: "What is your team's contact email address?", value: 'a@b.com' },
       { key: "What is the Responsible Officer's organisation?", value: 'Probation' },
       { key: 'Select the Probation region', value: 'Wales' },
       { key: "What is the Responsible Organisation's email address? (optional)", value: 'a@b.com' },
@@ -72,16 +66,6 @@ context('Interested parties flow', () => {
       userId: '123456781',
     })
 
-    cy.signIn()
-
-    cy.signIn()
-    const indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.newOrderFormButton.click()
-
-    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-
-    orderSummaryPage.interestedPartiesTask.click()
-
     const input = {
       notifyingOrganisation: {
         notifyingOrganisationEmailAddress: 'a@b.com',
@@ -91,13 +75,19 @@ context('Interested parties flow', () => {
         responsibleOrganisationEmailAddress: 'a@b.com',
       },
     }
+
+    createNewOrder({ notifyingOrganisation: input.notifyingOrganisation })
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+
+    orderSummaryPage.interestedPartiesTask.click()
+
     fillInInterestedPartiesWith({
       continueOnCya: false,
       ...input,
     })
     const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
     cyaPage.organisationDetailsSection.shouldHaveItems([
-      { key: "What is your team's contact email address?", value: 'a@b.com' },
       { key: "What is the Responsible Officer's organisation?", value: 'Home Office' },
       { key: "What is the Responsible Organisation's email address? (optional)", value: 'a@b.com' },
     ])
@@ -108,14 +98,6 @@ context('Interested parties flow', () => {
       name: 'Cemor Stubs',
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
-    cy.signIn()
-    const indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.newOrderFormButton.click()
-
-    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-
-    orderSummaryPage.interestedPartiesTask.click()
-
     const input = {
       notifyingOrganisation: {
         notifyingOrganisation: 'Prison service',
@@ -133,103 +115,22 @@ context('Interested parties flow', () => {
       },
       pdu: 'Dyfed Powys',
     }
-    fillInInterestedPartiesWith({
-      continueOnCya: false,
-      ...input,
-    })
-    const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
-    cyaPage.organisationDetailsSection.shouldHaveItems([
-      { key: 'What organisation or related organisation are you part of?', value: 'Prison service' },
-      { key: 'Select the name of the Prison', value: 'Altcourse Prison' },
-      { key: "What is your team's contact email address?", value: 'a@b.com' },
-      { key: "What is the Responsible Officer's first name?", value: 'John' },
-      { key: "What is the Responsible Officer's last name?", value: 'Smith' },
-      { key: "What is the Responsible Officer's email address?", value: 'John@Smith.com' },
-      { key: "What is the Responsible Officer's organisation?", value: 'Probation' },
-      { key: 'Select the Probation region', value: 'Wales' },
-    ])
-  })
-
-  it('clears downstream responsible officer data when notifying organisation is changed to court', () => {
-    cy.task('stubSignIn', {
-      name: 'Cemor Stubs',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'OTHER_ROLE'],
-    })
-    cy.signIn()
-    const indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.newOrderFormButton.click()
-
+    createNewOrder({ notifyingOrganisation: input.notifyingOrganisation })
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
     orderSummaryPage.interestedPartiesTask.click()
 
-    const input = {
-      notifyingOrganisation: {
-        notifyingOrganisation: 'Prison service',
-        notifyingOrganisationEmailAddress: 'a@b.com',
-        prison: 'Altcourse Prison',
-      },
-      responsibleOfficer: {
-        firstName: 'John',
-        lastName: 'Smith',
-        email: 'John@Smith.com',
-      },
-      responsibleOrganisation: {
-        responsibleOrganisation: 'Probation',
-        probationRegion: 'Wales',
-      },
-      pdu: 'Dyfed Powys',
-    }
-
     fillInInterestedPartiesWith({
       continueOnCya: false,
       ...input,
     })
-
     const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
-
     cyaPage.organisationDetailsSection.shouldHaveItems([
-      { key: 'What organisation or related organisation are you part of?', value: 'Prison service' },
-      { key: 'Select the name of the Prison', value: 'Altcourse Prison' },
-      { key: "What is your team's contact email address?", value: 'a@b.com' },
       { key: "What is the Responsible Officer's first name?", value: 'John' },
       { key: "What is the Responsible Officer's last name?", value: 'Smith' },
       { key: "What is the Responsible Officer's email address?", value: 'John@Smith.com' },
       { key: "What is the Responsible Officer's organisation?", value: 'Probation' },
       { key: 'Select the Probation region', value: 'Wales' },
-    ])
-
-    cyaPage.changeLinkByQuestion('What organisation or related organisation are you part of?').click()
-
-    const notifyOrgPage = Page.verifyOnPage(NotifyingOrganisationPage)
-
-    notifyOrgPage.form.fillInWith({
-      notifyingOrganisation: 'Family Court',
-      familyCourt: 'Aberystwyth Family Court',
-    })
-    notifyOrgPage.form.continueButton.click()
-
-    const resOrgPage = Page.verifyOnPage(ResponsibleOrganisationPage)
-    resOrgPage.form.fillInWith({
-      responsibleOrganisation: 'Field monitoring service',
-      responsibleOrganisationEmailAddress: 'ro@fms.com',
-    })
-
-    resOrgPage.form.continueButton.click()
-    Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
-
-    cyaPage.organisationDetailsSection.shouldHaveItems([
-      { key: 'What organisation or related organisation are you part of?', value: 'Family Court' },
-      { key: 'Select the name of the Family Court', value: 'Aberystwyth Family Court' },
-      { key: "What is your team's contact email address?", value: 'a@b.com' },
-      { key: "What is the Responsible Officer's organisation?", value: 'Field monitoring service' },
-      { key: "What is the Responsible Organisation's email address? (optional)", value: 'ro@fms.com' },
-    ])
-
-    cyaPage.organisationDetailsSection.shouldNotHaveItems([
-      "What is the Responsible Officer's first name?",
-      "What is the Responsible Officer's last name?",
-      "What is the Responsible Officer's email address?",
     ])
   })
 })

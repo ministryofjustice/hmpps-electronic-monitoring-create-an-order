@@ -9,6 +9,7 @@ import AuditService from '../services/auditService'
 import OrderService from '../services/orderService'
 import OrderController from './orderController'
 import TaskListService from '../services/taskListService'
+import FeatureFlags from '../utils/featureFlags'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -67,6 +68,18 @@ describe('OrderController', () => {
   })
 
   describe('create', () => {
+    beforeEach(() => {
+      const mockGet = jest.fn((flag: string) => flag === 'INTERESTED_PARTIES_FLOW_ENABLED')
+      const mockGetValue = jest.fn(() => 'true')
+      jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
+        get: mockGet,
+        getValue: mockGetValue,
+      } as never)
+    })
+
+    afterEach(() => {
+      jest.restoreAllMocks()
+    })
     it('should create an order and redirect to your details page', async () => {
       // Given
       const mockOrder = getMockOrder()

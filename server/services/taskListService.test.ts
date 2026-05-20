@@ -1310,7 +1310,7 @@ describe('TaskListService', () => {
 
       it('should navigate to CYA when notifying and responsible organisations are to check', async () => {
         const order = getMockOrder({
-          interestedParties: createInterestedParties(),
+          interestedParties: createInterestedParties({ responsibleOfficerFirstName: 'mockUser' }),
         })
         const taskListService = new TaskListService(mockOrderChecklistService)
 
@@ -1330,7 +1330,9 @@ describe('TaskListService', () => {
 
       it('should navigate to CYA when notifying and responsible organisations are complete', async () => {
         const order = getMockOrder({
-          interestedParties: createInterestedParties(),
+          interestedParties: createInterestedParties({
+            responsibleOfficerFirstName: 'mockUser',
+          }),
         })
         mockOrderChecklistService.getChecklist.mockResolvedValueOnce({
           ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS: true,

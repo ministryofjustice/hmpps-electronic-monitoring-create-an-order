@@ -1,7 +1,7 @@
 import { Order } from '../models/Order'
 import paths from '../constants/paths'
 import { AddressType } from '../models/Address'
-import { convertBooleanToEnum, isNotNullOrUndefined, isNullOrUndefined } from '../utils/utils'
+import { convertBooleanToEnum, isNotNullOrEmptyString, isNotNullOrUndefined, isNullOrUndefined } from '../utils/utils'
 import AttachmentType from '../models/AttachmentType'
 import OrderChecklistService from './orderChecklistService'
 import FeatureFlags from '../utils/featureFlags'
@@ -183,7 +183,7 @@ export default class TaskListService {
           name: PAGES.responsibleOrganisation,
           path: paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION,
           state: STATES.required,
-          completed: isNotNullOrUndefined(order.interestedParties?.responsibleOrganisation),
+          completed: isNotNullOrEmptyString(order.interestedParties?.responsibleOrganisation),
         })
       } else {
         tasks.push({
@@ -191,7 +191,7 @@ export default class TaskListService {
           name: PAGES.responsibleOfficer,
           path: paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER,
           state: STATES.required,
-          completed: isNotNullOrUndefined(order.interestedParties?.responsibleOfficerFirstName),
+          completed: isNotNullOrEmptyString(order.interestedParties?.responsibleOfficerFirstName),
         })
       }
 
