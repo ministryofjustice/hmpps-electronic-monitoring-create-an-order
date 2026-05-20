@@ -18,12 +18,21 @@ generic-service:
     OS_DATA_HUB_API_URL: "https://api.os.uk"
     OFFENCE_FLOW_ENABLED: "true"    
 
-  allowlist:
-    groups:
-      - digital_staff_and_mojo
-      - moj_cloud_platform
-      - prisons
-      - private_prisons
+  
+allowlist:
+  groups:
+    - digital_staff_and_mojo
+    - moj_cloud_platform
+    - prisons
+    - private_prisons
+  ipRanges:
+    # HOME OFFICE IPs
+    - 52.56.62.188/30
+    - 52.56.62.192/27
+    - 52.56.62.224/29
+    - 52.56.62.232/31
+    - 52.56.62.234/32
+
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-ems-cemo-ui-prod

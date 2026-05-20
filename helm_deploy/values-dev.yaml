@@ -23,7 +23,16 @@ generic-service:
     OS_DATA_HUB_API_URL: "https://api.os.uk"
 
   allowlist:
-    unrestricted: "0.0.0.0/0"
+    groups:
+      - digital_staff_and_mojo
+      - moj_cloud_platform
+    ipRanges:
+      # HOME OFFICE IPs
+      - 52.56.62.188/30
+      - 52.56.62.192/27
+      - 52.56.62.224/29
+      - 52.56.62.232/31
+      - 52.56.62.234/32
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-ems-cemo-ui-dev
