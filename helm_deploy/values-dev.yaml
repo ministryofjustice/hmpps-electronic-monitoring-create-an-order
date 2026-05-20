@@ -28,11 +28,7 @@ generic-service:
       - moj_cloud_platform
     ipRanges:
       # HOME OFFICE IPs
-      - 52.56.62.188/30
-      - 52.56.62.192/27
-      - 52.56.62.224/29
-      - 52.56.62.232/31
-      - 52.56.62.234/32
+      - 52.56.62.188/25
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-ems-cemo-ui-dev
