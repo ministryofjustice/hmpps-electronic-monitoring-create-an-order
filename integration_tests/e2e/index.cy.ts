@@ -180,6 +180,11 @@ context('Index', () => {
       cy.task('stubCemoCreateOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS', type: 'REQUEST' })
       cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
       cy.signIn()
+      const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
+      cy.task('setFeatureFlags', testFlags)
+    })
+    afterEach(() => {
+      cy.task('resetFeatureFlags')
     })
 
     it('should create a new order and go to your details page', () => {

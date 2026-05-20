@@ -514,7 +514,7 @@ export default class OrderTasksPage extends AppPage {
     probationDeliveryUnit = undefined,
     tertiaryAddressDetails = undefined,
     monitoringOrderTypeDescription = undefined,
-    newDeviceWearerFlow = true,
+    newDeviceWearerFlow = false,
   }): void {
     if (!newDeviceWearerFlow) {
       const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)

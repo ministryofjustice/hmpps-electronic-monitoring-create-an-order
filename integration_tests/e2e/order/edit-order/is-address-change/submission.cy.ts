@@ -24,6 +24,11 @@ context('Edit Order', () => {
       })
 
       cy.signIn()
+      const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
+      cy.task('setFeatureFlags', testFlags)
+    })
+    afterEach(() => {
+      cy.task('resetFeatureFlags')
     })
 
     it('Should return to order summary page when backButton is clicked', () => {

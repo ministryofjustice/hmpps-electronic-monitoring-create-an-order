@@ -19,6 +19,11 @@ context('Search', () => {
       cy.task('stubCemoCreateOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS', type: 'VARIATION' })
       cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
       cy.signIn()
+      const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
+      cy.task('setFeatureFlags', testFlags)
+    })
+    afterEach(() => {
+      cy.task('resetFeatureFlags')
     })
 
     it('Should render the correct elements ', () => {
@@ -325,17 +330,6 @@ context('Search', () => {
 
         // Verify the user was redirected to the your details page
         Page.verifyOnPage(NotifyingOrganisationPage)
-      })
-    })
-
-    context('Submitting a create variation request', () => {
-      beforeEach(() => {
-        cy.task('reset')
-        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-        cy.task('stubCemoListOrders')
-        cy.task('stubCemoCreateOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS', type: 'VARIATION' })
-        cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
-        cy.signIn()
       })
     })
   })
