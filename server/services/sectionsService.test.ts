@@ -96,10 +96,13 @@ describe('task list service', () => {
     })
 
     describe('section information', () => {
-      const order: Order = {
-        id: 'mockOrderId',
-        monitoringConditions: { startDate: new Date(4000, 0).toISOString() },
-      } as Order
+      let order: Order
+      beforeEach(() => {
+        order = {
+          interestedParties: { notifyingOrganisation: 'PRISON' },
+          monitoringConditions: { startDate: new Date(2040, 0).toISOString() },
+        } as Order
+      })
 
       it('returns section information given task list', () => {
         const taskOne: Task = {
@@ -164,133 +167,122 @@ describe('task list service', () => {
 
         expect(interestedPartiesSection.path).toBe('mockPath')
       })
-    })
-  })
+      it('section is complete when all tasks are', () => {
+        const tasks: Task[] = []
+        tasks.push({
+          section: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+          name: 'INTERESTED_PARTIES',
+          path: paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION,
+          state: 'REQUIRED',
+          completed: true,
+        })
 
-  describe('section list service', () => {
-    let order: Order
-    beforeEach(() => {
-      order = {
-        interestedParties: { notifyingOrganisation: 'PRISON' },
-        monitoringConditions: { startDate: new Date(2040, 0).toISOString() },
-      } as Order
-    })
+        mockTaskListService.getTasks.mockReturnValue(tasks)
 
-    it('section is complete when all tasks are', () => {
-      const tasks: Task[] = []
-      tasks.push({
-        section: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
-        name: 'INTERESTED_PARTIES',
-        path: paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION,
-        state: 'REQUIRED',
-        completed: true,
+        const sections = service.getSectionsForOrder(order)
+
+        const interestedPartiesSection = sections.find(
+          section => section.name === 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+        )!
+        expect(interestedPartiesSection.completed).toBe(true)
       })
 
-      mockTaskListService.getTasks.mockReturnValue(tasks)
-
-      const sections = service.getSectionsForOrder(order)
-
-      const interestedPartiesSection = sections.find(
-        section => section.name === 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
-      )!
-      expect(interestedPartiesSection.completed).toBe(true)
-    })
-
-    it('section is not complete when a task is not', () => {
-      const tasks: Task[] = []
-      tasks.push({
-        section: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
-        name: 'INTERESTED_PARTIES',
-        path: paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION,
-        state: 'REQUIRED',
-        completed: false,
-      })
-      tasks.push({
-        section: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
-        name: 'INTERESTED_PARTIES',
-        path: paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION,
-        state: 'REQUIRED',
-        completed: true,
-      })
-
-      mockTaskListService.getTasks.mockReturnValue(tasks)
-
-      const sections = service.getSectionsForOrder(order)
-
-      const interestedPartiesSection = sections.find(
-        section => section.name === 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
-      )!
-
-      expect(interestedPartiesSection.completed).toBe(false)
-    })
-
-    it('section is complete when all tasks cannot be completed', () => {
-      const tasks: Task[] = [
-        {
-          section: 'ABOUT_THE_DEVICE_WEARER',
-          name: 'DEVICE_WEARER',
-          path: '',
-          state: 'NOT_REQUIRED',
-          completed: false,
-        },
-      ]
-      mockTaskListService.getTasks.mockReturnValue(tasks)
-
-      order = { monitoringConditions: { startDate: new Date(2040, 0).toISOString() } } as Order
-
-      const sections = service.getSectionsForOrder(order)
-      const deviceWearerSection = sections.find(sec => sec.name === 'ABOUT_THE_DEVICE_WEARER')!
-      expect(deviceWearerSection.completed).toBe(true)
-    })
-
-    it('electronic monitoring section affect completion state based on order', () => {
-      const tasks: Task[] = []
-      tasks.push({
-        section: 'ELECTRONIC_MONITORING_CONDITIONS',
-        name: 'INTERESTED_PARTIES',
-        path: paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION,
-        state: 'REQUIRED',
-        completed: true,
-      })
-
-      order = {
-        interestedParties: { notifyingOrganisation: 'PRISON' },
-        monitoringConditions: { startDate: new Date(2040, 0).toISOString() },
-        enforcementZoneConditions: [],
-        mandatoryAttendanceConditions: [],
-      } as unknown as Order
-
-      mockTaskListService.getTasks.mockReturnValue(tasks)
-
-      const sections = service.getSectionsForOrder(order)
-
-      const matchedSection = sections.find(section => section.name === 'ELECTRONIC_MONITORING_CONDITIONS')!
-
-      expect(matchedSection.completed).toBe(false)
-    })
-
-    it('electronic monitoring section is not ready if device wearer section not complete', () => {
-      const tasks: Task[] = [
-        {
-          section: 'ABOUT_THE_DEVICE_WEARER',
-          name: 'DEVICE_WEARER',
-          path: '',
+      it('section is not complete when a task is not', () => {
+        const tasks: Task[] = []
+        tasks.push({
+          section: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+          name: 'INTERESTED_PARTIES',
+          path: paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION,
           state: 'REQUIRED',
           completed: false,
-        },
-        {
+        })
+        tasks.push({
+          section: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+          name: 'INTERESTED_PARTIES',
+          path: paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION,
+          state: 'REQUIRED',
+          completed: true,
+        })
+
+        mockTaskListService.getTasks.mockReturnValue(tasks)
+
+        const sections = service.getSectionsForOrder(order)
+
+        const interestedPartiesSection = sections.find(
+          section => section.name === 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+        )!
+
+        expect(interestedPartiesSection.completed).toBe(false)
+      })
+
+      it('section is complete when all tasks cannot be completed', () => {
+        const tasks: Task[] = [
+          {
+            section: 'ABOUT_THE_DEVICE_WEARER',
+            name: 'DEVICE_WEARER',
+            path: '',
+            state: 'NOT_REQUIRED',
+            completed: false,
+          },
+        ]
+        mockTaskListService.getTasks.mockReturnValue(tasks)
+
+        order = { monitoringConditions: { startDate: new Date(2040, 0).toISOString() } } as Order
+
+        const sections = service.getSectionsForOrder(order)
+        const deviceWearerSection = sections.find(sec => sec.name === 'ABOUT_THE_DEVICE_WEARER')!
+        expect(deviceWearerSection.completed).toBe(true)
+      })
+
+      it('electronic monitoring section affect completion state based on order', () => {
+        const tasks: Task[] = []
+        tasks.push({
           section: 'ELECTRONIC_MONITORING_CONDITIONS',
           name: 'INTERESTED_PARTIES',
-          path: '',
+          path: paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION,
           state: 'REQUIRED',
-          completed: false,
-        },
-      ]
-      mockTaskListService.getTasks.mockReturnValue(tasks)
+          completed: true,
+        })
 
-      const sections = service.getSectionsForOrder(order)
-      const emSection = sections.find(sec => sec.name === 'ELECTRONIC_MONITORING_CONDITIONS')!
-      expect(emSection.isReady).toBe(false)
+        order = {
+          interestedParties: { notifyingOrganisation: 'PRISON' },
+          monitoringConditions: { startDate: new Date(2040, 0).toISOString() },
+          enforcementZoneConditions: [],
+          mandatoryAttendanceConditions: [],
+        } as unknown as Order
+
+        mockTaskListService.getTasks.mockReturnValue(tasks)
+
+        const sections = service.getSectionsForOrder(order)
+
+        const matchedSection = sections.find(section => section.name === 'ELECTRONIC_MONITORING_CONDITIONS')!
+
+        expect(matchedSection.completed).toBe(false)
+      })
+
+      it('electronic monitoring section is not ready if device wearer section not complete', () => {
+        const tasks: Task[] = [
+          {
+            section: 'ABOUT_THE_DEVICE_WEARER',
+            name: 'DEVICE_WEARER',
+            path: '',
+            state: 'REQUIRED',
+            completed: false,
+          },
+          {
+            section: 'ELECTRONIC_MONITORING_CONDITIONS',
+            name: 'INTERESTED_PARTIES',
+            path: '',
+            state: 'REQUIRED',
+            completed: false,
+          },
+        ]
+        mockTaskListService.getTasks.mockReturnValue(tasks)
+
+        const sections = service.getSectionsForOrder(order)
+        const emSection = sections.find(sec => sec.name === 'ELECTRONIC_MONITORING_CONDITIONS')!
+        expect(emSection.isReady).toBe(false)
+      })
     })
   })
 })
