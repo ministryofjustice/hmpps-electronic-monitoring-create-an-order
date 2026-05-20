@@ -8,7 +8,7 @@ export default class ProbationDeliveryUnitPage extends AppFormPage {
   public form = new ProbationDeliveryUnitFormComponent()
 
   constructor() {
-    super(null, paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT, 'Contact information')
+    super(null, paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT, 'About the device wearer')
   }
 
   checkOnPage(): void {

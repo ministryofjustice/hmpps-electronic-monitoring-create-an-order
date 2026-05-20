@@ -11,7 +11,7 @@ export default class ContactInformationCheckYourAnswersPage extends CheckYourAns
       path = paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS
     }
 
-    super(heading, path, 'Contact information')
+    super(heading, path, 'About the device wearer')
   }
 
   // SECTIONS
