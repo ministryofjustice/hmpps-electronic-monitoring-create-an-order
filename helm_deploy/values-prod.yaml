@@ -27,7 +27,7 @@ allowlist:
     - private_prisons
   ipRanges:
     # HOME OFFICE IPs
-    - 52.56.62.188/25
+    - 52.56.62.128/25
 
 
 generic-prometheus-alerts:
