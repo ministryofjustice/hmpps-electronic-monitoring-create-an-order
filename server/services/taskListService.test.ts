@@ -1564,6 +1564,126 @@ describe('TaskListService', () => {
 
       jest.restoreAllMocks()
     })
+
+    it('should return responsible org section when notifying organisation is HOME_OFFICE and the start date is in the past', async () => {
+      const mockGet = jest.fn((flag: string) => flag === 'INTERESTED_PARTIES_FLOW_ENABLED')
+      const mockGetValue = jest.fn(() => '')
+      jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
+        get: mockGet,
+        getValue: mockGetValue,
+      } as never)
+
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({
+          notifyingOrganisation: 'HOME_OFFICE',
+        }),
+        monitoringConditions: createMonitoringConditions({
+          startDate: new Date(1900, 0, 0).toISOString(),
+        }),
+      })
+
+      const taskListService = new TaskListService(mockOrderChecklistService)
+
+      const sections = await taskListService.getSections(order)
+      // Then
+      expect(sections).toEqual([
+        {
+          checked: false,
+          completed: true,
+          name: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+          path: paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+          isReady: true,
+        },
+        {
+          checked: false,
+          completed: false,
+          name: 'ABOUT_THE_DEVICE_WEARER',
+          path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
+          isReady: true,
+        },
+        {
+         checked: false,
+         completed: false,
+         isReady: true,
+          name: 'RISK_INFORMATION',
+          path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+        },
+        {
+          checked: false,
+          completed: false,
+          name: 'ELECTRONIC_MONITORING_CONDITIONS',
+          path: monitoringConditionsPath.replace(':orderId', order.id),
+          isReady: false,
+        },
+        {
+          checked: false,
+          completed: false,
+          name: 'ADDITIONAL_DOCUMENTS',
+          path: paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
+          ':fileType(photo_Id|licence|court_order)',
+          'have-photo',
+        ),
+          isReady: true,
+        },
+      ])
+
+      jest.restoreAllMocks()
+    })
+
+     it('should not return responsible org section when notifying organisation is HOME_OFFICE and start date is in the future', async () => {
+      const mockGet = jest.fn((flag: string) => flag === 'INTERESTED_PARTIES_FLOW_ENABLED')
+      const mockGetValue = jest.fn(() => '')
+      jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
+        get: mockGet,
+        getValue: mockGetValue,
+      } as never)
+
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({
+          notifyingOrganisation: 'HOME_OFFICE',
+        }),
+      })
+
+      const taskListService = new TaskListService(mockOrderChecklistService)
+
+      const sections = await taskListService.getSections(order)
+      // Then
+      expect(sections).toEqual([
+        {
+          checked: false,
+          completed: false,
+          name: 'ABOUT_THE_DEVICE_WEARER',
+          path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
+          isReady: true,
+        },
+        {
+          checked: false,
+          completed: false,
+          name: 'RISK_INFORMATION',
+          path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+          isReady: true,
+        },
+        {
+          checked: false,
+          completed: false,
+          name: 'ELECTRONIC_MONITORING_CONDITIONS',
+          path: monitoringConditionsPath.replace(':orderId', order.id),
+          isReady: false,
+        },
+        {
+          checked: false,
+          completed: false,
+          name: 'ADDITIONAL_DOCUMENTS',
+          path: paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
+          ':fileType(photo_Id|licence|court_order)',
+          'have-photo',
+        ),
+          isReady: true,
+        },
+      ])
+      jest.restoreAllMocks()
+
+    })
   })
   describe('getNextCheckYourAnswersPage', () => {
     let order: Order
