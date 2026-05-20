@@ -76,7 +76,8 @@ context('Contact information', () => {
         }).should('be.true')
       })
 
-      it('should continue to collect installation and risk details', () => {
+      // Skipped as page is not in task list when interested parties flow is enabled
+      it.skip('should continue to collect installation and risk details', () => {
         const page = Page.visit(ProbationDeliveryUnitPage, { orderId: mockOrderId })
 
         page.form.fillInWith(sampleFormData)
