@@ -4,7 +4,6 @@ import ErrorPage from '../../pages/error'
 import Page from '../../pages/page'
 import AttachmentType from '../../../server/models/AttachmentType'
 import CheckYourAnswersPage from '../../pages/order/about-the-device-wearer/check-your-answers'
-import ContactInformationCheckYourAnswersPage from '../../pages/order/contact-information/check-your-answers'
 import InstallationAndRiskCheckYourAnswersPage from '../../pages/order/installation-and-risk/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from '../../pages/order/monitoring-conditions/check-your-answers'
 import AttachmentSummaryPage from '../../pages/order/attachments/summary'
@@ -42,6 +41,25 @@ context('Order Summary', () => {
             responsibleOrganisationEmail: '',
             responsibleOrganisationRegion: '',
           },
+          monitoringConditions: {
+            endDate: null,
+            orderType: null,
+            curfew: null,
+            exclusionZone: null,
+            trail: null,
+            mandatoryAttendance: null,
+            alcohol: null,
+            conditionType: null,
+            orderTypeDescription: null,
+            sentenceType: null,
+            issp: null,
+            hdc: null,
+            prarr: null,
+            pilot: null,
+            offenceType: null,
+            policeArea: null,
+            startDate: new Date(2040, 0).toISOString(),
+          },
         },
       })
 
@@ -57,6 +75,7 @@ context('Order Summary', () => {
     afterEach(() => {
       cy.task('resetFeatureFlags')
     })
+
     it('Display the common page elements and the submit order button', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.header.userName().should('contain.text', 'J. Smith')
@@ -67,6 +86,13 @@ context('Order Summary', () => {
     it('should display all tasks as incomplete or unable to start for a new order', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
+      page.interestedPartiesTask.shouldHaveStatus('Incomplete')
+      page.interestedPartiesTask.link.should(
+        'have.attr',
+        'href',
+        `/order/${mockOrderId}/interest-parties/notifying-organisation`,
+      )
+
       page.aboutTheDeviceWearerTask.shouldHaveStatus('Incomplete')
       page.aboutTheDeviceWearerTask.link.should(
         'have.attr',
@@ -74,15 +100,8 @@ context('Order Summary', () => {
         `/order/${mockOrderId}/about-the-device-wearer/identity-numbers`,
       )
 
-      page.contactInformationTask.shouldHaveStatus('Incomplete')
-      page.contactInformationTask.link.should(
-        'have.attr',
-        'href',
-        `/order/${mockOrderId}/contact-information/contact-details`,
-      )
-
       page.riskInformationTask.shouldHaveStatus('Incomplete')
-      page.riskInformationTask.link.should('have.attr', 'href', `/order/${mockOrderId}/installation-and-risk`)
+      page.riskInformationTask.link.should('have.attr', 'href', `/order/${mockOrderId}/installation-and-risk/offence`)
 
       page.electronicMonitoringTask.shouldHaveStatus('Cannot start yet')
       page.electronicMonitoringTask.link.should('not.exist')
@@ -96,8 +115,6 @@ context('Order Summary', () => {
     })
 
     it('Should have interested parties section at top of section list', () => {
-      const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
-      cy.task('setFeatureFlags', testFlags)
       Page.visit(OrderTasksPage, { orderId: mockOrderId })
       cy.get('.govuk-task-list__item')
         .first()
@@ -105,9 +122,7 @@ context('Order Summary', () => {
         .should('exist')
     })
 
-    it('Interested parties section link should go to responsible organisation page if not completed', () => {
-      const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
-      cy.task('setFeatureFlags', testFlags)
+    it('Interested parties section link should go to notifying organisation page if not completed', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.interestedPartiesTask.shouldHaveStatus('Incomplete')
       page.interestedPartiesTask.click()
@@ -121,8 +136,6 @@ context('Order Summary', () => {
     })
 
     it('Should not show contact information section if INTERESTED_PARTIES_FLOW_ENABLED flag is true', () => {
-      const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
-      cy.task('setFeatureFlags', testFlags)
       Page.visit(OrderTasksPage, { orderId: mockOrderId })
       cy.get('.govuk-task-list__item')
         .contains('.govuk-task-list__name-and-hint', 'Contact information')
@@ -166,9 +179,6 @@ context('Order Summary', () => {
     })
 
     it('Disables submit when risk information is incomplete', () => {
-      const testFlags = { OFFENCE_FLOW_ENABLED: true }
-      cy.task('setFeatureFlags', testFlags)
-
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
         id: mockOrderId,
@@ -254,15 +264,8 @@ context('Order Summary', () => {
         `/order/${mockOrderId}/about-the-device-wearer/identity-numbers`,
       )
 
-      page.contactInformationTask.shouldHaveStatus('Incomplete')
-      page.contactInformationTask.link.should(
-        'have.attr',
-        'href',
-        `/order/${mockOrderId}/contact-information/contact-details`,
-      )
-
       page.riskInformationTask.shouldHaveStatus('Incomplete')
-      page.riskInformationTask.link.should('have.attr', 'href', `/order/${mockOrderId}/installation-and-risk`)
+      page.riskInformationTask.link.should('have.attr', 'href', `/order/${mockOrderId}/installation-and-risk/offence`)
 
       page.electronicMonitoringTask.shouldHaveStatus('Cannot start yet')
       page.electronicMonitoringTask.link.should('not.exist')
@@ -520,6 +523,19 @@ context('Order Summary', () => {
             responsibleOrganisationPhoneNumber: '',
             responsibleOrganisationRegion: '',
           },
+          offences: [
+            {
+              id: 'offence id',
+              offenceType: 'SEXUAL_OFFENCES',
+            },
+          ],
+          offenceAdditionalDetails: {
+            additionalDetails: 'mock offence details',
+          },
+          detailsOfInstallation: {
+            riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
+            riskDetails: 'some risk details',
+          },
           enforcementZoneConditions: [
             {
               description: null,
@@ -660,13 +676,6 @@ context('Order Summary', () => {
         `/order/${mockOrderId}/about-the-device-wearer/check-your-answers`,
       )
 
-      page.contactInformationTask.shouldHaveStatus('To check')
-      page.contactInformationTask.link.should(
-        'have.attr',
-        'href',
-        `/order/${mockOrderId}/contact-information/check-your-answers`,
-      )
-
       page.riskInformationTask.shouldHaveStatus('To check')
       page.riskInformationTask.link.should(
         'have.attr',
@@ -697,21 +706,6 @@ context('Order Summary', () => {
       dwCYApage.continueButton().click()
       page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.aboutTheDeviceWearerTask.shouldHaveStatus('Complete')
-    })
-
-    it('should display status as Complete after view Contact Information check your answer page', () => {
-      let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
-      page.contactInformationTask.shouldHaveStatus('To check')
-      page.contactInformationTask.link.click()
-      const contactInformationCyaPage = Page.verifyOnPage(
-        ContactInformationCheckYourAnswersPage,
-        { orderId: mockOrderId },
-        {},
-        'Check your answers',
-      )
-      contactInformationCyaPage.continueButton().click()
-      page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
-      page.contactInformationTask.shouldHaveStatus('Complete')
     })
 
     it('should display status as Complete after view Risk Information check your answer page', () => {
@@ -765,14 +759,6 @@ context('Order Summary', () => {
       page.aboutTheDeviceWearerTask.link.click()
       const dwCYApage = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
       dwCYApage.continueButton().click()
-
-      const contactInformationCyaPage = Page.verifyOnPage(
-        ContactInformationCheckYourAnswersPage,
-        { orderId: mockOrderId },
-        {},
-        'Check your answers',
-      )
-      contactInformationCyaPage.continueButton().click()
 
       const riskInformationCyaPage = Page.verifyOnPage(
         InstallationAndRiskCheckYourAnswersPage,
@@ -880,6 +866,20 @@ context('Order Summary', () => {
             responsibleOrganisationPhoneNumber: '',
             responsibleOrganisationRegion: '',
           },
+          offences: [
+            {
+              id: 'offence id',
+              offenceType: 'SEXUAL_OFFENCES',
+            },
+          ],
+          offenceAdditionalDetails: {
+            additionalDetails: 'mock offence details',
+          },
+          detailsOfInstallation: {
+            riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
+            riskDetails: 'some risk details',
+          },
+          mappa: { isMappa: 'NO' },
           enforcementZoneConditions: [
             {
               description: null,
@@ -994,6 +994,11 @@ context('Order Summary', () => {
               startTime: '',
             },
           ],
+          installationLocation: {
+            location: 'PRIMARY',
+          },
+          installationAppointment: { placeName: 'blah', appointmentDate: new Date() },
+          orderParameters: { havePhoto: false },
         },
       })
 
@@ -1025,13 +1030,6 @@ context('Order Summary', () => {
         'have.attr',
         'href',
         `/order/${mockOrderId}/about-the-device-wearer/check-your-answers`,
-      )
-
-      page.contactInformationTask.shouldNotHaveStatus()
-      page.contactInformationTask.link.should(
-        'have.attr',
-        'href',
-        `/order/${mockOrderId}/contact-information/check-your-answers`,
       )
 
       page.riskInformationTask.shouldNotHaveStatus()
@@ -1204,6 +1202,19 @@ context('Order Summary', () => {
             responsibleOrganisationPhoneNumber: '',
             responsibleOrganisationRegion: '',
           },
+          offences: [
+            {
+              id: 'offence id',
+              offenceType: 'SEXUAL_OFFENCES',
+            },
+          ],
+          offenceAdditionalDetails: {
+            additionalDetails: 'mock offence details',
+          },
+          detailsOfInstallation: {
+            riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
+            riskDetails: 'some risk details',
+          },
           additionalDocuments: [{ id: uuidv4(), fileName: '', fileType: AttachmentType.LICENCE }],
           orderParameters: { havePhoto: false },
           isValid: true,
@@ -1281,6 +1292,19 @@ context('Order Summary', () => {
             responsibleOrganisationEmail: '',
             responsibleOrganisationPhoneNumber: '',
             responsibleOrganisationRegion: '',
+          },
+          offences: [
+            {
+              id: 'offence id',
+              offenceType: 'SEXUAL_OFFENCES',
+            },
+          ],
+          offenceAdditionalDetails: {
+            additionalDetails: 'mock offence details',
+          },
+          detailsOfInstallation: {
+            riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
+            riskDetails: 'some risk details',
           },
           addresses: [],
           additionalDocuments: [{ id: uuidv4(), fileName: '', fileType: AttachmentType.LICENCE }],
@@ -1364,6 +1388,19 @@ context('Order Summary', () => {
             responsibleOrganisationEmail: '',
             responsibleOrganisationPhoneNumber: '',
             responsibleOrganisationRegion: '',
+          },
+          offences: [
+            {
+              id: 'offence id',
+              offenceType: 'SEXUAL_OFFENCES',
+            },
+          ],
+          offenceAdditionalDetails: {
+            additionalDetails: 'mock offence details',
+          },
+          detailsOfInstallation: {
+            riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
+            riskDetails: 'some risk details',
           },
           monitoringConditions: {
             orderType: null,
@@ -1610,6 +1647,20 @@ context('Order Summary', () => {
             responsibleOrganisationPhoneNumber: '',
             responsibleOrganisationRegion: '',
           },
+          offences: [
+            {
+              id: 'offence id',
+              offenceType: 'SEXUAL_OFFENCES',
+            },
+          ],
+          offenceAdditionalDetails: {
+            additionalDetails: 'mock offence details',
+          },
+          detailsOfInstallation: {
+            riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
+            riskDetails: 'some risk details',
+          },
+          mappa: { isMappa: 'NO' },
           enforcementZoneConditions: [
             {
               description: null,
@@ -1728,6 +1779,7 @@ context('Order Summary', () => {
           installationLocation: {
             location: 'PRIMARY',
           },
+          installationAppointment: { placeName: 'blah', appointmentDate: new Date() },
         },
       })
 
@@ -1763,11 +1815,6 @@ context('Order Summary', () => {
         'have.attr',
         'href',
         convertToExpectedPath(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS_VERSION),
-      )
-      page.contactInformationTask.link.should(
-        'have.attr',
-        'href',
-        convertToExpectedPath(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS_VERSION),
       )
       page.riskInformationTask.link.should(
         'have.attr',

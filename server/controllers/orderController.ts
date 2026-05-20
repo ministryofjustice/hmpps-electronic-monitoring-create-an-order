@@ -1,6 +1,5 @@
 import { Request, RequestHandler, Response } from 'express'
 import { AuditService, OrderService } from '../services'
-import TaskListService from '../services/taskListService'
 import paths from '../constants/paths'
 import { CreateOrderFormDataParser } from '../models/form-data/order'
 import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
@@ -8,12 +7,13 @@ import FeatureFlags from '../utils/featureFlags'
 import isVariationType from '../utils/isVariationType'
 import TimelineModel from '../models/view-models/timelineModel'
 import { Order } from '../models/Order'
+import SectionService from '../services/sectionsService'
 
 export default class OrderController {
   constructor(
     private readonly auditService: AuditService,
     private readonly orderService: OrderService,
-    private readonly taskListService: TaskListService,
+    private readonly sectionService: SectionService,
   ) {}
 
   create: RequestHandler = async (req: Request, res: Response) => {
@@ -67,7 +67,7 @@ export default class OrderController {
     const error = req.flash('submissionError')
 
     const [sections, completedOrderVersions] = await Promise.all([
-      this.taskListService.getSections(order, versionId),
+      this.sectionService.getSectionsForOrder(order, versionId),
       this.orderService.getCompleteVersions({
         orderId: order.id,
         accessToken: res.locals.user.token,

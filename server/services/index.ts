@@ -49,6 +49,7 @@ import OffenceOtherInfoService from '../routes/installation-and-risk/offence-oth
 import InterestedPartiesStoreService from '../routes/interested-parties/interestedPartiesStoreService'
 import UpdateInterestedPartiesService from '../routes/interested-parties/interestedPartiesService'
 import PostcodeService from '../routes/postcode-lookup/postcodeService'
+import SectionService from './sectionsService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient, osDataHubClient } = dataAccess()
@@ -110,6 +111,8 @@ export const services = () => {
       : new InMemorCacheService<UserCohort>(),
   )
 
+  const sectionService = new SectionService(taskListService, orderChecklistService)
+
   const fmsRequestService = new FmsRequestService(cemoApiClient)
   return {
     alcoholMonitoringService,
@@ -154,6 +157,7 @@ export const services = () => {
     interestedPartiesStoreService,
     updateInterestedPartiesService,
     postcodeService,
+    sectionService,
   }
 }
 
@@ -190,4 +194,5 @@ export {
   OffenceOtherInfoService,
   UserCohortService,
   MappaService,
+  SectionService as SectionsService,
 }
