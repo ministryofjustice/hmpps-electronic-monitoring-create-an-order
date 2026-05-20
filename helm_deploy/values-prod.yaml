@@ -20,14 +20,14 @@ generic-service:
 
   
 allowlist:
+  home-office-vpn-1: 52.56.62.128/25
   groups:
     - digital_staff_and_mojo
     - moj_cloud_platform
     - prisons
     - private_prisons
-  ipRanges:
-    # HOME OFFICE IPs
-    - 52.56.62.128/25
+    - home_office
+  
 
 
 generic-prometheus-alerts:
