@@ -11,6 +11,7 @@ type formData = {
   magistratesCourt?: string
   youthCourt?: string
   notifyingOrganisationEmailAddress?: string
+  civilCountyCourt?: string
 }
 
 export default class NotifyingOrganisationComponent extends FormComponent {
@@ -80,6 +81,10 @@ export default class NotifyingOrganisationComponent extends FormComponent {
 
     if (data.crownCourt) {
       this.crownCourtField.set(data.crownCourt)
+    }
+
+    if (data.civilCountyCourt) {
+      this.civilCountyCourtField.set(data.civilCountyCourt)
     }
 
     if (data.magistratesCourt) {

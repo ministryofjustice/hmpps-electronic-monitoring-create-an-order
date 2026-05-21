@@ -1,5 +1,4 @@
 import Page from '../../../pages/page'
-import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
 import OffencePage from '../../../e2e/order/access-needs-installation-risk/offences/offence/offencePage'
@@ -10,6 +9,7 @@ import DapoPage from '../../../e2e/order/access-needs-installation-risk/offences
 import OffenceDeletePage from '../../../e2e/order/access-needs-installation-risk/offences/delete/OffenceListDeletePage'
 import DetailsOfInstallationPage from '../../../e2e/order/access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
 import IsMappaPage from '../../../e2e/order/access-needs-installation-risk/is-mappa/IsMappaPage'
+import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
 
 context('offences', () => {
   let orderSummaryPage: OrderSummaryPage
@@ -33,18 +33,6 @@ context('offences', () => {
     cy.task('setFeatureFlags', testFlags)
     cy.task('resetDB')
     cy.task('reset')
-
-    cy.task('stubSignIn', {
-      name: 'Cemor Stubs',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
-    })
-    cy.signIn()
-    const indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.newOrderFormButton.click()
-
-    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-
-    orderSummaryPage.aboutTheDeviceWearerTask.click()
   })
 
   afterEach(() => {
@@ -52,10 +40,23 @@ context('offences', () => {
   })
 
   it('Notifying organisation is Prison, single offence flow', () => {
-    const interestedParties = createFakeInterestedParties('Prison', 'Home Office', 'Altcourse Prison', null)
+    cy.task('stubSignIn', {
+      name: 'Cemor Stubs',
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
+    })
+    cy.signIn()
+
+    createNewOrder({
+      notifyingOrganisation: createFakeInterestedParties('Prison', 'Prison', undefined, 'North West'),
+    })
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+
+    orderSummaryPage.aboutTheDeviceWearerTask.click()
+
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
-      interestedParties,
+      newDeviceWearerFlow: true,
     })
 
     // Should go to offence page
@@ -97,10 +98,23 @@ context('offences', () => {
   })
 
   it('Notifying organisation is civil court, multiple offences flow', () => {
-    const interestedParties = createFakeInterestedParties('Civil and County Court', 'Home Office', null, null)
+    cy.task('stubSignIn', {
+      name: 'Cemor Stubs',
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'COURT'],
+    })
+    cy.signIn()
+
+    createNewOrder({
+      notifyingOrganisation: createFakeInterestedParties('Civil and County Court', 'Prison', undefined, 'North West'),
+    })
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+
+    orderSummaryPage.aboutTheDeviceWearerTask.click()
+
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
-      interestedParties,
+      newDeviceWearerFlow: true,
     })
 
     const offences = [
@@ -163,10 +177,23 @@ context('offences', () => {
   })
 
   it('Notifying organisation is family court, multiple dapo flow', () => {
-    const interestedParties = createFakeInterestedParties('Family Court', 'Home Office', 'Altcourse Prison', null)
+    cy.task('stubSignIn', {
+      name: 'Cemor Stubs',
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'COURT'],
+    })
+    cy.signIn()
+
+    createNewOrder({
+      notifyingOrganisation: createFakeInterestedParties('Family Court', 'Prison', undefined, 'North West'),
+    })
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+
+    orderSummaryPage.aboutTheDeviceWearerTask.click()
+
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
-      interestedParties,
+      newDeviceWearerFlow: true,
     })
 
     const dapoClauses = [
@@ -218,10 +245,23 @@ context('offences', () => {
     ])
   })
   it('Notifying organisation is Home Office, skips to risk at installation', () => {
-    const interestedParties = createFakeInterestedParties('Home Office', 'Home Office')
+    cy.task('stubSignIn', {
+      name: 'Cemor Stubs',
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'HOME_OFFICE'],
+    })
+    cy.signIn()
+
+    createNewOrder({
+      notifyingOrganisation: createFakeInterestedParties('Home Office', 'Prison', undefined, 'North West'),
+    })
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+
+    orderSummaryPage.aboutTheDeviceWearerTask.click()
+
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
-      interestedParties,
+      newDeviceWearerFlow: true,
     })
 
     const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
@@ -237,11 +277,25 @@ context('offences', () => {
     )
     cyaPage.installationRiskSection.shouldNotHaveItem('Offences')
   })
+
   it('Should able to delete dapo', () => {
-    const interestedParties = createFakeInterestedParties('Family Court', 'Home Office', 'Altcourse Prison', null)
+    cy.task('stubSignIn', {
+      name: 'Cemor Stubs',
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'COURT'],
+    })
+    cy.signIn()
+
+    createNewOrder({
+      notifyingOrganisation: createFakeInterestedParties('Family Court', 'Prison', undefined, 'North West'),
+    })
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+
+    orderSummaryPage.aboutTheDeviceWearerTask.click()
+
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
-      interestedParties,
+      newDeviceWearerFlow: true,
     })
 
     // Should go to dapo and date page
@@ -272,10 +326,23 @@ context('offences', () => {
   })
 
   it('Should able to delete offence', () => {
-    const interestedParties = createFakeInterestedParties('Civil and County Court', 'Home Office', null, null)
+    cy.task('stubSignIn', {
+      name: 'Cemor Stubs',
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'COURT'],
+    })
+    cy.signIn()
+
+    createNewOrder({
+      notifyingOrganisation: createFakeInterestedParties('Civil and County Court', 'Prison', undefined, 'North West'),
+    })
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+
+    orderSummaryPage.aboutTheDeviceWearerTask.click()
+
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
-      interestedParties,
+      newDeviceWearerFlow: true,
     })
 
     const offences = [
