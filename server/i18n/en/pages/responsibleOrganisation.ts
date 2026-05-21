@@ -22,7 +22,7 @@ const responsibleOrganisationPageContent: ResponsibleOrganisationPageContent = {
       text: 'Select the Youth Justice Service region',
     },
   },
-  section: 'About the Notifying and Responsible Organisation',
+  section: 'About the Responsible Organisation',
   title: 'Responsible Organisation',
 }
 
