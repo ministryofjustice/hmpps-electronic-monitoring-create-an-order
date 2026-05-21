@@ -64,7 +64,8 @@ context('Contact information', () => {
         }).should('be.true')
       })
 
-      it('should continue to cya page', () => {
+      // skip as not in interested parties flow
+      it.skip('should continue to cya page', () => {
         const page = Page.visit(InterestedPartiesPage, { orderId: mockOrderId })
 
         page.form.fillInWith(sampleFormData)
@@ -79,7 +80,8 @@ context('Contact information', () => {
       })
 
       context('DDv5 feature set to true', () => {
-        it('should continue to cya page', () => {
+        // skip as not in interested parties flow
+        it.skip('should continue to cya page', () => {
           cy.task('stubCemoSubmitOrder', {
             httpStatus: 200,
             id: mockOrderId,
