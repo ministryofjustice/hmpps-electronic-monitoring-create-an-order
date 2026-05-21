@@ -172,7 +172,7 @@ context('Receipt', () => {
           ],
           interestedParties: {
             notifyingOrganisation: 'PRISON',
-            notifyingOrganisationName: '',
+            notifyingOrganisationName: 'MilkShake',
             notifyingOrganisationEmail: 'notifying@organisation',
             responsibleOrganisation: 'POLICE',
             responsibleOrganisationPhoneNumber: '01234567890',
@@ -225,6 +225,9 @@ context('Receipt', () => {
         { key: 'Reference number', value: mockOrderId },
         { key: 'Date submitted', value: '01/01/2025, 10:30' },
         { key: 'Submitted by', value: 'test name' },
+        { key: 'Notifying organisation', value: 'PRISON' },
+        { key: "Notifying organisation's name or region", value: 'MilkShake' },
+        { key: "Notifying organisation's contact email address", value: 'notifying@organisation' },
       ])
       page.riskInformationSection.shouldExist()
       page.riskInformationSection.shouldHaveItems([

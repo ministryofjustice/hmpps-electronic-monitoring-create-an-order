@@ -4,9 +4,9 @@ import { NotifyingOrganisationEnum } from './NotifyingOrganisation'
 
 const InterestedPartiesModel = z
   .object({
-    notifyingOrganisation: NotifyingOrganisationEnum.nullable(),
-    notifyingOrganisationName: z.string().nullable(),
-    notifyingOrganisationEmail: z.string().nullable(),
+    notifyingOrganisation: NotifyingOrganisationEnum.nullable().optional(),
+    notifyingOrganisationName: z.string().nullable().optional(),
+    notifyingOrganisationEmail: z.string().nullable().optional(),
     responsibleOfficerName: z.string().nullable().optional(),
     responsibleOfficerPhoneNumber: z.string().nullable().optional(),
     responsibleOrganisation: ResponsibleOrganisationEnum.nullable(),

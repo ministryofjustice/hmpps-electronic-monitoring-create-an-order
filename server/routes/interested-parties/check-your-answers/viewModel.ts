@@ -51,7 +51,7 @@ const getResponsibleOrganisationRegionAnswer = (
   return []
 }
 
-const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions, cohort?: string) => {
+const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const resOfficerUri = paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER.replace(':orderId', order.id)
   const resOrgUri = paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION.replace(':orderId', order.id)
 
@@ -60,19 +60,8 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts:
 
   const answers = []
 
-  const isHomeOffice = cohort === 'HOME_OFFICE'
-
-  const startDate = order.monitoringConditions.startDate
-    ? new Date(order.monitoringConditions.startDate)
-    : new Date(1900, 0, 0)
-
-  const isStartDateInPast = startDate < new Date()
-
-  if (
-    order.interestedParties?.responsibleOfficerFirstName &&
-    !(isStartDateInPast && order.status === 'SUBMITTED') &&
-    !isHomeOffice
-  ) {
+  // Responsible Officer and Org answers
+  if (order.interestedParties?.responsibleOfficerFirstName) {
     answers.push(
       ...[
         createAnswer(
@@ -97,23 +86,21 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts:
     )
   }
 
-  if (order.interestedParties?.responsibleOrganisation && !(isStartDateInPast && order.status === 'SUBMITTED')) {
+  if (order.interestedParties?.responsibleOrganisation) {
     answers.push(
-      ...[
-        createAnswer(
-          responsibleOrganisationQuestions.responsibleOrganisation.text,
-          lookup(content.reference.responsibleOrganisations, order.interestedParties?.responsibleOrganisation),
-          resOrgUri,
-          answerOpts,
-        ),
-        ...getResponsibleOrganisationRegionAnswer(order, content, resOrgUri, answerOpts),
-        createAnswer(
-          responsibleOrganisationQuestions.responsibleOrganisationEmail.text,
-          order.interestedParties?.responsibleOrganisationEmail,
-          resOrgUri,
-          answerOpts,
-        ),
-      ],
+      createAnswer(
+        responsibleOrganisationQuestions.responsibleOrganisation.text,
+        lookup(content.reference.responsibleOrganisations, order.interestedParties?.responsibleOrganisation),
+        resOrgUri,
+        answerOpts,
+      ),
+      ...getResponsibleOrganisationRegionAnswer(order, content, resOrgUri, answerOpts),
+      createAnswer(
+        responsibleOrganisationQuestions.responsibleOrganisationEmail.text,
+        order.interestedParties?.responsibleOrganisationEmail,
+        resOrgUri,
+        answerOpts,
+      ),
     )
   }
 
@@ -149,20 +136,17 @@ const createProbationDeliveryUnitAnswer = (order: Order, content: I18n, answerOp
   return answers
 }
 
-const construct = (order: Order, content: I18n, cohort?: string) => {
+const construct = (order: Order, content: I18n) => {
   const answerOpts = {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
   }
 
-  const interestedParties = createInterestedPartiesAnswers(order, content, answerOpts, cohort)
+  const interestedParties = createInterestedPartiesAnswers(order, content, answerOpts)
   const probationDeliveryUnit = createProbationDeliveryUnitAnswer(order, content, answerOpts)
 
   return {
     interestedParties,
     probationDeliveryUnit,
-    containsResponsibleOrgDetails: interestedParties.some(
-      item => item.key?.text === "What is the Responsible Officer's organisation?",
-    ),
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
   }
 }
