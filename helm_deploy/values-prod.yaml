@@ -19,14 +19,14 @@ generic-service:
     OFFENCE_FLOW_ENABLED: "true"    
 
   
-allowlist:
-  home-office-vpn-1: 52.56.62.128/25
-  groups:
-    - digital_staff_and_mojo
-    - moj_cloud_platform
-    - prisons
-    - private_prisons
-    - home_office
+  allowlist:
+    home-office-vpn-1: 52.56.62.128/25
+    groups:
+      - digital_staff_and_mojo
+      - moj_cloud_platform
+      - prisons
+      - private_prisons
+      - home_office
   
 
 
