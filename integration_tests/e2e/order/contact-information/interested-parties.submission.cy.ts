@@ -70,7 +70,12 @@ context('Contact information', () => {
         page.form.fillInWith(sampleFormData)
         page.form.saveAndContinueButton.click()
 
-        Page.verifyOnPage(ContactInformationCheckYourAnswersPage, 'Check your answers')
+        Page.verifyOnPage(
+          ContactInformationCheckYourAnswersPage,
+          'Check your answers',
+          false,
+          'About the Notifying and Responsible Organisations',
+        )
       })
 
       context('DDv5 feature set to true', () => {
@@ -118,7 +123,12 @@ context('Contact information', () => {
 
           page.form.saveAndContinueButton.click()
 
-          Page.verifyOnPage(ContactInformationCheckYourAnswersPage, 'Check your answers')
+          Page.verifyOnPage(
+            ContactInformationCheckYourAnswersPage,
+            'Check your answers',
+            false,
+            'About the Notifying and Responsible Organisations',
+          )
         })
 
         it('should submit a correctly formatted interested parties submission for PARC_PRISON_AND_YOUNG_OFFENDER_INSTITUTION prison', () => {
