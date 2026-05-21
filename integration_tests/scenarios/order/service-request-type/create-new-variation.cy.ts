@@ -2,17 +2,21 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAddress, createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
+import { createFakeAddress, createFakeAdultDeviceWearer } from '../../../mockApis/faker'
 import { stubAttachments } from '../../utils'
 import SearchPage from '../../../pages/search'
 import ServiceRequestTypePage from '../../../e2e/order/variation/service-request-type/serviceRequestTypePage'
 import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
 import ReceiptPage from '../../../pages/order/receipt'
 import IsAddressChangePage from '../../../e2e/order/edit-order/is-address-change/isAddressChangePage'
+import NotifyingOrganisationPage from '../../../e2e/order/interested-parties/notifying-organisation/notifyingOrganisationPage'
+import fillInInterestedPartiesWith from '../../../utils/scenario-flows/interested-parties.cy'
+import InterestedPartiesCheckYourAnswersPage from '../../../e2e/order/interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
 
 context('Service-Request-Types', () => {
   const testFlags = {
     SERVICE_REQUEST_TYPE_ENABLED: true,
+    INTERESTED_PARTIES_FLOW_ENABLED: true,
   }
   const currentDate = new Date()
   const deviceWearerDetails = {
@@ -49,7 +53,23 @@ context('Service-Request-Types', () => {
       fileName: 'test.pdf',
     },
   }
-  const interestedParties = createFakeInterestedParties('Prison', 'Home Office', 'Altcourse Prison', null)
+  const interestedParties = {
+    notifyingOrganisation: {
+      notifyingOrganisation: 'Prison service',
+      notifyingOrganisationEmailAddress: 'a@b.com',
+      prison: 'Altcourse Prison',
+    },
+    responsibleOfficer: {
+      firstName: 'John',
+      lastName: 'Smith',
+      email: 'John@Smith.com',
+    },
+    responsibleOrganisation: {
+      responsibleOrganisation: 'Probation',
+      probationRegion: 'Wales',
+    },
+    pdu: 'Dyfed Powys',
+  }
   const monitoringOrderTypeDescription = {
     sentenceType: 'Standard Determinate Sentence',
     hdc: 'Yes',
@@ -83,7 +103,20 @@ context('Service-Request-Types', () => {
       page.form.continueButton.click()
     }
 
+    const notifyingOrganisationPage = Page.verifyOnPage(NotifyingOrganisationPage)
+    notifyingOrganisationPage.form.fillInWith(interestedParties.notifyingOrganisation)
+    notifyingOrganisationPage.form.continueButton.click()
+
     let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+    orderSummaryPage.interestedPartiesTask.click()
+
+    fillInInterestedPartiesWith({
+      continueOnCya: false,
+      ...interestedParties,
+    })
+    const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
+    cyaPage.return()
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
     orderSummaryPage.fillInVariationsDetails({ variationDetails: variation })
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
@@ -107,6 +140,7 @@ context('Service-Request-Types', () => {
       probationDeliveryUnit: undefined,
       installationLocation: undefined,
       installationAppointment: undefined,
+      newDeviceWearerFlow: true,
     })
 
     orderSummaryPage.submitOrderButton.click()

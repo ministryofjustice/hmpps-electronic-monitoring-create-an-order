@@ -2,14 +2,13 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAddress, createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
+import { createFakeAddress, createFakeAdultDeviceWearer } from '../../../mockApis/faker'
 import { stubAttachments } from '../../utils'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import SearchPage from '../../../pages/search'
 import ConfirmVariationPage from '../../../pages/order/variation/confirmVariation'
 import ServiceRequestTypePage from '../../../e2e/order/variation/service-request-type/serviceRequestTypePage'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
-import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
@@ -17,11 +16,15 @@ import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-su
 import IsRejectionPage from '../../../e2e/order/edit-order/is-rejection/isRejectionPage'
 import ReceiptPage from '../../../pages/order/receipt'
 import IsAddressChangePage from '../../../e2e/order/edit-order/is-address-change/isAddressChangePage'
+import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
+import fillInInterestedPartiesWith from '../../../utils/scenario-flows/interested-parties.cy'
+import InterestedPartiesCheckYourAnswersPage from '../../../e2e/order/interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
 
 context('Service-Request-Types', () => {
   let orderSummaryPage: OrderSummaryPage
   const testFlags = {
     SERVICE_REQUEST_TYPE_ENABLED: true,
+    INTERESTED_PARTIES_FLOW_ENABLED: true,
   }
   const currentDate = new Date()
   const deviceWearerDetails = {
@@ -58,7 +61,23 @@ context('Service-Request-Types', () => {
       fileName: 'test.pdf',
     },
   }
-  const interestedParties = createFakeInterestedParties('Prison', 'Home Office', 'Altcourse Prison', null)
+  const interestedParties = {
+    notifyingOrganisation: {
+      notifyingOrganisation: 'Prison service',
+      notifyingOrganisationEmailAddress: 'a@b.com',
+      prison: 'Altcourse Prison',
+    },
+    responsibleOfficer: {
+      firstName: 'John',
+      lastName: 'Smith',
+      email: 'John@Smith.com',
+    },
+    responsibleOrganisation: {
+      responsibleOrganisation: 'Probation',
+      probationRegion: 'Wales',
+    },
+    pdu: 'Dyfed Powys',
+  }
   const monitoringOrderTypeDescription = {
     sentenceType: 'Standard Determinate Sentence',
     hdc: 'Yes',
@@ -75,9 +94,19 @@ context('Service-Request-Types', () => {
   }
 
   const fillInNewOrder = () => {
-    let indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.newOrderFormButton.click()
+    createNewOrder({
+      notifyingOrganisation: interestedParties.notifyingOrganisation,
+      stubSignin: false,
+    })
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+    orderSummaryPage.interestedPartiesTask.click()
 
+    fillInInterestedPartiesWith({
+      continueOnCya: false,
+      ...interestedParties,
+    })
+    const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
+    cyaPage.return()
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
     orderSummaryPage.fillInNewOrderWith({
       deviceWearerDetails,
@@ -99,13 +128,14 @@ context('Service-Request-Types', () => {
       probationDeliveryUnit: undefined,
       installationLocation: undefined,
       installationAppointment: undefined,
+      newDeviceWearerFlow: true,
     })
 
     orderSummaryPage.submitOrderButton.click()
     const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
     submitSuccessPage.backToYourApplications.click()
 
-    indexPage = Page.verifyOnPage(IndexPage)
+    const indexPage = Page.verifyOnPage(IndexPage)
     indexPage.searchNav.click()
 
     const searchPage = Page.verifyOnPage(SearchPage)
@@ -132,10 +162,9 @@ context('Service-Request-Types', () => {
     }
 
     orderSummaryPage.fillInVariationsDetails({ variationDetails: variation })
-    orderSummaryPage.aboutTheDeviceWearerTask.click()
-
+    orderSummaryPage.interestedPartiesTask.click()
+    Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage, 'Check your answers').continue()
     Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').continue()
-    Page.verifyOnPage(ContactInformationCheckYourAnswersPage, 'Check your answers').continue()
     Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers').continue()
     Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers').continue()
     Page.verifyOnPage(AttachmentSummaryPage).saveAndReturn()

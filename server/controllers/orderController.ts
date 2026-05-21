@@ -24,8 +24,9 @@ export default class OrderController {
     }
 
     const order = await this.orderService.createOrder({ accessToken: res.locals.user.token, data: formData })
-
-    res.redirect(`/order/${order.id}/summary`)
+    if (FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED'))
+      res.redirect(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', order.id))
+    else res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
   }
 
   createVariation: RequestHandler = async (req: Request, res: Response) => {
@@ -60,6 +61,7 @@ export default class OrderController {
 
   summary: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
+
     const { versionId } = req.params
     const createNewOrderVersionEnabled = FeatureFlags.getInstance().get('CREATE_NEW_ORDER_VERSION_ENABLED')
     const error = req.flash('submissionError')

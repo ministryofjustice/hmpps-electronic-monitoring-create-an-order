@@ -11,10 +11,10 @@ import AttachmentSummaryPage from '../../pages/order/attachments/summary'
 import ConfirmVariationPage from '../../pages/order/variation/confirmVariation'
 import { Order } from '../../../server/models/Order'
 import paths from '../../../server/constants/paths'
-import NotifyingOrganisationPage from './interested-parties/notifying-organisation/notifyingOrganisationPage'
 import DetailsOfInstallationPage from './access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
+import ResponsibleOfficerPage from './interested-parties/responsible-officer/responsibleOfficerPage'
 
-let mockOrderId = uuidv4()
+const mockOrderId = uuidv4()
 
 context('Order Summary', () => {
   context('New Order', () => {
@@ -27,6 +27,22 @@ context('Order Summary', () => {
         httpStatus: 200,
         id: mockOrderId,
         status: 'IN_PROGRESS',
+        order: {
+          dataDictionaryVersion: 'DDV6',
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: 'ALTCOURSE_PRISON',
+            notifyingOrganisationEmail: 'notifying@organisation',
+
+            responsibleOfficerFirstName: null,
+            responsibleOfficerLastName: '',
+            responsibleOfficerEmail: '@email',
+
+            responsibleOrganisation: null,
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationRegion: '',
+          },
+        },
       })
 
       cy.task('stubCemoGetVersions', {
@@ -89,14 +105,14 @@ context('Order Summary', () => {
         .should('exist')
     })
 
-    it('Interested parties section link should go to notifying organisation page if not completed', () => {
+    it('Interested parties section link should go to responsible organisation page if not completed', () => {
       const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
       cy.task('setFeatureFlags', testFlags)
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.interestedPartiesTask.shouldHaveStatus('Incomplete')
       page.interestedPartiesTask.click()
 
-      Page.verifyOnPage(NotifyingOrganisationPage)
+      Page.verifyOnPage(ResponsibleOfficerPage)
     })
 
     it('Should be accessible', () => {
@@ -201,7 +217,22 @@ context('Order Summary', () => {
         httpStatus: 200,
         id: mockOrderId,
         status: 'IN_PROGRESS',
-        order: { type: 'VARIATION' },
+        order: {
+          type: 'VARIATION',
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: 'ALTCOURSE_PRISON',
+            notifyingOrganisationEmail: 'notifying@organisation',
+
+            responsibleOfficerFirstName: null,
+            responsibleOfficerLastName: '',
+            responsibleOfficerEmail: '@email',
+
+            responsibleOrganisation: null,
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationRegion: '',
+          },
+        },
       })
 
       cy.task('stubCemoGetVersions', {
@@ -252,6 +283,19 @@ context('Order Summary', () => {
         status: 'IN_PROGRESS',
         order: {
           type: 'VARIATION',
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: 'ALTCOURSE_PRISON',
+            notifyingOrganisationEmail: 'notifying@organisation',
+
+            responsibleOfficerFirstName: null,
+            responsibleOfficerLastName: '',
+            responsibleOfficerEmail: '@email',
+
+            responsibleOrganisation: null,
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationRegion: '',
+          },
         },
       })
 
@@ -267,6 +311,19 @@ context('Order Summary', () => {
         status: 'IN_PROGRESS',
         order: {
           type: 'REVOCATION',
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: 'ALTCOURSE_PRISON',
+            notifyingOrganisationEmail: 'notifying@organisation',
+
+            responsibleOfficerFirstName: null,
+            responsibleOfficerLastName: '',
+            responsibleOfficerEmail: '@email',
+
+            responsibleOrganisation: null,
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationRegion: '',
+          },
         },
       })
 
@@ -282,6 +339,19 @@ context('Order Summary', () => {
         status: 'IN_PROGRESS',
         order: {
           type: 'END_MONITORING',
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: 'ALTCOURSE_PRISON',
+            notifyingOrganisationEmail: 'notifying@organisation',
+
+            responsibleOfficerFirstName: null,
+            responsibleOfficerLastName: '',
+            responsibleOfficerEmail: '@email',
+
+            responsibleOrganisation: null,
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationRegion: '',
+          },
         },
       })
 
@@ -297,6 +367,19 @@ context('Order Summary', () => {
         status: 'IN_PROGRESS',
         order: {
           type: 'REINSTALL_DEVICE',
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: 'ALTCOURSE_PRISON',
+            notifyingOrganisationEmail: 'notifying@organisation',
+
+            responsibleOfficerFirstName: null,
+            responsibleOfficerLastName: '',
+            responsibleOfficerEmail: '@email',
+
+            responsibleOrganisation: null,
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationRegion: '',
+          },
         },
       })
 
@@ -312,6 +395,19 @@ context('Order Summary', () => {
         status: 'IN_PROGRESS',
         order: {
           type: 'REINSTALL_AT_DIFFERENT_ADDRESS',
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: 'ALTCOURSE_PRISON',
+            notifyingOrganisationEmail: 'notifying@organisation',
+
+            responsibleOfficerFirstName: null,
+            responsibleOfficerLastName: '',
+            responsibleOfficerEmail: '@email',
+
+            responsibleOrganisation: null,
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationRegion: '',
+          },
         },
       })
 
@@ -357,7 +453,6 @@ context('Order Summary', () => {
 
   context('Complete order, not submitted', () => {
     beforeEach(() => {
-      mockOrderId = uuidv4()
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
@@ -988,7 +1083,6 @@ context('Order Summary', () => {
 
   context('Partial complete order, not submitted', () => {
     beforeEach(() => {
-      mockOrderId = uuidv4()
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
       cy.signIn()
@@ -1020,6 +1114,19 @@ context('Order Summary', () => {
             disabilities: '',
             noFixedAbode: false,
             interpreterRequired: null,
+          },
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: 'ALTCOURSE_PRISON',
+            notifyingOrganisationEmail: 'notifying@organisation',
+
+            responsibleOfficerFirstName: null,
+            responsibleOfficerLastName: '',
+            responsibleOfficerEmail: '@email',
+
+            responsibleOrganisation: null,
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationRegion: '',
           },
           deviceWearerResponsibleAdult: {
             contactNumber: null,

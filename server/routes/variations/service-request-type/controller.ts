@@ -7,6 +7,7 @@ import { createGovukErrorSummary } from '../../../utils/errors'
 import ServiceRequestTypeService from '../serviceRequestTypeService'
 import getContent from '../../../i18n'
 import { Locales } from '../../../types/i18n/locale'
+import FeatureFlags from '../../../utils/featureFlags'
 
 export default class ServiceRequestTypeController {
   constructor(private readonly service: ServiceRequestTypeService) {}
@@ -51,7 +52,15 @@ export default class ServiceRequestTypeController {
       accessToken: res.locals.user.token,
       type: formData.serviceRequestType!,
     }
-    const id = await this.service.createNewVariation(input, req.order)
-    res.redirect(paths.ORDER.SUMMARY.replace(':orderId', id))
+    const result = await this.service.createNewVariation(input, req.order)
+
+    if (
+      result.interestedParties?.notifyingOrganisation ||
+      !FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')
+    ) {
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', result.id))
+    } else {
+      res.redirect(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', result.id))
+    }
   }
 }

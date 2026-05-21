@@ -1,8 +1,10 @@
 import { v4 as uuidv4 } from 'uuid'
 import IndexPage from '../pages/index'
-import OrderTasksPage from '../pages/order/summary'
 import Page from '../pages/page'
 import SearchPage from '../pages/search'
+import NotifyingOrganisationPage from './order/interested-parties/notifying-organisation/notifyingOrganisationPage'
+import { mockApiOrder } from '../mockApis/cemo'
+import paths from '../../server/constants/paths'
 
 const mockOrderId = uuidv4()
 
@@ -11,13 +13,119 @@ context('Index', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-      cy.task('stubCemoListOrders')
+
       cy.task('stubCemoCreateOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
       cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
       cy.signIn()
     })
 
     it('Should render the correct elements ', () => {
+      const mockOrderId1 = uuidv4()
+      const mockOrderId2 = uuidv4()
+      const mockOrderId3 = uuidv4()
+      cy.task('stubCemoListOrders', {
+        httpStatus: 200,
+        orders: [
+          {
+            ...mockApiOrder(),
+            id: mockOrderId1,
+            deviceWearer: {
+              nomisId: null,
+              pncId: null,
+              deliusId: null,
+              prisonNumber: null,
+              homeOfficeReferenceNumber: null,
+              complianceAndEnforcementPersonReference: null,
+              courtCaseReferenceNumber: null,
+              firstName: 'test',
+              lastName: 'user1',
+              alias: null,
+              dateOfBirth: null,
+              adultAtTimeOfInstallation: null,
+              sex: null,
+              gender: null,
+              disabilities: null,
+              noFixedAbode: null,
+              interpreterRequired: null,
+            },
+            interestedParties: {
+              notifyingOrganisation: 'PRISON',
+              notifyingOrganisationName: 'ALTCOURSE_PRISON',
+              notifyingOrganisationEmail: 'notifying@organisation',
+
+              responsibleOfficerFirstName: null,
+              responsibleOfficerLastName: '',
+              responsibleOfficerEmail: '@email',
+
+              responsibleOrganisation: null,
+              responsibleOrganisationEmail: '',
+              responsibleOrganisationRegion: '',
+            },
+          },
+          {
+            ...mockApiOrder(),
+            id: mockOrderId2,
+            deviceWearer: {
+              nomisId: null,
+              pncId: null,
+              deliusId: null,
+              prisonNumber: null,
+              homeOfficeReferenceNumber: null,
+              complianceAndEnforcementPersonReference: null,
+              courtCaseReferenceNumber: null,
+              firstName: 'Failed',
+              lastName: 'user2',
+              alias: null,
+              dateOfBirth: null,
+              adultAtTimeOfInstallation: null,
+              sex: null,
+              gender: null,
+              disabilities: null,
+              noFixedAbode: null,
+              interpreterRequired: null,
+            },
+            status: 'ERROR',
+          },
+          {
+            ...mockApiOrder(),
+            id: mockOrderId3,
+            deviceWearer: {
+              nomisId: null,
+              pncId: null,
+              deliusId: null,
+              prisonNumber: null,
+              homeOfficeReferenceNumber: null,
+              complianceAndEnforcementPersonReference: null,
+              courtCaseReferenceNumber: null,
+              firstName: 'vari',
+              lastName: 'user3',
+              alias: null,
+              dateOfBirth: null,
+              adultAtTimeOfInstallation: null,
+              sex: null,
+              gender: null,
+              disabilities: null,
+              noFixedAbode: null,
+              interpreterRequired: null,
+            },
+            interestedParties: {
+              notifyingOrganisation: 'PRISON',
+              notifyingOrganisationName: 'ALTCOURSE_PRISON',
+              notifyingOrganisationEmail: 'notifying@organisation',
+
+              responsibleOfficerFirstName: null,
+              responsibleOfficerLastName: '',
+              responsibleOfficerEmail: '',
+
+              responsibleOrganisation: null,
+              responsibleOrganisationEmail: '',
+              responsibleOrganisationRegion: '',
+            },
+            type: 'VARIATION',
+            status: 'IN_PROGRESS',
+          },
+        ],
+      })
       // Visit the home page
       const page = Page.visit(IndexPage)
 
@@ -37,18 +145,25 @@ context('Index', () => {
 
       // Order list
       page.orders.should('exist').should('have.length', 3)
-      page.TableContains('test tester', 'Draft')
-      page.IsAccesible('test tester', 0)
-      page.TableContains('Failed request', 'Failed')
-      page.IsAccesible('Failed request', 1)
-      page.TableContains('vari ation', 'Change to form Draft')
-      page.IsAccesible('vari ation', 2)
+      page.TableContains('test user1', 'Draft')
+      page.OrderFor('test user1').find('a').should('have.attr', 'href', `/order/${mockOrderId1}/summary`)
+      page.IsAccesible('test user1', 0)
+      page.TableContains('Failed user2', 'Failed')
+      page
+        .OrderFor('Failed user2')
+        .find('a')
+        .should('have.attr', 'href', paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', mockOrderId2))
+      page.IsAccesible('Failed user2', 1)
+      page.TableContains('vari user3', 'Change to form Draft')
+      page.OrderFor('vari user3').find('a').should('have.attr', 'href', `/order/${mockOrderId3}/summary`)
+      page.IsAccesible('vari user3', 2)
 
       // A11y
       page.checkIsAccessible()
     })
 
     it('navigates to the index page when we click the draft forms nav link', () => {
+      cy.task('stubCemoListOrders')
       const page = Page.visit(IndexPage)
 
       page.subNav.contains('Draft forms').should('have.attr', 'href', `/`)
@@ -65,9 +180,14 @@ context('Index', () => {
       cy.task('stubCemoCreateOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS', type: 'REQUEST' })
       cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
       cy.signIn()
+      const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
+      cy.task('setFeatureFlags', testFlags)
+    })
+    afterEach(() => {
+      cy.task('resetFeatureFlags')
     })
 
-    it('should create a new order', () => {
+    it('should create a new order and go to your details page', () => {
       // Visit the home page
       const page = Page.visit(IndexPage)
 
@@ -83,8 +203,7 @@ context('Index', () => {
         },
       }).should('be.true')
 
-      // Verify the user was redirected to the task page
-      Page.verifyOnPage(OrderTasksPage)
+      Page.verifyOnPage(NotifyingOrganisationPage)
     })
   })
 
