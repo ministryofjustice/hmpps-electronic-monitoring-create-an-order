@@ -453,7 +453,6 @@ context('Order Summary', () => {
 
   context('Complete order, not submitted', () => {
     beforeEach(() => {
-      mockOrderId = uuidv4()
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
@@ -1084,7 +1083,6 @@ context('Order Summary', () => {
 
   context('Partial complete order, not submitted', () => {
     beforeEach(() => {
-      mockOrderId = uuidv4()
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
       cy.signIn()

@@ -52,8 +52,9 @@ context('interested parties check answers page', () => {
             pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
             offenceType: '',
           },
-        })
+        },
       })
+    })
 
     it('shows all interested parties answers and pdu for checking if start date of order in future', () => {
       const page = Page.visit(InterestedPartiesCheckYourAnswersPage, { orderId: mockOrderId }, {}, 'View answers')
@@ -67,16 +68,15 @@ context('interested parties check answers page', () => {
         { key: "What is the Responsible Organisation's email address? (optional)", value: 'responsible@organisation' },
       ])
 
-        page.probationDeliveryUnitSection.shouldHaveItems([
-          {
-            key: "What is the Responsible Organisation's Probation Delivery Unit (PDU)",
-            value: 'County Durham and Darlington',
-          },
-        ])
+      page.probationDeliveryUnitSection.shouldHaveItems([
+        {
+          key: "What is the Responsible Organisation's Probation Delivery Unit (PDU)",
+          value: 'County Durham and Darlington',
+        },
+      ])
 
-        page.changeLinks.should('not.exist')
-        cy.get('.govuk-details__text').should('not.exist')
-      })
+      page.changeLinks.should('not.exist')
+      cy.get('.govuk-details__text').should('not.exist')
     })
   })
 })
