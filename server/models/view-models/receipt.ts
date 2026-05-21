@@ -19,6 +19,19 @@ const createOrderStatusAnswers = (order: Order) => {
     createAnswer('Reference number', order.id, '', answerOpts),
     createDateTimeAnswer('Date submitted', order.fmsResultDate, '', answerOpts),
     createAnswer('Submitted by', order.submittedBy, '', answerOpts),
+    createAnswer('Notifying organisation', order.interestedParties?.notifyingOrganisation || '', '', answerOpts),
+    createAnswer(
+      "Notifying organisation's name or region",
+      order.interestedParties?.notifyingOrganisationName || '',
+      '',
+      answerOpts,
+    ),
+    createAnswer(
+      "Notifying organisation's contact email address",
+      order.interestedParties?.notifyingOrganisationEmail || '',
+      '',
+      answerOpts,
+    ),
   ]
   return answers
 }
