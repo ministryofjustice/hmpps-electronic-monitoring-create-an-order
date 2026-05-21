@@ -1,7 +1,7 @@
 import ProbationDeliveryUnit from '../../../types/i18n/pages/probationDeliveryUnit'
 
 const pduPageContent: ProbationDeliveryUnit = {
-  section: 'About the Notifying and Responsible Organisations',
+  section: 'About the Responsible Organisation',
   title: '',
   helpText: '',
   legend: '',

@@ -15,11 +15,9 @@ export default class InterestedPartiesCheckYourAnswersController {
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const cohort = res.locals.user.cohort?.cohort
-
     res.render(
       'pages/order/interested-parties/check-your-answers',
-      ViewModel.construct(req.order!, res.locals.content!, cohort),
+      ViewModel.construct(req.order!, res.locals.content!),
     )
   }
 
