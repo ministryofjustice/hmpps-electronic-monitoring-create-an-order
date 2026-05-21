@@ -1602,9 +1602,9 @@ describe('TaskListService', () => {
           isReady: true,
         },
         {
-         checked: false,
-         completed: false,
-         isReady: true,
+          checked: false,
+          completed: false,
+          isReady: true,
           name: 'RISK_INFORMATION',
           path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
         },
@@ -1620,9 +1620,9 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
-          ':fileType(photo_Id|licence|court_order)',
-          'have-photo',
-        ),
+            ':fileType(photo_Id|licence|court_order)',
+            'have-photo',
+          ),
           isReady: true,
         },
       ])
@@ -1630,7 +1630,7 @@ describe('TaskListService', () => {
       jest.restoreAllMocks()
     })
 
-     it('should not return responsible org section when notifying organisation is HOME_OFFICE and start date is in the future', async () => {
+    it('should not return responsible org section when notifying organisation is HOME_OFFICE and start date is in the future', async () => {
       const mockGet = jest.fn((flag: string) => flag === 'INTERESTED_PARTIES_FLOW_ENABLED')
       const mockGetValue = jest.fn(() => '')
       jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
@@ -1675,14 +1675,13 @@ describe('TaskListService', () => {
           completed: false,
           name: 'ADDITIONAL_DOCUMENTS',
           path: paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
-          ':fileType(photo_Id|licence|court_order)',
-          'have-photo',
-        ),
+            ':fileType(photo_Id|licence|court_order)',
+            'have-photo',
+          ),
           isReady: true,
         },
       ])
       jest.restoreAllMocks()
-
     })
   })
   describe('getNextCheckYourAnswersPage', () => {

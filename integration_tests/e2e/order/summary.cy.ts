@@ -716,7 +716,6 @@ context('Order Summary', () => {
 
   context('Complete order, submitted', () => {
     const testFlags = { CREATE_NEW_ORDER_VERSION_ENABLED: true }
-
     beforeEach(() => {
       cy.task('reset')
       cy.task('setFeatureFlags', testFlags)
@@ -1703,6 +1702,256 @@ context('Order Summary', () => {
       cy.signIn().visit(`/order/${mockOrderId}/summary`, { failOnStatusCode: false })
 
       Page.verifyOnPage(ErrorPage, 'Page not found')
+    })
+  })
+
+  context('Complete order, home office', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+      // cy.task('stubCemoGetOrder', {
+      //   httpStatus: 200,
+      //   id: mockOrderId,
+      //   status: 'IN_PROGRESS',
+      //   order: {
+      //     id: mockOrderId,
+      //     status: 'IN_PROGRESS',
+      //     interestedParties: {
+      //       notifyingOrganisation: 'HOME_OFFICE',
+      //       responsibleOrganisation: 'HOME_OFFICE'
+      //     },
+      //     monitoringConditions: {
+      //       startDate: new Date(2029, 1, 1, 1, 1).toISOString(),
+      //       orderType: null,
+      //       curfew: true,
+      //       exclusionZone: true,
+      //       trail: true,
+      //       mandatoryAttendance: true,
+      //       alcohol: true,
+      //       orderTypeDescription: null,
+      //       conditionType: null,
+      //       endDate: null,
+      //       sentenceType: null,
+      //       issp: null,
+      //       hdc: null,
+      //       prarr: null,
+      //       pilot: null,
+      //       isValid: true,
+      //       offenceType: null,
+      //     }
+      //   },
+      // })
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          submittedBy: 'John Smith',
+          fmsResultDate: new Date(2028, 0, 1, 10, 30, 0, 0),
+          deviceWearer: {
+            nomisId: '',
+            pncId: null,
+            deliusId: null,
+            prisonNumber: null,
+            homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
+            firstName: 'Joe',
+            lastName: 'Bloggs',
+            alias: null,
+            dateOfBirth: null,
+            adultAtTimeOfInstallation: false,
+            sex: null,
+            gender: null,
+            disabilities: '',
+            noFixedAbode: false,
+            interpreterRequired: null,
+          },
+          deviceWearerResponsibleAdult: {
+            contactNumber: null,
+            fullName: null,
+            otherRelationshipDetails: null,
+            relationship: null,
+          },
+          contactDetails: { contactNumber: '', phoneNumberAvailable: false },
+          installationAndRisk: {
+            mappaCaseType: null,
+            mappaLevel: null,
+            riskCategory: null,
+            riskDetails: null,
+            offence: null,
+            offenceAdditionalDetails: null,
+          },
+          interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: '',
+            responsibleOfficerName: '',
+            responsibleOfficerPhoneNumber: '',
+            responsibleOrganisation: 'HOME_OFFICE',
+            responsibleOrganisationAddress: {
+              addressType: 'RESPONSIBLE_ORGANISATION',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationPhoneNumber: '',
+            responsibleOrganisationRegion: '',
+          },
+          enforcementZoneConditions: [
+            {
+              description: null,
+              duration: null,
+              endDate: null,
+              fileId: null,
+              fileName: null,
+              startDate: null,
+              zoneId: null,
+              zoneType: null,
+            },
+          ],
+          addresses: [
+            {
+              addressType: 'PRIMARY',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            {
+              addressType: 'SECONDARY',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            {
+              addressType: 'TERTIARY',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            {
+              addressType: 'INSTALLATION',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+          ],
+          additionalDocuments: [],
+          monitoringConditions: {
+            orderType: null,
+            curfew: true,
+            exclusionZone: true,
+            trail: true,
+            mandatoryAttendance: true,
+            alcohol: true,
+            orderTypeDescription: null,
+            conditionType: null,
+            startDate: null,
+            endDate: null,
+            sentenceType: null,
+            issp: null,
+            hdc: null,
+            prarr: null,
+            pilot: null,
+            isValid: true,
+            offenceType: null,
+          },
+          monitoringConditionsTrail: { startDate: null, endDate: null },
+          monitoringConditionsAlcohol: {
+            endDate: null,
+            installationLocation: null,
+            monitoringType: null,
+            prisonName: null,
+            probationOfficeName: null,
+            startDate: null,
+          },
+          isValid: false,
+          mandatoryAttendanceConditions: [
+            {
+              addressLine1: null,
+              addressLine2: null,
+              addressLine3: null,
+              addressLine4: null,
+              appointmentDay: null,
+              endDate: null,
+              endTime: null,
+              postcode: null,
+              purpose: null,
+              startDate: null,
+              startTime: null,
+            },
+          ],
+          curfewReleaseDateConditions: {
+            curfewAddress: null,
+            endTime: null,
+            orderId: null,
+            releaseDate: null,
+            startTime: null,
+          },
+          curfewConditions: {
+            curfewAddress: null,
+            endDate: null,
+            orderId: null,
+            startDate: null,
+            curfewAdditionalDetails: null,
+          },
+          curfewTimeTable: [
+            {
+              curfewAddress: '',
+              dayOfWeek: '',
+              endTime: '',
+              orderId: '',
+              startTime: '',
+            },
+          ],
+        },
+      })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
+      })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
+      })
+      cy.signIn()
+    })
+
+    afterEach(() => {
+      cy.task('resetFeatureFlags')
+    })
+
+    it('Home office notifying org, we dont see responsible org section', () => {
+      const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
+      cy.task('setFeatureFlags', testFlags)
+
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      cy.get('.govuk-task-list__item')
+        .contains('.govuk-task-list__name-and-hint', 'About the Responsible Organisation')
+        .should('not.exist')
+
+      page.aboutTheDeviceWearerTask.shouldHaveStatus('Incomplete')
+      page.riskInformationTask.shouldHaveStatus('Incomplete')
+      page.electronicMonitoringTask.shouldHaveStatus('Cannot start yet')
+      page.additionalDocumentsTask.shouldHaveStatus('Incomplete')
     })
   })
 })

@@ -895,8 +895,12 @@ export default class TaskListService {
           section !== SECTIONS.contactInformation || !FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED'),
       )
       .filter(
-        section => 
-          !((section === SECTIONS.interestParties && order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE') && this.isStartDateInTheFuture(order.monitoringConditions?.startDate!!)),
+        section =>
+          !(
+            section === SECTIONS.interestParties &&
+            order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE' &&
+            this.isStartDateInTheFuture(order.monitoringConditions?.startDate ?? '')
+          ),
       )
       .map(section => {
         const sectionsTasks = this.findTaskBySection(tasks, section)
@@ -933,7 +937,7 @@ export default class TaskListService {
     return (sectionTasks.find(task => task.path.includes('check-your-answers')) || sectionTasks[0]).path
   }
 
-   private isStartDateInTheFuture(date?: string): boolean {
+  private isStartDateInTheFuture(date?: string): boolean {
     if (!date) return true
     return new Date(date) > new Date()
   }
