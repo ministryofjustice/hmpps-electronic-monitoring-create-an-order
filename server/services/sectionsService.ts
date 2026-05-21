@@ -48,12 +48,12 @@ export default class SectionService {
     const startDate = order.monitoringConditions.startDate
       ? new Date(order.monitoringConditions.startDate)
       : new Date(1900, 0, 0)
-    const startDateIsInFuture = startDate > new Date()
+    const startDateIsInPast = startDate < new Date()
 
     if (
       order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE' &&
-      startDateIsInFuture &&
-      FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')
+      FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED') &&
+      !(isVariationType(order.type) && startDateIsInPast)
     ) {
       sections = [SECTIONS.interestParties, ...sections]
     }

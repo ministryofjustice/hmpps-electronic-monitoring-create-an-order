@@ -97,17 +97,21 @@ describe('task list service', () => {
       ])
     })
 
-    it('the start date is in the future', async () => {
-      const order: Order = { monitoringConditions: { startDate: new Date(2000, 0).toISOString() } } as Order
+    it('the start date is in the past and the order is a variation', async () => {
+      const order: Order = {
+        type: 'VARIATION',
+        monitoringConditions: { startDate: new Date(2000, 0).toISOString() },
+      } as Order
 
       const sections = await service.getSectionsForOrder(order)
 
-      expect(sections).toHaveLength(4)
+      expect(sections).toHaveLength(5)
       containsSections(sections, [
         'ABOUT_THE_DEVICE_WEARER',
         'RISK_INFORMATION',
         'ELECTRONIC_MONITORING_CONDITIONS',
         'ADDITIONAL_DOCUMENTS',
+        'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM',
       ])
     })
 

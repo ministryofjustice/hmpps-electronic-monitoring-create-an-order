@@ -40,6 +40,8 @@ import TypesOfMonitoringNeededPage from '../../e2e/order/monitoring-conditions/o
 import DapoPage from '../../e2e/order/access-needs-installation-risk/offences/dapo/DapoPage'
 import MonitoringTypePage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-type/MonitoringTypesPage'
 import fillInAboutTheDeviceWearer from '../../utils/scenario-flows/about-the-device-wearer-flow.cy'
+import ResponsibleOrganisationPage from '../../e2e/order/interested-parties/responsible-organisation/responsibleOrganisationPage'
+import NationalSecurityDirectoratePage from '../../e2e/order/interested-parties/national-security-directorate/nationalSecurityDirectoratePage'
 
 export default class OrderTasksPage extends AppPage {
   constructor(isOldVersionPage: boolean = false) {
@@ -161,7 +163,36 @@ export default class OrderTasksPage extends AppPage {
     monitoringOrderTypeDescription = undefined,
     newDeviceWearerFlow = false,
   }): OrderTasksPage {
-    this.aboutTheDeviceWearerTask.click()
+    if (newDeviceWearerFlow && interestedParties.notifyingOrganisation !== 'Home Office') {
+      this.interestedPartiesTask.click()
+      const interestedPartiesPage = Page.verifyOnPage(ResponsibleOrganisationPage)
+      interestedPartiesPage.form.fillInWith(interestedParties)
+      interestedPartiesPage.form.continueButton.click()
+
+      const nationalSecurityDirectoratePage = Page.verifyOnPage(NationalSecurityDirectoratePage)
+      nationalSecurityDirectoratePage.form.fillInWith('No')
+      nationalSecurityDirectoratePage.form.continueButton.click()
+
+      if (interestedParties.responsibleOrganisation === 'Probation' && probationDeliveryUnit !== undefined) {
+        const probationDeliveryUnitPage = Page.verifyOnPage(
+          ProbationDeliveryUnitPage,
+          'About the Responsible Organisation',
+        )
+        probationDeliveryUnitPage.form.fillInWith(probationDeliveryUnit)
+        probationDeliveryUnitPage.form.saveAndContinueButton.click()
+      }
+
+      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
+        ContactInformationCheckYourAnswersPage,
+        'Check your answer',
+        '',
+        false,
+        'About the Responsible Organisation',
+      )
+      contactInformationCheckYourAnswersPage.continueButton().click()
+    } else {
+      this.aboutTheDeviceWearerTask.click()
+    }
 
     this.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
