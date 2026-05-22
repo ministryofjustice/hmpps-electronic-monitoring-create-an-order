@@ -8,4 +8,9 @@ export const ResponsibleOrganisationEnum = z.enum([
   'POLICE',
 ])
 
-export type ResponsibeOrganisation = z.infer<typeof ResponsibleOrganisationEnum>
+export type ResponsibleOrganisation = z.infer<typeof ResponsibleOrganisationEnum>
+
+export const ResponsibleOrganisationField = ResponsibleOrganisationEnum
+  .or(z.literal(''))
+  .nullish()
+  .transform(val => val || null)

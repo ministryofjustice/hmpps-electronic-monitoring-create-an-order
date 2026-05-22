@@ -1709,38 +1709,6 @@ context('Order Summary', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-      // cy.task('stubCemoGetOrder', {
-      //   httpStatus: 200,
-      //   id: mockOrderId,
-      //   status: 'IN_PROGRESS',
-      //   order: {
-      //     id: mockOrderId,
-      //     status: 'IN_PROGRESS',
-      //     interestedParties: {
-      //       notifyingOrganisation: 'HOME_OFFICE',
-      //       responsibleOrganisation: 'HOME_OFFICE'
-      //     },
-      //     monitoringConditions: {
-      //       startDate: new Date(2029, 1, 1, 1, 1).toISOString(),
-      //       orderType: null,
-      //       curfew: true,
-      //       exclusionZone: true,
-      //       trail: true,
-      //       mandatoryAttendance: true,
-      //       alcohol: true,
-      //       orderTypeDescription: null,
-      //       conditionType: null,
-      //       endDate: null,
-      //       sentenceType: null,
-      //       issp: null,
-      //       hdc: null,
-      //       prarr: null,
-      //       pilot: null,
-      //       isValid: true,
-      //       offenceType: null,
-      //     }
-      //   },
-      // })
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
         id: mockOrderId,
@@ -1790,7 +1758,7 @@ context('Order Summary', () => {
             notifyingOrganisationEmail: '',
             responsibleOfficerName: '',
             responsibleOfficerPhoneNumber: '',
-            responsibleOrganisation: 'HOME_OFFICE',
+            responsibleOrganisation: '',
             responsibleOrganisationAddress: {
               addressType: 'RESPONSIBLE_ORGANISATION',
               addressLine1: '',
@@ -1948,9 +1916,9 @@ context('Order Summary', () => {
         .contains('.govuk-task-list__name-and-hint', 'About the Responsible Organisation')
         .should('not.exist')
 
-      page.aboutTheDeviceWearerTask.shouldHaveStatus('Incomplete')
-      page.riskInformationTask.shouldHaveStatus('Incomplete')
-      page.electronicMonitoringTask.shouldHaveStatus('Cannot start yet')
+      page.aboutTheDeviceWearerTask.shouldHaveStatus('To check')
+      page.riskInformationTask.shouldHaveStatus('To check')
+      page.electronicMonitoringTask.shouldHaveStatus('Incomplete')
       page.additionalDocumentsTask.shouldHaveStatus('Incomplete')
     })
   })
