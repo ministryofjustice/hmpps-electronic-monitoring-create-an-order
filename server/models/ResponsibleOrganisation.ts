@@ -10,7 +10,6 @@ export const ResponsibleOrganisationEnum = z.enum([
 
 export type ResponsibleOrganisation = z.infer<typeof ResponsibleOrganisationEnum>
 
-export const ResponsibleOrganisationField = ResponsibleOrganisationEnum
-  .or(z.literal(''))
+export const ResponsibleOrganisationField = ResponsibleOrganisationEnum.or(z.literal(''))
   .nullish()
   .transform(val => val || null)
