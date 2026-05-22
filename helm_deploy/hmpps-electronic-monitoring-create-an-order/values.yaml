@@ -70,8 +70,9 @@ generic-service:
 
   allowlist:
     groups:
-      - digital_staff_and_mojo
       - moj_cloud_platform
+      - prisons
+      - private_prisons
 
 gotenberg:
   nameOverride: gotenberg
