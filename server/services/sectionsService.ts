@@ -47,7 +47,7 @@ export default class SectionService {
 
     const startDate = order.monitoringConditions.startDate
       ? new Date(order.monitoringConditions.startDate)
-      : new Date(1900, 0, 0)
+      : new Date(2040, 0, 0)
     const startDateIsInPast = startDate < new Date()
 
     if (
