@@ -290,7 +290,7 @@ context('The kitchen sink', () => {
             responsible_officer_details_received: 'Yes',
             responsible_officer_email: '',
             responsible_officer_phone: formatAsFmsPhoneNumber(interestedParties.responsibleOfficerContactNumber),
-            responsible_officer_name: interestedParties.responsibleOfficerName,
+            responsible_officer_name: interestedParties.responsibleOfficer,
             responsible_organization: interestedParties.responsibleOrganisation,
             ro_post_code: '',
             ro_address_1: '',

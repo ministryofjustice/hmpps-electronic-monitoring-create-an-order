@@ -167,12 +167,12 @@ export default class OrderTasksPage extends AppPage {
     if (newDeviceWearerFlow && interestedParties.notifyingOrganisation !== 'Home Office') {
       this.interestedPartiesTask.click()
 
-      if (interestedParties.responsibleOfficerName) {
+      if (interestedParties.responsibleOfficer) {
         const responsibleOfficerPage = Page.verifyOnPage(ResponsibleOfficerPage)
         responsibleOfficerPage.form.fillInWith({
-          firstName: interestedParties.responsibleOfficerName.split(' ')[0],
-          lastName: interestedParties.responsibleOfficerName.split(' ')[1],
-          email: 'a@b.com',
+          firstName: interestedParties.responsibleOfficer.firstName,
+          lastName: interestedParties.responsibleOfficer.lastName,
+          email: interestedParties.responsibleOfficer.email,
         })
         responsibleOfficerPage.form.continueButton.click()
       }
@@ -181,13 +181,16 @@ export default class OrderTasksPage extends AppPage {
       responsibleOrgPage.form.fillInWith(interestedParties)
       responsibleOrgPage.form.continueButton.click()
 
-      if (interestedParties.responsibleOrganisation === 'PROBATION') {
+      if (interestedParties.responsibleOrganisation.toUpperCase() === 'PROBATION') {
         const nationalSecurityDirectoratePage = Page.verifyOnPage(NationalSecurityDirectoratePage)
         nationalSecurityDirectoratePage.form.fillInWith('No')
         nationalSecurityDirectoratePage.form.continueButton.click()
       }
 
-      if (interestedParties.responsibleOrganisation === 'Probation' && probationDeliveryUnit !== undefined) {
+      if (
+        interestedParties.responsibleOrganisation.toUpperCase() === 'PROBATION' &&
+        probationDeliveryUnit !== undefined
+      ) {
         const probationDeliveryUnitPage = Page.verifyOnPage(
           ProbationDeliveryUnitPage,
           'About the Responsible Organisation',

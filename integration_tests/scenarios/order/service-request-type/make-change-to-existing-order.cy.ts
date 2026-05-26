@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAddress, createFakeAdultDeviceWearer } from '../../../mockApis/faker'
+import { createFakeAddress, createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
 import { stubAttachments } from '../../utils'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import SearchPage from '../../../pages/search'
@@ -17,8 +17,6 @@ import IsRejectionPage from '../../../e2e/order/edit-order/is-rejection/isReject
 import ReceiptPage from '../../../pages/order/receipt'
 import IsAddressChangePage from '../../../e2e/order/edit-order/is-address-change/isAddressChangePage'
 import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
-import fillInInterestedPartiesWith from '../../../utils/scenario-flows/interested-parties.cy'
-import InterestedPartiesCheckYourAnswersPage from '../../../e2e/order/interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
 
 context('Service-Request-Types', () => {
   let orderSummaryPage: OrderSummaryPage
@@ -61,23 +59,8 @@ context('Service-Request-Types', () => {
       fileName: 'test.pdf',
     },
   }
-  const interestedParties = {
-    notifyingOrganisation: {
-      notifyingOrganisation: 'Prison service',
-      notifyingOrganisationEmailAddress: 'a@b.com',
-      prison: 'Altcourse Prison',
-    },
-    responsibleOfficer: {
-      firstName: 'John',
-      lastName: 'Smith',
-      email: 'John@Smith.com',
-    },
-    responsibleOrganisation: {
-      responsibleOrganisation: 'Probation',
-      probationRegion: 'Wales',
-    },
-    pdu: 'Dyfed Powys',
-  }
+  const interestedParties = createFakeInterestedParties('Prison', 'Probation', undefined, 'Wales')
+  const probationDeliveryUnit = { unit: 'Wales' }
   const monitoringOrderTypeDescription = {
     sentenceType: 'Standard Determinate Sentence',
     hdc: 'Yes',
@@ -95,19 +78,11 @@ context('Service-Request-Types', () => {
 
   const fillInNewOrder = () => {
     createNewOrder({
-      notifyingOrganisation: interestedParties.notifyingOrganisation,
+      notifyingOrganisation: interestedParties,
       stubSignin: false,
     })
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-    orderSummaryPage.interestedPartiesTask.click()
 
-    fillInInterestedPartiesWith({
-      continueOnCya: false,
-      ...interestedParties,
-    })
-    const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
-    cyaPage.return()
-    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
     orderSummaryPage.fillInNewOrderWith({
       deviceWearerDetails,
       responsibleAdultDetails: undefined,
@@ -125,7 +100,7 @@ context('Service-Request-Types', () => {
       curfewTimetable: undefined,
       attendanceMonitoringDetails: undefined,
       files,
-      probationDeliveryUnit: undefined,
+      probationDeliveryUnit,
       installationLocation: undefined,
       installationAppointment: undefined,
       newDeviceWearerFlow: true,
@@ -162,8 +137,7 @@ context('Service-Request-Types', () => {
     }
 
     orderSummaryPage.fillInVariationsDetails({ variationDetails: variation })
-    orderSummaryPage.interestedPartiesTask.click()
-    Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage, 'Check your answers').continue()
+    orderSummaryPage.aboutTheDeviceWearerTask.click()
     Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').continue()
     Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers').continue()
     Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers').continue()
