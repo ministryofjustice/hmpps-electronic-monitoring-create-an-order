@@ -42,6 +42,7 @@ import MonitoringTypePage from '../../e2e/order/monitoring-conditions/order-type
 import fillInAboutTheDeviceWearer from '../../utils/scenario-flows/about-the-device-wearer-flow.cy'
 import ResponsibleOrganisationPage from '../../e2e/order/interested-parties/responsible-organisation/responsibleOrganisationPage'
 import NationalSecurityDirectoratePage from '../../e2e/order/interested-parties/national-security-directorate/nationalSecurityDirectoratePage'
+import ResponsibleOfficerPage from '../../e2e/order/interested-parties/responsible-officer/responsibleOfficerPage'
 
 export default class OrderTasksPage extends AppPage {
   constructor(isOldVersionPage: boolean = false) {
@@ -165,13 +166,26 @@ export default class OrderTasksPage extends AppPage {
   }): OrderTasksPage {
     if (newDeviceWearerFlow && interestedParties.notifyingOrganisation !== 'Home Office') {
       this.interestedPartiesTask.click()
-      const interestedPartiesPage = Page.verifyOnPage(ResponsibleOrganisationPage)
-      interestedPartiesPage.form.fillInWith(interestedParties)
-      interestedPartiesPage.form.continueButton.click()
 
-      const nationalSecurityDirectoratePage = Page.verifyOnPage(NationalSecurityDirectoratePage)
-      nationalSecurityDirectoratePage.form.fillInWith('No')
-      nationalSecurityDirectoratePage.form.continueButton.click()
+      if (interestedParties.responsibleOfficerName) {
+        const responsibleOfficerPage = Page.verifyOnPage(ResponsibleOfficerPage)
+        responsibleOfficerPage.form.fillInWith({
+          firstName: interestedParties.responsibleOfficerName.split(' ')[0],
+          lastName: interestedParties.responsibleOfficerName.split(' ')[1],
+          email: 'a@b.com',
+        })
+        responsibleOfficerPage.form.continueButton.click()
+      }
+
+      const responsibleOrgPage = Page.verifyOnPage(ResponsibleOrganisationPage)
+      responsibleOrgPage.form.fillInWith(interestedParties)
+      responsibleOrgPage.form.continueButton.click()
+
+      if (interestedParties.responsibleOrganisation === 'PROBATION') {
+        const nationalSecurityDirectoratePage = Page.verifyOnPage(NationalSecurityDirectoratePage)
+        nationalSecurityDirectoratePage.form.fillInWith('No')
+        nationalSecurityDirectoratePage.form.continueButton.click()
+      }
 
       if (interestedParties.responsibleOrganisation === 'Probation' && probationDeliveryUnit !== undefined) {
         const probationDeliveryUnitPage = Page.verifyOnPage(

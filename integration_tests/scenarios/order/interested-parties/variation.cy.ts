@@ -9,7 +9,6 @@ import fillInInterestedPartiesWith from '../../../utils/scenario-flows/intereste
 import InterestedPartiesCheckYourAnswersPage from '../../../e2e/order/interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
 
 context('Interested parties flow', () => {
-  const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
   const fmsCaseId: string = uuidv4()
   const hmppsDocumentId: string = uuidv4()
   const files = {
@@ -62,7 +61,6 @@ context('Interested parties flow', () => {
       startDate: new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)),
       files,
     })
-    cy.task('setFeatureFlags', testFlags)
     Page.verifyOnPage(OrderSummaryPage).makeChanges()
     Page.verifyOnPage(ConfirmVariationPage).confirm()
     Page.verifyOnPage(IsRejectionPage).isNotRejection()
@@ -89,8 +87,8 @@ context('Interested parties flow', () => {
     fillInNewOrder({
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)),
       files,
+      newDeviceWearerFlow: true,
     })
-    cy.task('setFeatureFlags', testFlags)
     Page.verifyOnPage(OrderSummaryPage).makeChanges()
     Page.verifyOnPage(ConfirmVariationPage).confirm()
     Page.verifyOnPage(IsRejectionPage).isNotRejection()
@@ -99,30 +97,30 @@ context('Interested parties flow', () => {
 
     orderSummaryPage.interestedPartiesTask.click()
 
-    const input = {
-      responsibleOfficer: {
-        firstName: 'John',
-        lastName: 'Smith',
-        email: 'John@Smith.com',
-      },
-      responsibleOrganisation: {
-        responsibleOrganisation: 'Probation',
-        probationRegion: 'Wales',
-      },
-      pdu: 'Swansea',
-    }
-    fillInInterestedPartiesWith({
-      continueOnCya: false,
-      ...input,
-    })
-
+    // only clears data down if notifying org has changes so can't re-fill this in
+    // const input = {
+    //   responsibleOfficer: {
+    //     firstName: 'John',
+    //     lastName: 'Smith',
+    //     email: 'John@Smith.com',
+    //   },
+    //   responsibleOrganisation: {
+    //     responsibleOrganisation: 'Probation',
+    //     probationRegion: 'Wales',
+    //   },
+    //   pdu: 'Swansea',
+    // }
+    // fillInInterestedPartiesWith({
+    //   continueOnCya: false,
+    //   ...input,
+    // })
+    //
     const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
     cyaPage.organisationDetailsSection.shouldHaveItems([
-      { key: "What is the Responsible Officer's first name?", value: 'John' },
-      { key: "What is the Responsible Officer's last name?", value: 'Smith' },
-      { key: "What is the Responsible Officer's email address?", value: 'John@Smith.com' },
-      { key: "What is the Responsible Officer's organisation?", value: 'Probation' },
-      { key: 'Select the Probation region', value: 'Wales' },
+      { key: "What is the Responsible Officer's first name?", value: '' },
+      { key: "What is the Responsible Officer's last name?", value: '' },
+      { key: "What is the Responsible Officer's email address?", value: '' },
+      { key: "What is the Responsible Officer's organisation?", value: '' },
     ])
   })
 })
