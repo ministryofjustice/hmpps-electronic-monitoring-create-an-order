@@ -12,6 +12,7 @@ import { Order } from '../../../server/models/Order'
 import paths from '../../../server/constants/paths'
 import DetailsOfInstallationPage from './access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
 import ResponsibleOfficerPage from './interested-parties/responsible-officer/responsibleOfficerPage'
+import InterestedPartiesCheckYourAnswersPage from './interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
 
 const mockOrderId = uuidv4()
 
@@ -508,7 +509,9 @@ context('Order Summary', () => {
             notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: '',
             notifyingOrganisationEmail: '',
-            responsibleOfficerName: '',
+            responsibleOfficerFirstName: 'test',
+            responsibleOfficerLastName: '',
+            responsibleOfficerEmail: '@email',
             responsibleOfficerPhoneNumber: '',
             responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
             responsibleOrganisationAddress: {
@@ -756,7 +759,15 @@ context('Order Summary', () => {
     it('should enable submit button when all section completed and checked', () => {
       let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
-      page.aboutTheDeviceWearerTask.link.click()
+      page.interestedPartiesTask.link.click()
+      const ipCYApage = Page.verifyOnPage(
+        InterestedPartiesCheckYourAnswersPage,
+        { orderId: mockOrderId },
+        {},
+        'Check your answers',
+      )
+      ipCYApage.continueButton().click()
+
       const dwCYApage = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
       dwCYApage.continueButton().click()
 
