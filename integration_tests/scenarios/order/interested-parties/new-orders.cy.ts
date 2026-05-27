@@ -58,41 +58,6 @@ context('Interested parties flow', () => {
     ])
   })
 
-  it('Notifying organisation is Home Office and responsible organisation is Home Office', () => {
-    cy.task('stubSignIn', {
-      name: 'john smith',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'ROLE_EM_CEMO_HOME_OFFICE'],
-      stubCohort: false,
-      userId: '123456781',
-    })
-
-    const input = {
-      notifyingOrganisation: {
-        notifyingOrganisationEmailAddress: 'a@b.com',
-      },
-      responsibleOrganisation: {
-        responsibleOrganisation: 'Home Office',
-        responsibleOrganisationEmailAddress: 'a@b.com',
-      },
-    }
-
-    createNewOrder({ notifyingOrganisation: input.notifyingOrganisation })
-
-    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-
-    orderSummaryPage.interestedPartiesTask.click()
-
-    fillInInterestedPartiesWith({
-      continueOnCya: false,
-      ...input,
-    })
-    const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
-    cyaPage.organisationDetailsSection.shouldHaveItems([
-      { key: "What is the Responsible Officer's organisation?", value: 'Home Office' },
-      { key: "What is the Responsible Organisation's email address? (optional)", value: 'a@b.com' },
-    ])
-  })
-
   it('Notifying organisation is prison and responsible organisation is probation', () => {
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',

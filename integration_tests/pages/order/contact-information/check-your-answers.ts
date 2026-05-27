@@ -3,7 +3,7 @@ import CheckYourAnswersPage from '../../checkYourAnswersPage'
 import SummaryListComponent from '../../components/summaryListComponent'
 
 export default class ContactInformationCheckYourAnswersPage extends CheckYourAnswersPage {
-  constructor(heading: string, isOldVersion?: boolean) {
+  constructor(heading: string, isOldVersion?: boolean, section: string = 'Contact information') {
     let path: string
     if (isOldVersion) {
       path = paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS_VERSION
@@ -11,7 +11,7 @@ export default class ContactInformationCheckYourAnswersPage extends CheckYourAns
       path = paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS
     }
 
-    super(heading, path, 'Contact information')
+    super(heading, path, section)
   }
 
   // SECTIONS

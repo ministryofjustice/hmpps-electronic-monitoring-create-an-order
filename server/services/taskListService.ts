@@ -102,7 +102,7 @@ type SectionBlock = {
 
 type FormData = Record<string, string | boolean>
 
-const canBeCompleted = (task: Task, formData: FormData): boolean => {
+export const canBeCompleted = (task: Task, formData: FormData): boolean => {
   if (([PAGES.secondaryAddress, PAGES.tertiaryAddress] as Page[]).includes(task.name)) {
     if (task.name === PAGES.secondaryAddress) {
       if (!(formData.hasAnotherAddress === true && formData.addressType === 'primary')) {
@@ -944,6 +944,22 @@ export default class TaskListService {
     }
 
     return (sectionTasks.find(task => task.path.includes('check-your-answers')) || sectionTasks[0]).path
+  }
+
+  getNextTaskPath(sectionTasks: Task[], orderId: string, versionId?: string) {
+    let path: string
+
+    const firstAvailableTask = sectionTasks.find(task => canBeCompleted(task, {}))
+
+    path = (firstAvailableTask || sectionTasks[0]).path
+
+    path = path.replace(':orderId', orderId)
+
+    if (versionId) {
+      path = path.replace(`order/${orderId}`, `order/${orderId}/version/${versionId}`)
+    }
+
+    return path
   }
 }
 

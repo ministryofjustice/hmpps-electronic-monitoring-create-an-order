@@ -40,6 +40,9 @@ import TypesOfMonitoringNeededPage from '../../e2e/order/monitoring-conditions/o
 import DapoPage from '../../e2e/order/access-needs-installation-risk/offences/dapo/DapoPage'
 import MonitoringTypePage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-type/MonitoringTypesPage'
 import fillInAboutTheDeviceWearer from '../../utils/scenario-flows/about-the-device-wearer-flow.cy'
+import ResponsibleOrganisationPage from '../../e2e/order/interested-parties/responsible-organisation/responsibleOrganisationPage'
+import NationalSecurityDirectoratePage from '../../e2e/order/interested-parties/national-security-directorate/nationalSecurityDirectoratePage'
+import ResponsibleOfficerPage from '../../e2e/order/interested-parties/responsible-officer/responsibleOfficerPage'
 
 export default class OrderTasksPage extends AppPage {
   constructor(isOldVersionPage: boolean = false) {
@@ -150,6 +153,7 @@ export default class OrderTasksPage extends AppPage {
     curfewConditionDetails,
     curfewTimetable,
     enforcementZoneDetails,
+    secondEnforcementZoneDetails = undefined,
     alcoholMonitoringDetails,
     trailMonitoringDetails,
     attendanceMonitoringDetails,
@@ -161,7 +165,52 @@ export default class OrderTasksPage extends AppPage {
     monitoringOrderTypeDescription = undefined,
     newDeviceWearerFlow = false,
   }): OrderTasksPage {
-    this.aboutTheDeviceWearerTask.click()
+    if (newDeviceWearerFlow && interestedParties.notifyingOrganisation !== 'Home Office') {
+      this.interestedPartiesTask.click()
+
+      if (interestedParties.responsibleOfficer) {
+        const responsibleOfficerPage = Page.verifyOnPage(ResponsibleOfficerPage)
+        responsibleOfficerPage.form.fillInWith({
+          firstName: interestedParties.responsibleOfficer.firstName,
+          lastName: interestedParties.responsibleOfficer.lastName,
+          email: interestedParties.responsibleOfficer.email,
+        })
+        responsibleOfficerPage.form.continueButton.click()
+      }
+
+      const responsibleOrgPage = Page.verifyOnPage(ResponsibleOrganisationPage)
+      responsibleOrgPage.form.fillInWith(interestedParties)
+      responsibleOrgPage.form.continueButton.click()
+
+      if (interestedParties.responsibleOrganisation.toUpperCase() === 'PROBATION') {
+        const nationalSecurityDirectoratePage = Page.verifyOnPage(NationalSecurityDirectoratePage)
+        nationalSecurityDirectoratePage.form.fillInWith('No')
+        nationalSecurityDirectoratePage.form.continueButton.click()
+      }
+
+      if (
+        interestedParties.responsibleOrganisation.toUpperCase() === 'PROBATION' &&
+        probationDeliveryUnit !== undefined
+      ) {
+        const probationDeliveryUnitPage = Page.verifyOnPage(
+          ProbationDeliveryUnitPage,
+          'About the Responsible Organisation',
+        )
+        probationDeliveryUnitPage.form.fillInWith(probationDeliveryUnit)
+        probationDeliveryUnitPage.form.saveAndContinueButton.click()
+      }
+
+      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
+        ContactInformationCheckYourAnswersPage,
+        'Check your answer',
+        '',
+        false,
+        'About the Responsible Organisation',
+      )
+      contactInformationCheckYourAnswersPage.continueButton().click()
+    } else {
+      this.aboutTheDeviceWearerTask.click()
+    }
 
     this.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
@@ -178,7 +227,7 @@ export default class OrderTasksPage extends AppPage {
 
     if (Array.isArray(monitoringOrderTypeDescription.monitoringCondition)) {
       monitoringOrderTypeDescription.monitoringCondition.forEach((condition: string, index: number) => {
-        const monitoringConditionPage = Page.verifyOnPage(MonitoringTypePage)
+        let monitoringConditionPage = Page.verifyOnPage(MonitoringTypePage)
         monitoringConditionPage.form.fillInWith(condition)
         monitoringConditionPage.form.continueButton.click()
 
@@ -200,6 +249,22 @@ export default class OrderTasksPage extends AppPage {
             },
             false,
           )
+          if (secondEnforcementZoneDetails) {
+            const monitoringConditionsListPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)
+            monitoringConditionsListPage.form.fillInWith('Yes')
+            monitoringConditionsListPage.form.saveAndContinueButton.click()
+
+            monitoringConditionPage = Page.verifyOnPage(MonitoringTypePage)
+            monitoringConditionPage.form.fillInWith(condition)
+            monitoringConditionPage.form.continueButton.click()
+
+            this.fillInEnforcementZoneOrderDetailsWith(
+              {
+                enforcementZoneDetails: secondEnforcementZoneDetails,
+              },
+              false,
+            )
+          }
         }
 
         if (condition === 'Trail monitoring') {

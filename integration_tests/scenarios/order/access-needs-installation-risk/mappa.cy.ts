@@ -2,10 +2,10 @@ import DetailsOfInstallationPage from '../../../e2e/order/access-needs-installat
 import IsMappaPage from '../../../e2e/order/access-needs-installation-risk/is-mappa/IsMappaPage'
 import MappaPage from '../../../e2e/order/access-needs-installation-risk/mappa/MappaPage'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
-import IndexPage from '../../../pages'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import OrderSummaryPage from '../../../pages/order/summary'
 import Page from '../../../pages/page'
+import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
 
 context('offences', () => {
   let orderSummaryPage: OrderSummaryPage
@@ -32,12 +32,13 @@ context('offences', () => {
 
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'HOME_OFFICE'],
     })
     cy.signIn()
 
-    const indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.newOrderFormButton.click()
+    createNewOrder({
+      notifyingOrganisation: createFakeInterestedParties('Home Office', 'Home Office', undefined, 'North West'),
+    })
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
@@ -49,10 +50,9 @@ context('offences', () => {
   })
 
   it('Notifying organisation is Home Office, mappa flow', () => {
-    const interestedParties = createFakeInterestedParties('Home Office', 'Home Office')
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
-      interestedParties,
+      newDeviceWearerFlow: true,
     })
 
     const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
@@ -85,10 +85,9 @@ context('offences', () => {
   })
 
   it('Notifying organisation is Home Office, not mappa flow', () => {
-    const interestedParties = createFakeInterestedParties('Home Office', 'Home Office')
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
-      interestedParties,
+      newDeviceWearerFlow: true,
     })
 
     const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)

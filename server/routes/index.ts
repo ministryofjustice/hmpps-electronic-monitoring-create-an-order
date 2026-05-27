@@ -88,6 +88,7 @@ export default function routes({
   interestedPartiesStoreService,
   updateInterestedPartiesService,
   postcodeService,
+  sectionService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -154,7 +155,7 @@ export default function routes({
     taskListService,
   )
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
-  const orderController = new OrderController(auditService, orderService, taskListService)
+  const orderController = new OrderController(auditService, orderService, sectionService)
   const responsibleAdultController = new ResponsibleAdultController(
     auditService,
     deviceWearerResponsibleAdultService,
