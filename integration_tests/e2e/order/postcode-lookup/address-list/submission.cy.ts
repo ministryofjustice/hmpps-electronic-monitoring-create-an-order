@@ -2,7 +2,6 @@ import { v4 as uuidv4 } from 'uuid'
 import AddressListPage from './addressListPage'
 import Page from '../../../../pages/page'
 import FindAddressPage from '../find-address/findAddressPage'
-import InterestedPartiesPage from '../../../../pages/order/contact-information/interested-parties'
 import OrderTasksPage from '../../../../pages/order/summary'
 import DeviceWearerCheckYourAnswersPage from '../../../../pages/order/about-the-device-wearer/check-your-answers'
 
@@ -59,7 +58,7 @@ context('address list', () => {
     page.form.fillInWith('No')
     page.form.saveAndContinueButton.click()
 
-    Page.verifyOnPage(InterestedPartiesPage, { orderId: mockOrderId })
+    Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers')
   })
 
   it('can select no to additional addresses when interested parties flow is enabled', () => {
@@ -122,7 +121,7 @@ context('address list', () => {
 
       page.form.saveAndContinueButton.click()
 
-      Page.verifyOnPage(InterestedPartiesPage, { orderId: mockOrderId })
+      Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers')
     })
   })
 })

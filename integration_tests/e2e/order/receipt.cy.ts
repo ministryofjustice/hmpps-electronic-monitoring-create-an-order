@@ -239,7 +239,6 @@ context('Receipt', () => {
         { key: 'Any other risks to be aware of? (optional)', value: 'Information about potential risks' },
       ])
       page.deviceWearerSection.shouldExist()
-      page.contactInformationSection.shouldExist()
       page.monitoringConditionsSection.shouldExist()
     })
 

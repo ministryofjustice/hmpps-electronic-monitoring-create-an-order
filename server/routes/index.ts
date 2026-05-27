@@ -88,6 +88,7 @@ export default function routes({
   interestedPartiesStoreService,
   updateInterestedPartiesService,
   postcodeService,
+  sectionService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -148,13 +149,13 @@ export default function routes({
   )
   const removeMonitoringTypeController = new RemoveMonitoringTypeController(removeMonitoringTypeService)
   const noFixedAbodeController = new NoFixedAbodeController(auditService, deviceWearerService, taskListService)
-  const notifyingOrganisationController = new InterestedPartiesController(
+  const interestedPartiesController = new InterestedPartiesController(
     auditService,
     interestedPartiesService,
     taskListService,
   )
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
-  const orderController = new OrderController(auditService, orderService, taskListService)
+  const orderController = new OrderController(auditService, orderService, sectionService)
   const responsibleAdultController = new ResponsibleAdultController(
     auditService,
     deviceWearerResponsibleAdultService,
@@ -197,7 +198,7 @@ export default function routes({
     taskListService,
   )
 
-  const interestedPartiesController = new InterestedPartiesCheckYourAnswersController(
+  const interestedPartiesCheckYourAsnwerController = new InterestedPartiesCheckYourAnswersController(
     taskListService,
     orderChecklistService,
   )
@@ -283,8 +284,8 @@ export default function routes({
   post(paths.CONTACT_INFORMATION.ADDRESSES, addressController.update)
 
   // Interested parties
-  get(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, notifyingOrganisationController.view)
-  post(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, notifyingOrganisationController.update)
+  get(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, interestedPartiesController.view)
+  post(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, interestedPartiesController.update)
 
   // Probation delivery unit
   get(paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT, probationDeliveryUnitController.view)
@@ -397,10 +398,10 @@ export default function routes({
   get(paths.VARIATION.CREATE_VARIATION, isAddressChangeController.view)
   post(paths.VARIATION.CREATE_VARIATION, isAddressChangeController.update)
 
-  get(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS_VERSION, interestedPartiesController.view)
-  post(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS_VERSION, interestedPartiesController.update)
-  get(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS, interestedPartiesController.view)
-  post(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS, interestedPartiesController.update)
+  get(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS_VERSION, interestedPartiesCheckYourAsnwerController.view)
+  post(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS_VERSION, interestedPartiesCheckYourAsnwerController.update)
+  get(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS, interestedPartiesCheckYourAsnwerController.view)
+  post(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS, interestedPartiesCheckYourAsnwerController.update)
 
   router.use(
     paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.BASE_PATH,

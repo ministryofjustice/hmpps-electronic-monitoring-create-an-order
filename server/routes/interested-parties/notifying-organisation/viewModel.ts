@@ -16,7 +16,6 @@ type NotifyingOrganisationViewModel = ViewModel<
 }
 
 const construct = (
-  data: InterestedParties,
   formData: NotifyingOrganisationInput | undefined,
   errors: ValidationResult,
   order: Order,
@@ -24,19 +23,19 @@ const construct = (
 ): NotifyingOrganisationViewModel => {
   if (formData) return constructFromFormData(formData, errors, order, cohort)
 
-  return constructFromData(data, order, cohort)
+  return constructFromData(order, cohort)
 }
 
-const constructFromData = (data: InterestedParties, order: Order, cohort?: string): NotifyingOrganisationViewModel => {
+const constructFromData = (order: Order, cohort?: string): NotifyingOrganisationViewModel => {
   return {
     notifyingOrganisation: {
-      value: data.notifyingOrganisation || '',
+      value: order.interestedParties?.notifyingOrganisation || '',
     },
     notifyingOrganisationName: {
-      value: data.notifyingOrganisationName || '',
+      value: order.interestedParties?.notifyingOrganisationName || '',
     },
     notifyingOrganisationEmail: {
-      value: data.notifyingOrganisationEmail || '',
+      value: order.interestedParties?.notifyingOrganisationEmail || '',
     },
     errorSummary: null,
     DDv5: isOrderDataDictionarySameOrAbove('DDV5', order),

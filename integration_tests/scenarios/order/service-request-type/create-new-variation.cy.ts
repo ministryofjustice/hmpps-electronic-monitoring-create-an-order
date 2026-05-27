@@ -9,6 +9,7 @@ import ServiceRequestTypePage from '../../../e2e/order/variation/service-request
 import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
 import ReceiptPage from '../../../pages/order/receipt'
 import IsAddressChangePage from '../../../e2e/order/edit-order/is-address-change/isAddressChangePage'
+import NotifyingOrganisationPage from '../../../e2e/order/interested-parties/notifying-organisation/notifyingOrganisationPage'
 
 context('Service-Request-Types', () => {
   const testFlags = {
@@ -49,7 +50,9 @@ context('Service-Request-Types', () => {
       fileName: 'test.pdf',
     },
   }
-  const interestedParties = createFakeInterestedParties('Prison', 'Home Office', 'Altcourse Prison', null)
+  const interestedParties = createFakeInterestedParties('Prison', 'Probation', undefined, 'Wales')
+  const pdu = { unit: 'Dyfed Powys' }
+
   const monitoringOrderTypeDescription = {
     sentenceType: 'Standard Determinate Sentence',
     hdc: 'Yes',
@@ -83,10 +86,14 @@ context('Service-Request-Types', () => {
       page.form.continueButton.click()
     }
 
-    let orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+    const notifyingOrganisationPage = Page.verifyOnPage(NotifyingOrganisationPage)
+    notifyingOrganisationPage.form.fillInWith(interestedParties)
+    notifyingOrganisationPage.form.continueButton.click()
+
+    const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+
     orderSummaryPage.fillInVariationsDetails({ variationDetails: variation })
 
-    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
     orderSummaryPage.fillInNewOrderWith({
       deviceWearerDetails,
       responsibleAdultDetails: undefined,
@@ -104,9 +111,10 @@ context('Service-Request-Types', () => {
       curfewTimetable: undefined,
       attendanceMonitoringDetails: undefined,
       files,
-      probationDeliveryUnit: undefined,
+      probationDeliveryUnit: pdu,
       installationLocation: undefined,
       installationAppointment: undefined,
+      newDeviceWearerFlow: true,
     })
 
     orderSummaryPage.submitOrderButton.click()

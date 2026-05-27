@@ -10,7 +10,7 @@ context('interested parties check answers page', () => {
 
     cy.signIn()
   })
-  context('with full information in the past', () => {
+  context('with full information in the future', () => {
     beforeEach(() => {
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
@@ -35,7 +35,7 @@ context('interested parties check answers page', () => {
             unit: 'COUNTY_DURHAM_AND_DARLINGTON',
           },
           monitoringConditions: {
-            startDate: new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)),
+            startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)),
             endDate: '2030-02-01T00:00:00Z',
             orderType: 'CIVIL',
             curfew: false,
@@ -51,53 +51,6 @@ context('interested parties check answers page', () => {
             prarr: 'UNKNOWN',
             pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
             offenceType: '',
-          },
-        },
-      })
-    })
-
-    context('with full information in the future', () => {
-      beforeEach(() => {
-        cy.task('stubCemoGetOrder', {
-          httpStatus: 200,
-          id: mockOrderId,
-          status: 'SUBMITTED',
-          order: {
-            dataDictionaryVersion: 'DDV6',
-            interestedParties: {
-              notifyingOrganisation: 'PRISON',
-              notifyingOrganisationName: 'ALTCOURSE_PRISON',
-              notifyingOrganisationEmail: 'notifying@organisation',
-
-              responsibleOfficerFirstName: 'officer',
-              responsibleOfficerLastName: 'name',
-              responsibleOfficerEmail: 'officer@email',
-
-              responsibleOrganisation: 'PROBATION',
-              responsibleOrganisationEmail: 'responsible@organisation',
-              responsibleOrganisationRegion: 'WALES',
-            },
-            probationDeliveryUnit: {
-              unit: 'COUNTY_DURHAM_AND_DARLINGTON',
-            },
-            monitoringConditions: {
-              startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)),
-              endDate: '2030-02-01T00:00:00Z',
-              orderType: 'CIVIL',
-              curfew: false,
-              exclusionZone: false,
-              trail: true,
-              mandatoryAttendance: false,
-              alcohol: false,
-              conditionType: 'BAIL_ORDER',
-              orderTypeDescription: '',
-              sentenceType: 'IPP',
-              issp: 'YES',
-              hdc: 'NO',
-              prarr: 'UNKNOWN',
-              pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
-              offenceType: '',
-            },
           },
         })
       })

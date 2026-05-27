@@ -1,7 +1,7 @@
 import { Order } from '../models/Order'
 import paths from '../constants/paths'
 import { AddressType } from '../models/Address'
-import { convertBooleanToEnum, isNotNullOrUndefined, isNullOrUndefined } from '../utils/utils'
+import { convertBooleanToEnum, isNotNullOrEmptyString, isNotNullOrUndefined, isNullOrUndefined } from '../utils/utils'
 import AttachmentType from '../models/AttachmentType'
 import OrderChecklistService from './orderChecklistService'
 import FeatureFlags from '../utils/featureFlags'
@@ -65,6 +65,8 @@ const PAGES = {
   variationDetails: 'VARIATION_DETAILS',
   installationLocation: 'INSTALLATION_LOCATION',
   installationAppointment: 'INSTALLATION_APPOINTMENT',
+  responsibleOrganisation: 'RESPONSIBLE_ORGANISATION',
+  responsibleOfficer: 'RESPONSIBLE_OFFICER',
 } as const
 
 type Page = (typeof PAGES)[keyof typeof PAGES]
@@ -100,7 +102,7 @@ type SectionBlock = {
 
 type FormData = Record<string, string | boolean>
 
-const canBeCompleted = (task: Task, formData: FormData): boolean => {
+export const canBeCompleted = (task: Task, formData: FormData): boolean => {
   if (([PAGES.secondaryAddress, PAGES.tertiaryAddress] as Page[]).includes(task.name)) {
     if (task.name === PAGES.secondaryAddress) {
       if (!(formData.hasAnotherAddress === true && formData.addressType === 'primary')) {
@@ -170,13 +172,28 @@ export default class TaskListService {
     })
 
     if (FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')) {
-      tasks.push({
-        section: SECTIONS.interestParties,
-        name: PAGES.interestParties,
-        path: paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION,
-        state: STATES.required,
-        completed: isNotNullOrUndefined(order.interestedParties?.notifyingOrganisation),
-      })
+      if (
+        (notifyingOrganisationCourts as readonly string[]).indexOf(
+          order.interestedParties?.notifyingOrganisation ?? '',
+        ) > -1 ||
+        order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE'
+      ) {
+        tasks.push({
+          section: SECTIONS.interestParties,
+          name: PAGES.responsibleOrganisation,
+          path: paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION,
+          state: STATES.required,
+          completed: isNotNullOrEmptyString(order.interestedParties?.responsibleOrganisation),
+        })
+      } else {
+        tasks.push({
+          section: SECTIONS.interestParties,
+          name: PAGES.responsibleOfficer,
+          path: paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER,
+          state: STATES.required,
+          completed: isNotNullOrEmptyString(order.interestedParties?.responsibleOfficerFirstName),
+        })
+      }
 
       tasks.push({
         section: SECTIONS.interestParties,
@@ -940,6 +957,22 @@ export default class TaskListService {
   private isStartDateInTheFuture(date?: string): boolean {
     if (!date) return true
     return new Date(date) > new Date()
+  }
+  
+  getNextTaskPath(sectionTasks: Task[], orderId: string, versionId?: string) {
+    let path: string
+
+    const firstAvailableTask = sectionTasks.find(task => canBeCompleted(task, {}))
+
+    path = (firstAvailableTask || sectionTasks[0]).path
+
+    path = path.replace(':orderId', orderId)
+
+    if (versionId) {
+      path = path.replace(`order/${orderId}`, `order/${orderId}/version/${versionId}`)
+    }
+
+    return path
   }
 }
 

@@ -5,6 +5,7 @@ import YesNoQuestionPageController from '../../baseControllers/yes-no-question-p
 import ServiceRequestTypeService from '../serviceRequestTypeService'
 import getContent from '../../../i18n'
 import { Locales } from '../../../types/i18n/locale'
+import FeatureFlags from '../../../utils/featureFlags'
 
 export default class IsAddressChangeController extends YesNoQuestionPageController {
   constructor(private readonly service: ServiceRequestTypeService) {
@@ -39,8 +40,15 @@ export default class IsAddressChangeController extends YesNoQuestionPageControll
           accessToken: res.locals.user.token,
           type: 'REINSTALL_DEVICE',
         }
-        const id = await this.service.createNewVariation(input, req.order)
-        res.redirect(paths.ORDER.SUMMARY.replace(':orderId', id))
+        const order = await this.service.createNewVariation(input, req.order)
+        if (
+          order.interestedParties?.notifyingOrganisation ||
+          !FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')
+        ) {
+          res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
+        } else {
+          res.redirect(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', order.id))
+        }
       } else {
         res.redirect(paths.VARIATION.SERVICE_REQUEST_TYPE.replace(':orderId', orderId))
       }

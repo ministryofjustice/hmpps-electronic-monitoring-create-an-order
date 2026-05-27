@@ -13,6 +13,7 @@ import { appWithAllRoutes, flashProvider, unauthorisedUser, user } from './testu
 import TaskListService from '../services/taskListService'
 import OrderChecklistService from '../services/orderChecklistService'
 import OrderChecklistModel from '../models/OrderChecklist'
+import SectionsService from '../services/sectionsService'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -41,6 +42,7 @@ const mockOrderChecklistService = {
   getChecklist: jest.fn(),
 } as unknown as jest.Mocked<OrderChecklistService>
 const taskListService = new TaskListService(mockOrderChecklistService)
+const sectionService = new SectionsService(taskListService, mockOrderChecklistService)
 const mockSubmittedOrder = getMockSubmittedOrder()
 const mockDraftOrder = getMockOrder()
 
@@ -69,6 +71,7 @@ describe('authorised user', () => {
         deviceWearerService,
         orderSearchService,
         taskListService,
+        sectionService,
       },
       userSupplier: () => user,
     })
