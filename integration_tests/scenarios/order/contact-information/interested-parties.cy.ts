@@ -1,31 +1,28 @@
-import IndexPage from '../../../pages'
 import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
-import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
-import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
-import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
 import { createFakeInterestedParties } from '../../../mockApis/faker'
-import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
+import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
+import fillInInterestedPartiesWith from '../../../utils/scenario-flows/interested-parties.cy'
+import InterestedPartiesCheckYourAnswersPage from '../../../e2e/order/interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
 
 context('Police areas', () => {
   context('DDV6', () => {
     const populateNewOrder = interestedParties => {
-      const indexPage = Page.verifyOnPage(IndexPage)
-      indexPage.newOrderFormButton.click()
+      createNewOrder({
+        notifyingOrganisation: interestedParties,
+      })
+
       const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-      orderSummaryPage.contactInformationTask.click()
+      orderSummaryPage.interestedPartiesTask.click()
 
-      const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
-      contactDetailsPage.form.fillInWith({ contactNumber: '' })
-      contactDetailsPage.form.saveAndContinueButton.click()
-
-      const noFixedAbode = Page.verifyOnPage(NoFixedAbodePage)
-      noFixedAbode.form.fillInWith({ hasFixedAddress: 'No' })
-      noFixedAbode.form.saveAndContinueButton.click()
-
-      const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-      interestedPartiesPage.form.fillInWith(interestedParties)
-      interestedPartiesPage.form.saveAndContinueButton.click()
+      fillInInterestedPartiesWith({
+        responsibleOfficer: interestedParties.responsibleOfficer,
+        responsibleOrganisation: {
+          responsibleOrganisation: interestedParties.responsibleOrganisation,
+          policeArea: interestedParties.responsibleOrganisationRegion,
+        },
+        continueOnCya: false,
+      })
     }
 
     beforeEach(() => {
@@ -47,11 +44,11 @@ context('Police areas', () => {
         'National Crime Agency',
       )
       populateNewOrder(interestedParties)
-      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
-        ContactInformationCheckYourAnswersPage,
+      const interestedPartiesCheckYourAnswersPage = Page.verifyOnPage(
+        InterestedPartiesCheckYourAnswersPage,
         'Check your answer',
       )
-      contactInformationCheckYourAnswersPage.organisationDetailsSection.shouldHaveItems([
+      interestedPartiesCheckYourAnswersPage.organisationDetailsSection.shouldHaveItems([
         { key: 'Select the Police force area', value: 'National Crime Agency' },
       ])
     })

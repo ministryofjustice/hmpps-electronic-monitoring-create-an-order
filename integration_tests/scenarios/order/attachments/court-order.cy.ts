@@ -87,6 +87,7 @@ context('Service-Request-Types', () => {
     createNewOrder({
       notifyingOrganisation: interestedParties,
     })
+    interestedParties.responsibleOfficer = null
 
     const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
