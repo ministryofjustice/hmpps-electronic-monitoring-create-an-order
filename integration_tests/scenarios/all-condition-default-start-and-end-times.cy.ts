@@ -2,9 +2,9 @@ import { v4 as uuidv4 } from 'uuid'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../mockApis/faker'
 
 import Page from '../pages/page'
-import IndexPage from '../pages/index'
 import OrderSummaryPage from '../pages/order/summary'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from './utils'
+import createNewOrder from '../utils/scenario-flows/create-new-order.cy'
 
 context('The kitchen sink', () => {
   const fmsCaseId: string = uuidv4()
@@ -126,8 +126,7 @@ context('The kitchen sink', () => {
 
     it('With default start time and end time, british time is send to FMS', () => {
       cy.signIn()
-      const indexPage = Page.verifyOnPage(IndexPage)
-      indexPage.newOrderFormButton.click()
+      createNewOrder({ notifyingOrganisation: interestedParties })
 
       const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       cacheOrderId()
@@ -151,6 +150,7 @@ context('The kitchen sink', () => {
         probationDeliveryUnit,
         installationLocation: undefined,
         installationAppointment: undefined,
+        newDeviceWearerFlow: true,
       })
       orderSummaryPage.submitOrderButton.click()
       cy.task('verifyFMSCreateDeviceWearerRequestReceived', {
@@ -288,9 +288,9 @@ context('The kitchen sink', () => {
             pdu_responsible_email: '',
             planned_order_end_date: '',
             responsible_officer_details_received: 'Yes',
-            responsible_officer_email: '',
-            responsible_officer_phone: formatAsFmsPhoneNumber(interestedParties.responsibleOfficerContactNumber),
-            responsible_officer_name: interestedParties.responsibleOfficer,
+            responsible_officer_email: interestedParties.responsibleOfficer.email,
+            responsible_officer_phone: null,
+            responsible_officer_name: `${interestedParties.responsibleOfficer.firstName} ${interestedParties.responsibleOfficer.lastName}`,
             responsible_organization: interestedParties.responsibleOrganisation,
             ro_post_code: '',
             ro_address_1: '',

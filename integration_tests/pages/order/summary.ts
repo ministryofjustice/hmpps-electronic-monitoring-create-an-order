@@ -153,6 +153,7 @@ export default class OrderTasksPage extends AppPage {
     curfewConditionDetails,
     curfewTimetable,
     enforcementZoneDetails,
+    secondEnforcementZoneDetails = undefined,
     alcoholMonitoringDetails,
     trailMonitoringDetails,
     attendanceMonitoringDetails,
@@ -226,7 +227,7 @@ export default class OrderTasksPage extends AppPage {
 
     if (Array.isArray(monitoringOrderTypeDescription.monitoringCondition)) {
       monitoringOrderTypeDescription.monitoringCondition.forEach((condition: string, index: number) => {
-        const monitoringConditionPage = Page.verifyOnPage(MonitoringTypePage)
+        let monitoringConditionPage = Page.verifyOnPage(MonitoringTypePage)
         monitoringConditionPage.form.fillInWith(condition)
         monitoringConditionPage.form.continueButton.click()
 
@@ -248,6 +249,22 @@ export default class OrderTasksPage extends AppPage {
             },
             false,
           )
+          if (secondEnforcementZoneDetails) {
+            const monitoringConditionsListPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)
+            monitoringConditionsListPage.form.fillInWith('Yes')
+            monitoringConditionsListPage.form.saveAndContinueButton.click()
+
+            monitoringConditionPage = Page.verifyOnPage(MonitoringTypePage)
+            monitoringConditionPage.form.fillInWith(condition)
+            monitoringConditionPage.form.continueButton.click()
+
+            this.fillInEnforcementZoneOrderDetailsWith(
+              {
+                enforcementZoneDetails: secondEnforcementZoneDetails,
+              },
+              false,
+            )
+          }
         }
 
         if (condition === 'Trail monitoring') {
