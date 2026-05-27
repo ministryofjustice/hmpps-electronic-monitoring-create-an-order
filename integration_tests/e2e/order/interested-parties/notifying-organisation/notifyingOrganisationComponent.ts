@@ -12,6 +12,7 @@ type formData = {
   youthCourt?: string
   notifyingOrganisationEmailAddress?: string
   civilCountyCourt?: string
+  youthCustodyServiceRegion?: string
 }
 
 export default class NotifyingOrganisationComponent extends FormComponent {
@@ -72,7 +73,7 @@ export default class NotifyingOrganisationComponent extends FormComponent {
   }
 
   fillInWith(data: formData) {
-    if (data.notifyingOrganisation) {
+    if (data.notifyingOrganisation && data.notifyingOrganisation !== 'Probation service') {
       this.organisationField.set(data.notifyingOrganisation)
     }
     if (data.prison) {
@@ -94,9 +95,16 @@ export default class NotifyingOrganisationComponent extends FormComponent {
     if (data.youthCourt) {
       this.youthCourtField.set(data.youthCourt)
     }
+
     if (data.familyCourt) {
       this.familyCourtField.set(data.familyCourt)
     }
+
+    if (data.youthCustodyServiceRegion) {
+      cy.get('#youthCustodyServiceRegion').type('London')
+      cy.get('#youthCustodyServiceRegion__listbox').contains('London').click()
+    }
+
     if (data.notifyingOrganisationEmailAddress) {
       this.emailField.set(data.notifyingOrganisationEmailAddress)
     }
