@@ -52,7 +52,7 @@ context('interested parties check answers page', () => {
             pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
             offenceType: '',
           },
-        })
+        },
       })
 
       it('shows all interested parties answers and pdu for checking if start date of order in future', () => {

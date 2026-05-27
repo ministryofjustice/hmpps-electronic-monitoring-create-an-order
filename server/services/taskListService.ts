@@ -958,7 +958,7 @@ export default class TaskListService {
     if (!date) return true
     return new Date(date) > new Date()
   }
-  
+
   getNextTaskPath(sectionTasks: Task[], orderId: string, versionId?: string) {
     let path: string
 
