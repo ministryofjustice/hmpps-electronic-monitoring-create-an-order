@@ -5,7 +5,7 @@ import OrderChecklistService from './orderChecklistService'
 import TaskListService, { canBeCompleted, Task } from './taskListService'
 
 const SECTIONS = {
-  interestParties: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+  interestedParties: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
   aboutTheDeviceWearer: 'ABOUT_THE_DEVICE_WEARER',
   riskInformation: 'RISK_INFORMATION',
   electronicMonitoringCondition: 'ELECTRONIC_MONITORING_CONDITIONS',
@@ -45,17 +45,8 @@ export default class SectionService {
       SECTIONS.additionalDocuments,
     ]
 
-    const startDate = order.monitoringConditions.startDate
-      ? new Date(order.monitoringConditions.startDate)
-      : new Date(2040, 0, 0)
-    const startDateIsInPast = startDate < new Date()
-
-    if (
-      order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE' &&
-      FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED') &&
-      !(isVariationType(order.type) && startDateIsInPast)
-    ) {
-      sections = [SECTIONS.interestParties, ...sections]
+    if (this.shouldShowInterestedParties(order)) {
+      sections = [SECTIONS.interestedParties, ...sections]
     }
 
     if (isVariationType(order.type)) {
@@ -118,5 +109,18 @@ export default class SectionService {
       return this.isSectionComplete(deviceWearerTasks, order, SECTIONS.aboutTheDeviceWearer)
     }
     return true
+  }
+
+  private shouldShowInterestedParties(order: Order): boolean {
+    const startDate = order.monitoringConditions.startDate
+      ? new Date(order.monitoringConditions.startDate)
+      : new Date(2040, 0, 0)
+    const startDateIsInPast = startDate < new Date()
+
+    return (
+      order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE' &&
+      FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED') &&
+      !(isVariationType(order.type) && startDateIsInPast && order.status !== 'SUBMITTED')
+    )
   }
 }

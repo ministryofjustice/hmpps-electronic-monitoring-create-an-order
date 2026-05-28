@@ -6,6 +6,6 @@ export default class NotifyingOrganisationPage extends AppFormPage {
   public form = new NotifyingOrganisationComponent()
 
   constructor() {
-    super('Your Details', paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION)
+    super('Your details', paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION)
   }
 }
