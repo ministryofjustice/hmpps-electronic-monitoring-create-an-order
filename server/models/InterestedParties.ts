@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { ResponsibleOrganisationEnum } from './ResponsibleOrganisation'
+import { ResponsibleOrganisationField } from './ResponsibleOrganisation'
 import { NotifyingOrganisationEnum } from './NotifyingOrganisation'
 
 const InterestedPartiesModel = z
@@ -9,7 +9,7 @@ const InterestedPartiesModel = z
     notifyingOrganisationEmail: z.string().nullable().optional(),
     responsibleOfficerName: z.string().nullable().optional(),
     responsibleOfficerPhoneNumber: z.string().nullable().optional(),
-    responsibleOrganisation: ResponsibleOrganisationEnum.nullable(),
+    responsibleOrganisation: ResponsibleOrganisationField.nullable(),
     responsibleOrganisationRegion: z.string().nullable().optional(),
     responsibleOrganisationEmail: z.string().nullable().optional(),
     responsibleOfficerFirstName: z.string().nullable().optional(),

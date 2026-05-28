@@ -1,5 +1,5 @@
 import z from 'zod'
-import { ResponsibleOrganisationEnum } from '../ResponsibleOrganisation'
+import { ResponsibleOrganisationField } from '../ResponsibleOrganisation'
 import { NotifyingOrganisationEnum } from '../NotifyingOrganisation'
 import { FormDataModel } from './formData'
 
@@ -15,7 +15,7 @@ const InterestedPartiesFormDataModel = FormDataModel.extend({
   notifyingOrganisationEmail: z.string().default(''),
   responsibleOfficerName: z.string().default(''),
   responsibleOfficerPhoneNumber: z.string().default(''),
-  responsibleOrganisation: ResponsibleOrganisationEnum.nullable().default(null),
+  responsibleOrganisation: ResponsibleOrganisationField.or(z.literal('')).nullable().transform(val => val || null),
   responsibleOrgProbationRegion: z.string().default(''),
   policeArea: z.string().default(''),
   yjsRegion: z.string().default(''),
