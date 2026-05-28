@@ -12,7 +12,7 @@ import { notifyingOrganisationCourts } from '../models/NotifyingOrganisation'
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
 const SECTIONS = {
-  interestParties: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+  interestedParties: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
   aboutTheDeviceWearer: 'ABOUT_THE_DEVICE_WEARER',
   contactInformation: 'CONTACT_INFORMATION',
   riskInformation: 'RISK_INFORMATION',
@@ -33,7 +33,7 @@ const PAGES = {
   primaryAddress: 'PRIMARY_ADDRESS',
   secondaryAddress: 'SECONDARY_ADDRESS',
   tertiaryAddress: 'TERTIARY_ADDRESS',
-  interestParties: 'INTERESTED_PARTIES',
+  interestedParties: 'INTERESTED_PARTIES',
   checkAnswersInterestParties: 'CHECK_ANSWERS_INTERESTED_PARTIES',
   probationDeliveryUnit: 'PROBATION_DELIVERY_UNIT',
   checkAnswersContactInformation: 'CHECK_ANSWERS_CONTACT_INFORMATION',
@@ -179,7 +179,7 @@ export default class TaskListService {
         order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE'
       ) {
         tasks.push({
-          section: SECTIONS.interestParties,
+          section: SECTIONS.interestedParties,
           name: PAGES.responsibleOrganisation,
           path: paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION,
           state: STATES.required,
@@ -187,7 +187,7 @@ export default class TaskListService {
         })
       } else {
         tasks.push({
-          section: SECTIONS.interestParties,
+          section: SECTIONS.interestedParties,
           name: PAGES.responsibleOfficer,
           path: paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER,
           state: STATES.required,
@@ -196,7 +196,7 @@ export default class TaskListService {
       }
 
       tasks.push({
-        section: SECTIONS.interestParties,
+        section: SECTIONS.interestedParties,
         name: PAGES.checkAnswersInterestParties,
         path: paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS,
         state: STATES.hidden,
@@ -391,7 +391,7 @@ export default class TaskListService {
 
       tasks.push({
         section: SECTIONS.contactInformation,
-        name: PAGES.interestParties,
+        name: PAGES.interestedParties,
         path: paths.CONTACT_INFORMATION.INTERESTED_PARTIES,
         state: STATES.required,
         completed:
@@ -905,7 +905,7 @@ export default class TaskListService {
       .filter(section => section !== SECTIONS.variationDetails || isVariationType(order.type))
       .filter(
         section =>
-          section !== SECTIONS.interestParties || FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED'),
+          section !== SECTIONS.interestedParties || FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED'),
       )
       .filter(
         section =>

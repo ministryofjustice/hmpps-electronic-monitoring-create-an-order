@@ -5,7 +5,7 @@ import OrderChecklistService from './orderChecklistService'
 import TaskListService, { canBeCompleted, Task } from './taskListService'
 
 const SECTIONS = {
-  interestParties: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+  interestedParties: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
   aboutTheDeviceWearer: 'ABOUT_THE_DEVICE_WEARER',
   riskInformation: 'RISK_INFORMATION',
   electronicMonitoringCondition: 'ELECTRONIC_MONITORING_CONDITIONS',
@@ -46,7 +46,7 @@ export default class SectionService {
     ]
 
     if (this.shouldShowInterestedParties(order)) {
-      sections = [SECTIONS.interestParties, ...sections]
+      sections = [SECTIONS.interestedParties, ...sections]
     }
 
     if (isVariationType(order.type)) {
