@@ -45,16 +45,7 @@ export default class SectionService {
       SECTIONS.additionalDocuments,
     ]
 
-    const startDate = order.monitoringConditions.startDate
-      ? new Date(order.monitoringConditions.startDate)
-      : new Date(2040, 0, 0)
-    const startDateIsInPast = startDate < new Date()
-
-    if (
-      order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE' &&
-      FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED') &&
-      !(isVariationType(order.type) && startDateIsInPast)
-    ) {
+    if (this.shouldShowInterestedParties(order)) {
       sections = [SECTIONS.interestParties, ...sections]
     }
 
@@ -118,5 +109,18 @@ export default class SectionService {
       return this.isSectionComplete(deviceWearerTasks, order, SECTIONS.aboutTheDeviceWearer)
     }
     return true
+  }
+
+  private shouldShowInterestedParties(order: Order): boolean {
+    const startDate = order.monitoringConditions.startDate
+      ? new Date(order.monitoringConditions.startDate)
+      : new Date(2040, 0, 0)
+    const startDateIsInPast = startDate < new Date()
+
+    return (
+      order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE' &&
+      FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED') &&
+      !(isVariationType(order.type) && startDateIsInPast && order.status !== 'SUBMITTED')
+    )
   }
 }

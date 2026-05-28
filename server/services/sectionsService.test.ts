@@ -115,6 +115,26 @@ describe('task list service', () => {
       ])
     })
 
+    it('the start date is in the past and the order is submitted', async () => {
+      const order: Order = {
+        status: 'SUBMITTED',
+        type: 'VARIATION',
+        monitoringConditions: { startDate: new Date(2000, 0).toISOString() },
+      } as Order
+
+      const sections = await service.getSectionsForOrder(order)
+
+      expect(sections).toHaveLength(6)
+      containsSections(sections, [
+        'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+        'ABOUT_THE_DEVICE_WEARER',
+        'RISK_INFORMATION',
+        'ELECTRONIC_MONITORING_CONDITIONS',
+        'ADDITIONAL_DOCUMENTS',
+        'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM',
+      ])
+    })
+
     describe('section information', () => {
       let order: Order
       beforeEach(() => {
