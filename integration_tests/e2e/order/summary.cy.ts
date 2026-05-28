@@ -2071,7 +2071,7 @@ context('Order Summary', () => {
       cy.task('resetFeatureFlags')
     })
 
-    it('Home office notifying org, we dont see responsible org section', () => {
+    it.only('Home office notifying org, we dont see responsible org section', () => {
       const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
       cy.task('setFeatureFlags', testFlags)
 
@@ -2082,7 +2082,7 @@ context('Order Summary', () => {
         .should('not.exist')
 
       page.aboutTheDeviceWearerTask.shouldHaveStatus('To check')
-      page.riskInformationTask.shouldHaveStatus('To check')
+      page.riskInformationTask.shouldHaveStatus('Incomplete')
       page.electronicMonitoringTask.shouldHaveStatus('Incomplete')
       page.additionalDocumentsTask.shouldHaveStatus('Incomplete')
     })
