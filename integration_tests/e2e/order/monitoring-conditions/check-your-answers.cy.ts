@@ -275,6 +275,10 @@ context('Check your answers', () => {
         status: 'IN_PROGRESS',
         order: {
           ...mockOrder,
+          interestedParties: {
+            ...mockOrder.interestedParties,
+            notifyingOrganisation: 'HOME_OFFICE',
+          },
           installationLocation: {
             location: 'PRIMARY',
           },
