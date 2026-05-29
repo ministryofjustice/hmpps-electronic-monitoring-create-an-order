@@ -490,13 +490,20 @@ const createInstallationAppointmentAnswer = (order: Order, content: I18n, answer
 
   const { questions } = content.pages.installationAppointment
 
-  if (!order.installationAppointment || order.installationLocation?.location === 'PRIMARY') {
+  const isHomeOffice = order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE'
+
+  if (!order.installationAppointment || (order.installationLocation?.location === 'PRIMARY' && !isHomeOffice)) {
     return []
   }
+
+  const appointmentTimeText = isHomeOffice
+    ? 'What is the preferred time for installation to take place?'
+    : questions.appointmentTime.text
+
   return [
     createAnswer(questions.placeName.text, order.installationAppointment?.placeName, uri, answerOpts),
     createDateAnswer(questions.appointmentDate.text, order.installationAppointment?.appointmentDate, uri, answerOpts),
-    createTimeAnswer(questions.appointmentTime.text, order.installationAppointment?.appointmentDate, uri, answerOpts),
+    createTimeAnswer(appointmentTimeText, order.installationAppointment?.appointmentDate, uri, answerOpts),
   ]
 }
 

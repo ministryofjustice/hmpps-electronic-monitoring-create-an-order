@@ -7,10 +7,12 @@ import { createGovukErrorSummary } from '../../utils/errors'
 
 type InstallationAppointmentViewModel = ViewModel<Pick<InstallationAppointment, 'placeName'>> & {
   appointmentDate: DateTimeField
+  isHomeOffice: boolean
 }
 
 const constructFromEntity = (
   appointment: InstallationAppointment | undefined | null,
+  isHomeOffice: boolean,
 ): InstallationAppointmentViewModel => {
   return {
     placeName: {
@@ -19,12 +21,14 @@ const constructFromEntity = (
     appointmentDate: {
       value: deserialiseDateTime(appointment?.appointmentDate),
     },
+    isHomeOffice,
     errorSummary: null,
   }
 }
 
 const constructFromFormData = (
   formData: InstallationAppointmentFormData,
+  isHomeOffice: boolean,
   validationErrors: ValidationResult,
 ): InstallationAppointmentViewModel => {
   return {
@@ -43,18 +47,21 @@ const constructFromFormData = (
       timeError: getError(validationErrors, 'appointmentDate-hours'),
       dateError: getError(validationErrors, 'appointmentDate'),
     },
+    isHomeOffice,
     errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
+
 const construct = (
   appointment: InstallationAppointment | undefined | null,
   formData: InstallationAppointmentFormData,
+  isHomeOffice: boolean,
   validationErrors: ValidationResult,
 ): InstallationAppointmentViewModel => {
   if (validationErrors.length > 0 && formData) {
-    return constructFromFormData(formData, validationErrors)
+    return constructFromFormData(formData, isHomeOffice, validationErrors)
   }
-  return constructFromEntity(appointment)
+  return constructFromEntity(appointment, isHomeOffice)
 }
 
 export default {

@@ -3,6 +3,7 @@ import Page from '../../../pages/page'
 import InstallationAppointmentPage from '../../../pages/order/monitoring-conditions/installation-appointment'
 
 const mockOrderId = uuidv4()
+
 const mockDefaultOrder = {
   deviceWearer: {
     nomisId: 'nomis',
@@ -39,27 +40,61 @@ const mockDefaultOrder = {
     issp: 'YES',
     hdc: 'NO',
     prarr: 'UNKNOWN',
+    pilot: '',
     offenceType: '',
   },
 }
-const stubGetOrder = order => {
+const stubGetOrder = ({ notifyingOrg = 'PRISON' } = {}) => {
   cy.task('stubCemoGetOrder', {
     httpStatus: 200,
     id: mockOrderId,
     status: 'IN_PROGRESS',
-    order,
+    order: {
+      ...mockDefaultOrder,
+      interestedParties: {
+        notifyingOrganisation: notifyingOrg,
+        notifyingOrganisationName: '',
+        notifyingOrganisationEmail: 'notifying@organisation',
+        responsibleOrganisation: 'HOME_OFFICE',
+        responsibleOfficerPhoneNumber: '',
+        responsibleOrganisationEmail: 'responsible@organisation',
+        responsibleOrganisationRegion: '',
+        responsibleOfficerName: 'name',
+      },
+    },
   })
 }
 
 context('Monitoring conditions', () => {
   context('Installation appointment', () => {
+    context('Viewing a draft order for a Home Office order', () => {
+      beforeEach(() => {
+        cy.task('reset')
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+        stubGetOrder({ notifyingOrg: 'HOME_OFFICE' })
+        cy.signIn()
+      })
+
+      it('Should display Home Office specific appointment time question text', () => {
+        Page.visit(InstallationAppointmentPage, {
+          orderId: mockOrderId,
+        })
+        cy.get('.form-time legend').should(
+          'contains.text',
+          'What is the preferred time for installation to take place?',
+        )
+        cy.get('.form-time .govuk-hint').should(
+          'contains.text',
+          "If the installation can't be done at this time, it will happen during standard hours. Enter time using a 24 hour clock. For example, enter 14:30 instead of 2:30pm",
+        )
+      })
+    })
+
     context('Viewing a draft order with no installation appointment', () => {
       beforeEach(() => {
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-        stubGetOrder({
-          mockDefaultOrder,
-        })
+        stubGetOrder()
         cy.signIn()
       })
 
@@ -76,6 +111,11 @@ context('Monitoring conditions', () => {
         page.errorSummary.shouldNotExist()
         page.backToSummaryButton.should('not.exist')
         page.checkIsAccessible()
+        cy.get('.form-time legend').should('contains.text', 'What time will installation take place?')
+        cy.get('.form-time .govuk-hint').should(
+          'contains.text',
+          'Enter time using a 24 hour clock. For example, enter 14:30 instead of 2:30pm',
+        )
       })
     })
   })
