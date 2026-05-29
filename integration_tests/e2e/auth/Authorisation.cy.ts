@@ -36,7 +36,7 @@ context('Authorisation', () => {
       page.newOrderFormButton.click()
     })
   })
-    context('Authenticated HOIE user', () => {
+  context('Authenticated HOIE user', () => {
     beforeEach(() => {
       cy.task('stubSignIn', { name: 'jane doe', roles: ['ROLE_EM_CEMO_HOME_OFFICE'] })
       cy.signIn()
