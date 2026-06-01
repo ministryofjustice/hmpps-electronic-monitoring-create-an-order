@@ -7,12 +7,14 @@ import { createGovukErrorSummary } from '../../utils/errors'
 
 type InstallationAppointmentViewModel = ViewModel<Pick<InstallationAppointment, 'placeName'>> & {
   appointmentDate: DateTimeField
-  isHomeOffice: boolean
+  appointmentTimeLabel: string
+  appointmentTimeHint: string
 }
 
 const constructFromEntity = (
   appointment: InstallationAppointment | undefined | null,
-  isHomeOffice: boolean,
+  appointmentTimeLabel: string,
+  appointmentTimeHint: string,
 ): InstallationAppointmentViewModel => {
   return {
     placeName: {
@@ -21,14 +23,16 @@ const constructFromEntity = (
     appointmentDate: {
       value: deserialiseDateTime(appointment?.appointmentDate),
     },
-    isHomeOffice,
+    appointmentTimeLabel,
+    appointmentTimeHint,
     errorSummary: null,
   }
 }
 
 const constructFromFormData = (
   formData: InstallationAppointmentFormData,
-  isHomeOffice: boolean,
+  appointmentTimeLabel: string,
+  appointmentTimeHint: string,
   validationErrors: ValidationResult,
 ): InstallationAppointmentViewModel => {
   return {
@@ -47,7 +51,8 @@ const constructFromFormData = (
       timeError: getError(validationErrors, 'appointmentDate-hours'),
       dateError: getError(validationErrors, 'appointmentDate'),
     },
-    isHomeOffice,
+    appointmentTimeLabel,
+    appointmentTimeHint,
     errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
@@ -55,13 +60,14 @@ const constructFromFormData = (
 const construct = (
   appointment: InstallationAppointment | undefined | null,
   formData: InstallationAppointmentFormData,
-  isHomeOffice: boolean,
+  appointmentTimeLabel: string,
+  appointmentTimeHint: string,
   validationErrors: ValidationResult,
 ): InstallationAppointmentViewModel => {
   if (validationErrors.length > 0 && formData) {
-    return constructFromFormData(formData, isHomeOffice, validationErrors)
+    return constructFromFormData(formData, appointmentTimeLabel, appointmentTimeHint, validationErrors)
   }
-  return constructFromEntity(appointment, isHomeOffice)
+  return constructFromEntity(appointment, appointmentTimeLabel, appointmentTimeHint)
 }
 
 export default {

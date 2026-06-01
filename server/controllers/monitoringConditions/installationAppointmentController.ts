@@ -19,10 +19,13 @@ export default class InstallationAppointmentController {
     const isHomeOffice =
       req.order!.interestedParties?.notifyingOrganisation === 'HOME_OFFICE' &&
       (location === 'PRIMARY' || location === 'INSTALLATION')
+    const { questions } = res.locals.content!.pages.installationAppointment
+    const timeQuestion = isHomeOffice ? questions.appointmentTimeHomeOffice : questions.appointmentTime
     const viewModel = installationAppointmenttViewModel.construct(
       req.order!.installationAppointment,
       formData[0] as never,
-      isHomeOffice,
+      timeQuestion.text,
+      timeQuestion.hint as string,
       errors as never,
     )
     res.render('pages/order/monitoring-conditions/installation-appointment', viewModel)

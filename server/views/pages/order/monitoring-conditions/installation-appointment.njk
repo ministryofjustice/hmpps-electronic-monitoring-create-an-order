@@ -6,8 +6,6 @@
 {% set legend = content.pages.installationAppointment.legend %}
 {% set helpText = content.pages.installationAppointment.helpText %}
 {% set questions = content.pages.installationAppointment.questions %}
-{% set appointmentTimeLabel = "What is the preferred time for installation to take place?" if isHomeOffice else questions.appointmentTime.text %}
-{% set appointmentTimeHint = "If the installation can't be done at this time, it will happen during standard hours. Enter time using a 24 hour clock. For example, enter 14:30 instead of 2:30pm" if isHomeOffice else questions.appointmentTime.hint %}
 {% block formInputs %}
 
 {{ govukInput({

@@ -499,7 +499,7 @@ const createInstallationAppointmentAnswer = (order: Order, content: I18n, answer
 
   const appointmentTimeText =
     isHomeOffice && (location === 'PRIMARY' || location === 'INSTALLATION')
-      ? 'What is the preferred time for installation to take place?'
+      ? questions.appointmentTimeHomeOffice.text
       : questions.appointmentTime.text
 
   return [
