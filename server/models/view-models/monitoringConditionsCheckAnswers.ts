@@ -490,13 +490,22 @@ const createInstallationAppointmentAnswer = (order: Order, content: I18n, answer
 
   const { questions } = content.pages.installationAppointment
 
-  if (!order.installationAppointment || order.installationLocation?.location === 'PRIMARY') {
+  const isHomeOffice = order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE'
+  const location = order.installationLocation?.location
+
+  if (!order.installationAppointment || (location === 'PRIMARY' && !isHomeOffice)) {
     return []
   }
+
+  const appointmentTimeText =
+    isHomeOffice && (location === 'PRIMARY' || location === 'INSTALLATION')
+      ? questions.preferredAppointmentTime.text
+      : questions.appointmentTime.text
+
   return [
     createAnswer(questions.placeName.text, order.installationAppointment?.placeName, uri, answerOpts),
     createDateAnswer(questions.appointmentDate.text, order.installationAppointment?.appointmentDate, uri, answerOpts),
-    createTimeAnswer(questions.appointmentTime.text, order.installationAppointment?.appointmentDate, uri, answerOpts),
+    createTimeAnswer(appointmentTimeText, order.installationAppointment?.appointmentDate, uri, answerOpts),
   ]
 }
 
