@@ -41,10 +41,7 @@ export default class IsAddressChangeController extends YesNoQuestionPageControll
           type: 'REINSTALL_DEVICE',
         }
         const order = await this.service.createNewVariation(input, req.order)
-        if (
-          order.interestedParties?.notifyingOrganisation ||
-          !FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')
-        ) {
+        if (!FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')) {
           res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
         } else {
           res.redirect(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', order.id))

@@ -54,10 +54,7 @@ export default class ServiceRequestTypeController {
     }
     const result = await this.service.createNewVariation(input, req.order)
 
-    if (
-      result.interestedParties?.notifyingOrganisation ||
-      !FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')
-    ) {
+    if (!FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')) {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', result.id))
     } else {
       res.redirect(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', result.id))
