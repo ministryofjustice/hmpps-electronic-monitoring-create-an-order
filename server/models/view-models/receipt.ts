@@ -10,6 +10,8 @@ import { createAnswer, createDateTimeAnswer } from '../../utils/checkYourAnswers
 import { Order } from '../Order'
 import I18n from '../../types/i18n'
 import FeatureFlags from '../../utils/featureFlags'
+import { isNotNullOrEmptyString } from '../../utils/utils'
+
 
 const createOrderStatusAnswers = (order: Order) => {
   const answerOpts = { ignoreActions: true }
@@ -79,6 +81,13 @@ const getOrderTypeName = (
 }
 
 const createViewModel = (order: Order, content: I18n) => {
+const showResponsibleOrgSection =
+  !(
+    order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE' &&
+    !isNotNullOrEmptyString(order.interestedParties?.responsibleOrganisation) &&
+    !isNotNullOrEmptyString(order.interestedParties?.responsibleOfficerFirstName)
+  )
+
   const statusDetails = createOrderStatusAnswers(order)
   const isInterestedPartiesFlowEnabled = FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')
   const interestedParties = InterestedPartiesCheckAnswers.construct(order, content)
@@ -99,6 +108,7 @@ const createViewModel = (order: Order, content: I18n) => {
     additionalDocumentDetails,
     showDownloadJsonButtons: FeatureFlags.getInstance().get('DOWNLOAD_FMS_REQUEST_JSON_ENABLED'),
     isInterestedPartiesFlowEnabled,
+    showResponsibleOrgSection
   }
 }
 

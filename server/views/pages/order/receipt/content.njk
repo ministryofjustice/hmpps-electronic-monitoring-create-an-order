@@ -52,7 +52,7 @@
     {% include "../variation/answers.njk" %}
   {% endif %}
 
-  {% if isInterestedPartiesFlowEnabled %}
+  {% if isInterestedPartiesFlowEnabled and showResponsibleOrgSection %}
     <h2 class="govuk-heading-l">About the Responsible Organisation</h2>
 
     {% include "../interested-parties/answers.njk" %}
