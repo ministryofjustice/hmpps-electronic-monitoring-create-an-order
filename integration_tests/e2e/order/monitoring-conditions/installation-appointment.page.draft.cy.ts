@@ -44,7 +44,7 @@ const mockDefaultOrder = {
     offenceType: '',
   },
 }
-const stubGetOrder = ({ notifyingOrg = 'PRISON' } = {}) => {
+const stubGetOrder = ({ notifyingOrg = 'PRISON', installationLocation = 'PRIMARY' } = {}) => {
   cy.task('stubCemoGetOrder', {
     httpStatus: 200,
     id: mockOrderId,
@@ -61,6 +61,9 @@ const stubGetOrder = ({ notifyingOrg = 'PRISON' } = {}) => {
         responsibleOrganisationRegion: '',
         responsibleOfficerName: 'name',
       },
+      installationLocation: {
+        location: installationLocation,
+      },
     },
   })
 }
@@ -75,7 +78,7 @@ context('Monitoring conditions', () => {
         cy.signIn()
       })
 
-      it('Should display Home Office specific appointment time question text', () => {
+      it('Should display Home Office specific appointment time question text when installing at a primary address', () => {
         Page.visit(InstallationAppointmentPage, {
           orderId: mockOrderId,
         })
@@ -86,6 +89,18 @@ context('Monitoring conditions', () => {
         cy.get('.form-time .govuk-hint').should(
           'contains.text',
           "If the installation can't be done at this time, it will happen during standard hours. Enter time using a 24 hour clock. For example, enter 14:30 instead of 2:30pm",
+        )
+      })
+
+      it('Should display default appointment time question text when installing at a prison', () => {
+        stubGetOrder({ notifyingOrg: 'HOME_OFFICE', installationLocation: 'PRISON' })
+        Page.visit(InstallationAppointmentPage, {
+          orderId: mockOrderId,
+        })
+        cy.get('.form-time legend').should('contains.text', 'What time will installation take place?')
+        cy.get('.form-time .govuk-hint').should(
+          'contains.text',
+          'Enter time using a 24 hour clock. For example, enter 14:30 instead of 2:30pm',
         )
       })
     })

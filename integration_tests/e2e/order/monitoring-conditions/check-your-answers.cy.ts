@@ -307,6 +307,45 @@ context('Check your answers', () => {
       ])
     })
 
+    it('shows default appointment time question for Home Office, installing at prison', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          ...mockOrder,
+          interestedParties: {
+            ...mockOrder.interestedParties,
+            notifyingOrganisation: 'HOME_OFFICE',
+          },
+          installationLocation: {
+            location: 'PRISON',
+          },
+          installationAppointment: {
+            placeName: 'Mock Place',
+            appointmentDate: '2027-02-01T10:30:00Z',
+          },
+        },
+      })
+
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
+      page.installationAppointmentSection().shouldExist()
+      page.installationAppointmentSection().shouldHaveItems([
+        {
+          key: 'What is the name of the place where installation will take place?',
+          value: 'Mock Place',
+        },
+        {
+          key: 'What date will installation take place?',
+          value: '01/02/2027',
+        },
+        {
+          key: 'What time will installation take place?',
+          value: '10:30',
+        },
+      ])
+    })
+
     it('shows installation address', () => {
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,

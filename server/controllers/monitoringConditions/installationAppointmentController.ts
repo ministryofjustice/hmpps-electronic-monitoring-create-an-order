@@ -15,7 +15,10 @@ export default class InstallationAppointmentController {
   view: RequestHandler = async (req: Request, res: Response) => {
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
-    const isHomeOffice = req.order!.interestedParties?.notifyingOrganisation === 'HOME_OFFICE'
+    const location = req.order!.installationLocation?.location
+    const isHomeOffice =
+      req.order!.interestedParties?.notifyingOrganisation === 'HOME_OFFICE' &&
+      (location === 'PRIMARY' || location === 'INSTALLATION')
     const viewModel = installationAppointmenttViewModel.construct(
       req.order!.installationAppointment,
       formData[0] as never,
