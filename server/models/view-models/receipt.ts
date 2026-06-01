@@ -81,9 +81,9 @@ const getOrderTypeName = (
 
 const createViewModel = (order: Order, content: I18n) => {
   const showResponsibleOrgSection = !(
-    order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE' &&
-    !isNotNullOrEmptyString(order.interestedParties?.responsibleOrganisation) &&
-    !isNotNullOrEmptyString(order.interestedParties?.responsibleOfficerFirstName)
+    order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE' ||
+    (!isNotNullOrEmptyString(order.interestedParties?.responsibleOrganisation) &&
+      !isNotNullOrEmptyString(order.interestedParties?.responsibleOfficerFirstName))
   )
 
   const statusDetails = createOrderStatusAnswers(order)

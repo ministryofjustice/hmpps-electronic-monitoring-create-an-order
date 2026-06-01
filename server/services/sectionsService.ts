@@ -117,10 +117,21 @@ export default class SectionService {
       : new Date(2040, 0, 0)
     const startDateIsInPast = startDate < new Date()
 
-    return (
-      order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE' &&
-      FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED') &&
-      !(isVariationType(order.type) && startDateIsInPast && order.status !== 'SUBMITTED')
-    )
+    if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE') return false
+    if (FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')) {
+      if (!isVariationType(order.type)) {
+        return true
+      }
+      if (
+        order.status === 'SUBMITTED' &&
+        (order.interestedParties?.responsibleOfficerFirstName || order.interestedParties?.notifyingOrganisation)
+      ) {
+        return true
+      }
+      if (startDateIsInPast) {
+        return false
+      }
+    }
+    return false
   }
 }

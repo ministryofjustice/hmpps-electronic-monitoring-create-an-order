@@ -101,6 +101,10 @@ describe('task list service', () => {
       const order: Order = {
         type: 'VARIATION',
         monitoringConditions: { startDate: new Date(2000, 0).toISOString() },
+        interestedParties: {
+          responsibleOrganisation: 'PROBATION',
+          responsibleOfficerFirstName: 'James',
+        },
       } as Order
 
       const sections = await service.getSectionsForOrder(order)
@@ -120,6 +124,10 @@ describe('task list service', () => {
         status: 'SUBMITTED',
         type: 'VARIATION',
         monitoringConditions: { startDate: new Date(2000, 0).toISOString() },
+        interestedParties: {
+          responsibleOrganisation: 'PROBATION',
+          responsibleOfficerFirstName: 'James',
+        },
       } as Order
 
       const sections = await service.getSectionsForOrder(order)
