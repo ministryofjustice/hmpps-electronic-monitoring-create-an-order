@@ -318,7 +318,7 @@ context('Order type descriptions', () => {
 
     const trailMonitoringOrderWithDeviceType = {
       startDate: new Date(currentDate.getFullYear(), 11, 1),
-      endDate: new Date(currentDate.getFullYear() + 1, 11, 1, 23, 59, 0),
+      endDate: null,
       deviceType: 'A fitted GPS tag',
     }
 
