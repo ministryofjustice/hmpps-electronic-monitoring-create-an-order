@@ -17,6 +17,7 @@ import IsRejectionPage from '../../../e2e/order/edit-order/is-rejection/isReject
 import ReceiptPage from '../../../pages/order/receipt'
 import IsAddressChangePage from '../../../e2e/order/edit-order/is-address-change/isAddressChangePage'
 import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
+import NotifyingOrganisationPage from '../../../e2e/order/interested-parties/notifying-organisation/notifyingOrganisationPage'
 
 context('Service-Request-Types', () => {
   let orderSummaryPage: OrderSummaryPage
@@ -135,7 +136,8 @@ context('Service-Request-Types', () => {
       page.form.fillInWith(variationType)
       page.form.continueButton.click()
     }
-
+    const yourDetailsPage = Page.verifyOnPage(NotifyingOrganisationPage)
+    yourDetailsPage.form.continueButton.click()
     orderSummaryPage.fillInVariationsDetails({ variationDetails: variation })
     orderSummaryPage.aboutTheDeviceWearerTask.click()
     Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').continue()

@@ -7,6 +7,7 @@ import ConfirmVariationPage from '../../../pages/order/variation/confirmVariatio
 import IsRejectionPage from '../../../e2e/order/edit-order/is-rejection/isRejectionPage'
 import fillInInterestedPartiesWith from '../../../utils/scenario-flows/interested-parties.cy'
 import InterestedPartiesCheckYourAnswersPage from '../../../e2e/order/interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
+import NotifyingOrganisationPage from '../../../e2e/order/interested-parties/notifying-organisation/notifyingOrganisationPage'
 
 context('Interested parties flow', () => {
   const fmsCaseId: string = uuidv4()
@@ -64,7 +65,8 @@ context('Interested parties flow', () => {
     Page.verifyOnPage(OrderSummaryPage).makeChanges()
     Page.verifyOnPage(ConfirmVariationPage).confirm()
     Page.verifyOnPage(IsRejectionPage).isNotRejection()
-
+    const yourDetailsPage = Page.verifyOnPage(NotifyingOrganisationPage)
+    yourDetailsPage.form.continueButton.click()
     const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
     orderSummaryPage.interestedPartiesTask.click()
@@ -92,29 +94,29 @@ context('Interested parties flow', () => {
     Page.verifyOnPage(OrderSummaryPage).makeChanges()
     Page.verifyOnPage(ConfirmVariationPage).confirm()
     Page.verifyOnPage(IsRejectionPage).isNotRejection()
-
+    const yourDetailsPage = Page.verifyOnPage(NotifyingOrganisationPage)
+    yourDetailsPage.form.continueButton.click()
     const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
     orderSummaryPage.interestedPartiesTask.click()
 
-    // only clears data down if notifying org has changes so can't re-fill this in
-    // const input = {
-    //   responsibleOfficer: {
-    //     firstName: 'John',
-    //     lastName: 'Smith',
-    //     email: 'John@Smith.com',
-    //   },
-    //   responsibleOrganisation: {
-    //     responsibleOrganisation: 'Probation',
-    //     probationRegion: 'Wales',
-    //   },
-    //   pdu: 'Swansea',
-    // }
-    // fillInInterestedPartiesWith({
-    //   continueOnCya: false,
-    //   ...input,
-    // })
-    //
+    const input = {
+      responsibleOfficer: {
+        firstName: 'John',
+        lastName: 'Smith',
+        email: 'John@Smith.com',
+      },
+      responsibleOrganisation: {
+        responsibleOrganisation: 'Probation',
+        probationRegion: 'Wales',
+      },
+      pdu: 'Swansea',
+    }
+    fillInInterestedPartiesWith({
+      continueOnCya: false,
+      ...input,
+    })
+
     const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
     cyaPage.organisationDetailsSection.shouldHaveItems([
       { key: "What is the Responsible Officer's first name?", value: '' },
