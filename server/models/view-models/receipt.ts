@@ -12,7 +12,6 @@ import I18n from '../../types/i18n'
 import FeatureFlags from '../../utils/featureFlags'
 import { isNotNullOrEmptyString } from '../../utils/utils'
 
-
 const createOrderStatusAnswers = (order: Order) => {
   const answerOpts = { ignoreActions: true }
   const answers = [
@@ -81,8 +80,7 @@ const getOrderTypeName = (
 }
 
 const createViewModel = (order: Order, content: I18n) => {
-const showResponsibleOrgSection =
-  !(
+  const showResponsibleOrgSection = !(
     order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE' &&
     !isNotNullOrEmptyString(order.interestedParties?.responsibleOrganisation) &&
     !isNotNullOrEmptyString(order.interestedParties?.responsibleOfficerFirstName)
@@ -108,7 +106,7 @@ const showResponsibleOrgSection =
     additionalDocumentDetails,
     showDownloadJsonButtons: FeatureFlags.getInstance().get('DOWNLOAD_FMS_REQUEST_JSON_ENABLED'),
     isInterestedPartiesFlowEnabled,
-    showResponsibleOrgSection
+    showResponsibleOrgSection,
   }
 }
 
