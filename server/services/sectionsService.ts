@@ -131,6 +131,8 @@ export default class SectionService {
       if (startDateIsInPast) {
         return false
       }
+
+      return true
     }
     return false
   }

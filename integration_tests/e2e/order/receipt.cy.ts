@@ -285,7 +285,7 @@ context('Receipt', () => {
             },
           ],
           interestedParties: {
-            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: '',
             notifyingOrganisationEmail: 'notifying@organisation',
             responsibleOrganisation: 'POLICE',
