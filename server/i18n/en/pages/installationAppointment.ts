@@ -18,6 +18,10 @@ const installationAppointmentPageContent: InstallationAppointmentPageContent = {
       text: 'What time will installation take place?',
       hint: 'Enter time using a 24 hour clock. For example, enter 14:30 instead of 2:30pm',
     },
+    preferredAppointmentTime: {
+      text: 'What is the preferred time for installation to take place?',
+      hint: "If the installation can't be done at this time, it will happen during standard hours. Enter time using a 24 hour clock. For example, enter 14:30 instead of 2:30pm",
+    },
   },
 }
 
