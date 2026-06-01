@@ -510,5 +510,48 @@ context('Receipt', () => {
       cy.visit(`/order/${mockOrderId}/receipt`)
       cy.contains('.govuk-link', 'Change').should('not.exist')
     })
+
+    it('Should not show about responsible organisations section when HOME_OFFICE order has no responsible org or officer details', () => {
+      const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
+      cy.task('setFeatureFlags', testFlags)
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          deviceWearer: {
+            nomisId: null,
+            pncId: null,
+            deliusId: null,
+            prisonNumber: null,
+            homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
+            firstName: 'test',
+            lastName: 'tester',
+            alias: null,
+            dateOfBirth: null,
+            adultAtTimeOfInstallation: true,
+            sex: 'FEMALE',
+            gender: 'PREFER_TO_SELF_DESCRIBE',
+            disabilities: 'OTHER',
+            otherDisability: 'Broken arm',
+            noFixedAbode: true,
+            interpreterRequired: false,
+          },
+          interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: 'home-office@test.com',
+            responsibleOrganisation: null,
+            responsibleOfficerFirstName: null,
+          },
+        },
+      })
+      cy.visit(`/order/${mockOrderId}/receipt`)
+      const page = Page.verifyOnPage(ReceiptPage)
+
+      page.interestedPartiesSection.shouldNotExist()
+    })
   })
 })
