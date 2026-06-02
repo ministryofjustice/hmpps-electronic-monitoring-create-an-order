@@ -115,25 +115,37 @@ export default class SectionService {
     const startDate = order.monitoringConditions.startDate
       ? new Date(order.monitoringConditions.startDate)
       : new Date(2040, 0, 0)
-    const startDateIsInPast = startDate < new Date()
+    const startDateIsInFuture = startDate >= new Date()
 
-    if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE') return false
-    if (FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')) {
-      if (!isVariationType(order.type)) {
-        return true
-      }
-      if (
-        order.status === 'SUBMITTED' &&
-        (order.interestedParties?.responsibleOfficerFirstName || order.interestedParties?.notifyingOrganisation)
-      ) {
-        return true
-      }
-      if (startDateIsInPast) {
-        return false
-      }
+    // Return early for disallowed organisation
+    if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE') {
+      return false
+    }
 
+    // Feature flag must be enabled for any further logic
+    if (!FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')) {
+      return false
+    }
+
+    // Non-variation types are always allowed
+    if (!isVariationType(order.type)) {
       return true
     }
+
+    // Allowed when submitted with required interested party info
+    const hasInterestedPartyInfo =
+      order.interestedParties?.responsibleOfficerFirstName != null ||
+      order.interestedParties?.notifyingOrganisation != null
+
+    if (order.status === 'SUBMITTED' && hasInterestedPartyInfo) {
+      return true
+    }
+
+    // Past start date blocks the flow
+    if (startDateIsInFuture) {
+      return true
+    }
+
     return false
   }
 }
