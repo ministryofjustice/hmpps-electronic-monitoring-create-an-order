@@ -1,6 +1,7 @@
 import { Order } from '../models/Order'
 import FeatureFlags from '../utils/featureFlags'
 import isVariationType from '../utils/isVariationType'
+import { isNotNullOrEmptyString } from '../utils/utils'
 import OrderChecklistService from './orderChecklistService'
 import TaskListService, { canBeCompleted, Task } from './taskListService'
 
@@ -134,8 +135,9 @@ export default class SectionService {
 
     // Allowed when submitted with required interested party info
     const hasInterestedPartyInfo =
-      order.interestedParties?.responsibleOfficerFirstName != null ||
-      order.interestedParties?.notifyingOrganisation != null
+      isNotNullOrEmptyString(order.interestedParties?.responsibleOfficerFirstName) ||
+      isNotNullOrEmptyString(order.interestedParties?.responsibleOfficerName) ||
+      isNotNullOrEmptyString(order.interestedParties?.responsibleOrganisation)
 
     if (order.status === 'SUBMITTED' && hasInterestedPartyInfo) {
       return true
