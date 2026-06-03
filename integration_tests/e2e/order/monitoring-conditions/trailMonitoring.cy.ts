@@ -130,12 +130,6 @@ context('Trail monitoring', () => {
       page.form.deviceTypeField.shouldHaveAllOptions()
     })
 
-    it('should have an optional end date', () => {
-      const page = Page.visit(TrailMonitoringPage, { orderId: mockOrderId })
-
-      page.form.endDateField.element.contains('(optional)')
-    })
-
     it('should submit the device type', () => {
       cy.task('stubCemoSubmitOrder', {
         httpStatus: 200,
@@ -160,7 +154,6 @@ context('Trail monitoring', () => {
         expect(requests).to.have.lengthOf(1)
         expect(requests[0]).to.deep.equal({
           startDate: '2026-03-27T00:00:00.000Z',
-          endDate: '2040-01-01T23:59:59.000Z',
           deviceType: 'FITTED',
         })
       })
@@ -171,7 +164,6 @@ context('Trail monitoring', () => {
 
       page.form.fillInWith({
         startDate: new Date(2026, 2, 27),
-        endDate: new Date(2026, 3, 28),
       })
 
       page.form.saveAndContinueButton.click()
