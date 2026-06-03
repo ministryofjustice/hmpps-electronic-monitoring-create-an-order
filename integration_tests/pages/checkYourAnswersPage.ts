@@ -3,7 +3,9 @@ import { PageElement } from './page'
 
 export default class CheckYourAnswersPage extends AppPage {
   continueButton = (): PageElement => cy.get('[value="continue"]')
+
   returnButton = (): PageElement => cy.get('[value="back"]')
+
   saveAndReturnButton = (): PageElement => cy.get('#main-content > div > div > form > div > button')
 
   get changeLinks() {

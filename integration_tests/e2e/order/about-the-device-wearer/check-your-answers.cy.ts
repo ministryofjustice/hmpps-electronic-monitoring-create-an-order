@@ -3,7 +3,6 @@ import { NotFoundErrorPage } from '../../../pages/error'
 import Page from '../../../pages/page'
 import CheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import OrderTasksPage from '../../../pages/order/summary'
-import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 
 const mockOrderId = uuidv4()
 const pagePath = '/about-the-device-wearer/check-your-answers'

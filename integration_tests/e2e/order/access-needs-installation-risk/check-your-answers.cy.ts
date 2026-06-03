@@ -2,7 +2,6 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import OrderTasksPage from '../../../pages/order/summary'
-import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import paths from '../../../../server/constants/paths'
 import OffencePage from './offences/offence/offencePage'
 
