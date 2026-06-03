@@ -147,6 +147,7 @@ describe('CurfewConditionsController', () => {
         orderId: mockId,
         startDate: '2025-02-15',
         endDate: '2026-02-15',
+        details: null,
         curfewAdditionalDetails: null,
       }
       req.order = getMockOrder({

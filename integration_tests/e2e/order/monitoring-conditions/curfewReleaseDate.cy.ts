@@ -83,6 +83,7 @@ const mockEmptyCurfewReleaseDate = {
     startDate: '2025-03-27T00:00:00.000Z',
     orderId: mockOrderId,
     endDate: '2026-04-28T00:00:00.000Z',
+    details: 'No',
     curfewAdditionalDetails: '',
   },
   status: 'IN_PROGRESS',

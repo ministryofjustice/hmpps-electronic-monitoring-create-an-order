@@ -168,6 +168,7 @@ export const createCurfewReleaseDateConditions = (
 export const createCurfewConditions = (overrideProperties?: Partial<CurfewConditions>): CurfewConditions => ({
   endDate: null,
   startDate: null,
+  details: null,
   curfewAdditionalDetails: null,
   ...overrideProperties,
 })

@@ -10,6 +10,7 @@ context('Confirm delete', () => {
       curfewAddress: 'PRIMARY,SECONDARY',
       endDate: '2024-11-11T00:00:00Z',
       startDate: '2024-11-11T00:00:00Z',
+      details: 'Yes',
       curfewAdditionalDetails: 'some additional details',
       id: 'curfew id',
     },

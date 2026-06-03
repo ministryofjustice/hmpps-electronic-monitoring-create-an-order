@@ -74,6 +74,7 @@ context('Monitoring type list flow', () => {
     startDate: new Date(currentDate.getFullYear(), 0, 1, 0, 0, 0),
     endDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59, 0),
     addresses: [/Main address/],
+    details: 'Yes',
     curfewAdditionalDetails: 'Mock details',
   }
   const curfewNights = ['MONDAY']

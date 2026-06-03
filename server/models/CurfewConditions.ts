@@ -6,6 +6,7 @@ const CurfewConditionsModel = z.object({
   endDate: z.string().nullable().optional(),
   curfewAddress: z.string().nullable().optional(),
   curfewAdditionalDetails: z.string().nullable(),
+  details: z.string().nullable(),
 })
 
 export type CurfewConditions = z.infer<typeof CurfewConditionsModel>

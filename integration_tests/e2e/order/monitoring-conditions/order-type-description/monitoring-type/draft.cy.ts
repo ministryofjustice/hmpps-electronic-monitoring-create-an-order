@@ -244,6 +244,7 @@ context('monitoring types', () => {
         endDate: null,
         orderId: null,
         startDate: null,
+        details: null,
         curfewAdditionalDetails: null,
       },
       curfewTimeTable: [
