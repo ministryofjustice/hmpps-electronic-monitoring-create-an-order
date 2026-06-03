@@ -28,53 +28,51 @@
       defaultMinutes: "00"
     })}}
 
-  
-  {%set endDateQuestion = questions.endDate.text %}
-  {% if notifyingOrganisation == 'HOME_OFFICE' %}
-    {% set endDateQuestion = endDateQuestion + ' (optional)' %}
+  {% if notifyingOrganisation != 'HOME_OFFICE' %}
+    {%set endDateQuestion = questions.endDate.text %}
+
+    {{dateTimeInput({
+        id: "endDate",
+        name: "endDate",
+        date: endDate.value,
+        dateLabel:  endDateQuestion,
+        dateHint: questions.endDate.hint,
+        errorMessages: {
+          field: endDate.error,
+          date: errors.dateError,
+          time: errors.timeError
+        },
+        disabled: not isOrderEditable,
+        timesEnabled: false,
+        defaultHours: 23,
+        defaultMinutes: 59
+      })}}
   {% endif %}
 
-  {{dateTimeInput({
-      id: "endDate",
-      name: "endDate",
-      date: endDate.value,
-      dateLabel:  endDateQuestion,
-      dateHint: questions.endDate.hint,
-      errorMessages: {
-        field: endDate.error,
-        date: errors.dateError,
-        time: errors.timeError
+  {% if notifyingOrganisation == 'HOME_OFFICE' %}
+    {{ govukRadios({
+      name: "deviceType",
+      fieldset: {
+        legend: {
+          text: questions.deviceType.text,
+          classes: "govuk-fieldset__legend--s"
+        }
       },
-      disabled: not isOrderEditable,
-      timesEnabled: false,
-      defaultHours: 23,
-      defaultMinutes: 59
-    })}}
-
-    {% if notifyingOrganisation == 'HOME_OFFICE' %}
-      {{ govukRadios({
-        name: "deviceType",
-        fieldset: {
-          legend: {
-            text: questions.deviceType.text,
-            classes: "govuk-fieldset__legend--s"
-          }
+      items: [
+        {
+          value: "FITTED",
+          text: "A fitted GPS tag",
+          disabled: not isOrderEditable
         },
-        items: [
-          {
-            value: "FITTED",
-            text: "A fitted GPS tag",
-            disabled: not isOrderEditable
-          },
-          {
-            value: "NON_FITTED",
-            text: "A non-fitted device",
-            disabled: not isOrderEditable
-          }
-        ],
-        value: deviceType.value,
-        errorMessage: deviceType.error
-      }) }}
+        {
+          value: "NON_FITTED",
+          text: "A non-fitted device",
+          disabled: not isOrderEditable
+        }
+      ],
+      value: deviceType.value,
+      errorMessage: deviceType.error
+    }) }}
   {% endif %}
 
 {% endblock %}

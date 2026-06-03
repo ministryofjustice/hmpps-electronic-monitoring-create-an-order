@@ -12,13 +12,15 @@ const TrailMonitoringFormDataModel = z.object({
     hours: z.string().default(''),
     minutes: z.string().default(''),
   }),
-  endDate: z.object({
-    day: z.string().default(''),
-    month: z.string().default(''),
-    year: z.string().default(''),
-    hours: z.string().default(''),
-    minutes: z.string().default(''),
-  }),
+  endDate: z
+    .object({
+      day: z.string().default(''),
+      month: z.string().default(''),
+      year: z.string().default(''),
+      hours: z.string().default(''),
+      minutes: z.string().default(''),
+    })
+    .optional(),
   deviceType: z.string().optional(),
 })
 
@@ -26,14 +28,9 @@ const TrailMonitoringFormDataValidator = (notifyingOrganisation: NotifyingOrgani
   z.object({
     startDate: DateTimeInputModel(validationErrors.trailMonitoring.startDateTime),
     endDate:
-      notifyingOrganisation === 'HOME_OFFICE'
-        ? DateTimeInputModel(validationErrors.trailMonitoringHomeOffice.endDateTime).transform(value => {
-            if (value === null) {
-              return new Date(2040, 0, 1, 23, 59, 59).toISOString()
-            }
-            return value
-          })
-        : DateTimeInputModel(validationErrors.trailMonitoring.endDateTime),
+      notifyingOrganisation !== 'HOME_OFFICE'
+        ? DateTimeInputModel(validationErrors.trailMonitoring.endDateTime)
+        : z.any().optional(),
     deviceType:
       notifyingOrganisation === 'HOME_OFFICE'
         ? z.string({ message: validationErrors.trailMonitoringHomeOffice.deviceTypeRequired })

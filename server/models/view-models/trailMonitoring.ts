@@ -8,7 +8,7 @@ import { NotifyingOrganisation } from '../NotifyingOrganisation'
 
 type TrailMonitoringViewModel = ViewModel<unknown> & {
   startDate: DateTimeField
-  endDate: DateTimeField
+  endDate?: DateTimeField
   deviceType: TextField
   notifyingOrganisation: string | undefined
 }
@@ -18,7 +18,7 @@ const createViewModelFromFormData = (
   validationErrors: ValidationResult,
   notifyingOrganisation?: NotifyingOrganisation,
 ): TrailMonitoringViewModel => {
-  return {
+  const viewModel: TrailMonitoringViewModel = {
     startDate: {
       value: {
         day: formData.startDate.day,
@@ -29,16 +29,6 @@ const createViewModelFromFormData = (
       },
       error: getError(validationErrors, 'startDate'),
     },
-    endDate: {
-      value: {
-        day: formData.endDate.day,
-        month: formData.endDate.month,
-        year: formData.endDate.year,
-        hours: formData.endDate.hours,
-        minutes: formData.endDate.minutes,
-      },
-      error: getError(validationErrors, 'endDate'),
-    },
     deviceType: {
       value: formData.deviceType ?? '',
       error: getError(validationErrors, 'deviceType'),
@@ -46,6 +36,21 @@ const createViewModelFromFormData = (
     notifyingOrganisation,
     errorSummary: createGovukErrorSummary(validationErrors),
   }
+
+  if (formData.endDate) {
+    viewModel.endDate = {
+      value: {
+        day: formData.endDate.day || '',
+        month: formData.endDate.month,
+        year: formData.endDate.year,
+        hours: formData.endDate.hours,
+        minutes: formData.endDate.minutes,
+      },
+      error: getError(validationErrors, 'endDate'),
+    }
+  }
+
+  return viewModel
 }
 
 const createViewModelFromTrailMonitoring = (
