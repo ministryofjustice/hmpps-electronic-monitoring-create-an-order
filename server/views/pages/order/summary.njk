@@ -95,15 +95,21 @@
           } %}
         {% elif section.completed %}
              {% if not section.checked %}
-                {% set statusArgs = {                  
-                  html: '<strong class="govuk-tag">To check</strong>'
-                } %}
+	       {% if isVariationType %}
+                 {% set statusArgs = {
+                   text: "Optional"
+                 } %}
+               {% else %}
+                 {% set statusArgs = {
+                   html: '<strong class="govuk-tag">To check</strong>'
+                 } %}
                  {% set allChecked = false %}
-              {% else %}
-                {% set statusArgs = { 
-                  text: 'Complete'
-                } %}
-               {% endif %}
+	       {% endif %}
+             {% else %}
+               {% set statusArgs = { 
+                 text: 'Complete'
+               } %}
+             {% endif %}
         {% else %}
           {% set allChecked = false %}
           {% set statusArgs = { 
