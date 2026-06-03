@@ -40,11 +40,10 @@ context('Contact Information - check your answers', () => {
       page.header.phaseBanner().should('contain.text', 'dev')
     })
 
-    it('Should render the save and continue, and return buttons', () => {
+    it('Should render the save and return button', () => {
       const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.continueButton().should('exist')
-      page.returnButton().should('exist')
+      page.saveAndReturnButton().should('exist')
     })
 
     it('Should be accessible', () => {
@@ -1407,10 +1406,8 @@ context('Contact Information - check your answers', () => {
     it('shows correct buttons', () => {
       const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.continueButton().should('exist')
-      page.continueButton().contains('Go to next section')
       page.returnButton().should('exist')
-      page.returnButton().contains('Return to main form menu')
+      page.returnButton().contains('Return to the main form menu')
     })
   })
 
@@ -1523,10 +1520,8 @@ context('Contact Information - check your answers', () => {
     it('shows correct buttons', () => {
       const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.continueButton().should('exist')
-      page.continueButton().contains('Go to next section')
       page.returnButton().should('exist')
-      page.returnButton().contains('Return to main form menu')
+      page.returnButton().contains('Return to the main form menu')
     })
   })
 

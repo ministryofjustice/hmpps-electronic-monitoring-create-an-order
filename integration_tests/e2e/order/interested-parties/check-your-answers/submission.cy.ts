@@ -3,7 +3,6 @@ import Page from '../../../../pages/page'
 import InterestedPartiesCheckYourAnswersPage from './interestedPartiesCheckYourAnswersPage'
 import OrderTasksPage from '../../../../pages/order/summary'
 import IdentityNumbersPage from '../../../../pages/order/about-the-device-wearer/identity-numbers'
-import DeviceWearerCheckYourAnswersPage from '../../../../pages/order/about-the-device-wearer/check-your-answers'
 
 const mockOrderId = uuidv4()
 context('interested parties check answers page', () => {
@@ -27,6 +26,7 @@ context('interested parties check answers page', () => {
         httpStatus: 200,
         id: mockOrderId,
         status: 'IN_PROGRESS',
+        orderType: 'REQUEST',
         order: {
           dataDictionaryVersion: 'DDV5',
           interestedParties: {
@@ -87,12 +87,12 @@ context('interested parties check answers page', () => {
       })
     })
 
-    it('navigates to next cya when submitted order', () => {
+    it('submitted order has expected navigation button', () => {
       const page = Page.visit(InterestedPartiesCheckYourAnswersPage, { orderId: mockOrderId }, {}, 'View answers')
 
-      page.continueButton().click()
-
-      Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'View answers')
+      page.returnButton().contains('Return to the main form menu')
+      page.returnButton().click()
+      Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId }, {}, true)
     })
   })
 
@@ -104,6 +104,7 @@ context('interested parties check answers page', () => {
         id: mockOrderId,
         versionId: mockVersionId,
         status: 'SUBMITTED',
+        orderType: 'VARIATION',
         order: {
           dataDictionaryVersion: 'DDV5',
           interestedParties: {
@@ -123,18 +124,12 @@ context('interested parties check answers page', () => {
       })
     })
 
-    it('navigates to next cya when submitted order', () => {
-      const page = Page.visit(
-        InterestedPartiesCheckYourAnswersPage,
-        { orderId: mockOrderId, versionId: mockVersionId },
-        {},
-        'View answers',
-        true,
-      )
+    it('submitted order has expected navigation button', () => {
+      const page = Page.visit(InterestedPartiesCheckYourAnswersPage, { orderId: mockOrderId }, {}, 'View answers')
 
-      page.continueButton().click()
-
-      Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'View answers')
+      page.returnButton().contains('Return to the main form menu')
+      page.returnButton().click()
+      Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId }, {}, true)
     })
   })
 })

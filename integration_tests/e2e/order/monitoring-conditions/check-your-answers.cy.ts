@@ -456,7 +456,7 @@ context('Check your answers', () => {
       const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
 
       page.continueButton().should('exist')
-      page.returnButton().should('exist')
+      page.saveAndReturn().should('exist')
     })
 
     it('shows curfew timetable when primary address is applied', () => {
@@ -659,8 +659,8 @@ context('Check your answers', () => {
 
       page.continueButton().should('exist')
       page.continueButton().contains('Go to next section')
-      page.returnButton().should('exist')
-      page.returnButton().contains('Return to main form menu')
+      page.saveAndReturn().should('exist')
+      page.saveAndReturn().contains('Return to the main form menu')
     })
   })
 
@@ -758,8 +758,8 @@ context('Check your answers', () => {
 
       page.continueButton().should('exist')
       page.continueButton().contains('Go to next section')
-      page.returnButton().should('exist')
-      page.returnButton().contains('Return to main form menu')
+      page.saveAndReturn().should('exist')
+      page.saveAndReturn().contains('Return to the main form menu')
     })
   })
 
@@ -833,7 +833,7 @@ context('Check your answers', () => {
         true,
       )
 
-      page.returnButton().click()
+      page.saveAndReturn().click()
 
       Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
     })

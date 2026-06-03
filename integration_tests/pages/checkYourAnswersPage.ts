@@ -3,8 +3,8 @@ import { PageElement } from './page'
 
 export default class CheckYourAnswersPage extends AppPage {
   continueButton = (): PageElement => cy.get('[value="continue"]')
-
-  returnButton = (): PageElement => cy.get('.govuk-button--secondary')
+  returnButton = (): PageElement => cy.get('[value="back"]')
+  saveAndReturnButton = (): PageElement => cy.get('#main-content > div > div > form > div > button')
 
   get changeLinks() {
     return cy.contains('.govuk-link', 'Change')
@@ -28,5 +28,9 @@ export default class CheckYourAnswersPage extends AppPage {
 
   return(): void {
     this.returnButton().click()
+  }
+
+  saveAndReturn(): void {
+    this.saveAndReturnButton().click()
   }
 }

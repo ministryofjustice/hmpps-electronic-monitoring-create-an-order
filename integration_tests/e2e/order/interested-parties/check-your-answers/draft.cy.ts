@@ -18,6 +18,7 @@ context('interested parties check answers page', () => {
         status: 'IN_PROGRESS',
         order: {
           dataDictionaryVersion: 'DDV5',
+          type: 'REQUEST',
           interestedParties: {
             responsibleOfficerFirstName: 'officer',
             responsibleOfficerLastName: 'name',
