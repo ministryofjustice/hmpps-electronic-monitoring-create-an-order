@@ -20,7 +20,7 @@ export default class AppPage extends Page {
   }
 
   get backToSummaryButton(): PageElement {
-    return cy.contains('Save and return to main form menu')
+    return cy.contains('Save and return to the main form menu')
   }
 
   get returnBackToFormSectionMenuButton(): PageElement {

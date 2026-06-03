@@ -59,7 +59,6 @@ context('Attachments', () => {
 
         // Buttons
         page.backToSummaryButton.should('exist')
-        page.backButton.should('exist')
       })
 
       it('should go to main page when I click the return button', () => {

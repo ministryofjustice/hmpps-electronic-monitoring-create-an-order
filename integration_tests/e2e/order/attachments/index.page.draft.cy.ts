@@ -46,7 +46,7 @@ context('Attachments', () => {
         page.changeLinks.should('exist')
 
         // Buttons
-        page.saveAndReturnButton.should('exist')
+        page.saveAndReturnButton().should('exist')
       })
 
       it('Should render the attachment summary page for a draft order with uploaded attachments', () => {
@@ -80,7 +80,7 @@ context('Attachments', () => {
         page.changeLinks.should('exist')
 
         // Buttons
-        page.saveAndReturnButton.should('exist')
+        page.saveAndReturnButton().should('exist')
         page.backButton.should('exist')
       })
 
@@ -126,7 +126,7 @@ context('Attachments', () => {
           true,
         )
 
-        page.saveAndReturnButton.click()
+        page.saveAndReturnButton().click()
 
         Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
       })

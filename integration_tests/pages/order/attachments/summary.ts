@@ -6,6 +6,8 @@ import CheckYourAnswersPage from '../../checkYourAnswersPage'
 import ErrorSummaryComponent from '../../components/errorSummaryComponent'
 
 export default class AttachmentSummaryPage extends CheckYourAnswersPage {
+  saveAndReturnButton = (): PageElement => cy.get('#main-content > div > div > form > div > a')
+
   constructor(heading: string = 'Check your answers', isOldVersion: boolean = false) {
     let path: string
     if (isOldVersion) {
@@ -26,11 +28,4 @@ export default class AttachmentSummaryPage extends CheckYourAnswersPage {
   }
 
   // ACTIONS
-  get saveAndReturnButton(): PageElement {
-    return cy.contains('Save and return to main form menu')
-  }
-
-  saveAndReturn() {
-    this.saveAndReturnButton.click()
-  }
 }
