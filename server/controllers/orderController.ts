@@ -1,6 +1,5 @@
 import { Request, RequestHandler, Response } from 'express'
 import { AuditService, OrderService } from '../services'
-import TaskListService from '../services/taskListService'
 import paths from '../constants/paths'
 import { CreateOrderFormDataParser } from '../models/form-data/order'
 import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
@@ -8,12 +7,13 @@ import FeatureFlags from '../utils/featureFlags'
 import isVariationType from '../utils/isVariationType'
 import TimelineModel from '../models/view-models/timelineModel'
 import { Order } from '../models/Order'
+import SectionService from '../services/sectionsService'
 
 export default class OrderController {
   constructor(
     private readonly auditService: AuditService,
     private readonly orderService: OrderService,
-    private readonly taskListService: TaskListService,
+    private readonly sectionService: SectionService,
   ) {}
 
   create: RequestHandler = async (req: Request, res: Response) => {
@@ -24,8 +24,9 @@ export default class OrderController {
     }
 
     const order = await this.orderService.createOrder({ accessToken: res.locals.user.token, data: formData })
-
-    res.redirect(`/order/${order.id}/summary`)
+    if (FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED'))
+      res.redirect(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', order.id))
+    else res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
   }
 
   createVariation: RequestHandler = async (req: Request, res: Response) => {
@@ -60,12 +61,13 @@ export default class OrderController {
 
   summary: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
+
     const { versionId } = req.params
     const createNewOrderVersionEnabled = FeatureFlags.getInstance().get('CREATE_NEW_ORDER_VERSION_ENABLED')
     const error = req.flash('submissionError')
 
     const [sections, completedOrderVersions] = await Promise.all([
-      this.taskListService.getSections(order, versionId),
+      this.sectionService.getSectionsForOrder(order, versionId),
       this.orderService.getCompleteVersions({
         orderId: order.id,
         accessToken: res.locals.user.token,

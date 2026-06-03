@@ -1,5 +1,4 @@
 import Page from '../../../pages/page'
-import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import {
   createFakeAdultDeviceWearer,
@@ -15,6 +14,7 @@ import { verifyAttendanceMonitoringInCheckYourAnswersPage } from '../../../utils
 import { verifyEnforcementZoneInCheckYourAnswersPage } from '../../../utils/scenario-flows/enforcement-zone.cy'
 import { verifyCurfewInCheckYourAnswersPage } from '../../../utils/scenario-flows/curfew.cy'
 import removeMonitoringCondition from '../../../utils/scenario-flows/remove-monitoring-condition.cy'
+import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
 
 context('Monitoring type list flow', () => {
   const currentDate = new Date()
@@ -126,14 +126,16 @@ context('Monitoring type list flow', () => {
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
     cy.signIn()
-    const indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.newOrderFormButton.click()
+
+    const interestedParties = createFakeInterestedParties('Prison', 'Home Office', 'Altcourse Prison', null)
+    createNewOrder({
+      notifyingOrganisation: interestedParties,
+    })
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
     orderSummaryPage.aboutTheDeviceWearerTask.click()
 
-    const interestedParties = createFakeInterestedParties('Prison', 'Home Office', 'Altcourse Prison', null)
     const monitoringOrderTypeDescription = {
       sentenceType: 'Standard Determinate Sentence',
       hdc: 'Yes',
@@ -151,6 +153,7 @@ context('Monitoring type list flow', () => {
       primaryAddressDetails,
       installationAndRisk,
       monitoringOrderTypeDescription,
+      newDeviceWearerFlow: true,
     })
   })
 

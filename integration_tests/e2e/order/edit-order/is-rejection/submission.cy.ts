@@ -3,6 +3,7 @@ import IsRejectionPage from './isRejectionPage'
 import Page from '../../../../pages/page'
 import OrderTasksPage from '../../../../pages/order/summary'
 import IsAddressChangePage from '../is-address-change/isAddressChangePage'
+import NotifyingOrganisationPage from '../../interested-parties/notifying-organisation/notifyingOrganisationPage'
 
 const mockOrderId = uuidv4()
 const variationPath = '/copy-as-variation'
@@ -75,7 +76,7 @@ context('Edit Order', () => {
         body: {},
       }).should('be.true')
 
-      Page.verifyOnPage(OrderTasksPage)
+      Page.verifyOnPage(NotifyingOrganisationPage)
     })
 
     it('Should call amend-rejected-order endpoint if Yes is selected', () => {
@@ -95,7 +96,7 @@ context('Edit Order', () => {
         body: {},
       }).should('be.true')
 
-      Page.verifyOnPage(OrderTasksPage)
+      Page.verifyOnPage(NotifyingOrganisationPage)
     })
 
     context('SERVICE_REQUEST_TYPE_ENABLED enabled', () => {
@@ -119,7 +120,7 @@ context('Edit Order', () => {
           body: {},
         }).should('be.true')
 
-        Page.verifyOnPage(OrderTasksPage)
+        Page.verifyOnPage(NotifyingOrganisationPage)
       })
 
       it('Should go to is address changed page if no is selected and start date is in the past', () => {

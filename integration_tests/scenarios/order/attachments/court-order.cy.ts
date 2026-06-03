@@ -3,9 +3,9 @@ import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAdd
 import { stubAttachments } from '../../utils'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import Page from '../../../pages/page'
-import IndexPage from '../../../pages'
 import OrderSummaryPage from '../../../pages/order/summary'
 import ReceiptPage from '../../../pages/order/receipt'
+import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
 
 context('Service-Request-Types', () => {
   const fmsCaseId: string = uuidv4()
@@ -24,7 +24,7 @@ context('Service-Request-Types', () => {
 
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'COURT'],
     })
 
     cy.task('stubFMSCreateDeviceWearer', {
@@ -57,7 +57,6 @@ context('Service-Request-Types', () => {
       hasAnotherAddress: 'No',
     }
     const installationAddressDetails = createFakeAddress()
-    const interestedParties = createFakeInterestedParties('Family Court', 'Probation', null, 'North West')
 
     const monitoringOrderTypeDescription = {
       orderType: 'Civil',
@@ -84,8 +83,11 @@ context('Service-Request-Types', () => {
       courtOrder: { fileName: files.licence.fileName, contents: files.licence.contents, fileRequired: 'Yes' },
     }
 
-    const indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.newOrderFormButton.click()
+    const interestedParties = createFakeInterestedParties('Family Court', 'Probation', null, 'North West')
+    createNewOrder({
+      notifyingOrganisation: interestedParties,
+    })
+    interestedParties.responsibleOfficer = null
 
     const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
@@ -109,6 +111,7 @@ context('Service-Request-Types', () => {
       probationDeliveryUnit,
       installationLocation: undefined,
       installationAppointment: undefined,
+      newDeviceWearerFlow: true,
     })
     orderSummaryPage.submitOrderButton.click()
     const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)

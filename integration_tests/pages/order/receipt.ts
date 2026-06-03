@@ -53,7 +53,7 @@ export default class ReceiptPage extends AppPage {
   }
 
   get interestedPartiesSection(): SummaryListComponent {
-    const label = 'About the Notifying and Responsible Organisations'
+    const label = 'About the Responsible Organisation'
     return new SummaryListComponent(label)
   }
 }

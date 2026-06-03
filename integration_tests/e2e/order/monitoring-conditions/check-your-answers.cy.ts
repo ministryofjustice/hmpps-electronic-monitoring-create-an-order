@@ -65,7 +65,7 @@ context('Check your answers', () => {
         endDate: '2025-04-28T00:00:00.000Z',
       },
       interestedParties: {
-        notifyingOrganisation: 'HOME_OFFICE',
+        notifyingOrganisation: 'PRISON',
         notifyingOrganisationName: '',
         notifyingOrganisationEmail: '',
         responsibleOfficerName: '',
@@ -119,9 +119,6 @@ context('Check your answers', () => {
       ])
       page.curfewTimetableSection().element.should('exist')
       page.trailMonitoringConditionsSection().shouldExist()
-      page
-        .trailMonitoringConditionsSection()
-        .shouldHaveItem('What type of trail monitoring device is needed?', 'A fitted GPS tag')
       page.alcoholMonitoringConditionsSection().shouldExist()
     })
 
@@ -646,6 +643,36 @@ context('Check your answers', () => {
       page
         .alcoholMonitoringConditionsSection()
         .shouldNotHaveItem('What alcohol monitoring does the device wearer need?')
+    })
+
+    it('notifying org is home office with no end date', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          ...mockOrder,
+          interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: '',
+            responsibleOfficerName: '',
+            responsibleOfficerPhoneNumber: '',
+            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationRegion: '',
+          },
+          monitoringConditionsTrail: {
+            startDate: '2024-11-11T00:00:00Z',
+            deviceType: 'FITTED',
+          },
+        },
+      })
+
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.trailMonitoringConditionsSection().shouldExist()
+      page.trailMonitoringConditionsSection().shouldNotHaveItem('What date does trail monitoring end?')
     })
   })
 

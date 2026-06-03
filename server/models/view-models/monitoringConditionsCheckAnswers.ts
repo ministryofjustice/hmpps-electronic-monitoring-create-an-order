@@ -394,8 +394,11 @@ const createTrailAnswers = (order: Order, content: I18n, answerOpts: AnswerOptio
 
   const answers = [
     createDateAnswer(questions.startDate.text, order.monitoringConditionsTrail?.startDate, uri, answerOpts),
-    createDateAnswer(questions.endDate.text, order.monitoringConditionsTrail?.endDate, uri, answerOpts),
   ]
+
+  if (order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE') {
+    answers.push(createDateAnswer(questions.endDate.text, order.monitoringConditionsTrail?.endDate, uri, answerOpts))
+  }
 
   if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE') {
     const deviceType = lookup(content.reference.deviceTypes, order.monitoringConditionsTrail?.deviceType)

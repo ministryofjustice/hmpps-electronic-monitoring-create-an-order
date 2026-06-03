@@ -172,7 +172,7 @@ context('Receipt', () => {
           ],
           interestedParties: {
             notifyingOrganisation: 'PRISON',
-            notifyingOrganisationName: '',
+            notifyingOrganisationName: 'MilkShake',
             notifyingOrganisationEmail: 'notifying@organisation',
             responsibleOrganisation: 'POLICE',
             responsibleOrganisationPhoneNumber: '01234567890',
@@ -225,6 +225,9 @@ context('Receipt', () => {
         { key: 'Reference number', value: mockOrderId },
         { key: 'Date submitted', value: '01/01/2025, 10:30' },
         { key: 'Submitted by', value: 'test name' },
+        { key: 'Notifying organisation', value: 'PRISON' },
+        { key: "Notifying organisation's name or region", value: 'MilkShake' },
+        { key: "Notifying organisation's contact email address", value: 'notifying@organisation' },
       ])
       page.riskInformationSection.shouldExist()
       page.riskInformationSection.shouldHaveItems([
@@ -236,7 +239,6 @@ context('Receipt', () => {
         { key: 'Any other risks to be aware of? (optional)', value: 'Information about potential risks' },
       ])
       page.deviceWearerSection.shouldExist()
-      page.contactInformationSection.shouldExist()
       page.monitoringConditionsSection.shouldExist()
     })
 
@@ -283,7 +285,7 @@ context('Receipt', () => {
             },
           ],
           interestedParties: {
-            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: '',
             notifyingOrganisationEmail: 'notifying@organisation',
             responsibleOrganisation: 'POLICE',
@@ -335,7 +337,6 @@ context('Receipt', () => {
       page.monitoringConditionsSection.shouldExist()
       page.additionalDocumentsSection.shouldExist()
       page.interestedPartiesSection.shouldHaveItems([
-        { key: 'What organisation or related organisation are you part of?', value: 'Home Office' },
         { key: "What is the Responsible Officer's first name?", value: 'officer' },
         { key: "What is the Responsible Officer's last name?", value: 'name' },
         { key: "What is the Responsible Officer's email address?", value: 'officer@email' },
@@ -508,6 +509,49 @@ context('Receipt', () => {
     it('should have no change links', () => {
       cy.visit(`/order/${mockOrderId}/receipt`)
       cy.contains('.govuk-link', 'Change').should('not.exist')
+    })
+
+    it('Should not show about responsible organisations section when HOME_OFFICE order has no responsible org or officer details', () => {
+      const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
+      cy.task('setFeatureFlags', testFlags)
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          deviceWearer: {
+            nomisId: null,
+            pncId: null,
+            deliusId: null,
+            prisonNumber: null,
+            homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
+            firstName: 'test',
+            lastName: 'tester',
+            alias: null,
+            dateOfBirth: null,
+            adultAtTimeOfInstallation: true,
+            sex: 'FEMALE',
+            gender: 'PREFER_TO_SELF_DESCRIBE',
+            disabilities: 'OTHER',
+            otherDisability: 'Broken arm',
+            noFixedAbode: true,
+            interpreterRequired: false,
+          },
+          interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: 'home-office@test.com',
+            responsibleOrganisation: null,
+            responsibleOfficerFirstName: null,
+          },
+        },
+      })
+      cy.visit(`/order/${mockOrderId}/receipt`)
+      const page = Page.verifyOnPage(ReceiptPage)
+
+      page.interestedPartiesSection.shouldNotExist()
     })
   })
 })

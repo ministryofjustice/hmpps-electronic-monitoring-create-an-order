@@ -9,7 +9,7 @@ const nationalSecurityDirectoratePageConetent: NationalSecurityDirectoratePageCo
       hint: 'The National Security Directorate manage Critical Public Protection cases, Serious Organised Crime cases, those convicted of Terrorist Offences, or assessed as Terrorist Connected and Terrorist Risk cases',
     },
   },
-  section: 'About the Notifying and Responsible Organisations',
+  section: 'About the Responsible Organisation',
   title: '',
 }
 
