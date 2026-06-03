@@ -15,7 +15,7 @@ const responsibleOfficerPageContent: ResponsibleOfficerPageContent = {
       text: "What is the Responsible Officer's email address?",
     },
   },
-  section: 'About the Notifying and Responsible Organisation',
+  section: 'About the Responsible Organisation',
   title: 'Contact details for the Responsible Officer',
 }
 

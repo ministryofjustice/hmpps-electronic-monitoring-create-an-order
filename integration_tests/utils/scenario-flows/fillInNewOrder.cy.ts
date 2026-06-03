@@ -4,6 +4,7 @@ import SubmitSuccessPage from '../../pages/order/submit-success'
 import OrderSummaryPage from '../../pages/order/summary'
 import Page from '../../pages/page'
 import SearchPage from '../../pages/search'
+import createNewOrder from './create-new-order.cy'
 
 const currentDate = new Date()
 const deviceWearerDetails = {
@@ -43,11 +44,12 @@ const monitoringOrderTypeDescription = {
   monitoringCondition: ['Trail monitoring'],
 }
 
-export default function fillInNewOrder({ startDate = null, files }): void {
+export default function fillInNewOrder({ startDate = null, files, newDeviceWearerFlow = false }): void {
   trail.startDate = startDate || trail.startDate
 
-  let indexPage = Page.verifyOnPage(IndexPage)
-  indexPage.newOrderFormButton.click()
+  createNewOrder({
+    notifyingOrganisation: interestedParties,
+  })
 
   const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
   orderSummaryPage.fillInNewOrderWith({
@@ -70,13 +72,14 @@ export default function fillInNewOrder({ startDate = null, files }): void {
     probationDeliveryUnit: undefined,
     installationLocation: undefined,
     installationAppointment: undefined,
+    newDeviceWearerFlow,
   })
 
   orderSummaryPage.submitOrderButton.click()
   const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
   submitSuccessPage.backToYourApplications.click()
 
-  indexPage = Page.verifyOnPage(IndexPage)
+  const indexPage = Page.verifyOnPage(IndexPage)
   indexPage.searchNav.click()
 
   const searchPage = Page.verifyOnPage(SearchPage)

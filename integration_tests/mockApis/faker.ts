@@ -85,7 +85,11 @@ export type InterestedParties = {
   yjsRegion?: string
   responsibleOrganisationAddress?: Partial<Address>
   policeArea?: string
-  responsibleOfficerName?: string
+  responsibleOfficer?: {
+    firstName: string
+    lastName: string
+    email: string
+  }
   responsibleOfficerContactNumber?: string
   youthCustodyServiceRegion?: string
 }
@@ -177,7 +181,13 @@ export const createFakeInterestedParties = (
   responsibleOrganisationRegionOverride?: string,
 ): Partial<InterestedParties> => {
   const sexType = faker.person.sexType()
-  const officerName = `${faker.person.firstName(sexType)} ${faker.person.lastName()}`
+
+  const responsibleOfficer = {
+    firstName: faker.person.firstName(sexType),
+    lastName: faker.person.lastName(),
+    email: 'responsible-off@example.com',
+  }
+
   const officerContactNumber = createFakeUkPhoneNumber()
   const responsibleOrganisationEmailAddress = 'responsible-org@example.com'
   const notifyingOrganisationEmailAddress = 'notifying-org@example.com'
@@ -266,7 +276,7 @@ export const createFakeInterestedParties = (
     civilCountyCourt,
     militaryCourt,
     youthCourt,
-    responsibleOfficerName: officerName,
+    responsibleOfficer,
     responsibleOfficerContactNumber: officerContactNumber,
     responsibleOrganisation,
     responsibleOrganisationRegion,

@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import TertiaryAddressPage from '../../../pages/order/contact-information/tertiary-adddress'
-import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
 import OrderSummaryPage from '../../../pages/order/summary'
+import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 
 const mockOrderId = uuidv4()
 const apiPath = '/address'
@@ -88,7 +88,7 @@ context('Contact information', () => {
         }).should('be.true')
       })
 
-      it('should continue to collect responsible officer', () => {
+      it('should continue to cya page', () => {
         const page = Page.visit(TertiaryAddressPage, {
           orderId: mockOrderId,
           'addressType(primary|secondary|tertiary)': 'tertiary',
@@ -105,7 +105,7 @@ context('Contact information', () => {
         page.form.fillInWith(validFormData)
         page.form.saveAndContinueButton.click()
 
-        Page.verifyOnPage(InterestedPartiesPage)
+        Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
       })
 
       it('should return to the summary page', () => {

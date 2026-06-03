@@ -91,7 +91,9 @@ export function constructListViewModel(orders: Array<Order>): OrderListViewModel
   return {
     orders: orders.map((order, index) => ({
       name: getDisplayName(order),
-      href: paths.ORDER.SUMMARY.replace(':orderId', order.id),
+      href: order.interestedParties?.notifyingOrganisation
+        ? paths.ORDER.SUMMARY.replace(':orderId', order.id)
+        : paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', order.id),
       statusTags: getStatusTags(order),
       index,
     })),
