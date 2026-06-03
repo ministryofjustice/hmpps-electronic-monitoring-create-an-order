@@ -132,7 +132,6 @@ context('Mandatory fields only', () => {
     const curfewConditionDetails = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 20), // 20 days
-      details: 'No',
       curfewAdditionalDetails: '',
     }
     const curfewNights = ['FRIDAY', 'SATURDAY', 'SUNDAY']
@@ -503,7 +502,6 @@ context('Mandatory fields only', () => {
     const curfewConditionDetails = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days
       endDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 20), // 20 days
-      details: 'No',
       curfewAdditionalDetails: '',
     }
     const curfewNights = ['FRIDAY', 'SATURDAY', 'SUNDAY']

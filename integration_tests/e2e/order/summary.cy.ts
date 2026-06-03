@@ -529,7 +529,6 @@ context('Order Summary', () => {
             endDate: null,
             orderId: null,
             startDate: null,
-            details: null,
             curfewAdditionalDetails: null,
           },
           curfewTimeTable: [
@@ -889,7 +888,6 @@ context('Order Summary', () => {
             endDate: null,
             orderId: null,
             startDate: null,
-            details: null,
             curfewAdditionalDetails: null,
           },
           curfewTimeTable: [
@@ -1609,7 +1607,6 @@ context('Order Summary', () => {
             endDate: null,
             orderId: null,
             startDate: null,
-            details: null,
             curfewAdditionalDetails: null,
           },
           curfewTimeTable: [

@@ -7,7 +7,7 @@ import { createGovukErrorSummary } from '../../utils/errors'
 import { Order } from '../Order'
 
 type CurfewConditionsViewModel = ViewModel<
-  Omit<CurfewConditions, 'startDate' | 'endDate' | 'details' | 'curfewAdditionalDetails'>
+  Omit<CurfewConditions, 'startDate' | 'endDate' | 'curfewAdditionalDetails'>
 > & {
   startDate: DateTimeField
   endDate?: DateTimeField

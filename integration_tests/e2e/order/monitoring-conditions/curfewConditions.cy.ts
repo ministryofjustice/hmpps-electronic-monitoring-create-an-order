@@ -14,7 +14,6 @@ const mockSubmittedCurfewConditions = {
     startDate: '2025-03-27T00:00:00.000Z',
     orderId: mockOrderId,
     endDate: '2026-04-28T00:00:00.000Z',
-    details: 'No',
     curfewAdditionalDetails: '',
   },
   id: mockOrderId,
@@ -31,7 +30,6 @@ const mockEmptyCurfewConditions = {
     orderId: mockOrderId,
     startDate: null,
     endDate: null,
-    details: null,
     curfewAdditionalDetails: null,
   },
   interestedParties: {
@@ -246,7 +244,6 @@ context('Curfew conditions', () => {
           orderId: mockOrderId,
           startDate: null,
           endDate: null,
-          details: null,
           curfewAdditionalDetails: null,
         },
         interestedParties: {

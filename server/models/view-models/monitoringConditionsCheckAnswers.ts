@@ -330,8 +330,7 @@ const createCurfewAnswers = (order: Order, content: I18n, answerOpts: AnswerOpti
 
   if (isOrderDataDictionarySameOrAbove('DDV5', order)) {
     const curfewAdditionalDetails = order.curfewConditions?.curfewAdditionalDetails
-    const details = order.curfewConditions?.details
-    if (curfewAdditionalDetails !== null && curfewAdditionalDetails.length > 0 && details === 'Yes') {
+    if (curfewAdditionalDetails !== null && curfewAdditionalDetails.length > 0) {
       answers.push(
         createAnswer(
           curfewAdditionalDetailsQuestions.provideDetails.text,
@@ -344,7 +343,7 @@ const createCurfewAnswers = (order: Order, content: I18n, answerOpts: AnswerOpti
       answers.push(
         createAnswer(
           curfewAdditionalDetailsQuestions.provideDetails.text,
-          order.curfewConditions?.details,
+          'No',
           curfewAdditionalDetailsUri,
           answerOpts,
         ),

@@ -67,7 +67,6 @@ context('Monitoring conditions', () => {
               startDate: '',
               endDate: '',
               curfewAddress: '',
-              details: 'Yes',
               curfewAdditionalDetails: 'some additional curfew details',
             },
           },
