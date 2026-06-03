@@ -1,36 +1,29 @@
-import IndexPage from '../../../pages'
 import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
-import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
-import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
-import InterestedPartiesPage from '../../../pages/order/contact-information/interested-parties'
-import ProbationDeliveryUnitPage from '../../../pages/order/contact-information/probation-delivery-unit'
 import { createFakeInterestedParties } from '../../../mockApis/faker'
-import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
+import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
+import fillInInterestedPartiesWith from '../../../utils/scenario-flows/interested-parties.cy'
+import InterestedPartiesCheckYourAnswersPage from '../../../e2e/order/interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
 
 context('Probation-Deliever-Units', () => {
   context('DDV6', () => {
     const populateNewOrder = (interestedParties, probationDeliveryUnit) => {
-      const indexPage = Page.verifyOnPage(IndexPage)
-      indexPage.newOrderFormButton.click()
+      createNewOrder({
+        notifyingOrganisation: interestedParties,
+      })
+
       const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-      orderSummaryPage.contactInformationTask.click()
+      orderSummaryPage.interestedPartiesTask.click()
 
-      const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
-      contactDetailsPage.form.fillInWith({ contactNumber: '' })
-      contactDetailsPage.form.saveAndContinueButton.click()
-
-      const noFixedAbode = Page.verifyOnPage(NoFixedAbodePage)
-      noFixedAbode.form.fillInWith({ hasFixedAddress: 'No' })
-      noFixedAbode.form.saveAndContinueButton.click()
-
-      const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-      interestedPartiesPage.form.fillInWith(interestedParties)
-      interestedPartiesPage.form.saveAndContinueButton.click()
-
-      const probationDeliveryUnitPage = Page.verifyOnPage(ProbationDeliveryUnitPage)
-      probationDeliveryUnitPage.form.fillInWith(probationDeliveryUnit)
-      probationDeliveryUnitPage.form.saveAndContinueButton.click()
+      fillInInterestedPartiesWith({
+        responsibleOfficer: interestedParties.responsibleOfficer,
+        responsibleOrganisation: {
+          responsibleOrganisation: interestedParties.responsibleOrganisation,
+          probationRegion: interestedParties.responsibleOrganisationRegion,
+        },
+        pdu: probationDeliveryUnit.unit,
+        continueOnCya: false,
+      })
     }
 
     beforeEach(() => {
@@ -48,11 +41,11 @@ context('Probation-Deliever-Units', () => {
       const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'West Midlands')
       const probationDeliveryUnit = { unit: 'Staffordshire North' }
       populateNewOrder(interestedParties, probationDeliveryUnit)
-      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
-        ContactInformationCheckYourAnswersPage,
+      const interestedPartiesCheckYourAnswersPage = Page.verifyOnPage(
+        InterestedPartiesCheckYourAnswersPage,
         'Check your answer',
       )
-      contactInformationCheckYourAnswersPage.organisationDetailsSection.shouldHaveItems([
+      interestedPartiesCheckYourAnswersPage.organisationDetailsSection.shouldHaveItems([
         { key: "What is the Responsible Organisation's Probation Delivery Unit (PDU)", value: 'Staffordshire North' },
       ])
     })
@@ -61,11 +54,11 @@ context('Probation-Deliever-Units', () => {
       const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'West Midlands')
       const probationDeliveryUnit = { unit: 'Staffordshire South' }
       populateNewOrder(interestedParties, probationDeliveryUnit)
-      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
-        ContactInformationCheckYourAnswersPage,
+      const interestedPartiesCheckYourAnswersPage = Page.verifyOnPage(
+        InterestedPartiesCheckYourAnswersPage,
         'Check your answer',
       )
-      contactInformationCheckYourAnswersPage.organisationDetailsSection.shouldHaveItems([
+      interestedPartiesCheckYourAnswersPage.organisationDetailsSection.shouldHaveItems([
         { key: "What is the Responsible Organisation's Probation Delivery Unit (PDU)", value: 'Staffordshire South' },
       ])
     })
@@ -74,11 +67,11 @@ context('Probation-Deliever-Units', () => {
       const interestedParties = createFakeInterestedParties('Prison', 'Probation', 'Liverpool Prison', 'West Midlands')
       const probationDeliveryUnit = { unit: 'Personality Disorder Prosper (West Mids)' }
       populateNewOrder(interestedParties, probationDeliveryUnit)
-      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
-        ContactInformationCheckYourAnswersPage,
+      const interestedPartiesCheckYourAnswersPage = Page.verifyOnPage(
+        InterestedPartiesCheckYourAnswersPage,
         'Check your answer',
       )
-      contactInformationCheckYourAnswersPage.organisationDetailsSection.shouldHaveItems([
+      interestedPartiesCheckYourAnswersPage.organisationDetailsSection.shouldHaveItems([
         {
           key: "What is the Responsible Organisation's Probation Delivery Unit (PDU)",
           value: 'Personality Disorder Prosper (West Mids)',
@@ -95,11 +88,11 @@ context('Probation-Deliever-Units', () => {
       )
       const probationDeliveryUnit = { unit: 'Stockport and Tameside' }
       populateNewOrder(interestedParties, probationDeliveryUnit)
-      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
-        ContactInformationCheckYourAnswersPage,
+      const interestedPartiesCheckYourAnswersPage = Page.verifyOnPage(
+        InterestedPartiesCheckYourAnswersPage,
         'Check your answer',
       )
-      contactInformationCheckYourAnswersPage.organisationDetailsSection.shouldHaveItems([
+      interestedPartiesCheckYourAnswersPage.organisationDetailsSection.shouldHaveItems([
         {
           key: "What is the Responsible Organisation's Probation Delivery Unit (PDU)",
           value: 'Stockport and Tameside',
@@ -116,11 +109,11 @@ context('Probation-Deliever-Units', () => {
       )
       const probationDeliveryUnit = { unit: 'Salford and Trafford' }
       populateNewOrder(interestedParties, probationDeliveryUnit)
-      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
-        ContactInformationCheckYourAnswersPage,
+      const interestedPartiesCheckYourAnswersPage = Page.verifyOnPage(
+        InterestedPartiesCheckYourAnswersPage,
         'Check your answer',
       )
-      contactInformationCheckYourAnswersPage.organisationDetailsSection.shouldHaveItems([
+      interestedPartiesCheckYourAnswersPage.organisationDetailsSection.shouldHaveItems([
         { key: "What is the Responsible Organisation's Probation Delivery Unit (PDU)", value: 'Salford and Trafford' },
       ])
     })

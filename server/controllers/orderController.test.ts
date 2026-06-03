@@ -8,7 +8,8 @@ import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
 import AuditService from '../services/auditService'
 import OrderService from '../services/orderService'
 import OrderController from './orderController'
-import TaskListService from '../services/taskListService'
+import FeatureFlags from '../utils/featureFlags'
+import SectionService from '../services/sectionsService'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -21,7 +22,7 @@ describe('OrderController', () => {
   let mockAuditService: jest.Mocked<AuditService>
   let mockOrderService: jest.Mocked<OrderService>
   let orderController: OrderController
-  let taskListService: jest.Mocked<TaskListService>
+  let sectionService: jest.Mocked<SectionService>
 
   beforeEach(() => {
     mockAuditClient = new HmppsAuditClient({
@@ -38,10 +39,10 @@ describe('OrderController', () => {
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockOrderService = new OrderService(mockRestClient) as jest.Mocked<OrderService>
     mockOrderService.getCompleteVersions = jest.fn().mockResolvedValue([])
-    taskListService = {
-      getSections: jest.fn().mockReturnValue(Promise.resolve([])),
-    } as unknown as jest.Mocked<TaskListService>
-    orderController = new OrderController(mockAuditService, mockOrderService, taskListService)
+    sectionService = {
+      getSectionsForOrder: jest.fn().mockReturnValue(Promise.resolve([])),
+    } as unknown as jest.Mocked<SectionService>
+    orderController = new OrderController(mockAuditService, mockOrderService, sectionService)
   })
 
   describe('summary', () => {
@@ -67,7 +68,19 @@ describe('OrderController', () => {
   })
 
   describe('create', () => {
-    it('should create an order and redirect to view the order', async () => {
+    beforeEach(() => {
+      const mockGet = jest.fn((flag: string) => flag === 'INTERESTED_PARTIES_FLOW_ENABLED')
+      const mockGetValue = jest.fn(() => 'true')
+      jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
+        get: mockGet,
+        getValue: mockGetValue,
+      } as never)
+    })
+
+    afterEach(() => {
+      jest.restoreAllMocks()
+    })
+    it('should create an order and redirect to your details page', async () => {
       // Given
       const mockOrder = getMockOrder()
       const req = createMockRequest({
@@ -87,7 +100,7 @@ describe('OrderController', () => {
         accessToken: 'fakeUserToken',
         data: { type: 'REQUEST' },
       })
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/summary`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/interest-parties/notifying-organisation`)
     })
   })
 

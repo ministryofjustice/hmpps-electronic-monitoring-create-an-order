@@ -7,7 +7,7 @@ import ContactDetailsFormComponent from '../../components/forms/contact-informat
 export default class ContactDetailsPage extends AppFormPage {
   public form = new ContactDetailsFormComponent()
 
-  constructor(section: string = 'Contact information') {
+  constructor(section: string = 'About the device wearer') {
     super('', paths.CONTACT_INFORMATION.CONTACT_DETAILS, section)
   }
 

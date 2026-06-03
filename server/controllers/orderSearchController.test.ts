@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from 'express'
-import { createMonitoringConditions, getMockOrder } from '../../test/mocks/mockOrder'
+import { createInterestedParties, createMonitoringConditions, getMockOrder } from '../../test/mocks/mockOrder'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
 import { Order, OrderStatusEnum, OrderTypeEnum } from '../models/Order'
@@ -120,7 +120,7 @@ describe('OrderSearchController', () => {
 
   describe('list orders', () => {
     it('should render a view containing users orders', async () => {
-      const secondDraftOrder = getMockOrder()
+      const secondDraftOrder = getMockOrder({ interestedParties: createInterestedParties() })
       mockOrderService.listOrders.mockResolvedValue([mockDraftOrder, secondDraftOrder])
 
       await orderController.list(req, res, next)
@@ -130,7 +130,7 @@ describe('OrderSearchController', () => {
         expect.objectContaining({
           orders: [
             {
-              href: `/order/${mockDraftOrder.id}/summary`,
+              href: `/order/${mockDraftOrder.id}/interest-parties/notifying-organisation`,
               index: 0,
               name: 'Not supplied',
               statusTags: [{ type: 'DRAFT', text: 'Draft' }],

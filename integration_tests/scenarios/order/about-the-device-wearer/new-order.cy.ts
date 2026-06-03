@@ -1,9 +1,9 @@
 import Page from '../../../pages/page'
-import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAdultDeviceWearer, kelvinCloseAddress } from '../../../mockApis/faker'
+import { createFakeAdultDeviceWearer, createFakeInterestedParties, kelvinCloseAddress } from '../../../mockApis/faker'
 import fillInAboutTheDeviceWearer from '../../../utils/scenario-flows/about-the-device-wearer-flow.cy'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
+import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
 
 context('New about device wearer flow', () => {
   let orderSummaryPage: OrderSummaryPage
@@ -18,9 +18,9 @@ context('New about device wearer flow', () => {
       name: 'Cemor Stubs',
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
-    cy.signIn()
-    const indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.newOrderFormButton.click()
+    createNewOrder({
+      notifyingOrganisation: createFakeInterestedParties('Prison', 'Probation', undefined, 'North West'),
+    })
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 

@@ -1,10 +1,10 @@
 import { Router } from 'express'
-import NotifingOrganisationController from './notifying-organisation/controller'
 import ResponsibleOfficerController from './responsible-officer/controller'
 import ProbationDeliveryUnitController from './pdu/controller'
 import ResponsibleOrganisationController from './responsible-organisation/controller'
 import { Services } from '../../services'
 import NationalSecurityDirectorateController from './national-security-directorate/controller'
+import NotifingOrganisationController from './notifying-organisation/controller'
 
 const createInterestedPartiesRouter = (
   services: Pick<
@@ -41,6 +41,7 @@ const createInterestedPartiesRouter = (
 
   router.get('/national-security-directorate', nationalSecurityDirectorateController.view)
   router.post('/national-security-directorate', nationalSecurityDirectorateController.update)
+
   return router
 }
 

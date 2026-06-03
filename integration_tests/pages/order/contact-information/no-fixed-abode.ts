@@ -7,7 +7,7 @@ import NoFixedAbodeFormComponent from '../../components/forms/contact-informatio
 export default class NoFixedAbodePage extends AppFormPage {
   public form = new NoFixedAbodeFormComponent()
 
-  constructor(section: string = 'Contact information') {
+  constructor(section: string = 'About the device wearer') {
     super('Fixed address', paths.CONTACT_INFORMATION.NO_FIXED_ABODE, section)
   }
 

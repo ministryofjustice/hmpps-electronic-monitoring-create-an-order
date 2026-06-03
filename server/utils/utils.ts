@@ -193,6 +193,8 @@ export const isNullOrUndefined = <T>(value: T | null | undefined): value is null
 
 export const isNotNullOrUndefined = <T>(value: T | null | undefined): value is T => !isNullOrUndefined(value)
 
+export const isNotNullOrEmptyString = (value: string | null | undefined) => isNotNullOrUndefined(value) && value !== ''
+
 export const lookup = (map: ReferenceData, value: string | null | undefined, defaultValue: string = ''): string => {
   if (isNullOrUndefined(value)) {
     return defaultValue

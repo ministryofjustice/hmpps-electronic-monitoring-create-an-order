@@ -9,7 +9,6 @@ import SearchPage from '../../../pages/search'
 import ConfirmVariationPage from '../../../pages/order/variation/confirmVariation'
 import ServiceRequestTypePage from '../../../e2e/order/variation/service-request-type/serviceRequestTypePage'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
-import ContactInformationCheckYourAnswersPage from '../../../pages/order/contact-information/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
@@ -17,11 +16,14 @@ import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-su
 import IsRejectionPage from '../../../e2e/order/edit-order/is-rejection/isRejectionPage'
 import ReceiptPage from '../../../pages/order/receipt'
 import IsAddressChangePage from '../../../e2e/order/edit-order/is-address-change/isAddressChangePage'
+import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
+import NotifyingOrganisationPage from '../../../e2e/order/interested-parties/notifying-organisation/notifyingOrganisationPage'
 
 context('Service-Request-Types', () => {
   let orderSummaryPage: OrderSummaryPage
   const testFlags = {
     SERVICE_REQUEST_TYPE_ENABLED: true,
+    INTERESTED_PARTIES_FLOW_ENABLED: true,
   }
   const currentDate = new Date()
   const deviceWearerDetails = {
@@ -58,7 +60,8 @@ context('Service-Request-Types', () => {
       fileName: 'test.pdf',
     },
   }
-  const interestedParties = createFakeInterestedParties('Prison', 'Home Office', 'Altcourse Prison', null)
+  const interestedParties = createFakeInterestedParties('Prison', 'Probation', undefined, 'Wales')
+  const probationDeliveryUnit = { unit: 'Wales' }
   const monitoringOrderTypeDescription = {
     sentenceType: 'Standard Determinate Sentence',
     hdc: 'Yes',
@@ -75,10 +78,12 @@ context('Service-Request-Types', () => {
   }
 
   const fillInNewOrder = () => {
-    let indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.newOrderFormButton.click()
-
+    createNewOrder({
+      notifyingOrganisation: interestedParties,
+      stubSignin: false,
+    })
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+
     orderSummaryPage.fillInNewOrderWith({
       deviceWearerDetails,
       responsibleAdultDetails: undefined,
@@ -96,16 +101,17 @@ context('Service-Request-Types', () => {
       curfewTimetable: undefined,
       attendanceMonitoringDetails: undefined,
       files,
-      probationDeliveryUnit: undefined,
+      probationDeliveryUnit,
       installationLocation: undefined,
       installationAppointment: undefined,
+      newDeviceWearerFlow: true,
     })
 
     orderSummaryPage.submitOrderButton.click()
     const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
     submitSuccessPage.backToYourApplications.click()
 
-    indexPage = Page.verifyOnPage(IndexPage)
+    const indexPage = Page.verifyOnPage(IndexPage)
     indexPage.searchNav.click()
 
     const searchPage = Page.verifyOnPage(SearchPage)
@@ -130,12 +136,11 @@ context('Service-Request-Types', () => {
       page.form.fillInWith(variationType)
       page.form.continueButton.click()
     }
-
+    const yourDetailsPage = Page.verifyOnPage(NotifyingOrganisationPage)
+    yourDetailsPage.form.continueButton.click()
     orderSummaryPage.fillInVariationsDetails({ variationDetails: variation })
     orderSummaryPage.aboutTheDeviceWearerTask.click()
-
     Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').continue()
-    Page.verifyOnPage(ContactInformationCheckYourAnswersPage, 'Check your answers').continue()
     Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers').continue()
     Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers').continue()
     Page.verifyOnPage(AttachmentSummaryPage).saveAndReturn()

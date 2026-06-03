@@ -66,7 +66,8 @@ context('Access needs and installation risk information', () => {
         }).should('be.true')
       })
 
-      it('should continue to the check your answers page', () => {
+      // Skipped as page is no longer in task service
+      it.skip('should continue to the check your answers page', () => {
         const page = Page.visit(InstallationAndRiskPage, { orderId: mockOrderId })
 
         const validFormData = {

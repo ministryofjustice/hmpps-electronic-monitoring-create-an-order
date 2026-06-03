@@ -1,11 +1,12 @@
 import Page from '../../../pages/page'
-import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
 import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import fillInTagAtSourceWith from '../../../utils/scenario-flows/tag-at-source.cy'
 import TypesOfMonitoringNeededPage from '../../../e2e/order/monitoring-conditions/order-type-description/types-of-monitoring-needed/TypesOfMonitoringNeededPage'
+import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
+import fillInInterestedPartiesWith from '../../../utils/scenario-flows/interested-parties.cy'
 
 context('Order type descriptions', () => {
   const currentDate = new Date()
@@ -38,18 +39,6 @@ context('Order type descriptions', () => {
   beforeEach(() => {
     cy.task('resetDB')
     cy.task('reset')
-
-    cy.task('stubSignIn', {
-      name: 'Cemor Stubs',
-      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
-    })
-    cy.signIn()
-    const indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.newOrderFormButton.click()
-
-    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-
-    orderSummaryPage.aboutTheDeviceWearerTask.click()
   })
 
   afterEach(() => {
@@ -152,7 +141,21 @@ context('Order type descriptions', () => {
   }
 
   it('Notification org is prison, full HDC and pilot flow', () => {
+    cy.task('stubSignIn', {
+      name: 'Cemor Stubs',
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
+    })
+    cy.signIn()
+
     const interestedParties = createFakeInterestedParties('Prison', 'Home Office', 'Altcourse Prison', null)
+    createNewOrder({
+      notifyingOrganisation: interestedParties,
+    })
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+
+    orderSummaryPage.aboutTheDeviceWearerTask.click()
+
     const monitoringOrderTypeDescription = {
       sentenceType: 'Standard Determinate Sentence',
       hdc: 'Yes',
@@ -169,13 +172,29 @@ context('Order type descriptions', () => {
       primaryAddressDetails,
       installationAndRisk,
       monitoringOrderTypeDescription,
+      newDeviceWearerFlow: true,
     })
 
     verifyResult({ monitoringOrderTypeDescription })
   })
 
   it('Notification org is prison, PRARR no', () => {
+    cy.task('stubSignIn', {
+      name: 'Cemor Stubs',
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
+    })
+    cy.signIn()
+
     const interestedParties = createFakeInterestedParties('Prison', 'Home Office', null, null)
+
+    createNewOrder({
+      notifyingOrganisation: interestedParties,
+    })
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+
+    orderSummaryPage.aboutTheDeviceWearerTask.click()
+
     const monitoringOrderTypeDescription = {
       sentenceType: 'Extended Determinate Sentence',
       prarr: 'Yes',
@@ -188,12 +207,28 @@ context('Order type descriptions', () => {
       primaryAddressDetails,
       installationAndRisk,
       monitoringOrderTypeDescription,
+      newDeviceWearerFlow: true,
     })
     verifyResult({ monitoringOrderTypeDescription })
   })
 
   it('Notification org is YCS, sentence Section 250', () => {
+    cy.task('stubSignIn', {
+      name: 'Cemor Stubs',
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
+    })
+    cy.signIn()
+
     const interestedParties = createFakeInterestedParties('Youth Custody Service', 'Home Office', 'London', null)
+
+    createNewOrder({
+      notifyingOrganisation: interestedParties,
+    })
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+
+    orderSummaryPage.aboutTheDeviceWearerTask.click()
+
     const monitoringOrderTypeDescription = {
       sentenceType: 'Section 250 / Section 91',
       prarr: 'Yes',
@@ -206,12 +241,28 @@ context('Order type descriptions', () => {
       primaryAddressDetails,
       installationAndRisk,
       monitoringOrderTypeDescription,
+      newDeviceWearerFlow: true,
     })
     verifyResult({ monitoringOrderTypeDescription })
   })
 
   it('Notification org is YCS, sentence Section DTO, Issp yes', () => {
+    cy.task('stubSignIn', {
+      name: 'Cemor Stubs',
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
+    })
+    cy.signIn()
+
     const interestedParties = createFakeInterestedParties('Youth Custody Service', 'Home Office', 'London', null)
+
+    createNewOrder({
+      notifyingOrganisation: interestedParties,
+    })
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+
+    orderSummaryPage.aboutTheDeviceWearerTask.click()
+
     const monitoringOrderTypeDescription = {
       sentenceType: 'Detention and Training Order',
       issp: 'Yes',
@@ -225,20 +276,46 @@ context('Order type descriptions', () => {
       primaryAddressDetails,
       installationAndRisk,
       monitoringOrderTypeDescription,
+      newDeviceWearerFlow: true,
     })
     verifyResult({ monitoringOrderTypeDescription })
   })
 
   it('Notification org is Probation, order type Post Release, sentence Section SDS, Pilot DAPOL, HDC no', () => {
+    cy.task('stubSignIn', {
+      name: 'Cemor Stubs',
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PROBATION'],
+    })
+    cy.signIn()
+
     const interestedParties = createFakeInterestedParties(
       'Probation service',
       'Probation',
       null,
       'Kent, Surrey & Sussex',
     )
+
+    createNewOrder({
+      notifyingOrganisation: interestedParties,
+    })
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+
     const probationDeliveryUnit = {
       unit: 'Surrey',
     }
+
+    orderSummaryPage.interestedPartiesTask.click()
+    fillInInterestedPartiesWith({
+      responsibleOfficer: interestedParties.responsibleOfficer,
+      responsibleOrganisation: {
+        responsibleOrganisation: interestedParties.responsibleOrganisation,
+        probationRegion: interestedParties.responsibleOrganisationRegion,
+      },
+      pdu: probationDeliveryUnit.unit,
+      continueOnCya: true,
+    })
+
     const monitoringOrderTypeDescription = {
       // commented out due to ELM-4526
       // orderType: 'Release from prison',
@@ -257,6 +334,7 @@ context('Order type descriptions', () => {
       installationAndRisk,
       monitoringOrderTypeDescription,
       probationDeliveryUnit,
+      newDeviceWearerFlow: true,
     })
     verifyResult({ monitoringOrderTypeDescription })
   })
@@ -302,6 +380,22 @@ context('Order type descriptions', () => {
   })
 
   it('Notification org is home office', () => {
+    cy.task('stubSignIn', {
+      name: 'Cemor Stubs',
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'HOME_OFFICE'],
+    })
+    cy.signIn()
+
+    const interestedParties = createFakeInterestedParties('Home Office', 'Home Office', null, null)
+
+    createNewOrder({
+      notifyingOrganisation: interestedParties,
+    })
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+
+    orderSummaryPage.aboutTheDeviceWearerTask.click()
+
     const installationLocation = {
       location: 'At a prison',
     }
@@ -310,15 +404,15 @@ context('Order type descriptions', () => {
       placeName: 'mock prison',
       appointmentDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(13, 0, 0, 0)),
     }
+
     const installationAddressDetails = createFakeAddress()
-    const interestedParties = createFakeInterestedParties('Home Office', 'Home Office', null, null)
     const monitoringOrderTypeDescription = {
       monitoringCondition: 'Trail monitoring',
     }
 
     const trailMonitoringOrderWithDeviceType = {
       startDate: new Date(currentDate.getFullYear(), 11, 1),
-      endDate: new Date(currentDate.getFullYear() + 1, 11, 1, 23, 59, 0),
+      endDate: null,
       deviceType: 'A fitted GPS tag',
     }
 
@@ -328,6 +422,7 @@ context('Order type descriptions', () => {
       primaryAddressDetails,
       installationAndRisk,
       monitoringOrderTypeDescription,
+      newDeviceWearerFlow: true,
     })
     verifyResult({
       monitoringOrderTypeDescription,
@@ -339,12 +434,27 @@ context('Order type descriptions', () => {
   })
 
   it('Notification org is Civil', () => {
+    cy.task('stubSignIn', {
+      name: 'Cemor Stubs',
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'HOME_OFFICE'],
+    })
+    cy.signIn()
+
     const interestedParties = createFakeInterestedParties(
       'Civil and County Court',
       'Home Office',
       'Bedford County and Civil Court',
       null,
     )
+
+    createNewOrder({
+      notifyingOrganisation: interestedParties,
+    })
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+
+    orderSummaryPage.aboutTheDeviceWearerTask.click()
+
     const monitoringOrderTypeDescription = {
       // commented out due to ELM-4526
       // orderType: 'Bail',
@@ -357,6 +467,7 @@ context('Order type descriptions', () => {
       primaryAddressDetails,
       installationAndRisk,
       monitoringOrderTypeDescription,
+      newDeviceWearerFlow: true,
     })
     verifyResult({ monitoringOrderTypeDescription })
   })
