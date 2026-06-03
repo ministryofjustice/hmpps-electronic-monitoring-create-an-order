@@ -11,7 +11,14 @@ import { SanitisedError } from '../sanitisedError'
 type CreateOrderRequest = AuthenticatedRequestInput & {
   data: CreateOrderFormData
 }
-
+type createOrderWithNotifyingOrganisationReuqst = AuthenticatedRequestInput & {
+  data: {
+    requestType: string
+    notifyingOrganisation: string | undefined
+    notifyingOrganisationName: string | undefined
+    notifyingOrganisationEmail: string | null
+  }
+}
 type OrderRequestInput = AuthenticatedRequestInput & {
   orderId: string
 }
@@ -35,6 +42,15 @@ export default class OrderService {
   async createOrder(input: CreateOrderRequest): Promise<Order> {
     const result = await this.apiClient.post({
       path: '/api/orders',
+      token: input.accessToken,
+      data: input.data,
+    })
+    return OrderModel.parse(result)
+  }
+
+  async createOrderWithNotifyingOrganisation(input: createOrderWithNotifyingOrganisationReuqst): Promise<Order> {
+    const result = await this.apiClient.post({
+      path: '/api/orderWithNotifyingOrganisation',
       token: input.accessToken,
       data: input.data,
     })

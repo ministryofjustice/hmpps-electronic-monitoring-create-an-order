@@ -1,10 +1,10 @@
 import Page from '../../../pages/page'
-import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
-import { createFakeAdultDeviceWearer } from '../../../mockApis/faker'
+import { createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
 import fillinAddress from '../../../utils/scenario-flows/postcode-lookup.cy'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import fillInAboutTheDeviceWearer from '../../../utils/scenario-flows/about-the-device-wearer-flow.cy'
+import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
 
 context('Postcode Lookup', () => {
   let orderSummaryPage: OrderSummaryPage
@@ -65,9 +65,9 @@ context('Postcode Lookup', () => {
       },
     })
 
-    cy.signIn()
-    const indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.newOrderFormButton.click()
+    createNewOrder({
+      notifyingOrganisation: createFakeInterestedParties('Prison', 'Probation', undefined, 'North West'),
+    })
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 

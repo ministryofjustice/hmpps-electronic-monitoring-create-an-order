@@ -50,7 +50,11 @@ export default class IsRejectionController extends YesNoQuestionPageController {
           accessToken: res.locals.user.token,
         })
       }
-      res.redirect(`/order/${orderId}/summary`)
+      if (!FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')) {
+        res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+      } else {
+        res.redirect(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', orderId))
+      }
     }
   }
 
