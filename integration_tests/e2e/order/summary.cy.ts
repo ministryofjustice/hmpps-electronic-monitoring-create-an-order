@@ -457,7 +457,6 @@ context('Order Summary', () => {
 
   context('Complete order, variation, not submitted', () => {
     beforeEach(() => {
-      mockOrderId = uuidv4()
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
@@ -510,7 +509,9 @@ context('Order Summary', () => {
             notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: '',
             notifyingOrganisationEmail: '',
-            responsibleOfficerName: '',
+            responsibleOfficerFirstName: 'test',
+            responsibleOfficerLastName: '',
+            responsibleOfficerEmail: '@email',
             responsibleOfficerPhoneNumber: '',
             responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
             responsibleOrganisationAddress: {
@@ -524,6 +525,19 @@ context('Order Summary', () => {
             responsibleOrganisationEmail: '',
             responsibleOrganisationPhoneNumber: '',
             responsibleOrganisationRegion: '',
+          },
+          offences: [
+            {
+              id: 'offence id',
+              offenceType: 'SEXUAL_OFFENCES',
+            },
+          ],
+          offenceAdditionalDetails: {
+            additionalDetails: 'mock offence details',
+          },
+          detailsOfInstallation: {
+            riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
+            riskDetails: 'some risk details',
           },
           enforcementZoneConditions: [
             {
@@ -659,9 +673,9 @@ context('Order Summary', () => {
     it('should display all tasks as incomplete or unable to start for a new variation', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
-      page.aboutTheDeviceWearerTask.shouldHaveStatus('Optional')
+      page.interestedPartiesTask.shouldHaveStatus('Optional')
 
-      page.contactInformationTask.shouldHaveStatus('Optional')
+      page.aboutTheDeviceWearerTask.shouldHaveStatus('Optional')
 
       page.riskInformationTask.shouldHaveStatus('Optional')
 
@@ -674,6 +688,21 @@ context('Order Summary', () => {
       page.submitOrderButton.should('be.disabled')
     })
 
+    it('should display status as Complete after view interested parties check your answer page', () => {
+      let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.interestedPartiesTask.shouldHaveStatus('Optional')
+      page.interestedPartiesTask.link.click()
+      const ciCYApage = Page.verifyOnPage(
+        InterestedPartiesCheckYourAnswersPage,
+        { orderId: mockOrderId },
+        {},
+        'Check your answers',
+      )
+      ciCYApage.continueButton().click()
+      page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.interestedPartiesTask.shouldHaveStatus('Complete')
+    })
+
     it('should display status as Complete after view Device Wearer check your answer page', () => {
       let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.aboutTheDeviceWearerTask.shouldHaveStatus('Optional')
@@ -682,21 +711,6 @@ context('Order Summary', () => {
       dwCYApage.continueButton().click()
       page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.aboutTheDeviceWearerTask.shouldHaveStatus('Complete')
-    })
-
-    it('should display status as Complete after view Contact information check your answer page', () => {
-      let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
-      page.contactInformationTask.shouldHaveStatus('Optional')
-      page.contactInformationTask.link.click()
-      const ciCYApage = Page.verifyOnPage(
-        ContactInformationCheckYourAnswersPage,
-        { orderId: mockOrderId },
-        {},
-        'Check your answers',
-      )
-      ciCYApage.continueButton().click()
-      page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
-      page.contactInformationTask.shouldHaveStatus('Complete')
     })
 
     it('should display status as Complete after view Risk Information check your answer page', () => {
@@ -793,7 +807,9 @@ context('Order Summary', () => {
             notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: '',
             notifyingOrganisationEmail: '',
-            responsibleOfficerName: '',
+            responsibleOfficerFirstName: 'test',
+            responsibleOfficerLastName: '',
+            responsibleOfficerEmail: '@email',
             responsibleOfficerPhoneNumber: '',
             responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
             responsibleOrganisationAddress: {
@@ -807,6 +823,19 @@ context('Order Summary', () => {
             responsibleOrganisationEmail: '',
             responsibleOrganisationPhoneNumber: '',
             responsibleOrganisationRegion: '',
+          },
+          offences: [
+            {
+              id: 'offence id',
+              offenceType: 'SEXUAL_OFFENCES',
+            },
+          ],
+          offenceAdditionalDetails: {
+            additionalDetails: 'mock offence details',
+          },
+          detailsOfInstallation: {
+            riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
+            riskDetails: 'some risk details',
           },
           enforcementZoneConditions: [
             {
