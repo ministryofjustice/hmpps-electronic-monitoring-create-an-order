@@ -18,6 +18,9 @@ const expectedValidationErrors = {
   variationDetails: {
     required: 'Enter details of all the changes you have made',
   },
+  variationDetailsAvailable: {
+    required: 'Select Yes if there is any other information to be aware of',
+  },
 }
 
 context('Variation', () => {
@@ -43,9 +46,26 @@ context('Variation', () => {
         Page.verifyOnPage(VariationDetailsPage)
 
         page.form.variationDateField.shouldHaveValidationMessage(expectedValidationErrors.variationDate.required)
-        page.form.variationDetailsField.shouldHaveValidationMessage(expectedValidationErrors.variationDetails.required)
+        page.form.variationDetailsAvailable.shouldHaveValidationMessage(
+          expectedValidationErrors.variationDetailsAvailable.required,
+        )
         page.errorSummary.shouldExist()
         page.errorSummary.shouldHaveError(expectedValidationErrors.variationDate.required)
+        page.errorSummary.shouldHaveError(expectedValidationErrors.variationDetailsAvailable.required)
+      })
+
+      it('Should display details validation message when selected "Yes"', () => {
+        const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
+
+        page.form.variationDateField.set(new Date())
+        page.form.variationDetailsAvailable.set('Yes')
+
+        page.form.saveAndReturnButton.click()
+
+        Page.verifyOnPage(VariationDetailsPage)
+
+        page.form.variationDetailsField.shouldHaveValidationMessage(expectedValidationErrors.variationDetails.required)
+        page.errorSummary.shouldExist()
         page.errorSummary.shouldHaveError(expectedValidationErrors.variationDetails.required)
       })
 
@@ -64,22 +84,6 @@ context('Variation', () => {
         page.form.variationDateField.shouldHaveValidationMessage(expectedValidationErrors.variationDate.mustBeRealDate)
         page.errorSummary.shouldExist()
         page.errorSummary.shouldHaveError(expectedValidationErrors.variationDate.mustBeRealDate)
-      })
-
-      it('Should display description validation error message when the form description has not been filled in', () => {
-        const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
-
-        page.form.fillInWith({
-          variationDate: new Date(2024, 1, 1),
-        })
-
-        page.form.saveAndReturnButton.click()
-
-        Page.verifyOnPage(VariationDetailsPage)
-
-        page.form.variationDetailsField.shouldHaveValidationMessage(expectedValidationErrors.variationDetails.required)
-        page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError(expectedValidationErrors.variationDetails.required)
       })
 
       it('Should display description validation error message when the form description is longer than 200 characters', () => {

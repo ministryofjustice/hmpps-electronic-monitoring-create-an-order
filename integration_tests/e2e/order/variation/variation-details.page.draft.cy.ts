@@ -31,8 +31,8 @@ context('Variation', () => {
         page.header.userName().should('contain.text', 'J. Smith')
         page.header.phaseBanner().should('contain.text', 'dev')
 
-        page.form.variationDetailsNeededField.element.should('exist')
-        page.form.variationDetailsNeededField.set('Yes')
+        page.form.variationDetailsAvailable.element.should('exist')
+        page.form.variationDetailsAvailable.set('Yes')
         page.form.variationDetailsField.element.should('exist')
 
         cy.get('form').find('legend').contains('What have you changed in the form?').should('exist')
