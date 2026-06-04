@@ -57,7 +57,7 @@
               name: "action",
               value: "back"
             })}}
-          {% if goToNextSectionNavigation %}
+          {% elif goToNextSectionNavigation %}
             {{ govukButton({
               text: "Save and go to next section",
               name: "action",
@@ -80,5 +80,4 @@
       </form>
     </div>
   </div>
-
 {% endblock %}

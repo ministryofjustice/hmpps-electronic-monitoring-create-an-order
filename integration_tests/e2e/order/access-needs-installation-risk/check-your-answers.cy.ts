@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
+import { start } from 'repl'
 import Page from '../../../pages/page'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import OrderTasksPage from '../../../pages/order/summary'
@@ -18,7 +19,28 @@ context('installation and risk - check your answers', () => {
         httpStatus: 200,
         id: mockOrderId,
         status: 'IN_PROGRESS',
-        order: { dataDictionaryVersion: 'DDV5' },
+        type: 'REQUEST',
+        order: {
+          dataDictionaryVersion: 'DDV5',
+          monitoringConditions: {
+            startDate: null,
+            endDate: null,
+            orderType: null,
+            curfew: null,
+            exclusionZone: null,
+            trail: null,
+            mandatoryAttendance: null,
+            alcohol: null,
+            conditionType: null,
+            orderTypeDescription: null,
+            sentenceType: null,
+            issp: null,
+            hdc: null,
+            prarr: null,
+            pilot: null,
+            offenceType: null,
+          },
+        },
       })
 
       cy.signIn()
@@ -192,10 +214,8 @@ context('installation and risk - check your answers', () => {
     it('shows correct buttons', () => {
       const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.continueButton().should('exist')
-      page.continueButton().contains('Go to next section')
       page.returnButton().should('exist')
-      page.returnButton().contains('Return to main form menu')
+      page.returnButton().contains('Return to the main form menu')
     })
   })
 
@@ -268,10 +288,8 @@ context('installation and risk - check your answers', () => {
     it('shows correct buttons', () => {
       const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.continueButton().should('exist')
-      page.continueButton().contains('Go to next section')
       page.returnButton().should('exist')
-      page.returnButton().contains('Return to main form menu')
+      page.returnButton().contains('Return to the main form menu')
     })
   })
 
@@ -316,26 +334,6 @@ context('installation and risk - check your answers', () => {
       page.returnButton().click()
 
       Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
-    })
-
-    it('navigates correctly to next section', () => {
-      const page = Page.visit(
-        InstallationAndRiskCheckYourAnswersPage,
-        { orderId: mockOrderId, versionId: mockVersionId },
-        {},
-        pageHeading,
-        true,
-      )
-
-      page.continueButton().click()
-
-      Page.verifyOnPage(
-        MonitoringConditionsCheckYourAnswersPage,
-        { orderId: mockOrderId, versionId: mockVersionId },
-        {},
-        pageHeading,
-        true,
-      )
     })
   })
 

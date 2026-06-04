@@ -1,6 +1,6 @@
 import { createAnswer, createDatePreview, createMultipleChoiceAnswer } from '../../utils/checkYourAnswers'
 
-import { Order } from '../Order'
+import { Order, OrderStatusEnum, OrderTypeEnum } from '../Order'
 import I18n from '../../types/i18n'
 import { formatDateTime, lookup } from '../../utils/utils'
 import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
@@ -9,9 +9,12 @@ import FeatureFlags from '../../utils/featureFlags'
 import { notifyingOrganisationCourts } from '../NotifyingOrganisation'
 
 const checkBlankVariation = (order: Order) => {
-  const nextSectionBlank = order.monitoringConditions === null
-  const orderStatusValid = order.status !== 'ERROR' || 'SUBMITTED' // is variation submitted. needed?
-  return nextSectionBlank && orderStatusValid
+  const nextSectionBlank = order.monitoringConditions.startDate === null
+
+  const orderStatusValid = order.status === OrderStatusEnum.enum.IN_PROGRESS
+
+  const isNewOrderOrVariation = order.type === OrderTypeEnum.enum.REQUEST || order.type === OrderTypeEnum.enum.VARIATION
+  return nextSectionBlank && orderStatusValid && isNewOrderOrVariation
 }
 
 const createViewModel = (order: Order, content: I18n, uri: string = '') => {
@@ -161,7 +164,7 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
   return {
     riskInformation: answers,
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
-    goToNextSectionNavigation: checkBlankVariation(order)
+    goToNextSectionNavigation: checkBlankVariation(order),
   }
 }
 

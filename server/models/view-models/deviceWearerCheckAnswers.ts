@@ -11,7 +11,7 @@ import {
 import FeatureFlags from '../../utils/featureFlags'
 import { formatDateTime, lookup } from '../../utils/utils'
 import { AddressType } from '../Address'
-import { Order } from '../Order'
+import { Order, OrderStatusEnum, OrderTypeEnum } from '../Order'
 
 const createOtherDisabilityAnswer = (order: Order, content: I18n, uri: string, answerOpts: AnswerOptions) => {
   if (order.deviceWearer.disabilities.includes('OTHER')) {
@@ -245,8 +245,10 @@ const createAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOpt
 
 const checkBlankVariation = (order: Order) => {
   const nextSectionBlank = order.installationAndRisk === null
-  const orderStatusValid = order.status !== 'ERROR' || 'SUBMITTED' // is variation submitted. needed?
-  return nextSectionBlank && orderStatusValid
+  const orderStatusValid = order.status === OrderStatusEnum.enum.IN_PROGRESS
+
+  const isNewOrderOrVariation = order.type === OrderTypeEnum.enum.REQUEST || order.type === OrderTypeEnum.enum.VARIATION
+  return nextSectionBlank && orderStatusValid && isNewOrderOrVariation
 }
 
 const createViewModel = (order: Order, content: I18n) => {
@@ -264,7 +266,7 @@ const createViewModel = (order: Order, content: I18n) => {
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
     contactDetails: createContactDetailsAnswers(order, content, ignoreActions),
     addresses: createAddressAnswers(order, content, ignoreActions),
-    goToNextSectionNavigation: checkBlankVariation(order)
+    goToNextSectionNavigation: checkBlankVariation(order),
   }
 }
 

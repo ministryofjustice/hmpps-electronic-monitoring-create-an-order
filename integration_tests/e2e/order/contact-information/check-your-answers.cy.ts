@@ -20,7 +20,28 @@ context('Contact Information - check your answers', () => {
         httpStatus: 200,
         id: mockOrderId,
         status: 'IN_PROGRESS',
-        order: { dataDictionaryVersion: 'DDV5' },
+        order: {
+          dataDictionaryVersion: 'DDV5',
+          deviceWearer: {
+            nomisId: null,
+            pncId: null,
+            deliusId: null,
+            prisonNumber: null,
+            homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
+            firstName: null,
+            lastName: null,
+            alias: null,
+            dateOfBirth: null,
+            adultAtTimeOfInstallation: null,
+            sex: null,
+            gender: null,
+            disabilities: null,
+            noFixedAbode: null,
+            interpreterRequired: null,
+          },
+        },
       })
 
       cy.signIn()
@@ -1407,10 +1428,8 @@ context('Contact Information - check your answers', () => {
     it('shows correct buttons', () => {
       const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.continueButton().should('exist')
-      page.continueButton().contains('Go to next section')
       page.returnButton().should('exist')
-      page.returnButton().contains('Return to main form menu')
+      page.returnButton().contains('Return to the main form menu')
     })
   })
 
@@ -1523,10 +1542,8 @@ context('Contact Information - check your answers', () => {
     it('shows correct buttons', () => {
       const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.continueButton().should('exist')
-      page.continueButton().contains('Go to next section')
       page.returnButton().should('exist')
-      page.returnButton().contains('Return to main form menu')
+      page.returnButton().contains('Return to the main form menu')
     })
   })
 

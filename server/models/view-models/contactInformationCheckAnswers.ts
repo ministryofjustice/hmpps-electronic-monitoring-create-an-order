@@ -1,7 +1,7 @@
 import paths from '../../constants/paths'
 import { createAddressAnswer, createBooleanAnswer, createAnswer, AnswerOptions } from '../../utils/checkYourAnswers'
 import { formatDateTime, lookup } from '../../utils/utils'
-import { Order } from '../Order'
+import { Order, OrderStatusEnum, OrderTypeEnum } from '../Order'
 import I18n from '../../types/i18n'
 import { ReferenceCatalogDDv5 } from '../../types/i18n/reference'
 import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
@@ -280,10 +280,14 @@ const createProbationDeliveryUnitAnswer = (order: Order, content: I18n, answerOp
   return result
 }
 
-const checkBlankVariation = (order: Order) => {
-  const nextSectionBlank = order.deviceWearer === null
-  const orderStatusValid = order.status !== 'ERROR' || 'SUBMITTED' // is variation submitted. needed?
-  return nextSectionBlank && orderStatusValid
+const checkBlankVariationOrNewOrder = (order: Order) => {
+  const nextSectionBlank = order.deviceWearer.firstName === null
+
+  const orderStatusValid = order.status === OrderStatusEnum.enum.IN_PROGRESS
+
+  const isNewOrderOrVariation = order.type === OrderTypeEnum.enum.REQUEST || order.type === OrderTypeEnum.enum.VARIATION
+
+  return nextSectionBlank && orderStatusValid && isNewOrderOrVariation
 }
 
 const createViewModel = (order: Order, content: I18n) => {
@@ -296,7 +300,7 @@ const createViewModel = (order: Order, content: I18n) => {
     interestedParties: createInterestedPartiesAnswers(order, content, answerOpts),
     probationDeliveryUnit: createProbationDeliveryUnitAnswer(order, content, answerOpts),
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
-    goToNextSectionNavigation: checkBlankVariation(order)
+    goToNextSectionNavigation: checkBlankVariationOrNewOrder(order),
   }
 }
 
