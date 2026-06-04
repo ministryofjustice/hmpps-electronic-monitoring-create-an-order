@@ -51,7 +51,6 @@ context('Check your answers', () => {
         curfewAddress: 'PRIMARY,SECONDARY',
         endDate: '2024-11-11T00:00:00Z',
         startDate: '2024-11-11T00:00:00Z',
-        details: 'Yes',
         curfewAdditionalDetails: 'some additional details',
       },
       monitoringConditionsTrail: {
@@ -427,7 +426,6 @@ context('Check your answers', () => {
           curfewConditions: {
             curfewAddress: 'PRIMARY,SECONDARY',
             startDate: '2024-11-11T00:00:00Z',
-            details: 'Yes',
             curfewAdditionalDetails: 'some additional details',
           },
           enforcementZoneConditions: [
@@ -462,7 +460,6 @@ context('Check your answers', () => {
           curfewConditions: {
             curfewAddress: 'PRIMARY,SECONDARY',
             startDate: '2024-11-11T00:00:00Z',
-            details: 'No',
             curfewAdditionalDetails: '',
           },
         },
@@ -489,7 +486,6 @@ context('Check your answers', () => {
           curfewConditions: {
             curfewAddress: 'PRIMARY,SECONDARY',
             startDate: '2024-11-11T00:00:00Z',
-            details: 'Yes',
             curfewAdditionalDetails: 'some additional details',
           },
         },
@@ -1002,7 +998,6 @@ context('Check your answers', () => {
             curfewAddress: 'PRIMARY,SECONDARY',
             endDate: '2024-11-11T00:00:00Z',
             startDate: '2024-11-11T00:00:00Z',
-            details: 'Yes',
             curfewAdditionalDetails: 'some additional details',
           },
         },

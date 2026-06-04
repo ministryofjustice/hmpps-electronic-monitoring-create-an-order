@@ -70,7 +70,6 @@ context('Types of monitoring needed', () => {
         startDate: '2025-01-01T00:00:00Z',
         endDate: '2025-02-01T00:00:00Z',
         curfewAddress: null,
-        details: null,
         curfewAdditionalDetails: null,
       },
     })
@@ -187,7 +186,6 @@ context('Types of monitoring needed', () => {
         startDate: '2025-01-01T00:00:00Z',
         endDate: '2025-02-01T00:00:00Z',
         curfewAddress: null,
-        details: null,
         curfewAdditionalDetails: null,
       },
       mandatoryAttendanceConditions: [
