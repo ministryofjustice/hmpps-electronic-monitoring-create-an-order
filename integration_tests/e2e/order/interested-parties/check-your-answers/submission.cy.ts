@@ -95,34 +95,4 @@ context('interested parties check answers page', () => {
       Page.verifyOnPage(OrderTasksPage, 'View answers')
     })
   })
-
-  context('variation in progress', () => {
-    const mockVersionId = uuidv4()
-    beforeEach(() => {
-      cy.task('stubCemoGetVersion', {
-        httpStatus: 200,
-        id: mockOrderId,
-        versionId: mockVersionId,
-        status: 'SUBMITTED',
-        order: {
-          dataDictionaryVersion: 'DDV5',
-          interestedParties: {
-            notifyingOrganisation: 'PRISON',
-            notifyingOrganisationName: 'ALTCOURSE_PRISON',
-            notifyingOrganisationEmail: 'notifying@organisation',
-
-            responsibleOfficerFirstName: 'officer',
-            responsibleOfficerLastName: 'name',
-            responsibleOfficerEmail: 'officer@email',
-
-            responsibleOrganisation: 'POLICE',
-            responsibleOrganisationEmail: 'responsible@organisation',
-            responsibleOrganisationRegion: 'CHESHIRE',
-          },
-        },
-      })
-    })
-
-    // TODO
-  })
 })

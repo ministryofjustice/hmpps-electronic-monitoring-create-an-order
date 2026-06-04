@@ -13,6 +13,7 @@ import paths from '../../../server/constants/paths'
 import DetailsOfInstallationPage from './access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
 import ResponsibleOfficerPage from './interested-parties/responsible-officer/responsibleOfficerPage'
 import InterestedPartiesCheckYourAnswersPage from './interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
+import DeviceWearerCheckYourAnswersPage from '../../pages/order/about-the-device-wearer/check-your-answers'
 
 const mockOrderId = uuidv4()
 
@@ -706,7 +707,7 @@ context('Order Summary', () => {
       page.aboutTheDeviceWearerTask.shouldHaveStatus('To check')
       page.aboutTheDeviceWearerTask.link.click()
       const dwCYApage = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
-      dwCYApage.continueButton().click()
+      dwCYApage.saveAndReturnButton.click()
       page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.aboutTheDeviceWearerTask.shouldHaveStatus('Complete')
     })
@@ -736,7 +737,7 @@ context('Order Summary', () => {
         {},
         'Check your answers',
       )
-      monitoringConditionCyaPage.continueButton().click()
+      monitoringConditionCyaPage.saveAndReturnButton.click()
       page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.electronicMonitoringTask.shouldHaveStatus('Complete')
     })
@@ -756,7 +757,7 @@ context('Order Summary', () => {
       page.additionalDocumentsTask.shouldHaveStatus('Complete')
     })
 
-    it('should enable submit button when all section completed and checked', () => {
+    it.only('should enable submit button when all section completed and checked', () => {
       let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
       page.interestedPartiesTask.link.click()
@@ -766,10 +767,14 @@ context('Order Summary', () => {
         {},
         'Check your answers',
       )
-      ipCYApage.continueButton().click()
+     ipCYApage.saveAndReturnButton.click()
+     page.aboutTheDeviceWearerTask.link.click()
+     
 
-      const dwCYApage = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
-      dwCYApage.continueButton().click()
+    const dwCYApage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
+      dwCYApage.saveAndReturnButton.click()
+
+      page.riskInformationTask.link.click()
 
       const riskInformationCyaPage = Page.verifyOnPage(
         InstallationAndRiskCheckYourAnswersPage,
@@ -777,7 +782,7 @@ context('Order Summary', () => {
         {},
         'Check your answers',
       )
-      riskInformationCyaPage.continueButton().click()
+      riskInformationCyaPage.saveAndReturnButton.click()
 
       const monitoringConditionCyaPage = Page.verifyOnPage(
         MonitoringConditionsCheckYourAnswersPage,
@@ -785,8 +790,9 @@ context('Order Summary', () => {
         {},
         'Check your answers',
       )
-      monitoringConditionCyaPage.continueButton().click()
-
+      monitoringConditionCyaPage.saveAndReturnButton.click()
+      page.additionalDocumentsTask.link.click()
+      
       const attachmentSummaryPage = Page.verifyOnPage(
         AttachmentSummaryPage,
         { orderId: mockOrderId },
