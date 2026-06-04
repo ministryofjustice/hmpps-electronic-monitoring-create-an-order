@@ -1,5 +1,5 @@
 import QuestionPageContent from './questionPage'
 
-type CurfewReleaseDatePageContent = QuestionPageContent<'address' | 'endTime' | 'startTime'>
+type CurfewReleaseDatePageContent = QuestionPageContent<'endTime' | 'startTime'>
 
 export default CurfewReleaseDatePageContent

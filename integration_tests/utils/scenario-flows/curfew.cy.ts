@@ -1,4 +1,3 @@
-import { createAddressPreview } from '../../../server/utils/utils'
 import MonitoringConditionsCheckYourAnswersPage from '../../pages/order/monitoring-conditions/check-your-answers'
 import CurfewAdditionalDetailsPage from '../../pages/order/monitoring-conditions/curfew-additional-details'
 import CurfewConditionsPage from '../../pages/order/monitoring-conditions/curfew-conditions'
@@ -32,7 +31,6 @@ export function verifyCurfewInCheckYourAnswersPage({
   curfewReleaseDetails = undefined,
   curfewConditionDetails = undefined,
   curfewTimetable = undefined,
-  mainAddress = undefined,
 }): void {
   const page = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answer')
 
@@ -46,10 +44,6 @@ export function verifyCurfewInCheckYourAnswersPage({
       {
         key: 'On the day after release, what time does the curfew end?',
         value: `${curfewReleaseDetails.endTime.hours}:${curfewReleaseDetails.endTime.minutes}`,
-      },
-      {
-        key: 'On the day of release, where will the device wearer be during curfew hours?',
-        value: createAddressPreview(mainAddress),
       },
     ])
   } else {
