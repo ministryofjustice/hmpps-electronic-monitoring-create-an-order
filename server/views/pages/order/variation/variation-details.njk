@@ -71,21 +71,50 @@
   }) }}
 {% endif %}
 
+{% set variationDetailsHTML %}
   {{ govukCharacterCount({
     name: "variationDetails",
     id: "variationDetails",
     maxlength: 200,
     label: {
       text: content.pages.variationDetails.questions.variationDetails.text,
-      classes: "govuk-label--s",
       isPageHeading: false
-    },
-    hint: {
-      text: content.pages.variationDetails.questions.variationDetails.hint
     },
     value: variationDetails.value,
     errorMessage: variationDetails.error,
     attributes: isDisabled
   }) }}
+{% endset %}
+
+ {{ govukRadios({
+      name: "variationDetailsAvailable",
+      fieldset:{
+        legend: {
+          text: content.pages.variationDetails.questions.variationDetailsAvailable.text,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      items: [
+        {
+          value: "true",
+          text: "Yes",
+          hint: {
+            html: visuallyHiddenHint
+          },
+          conditional: {
+            html: variationDetailsHTML
+          },
+          disabled: not isOrderEditable
+        },
+        {
+          value: "false",
+          text: "No",
+          disabled: not isOrderEditable
+        }
+      ],
+      value: variationDetailsAvailable.value,
+      errorMessage: variationDetailsAvailable.error,
+      disabled: not isOrderEditable
+    }) }}
 
 {% endblock %}

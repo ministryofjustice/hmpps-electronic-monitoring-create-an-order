@@ -12,8 +12,12 @@ const variationDetailsPageContent: VariationDetailsPageContent = {
       text: 'What have you changed in the form?',
     },
     variationDetails: {
-      text: 'Enter details of all the changes you have made',
-      hint: 'This text will be sent with your changes to help the installer quickly understand what has changed and what they need to do.',
+      text: 'Provide additional information about the changes',
+      hint: '',
+    },
+    variationDetailsAvailable: {
+      text: 'Is there any other information to be aware of about the changes?',
+      hint: '',
     },
   },
   section: 'About the changes in this version of the form',

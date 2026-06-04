@@ -28,19 +28,20 @@ context('Variation', () => {
       it('Should allow the user to update the variation details', () => {
         const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
 
-        // Verify page layout is present
         page.header.userName().should('contain.text', 'J. Smith')
         page.header.phaseBanner().should('contain.text', 'dev')
 
-        // Verify form elements present and editable
+        page.form.variationDetailsNeededField.element.should('exist')
+        page.form.variationDetailsNeededField.set('Yes')
         page.form.variationDetailsField.element.should('exist')
+
         cy.get('form').find('legend').contains('What have you changed in the form?').should('exist')
+
         page.form.saveAndReturnButton.should('exist')
         page.form.shouldNotBeDisabled()
         page.errorSummary.shouldNotExist()
         page.backButton.should('exist')
         page.form.shouldHaveAllOptions()
-        // A11y
         page.checkIsAccessible()
       })
 

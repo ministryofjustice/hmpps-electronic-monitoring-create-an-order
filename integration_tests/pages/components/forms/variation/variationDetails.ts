@@ -1,7 +1,7 @@
 import FormComponent from '../../formComponent'
 import FormDateComponent from '../../formDateComponent'
+import FormInputComponent from '../../formInputComponent'
 import FormRadiosComponent from '../../formRadiosComponent'
-import FormTextareaComponent from '../../formTextareaComponent'
 
 export type VariationDetailsFormData = {
   variationType?: string
@@ -22,9 +22,13 @@ export default class VariationDetailsFormComponent extends FormComponent {
     return new FormDateComponent(this.form, label)
   }
 
-  get variationDetailsField(): FormTextareaComponent {
-    const label = 'Enter details of all the changes you have made'
-    return new FormTextareaComponent(this.form, label)
+  get variationDetailsNeededField(): FormRadiosComponent {
+    const label = 'Is there any other information to be aware of about the changes?'
+    return new FormRadiosComponent(this.form, label, ['Yes', 'No'])
+  }
+
+  get variationDetailsField(): FormInputComponent {
+    return new FormInputComponent(this.form, 'Provide additional information about the changes')
   }
 
   // FORM HELPERS
