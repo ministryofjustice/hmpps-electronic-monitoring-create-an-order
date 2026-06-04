@@ -126,7 +126,7 @@ describe('VariationDetailsController', () => {
           value: 'Change to curfew hours',
         },
         variationDetailsAvailable: {
-          value: 'Yes',
+          value: 'true',
         },
         type: 'VARIATION',
         errorSummary: null,

@@ -22,7 +22,7 @@ export default class VariationDetailsFormComponent extends FormComponent {
     return new FormDateComponent(this.form, label)
   }
 
-  get variationDetailsAvailable(): FormRadiosComponent {
+  get variationDetailsAvailableField(): FormRadiosComponent {
     const label = 'Is there any other information to be aware of about the changes?'
     return new FormRadiosComponent(this.form, label, ['Yes', 'No'])
   }
@@ -43,7 +43,7 @@ export default class VariationDetailsFormComponent extends FormComponent {
     }
 
     if (profile.variationDetails) {
-      this.variationDetailsAvailable.set('Yes')
+      this.variationDetailsAvailableField.set('Yes')
       this.variationDetailsField.set(profile.variationDetails)
     }
   }

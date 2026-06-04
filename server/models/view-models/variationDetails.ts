@@ -51,7 +51,7 @@ const createViewModelFromEntity = (order: Order): VariationDetailsViewModel => {
       value: order.variationDetails?.variationDetails ?? '',
     },
     variationDetailsAvailable: {
-      value: order.variationDetails?.variationDetails ? 'Yes' : '',
+      value: order.variationDetails?.variationDetails ? 'true' : '',
     },
     type: order.type,
     errorSummary: null,

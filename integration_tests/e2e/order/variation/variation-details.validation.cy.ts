@@ -46,7 +46,7 @@ context('Variation', () => {
         Page.verifyOnPage(VariationDetailsPage)
 
         page.form.variationDateField.shouldHaveValidationMessage(expectedValidationErrors.variationDate.required)
-        page.form.variationDetailsAvailable.shouldHaveValidationMessage(
+        page.form.variationDetailsAvailableField.shouldHaveValidationMessage(
           expectedValidationErrors.variationDetailsAvailable.required,
         )
         page.errorSummary.shouldExist()
@@ -58,7 +58,7 @@ context('Variation', () => {
         const page = Page.visit(VariationDetailsPage, { orderId: mockOrderId })
 
         page.form.variationDateField.set(new Date())
-        page.form.variationDetailsAvailable.set('Yes')
+        page.form.variationDetailsAvailableField.set('Yes')
 
         page.form.saveAndReturnButton.click()
 
