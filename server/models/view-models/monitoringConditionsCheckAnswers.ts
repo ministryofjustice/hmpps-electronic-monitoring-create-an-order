@@ -303,12 +303,6 @@ const createCurfewReleaseDateAnswers = (order: Order, content: I18n, answerOpts:
       releaseDateUri,
       answerOpts,
     ),
-    createAddressAnswer(
-      questions.address.text,
-      order.addresses.find(({ addressType }) => addressType === order.curfewReleaseDateConditions?.curfewAddress),
-      releaseDateUri,
-      answerOpts,
-    ),
   ]
 }
 

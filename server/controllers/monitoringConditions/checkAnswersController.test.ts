@@ -538,23 +538,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               ],
             },
           },
-          {
-            key: {
-              text: 'On the day of release, where will the device wearer be during curfew hours?',
-            },
-            value: {
-              html: 'Line 1, Line 2, Line 3, Postcode',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'on the day of release, where will the device wearer be during curfew hours?',
-                },
-              ],
-            },
-          },
         ],
         curfew: [
           {
@@ -1351,23 +1334,6 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   href: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id),
                   text: 'Change',
                   visuallyHiddenText: 'on the day after release, what time does the curfew end?',
-                },
-              ],
-            },
-          },
-          {
-            key: {
-              text: 'On the day of release, where will the device wearer be during curfew hours?',
-            },
-            value: {
-              html: 'Line 1, Line 2, Line 3, Postcode',
-            },
-            actions: {
-              items: [
-                {
-                  href: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id),
-                  text: 'Change',
-                  visuallyHiddenText: 'on the day of release, where will the device wearer be during curfew hours?',
                 },
               ],
             },
