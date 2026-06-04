@@ -91,7 +91,7 @@ context('Order Summary', () => {
       page.interestedPartiesTask.link.should(
         'have.attr',
         'href',
-        `/order/${mockOrderId}/interest-parties/responsible-officer`, //CHECK
+        `/order/${mockOrderId}/interest-parties/responsible-officer`,
       )
 
       page.aboutTheDeviceWearerTask.shouldHaveStatus('Incomplete')
