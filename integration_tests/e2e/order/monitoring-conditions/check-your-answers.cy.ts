@@ -456,7 +456,7 @@ context('Check your answers', () => {
       const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
 
       page.continueButton().should('exist')
-      page.saveAndReturn().should('exist')
+      page.saveAndReturnButton().should('exist')
     })
 
     it('shows curfew timetable when primary address is applied', () => {
@@ -657,10 +657,8 @@ context('Check your answers', () => {
     it('shows correct buttons', () => {
       const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.continueButton().should('exist')
-      page.continueButton().contains('Go to next section')
-      page.saveAndReturn().should('exist')
-      page.saveAndReturn().contains('Return to the main form menu')
+      page.saveAndReturnButton().should('exist')
+      page.saveAndReturnButton().contains('Return to the main form menu')
     })
   })
 
@@ -756,10 +754,8 @@ context('Check your answers', () => {
     it('shows correct buttons', () => {
       const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.continueButton().should('exist')
-      page.continueButton().contains('Go to next section')
-      page.saveAndReturn().should('exist')
-      page.saveAndReturn().contains('Return to the main form menu')
+      page.returnButton().should('exist')
+      page.returnButton().contains('Return to the main form menu')
     })
   })
 
@@ -833,12 +829,12 @@ context('Check your answers', () => {
         true,
       )
 
-      page.saveAndReturn().click()
+      page.returnButton().click()
 
       Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
     })
 
-    it('navigates correctly to next section', () => {
+    it('navigates correctly to back to the task summary section', () => {
       const page = Page.visit(
         CheckYourAnswers,
         { orderId: mockOrderId, versionId: mockVersionId },
@@ -847,7 +843,7 @@ context('Check your answers', () => {
         true,
       )
 
-      page.continueButton().click()
+      page.returnButton().click()
 
       Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
     })
