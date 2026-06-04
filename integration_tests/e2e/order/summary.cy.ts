@@ -3,7 +3,6 @@ import OrderTasksPage from '../../pages/order/summary'
 import ErrorPage from '../../pages/error'
 import Page from '../../pages/page'
 import AttachmentType from '../../../server/models/AttachmentType'
-import CheckYourAnswersPage from '../../pages/order/about-the-device-wearer/check-your-answers'
 import InstallationAndRiskCheckYourAnswersPage from '../../pages/order/installation-and-risk/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from '../../pages/order/monitoring-conditions/check-your-answers'
 import AttachmentSummaryPage from '../../pages/order/attachments/summary'
@@ -706,7 +705,12 @@ context('Order Summary', () => {
       let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.aboutTheDeviceWearerTask.shouldHaveStatus('To check')
       page.aboutTheDeviceWearerTask.link.click()
-      const dwCYApage = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
+      const dwCYApage = Page.verifyOnPage(
+        DeviceWearerCheckYourAnswersPage,
+        { orderId: mockOrderId },
+        {},
+        'Check your answers',
+      )
       dwCYApage.saveAndReturnButton.click()
       page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.aboutTheDeviceWearerTask.shouldHaveStatus('Complete')
@@ -757,7 +761,7 @@ context('Order Summary', () => {
       page.additionalDocumentsTask.shouldHaveStatus('Complete')
     })
 
-    it.only('should enable submit button when all section completed and checked', () => {
+    it('should enable submit button when all section completed and checked', () => {
       let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
       page.interestedPartiesTask.link.click()
@@ -767,11 +771,15 @@ context('Order Summary', () => {
         {},
         'Check your answers',
       )
-     ipCYApage.saveAndReturnButton.click()
-     page.aboutTheDeviceWearerTask.link.click()
-     
+      ipCYApage.saveAndReturnButton.click()
+      page.aboutTheDeviceWearerTask.link.click()
 
-    const dwCYApage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
+      const dwCYApage = Page.verifyOnPage(
+        DeviceWearerCheckYourAnswersPage,
+        { orderId: mockOrderId },
+        {},
+        'Check your answers',
+      )
       dwCYApage.saveAndReturnButton.click()
 
       page.riskInformationTask.link.click()
@@ -792,7 +800,7 @@ context('Order Summary', () => {
       )
       monitoringConditionCyaPage.saveAndReturnButton.click()
       page.additionalDocumentsTask.link.click()
-      
+
       const attachmentSummaryPage = Page.verifyOnPage(
         AttachmentSummaryPage,
         { orderId: mockOrderId },
