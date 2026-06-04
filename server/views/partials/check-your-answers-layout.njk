@@ -50,27 +50,32 @@
 
       <form method="post">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-	{% if not isOrderEditable %}
-	    {% set continueButton = "Go to next section" %}
-	    {% set secondaryButton = "Return to main form menu" %}
-	{% else %}
-	    {% set continueButton = "Save and go to next section" %}
-	    {% set secondaryButton = "Save as draft" %}
-	{% endif %}
-
         <div class="govuk-button-group">
-          {{ govukButton({
-            text: continueButton,
-            name: "action",
-            value: "continue"
-          })}}
-
-          {{ govukButton({
-            text: secondaryButton,
-            classes: "govuk-button--secondary",
-            name: "action",
-            value: "back"
-          }) }}
+          {% if not isOrderEditable %}
+            {{ govukButton({
+              text: "Return to the main form menu",
+              name: "action",
+              value: "back"
+            })}}
+          {% if goToNextSectionNavigation %}
+            {{ govukButton({
+              text: "Save and go to next section",
+              name: "action",
+              value: "continue"
+            })}}
+            {{ govukButton({
+              text: "Save as draft",
+              classes: "govuk-button--secondary",
+              name: "action",
+              value: "back"
+            }) }}
+          {% else %}
+            {{ govukButton({
+              text: "Save and return to the main form menu",
+              name: "action",
+              value: "back"
+            })}}
+          {% endif %}
         </div>
       </form>
     </div>

@@ -280,6 +280,12 @@ const createProbationDeliveryUnitAnswer = (order: Order, content: I18n, answerOp
   return result
 }
 
+const checkBlankVariation = (order: Order) => {
+  const nextSectionBlank = order.deviceWearer === null
+  const orderStatusValid = order.status !== 'ERROR' || 'SUBMITTED' // is variation submitted. needed?
+  return nextSectionBlank && orderStatusValid
+}
+
 const createViewModel = (order: Order, content: I18n) => {
   const answerOpts = {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
@@ -290,6 +296,7 @@ const createViewModel = (order: Order, content: I18n) => {
     interestedParties: createInterestedPartiesAnswers(order, content, answerOpts),
     probationDeliveryUnit: createProbationDeliveryUnitAnswer(order, content, answerOpts),
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
+    goToNextSectionNavigation: checkBlankVariation(order)
   }
 }
 

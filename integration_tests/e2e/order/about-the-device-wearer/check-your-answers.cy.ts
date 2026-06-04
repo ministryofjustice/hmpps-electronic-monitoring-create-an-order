@@ -31,11 +31,9 @@ context('Device wearer - check your answers', () => {
       page.header.phaseBanner().should('contain.text', 'dev')
     })
 
-    it('Should render the save and continue, and return buttons', () => {
+    it('Should render the save and return button', () => {
       const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
-
-      page.continueButton().should('exist')
-      page.returnButton().should('exist')
+      page.saveAndReturnButton().should('exist')
     })
 
     it('Should be accessible', () => {
@@ -726,10 +724,8 @@ context('Device wearer - check your answers', () => {
     it('shows correct buttons', () => {
       const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.continueButton().should('exist')
-      page.continueButton().contains('Go to next section')
       page.returnButton().should('exist')
-      page.returnButton().contains('Return to main form menu')
+      page.returnButton().contains('Return to the main form menu')
     })
   })
 
@@ -831,10 +827,8 @@ context('Device wearer - check your answers', () => {
     it('shows correct buttons', () => {
       const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.continueButton().should('exist')
-      page.continueButton().contains('Go to next section')
       page.returnButton().should('exist')
-      page.returnButton().contains('Return to main form menu')
+      page.returnButton().contains('Return to the main form menu')
     })
   })
 
@@ -887,31 +881,13 @@ context('Device wearer - check your answers', () => {
         pageHeading,
         true,
       )
-
+      page.returnButton().should('exist')
+      page.returnButton().contains('Return to the main form menu')
       page.returnButton().click()
 
       Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
     })
 
-    it('navigates correctly to next section', () => {
-      const page = Page.visit(
-        CheckYourAnswersPage,
-        { orderId: mockOrderId, versionId: mockVersionId },
-        {},
-        pageHeading,
-        true,
-      )
-
-      page.continueButton().click()
-
-      Page.verifyOnPage(
-        InstallationAndRiskCheckYourAnswersPage,
-        { orderId: mockOrderId, versionId: mockVersionId },
-        {},
-        pageHeading,
-        true,
-      )
-    })
   })
 
   context('Unhealthy backend', () => {

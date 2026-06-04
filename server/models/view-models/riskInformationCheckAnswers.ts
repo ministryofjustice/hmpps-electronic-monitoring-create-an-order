@@ -8,6 +8,12 @@ import paths from '../../constants/paths'
 import FeatureFlags from '../../utils/featureFlags'
 import { notifyingOrganisationCourts } from '../NotifyingOrganisation'
 
+const checkBlankVariation = (order: Order) => {
+  const nextSectionBlank = order.monitoringConditions === null
+  const orderStatusValid = order.status !== 'ERROR' || 'SUBMITTED' // is variation submitted. needed?
+  return nextSectionBlank && orderStatusValid
+}
+
 const createViewModel = (order: Order, content: I18n, uri: string = '') => {
   const { questions } = content.pages.installationAndRisk
 
@@ -155,6 +161,7 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
   return {
     riskInformation: answers,
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
+    goToNextSectionNavigation: checkBlankVariation(order)
   }
 }
 
