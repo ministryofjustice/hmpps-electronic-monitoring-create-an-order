@@ -1598,8 +1598,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             zoneId: 1,
           },
         ],
-        goToNextSectionNavigation: true,
-        "submittedDate": undefined,
+        submittedDate: undefined,
         trail: [
           {
             key: {

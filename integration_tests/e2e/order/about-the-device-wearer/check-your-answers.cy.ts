@@ -32,7 +32,7 @@ context('Device wearer - check your answers', () => {
 
     it('Should render the save and return button', () => {
       const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
-      page.saveAndReturnButton().should('exist')
+      page.saveAndReturnButton.should('exist')
     })
 
     it('Should be accessible', () => {

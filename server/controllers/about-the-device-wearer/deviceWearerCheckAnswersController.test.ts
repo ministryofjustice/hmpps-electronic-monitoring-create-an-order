@@ -794,7 +794,6 @@ describe('DeviceWearerCheckAnswersController', () => {
           },
         },
       ],
-      goToNextSectionNavigation: true,
       submittedDate: undefined,
     })
   })

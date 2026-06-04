@@ -6,7 +6,7 @@ export default class CheckYourAnswersPage extends AppPage {
 
   returnButton = (): PageElement => cy.get('[value="back"]')
 
-  saveAndReturnButton = (): PageElement => cy.get('#main-content > div > div > form > div > button').first()
+  // saveAndReturnButton = (): PageElement => cy.get('#main-content > div > div > form > div > button').first()
 
   get changeLinks() {
     return cy.contains('.govuk-link', 'Change')
@@ -30,5 +30,9 @@ export default class CheckYourAnswersPage extends AppPage {
 
   return(): void {
     this.returnButton().click()
+  }
+
+  get saveAndReturnButton(): PageElement {
+    return cy.get('#main-content > div > div > form > div > button').first()
   }
 }
