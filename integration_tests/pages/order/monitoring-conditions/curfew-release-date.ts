@@ -15,7 +15,6 @@ export default class CurfewReleaseDatePage extends AppFormPage {
     this.form.fillInWith({
       startTime: { hours: '18', minutes: '15' },
       endTime: { hours: '19', minutes: '30' },
-      address: /Second address/,
     })
   }
 }

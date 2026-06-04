@@ -75,7 +75,6 @@ context('The kitchen sink', () => {
     const curfewReleaseDetails = {
       startTime: { hours: '19', minutes: '00' },
       endTime: { hours: '07', minutes: '00' },
-      address: /Main address/,
     }
     const curfewConditionDetails = {
       startDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 15), // 15 days

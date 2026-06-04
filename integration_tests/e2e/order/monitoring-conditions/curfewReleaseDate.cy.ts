@@ -124,7 +124,6 @@ const checkFormFields = () => {
   cy.get('#curfewTimes-start-minutes').should('have.value', '15')
   cy.get('#curfewTimes-end-hours').should('have.value', '17')
   cy.get('#curfewTimes-end-minutes').should('have.value', '30')
-  cy.get('input[type="radio"][value="SECONDARY"]').should('be.checked')
 }
 
 context('Curfew monitoring - release date', () => {
@@ -143,7 +142,6 @@ context('Curfew monitoring - release date', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/release-date`)
       const page = Page.verifyOnPage(CurfewReleaseDatePage)
       page.header.userName().should('contain.text', 'J. Smith')
-      page.form.shouldHaveAllOptions()
       page.errorSummary.shouldNotExist()
     })
   })
@@ -159,9 +157,6 @@ context('Curfew monitoring - release date', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/release-date`)
       const page = Page.verifyOnPage(CurfewReleaseDatePage)
       page.submittedBanner.should('contain', 'You are viewing a submitted order.')
-      cy.get('input[type="radio"]').each($el => {
-        cy.wrap($el).should('be.disabled')
-      })
       checkFormFields()
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAsDraftButton.should('not.exist')
@@ -210,7 +205,6 @@ context('Curfew monitoring - release date', () => {
           id: mockOrderId,
           subPath: '/monitoring-conditions-curfew-release-date',
           response: [
-            { field: 'curfewAddress', error: 'You must enter a valid address' },
             { field: 'startTime', error: 'You must enter a valid start time' },
             { field: 'endTime', error: 'You must enter a valid end time' },
           ],
@@ -220,15 +214,9 @@ context('Curfew monitoring - release date', () => {
         page.form.saveAndContinueButton.click()
         cy.get('#curfewTimes-start-error').should('contain', 'You must enter a valid start time')
         cy.get('#curfewTimes-end-error').should('contain', 'You must enter a valid end time')
-        cy.get('#curfewAddress-error').should('contain', 'You must enter a valid address')
         page.errorSummary.shouldExist()
         page.errorSummary.shouldHaveError('You must enter a valid end time')
-        page.errorSummary.shouldHaveError('You must enter a valid address')
-        page.errorSummary.verifyErrorSummary([
-          'You must enter a valid start time',
-          'You must enter a valid end time',
-          'You must enter a valid address',
-        ])
+        page.errorSummary.verifyErrorSummary(['You must enter a valid start time', 'You must enter a valid end time'])
       })
     })
 
@@ -249,7 +237,7 @@ context('Curfew monitoring - release date', () => {
           expect(requests[0]).to.deep.equal({
             startTime: '18:15:00',
             endTime: '19:30:00',
-            curfewAddress: 'SECONDARY',
+            curfewAddress: null,
             releaseDate: '2025-03-27T00:00:00.000Z',
           })
         },

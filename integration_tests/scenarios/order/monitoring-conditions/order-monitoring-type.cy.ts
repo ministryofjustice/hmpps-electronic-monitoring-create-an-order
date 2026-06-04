@@ -68,7 +68,6 @@ context('Monitoring type list flow', () => {
     releaseDate: new Date(new Date().getTime() + 1000 * 60 * 60 * 24), // 1 day
     startTime: { hours: '19', minutes: '00' },
     endTime: { hours: '07', minutes: '00' },
-    address: /Main address/,
   }
   const curfew = {
     startDate: new Date(currentDate.getFullYear(), 0, 1, 0, 0, 0),
@@ -178,7 +177,6 @@ context('Monitoring type list flow', () => {
       curfewConditionDetails,
       curfewReleaseDetails,
       curfewTimetable,
-      mainAddress: primaryAddressDetails,
     })
 
     verifyTrailMonitoringInCheckYourAnswersPage(trailMonitoringDetails)
