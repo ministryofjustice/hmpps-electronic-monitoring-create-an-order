@@ -507,7 +507,7 @@ const createInstallationAppointmentAnswer = (order: Order, content: I18n, answer
 }
 
 const checkBlankVariation = (order: Order) => {
-  const nextSectionBlank = order.additionalDocuments === null
+  const nextSectionBlank = order.additionalDocuments.length === 0
 
   const orderStatusValid = order.status === OrderStatusEnum.enum.IN_PROGRESS
 

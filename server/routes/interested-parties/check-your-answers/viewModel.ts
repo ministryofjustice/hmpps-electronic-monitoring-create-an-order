@@ -1,5 +1,5 @@
 import paths from '../../../constants/paths'
-import { Order } from '../../../models/Order'
+import { Order, OrderStatusEnum, OrderTypeEnum } from '../../../models/Order'
 import I18n from '../../../types/i18n'
 import { ReferenceCatalogDDv6 } from '../../../types/i18n/reference'
 import { AnswerOptions, createAnswer } from '../../../utils/checkYourAnswers'
@@ -136,6 +136,15 @@ const createProbationDeliveryUnitAnswer = (order: Order, content: I18n, answerOp
   return answers
 }
 
+const checkBlankVariation = (order: Order) => {
+  const nextSectionBlank = order.deviceWearer.firstName === null
+
+  const orderStatusValid = order.status === OrderStatusEnum.enum.IN_PROGRESS
+
+  const isNewOrderOrVariation = order.type === OrderTypeEnum.enum.REQUEST || order.type === OrderTypeEnum.enum.VARIATION
+  return nextSectionBlank && orderStatusValid && isNewOrderOrVariation
+}
+
 const construct = (order: Order, content: I18n) => {
   const answerOpts = {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
@@ -148,6 +157,7 @@ const construct = (order: Order, content: I18n) => {
     interestedParties,
     probationDeliveryUnit,
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
+    goToNextSectionNavigation: checkBlankVariation(order),
   }
 }
 

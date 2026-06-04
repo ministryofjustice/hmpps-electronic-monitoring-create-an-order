@@ -3,7 +3,6 @@ import Page from '../../../../pages/page'
 import InterestedPartiesCheckYourAnswersPage from './interestedPartiesCheckYourAnswersPage'
 import OrderTasksPage from '../../../../pages/order/summary'
 import IdentityNumbersPage from '../../../../pages/order/about-the-device-wearer/identity-numbers'
-import DeviceWearerCheckYourAnswersPage from '../../../../pages/order/about-the-device-wearer/check-your-answers'
 
 const mockOrderId = uuidv4()
 context('interested parties check answers page', () => {
@@ -87,12 +86,13 @@ context('interested parties check answers page', () => {
       })
     })
 
-    it('navigates to next cya when submitted order', () => {
+    it('when submitted order, render return to main task summary page button', () => {
       const page = Page.visit(InterestedPartiesCheckYourAnswersPage, { orderId: mockOrderId }, {}, 'View answers')
 
-      page.continueButton().click()
+      page.returnButton().should('exist')
+      page.returnButton().contains('Return to the main form menu')
 
-      Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'View answers')
+      Page.verifyOnPage(OrderTasksPage, 'View answers')
     })
   })
 
@@ -121,20 +121,6 @@ context('interested parties check answers page', () => {
           },
         },
       })
-    })
-
-    it('navigates to next cya when submitted order', () => {
-      const page = Page.visit(
-        InterestedPartiesCheckYourAnswersPage,
-        { orderId: mockOrderId, versionId: mockVersionId },
-        {},
-        'View answers',
-        true,
-      )
-
-      page.continueButton().click()
-
-      Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'View answers')
     })
   })
 })
