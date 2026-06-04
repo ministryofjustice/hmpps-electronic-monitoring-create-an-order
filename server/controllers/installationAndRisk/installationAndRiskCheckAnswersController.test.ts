@@ -125,6 +125,8 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           },
         },
       ],
+      goToNextSectionNavigation: true,
+      submittedDate: undefined,
     })
   })
 
@@ -219,6 +221,8 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           },
         },
       ],
+      goToNextSectionNavigation: true,
+      submittedDate: undefined,
     })
   })
   it('should render the check answers page no mappa questions when not home office', async () => {
@@ -322,6 +326,8 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           },
         },
       ],
+      goToNextSectionNavigation: true,
+      submittedDate: undefined,
     })
   })
 
@@ -482,6 +488,8 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           },
         },
       ],
+      goToNextSectionNavigation: true,
+      submittedDate: undefined,
     })
   })
 })

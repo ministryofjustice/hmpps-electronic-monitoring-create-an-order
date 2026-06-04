@@ -91,7 +91,7 @@ context('interested parties check answers page', () => {
 
       page.returnButton().should('exist')
       page.returnButton().contains('Return to the main form menu')
-
+      page.returnButton().click()
       Page.verifyOnPage(OrderTasksPage, 'View answers')
     })
   })
@@ -122,5 +122,7 @@ context('interested parties check answers page', () => {
         },
       })
     })
+
+    //TODO
   })
 })

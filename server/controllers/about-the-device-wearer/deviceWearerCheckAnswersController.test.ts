@@ -268,6 +268,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           },
         },
       ],
+      goToNextSectionNavigation: true,
       personIdentifiers: [
         {
           key: {
@@ -632,6 +633,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           },
         },
       ],
+      goToNextSectionNavigation: true,
       personIdentifiers: [
         {
           key: {
@@ -792,6 +794,8 @@ describe('DeviceWearerCheckAnswersController', () => {
           },
         },
       ],
+      goToNextSectionNavigation: true,
+      submittedDate: undefined,
     })
   })
 
@@ -996,6 +1000,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           },
         },
       ],
+      goToNextSectionNavigation: true,
       personIdentifiers: [
         {
           key: {
@@ -1208,6 +1213,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           },
         },
       ],
+      submittedDate: undefined,
     })
   })
 })

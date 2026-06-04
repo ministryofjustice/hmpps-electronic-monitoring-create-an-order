@@ -90,9 +90,11 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         curfew: [],
         curfewTimetable: [],
         exclusionZone: [],
+        goToNextSectionNavigation: true,
         trail: [],
         attendance: [],
         alcohol: [],
+        submittedDate: undefined,
       })
     })
 
@@ -503,6 +505,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         installationAppointment: [],
         installationLocation: [],
         installationAddress: [],
+        goToNextSectionNavigation: true,
         curfewReleaseDate: [
           {
             key: {
@@ -1027,6 +1030,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             },
           },
         ],
+        submittedDate: undefined,
       })
     })
 
@@ -1302,6 +1306,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         ],
         installationAppointment: [],
         installationLocation: [],
+        goToNextSectionNavigation: true,
         installationAddress: [],
         curfewReleaseDate: [
           {
@@ -1593,6 +1598,8 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             zoneId: 1,
           },
         ],
+        goToNextSectionNavigation: true,
+        "submittedDate": undefined,
         trail: [
           {
             key: {
