@@ -101,6 +101,10 @@ export default class OrderTasksPage extends AppPage {
     return new Timeline()
   }
 
+  get saveAndReturnButton(): PageElement {
+    return cy.get('#main-content > div > div > form > div > button')
+  }
+
   fillInNewCurfewOrderWith({
     deviceWearerDetails,
     responsibleAdultDetails,
@@ -207,7 +211,9 @@ export default class OrderTasksPage extends AppPage {
         false,
         'About the Responsible Organisation',
       )
-      contactInformationCheckYourAnswersPage.continueButton().click()
+      contactInformationCheckYourAnswersPage.saveAndReturnButton().click()
+      Page.verifyOnPage(OrderTasksPage)
+      this.aboutTheDeviceWearerTask.click()
     } else {
       this.aboutTheDeviceWearerTask.click()
     }
@@ -224,6 +230,8 @@ export default class OrderTasksPage extends AppPage {
       monitoringOrderTypeDescription,
       newDeviceWearerFlow,
     })
+
+    // this.electronicMonitoringTask.click()
 
     if (Array.isArray(monitoringOrderTypeDescription.monitoringCondition)) {
       monitoringOrderTypeDescription.monitoringCondition.forEach((condition: string, index: number) => {
@@ -315,7 +323,7 @@ export default class OrderTasksPage extends AppPage {
       MonitoringConditionsCheckYourAnswersPage,
       'Check your answer',
     )
-    monitoringConditionsCheckYourAnswersPage.continueButton().click()
+    monitoringConditionsCheckYourAnswersPage.saveAndReturnButton().click()
 
     this.fillInAttachmentDetailsWith({
       files,
@@ -657,7 +665,9 @@ export default class OrderTasksPage extends AppPage {
         tertiaryAddressDetails,
       })
       const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
-      deviceWearerCheckYourAnswersPage.continue()
+      deviceWearerCheckYourAnswersPage.saveAndReturnButton().click()
+      Page.verifyOnPage(OrderTasksPage)
+      this.riskInformationTask.click()
     }
 
     if (installationAndRisk) {
@@ -711,7 +721,10 @@ export default class OrderTasksPage extends AppPage {
         InstallationAndRiskCheckYourAnswersPage,
         'Check your answer',
       )
-      installationAndRiskCheckYourAnswersPage.continueButton().click()
+      installationAndRiskCheckYourAnswersPage.saveAndReturnButton().click()
+
+      const summaryPage = Page.verifyOnPage(OrderTasksPage)
+      summaryPage.electronicMonitoringTask.click()
     }
 
     if (monitoringOrderTypeDescription) {
@@ -773,6 +786,9 @@ export default class OrderTasksPage extends AppPage {
   }
 
   fillInAttachmentDetailsWith({ files }): void {
+    Page.verifyOnPage(OrderTasksPage)
+    this.additionalDocumentsTask.click()
+
     if (files.licence !== undefined) {
       const uploadLicencePage = Page.verifyOnPage(UploadLicencePage)
       uploadLicencePage.form.fillInWith({
