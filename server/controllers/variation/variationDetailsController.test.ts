@@ -219,7 +219,7 @@ describe('VariationDetailsController', () => {
             day: '01',
           },
           variationDetails: 'Change to curfew hours',
-          variationDetailsAvailable: 'Yes',
+          variationDetailsAvailable: 'true',
         },
         params: {
           orderId: order.id,
