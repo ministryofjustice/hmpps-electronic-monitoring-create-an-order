@@ -17,7 +17,7 @@ jest.mock('../../services/orderService')
 jest.mock('../../services/deviceWearerService')
 jest.mock('../../data/hmppsAuditClient')
 jest.mock('../../data/restClient')
-jest.mock('../../services/SectionService')
+jest.mock('../../services/sectionsService')
 
 describe('InstallationAndRiskCheckAnswersController', () => {
   const taskListService = {
@@ -62,7 +62,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
     const next = jest.fn()
 
     // When
-    controller.view(req, res, next)
+    await controller.view(req, res, next)
 
     // Then
     expect(res.render).toHaveBeenCalledWith('pages/order/installation-and-risk/check-your-answers', {
@@ -158,7 +158,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
     const next = jest.fn()
 
     // When
-    controller.view(req, res, next)
+    await controller.view(req, res, next)
 
     // Then
     expect(res.render).toHaveBeenCalledWith('pages/order/installation-and-risk/check-your-answers', {
@@ -263,7 +263,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
     const next = jest.fn()
 
     // When
-    controller.view(req, res, next)
+    await controller.view(req, res, next)
 
     // Then
     expect(res.render).toHaveBeenCalledWith('pages/order/installation-and-risk/check-your-answers', {
@@ -374,7 +374,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
     const next = jest.fn()
 
     // When
-    controller.view(req, res, next)
+    await controller.view(req, res, next)
 
     // Then
     expect(res.render).toHaveBeenCalledWith('pages/order/installation-and-risk/check-your-answers', {

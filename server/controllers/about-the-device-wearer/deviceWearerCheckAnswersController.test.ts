@@ -14,7 +14,7 @@ jest.mock('../../services/orderService')
 jest.mock('../../services/deviceWearerService')
 jest.mock('../../data/hmppsAuditClient')
 jest.mock('../../data/restClient')
-jest.mock('../../services/SectionService')
+jest.mock('../../services/sectionsService')
 
 const adultDeviceWearer = createDeviceWearer({
   nomisId: 'nomis',

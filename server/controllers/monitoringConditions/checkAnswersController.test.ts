@@ -19,7 +19,7 @@ import SectionService from '../../services/sectionsService'
 
 jest.mock('../../data/hmppsAuditClient')
 jest.mock('../../services/auditService')
-jest.mock('../../services/SectionService')
+jest.mock('../../services/sectionsService')
 
 describe('MonitoringConditionsCheckAnswersController', () => {
   const taskListService = {
