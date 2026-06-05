@@ -6,6 +6,7 @@ import paths from '../../constants/paths'
 import createViewModel from '../../models/view-models/riskInformationCheckAnswers'
 import OrderChecklistService from '../../services/orderChecklistService'
 import SectionService from '../../services/sectionsService'
+
 const CheckYourAnswersFormModel = z.object({
   action: z.string().default('continue'),
 })
@@ -21,10 +22,7 @@ export default class CheckAnswersController {
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
     const uri = paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id)
-    const isNavigable = await this.sectionService.checkBlankVariationOrNewOrder(
-      order,
-      'RISK_INFORMATION',
-    )
+    const isNavigable = await this.sectionService.checkBlankVariationOrNewOrder(order, 'RISK_INFORMATION')
 
     res.render(
       `pages/order/installation-and-risk/check-your-answers`,

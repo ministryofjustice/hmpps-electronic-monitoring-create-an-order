@@ -40,11 +40,7 @@ describe('ContactDetailsCheckAnswersController', () => {
       serviceName: '',
     }) as jest.Mocked<HmppsAuditClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
-    controller = new CheckAnswersController(
-      mockAuditService,
-      taskListService,
-      mockOrderChecklistService,
-    )
+    controller = new CheckAnswersController(mockAuditService, taskListService, mockOrderChecklistService)
   })
 
   afterEach(() => {

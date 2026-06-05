@@ -1,4 +1,4 @@
-import { Order, OrderStatusEnum, OrderTypeEnum, VariationTypesEnum } from '../models/Order'
+import { Order, OrderStatusEnum, OrderTypeEnum } from '../models/Order'
 import isVariationType from '../utils/isVariationType'
 import { isNotNullOrEmptyString } from '../utils/utils'
 import OrderChecklistService from './orderChecklistService'
@@ -33,16 +33,18 @@ export default class SectionService {
   async checkBlankVariationOrNewOrder(order: Order, currentSection: SectionName): Promise<boolean> {
     const orderStatusValid = order.status === OrderStatusEnum.enum.IN_PROGRESS
 
-    if (orderStatusValid && order.type ===OrderTypeEnum.enum.REQUEST) {
+    if (orderStatusValid && order.type === OrderTypeEnum.enum.REQUEST) {
       return true
     }
 
     const tasks = this.taskListService.getTasks(order)
     const sections = await this.getSectionsForOrder(order)
 
-    const section = sections.findIndex(section => section.name == currentSection) 
+    const section = sections.findIndex(it => it.name === currentSection)
     const nextSection = sections[section + 1]
-    const nextSectionCompleted = this.isSectionComplete(tasks, order, nextSection.name)
+
+    const sectionTasks = tasks.filter(task => task.section === nextSection.name)
+    const nextSectionCompleted = this.isSectionComplete(sectionTasks, order, nextSection.name)
 
     const isNewOrderOrVariation = isVariationType(order.type)
 
