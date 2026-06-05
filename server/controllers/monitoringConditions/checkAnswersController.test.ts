@@ -15,9 +15,11 @@ import CheckAnswersController from './checkAnswersController'
 import OrderChecklistModel from '../../models/OrderChecklist'
 import OrderChecklistService from '../../services/orderChecklistService'
 import FeatureFlags from '../../utils/featureFlags'
+import SectionService from '../../services/sectionsService'
 
 jest.mock('../../data/hmppsAuditClient')
 jest.mock('../../services/auditService')
+jest.mock('../../services/SectionService')
 
 describe('MonitoringConditionsCheckAnswersController', () => {
   const taskListService = {
@@ -26,6 +28,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
   } as unknown as jest.Mocked<TaskListService>
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
+  let mockedSectionService: jest.Mocked<SectionService>
   let controller: CheckAnswersController
   const mockOrderChecklistService = {
     updateChecklist: jest.fn(),
@@ -39,7 +42,15 @@ describe('MonitoringConditionsCheckAnswersController', () => {
       serviceName: '',
     }) as jest.Mocked<HmppsAuditClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
-    controller = new CheckAnswersController(mockAuditService, taskListService, mockOrderChecklistService)
+    mockedSectionService = {
+      checkBlankVariationOrNewOrder: jest.fn().mockReturnValue(true),
+    } as unknown as jest.Mocked<SectionService>
+    controller = new CheckAnswersController(
+      mockAuditService,
+      taskListService,
+      mockOrderChecklistService,
+      mockedSectionService,
+    )
   })
 
   afterEach(() => {

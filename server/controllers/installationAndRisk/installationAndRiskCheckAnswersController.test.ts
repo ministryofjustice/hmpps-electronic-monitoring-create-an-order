@@ -10,12 +10,14 @@ import OrderChecklistModel from '../../models/OrderChecklist'
 import OrderChecklistService from '../../services/orderChecklistService'
 import mappaPageContent from '../../i18n/en/pages/mappa'
 import isMappaPageContent from '../../i18n/en/pages/isMappa'
+import SectionService from '../../services/sectionsService'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
 jest.mock('../../services/deviceWearerService')
 jest.mock('../../data/hmppsAuditClient')
 jest.mock('../../data/restClient')
+jest.mock('../../services/SectionService')
 
 describe('InstallationAndRiskCheckAnswersController', () => {
   const taskListService = {
@@ -25,6 +27,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
   let controller: CheckAnswersController
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
+  let mockedSectionService: jest.Mocked<SectionService>
   const { questions } = installationAndRiskPageContent
   const isMappaQuestions = isMappaPageContent.questions
   const mappaQuestions = mappaPageContent.questions
@@ -40,7 +43,15 @@ describe('InstallationAndRiskCheckAnswersController', () => {
       serviceName: '',
     }) as jest.Mocked<HmppsAuditClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
-    controller = new CheckAnswersController(mockAuditService, taskListService, mockOrderChecklistService)
+    mockedSectionService = {
+      checkBlankVariationOrNewOrder: jest.fn().mockReturnValue(true),
+    } as unknown as jest.Mocked<SectionService>
+    controller = new CheckAnswersController(
+      mockAuditService,
+      taskListService,
+      mockOrderChecklistService,
+      mockedSectionService,
+    )
   })
 
   it('should render the check answers page without any answers completed', async () => {

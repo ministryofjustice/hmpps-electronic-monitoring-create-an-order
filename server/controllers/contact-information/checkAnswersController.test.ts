@@ -11,12 +11,14 @@ import { DataDictionaryVersions } from '../../types/i18n/dataDictionaryVersion'
 import OrderChecklistModel from '../../models/OrderChecklist'
 import OrderChecklistService from '../../services/orderChecklistService'
 import FeatureFlags from '../../utils/featureFlags'
+import SectionService from '../../services/sectionsService'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
 jest.mock('../../services/deviceWearerService')
 jest.mock('../../data/hmppsAuditClient')
 jest.mock('../../data/restClient')
+jest.mock('../../services/SectionService')
 
 describe('ContactDetailsCheckAnswersController', () => {
   const taskListService = {
@@ -26,6 +28,7 @@ describe('ContactDetailsCheckAnswersController', () => {
   let controller: CheckAnswersController
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
+  let mockedSectionService: jest.Mocked<SectionService>
   const content = getContent(Locales.en, DataDictionaryVersions.DDV5)
   const { questions } = content.pages.interestedParties
   const mockOrderChecklistService = {
@@ -40,7 +43,15 @@ describe('ContactDetailsCheckAnswersController', () => {
       serviceName: '',
     }) as jest.Mocked<HmppsAuditClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
-    controller = new CheckAnswersController(mockAuditService, taskListService, mockOrderChecklistService)
+    mockedSectionService = {
+      checkBlankVariationOrNewOrder: jest.fn().mockReturnValue(true),
+    } as unknown as jest.Mocked<SectionService>
+    controller = new CheckAnswersController(
+      mockAuditService,
+      taskListService,
+      mockOrderChecklistService,
+      mockedSectionService,
+    )
   })
 
   afterEach(() => {
