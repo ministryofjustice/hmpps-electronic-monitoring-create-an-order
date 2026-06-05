@@ -280,17 +280,7 @@ const createProbationDeliveryUnitAnswer = (order: Order, content: I18n, answerOp
   return result
 }
 
-const checkBlankVariationOrNewOrder = (order: Order) => {
-  const nextSectionBlank = order.deviceWearer.firstName === null
-
-  const orderStatusValid = order.status === OrderStatusEnum.enum.IN_PROGRESS
-
-  const isNewOrderOrVariation = order.type === OrderTypeEnum.enum.REQUEST || order.type === OrderTypeEnum.enum.VARIATION
-
-  return nextSectionBlank && orderStatusValid && isNewOrderOrVariation
-}
-
-const createViewModel = (order: Order, content: I18n) => {
+const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean) => {
   const answerOpts = {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
   }
@@ -300,7 +290,7 @@ const createViewModel = (order: Order, content: I18n) => {
     interestedParties: createInterestedPartiesAnswers(order, content, answerOpts),
     probationDeliveryUnit: createProbationDeliveryUnitAnswer(order, content, answerOpts),
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
-    goToNextSectionNavigation: checkBlankVariationOrNewOrder(order),
+    goToNextSectionNavigation
   }
 }
 

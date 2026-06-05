@@ -243,22 +243,11 @@ const createAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOpt
   return answers
 }
 
-const checkBlankVariation = (order: Order) => {
-  const nextSectionBlank = order.installationAndRisk === null
-  const orderStatusValid = order.status === OrderStatusEnum.enum.IN_PROGRESS
-
-  const isNewOrderOrVariation = order.type === OrderTypeEnum.enum.REQUEST || order.type === OrderTypeEnum.enum.VARIATION
-  return nextSectionBlank && orderStatusValid && isNewOrderOrVariation
-}
-
-const createViewModel = (order: Order, content: I18n) => {
+const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean) => {
   const ignoreActions = {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
   }
-  // checkIfVariation and check next section populated
-  // blank variation
-  // stops the weird loop with the save and return solo button
-  // empty variation show the two buttons
+
   return {
     deviceWearer: createDeviceWearerAnswers(order, content, ignoreActions),
     personIdentifiers: createPersonIdentifierAnswers(order, content, ignoreActions),
@@ -266,7 +255,7 @@ const createViewModel = (order: Order, content: I18n) => {
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
     contactDetails: createContactDetailsAnswers(order, content, ignoreActions),
     addresses: createAddressAnswers(order, content, ignoreActions),
-    goToNextSectionNavigation: checkBlankVariation(order),
+    goToNextSectionNavigation,
   }
 }
 

@@ -136,16 +136,7 @@ const createProbationDeliveryUnitAnswer = (order: Order, content: I18n, answerOp
   return answers
 }
 
-const checkBlankVariation = (order: Order) => {
-  const nextSectionBlank = order.deviceWearer.firstName === null
-
-  const orderStatusValid = order.status === OrderStatusEnum.enum.IN_PROGRESS
-
-  const isNewOrderOrVariation = order.type === OrderTypeEnum.enum.REQUEST || order.type === OrderTypeEnum.enum.VARIATION
-  return nextSectionBlank && orderStatusValid && isNewOrderOrVariation
-}
-
-const construct = (order: Order, content: I18n) => {
+const construct = (order: Order, content: I18n,  goToNextSectionNavigation: boolean) => {
   const answerOpts = {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
   }
@@ -157,7 +148,7 @@ const construct = (order: Order, content: I18n) => {
     interestedParties,
     probationDeliveryUnit,
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
-    goToNextSectionNavigation: checkBlankVariation(order),
+    goToNextSectionNavigation,
   }
 }
 

@@ -1,9 +1,9 @@
-import { Order } from '../models/Order'
-import FeatureFlags from '../utils/featureFlags'
+import { Order, OrderStatusEnum, OrderTypeEnum, VariationTypesEnum } from '../models/Order' // <-- Updated importimport FeatureFlags from '../utils/featureFlags'
 import isVariationType from '../utils/isVariationType'
 import { isNotNullOrEmptyString } from '../utils/utils'
 import OrderChecklistService from './orderChecklistService'
 import TaskListService, { canBeCompleted, Task } from './taskListService'
+import FeatureFlags from '../utils/featureFlags'
 
 const SECTIONS = {
   interestedParties: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
@@ -29,6 +29,25 @@ export default class SectionService {
     private readonly taskListService: TaskListService,
     private readonly checkListService: OrderChecklistService,
   ) {}
+
+  public checkBlankVariationOrNewOrder(tasks: Task[], order: Order, nextSection: SectionName): boolean {
+    if (!order) return false //todo
+
+    const nextSectionBlank = this.isSectionComplete(tasks, order, nextSection)
+    const orderStatusValid = !order.status || order.status === OrderStatusEnum.enum.IN_PROGRESS
+    
+    const validTypes: string[] = [
+      OrderTypeEnum.enum.REQUEST,
+      VariationTypesEnum.enum.VARIATION,
+      VariationTypesEnum.enum.REINSTALL_AT_DIFFERENT_ADDRESS,
+      VariationTypesEnum.enum.REINSTALL_DEVICE,
+      VariationTypesEnum.enum.END_MONITORING,
+      VariationTypesEnum.enum.REVOCATION,
+    ]
+    const isNewOrderOrVariation = !order.type || validTypes.includes(order.type)
+
+    return nextSectionBlank && orderStatusValid && isNewOrderOrVariation
+  }
 
   async getSectionsForOrder(order: Order, version?: string): Promise<TaskSection[]> {
     const sections = this.getRelevantSections(order)

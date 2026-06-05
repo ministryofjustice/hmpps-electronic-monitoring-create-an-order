@@ -136,6 +136,7 @@ export default function routes({
     auditService,
     taskListService,
     orderChecklistService,
+    sectionService
   )
   const installationAndRiskController = new InstallationAndRiskController(
     auditService,
@@ -146,6 +147,7 @@ export default function routes({
     auditService,
     taskListService,
     orderChecklistService,
+    sectionService
   )
   const removeMonitoringTypeController = new RemoveMonitoringTypeController(removeMonitoringTypeService)
   const noFixedAbodeController = new NoFixedAbodeController(auditService, deviceWearerService, taskListService)
@@ -168,11 +170,13 @@ export default function routes({
     auditService,
     taskListService,
     orderChecklistService,
+    sectionService
   )
   const contactInformationCheckAnswersController = new ContactInformationCheckAnswersController(
     auditService,
     taskListService,
     orderChecklistService,
+    sectionService
   )
   const variationDetailsController = new VariationDetailsController(
     auditService,
@@ -201,6 +205,7 @@ export default function routes({
   const interestedPartiesCheckYourAsnwerController = new InterestedPartiesCheckYourAnswersController(
     taskListService,
     orderChecklistService,
+    sectionService
   )
 
   const isRejectionController = new IsRejectionController(isRejectionService)

@@ -8,16 +8,8 @@ import paths from '../../constants/paths'
 import FeatureFlags from '../../utils/featureFlags'
 import { notifyingOrganisationCourts } from '../NotifyingOrganisation'
 
-const checkBlankVariation = (order: Order) => {
-  const nextSectionBlank = order.monitoringConditions.startDate === null
 
-  const orderStatusValid = order.status === OrderStatusEnum.enum.IN_PROGRESS
-
-  const isNewOrderOrVariation = order.type === OrderTypeEnum.enum.REQUEST || order.type === OrderTypeEnum.enum.VARIATION
-  return nextSectionBlank && orderStatusValid && isNewOrderOrVariation
-}
-
-const createViewModel = (order: Order, content: I18n, uri: string = '') => {
+const createViewModel = (order: Order, content: I18n, uri: string = '', goToNextSectionNavigation: boolean) => {
   const { questions } = content.pages.installationAndRisk
 
   const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
@@ -164,7 +156,7 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
   return {
     riskInformation: answers,
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
-    goToNextSectionNavigation: checkBlankVariation(order),
+    goToNextSectionNavigation
   }
 }
 
