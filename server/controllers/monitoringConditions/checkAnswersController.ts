@@ -20,8 +20,7 @@ export default class CheckAnswersController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const tasks = this.taskListService.getTasks(order)
-    const isNavigable = this.sectionService.checkBlankVariationOrNewOrder(tasks, order, 'ADDITIONAL_DOCUMENTS')
+    const isNavigable = await this.sectionService.checkBlankVariationOrNewOrder(order, 'ELECTRONIC_MONITORING_CONDITIONS')
 
     res.render(
       `pages/order/monitoring-conditions/check-your-answers`,

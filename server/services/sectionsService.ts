@@ -5,7 +5,7 @@ import OrderChecklistService from './orderChecklistService'
 import TaskListService, { canBeCompleted, Task } from './taskListService'
 import FeatureFlags from '../utils/featureFlags'
 
-const SECTIONS = {
+export const SECTIONS = {
   interestedParties: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
   aboutTheDeviceWearer: 'ABOUT_THE_DEVICE_WEARER',
   riskInformation: 'RISK_INFORMATION',
@@ -30,23 +30,23 @@ export default class SectionService {
     private readonly checkListService: OrderChecklistService,
   ) {}
 
-  public checkBlankVariationOrNewOrder(tasks: Task[], order: Order, nextSection: SectionName): boolean {
-    if (!order) return false // todo
+  async checkBlankVariationOrNewOrder(order: Order, currentSection: SectionName): Promise<boolean> {
+    const orderStatusValid = order.status === OrderStatusEnum.enum.IN_PROGRESS
 
-    const nextSectionBlank = this.isSectionComplete(tasks, order, nextSection)
-    const orderStatusValid = !order.status || order.status === OrderStatusEnum.enum.IN_PROGRESS
+    if (orderStatusValid && order.type ===OrderTypeEnum.enum.REQUEST) {
+      return true
+    }
 
-    const validTypes: string[] = [
-      OrderTypeEnum.enum.REQUEST,
-      VariationTypesEnum.enum.VARIATION,
-      VariationTypesEnum.enum.REINSTALL_AT_DIFFERENT_ADDRESS,
-      VariationTypesEnum.enum.REINSTALL_DEVICE,
-      VariationTypesEnum.enum.END_MONITORING,
-      VariationTypesEnum.enum.REVOCATION,
-    ]
-    const isNewOrderOrVariation = !order.type || validTypes.includes(order.type)
+    const tasks = this.taskListService.getTasks(order)
+    const sections = await this.getSectionsForOrder(order)
 
-    return nextSectionBlank && orderStatusValid && isNewOrderOrVariation
+    const section = sections.findIndex(section => section.name == currentSection) 
+    const nextSection = sections[section + 1]
+    const nextSectionCompleted = this.isSectionComplete(tasks, order, nextSection.name)
+
+    const isNewOrderOrVariation = isVariationType(order.type)
+
+    return !nextSectionCompleted && orderStatusValid && isNewOrderOrVariation
   }
 
   async getSectionsForOrder(order: Order, version?: string): Promise<TaskSection[]> {
@@ -144,7 +144,7 @@ export default class SectionService {
 
     // Feature flag must be enabled for any further logic
     if (!FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')) {
-      return false
+      return true
     }
 
     // Non-variation types are always allowed

@@ -20,8 +20,7 @@ export default class DeviceWearerCheckAnswersController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const tasks = this.taskListService.getTasks(order)
-    const isNavigable = this.sectionService.checkBlankVariationOrNewOrder(tasks, order, 'RISK_INFORMATION')
+    const isNavigable = await this.sectionService.checkBlankVariationOrNewOrder(order, 'ABOUT_THE_DEVICE_WEARER')
 
     res.render(
       `pages/order/about-the-device-wearer/check-your-answers`,

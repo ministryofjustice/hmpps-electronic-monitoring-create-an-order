@@ -176,7 +176,6 @@ export default function routes({
     auditService,
     taskListService,
     orderChecklistService,
-    sectionService,
   )
   const variationDetailsController = new VariationDetailsController(
     auditService,

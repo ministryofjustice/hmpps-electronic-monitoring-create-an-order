@@ -67,7 +67,6 @@ describe('DeviceWearerCheckAnswersController', () => {
       serviceName: '',
     }) as jest.Mocked<HmppsAuditClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
-    // 👇 ADD THIS INITIALIZATION:
     mockedSectionService = {
       checkBlankVariationOrNewOrder: jest.fn().mockReturnValue(true),
       getSectionsForOrder: jest.fn(),

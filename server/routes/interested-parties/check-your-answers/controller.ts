@@ -18,12 +18,11 @@ export default class InterestedPartiesCheckYourAnswersController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const tasks = this.taskListService.getTasks(order)
-    const isNavigable = this.sectionService.checkBlankVariationOrNewOrder(tasks, order, 'ABOUT_THE_DEVICE_WEARER')
+    //const isNavigable = await this.sectionService.checkBlankVariationOrNewOrder(order, 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS')
 
     res.render(
       'pages/order/interested-parties/check-your-answers',
-      ViewModel.construct(req.order!, res.locals.content!, isNavigable),
+      ViewModel.construct(req.order!, res.locals.content!, true),
     )
   }
 
