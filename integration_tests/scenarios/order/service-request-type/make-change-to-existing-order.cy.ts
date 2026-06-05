@@ -146,9 +146,8 @@ context('Service-Request-Types', () => {
     orderSummaryPage.fillInVariationsDetails({ variationDetails: variation })
     orderSummaryPage.aboutTheDeviceWearerTask.click()
     Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').saveAndReturnButton.click()
-    if (!variationChangeFlow) {
-      orderSummaryPage.riskInformationTask.click()
-    }
+    orderSummaryPage.riskInformationTask.click()
+
     Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers').saveAndReturnButton.click()
     orderSummaryPage.electronicMonitoringTask.click()
     Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers').saveAndReturnButton.click()

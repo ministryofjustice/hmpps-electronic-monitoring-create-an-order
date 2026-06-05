@@ -772,7 +772,6 @@ context('Order Summary', () => {
         'Check your answers',
       )
       ipCYApage.saveAndReturnButton.click()
-      page.aboutTheDeviceWearerTask.link.click()
 
       const dwCYApage = Page.verifyOnPage(
         DeviceWearerCheckYourAnswersPage,
@@ -781,8 +780,6 @@ context('Order Summary', () => {
         'Check your answers',
       )
       dwCYApage.saveAndReturnButton.click()
-
-      page.riskInformationTask.link.click()
 
       const riskInformationCyaPage = Page.verifyOnPage(
         InstallationAndRiskCheckYourAnswersPage,
@@ -799,7 +796,6 @@ context('Order Summary', () => {
         'Check your answers',
       )
       monitoringConditionCyaPage.saveAndReturnButton.click()
-      page.additionalDocumentsTask.link.click()
 
       const attachmentSummaryPage = Page.verifyOnPage(
         AttachmentSummaryPage,
