@@ -21,7 +21,7 @@ export default class CheckAnswersController {
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
     const tasks = this.taskListService.getTasks(order)
-    const isNavigable = this.sectionService.checkBlankVariationOrNewOrder(tasks, order, 'RISK_INFORMATION')
+    const isNavigable = this.sectionService.checkBlankVariationOrNewOrder(tasks, order, 'ABOUT_THE_DEVICE_WEARER')
 
     res.render(`pages/order/contact-information/check-your-answers`, createViewModel(order, res.locals.content!, isNavigable))
   }
