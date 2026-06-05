@@ -1,6 +1,6 @@
 import { createAnswer, createDatePreview, createMultipleChoiceAnswer } from '../../utils/checkYourAnswers'
 
-import { Order, OrderStatusEnum, OrderTypeEnum } from '../Order'
+import { Order } from '../Order'
 import I18n from '../../types/i18n'
 import { formatDateTime, lookup } from '../../utils/utils'
 import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
@@ -8,8 +8,7 @@ import paths from '../../constants/paths'
 import FeatureFlags from '../../utils/featureFlags'
 import { notifyingOrganisationCourts } from '../NotifyingOrganisation'
 
-
-const createViewModel = (order: Order, content: I18n, uri: string = '', goToNextSectionNavigation: boolean) => {
+const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean, uri: string = '') => {
   const { questions } = content.pages.installationAndRisk
 
   const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
@@ -156,7 +155,7 @@ const createViewModel = (order: Order, content: I18n, uri: string = '', goToNext
   return {
     riskInformation: answers,
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
-    goToNextSectionNavigation
+    goToNextSectionNavigation,
   }
 }
 

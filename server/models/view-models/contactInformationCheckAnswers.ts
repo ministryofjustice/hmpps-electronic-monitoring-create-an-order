@@ -1,7 +1,7 @@
 import paths from '../../constants/paths'
 import { createAddressAnswer, createBooleanAnswer, createAnswer, AnswerOptions } from '../../utils/checkYourAnswers'
 import { formatDateTime, lookup } from '../../utils/utils'
-import { Order, OrderStatusEnum, OrderTypeEnum } from '../Order'
+import { Order } from '../Order'
 import I18n from '../../types/i18n'
 import { ReferenceCatalogDDv5 } from '../../types/i18n/reference'
 import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
@@ -290,7 +290,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
     interestedParties: createInterestedPartiesAnswers(order, content, answerOpts),
     probationDeliveryUnit: createProbationDeliveryUnitAnswer(order, content, answerOpts),
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
-    goToNextSectionNavigation
+    goToNextSectionNavigation,
   }
 }
 

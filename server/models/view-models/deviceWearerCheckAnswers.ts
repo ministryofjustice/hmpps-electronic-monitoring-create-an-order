@@ -11,7 +11,7 @@ import {
 import FeatureFlags from '../../utils/featureFlags'
 import { formatDateTime, lookup } from '../../utils/utils'
 import { AddressType } from '../Address'
-import { Order, OrderStatusEnum, OrderTypeEnum } from '../Order'
+import { Order } from '../Order'
 
 const createOtherDisabilityAnswer = (order: Order, content: I18n, uri: string, answerOpts: AnswerOptions) => {
   if (order.deviceWearer.disabilities.includes('OTHER')) {

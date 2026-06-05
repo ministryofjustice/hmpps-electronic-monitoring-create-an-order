@@ -31,11 +31,11 @@ export default class SectionService {
   ) {}
 
   public checkBlankVariationOrNewOrder(tasks: Task[], order: Order, nextSection: SectionName): boolean {
-    if (!order) return false //todo
+    if (!order) return false // todo
 
     const nextSectionBlank = this.isSectionComplete(tasks, order, nextSection)
     const orderStatusValid = !order.status || order.status === OrderStatusEnum.enum.IN_PROGRESS
-    
+
     const validTypes: string[] = [
       OrderTypeEnum.enum.REQUEST,
       VariationTypesEnum.enum.VARIATION,

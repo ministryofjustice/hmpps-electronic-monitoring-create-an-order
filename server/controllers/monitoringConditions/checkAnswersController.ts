@@ -15,7 +15,7 @@ export default class CheckAnswersController {
     private readonly auditService: AuditService,
     private readonly taskListService: TaskListService,
     private readonly checklistService: OrderChecklistService,
-    private readonly sectionService: SectionService
+    private readonly sectionService: SectionService,
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
@@ -23,7 +23,10 @@ export default class CheckAnswersController {
     const tasks = this.taskListService.getTasks(order)
     const isNavigable = this.sectionService.checkBlankVariationOrNewOrder(tasks, order, 'ADDITIONAL_DOCUMENTS')
 
-    res.render(`pages/order/monitoring-conditions/check-your-answers`, createViewModel(order, res.locals.content!, isNavigable))
+    res.render(
+      `pages/order/monitoring-conditions/check-your-answers`,
+      createViewModel(order, res.locals.content!, isNavigable),
+    )
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {

@@ -1,5 +1,5 @@
 import paths from '../../../constants/paths'
-import { Order, OrderStatusEnum, OrderTypeEnum } from '../../../models/Order'
+import { Order } from '../../../models/Order'
 import I18n from '../../../types/i18n'
 import { ReferenceCatalogDDv6 } from '../../../types/i18n/reference'
 import { AnswerOptions, createAnswer } from '../../../utils/checkYourAnswers'
@@ -136,7 +136,7 @@ const createProbationDeliveryUnitAnswer = (order: Order, content: I18n, answerOp
   return answers
 }
 
-const construct = (order: Order, content: I18n,  goToNextSectionNavigation: boolean) => {
+const construct = (order: Order, content: I18n, goToNextSectionNavigation: boolean) => {
   const answerOpts = {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
   }

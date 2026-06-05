@@ -13,7 +13,7 @@ export default class InterestedPartiesCheckYourAnswersController {
   constructor(
     private readonly taskListService: TaskListService,
     private readonly checklistService: OrderChecklistService,
-    private readonly sectionService: SectionService
+    private readonly sectionService: SectionService,
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {

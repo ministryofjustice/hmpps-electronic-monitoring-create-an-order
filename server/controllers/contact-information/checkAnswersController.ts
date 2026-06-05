@@ -4,7 +4,7 @@ import { AuditService } from '../../services'
 import TaskListService from '../../services/taskListService'
 import createViewModel from '../../models/view-models/contactInformationCheckAnswers'
 import OrderChecklistService from '../../services/orderChecklistService'
-import SectionService, { SectionName } from '../../services/sectionsService'
+import SectionService from '../../services/sectionsService'
 
 const CheckYourAnswersFormModel = z.object({
   action: z.string().default('continue'),
@@ -23,7 +23,10 @@ export default class CheckAnswersController {
     const tasks = this.taskListService.getTasks(order)
     const isNavigable = this.sectionService.checkBlankVariationOrNewOrder(tasks, order, 'ABOUT_THE_DEVICE_WEARER')
 
-    res.render(`pages/order/contact-information/check-your-answers`, createViewModel(order, res.locals.content!, isNavigable))
+    res.render(
+      `pages/order/contact-information/check-your-answers`,
+      createViewModel(order, res.locals.content!, isNavigable),
+    )
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {

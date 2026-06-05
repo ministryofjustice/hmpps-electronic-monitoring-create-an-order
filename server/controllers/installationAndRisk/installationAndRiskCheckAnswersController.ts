@@ -5,7 +5,7 @@ import TaskListService from '../../services/taskListService'
 import paths from '../../constants/paths'
 import createViewModel from '../../models/view-models/riskInformationCheckAnswers'
 import OrderChecklistService from '../../services/orderChecklistService'
-import SectionService, { SectionName } from '../../services/sectionsService'
+import SectionService from '../../services/sectionsService'
 
 const CheckYourAnswersFormModel = z.object({
   action: z.string().default('continue'),
@@ -23,9 +23,16 @@ export default class CheckAnswersController {
     const order = req.order!
     const uri = paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id)
     const tasks = this.taskListService.getTasks(order)
-    const isNavigable = this.sectionService.checkBlankVariationOrNewOrder(tasks, order, 'ELECTRONIC_MONITORING_CONDITIONS')
+    const isNavigable = this.sectionService.checkBlankVariationOrNewOrder(
+      tasks,
+      order,
+      'ELECTRONIC_MONITORING_CONDITIONS',
+    )
 
-    res.render(`pages/order/installation-and-risk/check-your-answers`, createViewModel(order, res.locals.content!, uri, isNavigable))
+    res.render(
+      `pages/order/installation-and-risk/check-your-answers`,
+      createViewModel(order, res.locals.content!, isNavigable, uri),
+    )
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {

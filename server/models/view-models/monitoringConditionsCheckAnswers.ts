@@ -10,7 +10,7 @@ import {
 } from '../../utils/utils'
 import { AddressType, AddressTypeEnum } from '../Address'
 import { CurfewSchedule, CurfewTimetable } from '../CurfewTimetable'
-import { Order, OrderStatusEnum, OrderTypeEnum } from '../Order'
+import { Order } from '../Order'
 import {
   createAddressAnswer,
   createDateAnswer,
