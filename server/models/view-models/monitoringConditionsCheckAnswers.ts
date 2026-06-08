@@ -333,6 +333,15 @@ const createCurfewAnswers = (order: Order, content: I18n, answerOpts: AnswerOpti
           answerOpts,
         ),
       )
+    } else {
+      answers.push(
+        createAnswer(
+          curfewAdditionalDetailsQuestions.provideDetails.text,
+          'No',
+          curfewAdditionalDetailsUri,
+          answerOpts,
+        ),
+      )
     }
   }
 
