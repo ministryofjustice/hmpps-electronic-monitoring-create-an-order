@@ -100,6 +100,7 @@ interface ValidationErrors {
     variationTypeRequired: string
     variationDetailsRequired: string
     variationDetailsTooLong: string
+    variationDetailsAvailableRequired: string
   }
   installationLocation: {
     locationRequired: string
@@ -353,6 +354,7 @@ const validationErrors: ValidationErrors = {
     variationTypeRequired: 'Select what you have changed',
     variationDetailsRequired: 'Enter details of all the changes you have made',
     variationDetailsTooLong: 'Information on what you have changed must be 200 characters or less',
+    variationDetailsAvailableRequired: 'Select Yes if there is any other information to be aware of',
   },
   installationLocation: {
     locationRequired: 'Select where will installation of the electronic monitoring device take place',
