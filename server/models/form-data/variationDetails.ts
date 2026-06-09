@@ -9,7 +9,8 @@ const VariationDetailsFormDataParser = FormDataModel.extend({
     year: z.string(),
   }),
   variationType: z.string().default(''),
-  variationDetails: z.string().default(''),
+  variationDetails: z.string().optional(),
+  variationDetailsAvailable: z.string().optional(),
   orderType: z.string().optional(),
 })
 const validateVariationDetailsFormData = (formData: VariationDetailsFormData) => {
@@ -20,11 +21,33 @@ const validateVariationDetailsFormData = (formData: VariationDetailsFormData) =>
       variationType: z.string().refine(val => val.length > 1 || orderType !== 'VARIATION', {
         message: validationErrors.variationDetails.variationTypeRequired,
       }),
-      variationDetails: z
-        .string()
-        .min(1, validationErrors.variationDetails.variationDetailsRequired)
-        .max(200, validationErrors.variationDetails.variationDetailsTooLong),
+      variationDetailsAvailable: z.string({
+        message: validationErrors.variationDetails.variationDetailsAvailableRequired,
+      }),
+      variationDetails: z.string(),
     })
+    .superRefine((data, ctx) => {
+      if (data.variationDetailsAvailable === 'true') {
+        if (data.variationDetails.length === 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ['variationDetails'],
+            message: validationErrors.variationDetails.variationDetailsRequired,
+          })
+        }
+        if (data.variationDetails.length > 200) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ['variationDetails'],
+            message: validationErrors.variationDetails.variationDetailsTooLong,
+          })
+        }
+      }
+    })
+    .transform(data => ({
+      ...data,
+      variationDetailsAvailable: undefined,
+    }))
     .parse(formData)
 }
 

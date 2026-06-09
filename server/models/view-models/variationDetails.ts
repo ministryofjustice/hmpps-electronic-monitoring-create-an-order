@@ -2,12 +2,13 @@ import { deserialiseDateTime, getError } from '../../utils/utils'
 import { VariationDetails } from '../VariationDetails'
 import { VariationDetailsFormData } from '../form-data/variationDetails'
 import { ValidationResult } from '../Validation'
-import { DateField, ViewModel } from './utils'
+import { DateField, TextField, ViewModel } from './utils'
 import { createGovukErrorSummary } from '../../utils/errors'
 import { Order } from '../Order'
 
 type VariationDetailsViewModel = ViewModel<Omit<VariationDetails, 'variationDate'>> & {
   variationDate: DateField
+  variationDetailsAvailable: TextField
   type: string
 }
 
@@ -26,8 +27,12 @@ const createViewModelFromFormData = (
       error: getError(validationErrors, 'variationDate'),
     },
     variationDetails: {
-      value: formData.variationDetails,
+      value: formData.variationDetails || '',
       error: getError(validationErrors, 'variationDetails'),
+    },
+    variationDetailsAvailable: {
+      value: formData.variationDetailsAvailable || '',
+      error: getError(validationErrors, 'variationDetailsAvailable'),
     },
     type: order.type,
     errorSummary: createGovukErrorSummary(validationErrors),
@@ -44,6 +49,9 @@ const createViewModelFromEntity = (order: Order): VariationDetailsViewModel => {
     },
     variationDetails: {
       value: order.variationDetails?.variationDetails ?? '',
+    },
+    variationDetailsAvailable: {
+      value: order.variationDetails?.variationDetails ? 'true' : '',
     },
     type: order.type,
     errorSummary: null,

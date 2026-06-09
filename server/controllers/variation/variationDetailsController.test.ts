@@ -83,6 +83,9 @@ describe('VariationDetailsController', () => {
         variationDetails: {
           value: '',
         },
+        variationDetailsAvailable: {
+          value: '',
+        },
       })
     })
 
@@ -121,6 +124,9 @@ describe('VariationDetailsController', () => {
         },
         variationDetails: {
           value: 'Change to curfew hours',
+        },
+        variationDetailsAvailable: {
+          value: 'true',
         },
         type: 'VARIATION',
         errorSummary: null,
@@ -182,6 +188,9 @@ describe('VariationDetailsController', () => {
             text: 'Enter details of all the changes you have made',
           },
         },
+        variationDetailsAvailable: {
+          value: '',
+        },
         type: 'VARIATION',
         errorSummary: {
           titleText: 'There is a problem',
@@ -210,6 +219,7 @@ describe('VariationDetailsController', () => {
             day: '01',
           },
           variationDetails: 'Change to curfew hours',
+          variationDetailsAvailable: 'true',
         },
         params: {
           orderId: order.id,
@@ -256,6 +266,7 @@ describe('VariationDetailsController', () => {
             day: '01',
           },
           variationDetails: 'Change to curfew hours',
+          variationDetailsAvailable: 'Yes',
         },
         params: {
           orderId: order.id,
@@ -325,7 +336,7 @@ describe('VariationDetailsController', () => {
           focusTarget: 'variationDate-day',
         },
         { error: 'Select what you have changed', field: 'variationType' },
-        { error: 'Enter details of all the changes you have made', field: 'variationDetails' },
+        { error: 'Select Yes if there is any other information to be aware of', field: 'variationDetailsAvailable' },
       ])
       expect(taskListService.getNextPage).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(paths.VARIATION.VARIATION_DETAILS.replace(':orderId', order.id))

@@ -43,6 +43,7 @@ context('Variation', () => {
         // Hide variation type question based on ticket https://dsdmoj.atlassian.net/browse/ELM-3923
         // page.form.variationTypeField.shouldHaveValue('The device wearer’s address')
         page.form.variationDateField.shouldHaveValue(new Date('2025-01-01T00:00:00Z'))
+        page.form.variationDetailsAvailableField.shouldHaveValue('Yes')
         page.form.variationDetailsField.shouldHaveValue('Change to address')
 
         // Should have the correct buttons

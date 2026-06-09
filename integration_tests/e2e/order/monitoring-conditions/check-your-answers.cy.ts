@@ -3,6 +3,7 @@ import Page from '../../../pages/page'
 import CheckYourAnswers from '../../../pages/order/monitoring-conditions/check-your-answers'
 import OrderTasksPage from '../../../pages/order/summary'
 import paths from '../../../../server/constants/paths'
+import CurfewAdditionalDetailsPage from '../../../pages/order/monitoring-conditions/curfew-additional-details'
 
 const mockOrderId = uuidv4()
 
@@ -448,6 +449,82 @@ context('Check your answers', () => {
 
       page.curfewSection.shouldNotHaveItem('What date does the curfew end?')
       page.exclusionZoneMonitoringSections().shouldNotHaveItem('What date does exclusion zone monitoring end?')
+    })
+
+    it('should allow user to go back to curfew boundary question if no curfew boundary', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          ...mockOrder,
+          curfewConditions: {
+            curfewAddress: 'PRIMARY,SECONDARY',
+            startDate: '2024-11-11T00:00:00Z',
+            curfewAdditionalDetails: '',
+          },
+        },
+      })
+
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.curfewSection.element.should('exist')
+      page.curfewSection.shouldHaveItems([
+        {
+          key: 'Do you want to change the standard curfew address boundary for any of the curfew addresses?',
+          value: 'No',
+        },
+      ])
+    })
+
+    it('should clear curfew additional details if user selects no change to curfew address boundary', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          ...mockOrder,
+          curfewConditions: {
+            curfewAddress: 'PRIMARY,SECONDARY',
+            startDate: '2024-11-11T00:00:00Z',
+            curfewAdditionalDetails: 'some additional details',
+          },
+        },
+      })
+
+      const cyaPage = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
+
+      const curfewAdditionalDetailsPage = Page.visit(CurfewAdditionalDetailsPage, {
+        orderId: mockOrderId,
+      })
+
+      curfewAdditionalDetailsPage.form.curfewRadios.element.getByLabel('No').check()
+
+      curfewAdditionalDetailsPage.form.saveAndContinueButton.click()
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          ...mockOrder,
+          curfewConditions: {
+            curfewAddress: 'PRIMARY,SECONDARY',
+            startDate: '2024-11-11T00:00:00Z',
+            curfewAdditionalDetails: '',
+          },
+        },
+      })
+
+      Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
+
+      cyaPage.curfewSection.element.should('exist')
+      cyaPage.curfewSection.shouldHaveItems([
+        {
+          key: 'Do you want to change the standard curfew address boundary for any of the curfew addresses?',
+          value: 'No',
+        },
+      ])
     })
 
     it('shows correct buttons', () => {
