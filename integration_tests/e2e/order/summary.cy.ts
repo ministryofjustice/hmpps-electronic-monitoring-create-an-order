@@ -707,7 +707,12 @@ context('Order Summary', () => {
       let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.aboutTheDeviceWearerTask.shouldHaveStatus('Optional')
       page.aboutTheDeviceWearerTask.link.click()
-      const dwCYApage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
+      const dwCYApage = Page.verifyOnPage(
+        DeviceWearerCheckYourAnswersPage,
+        { orderId: mockOrderId },
+        {},
+        'Check your answers',
+      )
       dwCYApage.saveAndReturnButton.click()
       page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.aboutTheDeviceWearerTask.shouldHaveStatus('Complete')
