@@ -698,7 +698,7 @@ context('Order Summary', () => {
         {},
         'Check your answers',
       )
-      ciCYApage.continueButton().click()
+      ciCYApage.saveAndReturnButton.click()
       page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.interestedPartiesTask.shouldHaveStatus('Complete')
     })
@@ -707,8 +707,8 @@ context('Order Summary', () => {
       let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.aboutTheDeviceWearerTask.shouldHaveStatus('Optional')
       page.aboutTheDeviceWearerTask.link.click()
-      const dwCYApage = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
-      dwCYApage.continueButton().click()
+      const dwCYApage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
+      dwCYApage.saveAndReturnButton.click()
       page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.aboutTheDeviceWearerTask.shouldHaveStatus('Complete')
     })
@@ -723,7 +723,7 @@ context('Order Summary', () => {
         {},
         'Check your answers',
       )
-      riskInformationCyaPage.continueButton().click()
+      riskInformationCyaPage.saveAndReturnButton.click()
       page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.riskInformationTask.shouldHaveStatus('Complete')
     })
@@ -738,7 +738,7 @@ context('Order Summary', () => {
         {},
         'Check your answers',
       )
-      monitoringConditionCyaPage.continueButton().click()
+      monitoringConditionCyaPage.saveAndReturnButton.click()
       page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.electronicMonitoringTask.shouldHaveStatus('Complete')
     })
