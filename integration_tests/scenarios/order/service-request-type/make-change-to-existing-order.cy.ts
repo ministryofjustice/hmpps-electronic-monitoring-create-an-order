@@ -126,7 +126,12 @@ context('Service-Request-Types', () => {
     Page.verifyOnPage(IsRejectionPage).isNotRejection()
   }
 
-  const fillInVariations = (variationType: string, receiptType: string, variation = variationDetails) => {
+  const fillInVariations = (
+    variationType: string,
+    receiptType: string,
+    variationChangeFlow?: boolean,
+    variation = variationDetails,
+  ) => {
     const isAddressChange = variationType === 'Address Change'
     const isAddressChangePage = Page.verifyOnPage(IsAddressChangePage)
     isAddressChangePage.form.fillInWith(isAddressChange ? 'Yes' : 'No')
@@ -140,9 +145,13 @@ context('Service-Request-Types', () => {
     yourDetailsPage.form.continueButton.click()
     orderSummaryPage.fillInVariationsDetails({ variationDetails: variation })
     orderSummaryPage.aboutTheDeviceWearerTask.click()
-    Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').continue()
-    Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers').continue()
-    Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers').continue()
+    Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').saveAndReturnButton.click()
+    orderSummaryPage.riskInformationTask.click()
+
+    Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers').saveAndReturnButton.click()
+    orderSummaryPage.electronicMonitoringTask.click()
+    Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers').saveAndReturnButton.click()
+    orderSummaryPage.additionalDocumentsTask.click()
     Page.verifyOnPage(AttachmentSummaryPage).saveAndReturn()
 
     orderSummaryPage.submitOrderButton.click()
@@ -221,6 +230,6 @@ context('Service-Request-Types', () => {
       variationDetails: 'Change to address',
     }
 
-    fillInVariations('I need to change something else in the form', 'Change to an order', fullVariationDetails)
+    fillInVariations('I need to change something else in the form', 'Change to an order', true, fullVariationDetails)
   })
 })

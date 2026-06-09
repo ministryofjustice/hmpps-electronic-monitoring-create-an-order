@@ -16,6 +16,7 @@ context('interested parties check answers page', () => {
         httpStatus: 200,
         id: mockOrderId,
         status: 'IN_PROGRESS',
+        type: 'REQUEST',
         order: {
           dataDictionaryVersion: 'DDV5',
           interestedParties: {

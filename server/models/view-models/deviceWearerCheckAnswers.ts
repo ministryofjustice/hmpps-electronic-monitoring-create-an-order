@@ -243,10 +243,11 @@ const createAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOpt
   return answers
 }
 
-const createViewModel = (order: Order, content: I18n) => {
+const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean) => {
   const ignoreActions = {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
   }
+
   return {
     deviceWearer: createDeviceWearerAnswers(order, content, ignoreActions),
     personIdentifiers: createPersonIdentifierAnswers(order, content, ignoreActions),
@@ -254,6 +255,7 @@ const createViewModel = (order: Order, content: I18n) => {
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
     contactDetails: createContactDetailsAnswers(order, content, ignoreActions),
     addresses: createAddressAnswers(order, content, ignoreActions),
+    goToNextSectionNavigation,
   }
 }
 

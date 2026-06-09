@@ -42,7 +42,10 @@ const mockOrderChecklistService = {
   getChecklist: jest.fn(),
 } as unknown as jest.Mocked<OrderChecklistService>
 const taskListService = new TaskListService(mockOrderChecklistService)
-const sectionService = new SectionsService(taskListService, mockOrderChecklistService)
+const sectionService = {
+  checkBlankVariationOrNewOrder: jest.fn().mockReturnValue(true),
+  getSectionsForOrder: jest.fn().mockReturnValue([]),
+} as unknown as jest.Mocked<SectionsService>
 const mockSubmittedOrder = getMockSubmittedOrder()
 const mockDraftOrder = getMockOrder()
 
@@ -72,6 +75,7 @@ describe('authorised user', () => {
         orderSearchService,
         taskListService,
         sectionService,
+        orderChecklistService: mockOrderChecklistService,
       },
       userSupplier: () => user,
     })
@@ -235,6 +239,7 @@ describe('Order Not Found', () => {
         orderService,
         deviceWearerService,
         orderSearchService,
+        orderChecklistService: mockOrderChecklistService,
       },
       userSupplier: () => user,
     })

@@ -7,12 +7,14 @@ import paths from '../../constants/paths'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 import OrderChecklistModel from '../../models/OrderChecklist'
 import OrderChecklistService from '../../services/orderChecklistService'
+import SectionService from '../../services/sectionsService'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
 jest.mock('../../services/deviceWearerService')
 jest.mock('../../data/hmppsAuditClient')
 jest.mock('../../data/restClient')
+jest.mock('../../services/sectionsService')
 
 const adultDeviceWearer = createDeviceWearer({
   nomisId: 'nomis',
@@ -52,6 +54,7 @@ describe('DeviceWearerCheckAnswersController', () => {
   let controller: DeviceWearerCheckAnswersController
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
+  let mockedSectionService: jest.Mocked<SectionService>
   const mockOrderChecklistService = {
     updateChecklist: jest.fn(),
     getChecklist: jest.fn().mockResolvedValue(OrderChecklistModel.parse({})),
@@ -64,7 +67,17 @@ describe('DeviceWearerCheckAnswersController', () => {
       serviceName: '',
     }) as jest.Mocked<HmppsAuditClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
-    controller = new DeviceWearerCheckAnswersController(mockAuditService, taskListService, mockOrderChecklistService)
+    mockedSectionService = {
+      checkBlankVariationOrNewOrder: jest.fn().mockReturnValue(true),
+      getSectionsForOrder: jest.fn(),
+    } as unknown as jest.Mocked<SectionService>
+
+    controller = new DeviceWearerCheckAnswersController(
+      mockAuditService,
+      taskListService,
+      mockOrderChecklistService,
+      mockedSectionService,
+    )
   })
 
   it('should render the check answers page without any answers completed', async () => {
@@ -268,6 +281,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           },
         },
       ],
+      goToNextSectionNavigation: true,
       personIdentifiers: [
         {
           key: {
@@ -632,6 +646,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           },
         },
       ],
+      goToNextSectionNavigation: true,
       personIdentifiers: [
         {
           key: {
@@ -792,6 +807,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           },
         },
       ],
+      submittedDate: undefined,
     })
   })
 
@@ -996,6 +1012,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           },
         },
       ],
+      goToNextSectionNavigation: true,
       personIdentifiers: [
         {
           key: {
@@ -1208,6 +1225,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           },
         },
       ],
+      submittedDate: undefined,
     })
   })
 })

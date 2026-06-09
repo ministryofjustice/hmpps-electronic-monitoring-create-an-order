@@ -15,9 +15,11 @@ import CheckAnswersController from './checkAnswersController'
 import OrderChecklistModel from '../../models/OrderChecklist'
 import OrderChecklistService from '../../services/orderChecklistService'
 import FeatureFlags from '../../utils/featureFlags'
+import SectionService from '../../services/sectionsService'
 
 jest.mock('../../data/hmppsAuditClient')
 jest.mock('../../services/auditService')
+jest.mock('../../services/sectionsService')
 
 describe('MonitoringConditionsCheckAnswersController', () => {
   const taskListService = {
@@ -26,6 +28,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
   } as unknown as jest.Mocked<TaskListService>
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
+  let mockedSectionService: jest.Mocked<SectionService>
   let controller: CheckAnswersController
   const mockOrderChecklistService = {
     updateChecklist: jest.fn(),
@@ -39,7 +42,15 @@ describe('MonitoringConditionsCheckAnswersController', () => {
       serviceName: '',
     }) as jest.Mocked<HmppsAuditClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
-    controller = new CheckAnswersController(mockAuditService, taskListService, mockOrderChecklistService)
+    mockedSectionService = {
+      checkBlankVariationOrNewOrder: jest.fn().mockReturnValue(true),
+    } as unknown as jest.Mocked<SectionService>
+    controller = new CheckAnswersController(
+      mockAuditService,
+      taskListService,
+      mockOrderChecklistService,
+      mockedSectionService,
+    )
   })
 
   afterEach(() => {
@@ -90,9 +101,11 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         curfew: [],
         curfewTimetable: [],
         exclusionZone: [],
+        goToNextSectionNavigation: true,
         trail: [],
         attendance: [],
         alcohol: [],
+        submittedDate: undefined,
       })
     })
 
@@ -503,6 +516,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         installationAppointment: [],
         installationLocation: [],
         installationAddress: [],
+        goToNextSectionNavigation: true,
         curfewReleaseDate: [
           {
             key: {
@@ -1027,6 +1041,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             },
           },
         ],
+        submittedDate: undefined,
       })
     })
 
@@ -1302,6 +1317,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         ],
         installationAppointment: [],
         installationLocation: [],
+        goToNextSectionNavigation: true,
         installationAddress: [],
         curfewReleaseDate: [
           {
@@ -1593,6 +1609,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             zoneId: 1,
           },
         ],
+        submittedDate: undefined,
         trail: [
           {
             key: {

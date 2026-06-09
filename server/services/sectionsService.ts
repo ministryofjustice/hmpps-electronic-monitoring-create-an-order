@@ -1,11 +1,11 @@
-import { Order } from '../models/Order'
-import FeatureFlags from '../utils/featureFlags'
+import { Order, OrderStatusEnum, OrderTypeEnum } from '../models/Order'
 import isVariationType from '../utils/isVariationType'
 import { isNotNullOrEmptyString } from '../utils/utils'
 import OrderChecklistService from './orderChecklistService'
 import TaskListService, { canBeCompleted, Task } from './taskListService'
+import FeatureFlags from '../utils/featureFlags'
 
-const SECTIONS = {
+export const SECTIONS = {
   interestedParties: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
   aboutTheDeviceWearer: 'ABOUT_THE_DEVICE_WEARER',
   riskInformation: 'RISK_INFORMATION',
@@ -29,6 +29,27 @@ export default class SectionService {
     private readonly taskListService: TaskListService,
     private readonly checkListService: OrderChecklistService,
   ) {}
+
+  async checkBlankVariationOrNewOrder(order: Order, currentSection: SectionName): Promise<boolean> {
+    const orderStatusValid = order.status === OrderStatusEnum.enum.IN_PROGRESS
+
+    if (orderStatusValid && order.type === OrderTypeEnum.enum.REQUEST) {
+      return true
+    }
+
+    const tasks = this.taskListService.getTasks(order)
+    const sections = await this.getSectionsForOrder(order)
+
+    const section = sections.findIndex(it => it.name === currentSection)
+    const nextSection = sections[section + 1]
+
+    const sectionTasks = tasks.filter(task => task.section === nextSection.name)
+    const nextSectionCompleted = this.isSectionComplete(sectionTasks, order, nextSection.name)
+
+    const isNewOrderOrVariation = isVariationType(order.type)
+
+    return !nextSectionCompleted && orderStatusValid && isNewOrderOrVariation
+  }
 
   async getSectionsForOrder(order: Order, version?: string): Promise<TaskSection[]> {
     const sections = this.getRelevantSections(order)
@@ -125,7 +146,7 @@ export default class SectionService {
 
     // Feature flag must be enabled for any further logic
     if (!FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')) {
-      return false
+      return true
     }
 
     // Non-variation types are always allowed

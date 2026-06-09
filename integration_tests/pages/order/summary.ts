@@ -207,7 +207,7 @@ export default class OrderTasksPage extends AppPage {
         false,
         'About the Responsible Organisation',
       )
-      contactInformationCheckYourAnswersPage.continueButton().click()
+      contactInformationCheckYourAnswersPage.saveAndReturnButton.click()
     } else {
       this.aboutTheDeviceWearerTask.click()
     }
