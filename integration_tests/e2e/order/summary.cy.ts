@@ -455,6 +455,521 @@ context('Order Summary', () => {
     })
   })
 
+  context('Complete order, variation, not submitted', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      // Create an order with all fields present (even though they're not valid)
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          deviceWearer: {
+            nomisId: '',
+            pncId: null,
+            deliusId: null,
+            prisonNumber: null,
+            homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
+            firstName: 'Joe',
+            lastName: 'Bloggs',
+            alias: null,
+            dateOfBirth: null,
+            adultAtTimeOfInstallation: false,
+            sex: null,
+            gender: null,
+            disabilities: '',
+            noFixedAbode: false,
+            interpreterRequired: null,
+          },
+          deviceWearerResponsibleAdult: {
+            contactNumber: null,
+            fullName: null,
+            otherRelationshipDetails: null,
+            relationship: null,
+          },
+          contactDetails: {
+            contactNumber: '',
+            phoneNumberAvailable: false,
+          },
+          installationAndRisk: {
+            mappaCaseType: null,
+            mappaLevel: null,
+            riskCategory: null,
+            riskDetails: null,
+            offence: null,
+            offenceAdditionalDetails: null,
+          },
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: '',
+            responsibleOfficerFirstName: 'test',
+            responsibleOfficerLastName: '',
+            responsibleOfficerEmail: '@email',
+            responsibleOfficerPhoneNumber: '',
+            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+            responsibleOrganisationAddress: {
+              addressType: 'RESPONSIBLE_ORGANISATION',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationPhoneNumber: '',
+            responsibleOrganisationRegion: '',
+          },
+          offences: [
+            {
+              id: 'offence id',
+              offenceType: 'SEXUAL_OFFENCES',
+            },
+          ],
+          offenceAdditionalDetails: {
+            additionalDetails: 'mock offence details',
+          },
+          detailsOfInstallation: {
+            riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
+            riskDetails: 'some risk details',
+          },
+          enforcementZoneConditions: [
+            {
+              description: null,
+              duration: null,
+              endDate: null,
+              fileId: null,
+              fileName: null,
+              startDate: null,
+              zoneId: null,
+              zoneType: null,
+            },
+          ],
+          addresses: [
+            {
+              addressType: 'PRIMARY',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            {
+              addressType: 'SECONDARY',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            {
+              addressType: 'TERTIARY',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            {
+              addressType: 'INSTALLATION',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+          ],
+          additionalDocuments: [{ id: uuidv4(), fileName: '', fileType: AttachmentType.LICENCE }],
+          orderParameters: { havePhoto: false },
+          monitoringConditions: {
+            orderType: null,
+            curfew: true,
+            exclusionZone: true,
+            trail: true,
+            mandatoryAttendance: true,
+            alcohol: true,
+            orderTypeDescription: null,
+            conditionType: null,
+            startDate: null,
+            endDate: null,
+            sentenceType: null,
+            issp: null,
+            hdc: null,
+            prarr: null,
+            pilot: null,
+            isValid: true,
+            offenceType: null,
+          },
+          monitoringConditionsTrail: { startDate: null, endDate: null },
+          monitoringConditionsAlcohol: {
+            endDate: null,
+            installationLocation: null,
+            monitoringType: null,
+            prisonName: null,
+            probationOfficeName: null,
+            startDate: null,
+          },
+          isValid: true,
+          mandatoryAttendanceConditions: [
+            {
+              addressLine1: null,
+              addressLine2: null,
+              addressLine3: null,
+              addressLine4: null,
+              appointmentDay: null,
+              endDate: null,
+              endTime: null,
+              postcode: null,
+              purpose: null,
+              startDate: null,
+              startTime: null,
+            },
+          ],
+          curfewReleaseDateConditions: {
+            curfewAddress: null,
+            endTime: null,
+            orderId: null,
+            releaseDate: null,
+            startTime: null,
+          },
+          curfewConditions: {
+            curfewAddress: null,
+            endDate: null,
+            orderId: null,
+            startDate: null,
+            curfewAdditionalDetails: null,
+          },
+          curfewTimeTable: [
+            {
+              curfewAddress: '',
+              dayOfWeek: '',
+              endTime: '',
+              orderId: '',
+              startTime: '',
+            },
+          ],
+          installationLocation: {
+            location: 'PRIMARY',
+          },
+          type: 'VARIATION',
+        },
+      })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
+      })
+
+      cy.signIn()
+    })
+
+    it('should display all tasks as incomplete or unable to start for a new variation', () => {
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.interestedPartiesTask.shouldHaveStatus('Optional')
+
+      page.aboutTheDeviceWearerTask.shouldHaveStatus('Optional')
+
+      page.riskInformationTask.shouldHaveStatus('Optional')
+
+      page.electronicMonitoringTask.shouldHaveStatus('Optional')
+
+      page.additionalDocumentsTask.shouldHaveStatus('Optional')
+
+      page.variationDetailsTask.shouldHaveStatus('Incomplete')
+
+      page.submitOrderButton.should('be.disabled')
+    })
+
+    it('should display status as Complete after view interested parties check your answer page', () => {
+      let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.interestedPartiesTask.shouldHaveStatus('Optional')
+      page.interestedPartiesTask.link.click()
+      const ciCYApage = Page.verifyOnPage(
+        InterestedPartiesCheckYourAnswersPage,
+        { orderId: mockOrderId },
+        {},
+        'Check your answers',
+      )
+      ciCYApage.continueButton().click()
+      page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.interestedPartiesTask.shouldHaveStatus('Complete')
+    })
+
+    it('should display status as Complete after view Device Wearer check your answer page', () => {
+      let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.aboutTheDeviceWearerTask.shouldHaveStatus('Optional')
+      page.aboutTheDeviceWearerTask.link.click()
+      const dwCYApage = Page.verifyOnPage(CheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
+      dwCYApage.continueButton().click()
+      page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.aboutTheDeviceWearerTask.shouldHaveStatus('Complete')
+    })
+
+    it('should display status as Complete after view Risk Information check your answer page', () => {
+      let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.riskInformationTask.shouldHaveStatus('Optional')
+      page.riskInformationTask.link.click()
+      const riskInformationCyaPage = Page.verifyOnPage(
+        InstallationAndRiskCheckYourAnswersPage,
+        { orderId: mockOrderId },
+        {},
+        'Check your answers',
+      )
+      riskInformationCyaPage.continueButton().click()
+      page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.riskInformationTask.shouldHaveStatus('Complete')
+    })
+
+    it('should display status as Complete after view Electonic Monitoring check your answer page', () => {
+      let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.electronicMonitoringTask.shouldHaveStatus('Optional')
+      page.electronicMonitoringTask.link.click()
+      const monitoringConditionCyaPage = Page.verifyOnPage(
+        MonitoringConditionsCheckYourAnswersPage,
+        { orderId: mockOrderId },
+        {},
+        'Check your answers',
+      )
+      monitoringConditionCyaPage.continueButton().click()
+      page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.electronicMonitoringTask.shouldHaveStatus('Complete')
+    })
+
+    it('should display status as Complete after view attachement check your answer page', () => {
+      let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.additionalDocumentsTask.shouldHaveStatus('Optional')
+      page.additionalDocumentsTask.link.click()
+      const attachmentSummaryPage = Page.verifyOnPage(
+        AttachmentSummaryPage,
+        { orderId: mockOrderId },
+        {},
+        'Check your answers',
+      )
+      attachmentSummaryPage.backToSummaryButton.click()
+      page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.additionalDocumentsTask.shouldHaveStatus('Complete')
+    })
+
+    it('should enable submit button when variation details are entered', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          deviceWearer: {
+            nomisId: '',
+            pncId: null,
+            deliusId: null,
+            prisonNumber: null,
+            homeOfficeReferenceNumber: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
+            firstName: 'Joe',
+            lastName: 'Bloggs',
+            alias: null,
+            dateOfBirth: null,
+            adultAtTimeOfInstallation: false,
+            sex: null,
+            gender: null,
+            disabilities: '',
+            noFixedAbode: false,
+            interpreterRequired: null,
+          },
+          deviceWearerResponsibleAdult: {
+            contactNumber: null,
+            fullName: null,
+            otherRelationshipDetails: null,
+            relationship: null,
+          },
+          contactDetails: {
+            contactNumber: '',
+            phoneNumberAvailable: false,
+          },
+          installationAndRisk: {
+            mappaCaseType: null,
+            mappaLevel: null,
+            riskCategory: null,
+            riskDetails: null,
+            offence: null,
+            offenceAdditionalDetails: null,
+          },
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: '',
+            responsibleOfficerFirstName: 'test',
+            responsibleOfficerLastName: '',
+            responsibleOfficerEmail: '@email',
+            responsibleOfficerPhoneNumber: '',
+            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+            responsibleOrganisationAddress: {
+              addressType: 'RESPONSIBLE_ORGANISATION',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationPhoneNumber: '',
+            responsibleOrganisationRegion: '',
+          },
+          offences: [
+            {
+              id: 'offence id',
+              offenceType: 'SEXUAL_OFFENCES',
+            },
+          ],
+          offenceAdditionalDetails: {
+            additionalDetails: 'mock offence details',
+          },
+          detailsOfInstallation: {
+            riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
+            riskDetails: 'some risk details',
+          },
+          enforcementZoneConditions: [
+            {
+              description: null,
+              duration: null,
+              endDate: null,
+              fileId: null,
+              fileName: null,
+              startDate: null,
+              zoneId: null,
+              zoneType: null,
+            },
+          ],
+          addresses: [
+            {
+              addressType: 'PRIMARY',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            {
+              addressType: 'SECONDARY',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            {
+              addressType: 'TERTIARY',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            {
+              addressType: 'INSTALLATION',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+          ],
+          additionalDocuments: [{ id: uuidv4(), fileName: '', fileType: AttachmentType.LICENCE }],
+          orderParameters: { havePhoto: false },
+          monitoringConditions: {
+            orderType: null,
+            curfew: true,
+            exclusionZone: true,
+            trail: true,
+            mandatoryAttendance: true,
+            alcohol: true,
+            orderTypeDescription: null,
+            conditionType: null,
+            startDate: null,
+            endDate: null,
+            sentenceType: null,
+            issp: null,
+            hdc: null,
+            prarr: null,
+            pilot: null,
+            isValid: true,
+            offenceType: null,
+          },
+          monitoringConditionsTrail: { startDate: null, endDate: null },
+          monitoringConditionsAlcohol: {
+            endDate: null,
+            installationLocation: null,
+            monitoringType: null,
+            prisonName: null,
+            probationOfficeName: null,
+            startDate: null,
+          },
+          isValid: true,
+          mandatoryAttendanceConditions: [
+            {
+              addressLine1: null,
+              addressLine2: null,
+              addressLine3: null,
+              addressLine4: null,
+              appointmentDay: null,
+              endDate: null,
+              endTime: null,
+              postcode: null,
+              purpose: null,
+              startDate: null,
+              startTime: null,
+            },
+          ],
+          curfewReleaseDateConditions: {
+            curfewAddress: null,
+            endTime: null,
+            orderId: null,
+            releaseDate: null,
+            startTime: null,
+          },
+          curfewConditions: {
+            curfewAddress: null,
+            endDate: null,
+            orderId: null,
+            startDate: null,
+            curfewAdditionalDetails: null,
+          },
+          curfewTimeTable: [
+            {
+              curfewAddress: '',
+              dayOfWeek: '',
+              endTime: '',
+              orderId: '',
+              startTime: '',
+            },
+          ],
+          installationLocation: {
+            location: 'PRIMARY',
+          },
+          type: 'VARIATION',
+          variationDetails: {
+            variationType: 'CURFEW_HOURS',
+            variationDate: '2024-01-01T00:00:00.000Z',
+            variationDetails: 'Change to curfew hours',
+          },
+        },
+      })
+
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.submitOrderButton.should('not.be.disabled')
+    })
+  })
+
   context('Complete order, not submitted', () => {
     beforeEach(() => {
       cy.task('reset')
