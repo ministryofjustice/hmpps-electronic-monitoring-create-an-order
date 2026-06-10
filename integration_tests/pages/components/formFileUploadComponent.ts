@@ -4,7 +4,8 @@ import { PageElement } from '../page'
 
 export type UploadFileOptions = {
   fileName: string
-  contents: string
+  contents?: string
+  rawContent?: string
 }
 
 export default class FormFileUploadComponent {
@@ -24,13 +25,21 @@ export default class FormFileUploadComponent {
   }
 
   uploadFile(options: UploadFileOptions): void {
-    cy.readFile(options.contents, null).then(fileContent => {
+    if (options.rawContent) {
       this.element.selectFile({
-        contents: Cypress.Buffer.from(fileContent),
+        contents: Cypress.Buffer.from(options.rawContent),
         fileName: options.fileName,
         lastModified: Date.now(),
       })
-    })
+    } else {
+      cy.readFile(options.contents!, null).then(fileContent => {
+        this.element.selectFile({
+          contents: Cypress.Buffer.from(fileContent),
+          fileName: options.fileName,
+          lastModified: Date.now(),
+        })
+      })
+    }
   }
 
   shouldHaveValue(value?: string | number | boolean): void {
