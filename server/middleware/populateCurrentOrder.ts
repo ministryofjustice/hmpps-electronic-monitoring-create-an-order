@@ -32,7 +32,6 @@ const populateOrder =
         res.locals.orderId = order.id
         res.locals.orderStatus = order.status
         res.locals.isOrderEditable = order.status === OrderStatusEnum.Enum.IN_PROGRESS
-        // for nunjucks template to know which caption to render
         res.locals.content = getContent(Locales.en, order.dataDictionaryVersion)
       }
 
