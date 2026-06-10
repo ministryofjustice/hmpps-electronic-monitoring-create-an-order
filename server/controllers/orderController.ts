@@ -85,6 +85,7 @@ export default class OrderController {
       createNewOrderVersionEnabled: createNewOrderVersionEnabled && isMostRecentVersion,
       timelineItems: TimelineModel.mapToTimelineItems(completedOrderVersions, order.id, currentVersion),
       isMostRecentVersion,
+      isVariationType: isVariationType(order.type),
     })
   }
 

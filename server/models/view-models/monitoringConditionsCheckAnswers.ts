@@ -515,7 +515,7 @@ const createInstallationAppointmentAnswer = (order: Order, content: I18n, answer
   ]
 }
 
-const createViewModel = (order: Order, content: I18n) => {
+const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean) => {
   const ignoreActions = {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
   }
@@ -532,6 +532,7 @@ const createViewModel = (order: Order, content: I18n) => {
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
     installationAddress: createInstallationAddressAnswers(order, content, ignoreActions),
     installationAppointment: createInstallationAppointmentAnswer(order, content, ignoreActions),
+    goToNextSectionNavigation,
   }
 }
 

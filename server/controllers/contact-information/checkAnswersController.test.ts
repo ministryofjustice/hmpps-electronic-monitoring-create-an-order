@@ -117,6 +117,7 @@ describe('ContactDetailsCheckAnswersController', () => {
           },
         },
       ],
+      goToNextSectionNavigation: true,
       interestedParties: [
         {
           key: {
@@ -432,6 +433,7 @@ describe('ContactDetailsCheckAnswersController', () => {
           },
         },
       ],
+      goToNextSectionNavigation: true,
       interestedParties: [
         {
           key: {
@@ -715,6 +717,7 @@ describe('ContactDetailsCheckAnswersController', () => {
           },
         },
       ],
+      goToNextSectionNavigation: true,
       interestedParties: [
         {
           key: {

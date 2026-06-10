@@ -86,10 +86,10 @@ const createViewModel = (order: Order, content: I18n) => {
   )
 
   const statusDetails = createOrderStatusAnswers(order)
-  const interestedParties = InterestedPartiesCheckAnswers.construct(order, content)
-  const devicewearer = DeviceWearerCheckAnswers.default(order, content)
-  const monitoringConditions = MonitoringConditionsCheckAnswers.default(order, content)
-  const riskDetails = RiskInformationCheckAnswers.default(order, content)
+  const interestedParties = InterestedPartiesCheckAnswers.construct(order, content, false)
+  const devicewearer = DeviceWearerCheckAnswers.default(order, content, false)
+  const monitoringConditions = MonitoringConditionsCheckAnswers.default(order, content, false)
+  const riskDetails = RiskInformationCheckAnswers.default(order, content, false)
   const additionalDocumentDetails = AdditionalDocumentsCheckAnswers.default(order, content)
   const variationDetails = VariationDetailsCheckAnswers.default(order, content)
 

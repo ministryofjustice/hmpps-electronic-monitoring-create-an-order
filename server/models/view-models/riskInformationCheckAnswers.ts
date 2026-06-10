@@ -8,7 +8,7 @@ import paths from '../../constants/paths'
 import FeatureFlags from '../../utils/featureFlags'
 import { notifyingOrganisationCourts } from '../NotifyingOrganisation'
 
-const createViewModel = (order: Order, content: I18n, uri: string = '') => {
+const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean, uri: string = '') => {
   const { questions } = content.pages.installationAndRisk
 
   const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
@@ -155,6 +155,7 @@ const createViewModel = (order: Order, content: I18n, uri: string = '') => {
   return {
     riskInformation: answers,
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
+    goToNextSectionNavigation,
   }
 }
 

@@ -3,7 +3,6 @@ import Page from '../../../../pages/page'
 import InterestedPartiesCheckYourAnswersPage from './interestedPartiesCheckYourAnswersPage'
 import OrderTasksPage from '../../../../pages/order/summary'
 import IdentityNumbersPage from '../../../../pages/order/about-the-device-wearer/identity-numbers'
-import DeviceWearerCheckYourAnswersPage from '../../../../pages/order/about-the-device-wearer/check-your-answers'
 
 const mockOrderId = uuidv4()
 context('interested parties check answers page', () => {
@@ -84,54 +83,13 @@ context('interested parties check answers page', () => {
       })
     })
 
-    it('navigates to next cya when submitted order', () => {
+    it('when submitted order, render return to main task summary page button', () => {
       const page = Page.visit(InterestedPartiesCheckYourAnswersPage, { orderId: mockOrderId }, {}, 'View answers')
 
-      page.continueButton().click()
-
-      Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'View answers')
-    })
-  })
-
-  context('variation in progress', () => {
-    const mockVersionId = uuidv4()
-    beforeEach(() => {
-      cy.task('stubCemoGetVersion', {
-        httpStatus: 200,
-        id: mockOrderId,
-        versionId: mockVersionId,
-        status: 'SUBMITTED',
-        order: {
-          dataDictionaryVersion: 'DDV5',
-          interestedParties: {
-            notifyingOrganisation: 'PRISON',
-            notifyingOrganisationName: 'ALTCOURSE_PRISON',
-            notifyingOrganisationEmail: 'notifying@organisation',
-
-            responsibleOfficerFirstName: 'officer',
-            responsibleOfficerLastName: 'name',
-            responsibleOfficerEmail: 'officer@email',
-
-            responsibleOrganisation: 'POLICE',
-            responsibleOrganisationEmail: 'responsible@organisation',
-            responsibleOrganisationRegion: 'CHESHIRE',
-          },
-        },
-      })
-    })
-
-    it('navigates to next cya when submitted order', () => {
-      const page = Page.visit(
-        InterestedPartiesCheckYourAnswersPage,
-        { orderId: mockOrderId, versionId: mockVersionId },
-        {},
-        'View answers',
-        true,
-      )
-
-      page.continueButton().click()
-
-      Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'View answers')
+      page.returnButton().should('exist')
+      page.returnButton().contains('Return to the main form menu')
+      page.returnButton().click()
+      Page.verifyOnPage(OrderTasksPage, 'View answers')
     })
   })
 })

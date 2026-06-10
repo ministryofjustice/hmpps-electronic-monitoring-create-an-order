@@ -3,6 +3,7 @@ import z from 'zod'
 import ViewModel from './viewModel'
 import TaskListService from '../../../services/taskListService'
 import { OrderChecklistService } from '../../../services'
+import SectionService from '../../../services/sectionsService'
 
 const CheckYourAnswersFormModel = z.object({
   action: z.string().default('continue'),
@@ -12,12 +13,19 @@ export default class InterestedPartiesCheckYourAnswersController {
   constructor(
     private readonly taskListService: TaskListService,
     private readonly checklistService: OrderChecklistService,
+    private readonly sectionService: SectionService,
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
+    const order = req.order!
+    const isNavigable = await this.sectionService.checkBlankVariationOrNewOrder(
+      order,
+      'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+    )
+
     res.render(
       'pages/order/interested-parties/check-your-answers',
-      ViewModel.construct(req.order!, res.locals.content!),
+      ViewModel.construct(req.order!, res.locals.content!, isNavigable),
     )
   }
 

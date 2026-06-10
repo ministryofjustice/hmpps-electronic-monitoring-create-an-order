@@ -280,7 +280,7 @@ const createProbationDeliveryUnitAnswer = (order: Order, content: I18n, answerOp
   return result
 }
 
-const createViewModel = (order: Order, content: I18n) => {
+const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean) => {
   const answerOpts = {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
   }
@@ -290,6 +290,7 @@ const createViewModel = (order: Order, content: I18n) => {
     interestedParties: createInterestedPartiesAnswers(order, content, answerOpts),
     probationDeliveryUnit: createProbationDeliveryUnitAnswer(order, content, answerOpts),
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
+    goToNextSectionNavigation,
   }
 }
 

@@ -73,6 +73,7 @@ context('Check your answers', () => {
         responsibleOrganisationRegion: '',
         responsibleOrganisationEmail: '',
       },
+      additionalDocuments: [],
       dataDictionaryVersion: 'DDV5',
     }
     beforeEach(() => {
@@ -761,10 +762,8 @@ context('Check your answers', () => {
     it('shows correct buttons', () => {
       const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.continueButton().should('exist')
-      page.continueButton().contains('Go to next section')
       page.returnButton().should('exist')
-      page.returnButton().contains('Return to main form menu')
+      page.returnButton().contains('Return to the main form menu')
     })
   })
 
@@ -860,10 +859,8 @@ context('Check your answers', () => {
     it('shows correct buttons', () => {
       const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.continueButton().should('exist')
-      page.continueButton().contains('Go to next section')
       page.returnButton().should('exist')
-      page.returnButton().contains('Return to main form menu')
+      page.returnButton().contains('Return to the main form menu')
     })
   })
 
@@ -938,20 +935,6 @@ context('Check your answers', () => {
       )
 
       page.returnButton().click()
-
-      Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
-    })
-
-    it('navigates correctly to next section', () => {
-      const page = Page.visit(
-        CheckYourAnswers,
-        { orderId: mockOrderId, versionId: mockVersionId },
-        {},
-        pageHeading,
-        true,
-      )
-
-      page.continueButton().click()
 
       Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
     })
