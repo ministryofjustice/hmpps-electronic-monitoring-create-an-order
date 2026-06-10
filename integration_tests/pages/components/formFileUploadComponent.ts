@@ -24,10 +24,12 @@ export default class FormFileUploadComponent {
   }
 
   uploadFile(options: UploadFileOptions): void {
-    this.element.selectFile({
-      contents: Cypress.Buffer.from(options.contents),
-      fileName: options.fileName,
-      lastModified: Date.now(),
+    cy.readFile(options.contents, null).then(fileContent => {
+      this.element.selectFile({
+        contents: Cypress.Buffer.from(fileContent),
+        fileName: options.fileName,
+        lastModified: Date.now(),
+      })
     })
   }
 
