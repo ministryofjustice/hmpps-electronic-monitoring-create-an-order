@@ -89,7 +89,7 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id))
     })
 
-    it('should go to offence page if current page is device wearer check your answers', () => {
+    it('should go to installation and risk page if current page is device wearer check your answers', () => {
       // Given
       const currentPage = 'CHECK_ANSWERS_DEVICE_WEARER'
       const taskListService = new TaskListService(mockOrderChecklistService)
@@ -150,7 +150,7 @@ describe('TaskListService', () => {
       )
     })
 
-    it('should return find address when current page is no fixed abode, postcode lookup is enabled and interested parties flow', () => {
+    it('should return find address when current page is no fixed abode and postcode lookup is enabled', () => {
       // Given
       const mockGet = jest.fn((flag: string) => ['POSTCODE_LOOKUP_ENABLED'].includes(flag))
       const mockGetValue = jest.fn(() => '')
@@ -1546,7 +1546,7 @@ describe('TaskListService', () => {
       })
     })
 
-    it('returns monitoring conditions CYA if current page is device wearer CYA', () => {
+    it('returns installation and risk CYA if current page is device wearer CYA', () => {
       const taskListService = new TaskListService(mockOrderChecklistService)
 
       const nextPage = taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_DEVICE_WEARER', order)
