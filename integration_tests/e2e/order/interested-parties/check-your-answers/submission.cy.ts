@@ -7,12 +7,9 @@ import DeviceWearerCheckYourAnswersPage from '../../../../pages/order/about-the-
 
 const mockOrderId = uuidv4()
 context('interested parties check answers page', () => {
-  const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-
-    cy.task('setFeatureFlags', testFlags)
 
     cy.signIn()
   })

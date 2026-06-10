@@ -1,5 +1,4 @@
 import { Order } from '../models/Order'
-import FeatureFlags from '../utils/featureFlags'
 import isVariationType from '../utils/isVariationType'
 import { isNotNullOrEmptyString } from '../utils/utils'
 import OrderChecklistService from './orderChecklistService'
@@ -120,11 +119,6 @@ export default class SectionService {
 
     // Return early for disallowed organisation
     if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE') {
-      return false
-    }
-
-    // Feature flag must be enabled for any further logic
-    if (!FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')) {
       return false
     }
 
