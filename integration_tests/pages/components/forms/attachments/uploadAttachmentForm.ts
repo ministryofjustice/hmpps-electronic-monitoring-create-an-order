@@ -5,7 +5,8 @@ import FormFileUploadComponent from '../../formFileUploadComponent'
 export type UploadAttachmentFormData = {
   file?: {
     fileName: string
-    contents: string
+    contents?: string
+    rawContent?: string
   }
 }
 
