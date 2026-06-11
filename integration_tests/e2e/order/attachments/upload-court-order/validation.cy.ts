@@ -24,7 +24,7 @@ context('Attachments', () => {
         page.form.fillInWith({
           file: {
             fileName: 'court_order.pdf',
-            contents: fileContent,
+            rawContent: fileContent,
           },
         })
         page.form.saveAndContinueButton.click()

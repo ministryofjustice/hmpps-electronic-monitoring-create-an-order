@@ -207,7 +207,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
         uploadFile: {
           fileName: 'test-image.png',
-          contents: fileContents,
+          rawContent: fileContents,
         },
         anotherZone: 'No',
       }
@@ -238,7 +238,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
         uploadFile: {
           fileName: 'test-image.png',
-          contents: fileContents,
+          rawContent: fileContents,
         },
         anotherZone: 'No',
       }
@@ -260,7 +260,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
         duration: 'A test duration: Lorum ipsum dolar sit amet...',
         uploadFile: {
           fileName: 'test-image.png',
-          contents: fileContents,
+          rawContent: fileContents,
         },
         anotherZone: 'No',
       }

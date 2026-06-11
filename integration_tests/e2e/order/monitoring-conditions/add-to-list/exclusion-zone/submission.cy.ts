@@ -268,8 +268,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
         description: 'A test description: Lorem ipsum dolor sit amet...',
         duration: 'A test duration: Lorem ipsum dolor sit amet...',
         uploadFile: {
-          fileName: 'test-image.png',
-          contents: fileContents,
+          fileName: 'test-image.jpeg',
+          rawContent: fileContents,
         },
       }
 
@@ -281,9 +281,9 @@ context('Monitoring conditions - Enforcement Zone', () => {
         fileContents: [
           {
             name: 'file',
-            filename: 'test-image.png',
-            contentType: 'image/png',
-            contents: 'Test image file',
+            filename: 'test-image.jpeg',
+            contentType: 'image/jpeg',
+            contents: fileContents,
           },
         ],
       }).should('be.true')
@@ -299,8 +299,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
         description: 'A test description: Lorem ipsum dolor sit amet...',
         duration: 'A test duration: Lorem ipsum dolor sit amet...',
         uploadFile: {
-          fileName: 'test-image.png',
-          contents: fileContents,
+          fileName: 'test-image.jpeg',
+          rawContent: fileContents,
         },
       }
 
@@ -321,8 +321,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
         description: 'A test description: Lorem ipsum dolor sit amet...',
         duration: 'A test duration: Lorem ipsum dolor sit amet...',
         uploadFile: {
-          fileName: 'test-image.png',
-          contents: fileContents,
+          fileName: 'test-image.jpeg',
+          rawContent: fileContents,
         },
       }
 
