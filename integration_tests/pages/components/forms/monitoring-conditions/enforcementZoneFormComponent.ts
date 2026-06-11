@@ -9,7 +9,8 @@ export type EnforcementZoneFormData = {
   endDate?: Date
   uploadFile?: {
     fileName: string
-    contents: string
+    contents?: string
+    rawContent?: string
   }
   description?: string
   duration?: string

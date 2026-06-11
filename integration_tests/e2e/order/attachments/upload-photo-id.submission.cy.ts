@@ -25,7 +25,7 @@ context('Attachments', () => {
         page.form.fillInWith({
           file: {
             fileName: 'profile.jpeg',
-            contents: fileContent,
+            rawContent: fileContent,
           },
         })
         page.form.saveAndContinueButton.click()
