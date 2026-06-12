@@ -90,7 +90,8 @@ export default class RestClient {
     headers = {},
     responseType = '',
     raw = false,
-  }: Omit<Request, 'token'>): Promise<Response> {
+    retryOnErr = false,
+  }: Omit<Request, 'token'> & { retryOnErr?: boolean }): Promise<Response> {
     logger.info(`${this.name} GET: ${this.apiUrl()}${path}`)
     try {
       const result = await superagent
@@ -99,7 +100,22 @@ export default class RestClient {
         .agent(this.agent)
         .retry(2, (err, res) => {
           if (err) logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
-          return undefined // retry handler only for logging retries, not to influence retry logic
+          if (retryOnErr) {
+            if (res && res.status === 500) {
+              logger.info(`Retrying ${this.name} due to 500 Internal Server Error`)
+              return true
+            }
+
+            if (res && res.status === 429) {
+              logger.info(`Retrying ${this.name} due to 429 Rate Limit`)
+              return true
+            }
+
+            if (res && res.status >= 400 && res.status < 500) {
+              return false
+            }
+          }
+          return undefined
         })
         .set(headers)
         .responseType(responseType)

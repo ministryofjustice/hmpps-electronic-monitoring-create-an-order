@@ -18,6 +18,7 @@ export default class OSDataHubClient implements PostcodeLookupClient {
         path: '/search/places/v1/postcode',
         query: `postcode=${postcode}&dataset=DPA`,
         headers: { key: this.apiKey || '' },
+        retryOnErr: true,
       })
 
       const data = results as OSDataHubPostcodeResponse
@@ -38,6 +39,7 @@ export default class OSDataHubClient implements PostcodeLookupClient {
       path: '/search/places/v1/uprn',
       query: `uprn=${uprn}`,
       headers: { key: this.apiKey || '' },
+      retryOnErr: true,
     })
 
     const data = results as OSDataHubPostcodeResponse
