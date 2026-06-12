@@ -18,10 +18,6 @@ const createViewModelFromFormData = (
   order: Order,
 ): VariationDetailsViewModel => {
   return {
-    variationType: {
-      value: formData.variationType,
-      error: getError(validationErrors, 'variationType'),
-    },
     variationDate: {
       value: formData.variationDate,
       error: getError(validationErrors, 'variationDate'),
@@ -41,9 +37,6 @@ const createViewModelFromFormData = (
 
 const createViewModelFromEntity = (order: Order): VariationDetailsViewModel => {
   return {
-    variationType: {
-      value: order.variationDetails?.variationType ?? '',
-    },
     variationDate: {
       value: deserialiseDateTime(order.variationDetails?.variationDate ?? null),
     },
