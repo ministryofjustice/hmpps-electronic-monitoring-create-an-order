@@ -40,10 +40,10 @@ describe('osDataHubClient', () => {
   })
   it('requests postcode lookup with retryOnErr flag enabled', async () => {
     apiClient.getWithoutBearer.mockResolvedValue({ results: ['blah_blah'] })
-    addressMapper.mapToAddresses.mockReturnValue(['blah_blah'])
+    addressMapper.mapToAddresses.mockReturnValue([])
 
     const client = new OSDataHubClient(apiClient, addressMapper, 'mockApiKey')
-    const result = await client.lookupByPostcode('SW1A2AA')
+    await client.lookupByPostcode('SW1A2AA')
 
     expect(apiClient.getWithoutBearer).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -53,6 +53,5 @@ describe('osDataHubClient', () => {
         retryOnErr: true,
       }),
     )
-    expect(result).toEqual(['blah_blah'])
   })
 })

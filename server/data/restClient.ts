@@ -15,6 +15,7 @@ interface Request {
   responseType?: string
   raw?: boolean
   token: string
+  retryOnErr?: boolean
 }
 
 interface RequestWithBody extends Request {
@@ -91,7 +92,7 @@ export default class RestClient {
     responseType = '',
     raw = false,
     retryOnErr = false,
-  }: Omit<Request, 'token'> & { retryOnErr?: boolean }): Promise<Response> {
+  }: Omit<Request, 'token'>): Promise<Response> {
     logger.info(`${this.name} GET: ${this.apiUrl()}${path}`)
     try {
       const result = await superagent
