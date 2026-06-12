@@ -1,4 +1,3 @@
-import * as ContactInformationCheckAnswers from './contactInformationCheckAnswers'
 import * as DeviceWearerCheckAnswers from './deviceWearerCheckAnswers'
 import * as MonitoringConditionsCheckAnswers from './monitoringConditionsCheckAnswers'
 import * as RiskInformationCheckAnswers from './riskInformationCheckAnswers'
@@ -87,9 +86,7 @@ const createViewModel = (order: Order, content: I18n) => {
   )
 
   const statusDetails = createOrderStatusAnswers(order)
-  const isInterestedPartiesFlowEnabled = FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')
   const interestedParties = InterestedPartiesCheckAnswers.construct(order, content, false)
-  const contactInformation = ContactInformationCheckAnswers.default(order, content, false)
   const devicewearer = DeviceWearerCheckAnswers.default(order, content, false)
   const monitoringConditions = MonitoringConditionsCheckAnswers.default(order, content, false)
   const riskDetails = RiskInformationCheckAnswers.default(order, content, false)
@@ -98,14 +95,13 @@ const createViewModel = (order: Order, content: I18n) => {
 
   return {
     statusDetails,
-    ...(isInterestedPartiesFlowEnabled ? interestedParties : contactInformation),
+    ...interestedParties,
     ...devicewearer,
     ...monitoringConditions,
     ...riskDetails,
     ...variationDetails,
     additionalDocumentDetails,
     showDownloadJsonButtons: FeatureFlags.getInstance().get('DOWNLOAD_FMS_REQUEST_JSON_ENABLED'),
-    isInterestedPartiesFlowEnabled,
     showResponsibleOrgSection,
   }
 }
