@@ -55,21 +55,6 @@
     ],
     errorMessage: variationDate.error
   }) }}
-{% if type === 'VARIATION' %}
-  {{ govukRadios({
-    name: "variationType",
-    fieldset: {
-      legend: {
-        text: content.pages.variationDetails.questions.variationType.text,
-        isPageHeading: false,
-        classes: "govuk-fieldset__legend--s"
-      }
-    },
-    value: variationType.value,
-    errorMessage: variationType.error,
-    items: content.reference.variationTypes | toOptions(not isOrderEditable)
-  }) }}
-{% endif %}
 
 {% set variationDetailsHTML %}
   {{ govukCharacterCount({
