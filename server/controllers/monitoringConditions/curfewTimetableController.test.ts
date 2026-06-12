@@ -855,11 +855,13 @@ describe('CurfewTimetableController', () => {
 
       taskListService.getNextPage = jest
         .fn()
-        .mockReturnValue(`/order/${mockId}/monitoring-conditions/check-your-answers`)
+        .mockReturnValue(`/order/${mockId}/monitoring-conditions/order-type-description/types-of-monitoring-needed`)
 
       await controller.update(req, res, next)
 
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/check-your-answers`)
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/order/${mockId}/monitoring-conditions/order-type-description/types-of-monitoring-needed`,
+      )
     })
 
     it('Should redirect back to summary page', async () => {

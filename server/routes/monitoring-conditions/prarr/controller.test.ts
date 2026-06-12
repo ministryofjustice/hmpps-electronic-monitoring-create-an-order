@@ -79,7 +79,7 @@ describe('prarr controller', () => {
       await controller.update(req, res, next)
 
       expect(res.redirect).toHaveBeenCalledWith(
-        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', req.order!.id),
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE.replace(':orderId', req.order!.id),
       )
     })
     it('validates', async () => {

@@ -237,7 +237,7 @@ describe('CurfewConditionsController', () => {
       )
     })
 
-    it('Should redirect to curfew condition page', async () => {
+    it('Should redirect to curfew release date page', async () => {
       req.order = getMockOrder({
         id: mockId,
         monitoringConditions: createMonitoringConditions({ curfew: true }),
@@ -261,11 +261,13 @@ describe('CurfewConditionsController', () => {
         },
       }
       mockCurfewReleaseDateService.update = jest.fn().mockResolvedValue(undefined)
-      taskListService.getNextPage = jest.fn().mockReturnValue(`/order/${mockId}/monitoring-conditions/curfew/timetable`)
+      taskListService.getNextPage = jest
+        .fn()
+        .mockReturnValue(`/order/${mockId}/monitoring-conditions/curfew/release-date`)
 
       await controller.update(req, res, next)
 
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/curfew/timetable`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/curfew/release-date`)
     })
 
     it('Should redirect back to summary page', async () => {
