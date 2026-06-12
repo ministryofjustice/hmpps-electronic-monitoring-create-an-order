@@ -244,6 +244,7 @@ context('Check your answers', () => {
           installationAppointment: {
             placeName: 'Mock Place',
             appointmentDate: '2025-02-01T10:30:00Z',
+            appointmentTimeDetails: 'Mock Details',
           },
         },
       })
@@ -262,6 +263,10 @@ context('Check your answers', () => {
         {
           key: 'What time will installation take place?',
           value: '10:30',
+        },
+        {
+          key: "If the installation can't be done at the preferred time when can it take place?",
+          value: 'Mock Details',
         },
       ])
       page.installationAddressSection().shouldExist()
