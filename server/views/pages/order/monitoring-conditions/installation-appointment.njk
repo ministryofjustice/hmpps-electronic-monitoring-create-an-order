@@ -1,6 +1,7 @@
 {% extends "../../../partials/form-layout.njk" %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "../../../partials/dateTimeInput.njk" import dateTimeInput %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 {% set section = content.pages.installationAppointment.section %}
 {% set heading = content.pages.installationAppointment.title %}
 {% set legend = content.pages.installationAppointment.legend %}
@@ -24,6 +25,7 @@
       disabled: not isOrderEditable
     }) }}
 
+
 {{dateTimeInput({
       id: "appointmentDate",
       name: "appointmentDate",
@@ -39,4 +41,22 @@
       disabled: not isOrderEditable,
       timesEnabled: true     
     })}}
+          {% if showAppointmentTimeDetails %}
+  {% set attributes = { disabled: "disabled" } if not isOrderEditable else { } %}
+    {{ govukCharacterCount({
+    name: "appointmentTimeDetails",
+    id: "appointmentTimeDetails",
+    maxlength: 1000,
+    value: appointmentTimeDetails.value,
+    errorMessage: appointmentTimeDetails.error,
+    label: {
+      text: questions.appointmentTimeDetails.text,
+      classes: "govuk-label--s"
+    },
+    hint: {
+      html: questions.appointmentTimeDetails.hint
+    },
+    attributes: attributes
+  }) }}
+    {% endif %}
 {% endblock %}
