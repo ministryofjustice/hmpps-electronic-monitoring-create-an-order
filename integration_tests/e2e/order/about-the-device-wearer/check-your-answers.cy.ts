@@ -42,9 +42,7 @@ context('Device wearer - check your answers', () => {
   })
 
   context('Device Wearer has no fixed address', () => {
-    const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
     beforeEach(() => {
-      cy.task('setFeatureFlags', testFlags)
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
       cy.signIn()
@@ -111,9 +109,7 @@ context('Device wearer - check your answers', () => {
   })
 
   context('Device Wearer has fixed address', () => {
-    const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
     beforeEach(() => {
-      cy.task('setFeatureFlags', testFlags)
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
       cy.signIn()
@@ -292,7 +288,7 @@ context('Device wearer - check your answers', () => {
       })
       context('postcode flow enabled', () => {
         it('shows other addresses question', () => {
-          cy.task('setFeatureFlags', { INTERESTED_PARTIES_FLOW_ENABLED: false, POSTCODE_LOOKUP_ENABLED: true })
+          cy.task('setFeatureFlags', { POSTCODE_LOOKUP_ENABLED: true })
 
           const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 

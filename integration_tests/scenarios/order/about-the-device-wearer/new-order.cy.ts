@@ -7,10 +7,8 @@ import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
 
 context('New about device wearer flow', () => {
   let orderSummaryPage: OrderSummaryPage
-  const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
 
   beforeEach(() => {
-    cy.task('setFeatureFlags', testFlags)
     cy.task('resetDB')
     cy.task('reset')
 

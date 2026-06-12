@@ -61,8 +61,7 @@ context('address list', () => {
     Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers')
   })
 
-  it('can select no to additional addresses when interested parties flow is enabled', () => {
-    cy.task('setFeatureFlags', { INTERESTED_PARTIES_FLOW_ENABLED: true })
+  it('can select no to additional addresses', () => {
     const page = Page.visit(AddressListPage, { orderId: mockOrderId })
 
     page.form.fillInWith('No')
