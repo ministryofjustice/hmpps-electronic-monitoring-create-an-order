@@ -25,7 +25,7 @@ const InstallationAppointmentFormDataValidator = (appointmentTimeDetailsRequired
       ? z
           .string()
           .min(1, validationErrors.installationAppointment.appointmentTimeDetailsRequired)
-          .max(1000, validationErrors.installationAppointment.appointmentTimeDetailsTooLong)
+          .max(500, validationErrors.installationAppointment.appointmentTimeDetailsTooLong)
       : z.string().optional(),
   })
 

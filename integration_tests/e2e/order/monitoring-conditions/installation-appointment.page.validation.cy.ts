@@ -217,7 +217,7 @@ context('Monitoring conditions', () => {
         )
       })
 
-      it('Should display validation error for appointment time details is over 1000 characters', () => {
+      it('Should display validation error for appointment time details is over 500 characters', () => {
         const page = Page.visit(InstallationAppointmentPage, {
           orderId: mockOrderId,
           'addressType(installation)': 'installation',
@@ -225,17 +225,17 @@ context('Monitoring conditions', () => {
         page.form.fillInWith({
           appointmentTimeDetails: faker.string.fromCharacters(
             'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
-            1001,
+            501,
           ),
         })
         page.form.saveAndContinueButton.click()
         Page.verifyOnPage(InstallationAppointmentPage)
         page.errorSummary.shouldExist()
         page.errorSummary.shouldHaveError(
-          'If installation can’t take place at the preferred time when it can take place must be 1000 characters or less',
+          'If installation can’t take place at the preferred time when it can take place must be 500 characters or less',
         )
         page.form.appointmentTimeDetailsField.shouldHaveValidationMessage(
-          'If installation can’t take place at the preferred time when it can take place must be 1000 characters or less',
+          'If installation can’t take place at the preferred time when it can take place must be 500 characters or less',
         )
       })
     })

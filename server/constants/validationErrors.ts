@@ -382,7 +382,7 @@ const validationErrors: ValidationErrors = {
     appointmentTimeDetailsRequired:
       'Enter if installation can’t take place at the preferred time when it can take place',
     appointmentTimeDetailsTooLong:
-      'If installation can’t take place at the preferred time when it can take place must be 1000 characters or less',
+      'If installation can’t take place at the preferred time when it can take place must be 500 characters or less',
   },
   installationAndRisk: {
     offenceRequired: 'Select the type of offence the device wearer committed',
