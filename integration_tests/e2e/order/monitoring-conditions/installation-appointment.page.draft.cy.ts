@@ -79,7 +79,7 @@ context('Monitoring conditions', () => {
       })
 
       it('Should display Home Office specific appointment time question text when installing at a primary address', () => {
-        Page.visit(InstallationAppointmentPage, {
+        const page = Page.visit(InstallationAppointmentPage, {
           orderId: mockOrderId,
         })
         cy.get('.form-time legend').should(
@@ -91,6 +91,7 @@ context('Monitoring conditions', () => {
           "If the installation can't be done at this time, it will happen during standard hours. Enter time using a 24 hour clock. For example, enter 14:30 instead of 2:30pm",
         )
         cy.get('#appointmentTimeDetails').should('exist')
+        page.form.appointmentTimeDetailsField.shouldExist()
       })
 
       it('Should display default appointment time question text when installing at a prison', () => {

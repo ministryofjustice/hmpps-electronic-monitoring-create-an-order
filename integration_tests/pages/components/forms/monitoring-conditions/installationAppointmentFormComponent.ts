@@ -6,7 +6,7 @@ import FormTextareaComponent from '../../formTextareaComponent'
 export type InstallationAppointmentFormData = {
   placeName?: string
   appointmentDate?: Date
-  appointmentTimeDetails: string
+  appointmentTimeDetails?: string
 }
 
 export default class InstallationAppointmentFormComponent extends FormComponent {

@@ -503,16 +503,29 @@ const createInstallationAppointmentAnswer = (order: Order, content: I18n, answer
     return []
   }
 
+  const showAppointmentTimeDetails = location === 'PRIMARY' || location === 'INSTALLATION'
+
   const appointmentTimeText =
-    isHomeOffice && (location === 'PRIMARY' || location === 'INSTALLATION')
+    isHomeOffice && showAppointmentTimeDetails
       ? questions.preferredAppointmentTime.text
       : questions.appointmentTime.text
 
-  return [
+  const answers = [
     createAnswer(questions.placeName.text, order.installationAppointment?.placeName, uri, answerOpts),
     createDateAnswer(questions.appointmentDate.text, order.installationAppointment?.appointmentDate, uri, answerOpts),
     createTimeAnswer(appointmentTimeText, order.installationAppointment?.appointmentDate, uri, answerOpts),
   ]
+  if (showAppointmentTimeDetails) {
+    answers.push(
+      createAnswer(
+        questions.appointmentTimeDetails.text,
+        order.installationAppointment.appointmentTimeDetails,
+        uri,
+        answerOpts,
+      ),
+    )
+  }
+  return answers
 }
 
 const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean) => {
