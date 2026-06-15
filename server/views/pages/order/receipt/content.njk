@@ -52,7 +52,7 @@
     {% include "../variation/answers.njk" %}
   {% endif %}
 
-  {% if isInterestedPartiesFlowEnabled and showResponsibleOrgSection %}
+  {% if showResponsibleOrgSection %}
     <h2 class="govuk-heading-l">About the Responsible Organisation</h2>
 
     {% include "../interested-parties/answers.njk" %}
@@ -61,13 +61,6 @@
   <h2 class="govuk-heading-l">About the device wearer</h2>
   
   {% include "../about-the-device-wearer/answers.njk" %}
-  
-  {% if not isInterestedPartiesFlowEnabled %}
-    <h2 class="govuk-heading-l">Contact information</h2>
-  
-    {% include "../contact-information/answers.njk" %}
-  {% endif %}
- 
 
   <h2 class="govuk-heading-l">Risk information</h2>
   

@@ -79,7 +79,7 @@ context('Monitoring conditions', () => {
       })
 
       it('Should display Home Office specific appointment time question text when installing at a primary address', () => {
-        Page.visit(InstallationAppointmentPage, {
+        const page = Page.visit(InstallationAppointmentPage, {
           orderId: mockOrderId,
         })
         cy.get('.form-time legend').should(
@@ -90,6 +90,8 @@ context('Monitoring conditions', () => {
           'contains.text',
           "If the installation can't be done at this time, it will happen during standard hours. Enter time using a 24 hour clock. For example, enter 14:30 instead of 2:30pm",
         )
+        cy.get('#appointmentTimeDetails').should('exist')
+        page.form.appointmentTimeDetailsField.shouldExist()
       })
 
       it('Should display default appointment time question text when installing at a prison', () => {
@@ -102,6 +104,42 @@ context('Monitoring conditions', () => {
           'contains.text',
           'Enter time using a 24 hour clock. For example, enter 14:30 instead of 2:30pm',
         )
+        cy.get('#appointmentTimeDetails').should('not.exist')
+      })
+
+      it('Should display default appointment time question text when installing at a probation', () => {
+        stubGetOrder({ notifyingOrg: 'HOME_OFFICE', installationLocation: 'PROBATION_OFFICE' })
+        Page.visit(InstallationAppointmentPage, {
+          orderId: mockOrderId,
+        })
+        cy.get('.form-time legend').should('contains.text', 'What time will installation take place?')
+        cy.get('.form-time .govuk-hint').should(
+          'contains.text',
+          'Enter time using a 24 hour clock. For example, enter 14:30 instead of 2:30pm',
+        )
+        cy.get('#appointmentTimeDetails').should('not.exist')
+      })
+
+      it('Should display default appointment time question text when installing at a immigration', () => {
+        stubGetOrder({ notifyingOrg: 'HOME_OFFICE', installationLocation: 'IMMIGRATION_REMOVAL_CENTRE' })
+        Page.visit(InstallationAppointmentPage, {
+          orderId: mockOrderId,
+        })
+        cy.get('.form-time legend').should('contains.text', 'What time will installation take place?')
+        cy.get('.form-time .govuk-hint').should(
+          'contains.text',
+          'Enter time using a 24 hour clock. For example, enter 14:30 instead of 2:30pm',
+        )
+        cy.get('#appointmentTimeDetails').should('not.exist')
+      })
+
+      it('Should appointment time details question text when installing at another address', () => {
+        stubGetOrder({ notifyingOrg: 'PRISON', installationLocation: 'INSTALLATION' })
+        Page.visit(InstallationAppointmentPage, {
+          orderId: mockOrderId,
+        })
+
+        cy.get('#appointmentTimeDetails').should('exist')
       })
     })
 

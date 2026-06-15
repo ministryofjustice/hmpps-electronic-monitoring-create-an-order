@@ -1,4 +1,4 @@
-type Question = {
+export type Question = {
   // The label tells the user what information is required.
   text: string
 

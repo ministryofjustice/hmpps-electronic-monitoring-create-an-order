@@ -4,17 +4,21 @@ import { ValidationResult } from '../Validation'
 import { InstallationAppointmentFormData } from '../form-data/installationAppointment'
 import { DateTimeField, ViewModel } from './utils'
 import { createGovukErrorSummary } from '../../utils/errors'
+import { Question } from '../../types/i18n/pages/questionPage'
 
-type InstallationAppointmentViewModel = ViewModel<Pick<InstallationAppointment, 'placeName'>> & {
+type InstallationAppointmentViewModel = ViewModel<
+  Pick<InstallationAppointment, 'placeName' | 'appointmentTimeDetails'>
+> & {
   appointmentDate: DateTimeField
   appointmentTimeLabel: string
   appointmentTimeHint: string
+  showAppointmentTimeDetails: boolean
 }
 
 const constructFromEntity = (
   appointment: InstallationAppointment | undefined | null,
-  appointmentTimeLabel: string,
-  appointmentTimeHint: string,
+  question: Question,
+  showAppointmentTimeDetails: boolean,
 ): InstallationAppointmentViewModel => {
   return {
     placeName: {
@@ -23,17 +27,21 @@ const constructFromEntity = (
     appointmentDate: {
       value: deserialiseDateTime(appointment?.appointmentDate),
     },
-    appointmentTimeLabel,
-    appointmentTimeHint,
+    appointmentTimeDetails: {
+      value: appointment?.appointmentTimeDetails || '',
+    },
+    showAppointmentTimeDetails,
+    appointmentTimeHint: question.hint!,
+    appointmentTimeLabel: question.text,
     errorSummary: null,
   }
 }
 
 const constructFromFormData = (
   formData: InstallationAppointmentFormData,
-  appointmentTimeLabel: string,
-  appointmentTimeHint: string,
   validationErrors: ValidationResult,
+  question: Question,
+  showAppointmentTimeDetails: boolean,
 ): InstallationAppointmentViewModel => {
   return {
     placeName: {
@@ -51,8 +59,13 @@ const constructFromFormData = (
       timeError: getError(validationErrors, 'appointmentDate-hours'),
       dateError: getError(validationErrors, 'appointmentDate'),
     },
-    appointmentTimeLabel,
-    appointmentTimeHint,
+    appointmentTimeDetails: {
+      value: formData?.appointmentTimeDetails || '',
+      error: getError(validationErrors, 'appointmentTimeDetails'),
+    },
+    showAppointmentTimeDetails,
+    appointmentTimeHint: question.hint!,
+    appointmentTimeLabel: question.text,
     errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
@@ -60,14 +73,14 @@ const constructFromFormData = (
 const construct = (
   appointment: InstallationAppointment | undefined | null,
   formData: InstallationAppointmentFormData,
-  appointmentTimeLabel: string,
-  appointmentTimeHint: string,
+  question: Question,
+  showAppointmentTimeDetails: boolean,
   validationErrors: ValidationResult,
 ): InstallationAppointmentViewModel => {
   if (validationErrors.length > 0 && formData) {
-    return constructFromFormData(formData, appointmentTimeLabel, appointmentTimeHint, validationErrors)
+    return constructFromFormData(formData, validationErrors, question, showAppointmentTimeDetails)
   }
-  return constructFromEntity(appointment, appointmentTimeLabel, appointmentTimeHint)
+  return constructFromEntity(appointment, question, showAppointmentTimeDetails)
 }
 
 export default {

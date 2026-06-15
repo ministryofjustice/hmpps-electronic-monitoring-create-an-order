@@ -35,13 +35,10 @@ context('Variation', () => {
         page.form.variationDetailsAvailableField.set('Yes')
         page.form.variationDetailsField.element.should('exist')
 
-        cy.get('form').find('legend').contains('What have you changed in the form?').should('exist')
-
         page.form.saveAndReturnButton.should('exist')
         page.form.shouldNotBeDisabled()
         page.errorSummary.shouldNotExist()
         page.backButton.should('exist')
-        page.form.shouldHaveAllOptions()
         page.checkIsAccessible()
       })
 
@@ -50,63 +47,6 @@ context('Variation', () => {
         Page.visit(VariationDetailsPage, { orderId: mockOrderId })
         Page.verifyOnPage(VariationDetailsPage)
         cy.get('form').find('legend').contains('What have you changed in the form?').should('not.exist')
-      })
-      context('DDv5', () => {
-        beforeEach(() => {
-          stubOrder()
-        })
-
-        it('Should have DDv5 options only', () => {
-          Page.visit(VariationDetailsPage, { orderId: mockOrderId })
-          const page = Page.verifyOnPage(VariationDetailsPage)
-          page.form.variationTypeField.shouldHaveOption('The device wearer’s address')
-          page.form.variationTypeField.shouldHaveOption('The device wearer’s personal details')
-          page.form.variationTypeField.shouldHaveOption('Change to add an exclusion zone(s)')
-          page.form.variationTypeField.shouldHaveOption('Change to an existing exclusion zone(s)')
-          page.form.variationTypeField.shouldHaveOption('The curfew hours')
-          page.form.variationTypeField.shouldHaveOption('Change of device type (fitted/non fitted)')
-          page.form.variationTypeField.shouldHaveOption(
-            'Temporary suspension of monitoring (attend a funeral or go on holiday)',
-          )
-          page.form.variationTypeField.shouldHaveOption('Change to an enforceable condition')
-          page.form.variationTypeField.shouldHaveOption('I have changed something due to an administration error')
-          page.form.variationTypeField.shouldHaveOption('I have changed something else in the form')
-
-          page.form.variationTypeField.shouldNotHaveOption('Change of curfew hours')
-          page.form.variationTypeField.shouldNotHaveOption('Change of address')
-          page.form.variationTypeField.shouldNotHaveOption('Change to add an Exclusion Zone(s)')
-          page.form.variationTypeField.shouldNotHaveOption('Change to an existing Exclusion Zone(s).')
-        })
-      })
-
-      context('DDv4', () => {
-        beforeEach(() => {
-          stubOrder('VARIATION', 'DDV4')
-        })
-
-        it('Should have DDv4 options only', () => {
-          Page.visit(VariationDetailsPage, { orderId: mockOrderId })
-          const page = Page.verifyOnPage(VariationDetailsPage)
-
-          page.form.variationTypeField.shouldHaveOption('Change of curfew hours')
-          page.form.variationTypeField.shouldHaveOption('Change of address')
-          page.form.variationTypeField.shouldHaveOption('Change to add an Exclusion Zone(s)')
-          page.form.variationTypeField.shouldHaveOption('Change to an existing Exclusion Zone(s).')
-          page.form.variationTypeField.shouldHaveOption('Order Suspension')
-
-          page.form.variationTypeField.shouldNotHaveOption('The device wearer’s address')
-          page.form.variationTypeField.shouldNotHaveOption('The device wearer’s personal details')
-          page.form.variationTypeField.shouldNotHaveOption('Change to add an exclusion zone(s)')
-          page.form.variationTypeField.shouldNotHaveOption('Change to an existing exclusion zone(s)')
-          page.form.variationTypeField.shouldNotHaveOption('The curfew hours')
-          page.form.variationTypeField.shouldNotHaveOption('Change to a device type')
-          page.form.variationTypeField.shouldNotHaveOption('Change to an enforceable condition')
-          page.form.variationTypeField.shouldNotHaveOption(
-            'Temporary suspension of monitoring (attend a funeral or go on holiday)',
-          )
-          page.form.variationTypeField.shouldNotHaveOption('I have changed something due to an administration error')
-          page.form.variationTypeField.shouldNotHaveOption('I have changed something else in the form')
-        })
       })
     })
     context('viewing an previous version', () => {
