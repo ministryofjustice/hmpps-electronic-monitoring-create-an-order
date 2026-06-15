@@ -1,7 +1,6 @@
 import InterestedPartiesModel, { InterestedParties } from './model'
 import { Order } from '../../models/Order'
 import Store from '../store/store'
-import { notifyingOrganisationCourts } from '../../models/NotifyingOrganisation'
 
 export default class InterestedPartiesStoreService {
   constructor(private readonly dataStore: Store) {}
@@ -46,29 +45,6 @@ export default class InterestedPartiesStoreService {
     interestedParties = this.getClearedData(interestedParties, field)
 
     interestedParties[field] = data
-    await this.updateInterestedParties(order, interestedParties)
-  }
-
-  public async updateNotifyingOrganisation(
-    order: Order,
-    data: Pick<InterestedParties, 'notifyingOrganisation' | 'notifyingOrganisationName' | 'notifyingOrganisationEmail'>,
-    responsibleOfficerData?: Pick<InterestedParties, 'responsibleOfficerFirstName' | 'responsibleOfficerLastName'>,
-  ) {
-    let interestedParties = await this.getInterestedParties(order)
-
-    if ((notifyingOrganisationCourts as readonly string[]).indexOf(data.notifyingOrganisation!) > -1) {
-      interestedParties = this.getClearedData(interestedParties, 'notifyingOrganisation', 'responsibleOrganisation')
-    }
-
-    interestedParties.notifyingOrganisation = data.notifyingOrganisation
-    interestedParties.notifyingOrganisationName = data.notifyingOrganisationName
-    interestedParties.notifyingOrganisationEmail = data.notifyingOrganisationEmail
-
-    if (interestedParties.notifyingOrganisation === 'HOME_OFFICE') {
-      interestedParties.responsibleOfficerFirstName = 'Home'
-      interestedParties.responsibleOfficerLastName = 'Office'
-    }
-
     await this.updateInterestedParties(order, interestedParties)
   }
 
