@@ -261,9 +261,6 @@ describe('CurfewConditionsController', () => {
         },
       }
       mockCurfewReleaseDateService.update = jest.fn().mockResolvedValue(undefined)
-      taskListService.getNextPage = jest
-        .fn()
-        .mockReturnValue(`/order/${mockId}/monitoring-conditions/curfew/release-date`)
 
       await controller.update(req, res, next)
 

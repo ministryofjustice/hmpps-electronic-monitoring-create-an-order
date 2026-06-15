@@ -290,18 +290,6 @@ describe('EnforcementZoneController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/zone/1`)
     })
 
-    it('Should render attendance page if action is continue', async () => {
-      req.params.zoneId = '0'
-      req.body = createMockBody('false', 'continue')
-      req.order?.enforcementZoneConditions.push(createMockEnforcementZone())
-      mockEnforcementZoneService.updateZone = jest.fn().mockReturnValueOnce(null)
-      taskListService.getNextPage = jest.fn().mockReturnValue(`/order/${mockId}/monitoring-conditions/attendance`)
-      await controller.update(req, res, next)
-
-      // need to work on this test
-      // expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/attendance`)
-    })
-
     it('Should logs audit', async () => {
       req.params.zoneId = '0'
       req.body = createMockBody('false', 'continue')
@@ -323,8 +311,7 @@ describe('EnforcementZoneController', () => {
       mockEnforcementZoneService.updateZone = jest.fn().mockReturnValueOnce(null)
       await controller.update(req, res, next)
 
-      // should work on this test as currently returns 0 calls
-      // expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/summary`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/summary`)
     })
   })
 })

@@ -55,6 +55,8 @@ export default class TrailMonitoringController {
       res.redirect(
         paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', orderId),
       )
+    } else {
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }
   }
 }

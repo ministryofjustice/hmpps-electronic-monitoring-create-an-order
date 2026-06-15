@@ -853,10 +853,6 @@ describe('CurfewTimetableController', () => {
 
       mockCurfewTimetableService.update = jest.fn().mockReturnValueOnce([{ dayOfWeek: 'Monday' }])
 
-      taskListService.getNextPage = jest
-        .fn()
-        .mockReturnValue(`/order/${mockId}/monitoring-conditions/order-type-description/types-of-monitoring-needed`)
-
       await controller.update(req, res, next)
 
       expect(res.redirect).toHaveBeenCalledWith(

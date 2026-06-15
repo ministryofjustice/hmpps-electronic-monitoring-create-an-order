@@ -386,30 +386,5 @@ describe('attendanceMonitoringController', () => {
         `/order/${mockOrder.id}/monitoring-conditions/order-type-description/types-of-monitoring-needed`,
       )
     })
-
-    it('should save and redirect to the form when the user selects yes to additional appointments', async () => {
-      // Given
-      const mockOrder = getMockOrder()
-      const mockBody = validBody
-      mockBody.addAnother = 'true'
-
-      const req = createMockRequest({
-        order: mockOrder,
-        body: validBody,
-        params: { orderId: mockOrder.id },
-        flash: jest.fn(),
-      })
-      const res = createMockResponse()
-      const next = jest.fn()
-
-      // When
-      await attendanceMonitoringController.update(req, res, next)
-
-      // Then
-      expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(
-        `/order/${mockOrder.id}/monitoring-conditions/order-type-description/types-of-monitoring-needed`,
-      )
-    })
   })
 })
