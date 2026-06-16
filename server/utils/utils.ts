@@ -225,3 +225,5 @@ export const createAddressPreview = (address: AddressWithoutType | null | undefi
   }
   return addressString + separator + address.postcode
 }
+
+export const filterNullValues = (obj: object) => Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== null))

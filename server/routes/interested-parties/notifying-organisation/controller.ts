@@ -8,6 +8,7 @@ import { convertZodErrorToValidationError } from '../../../utils/errors'
 import InterestedPartiesBaseController from '../base/interestedPartiesBaseController'
 import UpdateInterestedPartiesService from '../interestedPartiesService'
 import { InterestedParties } from '../model'
+import { filterNullValues } from '../../../utils/utils'
 
 export default class NotifingOrganisationController extends InterestedPartiesBaseController {
   constructor(
@@ -51,7 +52,7 @@ export default class NotifingOrganisationController extends InterestedPartiesBas
       return
     }
 
-    const data: InterestedParties = { ...order.interestedParties, ...validationResult.data }
+    const data: InterestedParties = filterNullValues({ ...order.interestedParties, ...validationResult.data })
     await this.service.update({
       data,
       accessToken: res.locals.user.token,
