@@ -1,10 +1,12 @@
 import { v4 as uuidv4 } from 'uuid'
-import MonitoringTypesPage from './MonitoringTypesPage'
 import Page from '../../../../../pages/page'
 import OrderTypePage from '../order-type/OrderTypePage'
 import SentenceTypePage from '../sentence-type/SentenceTypePage'
 import InstallationLocationPage from '../../../../../pages/order/monitoring-conditions/installation-location'
 import PrarrPage from '../prarr/PrarrPage'
+import AlcoholMonitoringPage from '../../../../../pages/order/monitoring-conditions/alcohol-monitoring'
+import MonitoringTypePage from '../monitoring-type/MonitoringTypesPage'
+import TypesOfMonitoringNeededPage from '../types-of-monitoring-needed/TypesOfMonitoringNeededPage'
 
 const currentDate = new Date()
 const mockResponse = {
@@ -71,9 +73,28 @@ context('pilot', () => {
     prarrPage.form.fillInWith('No')
     prarrPage.form.continueButton.click()
 
-    const monitoringTypesPage = Page.verifyOnPage(MonitoringTypesPage, { order: mockOrderId })
-    monitoringTypesPage.form.fillInWith('Alcohol')
-    monitoringTypesPage.form.continueButton.click()
+    const monitoringTypePage = Page.verifyOnPage(MonitoringTypePage, { orderId: mockOrderId })
+    monitoringTypePage.form.fillInWith('Alcohol')
+    monitoringTypePage.form.continueButton.click()
+
+    cy.task('stubCemoSubmitOrder', {
+      httpStatus: 200,
+      id: mockOrderId,
+      subPath: '/monitoring-conditions-alcohol',
+      response: {
+        monitoringType: 'ALCOHOL_ABSTINENCE',
+        startDate: '2024-03-27T00:00:00.000Z',
+        endDate: '2025-04-28T00:00:00.000Z',
+      },
+    })
+
+    const alcoholMonitoringPage = Page.verifyOnPage(AlcoholMonitoringPage, { orderId: mockOrderId })
+    alcoholMonitoringPage.fillInForm()
+    alcoholMonitoringPage.form.saveAndContinueButton.click()
+
+    const typesOfMonitoringNeededPage = Page.verifyOnPage(TypesOfMonitoringNeededPage, { orderId: mockOrderId })
+    typesOfMonitoringNeededPage.form.fillInWith('No')
+    typesOfMonitoringNeededPage.form.saveAndContinueButton.click()
 
     cy.task('stubCemoVerifyRequestReceived', {
       uri: `/orders/${mockOrderId}/monitoring-conditions`,
