@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../../pages/page'
 import TypesOfMonitoringNeededPage from './TypesOfMonitoringNeededPage'
 import MonitoringTypePage from '../monitoring-type/MonitoringTypesPage'
+import MonitoringConditionsCheckYourAnswersPage from '../../../../../pages/order/monitoring-conditions/check-your-answers'
 
 const mockOrderId = uuidv4()
 context('types of monitoring needed submission', () => {
@@ -19,9 +20,18 @@ context('types of monitoring needed submission', () => {
   it('Should go to the next page', () => {
     const page = Page.visit(TypesOfMonitoringNeededPage, { orderId: mockOrderId })
 
-    page.form.fillInWith('No')
+    page.form.fillInWith('Yes')
     page.form.saveAndContinueButton.click()
 
     Page.verifyOnPage(MonitoringTypePage, { orderId: mockOrderId })
+  })
+
+  it('Should go to the cya page', () => {
+    const page = Page.visit(TypesOfMonitoringNeededPage, { orderId: mockOrderId })
+
+    page.form.fillInWith('No')
+    page.form.saveAndContinueButton.click()
+
+    Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answer')
   })
 })
