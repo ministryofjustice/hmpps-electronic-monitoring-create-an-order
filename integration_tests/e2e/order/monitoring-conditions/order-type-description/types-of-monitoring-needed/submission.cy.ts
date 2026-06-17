@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../../pages/page'
 import TypesOfMonitoringNeededPage from './TypesOfMonitoringNeededPage'
-import MonitoringTypesPage from '../monitoring-types/MonitoringTypesPage'
+import MonitoringTypePage from '../monitoring-type/MonitoringTypesPage'
 
 const mockOrderId = uuidv4()
 context('types of monitoring needed submission', () => {
@@ -22,6 +22,6 @@ context('types of monitoring needed submission', () => {
     page.form.fillInWith('No')
     page.form.saveAndContinueButton.click()
 
-    Page.verifyOnPage(MonitoringTypesPage, { orderId: mockOrderId })
+    Page.verifyOnPage(MonitoringTypePage, { orderId: mockOrderId })
   })
 })
