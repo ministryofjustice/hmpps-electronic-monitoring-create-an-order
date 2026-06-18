@@ -58,11 +58,26 @@
     }]) %}
   {% endif %}
 
-  {% set items = items.concat([{
+ {% set items = items.concat([{
     value: "INSTALLATION",
     text: "At another address",
     disabled: not isOrderEditable
   }]) %}
+  
+    {% if showInstallationAlreadyTakenPlace %}
+      {% set items = items.concat([
+       {
+      value: "",
+      divider: "or"
+    },
+      {
+      value: "INSTALLATION_ALREADY_TAKEN_PLACE",
+      text: "Installation has already taken place",
+      disabled: not isOrderEditable
+    }]) %}
+  {% endif %}
+
+ 
 
   {{ govukRadios({
     name: "location",

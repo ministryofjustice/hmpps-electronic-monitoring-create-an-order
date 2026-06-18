@@ -5,18 +5,41 @@ import TaskListService from '../../services/taskListService'
 import { isValidationResult } from '../../models/Validation'
 import paths from '../../constants/paths'
 import InstallationLocationService from '../../services/installationLocationService'
+import { OrderService } from '../../services'
+import { Order } from '../../models/Order'
+import isVariationType from '../../utils/isVariationType'
 
 export default class InstallationLocationController {
   constructor(
     private readonly installationLocationService: InstallationLocationService,
     private readonly taskListService: TaskListService,
+    private readonly orderService: OrderService,
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
-    const viewModel = installationLocationViewModel.construct(req.order!, formData[0] as never, errors as never)
+    const viewModel = installationLocationViewModel.construct(
+      req.order!,
+      formData[0] as never,
+      errors as never,
+      await this.showInstallationAlreadyTakenPlace(req.order!, res),
+    )
     res.render('pages/order/monitoring-conditions/installation-location', viewModel)
+  }
+
+  showInstallationAlreadyTakenPlace = async (order: Order, res: Response): Promise<boolean> => {
+    const versions = await this.orderService.getCompleteVersions({
+      orderId: order.id,
+      accessToken: res.locals.user.token,
+    })
+
+    if (
+      isVariationType(order.type) &&
+      versions.filter(v => v.type === 'REQUEST' && v.status === 'SUBMITTED').length === 0
+    )
+      return true
+    return false
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
