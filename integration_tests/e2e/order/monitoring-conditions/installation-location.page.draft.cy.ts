@@ -267,6 +267,26 @@ context('Installation location page', () => {
       page.form.locationField.shouldHaveOption('Installation has already taken place')
     })
 
+    it('Should not show installation already taken place option, when order is new order', () => {
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
+      })
+      stubGetOrder({
+        ...mockDefaultOrder,
+        type: 'REQUEST',
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'HOME_OFFICE' }),
+      })
+      const page = Page.visit(InstallationLocationPage, {
+        orderId: mockOrderId,
+      })
+      page.form.locationField.shouldNotHaveDivider()
+      page.form.locationField.shouldNotHaveOption('Installation has already taken place')
+    })
+
     it('Should not show installation already taken place option, when order is varying existing order', () => {
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
