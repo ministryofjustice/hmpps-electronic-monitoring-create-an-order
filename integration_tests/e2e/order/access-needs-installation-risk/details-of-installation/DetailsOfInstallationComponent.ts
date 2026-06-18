@@ -6,6 +6,7 @@ type DetailsOfInstallationData = {
   possibleRisks?: string[]
   riskCategories?: string[]
   riskDetails?: string
+  genderAdditionalDetails?: string
 }
 
 export default class DetailsOfInstallationComponent extends FormComponent {
@@ -42,6 +43,11 @@ export default class DetailsOfInstallationComponent extends FormComponent {
     return new FormTextareaComponent(this.form, label)
   }
 
+  get genderAdditionalDetailsField(): FormTextareaComponent {
+    const label = 'What sex or gender are they a risk to?'
+    return new FormTextareaComponent(this.form, label)
+  }
+
   fillInWith(input: DetailsOfInstallationData) {
     if (input.possibleRisks) {
       this.possibleRiskField.set(input.possibleRisks)
@@ -51,6 +57,9 @@ export default class DetailsOfInstallationComponent extends FormComponent {
     }
     if (input.riskDetails) {
       this.riskDetailsField.set(input.riskDetails)
+    }
+    if (input.genderAdditionalDetails) {
+      this.genderAdditionalDetailsField.set(input.genderAdditionalDetails)
     }
   }
 }
