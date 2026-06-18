@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid'
 import { NotFoundErrorPage } from '../../../pages/error'
-import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcohol-monitoring'
 import TrailMonitoringPage from '../../../pages/order/monitoring-conditions/trail-monitoring'
 import Page from '../../../pages/page'
+import TypesOfMonitoringNeededPage from './order-type-description/types-of-monitoring-needed/TypesOfMonitoringNeededPage'
 
 const mockOrderId = uuidv4()
 
@@ -267,7 +267,7 @@ context('Trail monitoring', () => {
       })
     })
 
-    it('should correctly submit the data to the CEMO API and move to the next selected page', () => {
+    it('should correctly submit the data to the CEMO API and move to the types of monitoring needed page', () => {
       cy.task('stubCemoSubmitOrder', {
         httpStatus: 200,
         id: mockOrderId,
@@ -291,7 +291,7 @@ context('Trail monitoring', () => {
         })
       })
 
-      Page.verifyOnPage(AlcoholMonitoringPage)
+      Page.verifyOnPage(TypesOfMonitoringNeededPage)
     })
   })
 

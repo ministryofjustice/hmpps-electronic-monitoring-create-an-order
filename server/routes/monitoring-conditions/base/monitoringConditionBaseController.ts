@@ -3,7 +3,6 @@ import paths from '../../../constants/paths'
 import { Order } from '../../../models/Order'
 import MonitoringConditionsUpdateService from '../monitoringConditionsService'
 import MonitoringConditionsStoreService from '../monitoringConditionsStoreService'
-import FeatureFlags from '../../../utils/featureFlags'
 import anyConditionCompleted from '../../../utils/anyConditionCompleted'
 
 export default abstract class MonitoringConditionsBaseController {
@@ -13,26 +12,22 @@ export default abstract class MonitoringConditionsBaseController {
   ) {}
 
   async UpdateMonitoringConditionAndGoToMonitoringTypePage(order: Order, req: Request, res: Response) {
-    if (FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')) {
-      const data = await this.montoringConditionsStoreService.getMonitoringConditions(order)
-      // clear any existing start and end date
-      data.startDate = null
-      data.endDate = null
-      await this.monitoringConditionsService.updateMonitoringConditions({
-        data,
-        accessToken: res.locals.user.token,
-        orderId: order.id,
-      })
-      if (anyConditionCompleted(order)) {
-        res.redirect(
-          paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', order.id),
-        )
-      } else {
-        req.flash('redirect', 'true')
-        res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE.replace(':orderId', order.id))
-      }
+    const data = await this.montoringConditionsStoreService.getMonitoringConditions(order)
+    // clear any existing start and end date
+    data.startDate = null
+    data.endDate = null
+    await this.monitoringConditionsService.updateMonitoringConditions({
+      data,
+      accessToken: res.locals.user.token,
+      orderId: order.id,
+    })
+    if (anyConditionCompleted(order)) {
+      res.redirect(
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', order.id),
+      )
     } else {
-      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', order.id))
+      req.flash('redirect', 'true')
+      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE.replace(':orderId', order.id))
     }
   }
 }

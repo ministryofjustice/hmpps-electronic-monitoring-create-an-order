@@ -8,7 +8,6 @@ import { CurfewTimetable } from '../../models/CurfewTimetable'
 import CurfewTimetableFormDataModel, { CurfewTimetableDataModel } from '../../models/form-data/curfewTimetable'
 import curfewTimetableViewModel from '../../models/view-models/curfewTimetable'
 import { serialiseTime } from '../../utils/utils'
-import FeatureFlags from '../../utils/featureFlags'
 
 const createApiModelFromFormData = (curfewTimetable: CurfewTimetableDataModel, orderId: string): CurfewTimetable => {
   return Object.entries(curfewTimetable).flatMap(([day, timetables]) =>
@@ -154,13 +153,9 @@ export default class CurfewTimetableController {
     }
 
     if (action === 'continue') {
-      if (FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')) {
-        res.redirect(
-          paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', orderId),
-        )
-      } else {
-        res.redirect(this.taskListService.getNextPage('CURFEW_TIMETABLE', req.order!))
-      }
+      res.redirect(
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', orderId),
+      )
       return
     }
 

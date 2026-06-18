@@ -7,7 +7,6 @@ import TaskListService from '../../services/taskListService'
 import { EnforcementZoneFormDataModel } from '../../models/form-data/enforcementZone'
 import enforcementZoneViewModel from '../../models/view-models/enforcementZone'
 import { ValidationResult } from '../../models/Validation'
-import FeatureFlags from '../../utils/featureFlags'
 
 export default class EnforcementZoneController {
   constructor(
@@ -73,12 +72,10 @@ export default class EnforcementZoneController {
               (zoneIdInt + 1).toString(),
             ),
           )
-        else if (FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')) {
+        else {
           res.redirect(
             paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', orderId),
           )
-        } else {
-          res.redirect(this.taskListService.getNextPage('ENFORCEMENT_ZONE_MONITORING', req.order!))
         }
       } else {
         res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))

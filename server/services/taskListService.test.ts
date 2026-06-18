@@ -463,7 +463,9 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id))
+      expect(nextPage).toBe(
+        paths.MONITORING_CONDITIONS.ZONE_NEW_ITEM.replace(':zoneId', '0').replace(':orderId', order.id),
+      )
     })
 
     it('should return trail monitoring if current page is curfew timetable and trail is selected', () => {
