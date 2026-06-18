@@ -7,6 +7,7 @@
 {% set helpText = content.pages.installationLocation.helpText %}
 {% set questions = content.pages.installationLocation.questions %}
 {% set questionName = "Installation Location"%}
+{% set reference = content.reference.installationLocations %}
 {% block formInputs %}
 
   {% set detailsTextHtml %}
@@ -40,12 +41,12 @@
         },
         {
           value: "PRISON",
-          text: "At a prison",
+          text: reference.PRISON,
           disabled: not isOrderEditable
         },
         {
           value: "PROBATION_OFFICE",
-          text: "At a probation office",
+          text: reference.PROBATION_OFFICE,
           disabled: not isOrderEditable
         }
     ] %}
@@ -53,17 +54,17 @@
   {% if showImmigrationRemovalCentre %}
       {% set items = items.concat([{
       value: "IMMIGRATION_REMOVAL_CENTRE",
-      text: "At an immigration removal centre",
+      text: reference.IMMIGRATION_REMOVAL_CENTRE,
       disabled: not isOrderEditable
     }]) %}
   {% endif %}
 
  {% set items = items.concat([{
     value: "INSTALLATION",
-    text: "At another address",
+    text: reference.INSTALLATION,
     disabled: not isOrderEditable
   }]) %}
-  
+
     {% if showInstallationAlreadyTakenPlace %}
       {% set items = items.concat([
        {
@@ -72,7 +73,7 @@
     },
       {
       value: "INSTALLATION_ALREADY_TAKEN_PLACE",
-      text: "Installation has already taken place",
+      text: reference.INSTALLATION_ALREADY_TAKEN_PLACE,
       disabled: not isOrderEditable
     }]) %}
   {% endif %}

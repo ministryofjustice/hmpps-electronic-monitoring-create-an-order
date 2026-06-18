@@ -16,6 +16,11 @@ context('Monitoring conditions', () => {
           status: 'IN_PROGRESS',
         })
 
+        cy.task('stubCemoGetVersions', {
+          httpStatus: 200,
+          versions: [],
+          orderId: mockOrderId,
+        })
         cy.signIn()
       })
 

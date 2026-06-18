@@ -35,6 +35,7 @@ export default class InstallationLocationController {
     })
 
     if (
+      order.status === 'IN_PROGRESS' &&
       isVariationType(order.type) &&
       versions.filter(v => v.type === 'REQUEST' && v.status === 'SUBMITTED').length === 0
     )
