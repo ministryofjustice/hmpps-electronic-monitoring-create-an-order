@@ -56,7 +56,7 @@ context('Access needs and installation risk information', () => {
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}${apiPath}`,
           body: {
-            offence: 'ROBBERY',
+            offence: ['ROBBERY'],
             offenceAdditionalDetails: '',
             riskCategory: ['SEXUAL_OFFENCES', 'HISTORY_OF_SUBSTANCE_ABUSE'],
             riskDetails: 'Mock risk',

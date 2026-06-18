@@ -10,7 +10,7 @@ export default class FormCheckboxesComponent {
     private readonly label: string,
     private readonly options: string[] | RegExp[],
   ) {
-    this.parent.getByLegend(this.label, { log: false }).as(`${this.elementCacheId}-element`)
+    this.parent.get('.govuk-form-group > .govuk-fieldset').as(`${this.elementCacheId}-element`)
   }
 
   get element(): PageElement {

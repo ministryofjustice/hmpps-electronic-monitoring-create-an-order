@@ -1,15 +1,15 @@
+import FormCheckboxesComponent from '../../../../../pages/components/formCheckboxesComponent'
 import FormComponent from '../../../../../pages/components/formComponent'
 import FormDateComponent from '../../../../../pages/components/formDateComponent'
-import FormRadiosComponent from '../../../../../pages/components/formRadiosComponent'
 
 export type OffenceInput = {
   offenceType?: string
   offenceDate?: Date
 }
 export default class OffenceComponent extends FormComponent {
-  get offenceTypeField(): FormRadiosComponent {
-    const label = 'What type of offence did the device wearer commit?'
-    return new FormRadiosComponent(this.form, label, [
+  get offenceTypeField(): FormCheckboxesComponent {
+    const label = 'What type of offences did the device wearer commit?'
+    return new FormCheckboxesComponent(this.form, label, [
       'Violence against the person',
       'Sexual offences',
       'Robbery',
