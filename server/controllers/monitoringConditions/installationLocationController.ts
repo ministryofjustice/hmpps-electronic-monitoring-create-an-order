@@ -34,13 +34,11 @@ export default class InstallationLocationController {
       accessToken: res.locals.user.token,
     })
 
-    if (
+    return (
       order.status === 'IN_PROGRESS' &&
       isVariationType(order.type) &&
       versions.filter(v => v.type === 'REQUEST' && v.status === 'SUBMITTED').length === 0
     )
-      return true
-    return false
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
