@@ -248,7 +248,7 @@ context('Check your answers', () => {
           value: 'Installation has already taken place',
         },
       ])
-      page.installationAddressSection().shouldExist()
+      page.installationAddressSection().shouldNotExist()
     })
 
     it('shows installation appointment', () => {
