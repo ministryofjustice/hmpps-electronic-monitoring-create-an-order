@@ -538,7 +538,8 @@ export default class TaskListService {
           order.installationLocation?.location === 'PROBATION_OFFICE' ||
           order.installationLocation?.location === 'IMMIGRATION_REMOVAL_CENTRE' ||
           order.installationLocation?.location === 'INSTALLATION' ||
-          order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE',
+          (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE' &&
+            order.installationLocation?.location !== 'INSTALLATION_ALREADY_TAKEN_PLACE'),
         STATES.cantBeStarted,
         STATES.required,
         STATES.notRequired,
