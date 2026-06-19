@@ -13,6 +13,7 @@ type InstallationLocationViewModel = ViewModel<InstallationLocation> & {
   pilotPrison?: boolean
   showImmigrationRemovalCentre?: boolean
   fixedAddressExist: boolean
+  showInstallationAlreadyTakenPlace?: boolean
 }
 
 const getPilotPrisonStatus = (order: Order): boolean => {
@@ -76,13 +77,18 @@ const construct = (
   order: Order,
   formData: InstallationLocationFormData,
   validationErrors: ValidationResult,
+  showInstallationAlreadyTakenPlace: boolean,
 ): InstallationLocationViewModel => {
   const primaryAddressView = createPrimaryAddressView(order.addresses)
-
+  let model: InstallationLocationViewModel
   if (validationErrors.length > 0) {
-    return constructFromFormData(formData, primaryAddressView, validationErrors, order)
+    model = constructFromFormData(formData, primaryAddressView, validationErrors, order)
+  } else {
+    model = constructFromEntity(primaryAddressView, order, order.installationLocation?.location)
   }
-  return constructFromEntity(primaryAddressView, order, order.installationLocation?.location)
+
+  model.showInstallationAlreadyTakenPlace = showInstallationAlreadyTakenPlace
+  return model
 }
 
 export default {

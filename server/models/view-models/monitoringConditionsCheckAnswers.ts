@@ -184,7 +184,11 @@ const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n
 }
 
 const createInstallationAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
-  if (!order.installationLocation || order.installationLocation.location === 'PRIMARY') {
+  if (
+    !order.installationLocation ||
+    order.installationLocation.location === 'PRIMARY' ||
+    order.installationLocation.location === 'INSTALLATION_ALREADY_TAKEN_PLACE'
+  ) {
     return []
   }
   const uri = getInstallationAddressLink(order)

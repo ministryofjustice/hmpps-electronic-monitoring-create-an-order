@@ -60,6 +60,24 @@ context('Monitoring conditions', () => {
         },
       ],
     }
+    const defaultMonitoringCondition = {
+      startDate: '2025-01-01T00:00:00Z',
+      endDate: '2025-02-01T00:00:00Z',
+      orderType: 'CIVIL',
+      curfew: false,
+      exclusionZone: false,
+      trail: false,
+      mandatoryAttendance: false,
+      alcohol: true,
+      conditionType: 'BAIL_ORDER',
+      orderTypeDescription: 'DAPO',
+      sentenceType: 'IPP',
+      issp: 'YES',
+      hdc: 'NO',
+      prarr: 'UNKNOWN',
+      pilot: '',
+      offenceType: '',
+    }
 
     const stubGetOrder = monitoringConditions => {
       cy.task('stubCemoGetOrder', {
@@ -76,24 +94,7 @@ context('Monitoring conditions', () => {
       beforeEach(() => {
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-        stubGetOrder({
-          startDate: '2025-01-01T00:00:00Z',
-          endDate: '2025-02-01T00:00:00Z',
-          orderType: 'CIVIL',
-          curfew: false,
-          exclusionZone: false,
-          trail: false,
-          mandatoryAttendance: false,
-          alcohol: true,
-          conditionType: 'BAIL_ORDER',
-          orderTypeDescription: 'DAPO',
-          sentenceType: 'IPP',
-          issp: 'YES',
-          hdc: 'NO',
-          prarr: 'UNKNOWN',
-          pilot: '',
-          offenceType: '',
-        })
+        stubGetOrder(defaultMonitoringCondition)
         cy.task('stubCemoSubmitOrder', {
           httpStatus: 200,
           id: mockOrderId,
@@ -101,6 +102,11 @@ context('Monitoring conditions', () => {
           response: {
             location: 'PRISON',
           },
+        })
+        cy.task('stubCemoGetVersions', {
+          httpStatus: 200,
+          versions: [],
+          orderId: mockOrderId,
         })
         cy.signIn()
       })
@@ -436,6 +442,37 @@ context('Monitoring conditions', () => {
           locationPage.form.saveAndContinueButton.click()
 
           Page.verifyOnPage(InstallationAppointmentPage)
+        })
+      })
+
+      context('Installation already taken place', () => {
+        it(`Should submit correct value and go to check your answer page`, () => {
+          cy.task('stubCemoGetOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            status: 'IN_PROGRESS',
+            order: {
+              ...mockDefaultOrder,
+              type: 'VARIATION',
+              monitoringCondition: defaultMonitoringCondition,
+            },
+          })
+
+          cy.task('stubCemoSubmitOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            subPath: apiPath,
+            response: {
+              location: 'INSTALLATION_ALREADY_TAKEN_PLACE',
+            },
+          })
+          const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
+          const validFormData = {
+            location: 'Installation has already taken place',
+          }
+          page.form.fillInWith(validFormData)
+          page.form.saveAndContinueButton.click()
+          Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answer')
         })
       })
     })

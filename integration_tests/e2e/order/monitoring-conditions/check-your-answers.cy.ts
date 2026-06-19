@@ -227,6 +227,30 @@ context('Check your answers', () => {
       page.installationAddressSection().shouldExist()
     })
 
+    it('shows installation location - INSTALLATION_ALREADY_TAKEN_PLACE', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          ...mockOrder,
+          installationLocation: {
+            location: 'INSTALLATION_ALREADY_TAKEN_PLACE',
+          },
+        },
+      })
+
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
+      page.installationLocationSection().shouldExist()
+      page.installationLocationSection().shouldHaveItems([
+        {
+          key: 'Where will installation of the electronic monitoring device take place?',
+          value: 'Installation has already taken place',
+        },
+      ])
+      page.installationAddressSection().shouldNotExist()
+    })
+
     it('shows installation appointment', () => {
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
