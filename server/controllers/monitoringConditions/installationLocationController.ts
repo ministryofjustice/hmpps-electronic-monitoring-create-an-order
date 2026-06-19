@@ -5,7 +5,6 @@ import TaskListService from '../../services/taskListService'
 import { isValidationResult } from '../../models/Validation'
 import paths from '../../constants/paths'
 import InstallationLocationService from '../../services/installationLocationService'
-import { OrderService } from '../../services'
 import { Order } from '../../models/Order'
 import isVariationType from '../../utils/isVariationType'
 
@@ -13,7 +12,6 @@ export default class InstallationLocationController {
   constructor(
     private readonly installationLocationService: InstallationLocationService,
     private readonly taskListService: TaskListService,
-    private readonly orderService: OrderService,
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
@@ -29,16 +27,7 @@ export default class InstallationLocationController {
   }
 
   showInstallationAlreadyTakenPlace = async (order: Order, res: Response): Promise<boolean> => {
-    const versions = await this.orderService.getCompleteVersions({
-      orderId: order.id,
-      accessToken: res.locals.user.token,
-    })
-
-    return (
-      order.status === 'IN_PROGRESS' &&
-      isVariationType(order.type) &&
-      versions.filter(v => v.type === 'REQUEST' && v.status === 'SUBMITTED').length === 0
-    )
+    return order.status === 'IN_PROGRESS' && isVariationType(order.type)
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {

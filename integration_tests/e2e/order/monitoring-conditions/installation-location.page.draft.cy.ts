@@ -91,11 +91,7 @@ context('Installation location page', () => {
     cy.signIn()
 
     const testFlags = { TAG_AT_SOURCE_PILOT_PRISONS: 'SUDBURY_PRISON,FOSSE_WAY_PRISON' }
-    cy.task('stubCemoGetVersions', {
-      httpStatus: 200,
-      versions: [],
-      orderId: mockOrderId,
-    })
+
     cy.task('setFeatureFlags', testFlags)
   })
 
@@ -249,7 +245,7 @@ context('Installation location page', () => {
   })
 
   context('Installation already taken place option', () => {
-    it('Should show installation already taken place option, when order is new variation', () => {
+    it('Should show installation already taken place option, when order is variation', () => {
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
       stubGetOrder({
@@ -270,44 +266,9 @@ context('Installation location page', () => {
     it('Should not show installation already taken place option, when order is new order', () => {
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-      cy.task('stubCemoGetVersions', {
-        httpStatus: 200,
-        versions: [],
-        orderId: mockOrderId,
-      })
       stubGetOrder({
         ...mockDefaultOrder,
         type: 'REQUEST',
-        interestedParties: createInterestedParties({ notifyingOrganisation: 'HOME_OFFICE' }),
-      })
-      const page = Page.visit(InstallationLocationPage, {
-        orderId: mockOrderId,
-      })
-      page.form.locationField.shouldNotHaveDivider()
-      page.form.locationField.shouldNotHaveOption('Installation has already taken place')
-    })
-
-    it('Should not show installation already taken place option, when order is varying existing order', () => {
-      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-
-      const versionOne = {
-        orderId: uuidv4(),
-        versionId: uuidv4(),
-        versionNumber: 0,
-        submittedBy: 'John Smith',
-        fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0).toISOString(),
-        type: 'REQUEST',
-        status: 'SUBMITTED',
-      }
-
-      cy.task('stubCemoGetVersions', {
-        httpStatus: 200,
-        versions: [versionOne],
-        orderId: mockOrderId,
-      })
-      stubGetOrder({
-        ...mockDefaultOrder,
-        type: 'VARIATION',
         interestedParties: createInterestedParties({ notifyingOrganisation: 'HOME_OFFICE' }),
       })
       const page = Page.visit(InstallationLocationPage, {

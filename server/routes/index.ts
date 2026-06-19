@@ -194,7 +194,6 @@ export default function routes({
   const installationLocationController = new InstallationLocationController(
     installationLocationService,
     taskListService,
-    orderService,
   )
 
   const installationAppointmentController = new InstallationAppointmentController(
