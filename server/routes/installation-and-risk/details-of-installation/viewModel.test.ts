@@ -35,6 +35,7 @@ describe('details of installation view model', () => {
       possibleRisk: [],
       riskCategory: ['HISTORY_OF_SUBSTANCE_ABUSE'],
       riskDetails: 'some details',
+      genderRiskDetails: '',
       action: '',
     } as DetailsOfInstallationInput
     const errors = [{ error: 'some error', field: 'possibleRisk' }] as ValidationResult

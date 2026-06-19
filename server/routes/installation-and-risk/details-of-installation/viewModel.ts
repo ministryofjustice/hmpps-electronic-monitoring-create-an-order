@@ -27,6 +27,10 @@ const construct = (
       value: formData?.riskDetails || order.detailsOfInstallation?.riskDetails || '',
       error: getError(errors, 'riskDetails'),
     },
+    genderRiskDetails: {
+      value: formData?.genderRiskDetails || '',
+      error: getError(errors, 'genderRiskDetails'),
+    },
     errorSummary: createGovukErrorSummary(errors),
   }
 }
