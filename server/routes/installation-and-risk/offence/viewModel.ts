@@ -20,7 +20,7 @@ const contructFromOrder = (
 ): OffenceViewModel => {
   return {
     offenceType: {
-      value: offence?.offenceType || '',
+      value: offence?.offenceType?.toString() || '',
     },
     offenceDate: {
       value: deserialiseDateTime(offence?.offenceDate),

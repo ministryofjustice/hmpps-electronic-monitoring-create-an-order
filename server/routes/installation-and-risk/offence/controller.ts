@@ -1,7 +1,7 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
 import viewModel from './viewModel'
-import OffenceFormModel, { OffenceInput } from './formModel'
+import { OffenceInput } from './formModel'
 import OffenceService from './service'
 import { ValidationResult, isValidationResult } from '../../../models/Validation'
 import { Offence } from '../../../models/Offence'
@@ -52,8 +52,8 @@ export default class OffenceController {
     const order = req.order!
     const { offenceId } = req.params
     req.body.id = offenceId
-    const formData = OffenceFormModel.parse(req.body)
-    if (formData.offenceType === 'TERRORISM_OFFENCE') {
+    const formData = req.body
+    if (formData && formData.offenceType?.includes('TERRORISM_OFFENCE')) {
       req.flash('SpecialOrderSection', res.locals.content!.pages.offence.section)
       res.redirect(paths.ORDER.SPECIAL_ORDER.replace(':orderId', order.id))
       return
@@ -68,16 +68,16 @@ export default class OffenceController {
     if (isValidationResult(result)) {
       req.flash('formData', formData)
       req.flash('validationErrors', result)
-      if (formData.id) {
+      if (formData && formData.id) {
         res.redirect(
-          paths.INSTALLATION_AND_RISK.OFFENCE.replace(':orderId', order.id).replace(':offenceId', formData.id),
+          paths.INSTALLATION_AND_RISK.OFFENCE.replace(':orderId', order.id).replace(':offenceId', formData[0].id),
         )
         return
       }
       res.redirect(paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM.replace(':orderId', order.id))
       return
     }
-    if (formData.action === 'continue') {
+    if (formData && formData.action === 'continue') {
       if (this.courts.indexOf(order.interestedParties?.notifyingOrganisation) !== -1) {
         res.redirect(paths.INSTALLATION_AND_RISK.OFFENCE_LIST.replace(':orderId', order.id))
       } else {

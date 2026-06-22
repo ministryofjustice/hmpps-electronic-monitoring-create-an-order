@@ -26,7 +26,7 @@ export default class OffenceService {
 
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/offence`,
-        data: requestBody,
+        data: requestBody ?? [],
         token: input.accessToken,
       })
 

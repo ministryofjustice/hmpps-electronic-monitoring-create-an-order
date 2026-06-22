@@ -41,7 +41,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
           'Offences',
           order.offences.map(
             offence =>
-              `${lookup(content.reference.offences, offence.offenceType)} on ${createDatePreview(offence.offenceDate)}`,
+              `${lookup(content.reference.offences, offence.offenceType?.at(0))} on ${createDatePreview(offence.offenceDate)}`,
           ),
           paths.INSTALLATION_AND_RISK.OFFENCE_LIST.replace(':orderId', order.id),
         ),
@@ -50,7 +50,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
       answers.push(
         createAnswer(
           questions.offence.text,
-          lookup(content.reference.offences, firstOffence?.offenceType),
+          lookup(content.reference.offences, firstOffence?.offenceType?.at(0)),
           offencePath,
           answerOpts,
         ),
@@ -71,7 +71,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
     answers.push(
       createAnswer(
         questions.offence.text,
-        lookup(content.reference.offences, order.installationAndRisk?.offence),
+        lookup(content.reference.offences, order.installationAndRisk?.offence?.at(0)),
         uri,
         answerOpts,
       ),

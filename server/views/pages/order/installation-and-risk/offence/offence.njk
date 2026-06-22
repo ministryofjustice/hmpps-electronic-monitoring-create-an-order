@@ -2,7 +2,7 @@
 
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "../../../../partials/dateTimeInput.njk" import dateTimeInput %}
 
 {% set section = content.pages.offence.section %}
@@ -13,15 +13,15 @@
 {% block formInputs %}
   {% set disabled = not isOrderEditable %}
 
-  {% set radioItems = content.reference.offences | toOptions(disabled) %}
+  {% set checkboxItems = content.reference.offences | toOptions(disabled) %}
 
   {% if not isHomeOffice %}
-    {% set radioItems = radioItems | removeOptions(['NO_OFFENCE_COMMITTED']) %}
+    {% set checkboxItems = checkboxItems | removeOptions(['NO_OFFENCE_COMMITTED']) %}
   {% endif %}
 
-  {% set radioItems = radioItems | addDivider() %}  
+  {% set checkboxItems = checkboxItems | addDivider() %}  
 
-    {{ govukRadios({
+    {{ govukCheckboxes({
     name: "offenceType",
     fieldset: {
       legend: {
@@ -33,8 +33,8 @@
     hint: {
       text: content.pages.deviceWearer.questions.offenceType.hint
     },
-    items: radioItems,
-    value: offenceType.value,
+    items: checkboxItems,
+    values: [offenceType.value],
     errorMessage: offenceType.error,
     disabled: not isOrderEditable
   }) }}

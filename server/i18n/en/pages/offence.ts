@@ -1,8 +1,7 @@
 import OffenceContent from '../../../types/i18n/pages/offence'
 
 const offenceContent: OffenceContent = {
-  helpText:
-    '',
+  helpText: '',
   legend: '',
   questions: {
     offenceType: {

@@ -47,7 +47,7 @@ context('Offence submissions', () => {
         id: mockOrderId,
         subPath: apiPath,
         response: {
-          offenceType: 'THEFT_OFFENCES',
+          offenceType: ['THEFT_OFFENCES'],
           offenceDate: '2020-01-01T00:00:00Z',
         },
       })
@@ -64,7 +64,7 @@ context('Offence submissions', () => {
       cy.task('stubCemoVerifyRequestReceived', {
         uri: `/orders/${mockOrderId}${apiPath}`,
         body: {
-          offenceType: 'THEFT_OFFENCES',
+          offenceType: ['THEFT_OFFENCES'],
           offenceDate: '2025-01-01T00:00:00.000Z',
         },
       }).should('be.true')
@@ -108,7 +108,25 @@ context('Offence submissions', () => {
       cy.task('stubCemoVerifyRequestReceived', {
         uri: `/orders/${mockOrderId}${apiPath}`,
         body: {
-          offenceType: 'THEFT_OFFENCES',
+          offenceType: ['THEFT_OFFENCES'],
+        },
+      }).should('be.true')
+      Page.verifyOnPage(OffenceOtherInfoPage)
+    })
+
+    it('Submitting multiple valid offences', () => {
+      const page = Page.visit(OffencePage, { orderId: mockOrderId })
+      page.form.fillInWith({
+        offenceType: 'Theft Offences',
+      })
+      page.form.fillInWith({
+        offenceType: 'Sexual offence',
+      })
+      page.form.saveAndContinueButton.click()
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOrderId}${apiPath}`,
+        body: {
+          offenceType: ['THEFT_OFFENCES', 'SEXUAL_OFFENCES'],
         },
       }).should('be.true')
       Page.verifyOnPage(OffenceOtherInfoPage)

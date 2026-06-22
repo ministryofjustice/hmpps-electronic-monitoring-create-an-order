@@ -1444,7 +1444,7 @@ describe('TaskListService', () => {
           notifyingOrganisation: 'CROWN_COURT',
         }),
         dapoClauses: [],
-        offences: [{ offenceType: 'offenceType', offenceDate: new Date().toISOString() }],
+        offences: [{ offenceType: ['offenceType'], offenceDate: new Date().toISOString() }],
         detailsOfInstallation: { riskCategory: ['some category'], riskDetails: '' },
         offenceAdditionalDetails: { additionalDetails: 'details' },
       })
@@ -1476,7 +1476,7 @@ describe('TaskListService', () => {
           notifyingOrganisation: 'CROWN_COURT',
         }),
         installationAndRisk: createInstallationAndRisk({
-          offence: 'SEXUAL_OFFENCES',
+          offence: ['SEXUAL_OFFENCES'],
           offenceAdditionalDetails: 'mock offence additional details',
         }),
         offences: [],

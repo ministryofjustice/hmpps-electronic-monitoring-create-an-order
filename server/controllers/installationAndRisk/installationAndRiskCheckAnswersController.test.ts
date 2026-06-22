@@ -145,7 +145,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
     // Given
     const order = getMockOrder({
       installationAndRisk: {
-        offence: 'SEXUAL_OFFENCES',
+        offence: ['SEXUAL_OFFENCES'],
         offenceAdditionalDetails: 'some offence details',
         riskCategory: ['RISK_TO_GENDER'],
         riskDetails: 'some risk details',
@@ -250,7 +250,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         responsibleOrganisationRegion: '',
       },
       installationAndRisk: {
-        offence: 'SEXUAL_OFFENCES',
+        offence: ['SEXUAL_OFFENCES'],
         offenceAdditionalDetails: 'some offence details',
         riskCategory: ['RISK_TO_GENDER'],
         riskDetails: 'some risk details',
@@ -356,7 +356,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         responsibleOrganisationRegion: '',
       },
       installationAndRisk: {
-        offence: 'SEXUAL_OFFENCES',
+        offence: ['SEXUAL_OFFENCES'],
         offenceAdditionalDetails: 'some offence details',
         riskCategory: ['RISK_TO_GENDER'],
         riskDetails: 'some risk details',

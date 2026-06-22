@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 const OffenceModel = z.object({
   id: z.string().optional(),
-  offenceType: z.string().nullable(),
+  offenceType: z.array(z.string().nullable()).nullable(),
   offenceDate: z.string().datetime().nullable().optional(),
 })
 

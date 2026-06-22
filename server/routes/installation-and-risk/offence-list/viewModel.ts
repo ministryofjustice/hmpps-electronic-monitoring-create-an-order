@@ -46,7 +46,7 @@ const getDapoClauseSummaryItem = (item: DapoClause, orderId: string): Answer =>
 
 const getOffentSummaryItem = (item: Offence, content: I18n, orderId: string): Answer =>
   createAnswer(
-    lookup(content!.reference.offences, item.offenceType),
+    lookup(content!.reference.offences, item.offenceType?.at(0)),
     `on ${createDatePreview(item.offenceDate!)} `,
     paths.INSTALLATION_AND_RISK.OFFENCE.replace(':orderId', orderId).replace(':offenceId', item.id!),
     {

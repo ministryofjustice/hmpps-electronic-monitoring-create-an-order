@@ -13,7 +13,7 @@ const construct = (order: Order, id: string, content: I18n) => {
   let readableText: string = ''
   if (matchingOffence !== undefined) {
     question += 'offence?'
-    const name = lookup(content.reference.offences, matchingOffence.offenceType)
+    const name = lookup(content.reference.offences, matchingOffence.offenceType?.at(0))
     readableText = format(name, matchingOffence.offenceDate)
   } else if (matchingDapoClause) {
     question += 'DAPO order clause?'
