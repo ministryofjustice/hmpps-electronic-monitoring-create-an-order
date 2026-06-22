@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from 'uuid'
 import SearchPage from '../pages/search'
 import Page from '../pages/page'
-import { mockApiOrder } from '../mockApis/cemo'
 import IndexPage from '../pages'
 import IsAddressChangePage from './order/edit-order/is-address-change/isAddressChangePage'
 import NotifyingOrganisationPage from './order/interested-parties/notifying-organisation/notifyingOrganisationPage'
+import mockApiOrder from '../utils/data/ApiOrder'
 
 const mockOrderId = uuidv4()
 
