@@ -3,7 +3,6 @@ import { SuperAgentRequest } from 'superagent'
 import { v4 as uuidv4 } from 'uuid'
 import jsonDiff from 'json-diff'
 import { Client as PostgresqlClient } from 'pg'
-import logger from '../../logger'
 import { Order } from '../../server/models/Order'
 import { getMatchingRequests, stubFor } from './wiremock'
 import { DeviceWearer } from '../../server/models/DeviceWearer'
@@ -677,16 +676,13 @@ ${jsonDiff.diffString(expected, requests[0], { color: false })}
   })
 
 const tables = [
-  'alternative_contact_details',
-  'device_wearer_contact_details',
-
   'curfew_timetable',
 
   'mandatory_attendance',
   'alcohol_monitoring',
   'curfew',
   'curfew_release_date',
-  'additional_documentions',
+  'additional_documents',
   'monitoring_conditions',
 
   'installation_and_risk',
@@ -727,12 +723,12 @@ const resetDB = async () => {
   // const { rows } = await client.query("SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE';")
   // console.log(rows)
 
-  try {
-    await emptyNextTable(client)
-  } catch (error) {
-    // quite fail
-    logger.log(`Error rest DB ${error} `)
-  }
+  // try {
+  await emptyNextTable(client)
+  // } catch (error) {
+  //   // quite fail
+  //   logger.log(`Error rest DB ${error} `)
+  // }
   await client.end()
 
   return true
