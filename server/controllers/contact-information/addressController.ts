@@ -39,7 +39,7 @@ export default class AddressController {
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { addressType } = req.params
+    const addressType = req.params.addressType as string
     const { addresses } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
@@ -49,7 +49,8 @@ export default class AddressController {
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId, addressType } = req.params
+    const orderId = req.params.orderId as string
+    const addressType = req.params.addressType as string
     const { action, ...formData } = AddressFormDataModel.parse(req.body)
 
     const result = await this.addressService.updateAddress({

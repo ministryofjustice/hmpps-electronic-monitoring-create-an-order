@@ -34,7 +34,7 @@ export default class TrailMonitoringController {
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
+    const orderId = req.params.orderId as string
     const formData = TrailMonitoringFormDataModel.parse(req.body)
     const { interestedParties } = req.order!
     const notifyingOrganisation = interestedParties?.notifyingOrganisation ?? null

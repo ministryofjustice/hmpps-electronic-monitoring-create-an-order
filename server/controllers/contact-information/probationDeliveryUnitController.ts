@@ -43,7 +43,7 @@ export default class ProbationDeliveryUnitController {
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
+    const orderId = req.params.orderId as string
     const { action, ...formData } = ProbationDeliveryUnitFormDataModel.parse(req.body)
 
     const result = await this.probationDeliveryUnitService.update({

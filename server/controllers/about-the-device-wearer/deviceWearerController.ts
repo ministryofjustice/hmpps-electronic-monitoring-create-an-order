@@ -31,7 +31,7 @@ export default class DeviceWearerController {
   }
 
   updateDeviceWearer: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
+    const orderId = req.params.orderId as string
     const { action, ...formData } = DeviceWearerFormDataParser.parse(req.body)
 
     const result = await this.deviceWearerService.updateDeviceWearer({

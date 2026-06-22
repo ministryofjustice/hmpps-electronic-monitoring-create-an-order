@@ -50,7 +50,7 @@ export default class AddressResultController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const { addressType } = req.params
+    const addressType = req.params.addressType as string
     const uprn = req.body.address as string
     const { postcode, buildingId } = req.body
 

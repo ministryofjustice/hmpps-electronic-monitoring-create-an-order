@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 import jsonDiff from 'json-diff'
 import { Client as PostgresqlClient } from 'pg'
 
+import logger from '../../logger'
 import { Order } from '../../server/models/Order'
 import { getMatchingRequests, stubFor } from './wiremock'
 import { DeviceWearer } from '../../server/models/DeviceWearer'
@@ -801,6 +802,7 @@ const resetDB = async () => {
     await emptyNextTable(client)
   } catch (error) {
     // quite fail
+    logger.warn(`Error rest DB ${error} `)
   }
   await client.end()
 

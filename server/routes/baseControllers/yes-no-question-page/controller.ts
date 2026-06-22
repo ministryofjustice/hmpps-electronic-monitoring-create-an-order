@@ -24,7 +24,7 @@ export default abstract class YesNoQuestionPageController {
     cancelPath: string,
     validationError: string,
   ): YesNoQuestionFormData | undefined {
-    const { orderId } = req.params
+    const orderId = req.params.orderId as string
     const formData = YesNoQuestionFormDataModel.parse(req.body)
     if (formData.action === 'continue') {
       if (!formData.answer) {
