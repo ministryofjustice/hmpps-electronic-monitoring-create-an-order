@@ -319,7 +319,7 @@ export default class TaskListService {
           STATES.required,
           STATES.notRequired,
         ),
-        completed: order.offences.length > 0,
+        completed: isNotNullOrUndefined(order.offences) && order.offences.length > 0,
       })
       tasks.push({
         section: SECTIONS.riskInformation,

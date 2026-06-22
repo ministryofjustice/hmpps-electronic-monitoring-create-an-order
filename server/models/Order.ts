@@ -64,7 +64,7 @@ const OrderModel = z.object({
   dataDictionaryVersion: DataDictionaryVersionEnum,
   orderParameters: OrderParametersModel.nullable().optional(),
   dapoClauses: z.array(DapoClauseModel),
-  offences: z.array(OffenceModel),
+  offences: z.array(OffenceModel).nullable(),
   mappa: MappaModel.nullable().optional(),
   detailsOfInstallation: DetailsOfInstallationModel.nullable().optional(),
   offenceAdditionalDetails: OffenceAdditionalDetailsModel.nullable().optional(),

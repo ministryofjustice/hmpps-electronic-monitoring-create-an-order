@@ -190,7 +190,7 @@ context('Receipt', () => {
             responsibleOfficerPhoneNumber: '01234567891',
           },
           installationAndRisk: {
-            offence: 'SEXUAL_OFFENCES',
+            offence: ['SEXUAL_OFFENCES'],
             offenceAdditionalDetails: 'Information about offence',
             riskCategory: ['RISK_TO_GENDER'],
             riskDetails: 'Information about potential risks',
@@ -304,7 +304,7 @@ context('Receipt', () => {
             responsibleOfficerEmail: 'officer@email',
           },
           installationAndRisk: {
-            offence: 'SEXUAL_OFFENCES',
+            offence: ['SEXUAL_OFFENCES'],
             offenceAdditionalDetails: 'Information about offence',
             riskCategory: ['RISK_TO_GENDER'],
             riskDetails: 'Information about potential risks',
@@ -405,7 +405,7 @@ context('Receipt', () => {
             responsibleOfficerPhoneNumber: '01234567891',
           },
           installationAndRisk: {
-            offence: 'SEXUAL_OFFENCES',
+            offence: ['SEXUAL_OFFENCES'],
             offenceAdditionalDetails: 'Information about offence',
             riskCategory: ['RISK_TO_GENDER'],
             riskDetails: 'Information about potential risks',

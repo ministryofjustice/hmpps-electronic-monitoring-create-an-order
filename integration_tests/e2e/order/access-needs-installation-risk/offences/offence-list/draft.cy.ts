@@ -35,7 +35,7 @@ context('offence list page', () => {
           offences: [
             {
               id: mockOrderId,
-              offenceType: 'THEFT_OFFENCES',
+              offenceType: ['THEFT_OFFENCES'],
               offenceDate: '2025-01-12T00:00:00Z',
             },
           ],

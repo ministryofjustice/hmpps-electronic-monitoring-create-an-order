@@ -6,7 +6,7 @@ import I18n from '../../../types/i18n'
 import { lookup } from '../../../utils/utils'
 
 const construct = (order: Order, id: string, content: I18n) => {
-  const matchingOffence = findOffence(order.offences, id)
+  const matchingOffence = findOffence(order.offences!, id)
   const matchingDapoClause = findDapoClause(order.dapoClauses, id)
 
   let question: string = 'Are you sure that you want to delete this '

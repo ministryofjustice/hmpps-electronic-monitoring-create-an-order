@@ -198,7 +198,7 @@ context('Order Summary', () => {
             responsibleOrganisationEmail: '',
           },
           installationAndRisk: {
-            offence: 'SEXUAL_OFFENCES',
+            offence: ['SEXUAL_OFFENCES'],
             offenceAdditionalDetails: 'mock offence additional details',
             riskCategory: null,
             riskDetails: null,
@@ -529,7 +529,7 @@ context('Order Summary', () => {
           offences: [
             {
               id: 'offence id',
-              offenceType: 'SEXUAL_OFFENCES',
+              offenceType: ['SEXUAL_OFFENCES'],
             },
           ],
           offenceAdditionalDetails: {
@@ -832,7 +832,7 @@ context('Order Summary', () => {
           offences: [
             {
               id: 'offence id',
-              offenceType: 'SEXUAL_OFFENCES',
+              offenceType: ['SEXUAL_OFFENCES'],
             },
           ],
           offenceAdditionalDetails: {
@@ -1049,7 +1049,7 @@ context('Order Summary', () => {
           offences: [
             {
               id: 'offence id',
-              offenceType: 'SEXUAL_OFFENCES',
+              offenceType: ['SEXUAL_OFFENCES'],
             },
           ],
           offenceAdditionalDetails: {
@@ -1410,7 +1410,7 @@ context('Order Summary', () => {
           offences: [
             {
               id: 'offence id',
-              offenceType: 'SEXUAL_OFFENCES',
+              offenceType: ['SEXUAL_OFFENCES'],
             },
           ],
           offenceAdditionalDetails: {
@@ -1746,7 +1746,7 @@ context('Order Summary', () => {
           offences: [
             {
               id: 'offence id',
-              offenceType: 'SEXUAL_OFFENCES',
+              offenceType: ['SEXUAL_OFFENCES'],
             },
           ],
           offenceAdditionalDetails: {
@@ -1837,7 +1837,7 @@ context('Order Summary', () => {
           offences: [
             {
               id: 'offence id',
-              offenceType: 'SEXUAL_OFFENCES',
+              offenceType: ['SEXUAL_OFFENCES'],
             },
           ],
           offenceAdditionalDetails: {
@@ -1933,7 +1933,7 @@ context('Order Summary', () => {
           offences: [
             {
               id: 'offence id',
-              offenceType: 'SEXUAL_OFFENCES',
+              offenceType: ['SEXUAL_OFFENCES'],
             },
           ],
           offenceAdditionalDetails: {
@@ -2195,7 +2195,7 @@ context('Order Summary', () => {
           offences: [
             {
               id: 'offence id',
-              offenceType: 'SEXUAL_OFFENCES',
+              offenceType: ['SEXUAL_OFFENCES'],
             },
           ],
           offenceAdditionalDetails: {
@@ -2416,7 +2416,7 @@ context('Order Summary', () => {
           offences: [
             {
               id: 'offence id',
-              offenceType: 'SEXUAL_OFFENCES',
+              offenceType: ['SEXUAL_OFFENCES'],
             },
           ],
           offenceAdditionalDetails: {

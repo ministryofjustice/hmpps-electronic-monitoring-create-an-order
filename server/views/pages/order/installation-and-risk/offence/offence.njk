@@ -3,6 +3,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "../../../../partials/dateTimeInput.njk" import dateTimeInput %}
 
 {% set section = content.pages.offence.section %}
@@ -13,46 +14,71 @@
 {% block formInputs %}
   {% set disabled = not isOrderEditable %}
 
-  {% set checkboxItems = content.reference.offences | toOptions(disabled) %}
+  {% set offenceOptions = content.reference.offences | toOptions(disabled) %}
 
   {% if not isHomeOffice %}
-    {% set checkboxItems = checkboxItems | removeOptions(['NO_OFFENCE_COMMITTED']) %}
+    {% set offenceOptions = offenceOptions | removeOptions(['NO_OFFENCE_COMMITTED']) %}
   {% endif %}
 
-  {% set checkboxItems = checkboxItems | addDivider() %}  
+  {% set offenceOptions = offenceOptions | addDivider() %}
 
+  {# hoping showDate reflects is not org #}
+  {% if not showDate %}
     {{ govukCheckboxes({
-    name: "offenceType",
-    fieldset: {
-      legend: {
-        text: content.pages.offence.questions.offenceType.text,
-        isPageHeading: false,
-        classes: "govuk-fieldset__legend--s"
-      }
-    },
-    hint: {
-      text: content.pages.deviceWearer.questions.offenceType.hint
-    },
-    items: checkboxItems,
-    values: [offenceType.value],
-    errorMessage: offenceType.error,
-    disabled: not isOrderEditable
-  }) }}
+      name: "offenceType",
+      fieldset: {
+        legend: {
+          text: content.pages.offence.questions.offenceType.text,
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: content.pages.deviceWearer.questions.offenceType.hint
+      },
+      items: offenceOptions,
+      values: [offenceType.value],
+      errorMessage: offenceType.error,
+      disabled: not isOrderEditable
+    }) }}
+
+  {% else %}
+
+    {{ govukRadios({
+      name: "offenceType",
+      fieldset: {
+        legend: {
+          text: content.pages.offence.questions.offenceType.text,
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      hint: {
+        text: content.pages.deviceWearer.questions.offenceType.hint
+      },
+      items: offenceOptions,
+      value: offenceType.value,
+      errorMessage: offenceType.error,
+      disabled: not isOrderEditable
+    }) }}
+
+  {% endif %}
+
   {% if showDate %}
-      {{dateTimeInput({
+      {{ dateTimeInput({
         id: "offenceDate",
         name: "offenceDate",    
         date: offenceDate.value,
         dateLabel: questions.offenceDate.text,
         dateHint: questions.offenceDate.hint,   
         errorMessages: {       
-        date: offenceDate.error,
-        time: offenceDate.error
-      },   
+          date: offenceDate.error,
+          time: offenceDate.error
+        },   
         disabled: disabled,
         timesEnabled: false,
         defaultHours: 00,
         defaultMinutes: 00
-      })}}
+      }) }}
   {% endif %}
 {% endblock %}

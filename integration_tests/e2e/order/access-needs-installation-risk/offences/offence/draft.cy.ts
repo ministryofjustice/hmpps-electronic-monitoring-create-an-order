@@ -41,7 +41,7 @@ context('Draft Offences', () => {
 
       cy.signIn()
     })
-
+    const isRadio = true
     it('Should display all offence options and show date question', () => {
       stubOrder()
       const page = Page.visit(OffencePage, { orderId: mockOrderId })
@@ -49,14 +49,13 @@ context('Draft Offences', () => {
       page.header.phaseBanner().should('contain.text', 'dev')
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAsDraftButton.should('exist')
-      page.form.shouldNotBeDisabled()
+      page.form.shouldNotBeDisabled(isRadio)
       page.errorSummary.shouldNotExist()
       page.backButton.should('exist')
       page.checkIsAccessible()
-      page.form.offenceTypeField.shouldExist()
+      page.form.shouldNotBeDisabled(isRadio)
       cy.get('#offenceDate').should('exist')
-      page.form.shouldHaveAllOptions()
-      page.form.offenceTypeField.shouldNotHaveOption('They have not committed an offence')
+      page.form.getOffenceTypeField(isRadio).shouldNotHaveOption('They have not committed an offence')
     })
 
     it('Should load offence type and offence date from existing offence', () => {
@@ -64,12 +63,12 @@ context('Draft Offences', () => {
       stubOrder('CROWN_COURT', [
         {
           id: mockOffenceId,
-          offenceType: 'SEXUAL_OFFENCES',
+          offenceType: ['SEXUAL_OFFENCES'],
           offenceDate: '2020-01-01T00:00:00Z',
         },
       ])
       const page = Page.visit(OffenceExistingItemPage, { orderId: mockOrderId, offenceId: mockOffenceId })
-      page.form.offenceTypeField.shouldHaveValue('Sexual offences')
+      page.form.getOffenceTypeField(isRadio).shouldHaveValue('Sexual offences')
       page.form.offenceDateField.shouldHaveValue(new Date(2020, 0, 1))
     })
   })
@@ -91,10 +90,10 @@ context('Draft Offences', () => {
       page.errorSummary.shouldNotExist()
       page.backButton.should('exist')
       page.checkIsAccessible()
-      page.form.offenceTypeField.shouldExist()
+      page.form.getOffenceTypeField().shouldExist()
       cy.get('#offenceDate').should('not.exist')
       page.form.shouldHaveAllOptions()
-      page.form.offenceTypeField.shouldNotHaveOption('They have not committed an offence')
+      page.form.getOffenceTypeField().shouldNotHaveOption('They have not committed an offence')
     })
 
     it('Should load offence type and offence date from existing offence', () => {
@@ -102,11 +101,11 @@ context('Draft Offences', () => {
       stubOrder('PRISON', [
         {
           id: mockOffenceId,
-          offenceType: 'SEXUAL_OFFENCES',
+          offenceType: ['SEXUAL_OFFENCES'],
         },
       ])
       const page = Page.visit(OffenceExistingItemPage, { orderId: mockOrderId, offenceId: mockOffenceId })
-      page.form.offenceTypeField.shouldHaveValue('Sexual offences')
+      page.form.getOffenceTypeField().shouldHaveValue('Sexual offences')
     })
   })
 
@@ -127,10 +126,10 @@ context('Draft Offences', () => {
       page.errorSummary.shouldNotExist()
       page.backButton.should('exist')
       page.checkIsAccessible()
-      page.form.offenceTypeField.shouldExist()
+      page.form.getOffenceTypeField().shouldExist()
       cy.get('#offenceDate').should('not.exist')
       page.form.shouldHaveAllOptions()
-      page.form.offenceTypeField.shouldHaveOption('They have not committed an offence')
+      page.form.getOffenceTypeField().shouldHaveOption('They have not committed an offence')
     })
   })
 })

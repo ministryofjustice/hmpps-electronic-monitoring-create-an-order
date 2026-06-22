@@ -3,6 +3,7 @@ import paths from '../../../constants/paths'
 import ViewModel from './viewModel'
 import OffenceService from '../offence/service'
 import DapoService from '../dapo/service'
+import { isNotNullOrUndefined } from '../../../utils/utils'
 
 export default class OffenceListDeleteController {
   constructor(
@@ -26,7 +27,7 @@ export default class OffenceListDeleteController {
       return res.redirect(paths.INSTALLATION_AND_RISK.OFFENCE_LIST.replace(':orderId', order.id))
     }
 
-    const matchingOffence = order.offences.find(offence => offence.id === id)
+    const matchingOffence = order.offences!.find(offence => offence.id === id)
     const matchingClause = order.dapoClauses.find(clause => clause.id === id)
 
     if (matchingOffence) {
@@ -35,7 +36,7 @@ export default class OffenceListDeleteController {
         orderId: order.id,
         offenceId: id,
       })
-      if (order.offences.length === 1) {
+      if (isNotNullOrUndefined(order.offences) && order.offences.length === 1) {
         return res.redirect(paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM.replace(':orderId', order.id))
       }
     } else if (matchingClause) {

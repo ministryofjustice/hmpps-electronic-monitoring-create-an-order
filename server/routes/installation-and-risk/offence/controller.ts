@@ -1,7 +1,7 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
 import viewModel from './viewModel'
-import { OffenceInput } from './formModel'
+import { OffenceInput, OffenceFormModel } from './formModel'
 import OffenceService from './service'
 import { ValidationResult, isValidationResult } from '../../../models/Validation'
 import { Offence } from '../../../models/Offence'
@@ -52,7 +52,8 @@ export default class OffenceController {
     const order = req.order!
     const { offenceId } = req.params
     req.body.id = offenceId
-    const formData = req.body
+    // const formData = req.body
+    const formData = OffenceFormModel.parse(req.body)
     if (formData && formData.offenceType?.includes('TERRORISM_OFFENCE')) {
       req.flash('SpecialOrderSection', res.locals.content!.pages.offence.section)
       res.redirect(paths.ORDER.SPECIAL_ORDER.replace(':orderId', order.id))
@@ -70,7 +71,7 @@ export default class OffenceController {
       req.flash('validationErrors', result)
       if (formData && formData.id) {
         res.redirect(
-          paths.INSTALLATION_AND_RISK.OFFENCE.replace(':orderId', order.id).replace(':offenceId', formData[0].id),
+          paths.INSTALLATION_AND_RISK.OFFENCE.replace(':orderId', order.id).replace(':offenceId', formData.id),
         )
         return
       }
