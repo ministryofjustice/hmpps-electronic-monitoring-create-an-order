@@ -9,8 +9,12 @@ export default class FormRadiosComponent {
     private readonly parent: PageElement,
     private readonly label: string,
     private readonly options: (string | RegExp)[],
+    private readonly getByLegend: boolean = false,
   ) {
-    this.parent.get('.govuk-form-group > .govuk-fieldset').as(`${this.elementCacheId}-element`)
+    const element = getByLegend
+      ? this.parent.getByLegend(this.label, { log: false })
+      : this.parent.get('.govuk-form-group > .govuk-fieldset')
+    element.as(`${this.elementCacheId}-element`)
   }
 
   get element(): PageElement {

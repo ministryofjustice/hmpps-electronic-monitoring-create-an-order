@@ -18,8 +18,8 @@ context('offence delete page', () => {
   beforeEach(() => {
     mockOrder = {
       offences: [
-        { id: mockOffenceId, offenceType: 'THEFT_OFFENCES', offenceDate: mockDate.toISOString() },
-        { id: uuidv4(), offenceType: 'SEXUAL_OFFENCES', offenceDate: new Date(2025, 1, 2).toISOString() },
+        { id: mockOffenceId, offenceType: ['THEFT_OFFENCES'], offenceDate: mockDate.toISOString() },
+        { id: uuidv4(), offenceType: ['SEXUAL_OFFENCES'], offenceDate: new Date(2025, 1, 2).toISOString() },
       ],
       dapoClauses: [
         { id: mockDapoId, clause: '12345', date: mockDate.toISOString() },

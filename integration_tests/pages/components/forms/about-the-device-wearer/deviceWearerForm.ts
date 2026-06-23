@@ -55,70 +55,79 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
 
   get responsibleAdultRequiredField(): FormRadiosComponent {
     const label = 'Is a responsible adult required?'
-    return new FormRadiosComponent(this.form, label, ['Yes', 'No'])
+    return new FormRadiosComponent(this.form, label, ['Yes', 'No'], true)
   }
 
   // SEX
 
   get sexField(): FormRadiosComponent {
     const label = 'What is the sex of the device wearer?'
-    return new FormRadiosComponent(this.form, label, [
-      'Male',
-      'Female',
-      'Prefer not to say',
-      'Not able to provide this information',
-    ])
+    return new FormRadiosComponent(
+      this.form,
+      label,
+      ['Male', 'Female', 'Prefer not to say', 'Not able to provide this information'],
+      true,
+    )
   }
 
   // GENDER IDENTITY
 
   get genderIdentityField(): FormRadiosComponent {
     const label = "What is the device wearer's gender?"
-    return new FormRadiosComponent(this.form, label, [
-      'Male',
-      'Female',
-      'Non binary',
-      'Not able to provide this information',
-      'Self identify',
-    ])
+    return new FormRadiosComponent(
+      this.form,
+      label,
+      ['Male', 'Female', 'Non binary', 'Not able to provide this information', 'Self identify'],
+      true,
+    )
   }
 
   // Disabilities
 
   get disabilityField(): FormRadiosComponent {
     const label = 'Does the device wearer have any of the disabilities or health conditions listed?'
-    return new FormRadiosComponent(this.form, label, [
-      'Visual impairment or blindness not corrected by wearing glasses',
-      'Deafness or serious hearing impairment',
-      'Physical disability or mobility issue',
-      'Fine motor or dexterity impairment',
-      'Neurodiversity including conditions affecting learning, understanding or concentration',
-      'Condition affecting the memory or retaining information',
-      'Mental health condition',
-      'Health condition affecting stamina, breathing or causing fatigue',
-      'Conditions affecting social skills and behaviour',
-      'The device wearer has a disability or health condition not listed',
-      'Not able to provide this information',
-    ])
+    return new FormRadiosComponent(
+      this.form,
+      label,
+      [
+        'Visual impairment or blindness not corrected by wearing glasses',
+        'Deafness or serious hearing impairment',
+        'Physical disability or mobility issue',
+        'Fine motor or dexterity impairment',
+        'Neurodiversity including conditions affecting learning, understanding or concentration',
+        'Condition affecting the memory or retaining information',
+        'Mental health condition',
+        'Health condition affecting stamina, breathing or causing fatigue',
+        'Conditions affecting social skills and behaviour',
+        'The device wearer has a disability or health condition not listed',
+        'Not able to provide this information',
+      ],
+      true,
+    )
   }
 
   get disabilityFieldDDv5(): FormRadiosComponent {
     const label = 'Does the device wearer have any of the disabilities or health conditions listed?'
-    return new FormRadiosComponent(this.form, label, [
-      'Visual impairment or blindness not corrected by wearing glasses',
-      'Deafness or serious hearing impairment',
-      'Physical disability or mobility issue',
-      'Fine motor or dexterity impairment',
-      'Skin condition',
-      'Neurodiversity including conditions affecting learning, understanding or concentration',
-      'Condition affecting the memory or retaining information',
-      'Mental health condition',
-      'Health condition affecting stamina, breathing or causing fatigue',
-      'Conditions affecting social skills and behaviour',
-      'The device wearer has a disability or health condition not listed',
-      'The device wearer does not have any of the disabilities or health conditions listed',
-      'Not able to provide this information',
-    ])
+    return new FormRadiosComponent(
+      this.form,
+      label,
+      [
+        'Visual impairment or blindness not corrected by wearing glasses',
+        'Deafness or serious hearing impairment',
+        'Physical disability or mobility issue',
+        'Fine motor or dexterity impairment',
+        'Skin condition',
+        'Neurodiversity including conditions affecting learning, understanding or concentration',
+        'Condition affecting the memory or retaining information',
+        'Mental health condition',
+        'Health condition affecting stamina, breathing or causing fatigue',
+        'Conditions affecting social skills and behaviour',
+        'The device wearer has a disability or health condition not listed',
+        'The device wearer does not have any of the disabilities or health conditions listed',
+        'Not able to provide this information',
+      ],
+      true,
+    )
   }
 
   get otherDisabilityField(): FormInputComponent {
@@ -130,7 +139,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
 
   get interpreterRequiredField(): FormRadiosComponent {
     const label = 'Is an interpreter needed?'
-    return new FormRadiosComponent(this.form, label, ['Yes', 'No'])
+    return new FormRadiosComponent(this.form, label, ['Yes', 'No'], true)
   }
 
   get languageField(): FormAutocompleteComponent {

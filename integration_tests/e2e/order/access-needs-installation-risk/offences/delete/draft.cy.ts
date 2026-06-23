@@ -48,7 +48,7 @@ context('delete offence', () => {
       order: {
         offences: [
           {
-            offenceType: 'SEXUAL_OFFENCES',
+            offenceType: ['SEXUAL_OFFENCES'],
             offenceDate: mockDate.toISOString(),
             id: mockOffenceId,
           },
