@@ -43,7 +43,9 @@ context('Offence validations', () => {
       const page = Page.visit(OffencePage, { orderId: mockOrderId })
 
       page.form.saveAndContinueButton.click()
-      page.form.offenceTypeField.shouldHaveValidationMessage('Select the type of offence the device wearer committed')
+      page.form
+        .getOffenceTypeField()
+        .shouldHaveValidationMessage('Select the type of offence the device wearer committed')
       page.form.offenceDateField.shouldHaveValidationMessage('Enter date of offence the device wearer committed')
     })
 
@@ -75,7 +77,9 @@ context('Offence validations', () => {
       page.errorSummary.shouldExist()
       page.errorSummary.shouldHaveError('Select the type of offence the device wearer committed')
       page.errorSummary.shouldNotHaveError('Enter date of offence the device wearer committed')
-      page.form.offenceTypeField.shouldHaveValidationMessage('Select the type of offence the device wearer committed')
+      page.form
+        .getOffenceTypeField()
+        .shouldHaveValidationMessage('Select the type of offence the device wearer committed')
     })
   })
 })

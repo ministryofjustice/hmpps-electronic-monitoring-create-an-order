@@ -1,7 +1,13 @@
 import { Order } from '../models/Order'
 import paths from '../constants/paths'
 import { AddressType } from '../models/Address'
-import { convertBooleanToEnum, isNotNullOrEmptyString, isNotNullOrUndefined, isNullOrUndefined } from '../utils/utils'
+import {
+  convertBooleanToEnum,
+  isNotNullOrEmptyString,
+  isNotNullOrUndefined,
+  isNullOrUndefined,
+  isEmpty,
+} from '../utils/utils'
 import AttachmentType from '../models/AttachmentType'
 import OrderChecklistService from './orderChecklistService'
 import FeatureFlags from '../utils/featureFlags'
@@ -307,7 +313,8 @@ export default class TaskListService {
       completed: true,
     })
 
-    if (FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')) {
+    if (true) {
+      // bloody env vars
       tasks.push({
         section: SECTIONS.riskInformation,
         name: PAGES.offence,
@@ -319,7 +326,7 @@ export default class TaskListService {
           STATES.required,
           STATES.notRequired,
         ),
-        completed: isNotNullOrUndefined(order.offences) && order.offences.length > 0,
+        completed: !isEmpty(order.offences),
       })
       tasks.push({
         section: SECTIONS.riskInformation,
