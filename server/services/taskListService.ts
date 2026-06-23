@@ -313,8 +313,7 @@ export default class TaskListService {
       completed: true,
     })
 
-    if (true) {
-      // bloody env vars
+    if (FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')) {
       tasks.push({
         section: SECTIONS.riskInformation,
         name: PAGES.offence,
