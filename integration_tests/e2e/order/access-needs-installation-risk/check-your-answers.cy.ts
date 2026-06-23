@@ -81,7 +81,7 @@ context('installation and risk - check your answers', () => {
         order: {
           dataDictionaryVersion: 'DDV5',
           installationAndRisk: {
-            offence: 'SEXUAL_OFFENCES',
+            offence: ['SEXUAL_OFFENCES'],
             offenceAdditionalDetails: 'some offence details',
 
             riskCategory: ['RISK_TO_GENDER', 'IOM'],
@@ -148,7 +148,7 @@ context('installation and risk - check your answers', () => {
         order: {
           dataDictionaryVersion: 'DDV5',
           installationAndRisk: {
-            offence: 'SEXUAL_OFFENCES',
+            offence: ['SEXUAL_OFFENCES'],
             offenceAdditionalDetails: 'some offence details',
             riskCategory: ['RISK_TO_GENDER', 'IOM', 'HISTORY_OF_SUBSTANCE_ABUSE'],
             riskDetails: 'some risk details',
@@ -229,7 +229,7 @@ context('installation and risk - check your answers', () => {
         order: {
           dataDictionaryVersion: 'DDV5',
           installationAndRisk: {
-            offence: 'SEXUAL_OFFENCES',
+            offence: ['SEXUAL_OFFENCES'],
             offenceAdditionalDetails: 'some offence details',
             riskCategory: ['RISK_TO_GENDER', 'IOM'],
             riskDetails: 'some risk details',
@@ -304,7 +304,7 @@ context('installation and risk - check your answers', () => {
         status: 'SUBMITTED',
         order: {
           installationAndRisk: {
-            offence: 'SEXUAL_OFFENCES',
+            offence: ['SEXUAL_OFFENCES'],
             offenceAdditionalDetails: 'some offence details',
             riskCategory: ['RISK_TO_GENDER', 'IOM'],
             riskDetails: 'some risk details',
@@ -347,7 +347,7 @@ context('installation and risk - check your answers', () => {
         status: 'ERROR',
         order: {
           installationAndRisk: {
-            offence: 'SEXUAL_OFFENCES',
+            offence: ['SEXUAL_OFFENCES'],
             offenceAdditionalDetails: 'some offence details',
             riskCategory: ['RISK_TO_GENDER', 'IOM'],
             riskDetails: 'some risk details',
@@ -454,11 +454,11 @@ context('installation and risk - check your answers', () => {
           },
           offences: [
             {
-              offenceType: 'SEXUAL_OFFENCES',
+              offenceType: ['SEXUAL_OFFENCES'],
               offenceDate: new Date(2025, 1, 1),
             },
             {
-              offenceType: 'CRIMINAL_DAMAGE_AND_ARSON',
+              offenceType: ['CRIMINAL_DAMAGE_AND_ARSON'],
               offenceDate: new Date(2025, 2, 2),
             },
           ],
@@ -553,7 +553,7 @@ context('installation and risk - check your answers', () => {
             responsibleOrganisationRegion: '',
           },
           installationAndRisk: {
-            offence: 'SEXUAL_OFFENCES',
+            offence: ['SEXUAL_OFFENCES'],
             riskCategory: [],
             possibleRisk: [],
             riskDetails: '',
@@ -563,11 +563,11 @@ context('installation and risk - check your answers', () => {
           },
           offences: [
             {
-              offenceType: 'SEXUAL_OFFENCES',
+              offenceType: ['SEXUAL_OFFENCES'],
               offenceDate: new Date(2025, 1, 1),
             },
             {
-              offenceType: 'CRIMINAL_DAMAGE_AND_ARSON',
+              offenceType: ['CRIMINAL_DAMAGE_AND_ARSON'],
               offenceDate: new Date(2025, 2, 2),
             },
           ],
@@ -643,7 +643,7 @@ context('installation and risk - check your answers', () => {
           offences: [
             {
               id: mockOffenceId,
-              offenceType: 'SEXUAL_OFFENCES',
+              offenceType: ['SEXUAL_OFFENCES'],
             },
           ],
           offenceAdditionalDetails: {
@@ -667,7 +667,7 @@ context('installation and risk - check your answers', () => {
 
       const offencePage = Page.verifyOnPage(OffencePage)
 
-      offencePage.form.offenceTypeField.shouldHaveValue('Sexual offences')
+      offencePage.form.getOffenceTypeField().shouldHaveValue('Sexual offences')
     })
   })
 })

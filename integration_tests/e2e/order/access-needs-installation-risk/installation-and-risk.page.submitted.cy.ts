@@ -18,7 +18,7 @@ context('Access needs and installation risk information', () => {
           order: {
             dataDictionaryVersion: 'DDV5',
             installationAndRisk: {
-              offence: 'SEXUAL_OFFENCES',
+              offence: ['SEXUAL_OFFENCES'],
               offenceAdditionalDetails: 'Information about offence',
               riskCategory: ['SEXUAL_OFFENCES', 'DANGEROUS_ANIMALS'],
               riskDetails: 'Information about potential risks',
