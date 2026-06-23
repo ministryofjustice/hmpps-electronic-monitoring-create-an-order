@@ -44,7 +44,6 @@ context('offences', () => {
       name: 'Cemor Stubs',
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
-    cy.signIn()
 
     createNewOrder({
       notifyingOrganisation: createFakeInterestedParties('Prison', 'Prison', undefined, 'North West'),
@@ -102,7 +101,6 @@ context('offences', () => {
       name: 'Cemor Stubs',
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'COURT'],
     })
-    cy.signIn()
 
     createNewOrder({
       notifyingOrganisation: createFakeInterestedParties('Civil and County Court', 'Prison', undefined, 'North West'),
@@ -181,7 +179,6 @@ context('offences', () => {
       name: 'Cemor Stubs',
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'COURT'],
     })
-    cy.signIn()
 
     createNewOrder({
       notifyingOrganisation: createFakeInterestedParties('Family Court', 'Prison', undefined, 'North West'),
@@ -249,7 +246,6 @@ context('offences', () => {
       name: 'Cemor Stubs',
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'HOME_OFFICE'],
     })
-    cy.signIn()
 
     createNewOrder({
       notifyingOrganisation: createFakeInterestedParties('Home Office', 'Prison', undefined, 'North West'),
@@ -283,7 +279,6 @@ context('offences', () => {
       name: 'Cemor Stubs',
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'COURT'],
     })
-    cy.signIn()
 
     createNewOrder({
       notifyingOrganisation: createFakeInterestedParties('Family Court', 'Prison', undefined, 'North West'),
@@ -330,7 +325,6 @@ context('offences', () => {
       name: 'Cemor Stubs',
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'COURT'],
     })
-    cy.signIn()
 
     createNewOrder({
       notifyingOrganisation: createFakeInterestedParties('Civil and County Court', 'Prison', undefined, 'North West'),

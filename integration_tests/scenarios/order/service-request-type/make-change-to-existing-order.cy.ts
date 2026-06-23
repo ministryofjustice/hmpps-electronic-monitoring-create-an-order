@@ -79,7 +79,6 @@ context('Service-Request-Types', () => {
   const fillInNewOrder = () => {
     createNewOrder({
       notifyingOrganisation: interestedParties,
-      stubSignin: false,
     })
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
@@ -190,8 +189,6 @@ context('Service-Request-Types', () => {
     })
 
     stubAttachments(files, fmsCaseId, hmppsDocumentId, true)
-
-    cy.signIn()
 
     fillInNewOrder()
   })

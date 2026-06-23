@@ -34,7 +34,6 @@ context('Probation-Deliever-Units', () => {
         name: 'Cemor Stubs',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
       })
-      cy.signIn()
     })
 
     it('Should able to select Staffordshire North as PDU', () => {
