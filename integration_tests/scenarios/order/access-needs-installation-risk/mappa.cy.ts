@@ -34,7 +34,6 @@ context('offences', () => {
       name: 'Cemor Stubs',
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'HOME_OFFICE'],
     })
-    cy.signIn()
 
     createNewOrder({
       notifyingOrganisation: createFakeInterestedParties('Home Office', 'Home Office', undefined, 'North West'),

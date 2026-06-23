@@ -125,7 +125,6 @@ context('The kitchen sink', () => {
     }
 
     it('With default start time and end time, british time is send to FMS', () => {
-      cy.signIn()
       createNewOrder({ notifyingOrganisation: interestedParties })
 
       const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)

@@ -191,8 +191,6 @@ context('Service-Request-Types', () => {
 
     stubAttachments(files, fmsCaseId, hmppsDocumentId, true)
 
-    cy.signIn()
-
     fillInNewOrder()
   })
 
