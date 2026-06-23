@@ -676,24 +676,34 @@ ${jsonDiff.diffString(expected, requests[0], { color: false })}
   })
 
 const tables = [
+  'contact_details',
   'curfew_timetable',
 
   'mandatory_attendance',
   'alcohol_monitoring',
   'curfew',
   'curfew_release_date',
+  'curfew_timetable',
+  'dapo',
+  'details_of_installation',
   'additional_documents',
   'monitoring_conditions',
-
+  'mappa',
   'installation_and_risk',
+  'installation_appointment',
+  'installation_location',
   'enforcement_zone',
   'trail_monitoring',
   'interested_parties',
   'responsible_adult',
-
+  'offence',
+  'offence_additional_details',
+  'order_parameters',
+  'probation_delivery_unit',
+  'variation_details',
   'device_wearer',
   'address',
-
+  'order_version',
   'orders',
 ]
 
@@ -718,17 +728,7 @@ const resetDB = async () => {
   })
 
   await client.connect()
-
-  // INFO: incase we ever need to list the tables
-  // const { rows } = await client.query("SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE';")
-  // console.log(rows)
-
-  // try {
   await emptyNextTable(client)
-  // } catch (error) {
-  //   // quite fail
-  //   logger.log(`Error rest DB ${error} `)
-  // }
   await client.end()
 
   return true
