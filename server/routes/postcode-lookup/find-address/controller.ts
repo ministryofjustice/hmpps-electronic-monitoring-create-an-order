@@ -11,7 +11,7 @@ export default class FindAddressController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const { addressType } = req.params
+    const addressType = req.params.addressType as string
 
     const formData = req.flash('formData')[0] as unknown as FindAddressForm | undefined
     const errors = req.flash('validationErrors') as unknown as ValidationResult
@@ -23,7 +23,7 @@ export default class FindAddressController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const { addressType } = req.params
+    const addressType = req.params.addressType as string
 
     const formData = FindAddressFormData.parse(req.body)
 

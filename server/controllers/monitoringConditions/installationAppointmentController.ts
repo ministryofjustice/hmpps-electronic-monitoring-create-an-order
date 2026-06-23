@@ -5,6 +5,9 @@ import paths from '../../constants/paths'
 import { isValidationResult } from '../../models/Validation'
 import TaskListService from '../../services/taskListService'
 import InstallationAppointmentFormDataModel from '../../models/form-data/installationAppointment'
+import { Order } from '../../models/Order'
+import InstallationAppointmentPageContent from '../../types/i18n/pages/installationAppointment'
+import { Question } from '../../types/i18n/pages/questionPage'
 
 export default class InstallationAppointmentController {
   constructor(
@@ -15,29 +18,39 @@ export default class InstallationAppointmentController {
   view: RequestHandler = async (req: Request, res: Response) => {
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
-    const location = req.order!.installationLocation?.location
-    const isHomeOffice =
-      req.order!.interestedParties?.notifyingOrganisation === 'HOME_OFFICE' &&
-      (location === 'PRIMARY' || location === 'INSTALLATION')
-    const { questions } = res.locals.content!.pages.installationAppointment
-    const timeQuestion = isHomeOffice ? questions.preferredAppointmentTime : questions.appointmentTime
     const viewModel = installationAppointmenttViewModel.construct(
       req.order!.installationAppointment,
       formData[0] as never,
-      timeQuestion.text,
-      timeQuestion.hint as string,
+      this.getAppointmentTimeQuestion(req.order!, res.locals.content!.pages.installationAppointment),
+      this.shouldShowAppointmentTimeDetails(req.order!),
       errors as never,
     )
     res.render('pages/order/monitoring-conditions/installation-appointment', viewModel)
   }
 
+  shouldShowAppointmentTimeDetails = (order: Order): boolean => {
+    const location = order.installationLocation?.location
+    return location === 'PRIMARY' || location === 'INSTALLATION'
+  }
+
+  getAppointmentTimeQuestion = (order: Order, pageContent: InstallationAppointmentPageContent): Question => {
+    if (
+      order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE' &&
+      this.shouldShowAppointmentTimeDetails(order)
+    ) {
+      return pageContent.questions.preferredAppointmentTime
+    }
+    return pageContent.questions.appointmentTime
+  }
+
   update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
+    const orderId = req.params.orderId as string
     const formData = InstallationAppointmentFormDataModel.parse(req.body)
     const result = await this.installationAppointmentService.update({
       accessToken: res.locals.user.token,
       orderId,
       data: formData,
+      appointmentTimeDetailsRequired: this.shouldShowAppointmentTimeDetails(req.order!),
     })
 
     if (isValidationResult(result)) {

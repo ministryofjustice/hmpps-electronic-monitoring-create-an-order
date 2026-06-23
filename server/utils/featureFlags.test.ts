@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires, global-require, @typescript-eslint/no-require-imports */
+/* eslint-disable global-require, @typescript-eslint/no-require-imports */
 
 // NB: Instead of importing FeatureFlags at top of file, it is imported with require() in each test so that the module is re-evaluated at the start of each test. This is required for tests checking the behaviour of the module on instantiation.
 
@@ -12,7 +12,6 @@ const mockFlags = {
   VARIATION_AS_NEW_ORDER_ENABLED: true,
   ALCOHOL_MONITORING_ENABLED: false,
   CREATE_NEW_ORDER_VERSION_ENABLED: false,
-  LIST_MONITORING_CONDITION_FLOW_ENABLED: false,
   POSTCODE_LOOKUP_ENABLED: false,
   SERVICE_REQUEST_TYPE_ENABLED: false,
   TAG_AT_SOURCE_PILOT_PRISONS: '',
@@ -20,7 +19,6 @@ const mockFlags = {
   LICENCE_VARIATION_PROBATION_REGIONS: '',
   OFFENCE_FLOW_ENABLED: false,
   DOWNLOAD_FMS_REQUEST_JSON_ENABLED: false,
-  INTERESTED_PARTIES_FLOW_ENABLED: false,
 }
 
 jest.mock('fs')

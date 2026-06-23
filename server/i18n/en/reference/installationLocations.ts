@@ -5,6 +5,7 @@ const installationLocations: InstallationLocations = {
   PROBATION_OFFICE: 'At a probation office',
   INSTALLATION: 'At another address',
   IMMIGRATION_REMOVAL_CENTRE: 'At an immigration removal centre',
+  INSTALLATION_ALREADY_TAKEN_PLACE: 'Installation has already taken place',
 }
 
 export default installationLocations

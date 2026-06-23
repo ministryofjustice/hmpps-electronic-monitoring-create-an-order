@@ -8,7 +8,6 @@ const mockOrderId = uuidv4()
 const apiPath = '/variation'
 const sampleFormData = {
   variationDate: new Date(2024, 0, 1),
-  variationType: 'Change of curfew hours',
   variationDetails: 'Change to curfew hours',
 }
 
@@ -31,7 +30,6 @@ context('Variation', () => {
           id: mockOrderId,
           subPath: apiPath,
           response: {
-            variationType: 'CURFEW_HOURS',
             variationDate: '2024-01-01T00:00:00.000Z',
             variationDetails: 'Change to curfew hours',
           },
@@ -49,7 +47,6 @@ context('Variation', () => {
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}${apiPath}`,
           body: {
-            variationType: 'CURFEW_HOURS',
             variationDate: '2024-01-01T00:00:00.000Z',
             variationDetails: 'Change to curfew hours',
           },
@@ -93,7 +90,6 @@ context('Variation', () => {
           id: mockOrderId,
           subPath: apiPath,
           response: {
-            variationType: 'CHANGE_TO_DEVICE_TYPE',
             variationDate: '2024-01-01T00:00:00.000Z',
             variationDetails: 'Change to device type',
           },
@@ -107,7 +103,6 @@ context('Variation', () => {
 
         page.form.fillInWith({
           variationDate: new Date(2024, 0, 1),
-          variationType: 'Change of device type (fitted/non fitted)',
           variationDetails: 'Change to device type',
         })
 
@@ -116,7 +111,6 @@ context('Variation', () => {
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}${apiPath}`,
           body: {
-            variationType: 'CHANGE_TO_DEVICE_TYPE',
             variationDate: '2024-01-01T00:00:00.000Z',
             variationDetails: 'Change to device type',
           },
@@ -143,7 +137,6 @@ context('Variation', () => {
           id: mockOrderId,
           subPath: apiPath,
           response: {
-            variationType: 'CHANGE_TO_DEVICE_TYPE',
             variationDate: '2024-01-01T00:00:00.000Z',
             variationDetails: 'Change to device type',
           },
@@ -157,7 +150,6 @@ context('Variation', () => {
 
         page.form.fillInWith({
           variationDate: new Date(2024, 0, 1),
-          variationType: 'Change of device type (fitted/non fitted)',
           variationDetails: 'Change to device type',
         })
 
@@ -166,7 +158,6 @@ context('Variation', () => {
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}${apiPath}`,
           body: {
-            variationType: 'CHANGE_TO_DEVICE_TYPE',
             variationDate: '2024-01-01T00:00:00.000Z',
             variationDetails: 'Change to device type',
           },
@@ -180,7 +171,6 @@ context('Variation', () => {
 
         page.form.fillInWith({
           variationDate: new Date(2024, 0, 1),
-          variationType: 'Change of device type (fitted/non fitted)',
         })
         page.form.variationDetailsAvailableField.set('No')
 
@@ -189,7 +179,6 @@ context('Variation', () => {
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}${apiPath}`,
           body: {
-            variationType: 'CHANGE_TO_DEVICE_TYPE',
             variationDate: '2024-01-01T00:00:00.000Z',
             variationDetails: '',
           },

@@ -219,15 +219,15 @@ describe('AlcoholMonitoringController', () => {
         startDate: '2026-12-30',
         endDate: '2027-12-30',
       })
-      taskListService.getNextPage = jest
-        .fn()
-        .mockReturnValue(`/order/${mockOrder.id}/monitoring-conditions/check-your-answers`)
+
       // When
       await alcoholMonitoringController.update(req, res, next)
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/monitoring-conditions/check-your-answers`)
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/order/123456789/monitoring-conditions/order-type-description/types-of-monitoring-needed`,
+      )
     })
   })
 

@@ -12,14 +12,14 @@ export default class OffenceListDeleteController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const id = req.params.offenceId
+    const id = req.params.offenceId as string
 
     res.render('pages/order/installation-and-risk/offence/delete', ViewModel.construct(order, id, res.locals.content!))
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const id = req.params.offenceId
+    const id = req.params.offenceId as string
     const accessToken = res.locals.user.token
 
     if (req.body.action === 'cancel') {

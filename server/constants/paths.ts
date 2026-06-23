@@ -109,7 +109,6 @@ const paths = {
       POLICE_AREA: '/order/:orderId/monitoring-conditions/order-type-description/police-area',
       PILOT: '/order/:orderId/monitoring-conditions/order-type-description/pilot',
       DAPOL_MISSED_IN_ERROR: '/order/:orderId/monitoring-conditions/order-type-description/dapol-missed-in-error',
-      MONITORING_TYPES: '/order/:orderId/monitoring-conditions/order-type-description/monitoring-types',
       MONITORING_TYPE: '/order/:orderId/monitoring-conditions/order-type-description/monitoring-type',
       TYPES_OF_MONITORING_NEEDED:
         '/order/:orderId/monitoring-conditions/order-type-description/types-of-monitoring-needed',

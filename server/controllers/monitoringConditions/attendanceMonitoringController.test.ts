@@ -364,7 +364,7 @@ describe('attendanceMonitoringController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/monitoring-conditions/attendance`)
     })
 
-    it('should save and redirect to the check your answers page if the user selects continue', async () => {
+    it('should save and redirect to the types of monitoring needed page if the user selects continue', async () => {
       // Given
       const mockOrder = getMockOrder()
 
@@ -382,30 +382,9 @@ describe('attendanceMonitoringController', () => {
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/monitoring-conditions/check-your-answers`)
-    })
-
-    it('should save and redirect to the form when the user selects yes to additional appointments', async () => {
-      // Given
-      const mockOrder = getMockOrder()
-      const mockBody = validBody
-      mockBody.addAnother = 'true'
-
-      const req = createMockRequest({
-        order: mockOrder,
-        body: validBody,
-        params: { orderId: mockOrder.id },
-        flash: jest.fn(),
-      })
-      const res = createMockResponse()
-      const next = jest.fn()
-
-      // When
-      await attendanceMonitoringController.update(req, res, next)
-
-      // Then
-      expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/monitoring-conditions/attendance`)
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/order/${mockOrder.id}/monitoring-conditions/order-type-description/types-of-monitoring-needed`,
+      )
     })
   })
 })

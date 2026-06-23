@@ -6,27 +6,32 @@ mojFrontend.initAll()
 initAll()
 
 const backButton = document.getElementsByClassName('govuk-back-link')[0]
-if(backButton) {
+if (backButton) {
   backButton.addEventListener('click', () => {
     window.history.back()
   })
 }
 
 function nodeListForEach(nodes, callback) {
-  if (window.NodeList.prototype.forEach) {
-    return nodes.forEach(callback)
+  if (NodeList.prototype.forEach) {
+    nodes.forEach(callback)
+    return
   }
-  for (var i = 0; i < nodes.length; i++) {
+
+  for (let i = 0; i < nodes.length; i += 1) {
     callback.call(window, nodes[i], i, nodes)
   }
 }
 
-function initAll() {  
-  const $spinnerForms = document.querySelectorAll('[data-module="form-spinner"]')
-  nodeListForEach($spinnerForms, function ($spinnerForm) {
-    new FormSpinner($spinnerForm)
+function initAll() {
+  const spinnerForms = document.querySelectorAll('[data-module="form-spinner"]')
+
+  nodeListForEach(spinnerForms, spinnerForm => {
+    const spinner = new FormSpinner(spinnerForm)
+    return spinner
   })
 }
+
 function FormSpinner(container) {
   this.container = container
 
@@ -38,7 +43,7 @@ function FormSpinner(container) {
     formSpinnerTemplate.innerHTML = `
       <div class="form-spinner">
         <div class="form-spinner__notification-box" role="alert">
-          ${this.container.dataset.loadingText ?? 'Submitting'}
+          ${this.container.dataset.loadingText || 'Submitting'}
           <div class="form-spinner__spinner">
             ${this.spinnerSvg}
           </div>
@@ -49,7 +54,7 @@ function FormSpinner(container) {
     setTimeout(() => document.querySelector('body').appendChild(formSpinnerTemplate.content.firstChild), 1000)
 
     const buttons = this.container.querySelectorAll('[data-module="govuk-button"]')
-    nodeListForEach(buttons, function (button) {
+    nodeListForEach(buttons, button => {
       button.setAttribute('disabled', 'disabled')
       button.setAttribute('aria-disabled', 'true')
     })

@@ -8,7 +8,7 @@ export default class RemoveMonitoringTypeController {
   constructor(private readonly service: RemoveMonitoringTypeService) {}
 
   view: Handler = (req: Request, res: Response) => {
-    const { monitoringTypeId } = req.params
+    const monitoringTypeId = req.params.monitoringTypeId as string
     const { order } = req
     if (!order) {
       res.status(400).send('Order not found on request')
@@ -28,7 +28,7 @@ export default class RemoveMonitoringTypeController {
   }
 
   update: Handler = async (req: Request, res: Response) => {
-    const { monitoringTypeId } = req.params
+    const monitoringTypeId = req.params.monitoringTypeId as string
 
     const { order } = req
     if (!order) {

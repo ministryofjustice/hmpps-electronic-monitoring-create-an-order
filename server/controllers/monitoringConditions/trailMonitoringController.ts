@@ -6,7 +6,6 @@ import TrailMonitoringService from '../../services/trailMonitoringService'
 import trailMonitoringViewModel from '../../models/view-models/trailMonitoring'
 import { TrailMonitoringFormDataModel } from '../../models/form-data/trailMonitoring'
 import TaskListService from '../../services/taskListService'
-import FeatureFlags from '../../utils/featureFlags'
 
 export default class TrailMonitoringController {
   constructor(
@@ -35,7 +34,7 @@ export default class TrailMonitoringController {
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
+    const orderId = req.params.orderId as string
     const formData = TrailMonitoringFormDataModel.parse(req.body)
     const { interestedParties } = req.order!
     const notifyingOrganisation = interestedParties?.notifyingOrganisation ?? null
@@ -53,13 +52,9 @@ export default class TrailMonitoringController {
 
       res.redirect(paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', orderId))
     } else if (formData.action === 'continue') {
-      if (FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')) {
-        res.redirect(
-          paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', orderId),
-        )
-      } else {
-        res.redirect(this.taskListService.getNextPage('TRAIL_MONITORING', req.order!))
-      }
+      res.redirect(
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', orderId),
+      )
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }

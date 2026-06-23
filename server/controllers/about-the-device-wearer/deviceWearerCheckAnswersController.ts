@@ -30,7 +30,7 @@ export default class DeviceWearerCheckAnswersController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const { versionId } = req.params
+    const versionId = req.params.versionId as string
     const { action } = CheckYourAnswersFormModel.parse(req.body)
 
     await this.checklistService.updateChecklist(`${order.id}-${order.versionId}`, 'ABOUT_THE_DEVICE_WEARER')

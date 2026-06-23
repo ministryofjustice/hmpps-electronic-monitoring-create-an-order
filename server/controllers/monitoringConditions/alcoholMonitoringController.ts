@@ -5,7 +5,6 @@ import { AlcoholMonitoringService, AuditService } from '../../services'
 import alcoholMonitoringViewModel from '../../models/view-models/alcoholMonitoring'
 import { AlcoholMonitoringFormDataModel } from '../../models/form-data/alcoholMonitoring'
 import TaskListService from '../../services/taskListService'
-import FeatureFlags from '../../utils/featureFlags'
 
 export default class AlcoholMonitoringController {
   constructor(
@@ -38,7 +37,7 @@ export default class AlcoholMonitoringController {
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
+    const orderId = req.params.orderId as string
     const order = req.order!
     const formData = AlcoholMonitoringFormDataModel.parse(req.body)
 
@@ -58,18 +57,9 @@ export default class AlcoholMonitoringController {
 
       res.redirect(paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', orderId))
     } else if (formData.action === 'continue') {
-      if (FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')) {
-        res.redirect(
-          paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', orderId),
-        )
-      } else {
-        res.redirect(
-          this.taskListService.getNextPage('ALCOHOL_MONITORING', {
-            ...req.order!,
-            monitoringConditionsAlcohol: updateResult,
-          }),
-        )
-      }
+      res.redirect(
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', orderId),
+      )
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }

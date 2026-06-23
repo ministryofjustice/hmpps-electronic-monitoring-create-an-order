@@ -15,7 +15,8 @@ export default class EnforcementZoneAddToListController {
   ) {}
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId, zoneId } = req.params
+    const zoneId = req.params.zoneId as string
+    const orderId = req.params.orderId as string
     const { interestedParties } = req.order!
 
     const file = req.file as Express.Multer.File
@@ -83,7 +84,7 @@ export default class EnforcementZoneAddToListController {
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { zoneId } = req.params
+    const zoneId = req.params.zoneId as string
     const order = req.order!
     const viewModel = enforcementZoneAddToListViewModel.construct(parseInt(zoneId, 10), order, {} as never, [])
 

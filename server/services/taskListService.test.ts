@@ -33,7 +33,7 @@ describe('TaskListService', () => {
 
   const monitoringConditionsPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE
   describe('getNextPage', () => {
-    it('should return check your answers if current page is device wearer and adultAtTheTimeOfInstallation is true', () => {
+    it('should return contact details if current page is device wearer and adultAtTheTimeOfInstallation is true', () => {
       // Given
       const currentPage = 'DEVICE_WEARER'
       const taskListService = new TaskListService(mockOrderChecklistService)
@@ -45,7 +45,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id))
     })
 
     it('should return responsible adult if current page is device wearer and adultAtTheTimeOfInstallation is false', () => {
@@ -63,7 +63,7 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id))
     })
 
-    it('should return check your answers if current page is responsible adult', () => {
+    it('should return contact details if current page is responsible adult', () => {
       // Given
       const currentPage = 'RESPONSIBLE_ADULT'
       const taskListService = new TaskListService(mockOrderChecklistService)
@@ -73,7 +73,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id))
     })
 
     it('should return device wearer page if current page is identity numbers', () => {
@@ -89,7 +89,7 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id))
     })
 
-    it('should return contact details if current page is check your answers', () => {
+    it('should go to installation and risk page if current page is device wearer check your answers', () => {
       // Given
       const currentPage = 'CHECK_ANSWERS_DEVICE_WEARER'
       const taskListService = new TaskListService(mockOrderChecklistService)
@@ -99,7 +99,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id))
     })
 
     it('should return no fixed abode if current page is contact details', () => {
@@ -115,7 +115,7 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id))
     })
 
-    it('should return interested parties if current page is no fixed abode and noFixedAbode is true', () => {
+    it('should go to device wearer cya if current page is no fixed abode and noFixedAbode is true', () => {
       // Given
       const currentPage = 'NO_FIXED_ABODE'
       const taskListService = new TaskListService(mockOrderChecklistService)
@@ -127,7 +127,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
     })
 
     it('should return primary address if current page is no fixed abode and noFixedAbode is false', () => {
@@ -150,11 +150,9 @@ describe('TaskListService', () => {
       )
     })
 
-    it('should return find address when current page is no fixed abode, postcode lookup is enabled and interested parties flow is enabled', () => {
+    it('should return find address when current page is no fixed abode and postcode lookup is enabled', () => {
       // Given
-      const mockGet = jest.fn((flag: string) =>
-        ['INTERESTED_PARTIES_FLOW_ENABLED', 'POSTCODE_LOOKUP_ENABLED'].includes(flag),
-      )
+      const mockGet = jest.fn((flag: string) => ['POSTCODE_LOOKUP_ENABLED'].includes(flag))
       const mockGetValue = jest.fn(() => '')
       jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
         get: mockGet,
@@ -177,7 +175,7 @@ describe('TaskListService', () => {
       jest.restoreAllMocks()
     })
 
-    it('should return interested parties if current page is primary address and hasAnotherAddress is false', () => {
+    it('should return device wearer cya if current page is primary address and hasAnotherAddress is false', () => {
       // Given
       const currentPage = 'PRIMARY_ADDRESS'
       const taskListService = new TaskListService(mockOrderChecklistService)
@@ -192,7 +190,7 @@ describe('TaskListService', () => {
       })
 
       // Then
-      expect(nextPage).toBe(paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
     })
 
     it('should return secondary address if current page is primary address and hasAnotherAddress is true', () => {
@@ -218,7 +216,7 @@ describe('TaskListService', () => {
       )
     })
 
-    it('should return interested parties if current page is seconddary address and hasAnotherAddress is false', () => {
+    it('should return device wearer cya if current page is secondary address and hasAnotherAddress is false', () => {
       // Given
       const currentPage = 'SECONDARY_ADDRESS'
       const taskListService = new TaskListService(mockOrderChecklistService)
@@ -233,7 +231,7 @@ describe('TaskListService', () => {
       })
 
       // Then
-      expect(nextPage).toBe(paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
     })
 
     it('should return tertiary address if current page is secondary address and hasAnotherAddress is true', () => {
@@ -269,12 +267,12 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
     })
 
-    it('should return check your answers if current page is interested parties', () => {
+    it('should return identity numbers if current page is interested parties cya', () => {
       // Given
-      const currentPage = 'INTERESTED_PARTIES'
+      const currentPage = 'CHECK_ANSWERS_INTERESTED_PARTIES'
       const taskListService = new TaskListService(mockOrderChecklistService)
       const order = getMockOrder()
 
@@ -282,20 +280,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
-    })
-
-    it('should return installation and risk if current page is check your answers', () => {
-      // Given
-      const currentPage = 'CHECK_ANSWERS_CONTACT_INFORMATION'
-      const taskListService = new TaskListService(mockOrderChecklistService)
-      const order = getMockOrder()
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id))
     })
 
     it('should return check answers if current page is installation and risk', () => {
@@ -478,7 +463,9 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ZONE.replace(':zoneId', '0').replace(':orderId', order.id))
+      expect(nextPage).toBe(
+        paths.MONITORING_CONDITIONS.ZONE_NEW_ITEM.replace(':zoneId', '0').replace(':orderId', order.id),
+      )
     })
 
     it('should return trail monitoring if current page is curfew timetable and trail is selected', () => {
@@ -748,7 +735,6 @@ describe('TaskListService', () => {
 
     it.each([
       ['DEVICE_WEARER', paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS],
-      ['CONTACT_DETAILS', paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS],
       ['INSTALLATION_AND_RISK', paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS],
       ['MONITORING_CONDITIONS', paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS],
     ])(
@@ -786,15 +772,15 @@ describe('TaskListService', () => {
         {
           checked: false,
           completed: false,
-          name: 'ABOUT_THE_DEVICE_WEARER',
-          path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
+          name: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+          path: paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER.replace(':orderId', order.id),
           isReady: true,
         },
         {
           checked: false,
           completed: false,
-          name: 'CONTACT_INFORMATION',
-          path: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+          name: 'ABOUT_THE_DEVICE_WEARER',
+          path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
           isReady: true,
         },
         {
@@ -868,15 +854,15 @@ describe('TaskListService', () => {
         {
           checked: false,
           completed: true,
-          name: 'ABOUT_THE_DEVICE_WEARER',
-          path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+          name: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+          path: paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
           isReady: true,
         },
         {
           checked: false,
           completed: true,
-          name: 'CONTACT_INFORMATION',
-          path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+          name: 'ABOUT_THE_DEVICE_WEARER',
+          path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
           isReady: true,
         },
         {
@@ -958,15 +944,15 @@ describe('TaskListService', () => {
         {
           checked: true,
           completed: true,
-          name: 'ABOUT_THE_DEVICE_WEARER',
-          path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+          name: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+          path: paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
           isReady: true,
         },
         {
           checked: true,
           completed: true,
-          name: 'CONTACT_INFORMATION',
-          path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+          name: 'ABOUT_THE_DEVICE_WEARER',
+          path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
           isReady: true,
         },
         {
@@ -1019,15 +1005,15 @@ describe('TaskListService', () => {
         {
           checked: false,
           completed: false,
-          name: 'ABOUT_THE_DEVICE_WEARER',
-          path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
+          name: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+          path: paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER.replace(':orderId', order.id),
           isReady: true,
         },
         {
           checked: false,
           completed: false,
-          name: 'CONTACT_INFORMATION',
-          path: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+          name: 'ABOUT_THE_DEVICE_WEARER',
+          path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
           isReady: true,
         },
         {
@@ -1089,16 +1075,16 @@ describe('TaskListService', () => {
       expect(sections).toEqual([
         {
           checked: false,
-          completed: false,
-          name: 'ABOUT_THE_DEVICE_WEARER',
-          path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
+          completed: true,
+          name: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+          path: paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
           isReady: true,
         },
         {
           checked: false,
           completed: false,
-          name: 'CONTACT_INFORMATION',
-          path: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+          name: 'ABOUT_THE_DEVICE_WEARER',
+          path: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
           isReady: true,
         },
         {
@@ -1160,15 +1146,15 @@ describe('TaskListService', () => {
         {
           checked: false,
           completed: false,
-          name: 'ABOUT_THE_DEVICE_WEARER',
-          path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+          name: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+          path: paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
           isReady: true,
         },
         {
           checked: false,
           completed: false,
-          name: 'CONTACT_INFORMATION',
-          path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
+          name: 'ABOUT_THE_DEVICE_WEARER',
+          path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id),
           isReady: true,
         },
         {
@@ -1221,8 +1207,8 @@ describe('TaskListService', () => {
         {
           checked: false,
           completed: false,
-          name: 'ABOUT_THE_DEVICE_WEARER',
-          path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS_VERSION.replace(':orderId', order.id).replace(
+          name: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+          path: paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS_VERSION.replace(':orderId', order.id).replace(
             ':versionId',
             'someVersionId',
           ),
@@ -1231,8 +1217,8 @@ describe('TaskListService', () => {
         {
           checked: false,
           completed: false,
-          name: 'CONTACT_INFORMATION',
-          path: paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS_VERSION.replace(':orderId', order.id).replace(
+          name: 'ABOUT_THE_DEVICE_WEARER',
+          path: paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS_VERSION.replace(':orderId', order.id).replace(
             ':versionId',
             'someVersionId',
           ),
@@ -1271,7 +1257,7 @@ describe('TaskListService', () => {
       ])
     })
 
-    it('should return contact information section as incomplete if interested parties exists but notifying organisation fields are null', async () => {
+    it('should return interested parties section as incomplete if notifying organisation fields are null', async () => {
       // Given
       const order = getMockOrder({
         deviceWearer: createDeviceWearer({ noFixedAbode: true }),
@@ -1280,6 +1266,7 @@ describe('TaskListService', () => {
           notifyingOrganisation: null,
           notifyingOrganisationName: null,
           notifyingOrganisationEmail: null,
+          responsibleOfficerFirstName: null,
         }),
       })
 
@@ -1289,25 +1276,14 @@ describe('TaskListService', () => {
       const sections = await taskListService.getSections(order)
 
       // Then
-      const contactInformationSection = sections.find(section => section.name === 'CONTACT_INFORMATION')
+      const interestedPartiesSection = sections.find(
+        section => section.name === 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+      )
 
-      expect(contactInformationSection?.completed).toBe(false)
+      expect(interestedPartiesSection?.completed).toBe(false)
     })
 
-    describe('when interested parties flow is enabled', () => {
-      beforeEach(() => {
-        const mockGet = jest.fn((flag: string) => flag === 'INTERESTED_PARTIES_FLOW_ENABLED')
-        const mockGetValue = jest.fn(() => '')
-        jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
-          get: mockGet,
-          getValue: mockGetValue,
-        } as never)
-      })
-
-      afterEach(() => {
-        jest.restoreAllMocks()
-      })
-
+    describe('interested parties flow', () => {
       it('should navigate to CYA when notifying and responsible organisations are to check', async () => {
         const order = getMockOrder({
           interestedParties: createInterestedParties({ responsibleOfficerFirstName: 'mockUser' }),
@@ -1572,18 +1548,10 @@ describe('TaskListService', () => {
       })
     })
 
-    it('returns contact info CYA if current page is device wearer CYA', () => {
+    it('returns installation and risk CYA if current page is device wearer CYA', () => {
       const taskListService = new TaskListService(mockOrderChecklistService)
 
       const nextPage = taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_DEVICE_WEARER', order)
-
-      expect(nextPage).toBe(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
-    })
-
-    it('returns risk information CYA if current page is contact info CYA', () => {
-      const taskListService = new TaskListService(mockOrderChecklistService)
-
-      const nextPage = taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_CONTACT_INFORMATION', order)
 
       expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
     })

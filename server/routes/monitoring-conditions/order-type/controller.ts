@@ -83,7 +83,7 @@ export default class OrderTypeController extends MonitoringConditionsBaseControl
         await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, req, res)
         return
       default:
-        res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', order.id))
+        res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE.replace(':orderId', order.id))
     }
   }
 }

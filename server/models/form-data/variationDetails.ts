@@ -8,19 +8,14 @@ const VariationDetailsFormDataParser = FormDataModel.extend({
     month: z.string(),
     year: z.string(),
   }),
-  variationType: z.string().default(''),
   variationDetails: z.string().optional(),
   variationDetailsAvailable: z.string().optional(),
   orderType: z.string().optional(),
 })
 const validateVariationDetailsFormData = (formData: VariationDetailsFormData) => {
-  const { orderType } = formData
   return z
     .object({
       variationDate: DateInputModel(validationErrors.variationDetails.variationDate),
-      variationType: z.string().refine(val => val.length > 1 || orderType !== 'VARIATION', {
-        message: validationErrors.variationDetails.variationTypeRequired,
-      }),
       variationDetailsAvailable: z.string({
         message: validationErrors.variationDetails.variationDetailsAvailableRequired,
       }),

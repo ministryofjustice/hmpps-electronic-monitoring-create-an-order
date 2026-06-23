@@ -220,7 +220,7 @@ describe('order type controller', () => {
     })
 
     expect(res.redirect).toHaveBeenCalledWith(
-      paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', mockOrder.id),
+      paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE.replace(':orderId', mockOrder.id),
     )
   })
 
@@ -234,7 +234,7 @@ describe('order type controller', () => {
       orderType: 'IMMIGRATION',
     })
     expect(res.redirect).toHaveBeenCalledWith(
-      paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', mockOrder.id),
+      paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE.replace(':orderId', mockOrder.id),
     )
   })
 
