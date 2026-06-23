@@ -79,7 +79,6 @@ context('Service-Request-Types', () => {
   const fillInNewOrder = () => {
     createNewOrder({
       notifyingOrganisation: interestedParties,
-      stubSignin: false,
     })
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
