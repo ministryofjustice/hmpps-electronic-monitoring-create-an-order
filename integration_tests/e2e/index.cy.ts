@@ -3,7 +3,7 @@ import IndexPage from '../pages/index'
 import Page from '../pages/page'
 import SearchPage from '../pages/search'
 import NotifyingOrganisationPage from './order/interested-parties/notifying-organisation/notifyingOrganisationPage'
-import { mockApiOrder } from '../mockApis/cemo'
+import mockApiOrder from '../utils/data/ApiOrder'
 import paths from '../../server/constants/paths'
 
 const mockOrderId = uuidv4()
@@ -180,9 +180,6 @@ context('Index', () => {
       cy.task('stubCemoCreateOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS', type: 'REQUEST' })
       cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
       cy.signIn()
-    })
-    afterEach(() => {
-      cy.task('resetFeatureFlags')
     })
 
     it('should create a new order and go to your details page', () => {

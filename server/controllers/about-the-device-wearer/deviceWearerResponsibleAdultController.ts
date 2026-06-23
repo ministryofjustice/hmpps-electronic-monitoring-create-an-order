@@ -28,7 +28,7 @@ export default class DeviceWearerResponsibleAdultController {
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
+    const orderId = req.params.orderId as string
     const { action, ...formData } = DeviceWearerResponsibleAdultFormDataModel.parse(req.body)
 
     const updateDeviceWearerResult = await this.deviceWearerResponsibleAdultService.updateDeviceWearerResponsibleAdult({

@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from 'uuid'
-import { mockApiOrder } from '../../../../../mockApis/cemo'
 import Page from '../../../../../pages/page'
 import AttendanceMonitoringAddToListPage from './AttendanceMonitoringPage'
 import TypesOfMonitoringNeededPage from '../../order-type-description/types-of-monitoring-needed/TypesOfMonitoringNeededPage'
 import ErrorPage from '../../../../../pages/error'
+import mockApiOrder from '../../../../../utils/data/ApiOrder'
 
 const mockOrderId = uuidv4()
 const mockConditionId = uuidv4()

@@ -1,5 +1,6 @@
 import z from 'zod'
 import { ValidationError } from '../../models/Validation'
+import logger from '../../../logger'
 
 const dateModel = z.object({
   day: z.number().int().min(1).max(31),
@@ -32,6 +33,7 @@ export default class DateValidator {
       dateModel.parse({ day, month, year })
       return { result: true }
     } catch (error) {
+      logger.warn(`Error validate date ${error} `)
       return { result: false, error: validationError }
     }
   }
