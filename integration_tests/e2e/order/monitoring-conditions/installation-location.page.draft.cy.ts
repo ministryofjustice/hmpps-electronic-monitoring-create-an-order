@@ -243,4 +243,39 @@ context('Installation location page', () => {
       })
     })
   })
+
+  context('Installation already taken place option', () => {
+    it('Should show installation already taken place option, when order is variation', () => {
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      stubGetOrder({
+        ...mockDefaultOrder,
+        type: 'VARIATION',
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'HOME_OFFICE' }),
+      })
+      const page = Page.visit(InstallationLocationPage, {
+        orderId: mockOrderId,
+      })
+      page.form.locationField.shouldHaveOption('At a prison')
+      page.form.locationField.shouldHaveOption('At a probation office')
+      page.form.locationField.shouldHaveOption('At an immigration removal centre')
+      page.form.locationField.shouldHaveDivider('or')
+      page.form.locationField.shouldHaveOption('Installation has already taken place')
+    })
+
+    it('Should not show installation already taken place option, when order is new order', () => {
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      stubGetOrder({
+        ...mockDefaultOrder,
+        type: 'REQUEST',
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'HOME_OFFICE' }),
+      })
+      const page = Page.visit(InstallationLocationPage, {
+        orderId: mockOrderId,
+      })
+      page.form.locationField.shouldNotHaveDivider()
+      page.form.locationField.shouldNotHaveOption('Installation has already taken place')
+    })
+  })
 })

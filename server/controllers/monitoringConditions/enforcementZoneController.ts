@@ -16,7 +16,8 @@ export default class EnforcementZoneController {
   ) {}
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId, zoneId } = req.params
+    const orderId = req.params.orderId as string
+    const zoneId = req.params.zoneId as string
     const file = req.file as Express.Multer.File
     const zoneIdInt = Number.parseInt(zoneId, 10)
     req.body.zoneId = zoneIdInt
@@ -84,7 +85,7 @@ export default class EnforcementZoneController {
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { zoneId } = req.params
+    const zoneId = req.params.zoneId as string
     const order = req.order!
     const viewModel = enforcementZoneViewModel.construct(
       parseInt(zoneId, 10),

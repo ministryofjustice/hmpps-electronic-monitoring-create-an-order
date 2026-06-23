@@ -23,7 +23,7 @@ export default class CurfewConditionsController {
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
+    const orderId = req.params.orderId as string
     const formData = CurfewConditionsFormDataModel.parse(req.body)
     const { interestedParties } = req.order!
 

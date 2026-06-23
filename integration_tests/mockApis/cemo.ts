@@ -3,12 +3,12 @@ import { SuperAgentRequest } from 'superagent'
 import { v4 as uuidv4 } from 'uuid'
 import jsonDiff from 'json-diff'
 import { Client as PostgresqlClient } from 'pg'
-
 import { Order } from '../../server/models/Order'
 import { getMatchingRequests, stubFor } from './wiremock'
 import { DeviceWearer } from '../../server/models/DeviceWearer'
 import { DeviceWearerResponsibleAdult as ResponsibleAdult } from '../../server/models/DeviceWearerResponsibleAdult'
 import { OrderParameters } from '../../server/models/OrderParametersModel'
+import mockApiOrder from '../utils/data/ApiOrder'
 
 const ping = (httpStatus = 200) =>
   stubFor({
@@ -22,77 +22,6 @@ const ping = (httpStatus = 200) =>
       jsonBody: { status: httpStatus === 200 ? 'UP' : 'DOWN' },
     },
   })
-
-type ApiOrder = Omit<Order, 'deviceWearer'> & {
-  deviceWearer: Omit<Order['deviceWearer'], 'disabilities'> & {
-    disabilities: string
-  }
-}
-export const mockApiOrder = (status: Order['status'] = 'IN_PROGRESS', type: Order['type'] = 'REQUEST'): ApiOrder => ({
-  id: uuidv4(),
-  status,
-  type,
-  dataDictionaryVersion: 'DDV4',
-  deviceWearer: {
-    nomisId: null,
-    pncId: null,
-    deliusId: null,
-    prisonNumber: null,
-    homeOfficeReferenceNumber: null,
-    complianceAndEnforcementPersonReference: null,
-    courtCaseReferenceNumber: null,
-    firstName: null,
-    middleName: null,
-    lastName: null,
-    alias: null,
-    dateOfBirth: null,
-    adultAtTimeOfInstallation: null,
-    sex: null,
-    gender: null,
-    disabilities: '',
-    noFixedAbode: null,
-    interpreterRequired: null,
-  },
-  deviceWearerResponsibleAdult: null,
-  enforcementZoneConditions: [],
-  addresses: [],
-  contactDetails: null,
-  installationAndRisk: null,
-  probationDeliveryUnit: null,
-  interestedParties: null,
-  additionalDocuments: [],
-  monitoringConditions: {
-    orderType: null,
-    curfew: null,
-    exclusionZone: null,
-    trail: null,
-    mandatoryAttendance: null,
-    alcohol: null,
-    orderTypeDescription: null,
-    conditionType: null,
-    startDate: null,
-    endDate: null,
-    sentenceType: null,
-    issp: null,
-    hdc: null,
-    prarr: null,
-    pilot: null,
-    dapolMissedInError: null,
-    offenceType: null,
-    isValid: false,
-  },
-  monitoringConditionsTrail: null,
-  monitoringConditionsAlcohol: null,
-  mandatoryAttendanceConditions: [],
-  variationDetails: null,
-  isValid: false,
-  orderParameters: null,
-  versionId: uuidv4(),
-  dapoClauses: [],
-  offences: [],
-  mappa: null,
-  offenceAdditionalDetails: null,
-})
 
 type ListOrdersStubOptions = {
   httpStatus: number
@@ -747,27 +676,34 @@ ${jsonDiff.diffString(expected, requests[0], { color: false })}
   })
 
 const tables = [
-  'alternative_contact_details',
-  'device_wearer_contact_details',
-
+  'contact_details',
   'curfew_timetable',
 
   'mandatory_attendance',
   'alcohol_monitoring',
   'curfew',
   'curfew_release_date',
-  'additional_documentions',
+  'curfew_timetable',
+  'dapo',
+  'details_of_installation',
+  'additional_documents',
   'monitoring_conditions',
-
+  'mappa',
   'installation_and_risk',
+  'installation_appointment',
+  'installation_location',
   'enforcement_zone',
   'trail_monitoring',
   'interested_parties',
   'responsible_adult',
-
+  'offence',
+  'offence_additional_details',
+  'order_parameters',
+  'probation_delivery_unit',
+  'variation_details',
   'device_wearer',
   'address',
-
+  'order_version',
   'orders',
 ]
 
@@ -792,16 +728,7 @@ const resetDB = async () => {
   })
 
   await client.connect()
-
-  // INFO: incase we ever need to list the tables
-  // const { rows } = await client.query("SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE';")
-  // console.log(rows)
-
-  try {
-    await emptyNextTable(client)
-  } catch (error) {
-    // quite fail
-  }
+  await emptyNextTable(client)
   await client.end()
 
   return true

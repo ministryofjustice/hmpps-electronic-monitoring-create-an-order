@@ -37,7 +37,7 @@ export default class AlcoholMonitoringController {
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
+    const orderId = req.params.orderId as string
     const order = req.order!
     const formData = AlcoholMonitoringFormDataModel.parse(req.body)
 

@@ -103,7 +103,7 @@ export default class CurfewTimetableController {
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
+    const orderId = req.params.orderId as string
     const { action, ...formData } = CurfewTimetableFormDataModel.parse(req.body)
     const [act, options] = parseAction(action)
 

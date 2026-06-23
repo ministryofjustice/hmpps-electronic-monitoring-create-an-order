@@ -24,7 +24,7 @@ export default class NoFixedAbodeController {
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
+    const orderId = req.params.orderId as string
     const { action, ...formData } = NoFixedAbodeFormDataModel.parse(req.body)
 
     const result = await this.deviceWearerService.updateNoFixedAbode({
