@@ -15,7 +15,6 @@ context('Monitoring conditions', () => {
           id: mockOrderId,
           status: 'IN_PROGRESS',
         })
-
         cy.signIn()
       })
 

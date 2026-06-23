@@ -29,7 +29,7 @@ export default class OrderController {
 
   createVariation: RequestHandler = async (req: Request, res: Response) => {
     const { action } = req.body
-    const { orderId } = req.params
+    const orderId = req.params.orderId as string
     const order = req.order!
 
     if (action === 'continue') {
@@ -60,7 +60,7 @@ export default class OrderController {
   summary: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
 
-    const { versionId } = req.params
+    const versionId = req.params.versionId as string
     const createNewOrderVersionEnabled = FeatureFlags.getInstance().get('CREATE_NEW_ORDER_VERSION_ENABLED')
     const error = req.flash('submissionError')
 
@@ -171,7 +171,7 @@ export default class OrderController {
   }
 
   submitSuccess: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
+    const orderId = req.params.orderId as string
     const orderType = req.order!.type
 
     res.render('pages/order/submit-success', {

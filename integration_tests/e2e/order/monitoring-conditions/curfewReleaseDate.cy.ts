@@ -1,9 +1,10 @@
 import { v4 as uuidv4 } from 'uuid'
-import { mockApiOrder } from '../../../mockApis/cemo'
+
 import { NotFoundErrorPage } from '../../../pages/error'
 import CurfewReleaseDatePage from '../../../pages/order/monitoring-conditions/curfew-release-date'
 import Page from '../../../pages/page'
 import CurfewAdditionalDetailsPage from '../../../pages/order/monitoring-conditions/curfew-additional-details'
+import mockApiOrder from '../../../utils/data/ApiOrder'
 
 const mockOrderId = uuidv4()
 

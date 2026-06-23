@@ -23,7 +23,7 @@ export default class IsAddressChangeController extends YesNoQuestionPageControll
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
+    const orderId = req.params.orderId as string
 
     const formData = super.tryGetValidFormData(
       req,

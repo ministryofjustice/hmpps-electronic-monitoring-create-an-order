@@ -17,7 +17,7 @@ export default class AttendanceMonitoringAddToListController {
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { conditionId } = req.params
+    const conditionId = req.params.conditionId as string
     const { mandatoryAttendanceConditions: monitoringConditionsAttendance } = req.order!
     const condition = monitoringConditionsAttendance?.find(c => c.id === conditionId)
     if (!condition) {
@@ -30,8 +30,8 @@ export default class AttendanceMonitoringAddToListController {
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId, conditionId } = req.params
-
+    const orderId = req.params.orderId as string
+    const conditionId = req.params.conditionId as string
     req.body.id = conditionId
     const formData = AttendanceMonitoringAddToListFormDataModel.parse(req.body)
 

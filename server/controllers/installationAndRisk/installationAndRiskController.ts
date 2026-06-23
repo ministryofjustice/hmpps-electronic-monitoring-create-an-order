@@ -23,7 +23,7 @@ export default class InstallationAndRiskController {
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
+    const orderId = req.params.orderId as string
     const formData = InstallationAndRiskFormDataModel.parse(req.body)
     const updateResult = await this.installationAndRiskService.update({
       accessToken: res.locals.user.token,

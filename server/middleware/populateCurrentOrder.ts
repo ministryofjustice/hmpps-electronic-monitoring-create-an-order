@@ -12,7 +12,7 @@ const populateOrder =
   async (req: Request, res: Response, next: NextFunction, orderId: string) => {
     try {
       const { token } = res.locals.user
-      const { versionId } = req.params
+      const versionId = req.params.versionId as string
 
       if (orderId && validate(orderId)) {
         let order

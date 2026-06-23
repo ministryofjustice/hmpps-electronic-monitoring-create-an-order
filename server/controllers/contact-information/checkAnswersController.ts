@@ -24,7 +24,7 @@ export default class CheckAnswersController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const { versionId } = req.params
+    const versionId = req.params.versionId as string
     const { action } = CheckYourAnswersFormModel.parse(req.body)
 
     this.checklistService.updateChecklist(`${order.id}-${order.versionId}`, 'CONTACT_INFORMATION')
