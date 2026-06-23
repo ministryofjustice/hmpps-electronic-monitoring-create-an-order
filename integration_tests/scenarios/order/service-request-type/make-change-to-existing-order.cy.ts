@@ -44,6 +44,7 @@ context('Service-Request-Types', () => {
     possibleRisk: 'Sex offender',
     riskCategory: 'Children under the age of 18 are living at the property',
     riskDetails: 'No risk',
+    genderRiskDetails: '',
   }
 
   const trail = {

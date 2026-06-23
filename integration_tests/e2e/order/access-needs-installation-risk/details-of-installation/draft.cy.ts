@@ -41,6 +41,7 @@ context('details of installation page', () => {
       order: {
         detailsOfInstallation: {
           riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
+          genderRiskDetails: 'women',
           riskDetails: 'some risky details',
         },
         dataDictionaryVersion: 'DDV6',
@@ -63,6 +64,6 @@ context('details of installation page', () => {
     })
 
     cy.contains('What sex or gender are they a risk to?').should('exist')
-    page.form.genderAdditionalDetailsField.element.should('exist')
+    page.form.genderRiskDetailsField.element.should('exist')
   })
 })

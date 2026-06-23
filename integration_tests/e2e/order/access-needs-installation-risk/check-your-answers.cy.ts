@@ -599,6 +599,7 @@ context('installation and risk - check your answers', () => {
         order: {
           detailsOfInstallation: {
             riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
+            genderRiskDetails: '',
             riskDetails: 'some risk details',
           },
           dataDictionaryVersion: 'DDV6',
@@ -621,6 +622,8 @@ context('installation and risk - check your answers', () => {
           value: 'some risk details',
         },
       ])
+
+      page.installationRiskSection.shouldNotHaveItem('What sex or gender are they a risk to?')
     })
 
     it('shows risk answers for gender', () => {

@@ -40,10 +40,23 @@ export const DetailsOfInstallationValidator = z
       }
     }
   })
-  .transform(({ riskCategory, possibleRisk, ...formData }) => ({
-    riskCategory: [...possibleRisk, ...riskCategory],
-    ...formData,
-  }))
+  .transform(({ riskCategory, possibleRisk, riskDetails, genderRiskDetails, ...formData }) => {
+    if (typeof genderRiskDetails === 'string' && genderRiskDetails.trim()) {
+      return {
+        riskCategory: [...possibleRisk, ...riskCategory],
+        riskDetails: `Risk to gender: ${genderRiskDetails}\nAdditional risk details: ${riskDetails}`,
+        genderRiskDetails: undefined,
+        ...formData,
+      }
+    }
+
+    return {
+      riskCategory: [...possibleRisk, ...riskCategory],
+      riskDetails,
+      genderRiskDetails: '',
+      ...formData,
+    }
+  })
 
 export type DetailsOfInstallationInput = z.infer<typeof DetailsOfInstallationFormModel>
 export default DetailsOfInstallationFormModel
