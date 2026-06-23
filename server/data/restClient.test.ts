@@ -141,4 +141,67 @@ describe.each(['get', 'patch', 'post', 'put', 'delete'] as const)('Method: %s', 
     expect(result).toStrictEqual({ success: true })
     expect(nock.isDone()).toBe(true)
   })
+
+  it('should FAIL FAST and NOT retry on 400 Bad Request client errors', async () => {
+    nock('http://localhost:8080', {
+      reqheaders: { authorization: 'Bearer token-1' },
+    })
+      [method]('/api/test')
+      .reply(400)
+
+    await expect(
+      restClient[method]({
+        path: '/test',
+        retry: true,
+        token: 'token-1',
+        retryOnErr: true,
+      }),
+    ).rejects.toThrow('Bad Request')
+
+    expect(nock.isDone()).toBe(true)
+  })
+
+  it('should explicitly retry on 429 Too Many Requests', async () => {
+    nock('http://localhost:8080', {
+      reqheaders: { authorization: 'Bearer token-1' },
+    })
+      [method]('/api/test')
+      .reply(429)
+      [method]('/api/test')
+      .reply(429)
+      [method]('/api/test')
+      .reply(200, { success: true })
+
+    const result = await restClient[method]({
+      path: '/test',
+      retry: true,
+      token: 'token-1',
+      retryOnErr: true,
+    })
+
+    expect(result).toStrictEqual({ success: true })
+    expect(nock.isDone()).toBe(true)
+  })
+
+  it('should explicitly retry on 500', async () => {
+    nock('http://localhost:8080', {
+      reqheaders: { authorization: 'Bearer token-1' },
+    })
+      [method]('/api/test')
+      .reply(500)
+      [method]('/api/test')
+      .reply(500)
+      [method]('/api/test')
+      .reply(200, { success: true })
+
+    const result = await restClient[method]({
+      path: '/test',
+      retry: true,
+      token: 'token-1',
+      retryOnErr: true,
+    })
+
+    expect(result).toStrictEqual({ success: true })
+    expect(nock.isDone()).toBe(true)
+  })
 })

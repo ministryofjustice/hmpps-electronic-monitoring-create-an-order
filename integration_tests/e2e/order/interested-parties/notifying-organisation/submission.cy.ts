@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../pages/page'
 import NotifyingOrganisationPage from './notifyingOrganisationPage'
 import OrderTasksPage from '../../../../pages/order/summary'
-import { mockApiOrder } from '../../../../mockApis/cemo'
+import mockApiOrder from '../../../../utils/data/ApiOrder'
 
 const mockOrderId = uuidv4()
 context('Submit notifying organisations', () => {

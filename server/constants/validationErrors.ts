@@ -108,6 +108,8 @@ interface ValidationErrors {
   installationAppointment: {
     placeNameRequired: string
     appointmentDate: DateTimeErrorMessages
+    appointmentTimeDetailsRequired: string
+    appointmentTimeDetailsTooLong: string
   }
   installationAndRisk: {
     offenceRequired: string
@@ -377,6 +379,10 @@ const validationErrors: ValidationErrors = {
         required: 'Enter time of installation',
       },
     },
+    appointmentTimeDetailsRequired:
+      'Enter if installation can’t take place at the preferred time when it can take place',
+    appointmentTimeDetailsTooLong:
+      'If installation can’t take place at the preferred time when it can take place must be 500 characters or less',
   },
   installationAndRisk: {
     offenceRequired: 'Select the type of offence the device wearer committed',

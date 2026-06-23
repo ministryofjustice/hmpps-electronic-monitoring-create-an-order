@@ -3,7 +3,6 @@ import isVariationType from '../utils/isVariationType'
 import { isNotNullOrEmptyString } from '../utils/utils'
 import OrderChecklistService from './orderChecklistService'
 import TaskListService, { canBeCompleted, Task } from './taskListService'
-import FeatureFlags from '../utils/featureFlags'
 
 export const SECTIONS = {
   interestedParties: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
@@ -142,11 +141,6 @@ export default class SectionService {
     // Return early for disallowed organisation
     if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE') {
       return false
-    }
-
-    // Feature flag must be enabled for any further logic
-    if (!FeatureFlags.getInstance().get('INTERESTED_PARTIES_FLOW_ENABLED')) {
-      return true
     }
 
     // Non-variation types are always allowed

@@ -154,58 +154,41 @@ const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n
     )
   }
 
-  if (FeatureFlags.getInstance().getValue('LIST_MONITORING_CONDITION_FLOW_ENABLED')) {
-    const monitoringTypesPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED
-    const typesSelected = []
-    if (order.monitoringConditionsAlcohol?.startDate !== undefined) {
-      typesSelected.push('Alcohol monitoring')
-    }
-    if (order.monitoringConditionsTrail?.startDate !== undefined) {
-      typesSelected.push('Trail monitoring')
-    }
-    if (order.curfewConditions?.startDate !== undefined) {
-      typesSelected.push('Curfew')
-    }
-    if (order.enforcementZoneConditions.length !== 0) {
-      typesSelected.push('Exclusion zone monitoring')
-    }
-    if (order.mandatoryAttendanceConditions.length !== 0) {
-      typesSelected.push('Mandatory attendance monitoring')
-    }
-    answers.push(
-      createMultipleChoiceAnswer(
-        content.pages.monitoringConditions.questions.monitoringRequired.text,
-        typesSelected,
-        monitoringTypesPath.replace(':orderId', order.id),
-        answerOpts,
-      ),
-    )
-  } else {
-    const monitoringTypes = [
-      { name: 'Curfew', data: data.curfew },
-      { name: 'Exclusion zone monitoring', data: data.exclusionZone },
-      { name: 'Trail monitoring', data: data.trail },
-      { name: 'Mandatory attendance monitoring', data: data.mandatoryAttendance },
-      { name: 'Alcohol monitoring', data: data.alcohol },
-    ]
-    if (monitoringTypes.every(type => type.data !== undefined)) {
-      const monitoringTypesPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES
-      answers.push(
-        createMultipleChoiceAnswer(
-          content.pages.monitoringConditions.questions.monitoringRequired.text,
-          monitoringTypes.filter(type => type.data).map(type => type.name),
-          monitoringTypesPath.replace(':orderId', order.id),
-          answerOpts,
-        ),
-      )
-    }
+  const monitoringTypesPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED
+  const typesSelected = []
+  if (order.monitoringConditionsAlcohol?.startDate !== undefined) {
+    typesSelected.push('Alcohol monitoring')
   }
+  if (order.monitoringConditionsTrail?.startDate !== undefined) {
+    typesSelected.push('Trail monitoring')
+  }
+  if (order.curfewConditions?.startDate !== undefined) {
+    typesSelected.push('Curfew')
+  }
+  if (order.enforcementZoneConditions.length !== 0) {
+    typesSelected.push('Exclusion zone monitoring')
+  }
+  if (order.mandatoryAttendanceConditions.length !== 0) {
+    typesSelected.push('Mandatory attendance monitoring')
+  }
+  answers.push(
+    createMultipleChoiceAnswer(
+      content.pages.monitoringConditions.questions.monitoringRequired.text,
+      typesSelected,
+      monitoringTypesPath.replace(':orderId', order.id),
+      answerOpts,
+    ),
+  )
 
   return answers
 }
 
 const createInstallationAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
-  if (!order.installationLocation || order.installationLocation.location === 'PRIMARY') {
+  if (
+    !order.installationLocation ||
+    order.installationLocation.location === 'PRIMARY' ||
+    order.installationLocation.location === 'INSTALLATION_ALREADY_TAKEN_PLACE'
+  ) {
     return []
   }
   const uri = getInstallationAddressLink(order)
@@ -349,9 +332,7 @@ const createCurfewAnswers = (order: Order, content: I18n, answerOpts: AnswerOpti
 }
 
 const createExclusionZoneAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
-  const uri = FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')
-    ? paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':orderId', order.id)
-    : paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', order.id)
+  const uri = paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':orderId', order.id)
   const { questions } = content.pages.exclusionZone
 
   if (order.enforcementZoneConditions.length === 0) {
@@ -503,16 +484,29 @@ const createInstallationAppointmentAnswer = (order: Order, content: I18n, answer
     return []
   }
 
+  const showAppointmentTimeDetails = location === 'PRIMARY' || location === 'INSTALLATION'
+
   const appointmentTimeText =
-    isHomeOffice && (location === 'PRIMARY' || location === 'INSTALLATION')
+    isHomeOffice && showAppointmentTimeDetails
       ? questions.preferredAppointmentTime.text
       : questions.appointmentTime.text
 
-  return [
+  const answers = [
     createAnswer(questions.placeName.text, order.installationAppointment?.placeName, uri, answerOpts),
     createDateAnswer(questions.appointmentDate.text, order.installationAppointment?.appointmentDate, uri, answerOpts),
     createTimeAnswer(appointmentTimeText, order.installationAppointment?.appointmentDate, uri, answerOpts),
   ]
+  if (showAppointmentTimeDetails) {
+    answers.push(
+      createAnswer(
+        questions.appointmentTimeDetails.text,
+        order.installationAppointment.appointmentTimeDetails,
+        uri,
+        answerOpts,
+      ),
+    )
+  }
+  return answers
 }
 
 const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean) => {

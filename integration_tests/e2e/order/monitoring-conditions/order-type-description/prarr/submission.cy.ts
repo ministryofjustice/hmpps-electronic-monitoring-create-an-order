@@ -110,8 +110,6 @@ context('order type', () => {
   })
 
   it('Should redirect to list monitoring page when no monitoring condition is available', () => {
-    const testFlags = { LIST_MONITORING_CONDITION_FLOW_ENABLED: true }
-    cy.task('setFeatureFlags', testFlags)
     stubGetOrder({
       monitoringConditions: createMonitoringConditions({ alcohol: true, hdc: 'NO', pilot: 'UNKNOWN' }),
       monitoringConditionsAlcohol: {
@@ -134,8 +132,6 @@ context('order type', () => {
   })
 
   it('Should redirect to list monitoring page when trail monitoring already exist', () => {
-    const testFlags = { LIST_MONITORING_CONDITION_FLOW_ENABLED: true }
-    cy.task('setFeatureFlags', testFlags)
     stubGetOrder({
       monitoringConditions: createMonitoringConditions({ trail: true, hdc: 'YES', pilot: 'UNKNOWN' }),
       monitoringConditionsTrail: {

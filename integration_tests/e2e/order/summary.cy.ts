@@ -136,7 +136,7 @@ context('Order Summary', () => {
       page.checkIsAccessible()
     })
 
-    it('Should not show contact information section if INTERESTED_PARTIES_FLOW_ENABLED flag is true', () => {
+    it('Should not show contact information section', () => {
       Page.visit(OrderTasksPage, { orderId: mockOrderId })
       cy.get('.govuk-task-list__item')
         .contains('.govuk-task-list__name-and-hint', 'Contact information')
@@ -2827,9 +2827,6 @@ context('Order Summary', () => {
     })
 
     it('Home office notifying org, we dont see responsible org section', () => {
-      const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true }
-      cy.task('setFeatureFlags', testFlags)
-
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
       cy.get('.govuk-task-list__item')

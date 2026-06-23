@@ -41,9 +41,13 @@ services:
 
       - HMPPS_S3_BUCKETNAME=test_bucket
       - MANAGE_USER_URL=http://cemo-wiremock:8080/manage-user
+      - SPRING_JPA_PROPERTIES_HIBERNATE_enable_lazy_load_no_trans=true
+      # - SPRING_JPA_HIBERNATE_DDL_AUTO=create
+      - SPRING_FLYWAY_ENABLED=true
+
   cemo-db:
     container_name: cemo-db
-    image: postgres:18
+    image: postgres:latest
     restart: always
     networks:
       - hmpps_integration

@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
+import { faker } from '@faker-js/faker'
 import Page from '../../../pages/page'
 import InstallationAppointmentPage from '../../../pages/order/monitoring-conditions/installation-appointment'
 
@@ -127,6 +128,115 @@ context('Monitoring conditions', () => {
           page.errorSummary.shouldExist()
           page.errorSummary.shouldHaveError('Time of installation must include a minute')
         })
+      })
+    })
+    context('Appointment time details validations', () => {
+      const mockDefaultOrder = {
+        deviceWearer: {
+          nomisId: 'nomis',
+          pncId: 'pnc',
+          deliusId: 'delius',
+          prisonNumber: 'prison',
+          homeOfficeReferenceNumber: '',
+          complianceAndEnforcementPersonReference: 'cepr',
+          courtCaseReferenceNumber: 'ccrn',
+          firstName: 'test',
+          lastName: 'tester',
+          alias: 'tes',
+          dateOfBirth: '2000-01-01T00:00:00Z',
+          adultAtTimeOfInstallation: true,
+          sex: 'MALE',
+          gender: 'MALE',
+          disabilities: 'MENTAL_HEALTH',
+          otherDisability: null,
+          noFixedAbode: false,
+          interpreterRequired: false,
+        },
+        monitoringConditions: {
+          startDate: '2025-01-01T00:00:00Z',
+          endDate: '2025-02-01T00:00:00Z',
+          orderType: 'CIVIL',
+          curfew: true,
+          exclusionZone: true,
+          trail: true,
+          mandatoryAttendance: true,
+          alcohol: true,
+          conditionType: 'BAIL_ORDER',
+          orderTypeDescription: 'DAPO',
+          sentenceType: 'IPP',
+          issp: 'YES',
+          hdc: 'NO',
+          prarr: 'UNKNOWN',
+          pilot: '',
+          offenceType: '',
+        },
+      }
+      beforeEach(() => {
+        cy.task('reset')
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: {
+            ...mockDefaultOrder,
+            interestedParties: {
+              notifyingOrganisation: 'HOME_OFFICE',
+              notifyingOrganisationName: '',
+              notifyingOrganisationEmail: 'notifying@organisation',
+              responsibleOrganisation: 'HOME_OFFICE',
+              responsibleOfficerPhoneNumber: '',
+              responsibleOrganisationEmail: 'responsible@organisation',
+              responsibleOrganisationRegion: '',
+              responsibleOfficerName: 'name',
+            },
+            installationLocation: {
+              location: 'INSTALLATION',
+            },
+          },
+        })
+
+        cy.signIn()
+      })
+
+      it('Should display validation error for appointment time details if blank', () => {
+        const page = Page.visit(InstallationAppointmentPage, {
+          orderId: mockOrderId,
+          'addressType(installation)': 'installation',
+        })
+
+        page.form.saveAndContinueButton.click()
+        Page.verifyOnPage(InstallationAppointmentPage)
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(
+          'Enter if installation can’t take place at the preferred time when it can take place',
+        )
+        page.form.appointmentTimeDetailsField.shouldHaveValidationMessage(
+          'Enter if installation can’t take place at the preferred time when it can take place',
+        )
+      })
+
+      it('Should display validation error for appointment time details is over 500 characters', () => {
+        const page = Page.visit(InstallationAppointmentPage, {
+          orderId: mockOrderId,
+          'addressType(installation)': 'installation',
+        })
+        page.form.fillInWith({
+          appointmentTimeDetails: faker.string.fromCharacters(
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
+            501,
+          ),
+        })
+        page.form.saveAndContinueButton.click()
+        Page.verifyOnPage(InstallationAppointmentPage)
+        page.errorSummary.shouldExist()
+        page.errorSummary.shouldHaveError(
+          'If installation can’t take place at the preferred time when it can take place must be 500 characters or less',
+        )
+        page.form.appointmentTimeDetailsField.shouldHaveValidationMessage(
+          'If installation can’t take place at the preferred time when it can take place must be 500 characters or less',
+        )
       })
     })
   })

@@ -18,7 +18,7 @@ export default class OffenceController {
   ]
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { offenceId } = req.params
+    const offenceId = req.params.offenceId as string
     const order = req.order!
     const formData = req.flash('formData') as unknown as OffenceInput[]
     const errors = req.flash('validationErrors') as unknown as ValidationResult
@@ -50,7 +50,7 @@ export default class OffenceController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const { offenceId } = req.params
+    const offenceId = req.params.offenceId as string
     req.body.id = offenceId
     const formData = OffenceFormModel.parse(req.body)
     if (formData.offenceType === 'TERRORISM_OFFENCE') {

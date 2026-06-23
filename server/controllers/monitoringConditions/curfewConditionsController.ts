@@ -6,7 +6,6 @@ import CurfewConditionsService from '../../services/curfewConditionsService'
 import { CurfewConditionsFormDataModel } from '../../models/form-data/curfewConditions'
 import CurfewConditionsViewModel from '../../models/view-models/curfewConditions'
 import TaskListService from '../../services/taskListService'
-import FeatureFlags from '../../utils/featureFlags'
 
 export default class CurfewConditionsController {
   constructor(
@@ -24,7 +23,7 @@ export default class CurfewConditionsController {
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
+    const orderId = req.params.orderId as string
     const formData = CurfewConditionsFormDataModel.parse(req.body)
     const { interestedParties } = req.order!
 
@@ -44,11 +43,7 @@ export default class CurfewConditionsController {
     }
 
     if (formData.action === 'continue') {
-      if (FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')) {
-        res.redirect(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', orderId))
-        return
-      }
-      res.redirect(this.taskListService.getNextPage('CURFEW_CONDITIONS', req.order!))
+      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', orderId))
       return
     }
 

@@ -8,7 +8,7 @@ import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
 
 context('Postcode Lookup', () => {
   let orderSummaryPage: OrderSummaryPage
-  const testFlags = { INTERESTED_PARTIES_FLOW_ENABLED: true, POSTCODE_LOOKUP_ENABLED: true }
+  const testFlags = { POSTCODE_LOOKUP_ENABLED: true }
 
   const deviceWearerDetails = {
     ...createFakeAdultDeviceWearer(),

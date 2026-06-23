@@ -7,7 +7,6 @@ import TaskListService from '../../services/taskListService'
 import { EnforcementZoneFormDataModel } from '../../models/form-data/enforcementZone'
 import enforcementZoneViewModel from '../../models/view-models/enforcementZone'
 import { ValidationResult } from '../../models/Validation'
-import FeatureFlags from '../../utils/featureFlags'
 
 export default class EnforcementZoneController {
   constructor(
@@ -17,7 +16,8 @@ export default class EnforcementZoneController {
   ) {}
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId, zoneId } = req.params
+    const orderId = req.params.orderId as string
+    const zoneId = req.params.zoneId as string
     const file = req.file as Express.Multer.File
     const zoneIdInt = Number.parseInt(zoneId, 10)
     req.body.zoneId = zoneIdInt
@@ -73,12 +73,10 @@ export default class EnforcementZoneController {
               (zoneIdInt + 1).toString(),
             ),
           )
-        else if (FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')) {
+        else {
           res.redirect(
             paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', orderId),
           )
-        } else {
-          res.redirect(this.taskListService.getNextPage('ENFORCEMENT_ZONE_MONITORING', req.order!))
         }
       } else {
         res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
@@ -87,7 +85,7 @@ export default class EnforcementZoneController {
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { zoneId } = req.params
+    const zoneId = req.params.zoneId as string
     const order = req.order!
     const viewModel = enforcementZoneViewModel.construct(
       parseInt(zoneId, 10),

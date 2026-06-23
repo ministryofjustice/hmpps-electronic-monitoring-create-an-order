@@ -23,7 +23,7 @@ export default class ContactDetailsController {
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId } = req.params
+    const orderId = req.params.orderId as string
     const { action, ...formData } = ContactDetailsFormDataModel.parse(req.body)
 
     const result = await this.contactDetailsService.updateContactDetails({

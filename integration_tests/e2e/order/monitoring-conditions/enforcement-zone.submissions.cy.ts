@@ -2,9 +2,9 @@ import { v4 as uuidv4 } from 'uuid'
 
 import Page from '../../../pages/page'
 import EnforcementZonePage from '../../../pages/order/monitoring-conditions/enforcement-zone'
-import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions/attendance-monitoring'
 import OrderSummaryPage from '../../../pages/order/summary'
 import { EnforcementZoneFormData } from '../../../pages/components/forms/monitoring-conditions/enforcementZoneFormComponent'
+import TypesOfMonitoringNeededPage from './order-type-description/types-of-monitoring-needed/TypesOfMonitoringNeededPage'
 
 const mockOrderId = uuidv4()
 const apiPath = '/enforcementZone'
@@ -58,8 +58,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
 
           startDate: '2024-10-10',
           endDate: '2024-10-11',
-          description: 'A test description: Lorum ipsum dolar sit amet...',
-          duration: 'A test duration: Lorum ipsum dolar sit amet...',
+          description: 'A test description: Lorem ipsum dolor sit amet...',
+          duration: 'A test duration: Lorem ipsum dolor sit amet...',
           anotherZone: 'No',
         },
       })
@@ -74,8 +74,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
         zoneType,
         startDate: new Date('2024-12-10T00:00:00.000Z'),
         endDate: new Date('2024-12-11T00:00:00.000Z'),
-        description: 'A test description: Lorum ipsum dolar sit amet...',
-        duration: 'A test duration: Lorum ipsum dolar sit amet...',
+        description: 'A test description: Lorem ipsum dolor sit amet...',
+        duration: 'A test duration: Lorem ipsum dolor sit amet...',
         anotherZone: 'No',
       }
 
@@ -90,29 +90,29 @@ context('Monitoring conditions - Enforcement Zone', () => {
 
           startDate: '2024-12-10T00:00:00.000Z',
           endDate: '2024-12-11T23:59:00.000Z',
-          description: 'A test description: Lorum ipsum dolar sit amet...',
-          duration: 'A test duration: Lorum ipsum dolar sit amet...',
+          description: 'A test description: Lorem ipsum dolor sit amet...',
+          duration: 'A test duration: Lorem ipsum dolor sit amet...',
           anotherZone: 'false',
         },
       }).should('be.true')
     })
 
-    it('should continue to collect attendance monitoring data', () => {
+    it('should continue to types of monitoring needed page', () => {
       const page = Page.visit(EnforcementZonePage, { orderId: mockOrderId, zoneId: 1 })
 
       const validFormData = {
         zoneType,
         startDate: new Date('2024-12-10T00:00:00.000Z'),
         endDate: new Date('2024-12-11T00:00:00.000Z'),
-        description: 'A test description: Lorum ipsum dolar sit amet...',
-        duration: 'A test duration: Lorum ipsum dolar sit amet...',
+        description: 'A test description: Lorem ipsum dolor sit amet...',
+        duration: 'A test duration: Lorem ipsum dolor sit amet...',
         anotherZone: 'No',
       }
 
       page.form.fillInWith(validFormData)
       page.form.saveAndContinueButton.click()
 
-      Page.verifyOnPage(AttendanceMonitoringPage)
+      Page.verifyOnPage(TypesOfMonitoringNeededPage)
     })
 
     it('should return to the summary page', () => {
@@ -122,8 +122,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
         zoneType,
         startDate: new Date('2024-12-10T00:00:00.000Z'),
         endDate: new Date('2024-12-11T00:00:00.000Z'),
-        description: 'A test description: Lorum ipsum dolar sit amet...',
-        duration: 'A test duration: Lorum ipsum dolar sit amet...',
+        description: 'A test description: Lorem ipsum dolor sit amet...',
+        duration: 'A test duration: Lorem ipsum dolor sit amet...',
         anotherZone: 'No',
       }
 
@@ -181,8 +181,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
           zoneId,
           startDate: '2024-10-10',
           endDate: '2024-10-11',
-          description: 'A test description: Lorum ipsum dolar sit amet...',
-          duration: 'A test duration: Lorum ipsum dolar sit amet...',
+          description: 'A test description: Lorem ipsum dolor sit amet...',
+          duration: 'A test duration: Lorem ipsum dolor sit amet...',
         },
       })
       cy.task('stubCemoSubmitOrder', {
@@ -203,8 +203,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
         zoneType,
         startDate: new Date('2024-12-10T00:00:00.000Z'),
         endDate: new Date('2024-12-11T00:00:00.000Z'),
-        description: 'A test description: Lorum ipsum dolar sit amet...',
-        duration: 'A test duration: Lorum ipsum dolar sit amet...',
+        description: 'A test description: Lorem ipsum dolor sit amet...',
+        duration: 'A test duration: Lorem ipsum dolor sit amet...',
         uploadFile: {
           fileName: 'test-image.png',
           rawContent: fileContents,
@@ -234,8 +234,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
       const validFormData: EnforcementZoneFormData = {
         startDate: new Date('2024-12-10T00:00:00.000Z'),
         endDate: new Date('2024-12-11T00:00:00.000Z'),
-        description: 'A test description: Lorum ipsum dolar sit amet...',
-        duration: 'A test duration: Lorum ipsum dolar sit amet...',
+        description: 'A test description: Lorem ipsum dolor sit amet...',
+        duration: 'A test duration: Lorem ipsum dolor sit amet...',
         uploadFile: {
           fileName: 'test-image.png',
           rawContent: fileContents,
@@ -246,7 +246,7 @@ context('Monitoring conditions - Enforcement Zone', () => {
       page.form.fillInWith(validFormData)
       page.form.saveAndContinueButton.click()
 
-      Page.verifyOnPage(AttendanceMonitoringPage, { orderId: mockOrderId, zoneId: 2 })
+      Page.verifyOnPage(TypesOfMonitoringNeededPage, { orderId: mockOrderId, zoneId: 2 })
     })
 
     it('should return to the summary page', () => {
@@ -256,8 +256,8 @@ context('Monitoring conditions - Enforcement Zone', () => {
         zoneType,
         startDate: new Date('2024-12-10T00:00:00.000Z'),
         endDate: new Date('2024-12-11T00:00:00.000Z'),
-        description: 'A test description: Lorum ipsum dolar sit amet...',
-        duration: 'A test duration: Lorum ipsum dolar sit amet...',
+        description: 'A test description: Lorem ipsum dolor sit amet...',
+        duration: 'A test duration: Lorem ipsum dolor sit amet...',
         uploadFile: {
           fileName: 'test-image.png',
           rawContent: fileContents,

@@ -8,7 +8,7 @@ export default class IndexPage extends AppPage {
   }
 
   get newOrderFormButton(): PageElement {
-    return cy.contains('Start new form')
+    return cy.contains<HTMLElement>('Start new form')
   }
 
   get ordersList(): PageElement {
@@ -28,7 +28,7 @@ export default class IndexPage extends AppPage {
   }
 
   OrderFor(name: string): PageElement {
-    return this.ordersList.contains('td', name)
+    return this.ordersList.contains<HTMLElement>('td', name)
   }
 
   TableContains(name: string, status: string): PageElement {

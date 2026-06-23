@@ -4,6 +4,7 @@ import { Page } from '../services/auditService'
 import { AuditService, OrderSearchService } from '../services'
 import config from '../config'
 import { constructSearchViewModel, constructListViewModel, OrderSearchViewModel } from '../models/form-data/search'
+import logger from '../../logger'
 
 const SearchOrderFormDataParser = z.object({
   searchTerm: z.string().nullable().optional(),
@@ -26,6 +27,7 @@ export default class OrderSearchController {
 
       res.render('pages/index', constructListViewModel(orders))
     } catch (e) {
+      logger.warn(`List orders ${e} `)
       res.render('pages/index', constructListViewModel([]))
     }
   }
