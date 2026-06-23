@@ -38,9 +38,6 @@ context('Monitoring type list flow', () => {
     riskCategory: 'Children under the age of 18 are living at the property',
     riskDetails: 'No risk',
   }
-  const testFlags = {
-    LIST_MONITORING_CONDITION_FLOW_ENABLED: true,
-  }
 
   let orderSummaryPage: OrderSummaryPage
 
@@ -115,7 +112,6 @@ context('Monitoring type list flow', () => {
     address: createKnownAddress(),
   }
   beforeEach(() => {
-    cy.task('setFeatureFlags', testFlags)
     cy.task('resetDB')
     cy.task('reset')
 

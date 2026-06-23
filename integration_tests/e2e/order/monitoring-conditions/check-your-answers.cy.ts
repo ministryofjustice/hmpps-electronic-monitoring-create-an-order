@@ -227,6 +227,30 @@ context('Check your answers', () => {
       page.installationAddressSection().shouldExist()
     })
 
+    it('shows installation location - INSTALLATION_ALREADY_TAKEN_PLACE', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          ...mockOrder,
+          installationLocation: {
+            location: 'INSTALLATION_ALREADY_TAKEN_PLACE',
+          },
+        },
+      })
+
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
+      page.installationLocationSection().shouldExist()
+      page.installationLocationSection().shouldHaveItems([
+        {
+          key: 'Where will installation of the electronic monitoring device take place?',
+          value: 'Installation has already taken place',
+        },
+      ])
+      page.installationAddressSection().shouldNotExist()
+    })
+
     it('shows installation appointment', () => {
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
@@ -244,6 +268,7 @@ context('Check your answers', () => {
           installationAppointment: {
             placeName: 'Mock Place',
             appointmentDate: '2025-02-01T10:30:00Z',
+            appointmentTimeDetails: 'Mock Details',
           },
         },
       })
@@ -262,6 +287,10 @@ context('Check your answers', () => {
         {
           key: 'What time will installation take place?',
           value: '10:30',
+        },
+        {
+          key: "If the installation can't be done at the preferred time when can it take place?",
+          value: 'Mock Details',
         },
       ])
       page.installationAddressSection().shouldExist()

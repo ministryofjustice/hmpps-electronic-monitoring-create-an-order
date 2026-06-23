@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
+import { faker } from '@faker-js/faker'
 import Page from '../../../pages/page'
 import InstallationAppointmentPage from '../../../pages/order/monitoring-conditions/installation-appointment'
 import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
@@ -33,6 +34,7 @@ context('Monitoring conditions', () => {
           response: {
             placeName: 'mock place',
             appointmentDate: '2025-01-01T10:00:00Z',
+            appointmentTimeDetails: '',
           },
         })
         cy.signIn()
@@ -47,6 +49,7 @@ context('Monitoring conditions', () => {
           body: {
             placeName: validFormData.placeName,
             appointmentDate: '2025-01-01T10:00:00.000Z',
+            appointmentTimeDetails: '',
           },
         }).should('be.true')
         Page.verifyOnPage(InstallationAddressPage)
@@ -59,15 +62,40 @@ context('Monitoring conditions', () => {
             id: mockOrderId,
             status: 'IN_PROGRESS',
             order: {
+              interestedParties: {
+                notifyingOrganisation: 'HOME_OFFICE',
+                notifyingOrganisationName: '',
+                notifyingOrganisationEmail: 'notifying@organisation',
+                responsibleOrganisation: 'HOME_OFFICE',
+                responsibleOfficerPhoneNumber: '',
+                responsibleOrganisationEmail: 'responsible@organisation',
+                responsibleOrganisationRegion: '',
+                responsibleOfficerName: 'name',
+              },
               installationLocation: {
                 location: 'PRIMARY',
               },
             },
           })
           const page = Page.visit(InstallationAppointmentPage, { orderId: mockOrderId })
-          page.form.fillInWith(validFormData)
+          const appointmentTimeDetails = faker.string.fromCharacters(
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
+            10,
+          )
+          page.form.fillInWith({
+            appointmentTimeDetails,
+            ...validFormData,
+          })
           page.form.saveAndContinueButton.click()
 
+          cy.task('stubCemoVerifyRequestReceived', {
+            uri: `/orders/${mockOrderId}${apiPath}`,
+            body: {
+              placeName: validFormData.placeName,
+              appointmentDate: '2025-01-01T10:00:00.000Z',
+              appointmentTimeDetails,
+            },
+          }).should('be.true')
           Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers')
         })
       })

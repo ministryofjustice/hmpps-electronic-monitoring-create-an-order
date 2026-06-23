@@ -229,7 +229,7 @@ describe('CurfewReleaseDateController', () => {
       )
     })
 
-    it('Should redirect to curfew condition page', async () => {
+    it('Should redirect to curfew additional details page', async () => {
       req.order = getMockOrder({
         id: mockId,
         monitoringConditions: createMonitoringConditions({ curfew: true }),
@@ -248,7 +248,7 @@ describe('CurfewReleaseDateController', () => {
         .mockReturnValue(`/order/${mockId}/monitoring-conditions/curfew/conditions`)
       await controller.update(req, res, next)
 
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/curfew/conditions`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/curfew/additional-details`)
     })
 
     it('Should redirect back to summary page', async () => {

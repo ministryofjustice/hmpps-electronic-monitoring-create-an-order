@@ -32,7 +32,7 @@ describe('task list service', () => {
 
     mockCheckListService.getChecklist.mockResolvedValue(OrderChecklistModel.parse({}))
 
-    const mockGet = jest.fn((flag: string) => flag === 'INTERESTED_PARTIES_FLOW_ENABLED')
+    const mockGet = jest.fn(() => true)
     const mockGetValue = jest.fn(() => '')
     jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
       get: mockGet,

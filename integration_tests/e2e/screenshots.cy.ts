@@ -88,7 +88,7 @@ context('Screenshots', () => {
     cy.visit(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR.replace(':orderId', mockOrderId))
     cy.screenshot('PrarrPage', { overwrite: true })
 
-    cy.visit(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPES.replace(':orderId', mockOrderId))
+    cy.visit(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE.replace(':orderId', mockOrderId))
     cy.screenshot('MonitoringTypesPage', { overwrite: true })
 
     cy.visit(paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', mockOrderId))

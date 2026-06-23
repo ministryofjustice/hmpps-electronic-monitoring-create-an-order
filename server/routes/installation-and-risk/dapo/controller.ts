@@ -12,7 +12,7 @@ export default class DapoController {
     const order = req.order!
     const formData = req.flash('formData') as unknown as DapoInput[]
     const errors = req.flash('validationErrors') as unknown as ValidationResult
-    const { clauseId } = req.params
+    const clauseId = req.params.clauseId as string
 
     res.render(
       'pages/order/installation-and-risk/offence/dapo',

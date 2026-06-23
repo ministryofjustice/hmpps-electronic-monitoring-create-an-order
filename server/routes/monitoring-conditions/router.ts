@@ -7,7 +7,6 @@ import HdcController from './hdc/controller'
 import PilotController from './pilot/controller'
 import IsspController from './issp/controller'
 import PrarrController from './prarr/controller'
-import MonitoringTypesController from './monitoring-types/controller'
 import MonitoringTypeController from './monitoring-type/controller'
 import OffenceTypeController from './offence-type/controller'
 import PoliceAreaController from './police-area/controller'
@@ -49,11 +48,6 @@ const createOrderTypeDescriptionRouter = (
 
   const prarrController = new PrarrController(monitoringConditionsStoreService, monitoringConditionsUpdateService)
 
-  const monitoringTypesController = new MonitoringTypesController(
-    monitoringConditionsStoreService,
-    monitoringConditionsUpdateService,
-    taskListService,
-  )
   const monitoringTypeController = new MonitoringTypeController(taskListService)
 
   const policeAreaController = new PoliceAreaController(monitoringConditionsStoreService)
@@ -91,9 +85,6 @@ const createOrderTypeDescriptionRouter = (
   router.post('/police-area', asyncMiddleware(policeAreaController.update))
 
   router.get('/hard-stop', asyncMiddleware(hardStopController.view))
-
-  router.get('/monitoring-types', asyncMiddleware(monitoringTypesController.view))
-  router.post('/monitoring-types', asyncMiddleware(monitoringTypesController.update))
 
   router.get('/monitoring-type', asyncMiddleware(monitoringTypeController.view))
   router.post('/monitoring-type', asyncMiddleware(monitoringTypeController.update))

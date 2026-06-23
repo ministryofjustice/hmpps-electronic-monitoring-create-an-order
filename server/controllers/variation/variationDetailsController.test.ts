@@ -77,9 +77,6 @@ describe('VariationDetailsController', () => {
             hours: '',
           },
         },
-        variationType: {
-          value: '',
-        },
         variationDetails: {
           value: '',
         },
@@ -95,7 +92,6 @@ describe('VariationDetailsController', () => {
         order: getMockOrder({
           type: 'VARIATION',
           variationDetails: {
-            variationType: 'CURFEW_HOURS',
             variationDate: '2024-01-01T00:00:00.000Z',
             variationDetails: 'Change to curfew hours',
           },
@@ -110,9 +106,6 @@ describe('VariationDetailsController', () => {
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/variation/variation-details', {
-        variationType: {
-          value: 'CURFEW_HOURS',
-        },
         variationDate: {
           value: {
             year: '2024',
@@ -142,13 +135,11 @@ describe('VariationDetailsController', () => {
         flash: jest
           .fn()
           .mockReturnValueOnce([
-            { error: 'Select what you have changed', field: 'variationType' },
             { error: 'Enter the date you want the changes to take effect', field: 'variationDate' },
             { error: 'Enter details of all the changes you have made', field: 'variationDetails' },
           ])
           .mockReturnValueOnce([
             {
-              variationType: '',
               variationDate: {
                 year: '',
                 month: '',
@@ -166,12 +157,6 @@ describe('VariationDetailsController', () => {
 
       // Then
       expect(res.render).toHaveBeenCalledWith('pages/order/variation/variation-details', {
-        variationType: {
-          value: '',
-          error: {
-            text: 'Select what you have changed',
-          },
-        },
         variationDate: {
           value: {
             year: '',
@@ -195,7 +180,6 @@ describe('VariationDetailsController', () => {
         errorSummary: {
           titleText: 'There is a problem',
           errorList: [
-            { href: '#variationType', text: 'Select what you have changed' },
             { href: '#variationDate', text: 'Enter the date you want the changes to take effect' },
             { href: '#variationDetails', text: 'Enter details of all the changes you have made' },
           ],
@@ -212,7 +196,6 @@ describe('VariationDetailsController', () => {
         order,
         body: {
           action: 'continue',
-          variationType: 'CURFEW_HOURS',
           variationDate: {
             year: '2024',
             month: '01',
@@ -229,7 +212,6 @@ describe('VariationDetailsController', () => {
       const res = createMockResponse()
       const next = jest.fn()
       restClient.put.mockResolvedValue({
-        variationType: 'CURFEW_HOURS',
         variationDate: '2024-01-01T00:00:00.000Z',
         variationDetails: 'Change to curfew hours',
       })
@@ -244,7 +226,6 @@ describe('VariationDetailsController', () => {
       expect(restClient.put).toHaveBeenCalledWith({
         path: `/api/orders/${order.id}/variation`,
         data: {
-          variationType: 'CURFEW_HOURS',
           variationDate: '2024-01-01T00:00:00.000Z',
           variationDetails: 'Change to curfew hours',
         },
@@ -259,7 +240,6 @@ describe('VariationDetailsController', () => {
         order,
         body: {
           action: 'continue',
-          variationType: 'CURFEW_HOURS',
           variationDate: {
             year: '2024',
             month: '01',
@@ -276,7 +256,6 @@ describe('VariationDetailsController', () => {
       const res = createMockResponse()
       const next = jest.fn()
       restClient.put.mockResolvedValue({
-        variationType: 'CURFEW_HOURS',
         variationDate: '2024-01-01T00:00:00.000Z',
         variationDetails: 'Change to curfew hours',
       })
@@ -298,7 +277,6 @@ describe('VariationDetailsController', () => {
         order,
         body: {
           action: 'continue',
-          variationType: '',
           variationDate: {
             year: '',
             month: '',
@@ -320,7 +298,6 @@ describe('VariationDetailsController', () => {
       // Then
       expect(req.flash).toHaveBeenCalledTimes(2)
       expect(req.flash).toHaveBeenNthCalledWith(1, 'formData', {
-        variationType: '',
         variationDate: {
           year: '',
           month: '',
@@ -335,7 +312,6 @@ describe('VariationDetailsController', () => {
           field: 'variationDate',
           focusTarget: 'variationDate-day',
         },
-        { error: 'Select what you have changed', field: 'variationType' },
         { error: 'Select Yes if there is any other information to be aware of', field: 'variationDetailsAvailable' },
       ])
       expect(taskListService.getNextPage).not.toHaveBeenCalled()

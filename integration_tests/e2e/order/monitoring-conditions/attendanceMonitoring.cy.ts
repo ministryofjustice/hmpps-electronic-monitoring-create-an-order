@@ -1,9 +1,10 @@
 import { v4 as uuidv4 } from 'uuid'
-import { mockApiOrder } from '../../../mockApis/cemo'
+
 import ErrorPage from '../../../pages/error'
 import AlcoholMonitoringPage from '../../../pages/order/monitoring-conditions/alcohol-monitoring'
 import AttendanceMonitoringPage from '../../../pages/order/monitoring-conditions/attendance-monitoring'
 import Page from '../../../pages/page'
+import mockApiOrder from '../../../utils/data/ApiOrder'
 
 const mockOrderId = uuidv4()
 const mockConditionId = uuidv4()

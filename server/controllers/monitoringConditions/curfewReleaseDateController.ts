@@ -6,7 +6,6 @@ import CurfewReleaseDateService from '../../services/curfewReleaseDateService'
 import CurfewReleaseDateFormDataModel from '../../models/form-data/curfewReleaseDate'
 import curfewReleaseDateViewModel from '../../models/view-models/curfewReleaseDate'
 import TaskListService from '../../services/taskListService'
-import FeatureFlags from '../../utils/featureFlags'
 
 export default class CurfewReleaseDateController {
   constructor(
@@ -43,12 +42,7 @@ export default class CurfewReleaseDateController {
     }
 
     if (formData.action === 'continue') {
-      if (FeatureFlags.getInstance().get('LIST_MONITORING_CONDITION_FLOW_ENABLED')) {
-        res.redirect(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', order.id))
-        return
-      }
-
-      res.redirect(this.taskListService.getNextPage('CURFEW_RELEASE_DATE', req.order!))
+      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', order.id))
       return
     }
 

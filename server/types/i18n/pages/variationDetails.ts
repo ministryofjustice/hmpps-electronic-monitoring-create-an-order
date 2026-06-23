@@ -1,7 +1,7 @@
 import QuestionPageContent from './questionPage'
 
 type VariationDetailsPageContent = QuestionPageContent<
-  'variationDate' | 'variationType' | 'variationDetails' | 'variationDetailsAvailable'
+  'variationDate' | 'variationDetails' | 'variationDetailsAvailable'
 >
 
 export default VariationDetailsPageContent

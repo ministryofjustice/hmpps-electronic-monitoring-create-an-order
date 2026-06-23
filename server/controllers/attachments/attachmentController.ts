@@ -17,7 +17,8 @@ export default class AttachmentsController {
   ) {}
 
   uploadFile: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId, fileType } = req.params
+    const orderId = req.params.orderId as string
+    const fileType = req.params.fileType as string
     const attachment = req.file as Express.Multer.File
 
     const error = await this.attachmentService.uploadAttachment({
@@ -57,7 +58,7 @@ export default class AttachmentsController {
   }
 
   uploadFileView: RequestHandler = async (req: Request, res: Response) => {
-    const { fileType } = req.params
+    const fileType = req.params.fileType as string
     const order = req.order!
 
     if (order.status === 'SUBMITTED') {
@@ -71,7 +72,9 @@ export default class AttachmentsController {
   }
 
   downloadFile: RequestHandler = async (req: Request, res: Response) => {
-    const { orderId, fileType, filename } = req.params
+    const orderId = req.params.orderId as string
+    const fileType = req.params.fileType as string
+    const filename = req.params.filename as string
     await this.attachmentService
       .downloadAttachment({ accessToken: res.locals.user.token, orderId, fileType: fileType.toUpperCase() })
       .then(data => {
@@ -86,7 +89,7 @@ export default class AttachmentsController {
   }
 
   confirmDeleteView: RequestHandler = async (req: Request, res: Response) => {
-    const { fileType } = req.params
+    const fileType = req.params.fileType as string
     const order = req.order!
 
     res.render('pages/order/attachments/delete-confirm', {
@@ -96,7 +99,7 @@ export default class AttachmentsController {
   }
 
   deleteFile: RequestHandler = async (req: Request, res: Response) => {
-    const { fileType } = req.params
+    const fileType = req.params.fileType as string
     const order = req.order!
     const { action } = req.body
 

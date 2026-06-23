@@ -29,6 +29,14 @@ export default class FormRadiosComponent {
     this.options.forEach(option => this.element.getByLabel(option).should('not.be.checked'))
   }
 
+  shouldHaveDivider(value: string | RegExp): void {
+    this.element.find('.govuk-radios__divider').should('exist').should('contain', value)
+  }
+
+  shouldNotHaveDivider(): void {
+    this.element.find('.govuk-radios__divider').should('not.exist')
+  }
+
   shouldHaveOption(value: string | RegExp): void {
     this.element.getByLabel(value).should('exist')
   }

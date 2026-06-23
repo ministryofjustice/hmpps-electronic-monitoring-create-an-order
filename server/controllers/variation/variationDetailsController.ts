@@ -28,7 +28,7 @@ export default class VariationDetailsController {
   }
 
   update: RequestHandler = async (req, res) => {
-    const { orderId } = req.params
+    const orderId = req.params.orderId as string
     const order = req.order!
     const { action, ...formData } = VariationDetailsFormDataParser.parse(req.body)
     formData.orderType = order.type

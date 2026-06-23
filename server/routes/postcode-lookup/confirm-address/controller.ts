@@ -49,7 +49,7 @@ export default class ConfirmAddressController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const addressType = req.params.addressType.toUpperCase()
+    const addressType = (req.params.addressType as string).toUpperCase()
 
     const { action } = req.body
 

@@ -23,7 +23,6 @@ context('Service-Request-Types', () => {
   let orderSummaryPage: OrderSummaryPage
   const testFlags = {
     SERVICE_REQUEST_TYPE_ENABLED: true,
-    INTERESTED_PARTIES_FLOW_ENABLED: true,
   }
   const currentDate = new Date()
   const deviceWearerDetails = {

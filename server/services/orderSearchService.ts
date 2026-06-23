@@ -9,7 +9,6 @@ export type OrderSearchInput = AuthenticatedRequestInput & {
 export default class OrderSearchService {
   constructor(private readonly apiClient: RestClient) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async listOrders(input: AuthenticatedRequestInput): Promise<OrderList> {
     const result = await this.apiClient.get({
       path: '/api/orders',
