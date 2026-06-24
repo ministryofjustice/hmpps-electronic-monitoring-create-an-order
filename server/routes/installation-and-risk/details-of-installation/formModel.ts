@@ -45,7 +45,6 @@ export const DetailsOfInstallationValidator = z
       return {
         riskCategory: [...possibleRisk, ...riskCategory],
         riskDetails: `Risk to gender: ${genderRiskDetails}\nAdditional risk details: ${riskDetails}`,
-        genderRiskDetails: undefined,
         ...formData,
       }
     }
