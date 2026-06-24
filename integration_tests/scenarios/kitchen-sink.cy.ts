@@ -134,8 +134,6 @@ context('The kitchen sink', () => {
     }
 
     it('Should successfully submit the order to the FMS API', () => {
-      cy.signIn()
-
       createNewOrder({ notifyingOrganisation: interestedParties })
 
       const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)

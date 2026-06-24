@@ -145,7 +145,6 @@ context('Order type descriptions', () => {
       name: 'Cemor Stubs',
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
-    cy.signIn()
 
     const interestedParties = createFakeInterestedParties('Prison', 'Home Office', 'Altcourse Prison', null)
     createNewOrder({
@@ -183,7 +182,6 @@ context('Order type descriptions', () => {
       name: 'Cemor Stubs',
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
-    cy.signIn()
 
     const interestedParties = createFakeInterestedParties('Prison', 'Home Office', null, null)
 
@@ -217,7 +215,6 @@ context('Order type descriptions', () => {
       name: 'Cemor Stubs',
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
-    cy.signIn()
 
     const interestedParties = createFakeInterestedParties('Youth Custody Service', 'Home Office', 'London', null)
 
@@ -251,7 +248,6 @@ context('Order type descriptions', () => {
       name: 'Cemor Stubs',
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
-    cy.signIn()
 
     const interestedParties = createFakeInterestedParties('Youth Custody Service', 'Home Office', 'London', null)
 
@@ -286,7 +282,6 @@ context('Order type descriptions', () => {
       name: 'Cemor Stubs',
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PROBATION'],
     })
-    cy.signIn()
 
     const interestedParties = createFakeInterestedParties(
       'Probation service',
@@ -384,7 +379,6 @@ context('Order type descriptions', () => {
       name: 'Cemor Stubs',
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'HOME_OFFICE'],
     })
-    cy.signIn()
 
     const interestedParties = createFakeInterestedParties('Home Office', 'Home Office', null, null)
 
@@ -438,7 +432,6 @@ context('Order type descriptions', () => {
       name: 'Cemor Stubs',
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'HOME_OFFICE'],
     })
-    cy.signIn()
 
     const interestedParties = createFakeInterestedParties(
       'Civil and County Court',

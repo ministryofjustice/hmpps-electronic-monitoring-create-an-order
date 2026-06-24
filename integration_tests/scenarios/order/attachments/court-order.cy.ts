@@ -38,8 +38,6 @@ context('Service-Request-Types', () => {
     })
 
     stubAttachments(files, fmsCaseId, hmppsDocumentId, true)
-
-    cy.signIn()
   })
 
   it('Notifying org is court, should able to upload court order and submit', () => {

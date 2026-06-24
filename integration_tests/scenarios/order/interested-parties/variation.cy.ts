@@ -48,7 +48,6 @@ context('Interested parties flow', () => {
     })
 
     stubAttachments(files, fmsCaseId, hmppsDocumentId, true)
-    cy.signIn()
   })
 
   afterEach(() => {
