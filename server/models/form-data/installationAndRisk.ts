@@ -3,7 +3,7 @@ import { validationErrors } from '../../constants/validationErrors'
 
 const InstallationAndRiskFormDataModel = z.object({
   action: z.string().default('continue'),
-  offence: z.string().nullable().default(null),
+  offence: z.array(z.string().nullable().default(null)),
   offenceAdditionalDetails: z.string().default(''),
   possibleRisk: z
     .union([z.string(), z.array(z.string()).default([])])
@@ -18,7 +18,7 @@ const InstallationAndRiskFormDataModel = z.object({
 
 const InstallationAndRiskFormDataValidator = z
   .object({
-    offence: z.string().min(1, validationErrors.installationAndRisk.offenceRequired),
+    offence: z.array(z.string().min(1, validationErrors.installationAndRisk.offenceRequired)),
     offenceAdditionalDetails: z.string().max(500, validationErrors.installationAndRisk.offenceAdditionalDetailsTooLong),
     possibleRisk: z.array(z.string()).min(1, validationErrors.installationAndRisk.possibleRiskRequired),
     riskCategory: z.array(z.string()),
@@ -26,7 +26,8 @@ const InstallationAndRiskFormDataValidator = z
     mappaLevel: z.string().nullable(),
     mappaCaseType: z.string().nullable(),
   })
-  .transform(({ riskCategory, possibleRisk, ...formData }) => ({
+  .transform(({ riskCategory, possibleRisk, offence, ...formData }) => ({
+    offence: [...offence],
     riskCategory: [...possibleRisk, ...riskCategory],
     possibleRisk: undefined,
     ...formData,

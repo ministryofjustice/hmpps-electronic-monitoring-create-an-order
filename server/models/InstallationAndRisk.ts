@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 const InstallationAndRiskModel = z.object({
-  offence: z.string().nullable(),
+  offence: z.array(z.string().nullable()).nullable(),
   offenceAdditionalDetails: z.string().nullable(),
   riskCategory: z.array(z.string()).nullable(),
   riskDetails: z.string().nullable(),
