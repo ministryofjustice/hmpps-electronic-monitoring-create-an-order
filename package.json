@@ -92,7 +92,7 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.1071.0",
+    "@aws-sdk/client-sqs": "^3.1072.0",
     "@ministryofjustice/frontend": "^5.2.1",
     "@secretlint/secretlint-rule-pattern": "^11.7.1",
     "@types/multer": "^2.1.0",
@@ -154,7 +154,7 @@
     "aws-sdk-client-mock": "^4.1.0",
     "axe-core": "^4.12.1",
     "chokidar": "^3.6.0",
-    "concurrently": "^9.2.1",
+    "concurrently": "^9.2.3",
     "cypress": "^15.17.0",
     "cypress-axe": "^1.7.0",
     "cypress-multi-reporters": "^2.0.5",
@@ -177,7 +177,7 @@
     "micromatch": "^4.0.8",
     "mocha-junit-reporter": "^2.2.1",
     "nock": "^13.5.6",
-    "pg": "^8.21.0",
+    "pg": "^8.22.0",
     "prettier": "^3.8.4",
     "prettier-plugin-jinja-template": "^2.2.0",
     "secretlint": "^11.7.1",
