@@ -1,5 +1,5 @@
 {% extends "../../../../partials/form-layout.njk" %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% set section = pageContent.section %}
@@ -12,14 +12,14 @@
       classes: "govuk-!-margin-bottom-9"
   }) }}
 
-  {{ govukRadios({
+  {{ govukCheckboxes({
       name: "addAnother",
-      classes: "govuk-radios--inline",
+      classes: "govuk-checkboxes--inline",
       fieldset: {
         legend: {
           text: pageContent.questions.addAnother.text,
           isPageHeading: false,
-          classes: "govuk-fieldset__legend--s"
+          classes: "govuk-checkboxes__legend--s"
         }
       },
       items: [

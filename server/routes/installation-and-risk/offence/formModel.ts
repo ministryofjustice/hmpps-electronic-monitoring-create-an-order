@@ -3,24 +3,36 @@ import { DateInputModel } from '../../../models/form-data/formData'
 import { validationErrors } from '../../../constants/validationErrors'
 
 const OffenceFormModel = z.object({
-  action: z.string(),
+  action: z.string().optional(),
   id: z.string().optional(),
-  offenceType: z.string().default(''),
-  offenceDate: z
-    .object({
-      day: z.string().default(''),
-      month: z.string().default(''),
-      year: z.string().default(''),
-    })
-    .nullable()
-    .optional(),
+  offences: z
+    .array(
+      z.object({
+        offenceType: z.string().default(''),
+        offenceDate: z
+          .object({
+            day: z.string().default(''),
+            month: z.string().default(''),
+            year: z.string().default(''),
+          })
+          .nullable()
+          .optional(),
+      }),
+    )
+    .nullable(),
 })
 
 export const OffenceFormValidator = (dateRequired: boolean | null) =>
   z.object({
     id: z.string().optional(),
-    offenceType: z.string().min(1, validationErrors.offence.offenceTypeRequired),
-    offenceDate: dateRequired ? DateInputModel(validationErrors.offence.offenceDate) : z.string().optional(),
+    offences: z
+      .array(
+        z.object({
+          offenceType: z.string().min(1, validationErrors.offence.offenceTypeRequired),
+          offenceDate: dateRequired ? DateInputModel(validationErrors.offence.offenceDate) : z.string().optional(),
+        }),
+      )
+      .nullable(),
   })
 
 export type OffenceInput = z.infer<typeof OffenceFormModel>

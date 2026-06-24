@@ -6,25 +6,34 @@ import { createGovukErrorSummary } from '../../../utils/errors'
 import { deserialiseDateTime, getError } from '../../../utils/utils'
 import { OffenceInput } from './formModel'
 
-type OffenceViewModel = ViewModel<Pick<OffenceInput, 'offenceType'>> & {
+type OffenceInputItem = NonNullable<OffenceInput['offences']>[number]
+
+export type OffenceItemViewModel = Omit<ViewModel<Pick<OffenceInputItem, 'offenceType'>>, 'errorSummary'> & {
   offenceDate: DateField
-  showDate: boolean
-  isHomeOffice: boolean
 }
 
-const contructFromOrder = (
+export type OffenceViewModel = {
+  offences: OffenceItemViewModel[]
+  showDate: boolean
+  isHomeOffice: boolean
+  errorSummary: ReturnType<typeof createGovukErrorSummary> | null
+}
+
+const constructFromOrder = (
   order: Order,
-  offence: Offence | undefined,
+  offences: Offence[],
   showDate: boolean,
   isHomeOffice: boolean,
 ): OffenceViewModel => {
   return {
-    offenceType: {
-      value: offence?.offenceType || '',
-    },
-    offenceDate: {
-      value: deserialiseDateTime(offence?.offenceDate),
-    },
+    offences: offences.map(offence => ({
+      offenceType: {
+        value: offence?.offenceType || '',
+      },
+      offenceDate: {
+        value: deserialiseDateTime(offence?.offenceDate),
+      },
+    })),
     showDate,
     isHomeOffice,
     errorSummary: null,
@@ -37,19 +46,23 @@ const constructFromFormData = (
   showDate: boolean,
   isHomeOffice: boolean,
 ): OffenceViewModel => {
+  const formOffences = formData?.offences || []
+
   return {
-    offenceType: {
-      value: formData?.offenceType || '',
-      error: getError(errors, 'offenceType'),
-    },
-    offenceDate: {
-      value: {
-        day: formData.offenceDate?.day || '',
-        month: formData.offenceDate?.month || '',
-        year: formData.offenceDate?.year || '',
+    offences: formOffences.map((offence, index) => ({
+      offenceType: {
+        value: offence?.offenceType || '',
+        error: getError(errors, `offences[${index}].offenceType`),
       },
-      error: getError(errors, 'offenceDate'),
-    },
+      offenceDate: {
+        value: {
+          day: offence?.offenceDate?.day || '',
+          month: offence?.offenceDate?.month || '',
+          year: offence?.offenceDate?.year || '',
+        },
+        error: getError(errors, `offences[${index}].offenceDate`),
+      },
+    })),
     showDate,
     isHomeOffice,
     errorSummary: createGovukErrorSummary(errors),
@@ -58,7 +71,7 @@ const constructFromFormData = (
 
 const construct = (
   order: Order,
-  offence: Offence | undefined,
+  offences: Offence[] | undefined,
   showDate: boolean,
   formData: OffenceInput | undefined,
   errors: ValidationResult,
@@ -68,7 +81,7 @@ const construct = (
   if (errors.length > 0 && formData !== undefined) {
     return constructFromFormData(formData, errors, showDate, isHomeOffice)
   }
-  return contructFromOrder(order, offence, showDate, isHomeOffice)
+  return constructFromOrder(order, offences || [], showDate, isHomeOffice)
 }
 
 export default { construct }
