@@ -15,6 +15,7 @@ export interface BaseUser {
   token: string
   cohort?: UserCohort
   cohortDisaplyName?: string
+  useTechnologyPortal?: boolean
 }
 
 /**

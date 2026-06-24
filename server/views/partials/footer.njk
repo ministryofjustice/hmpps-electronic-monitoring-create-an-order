@@ -6,8 +6,12 @@
         <h2 class="govuk-heading-m">Get help</h2>
 
          <p class="govuk-body-s govuk-!-margin-bottom-1">For further support use the <a class="govuk-link govuk-footer__link" target="_blank" href="https://ministryofjustice.github.io/hmpps-electronic-monitoring-create-an-order-docs/index.html#overview">Help guide (opens in new tab)</a></p>
-         
-         <p class="govuk-body-s govuk-!-margin-bottom-5">If you are unable to fix the issue or there is something wrong with this page, contact the EMO support team by <a class="govuk-footer__link" href="https://forms.office.com/e/czQvLP6DQq" target="_blank" >reporting the problem (opens in new tab)</a>.</p>
+         {% if user.useTechnologyPortal %}
+            {% set reportProblemLink = "https://mojprod.service-now.com/moj_sp" %}
+          {% else %}
+            {% set reportProblemLink = "https://forms.office.com/e/czQvLP6DQq" %}
+        {% endif %}
+         <p class="govuk-body-s govuk-!-margin-bottom-5">If you are unable to fix the issue or there is something wrong with this page, contact the EMO support team by <a class="govuk-footer__link" href={{reportProblemLink}} target="_blank" >reporting the problem (opens in new tab)</a>.</p>
 
           <h2 class="govuk-visually-hidden">Support links</h2>
           <ul class="govuk-footer__inline-list govuk-!-margin-bottom-5">
