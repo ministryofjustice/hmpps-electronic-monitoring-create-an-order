@@ -1478,7 +1478,7 @@ describe('TaskListService', () => {
           notifyingOrganisation: 'CROWN_COURT',
         }),
         installationAndRisk: createInstallationAndRisk({
-          offence: 'SEXUAL_OFFENCES',
+          offence: ['SEXUAL_OFFENCES'],
           offenceAdditionalDetails: 'mock offence additional details',
         }),
         offences: [],

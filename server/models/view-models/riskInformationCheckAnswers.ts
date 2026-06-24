@@ -71,7 +71,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
     answers.push(
       createAnswer(
         questions.offence.text,
-        lookup(content.reference.offences, order.installationAndRisk?.offence),
+        lookup(content.reference.offences, order.installationAndRisk?.offence![0]),
         uri,
         answerOpts,
       ),

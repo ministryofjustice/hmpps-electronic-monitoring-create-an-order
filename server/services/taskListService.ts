@@ -387,7 +387,7 @@ export default class TaskListService {
         name: PAGES.installationAndRisk,
         path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK,
         state: STATES.required,
-        completed: isNotNullOrUndefined(order.installationAndRisk),
+        completed: order.offences.length > 0 && isNotNullOrUndefined(order.installationAndRisk),
       })
     }
 
