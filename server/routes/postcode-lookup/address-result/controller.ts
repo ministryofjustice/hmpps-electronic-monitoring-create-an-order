@@ -2,10 +2,11 @@ import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
 import PostcodeService from '../postcodeService'
 import Model from './model'
-import { AddressType } from '../../../models/Address'
+import { AddressType, AddressWithUPRN } from '../../../models/Address'
 import I18n from '../../../types/i18n'
 import AddressService from '../../../services/addressService'
 import { ValidationResult } from '../../../models/Validation'
+import logger from '../../../../logger'
 
 export default class AddressResultController {
   constructor(
@@ -20,7 +21,17 @@ export default class AddressResultController {
     const buildingId = req.query.buildingId as string | undefined
     const errors = req.flash('validationErrors') as unknown as ValidationResult
 
-    const addresses = await this.postcodeService.lookupByPostcode(postcode, addressType, buildingId)
+    let addresses: AddressWithUPRN[]
+    try {
+      addresses = await this.postcodeService.lookupByPostcode(postcode, addressType, buildingId)
+    } catch (e) {
+      logger.error(e)
+      req.flash('isFailObtainAddress', 'true')
+      res.redirect(
+        paths.POSTCODE_LOOKUP.ENTER_ADDRESS.replace(':orderId', orderId).replace(':addressType', addressType),
+      )
+      return
+    }
 
     if (addresses.length === 0) {
       const model = Model.construct(addresses, res.locals.content as I18n, [], {

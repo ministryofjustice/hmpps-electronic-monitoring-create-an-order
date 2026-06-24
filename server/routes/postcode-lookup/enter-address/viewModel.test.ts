@@ -16,7 +16,7 @@ describe('view model', () => {
     const mockFormData = {} as AddressFormData
     const addresses = [] as Array<Address>
 
-    const model = ViewModel.construct('PRIMARY', addresses, mockFormData, content, mockErrors)
+    const model = ViewModel.construct('PRIMARY', addresses, mockFormData, content, mockErrors, false)
 
     it('sets error text if address line 1 error', () => {
       expect(model.addressLine1.error?.text).toBe(validationErrors.address.addressLine1Required)
@@ -49,7 +49,7 @@ describe('view model', () => {
       },
     ]
 
-    const model = ViewModel.construct('PRIMARY', addresses, {} as AddressFormData, content, [])
+    const model = ViewModel.construct('PRIMARY', addresses, {} as AddressFormData, content, [], false)
 
     it('populates values when present', () => {
       expect(model.addressLine1.value).toBe('90 High Road')
@@ -78,7 +78,7 @@ describe('view model', () => {
       },
     ]
 
-    const model = ViewModel.construct('PRIMARY', addresses, {} as AddressFormData, content, [])
+    const model = ViewModel.construct('PRIMARY', addresses, {} as AddressFormData, content, [], false)
 
     it('returns blank value for fields if no match', () => {
       expect(model.addressLine1.value).toBe('')
@@ -102,7 +102,7 @@ describe('view model', () => {
       },
     ]
 
-    const model = ViewModel.construct('PRIMARY', addresses, {} as AddressFormData, content, [])
+    const model = ViewModel.construct('PRIMARY', addresses, {} as AddressFormData, content, [], false)
     it('content has correct headings', () => {
       expect(model.content).toEqual(content.pages.manualDeviceWearerAddress)
     })
@@ -121,7 +121,7 @@ describe('view model', () => {
       },
     ]
 
-    const model = ViewModel.construct('INSTALLATION', addresses, {} as AddressFormData, content, [])
+    const model = ViewModel.construct('INSTALLATION', addresses, {} as AddressFormData, content, [], false)
     it('content has correct headings', () => {
       expect(model.content).toEqual(content.pages.manualTagAtSourceAddress)
     })
@@ -140,7 +140,7 @@ describe('view model', () => {
       },
     ]
 
-    const model = ViewModel.construct('SECONDARY', addresses, {} as AddressFormData, content, [])
+    const model = ViewModel.construct('SECONDARY', addresses, {} as AddressFormData, content, [], false)
     it('content has correct headings', () => {
       expect(model.content).toEqual(content.pages.manualCurfewAddress)
     })
