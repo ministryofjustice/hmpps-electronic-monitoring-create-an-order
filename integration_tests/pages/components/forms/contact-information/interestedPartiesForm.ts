@@ -38,7 +38,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
       'Scottish Court',
       'Family Court',
       'Probation',
-    ])
+    ], true)
   }
 
   get notifyingOrganisationFieldDDV5(): FormRadiosComponent {
@@ -55,7 +55,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
       'Scottish Court',
       'Youth Court',
       'Youth Custody Service (YCS)',
-    ])
+    ], true)
   }
 
   get prisonField(): FormAutocompleteComponent {
@@ -120,7 +120,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
       'Field monitoring service',
       'Home Office',
       'Police',
-    ])
+    ], true)
   }
 
   get responsibleOrgProbationField(): FormSelectComponent {

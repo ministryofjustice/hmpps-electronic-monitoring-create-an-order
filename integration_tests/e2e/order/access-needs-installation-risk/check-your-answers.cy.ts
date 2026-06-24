@@ -148,7 +148,7 @@ context('installation and risk - check your answers', () => {
         order: {
           dataDictionaryVersion: 'DDV5',
           installationAndRisk: {
-            offence: 'SEXUAL_OFFENCES',
+            offence: ['SEXUAL_OFFENCES'],
             offenceAdditionalDetails: 'some offence details',
             riskCategory: ['RISK_TO_GENDER', 'IOM', 'HISTORY_OF_SUBSTANCE_ABUSE'],
             riskDetails: 'some risk details',
@@ -229,7 +229,7 @@ context('installation and risk - check your answers', () => {
         order: {
           dataDictionaryVersion: 'DDV5',
           installationAndRisk: {
-            offence: 'SEXUAL_OFFENCES',
+            offence: ['SEXUAL_OFFENCES'],
             offenceAdditionalDetails: 'some offence details',
             riskCategory: ['RISK_TO_GENDER', 'IOM'],
             riskDetails: 'some risk details',
@@ -304,7 +304,7 @@ context('installation and risk - check your answers', () => {
         status: 'SUBMITTED',
         order: {
           installationAndRisk: {
-            offence: 'SEXUAL_OFFENCES',
+            offence: ['SEXUAL_OFFENCES'],
             offenceAdditionalDetails: 'some offence details',
             riskCategory: ['RISK_TO_GENDER', 'IOM'],
             riskDetails: 'some risk details',
@@ -347,7 +347,7 @@ context('installation and risk - check your answers', () => {
         status: 'ERROR',
         order: {
           installationAndRisk: {
-            offence: 'SEXUAL_OFFENCES',
+            offence: ['SEXUAL_OFFENCES'],
             offenceAdditionalDetails: 'some offence details',
             riskCategory: ['RISK_TO_GENDER', 'IOM'],
             riskDetails: 'some risk details',
@@ -553,7 +553,7 @@ context('installation and risk - check your answers', () => {
             responsibleOrganisationRegion: '',
           },
           installationAndRisk: {
-            offence: 'SEXUAL_OFFENCES',
+            offence: ['SEXUAL_OFFENCES'],
             riskCategory: [],
             possibleRisk: [],
             riskDetails: '',

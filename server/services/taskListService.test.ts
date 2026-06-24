@@ -841,6 +841,7 @@ describe('TaskListService', () => {
           placeName: 'primary',
           appointmentDate: 'date',
         },
+        offences: [{ id: 'offence id', offenceType: 'SEXUAL_OFFENCES' }],
         additionalDocuments: [createAttatchment(), createAttatchment({ fileType: AttachmentType.PHOTO_ID })],
         orderParameters: { havePhoto: true },
       })
@@ -922,6 +923,7 @@ describe('TaskListService', () => {
         },
         additionalDocuments: [createAttatchment(), createAttatchment({ fileType: AttachmentType.PHOTO_ID })],
         orderParameters: { havePhoto: true },
+        offences: [{ id: 'offence id', offenceType: 'SEXUAL_OFFENCES' }],
       })
       mockOrderChecklistService.getChecklist.mockReturnValueOnce(
         Promise.resolve({
