@@ -52,18 +52,8 @@ export default class OffenceController {
     const order = req.order!
     const offenceId = req.params.offenceId as string
     req.body.id = offenceId
-    /* const formData = OffenceFormModel.parse({
-    action: req.body.action,
-    id: req.body.id ? req.body.id : '',
-    offences: [
-      {
-        offenceType: req.body.offenceType,
-        offenceDate: req.body.offenceDate,
-     }
-  ]
-}) */
 
-    const offenceTypes = Array.isArray(req.body.offenceType)
+    const offenceTypes: string[] = Array.isArray(req.body.offenceType)
       ? req.body.offenceType
       : [req.body.offenceType].filter(Boolean)
 
@@ -71,22 +61,25 @@ export default class OffenceController {
       ? req.body.offenceDate
       : [req.body.offenceDate].filter(Boolean)
 
-    const mappedOffences = offenceTypes.map((type: string, index: number) => ({
-      offenceType: type,
-      offenceDate: offenceDates[index] || undefined,
-    }))
+    const mappedOffences = offenceTypes.length
+      ? offenceTypes.map((offenceType: string, index: number) => ({
+          offenceType,
+          offenceDate: offenceDates[index] || req.body.offenceDate || undefined,
+        }))
+      : [{ offenceType: '', offenceDate: req.body.offenceDate || undefined }]
 
     const formData = OffenceFormModel.parse({
       action: req.body.action,
-      id: req.body.id ? req.body.id : '',
+      id: req.body.id || '',
       offences: mappedOffences,
     })
-    const firstOffence = formData.offences?.at(0)
-    if (firstOffence!.offenceType === 'TERRORISM_OFFENCE') {
+
+    if (formData.offences?.some(offence => offence.offenceType === 'TERRORISM_OFFENCE')) {
       req.flash('SpecialOrderSection', res.locals.content!.pages.offence.section)
       res.redirect(paths.ORDER.SPECIAL_ORDER.replace(':orderId', order.id))
       return
     }
+
     const dateRequired = this.courts.indexOf(order.interestedParties?.notifyingOrganisation) !== -1
     const result = await this.service.updateOffence({
       formData,

@@ -27,7 +27,7 @@
       text: content.pages.installationAndRisk.questions.offence.hint
     },
     items: content.reference.offences | toOptions(false, true),
-    value: offence.value,
+    value: offence.values,
     errorMessage: offence.error,
     disabled: not isOrderEditable
   }) }}
