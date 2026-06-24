@@ -115,7 +115,7 @@ describe('EnterAddressController', () => {
           orderId: mockOrder.id,
           addressType: 'primary',
         },
-        flash: jest.fn().mockReturnValueOnce(errors).mockReturnValueOnce([formData]).mockReturnValueOnce([true]),
+        flash: jest.fn().mockReturnValueOnce(errors).mockReturnValueOnce([formData]).mockReturnValueOnce(['true']),
       })
       const res = createMockResponse()
       const next = jest.fn()
