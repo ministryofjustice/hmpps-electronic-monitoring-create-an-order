@@ -30,32 +30,34 @@ export default class InterestedPartiesFormComponent extends FormComponent {
 
   get notifyingOrganisationField(): FormRadiosComponent {
     const label = 'What organisation or related organisation are you part of?'
-    return new FormRadiosComponent(this.form, label, [
-      'Crown Court',
-      'Magistrates Court',
-      'Prison',
-      'Home Office',
-      'Scottish Court',
-      'Family Court',
-      'Probation',
-    ], true)
+    return new FormRadiosComponent(
+      this.form,
+      label,
+      ['Crown Court', 'Magistrates Court', 'Prison', 'Home Office', 'Scottish Court', 'Family Court', 'Probation'],
+      true,
+    )
   }
 
   get notifyingOrganisationFieldDDV5(): FormRadiosComponent {
     const label = 'What organisation or related organisation are you part of?'
-    return new FormRadiosComponent(this.form, label, [
-      'Civil & County Court',
-      'Crown Court',
-      'Family Court',
-      'Home Office',
-      'Magistrates Court',
-      'Military Court',
-      'Prison',
-      'Probation',
-      'Scottish Court',
-      'Youth Court',
-      'Youth Custody Service (YCS)',
-    ], true)
+    return new FormRadiosComponent(
+      this.form,
+      label,
+      [
+        'Civil & County Court',
+        'Crown Court',
+        'Family Court',
+        'Home Office',
+        'Magistrates Court',
+        'Military Court',
+        'Prison',
+        'Probation',
+        'Scottish Court',
+        'Youth Court',
+        'Youth Custody Service (YCS)',
+      ],
+      true,
+    )
   }
 
   get prisonField(): FormAutocompleteComponent {
@@ -114,13 +116,12 @@ export default class InterestedPartiesFormComponent extends FormComponent {
   }
 
   get responsibleOrganisationField(): FormRadiosComponent {
-    return new FormRadiosComponent(this.form, "What is the Responsible Officer's organisation?", [
-      'Youth Justice Service (YJS)',
-      'Probation',
-      'Field monitoring service',
-      'Home Office',
-      'Police',
-    ], true)
+    return new FormRadiosComponent(
+      this.form,
+      "What is the Responsible Officer's organisation?",
+      ['Youth Justice Service (YJS)', 'Probation', 'Field monitoring service', 'Home Office', 'Police'],
+      true,
+    )
   }
 
   get responsibleOrgProbationField(): FormSelectComponent {
