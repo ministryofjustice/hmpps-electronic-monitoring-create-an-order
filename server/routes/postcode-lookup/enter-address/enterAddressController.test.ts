@@ -80,7 +80,14 @@ describe('EnterAddressController', () => {
       await enterAddressController.view(req, res, next)
 
       // Then
-      expect(ViewModel.construct).toHaveBeenCalledWith(param, mockOrder.addresses, undefined, res.locals.content, [])
+      expect(ViewModel.construct).toHaveBeenCalledWith(
+        param,
+        mockOrder.addresses,
+        undefined,
+        res.locals.content,
+        [],
+        false,
+      )
       expect(res.render).toHaveBeenCalledWith('pages/order/postcode-lookup/enter-address', mockViewModel)
     })
 
@@ -108,7 +115,7 @@ describe('EnterAddressController', () => {
           orderId: mockOrder.id,
           addressType: 'primary',
         },
-        flash: jest.fn().mockReturnValueOnce(errors).mockReturnValueOnce([formData]),
+        flash: jest.fn().mockReturnValueOnce(errors).mockReturnValueOnce([formData]).mockReturnValueOnce([true]),
       })
       const res = createMockResponse()
       const next = jest.fn()
@@ -123,6 +130,7 @@ describe('EnterAddressController', () => {
         formData,
         res.locals.content,
         errors,
+        true,
       )
       expect(res.render).toHaveBeenCalledWith('pages/order/postcode-lookup/enter-address', mockViewModel)
     })

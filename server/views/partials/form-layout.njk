@@ -7,7 +7,7 @@
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-
+{% from "moj/components/alert/macro.njk" import mojAlert %}
 {% set mainClasses = "app-container govuk-body" %}
 {% if heading %}
   <h1 class="govuk-heading-l">
@@ -45,6 +45,14 @@
         }) }}
       {% endif %}
 
+       {% if alertMessage %}
+         {{ mojAlert({
+            variant: alertMessageVariant,
+            title: alertMessageTitle,
+            dismissible: alertMessageDismissible,
+            html: alertMessageHtml
+          }) }} 
+      {% endif %}
       {% if errorSummary %}
         {{ govukErrorSummary(errorSummary) }}
       {% endif %}

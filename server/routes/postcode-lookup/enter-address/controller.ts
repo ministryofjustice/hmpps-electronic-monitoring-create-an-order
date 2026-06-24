@@ -17,6 +17,7 @@ export default class EnterAddressController {
     const addressType = req.params.addressType as string
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
+    const isFailObtainAddress = req.flash('isFailObtainAddress')
     const { addresses } = req.order!
     const viewModel = ViewModel.construct(
       addressType as AddressType,
@@ -24,6 +25,7 @@ export default class EnterAddressController {
       formData[0] as never,
       res.locals.content!,
       errors as never,
+      isFailObtainAddress.length > 0 && isFailObtainAddress[0] === 'true',
     )
 
     res.render('pages/order/postcode-lookup/enter-address', viewModel)
