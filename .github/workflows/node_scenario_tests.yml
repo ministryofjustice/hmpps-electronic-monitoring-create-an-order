@@ -42,7 +42,7 @@ jobs:
       timings-5: ${{ steps.timings.outputs.t5 }}
       timings-6: ${{ steps.timings.outputs.t6 }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: ministryofjustice/hmpps-assess-risks-and-needs-github-actions/.github/actions/cypress/create_timings_file@v1
         with:
