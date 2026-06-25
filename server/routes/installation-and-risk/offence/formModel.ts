@@ -5,7 +5,7 @@ import { validationErrors } from '../../../constants/validationErrors'
 const OffenceFormModel = z.object({
   action: z.string(),
   id: z.string().optional(),
-  offenceType: z.string().default(''),
+  offenceType: z.string().default('').optional(),
   offenceDate: z
     .object({
       day: z.string().default(''),
@@ -14,13 +14,18 @@ const OffenceFormModel = z.object({
     })
     .nullable()
     .optional(),
+  // eslint-disable-next-line no-nested-ternary
+  offences: z.preprocess(v => (v == null ? undefined : Array.isArray(v) ? v : [v]), z.array(z.string()).optional()),
 })
 
-export const OffenceFormValidator = (dateRequired: boolean | null) =>
+export const OffenceFormValidator = (dateRequired: boolean | null, multiOffence: boolean | null) =>
   z.object({
     id: z.string().optional(),
-    offenceType: z.string().min(1, validationErrors.offence.offenceTypeRequired),
+    offenceType: multiOffence ? z.string().optional() : z.string().min(1, validationErrors.offence.offenceTypeRequired),
     offenceDate: dateRequired ? DateInputModel(validationErrors.offence.offenceDate) : z.string().optional(),
+    offences: multiOffence
+      ? z.array(z.string()).min(1, validationErrors.offence.offenceTypeRequired)
+      : z.array(z.string()).optional(),
   })
 
 export type OffenceInput = z.infer<typeof OffenceFormModel>
