@@ -20,9 +20,18 @@ export default class DetailsOfInstallationService {
   ): Promise<DetailsOfInstallation | ValidationResult> {
     try {
       const parsedData = DetailsOfInstallationValidator.parse(input.data)
+
+      const dataToSend = {
+        ...parsedData,
+        riskDetails: parsedData.genderRiskDetails?.trim()
+          ? `Risk to gender: ${parsedData.genderRiskDetails}\nAdditional risk details: ${parsedData.riskDetails}`
+          : parsedData.riskDetails,
+        genderRiskDetails: '',
+      }
+
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/details-of-installation`,
-        data: parsedData,
+        data: dataToSend,
         token: input.accessToken,
       })
       return DetailsOfInstallationModel.parse(result)

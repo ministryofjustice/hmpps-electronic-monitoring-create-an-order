@@ -90,9 +90,16 @@ context('details of installation page', () => {
       body: {
         riskCategory: ['RISK_TO_GENDER', 'DANGEROUS_ANIMALS'],
         riskDetails: 'Risk to gender: women\nAdditional risk details: some details',
+        genderRiskDetails: '',
       },
     }).should('be.true')
 
     Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers')
+
+    const editPage = Page.visit(DetailsOfInstallationPage, { orderId: mockOrderId })
+
+    Page.verifyOnPage(DetailsOfInstallationPage)
+    editPage.form.riskDetailsField.shouldHaveValue('some details')
+    editPage.form.genderRiskDetailsField.shouldHaveValue('women')
   })
 })
