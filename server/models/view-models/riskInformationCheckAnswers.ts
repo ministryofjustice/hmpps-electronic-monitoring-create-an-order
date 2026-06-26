@@ -48,9 +48,9 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
       )
     } else if (!isHomeOfficeUser) {
       answers.push(
-        createAnswer(
+        createMultipleChoiceAnswer(
           questions.offence.text,
-          lookup(content.reference.offences, firstOffence?.offenceType),
+          order.offences.map(offence => lookup(content.reference.offences, offence.offenceType)),
           offencePath,
           answerOpts,
         ),

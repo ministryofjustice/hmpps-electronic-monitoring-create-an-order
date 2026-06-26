@@ -20,7 +20,7 @@
     {% set offenceOptions = offenceOptions | removeOptions(['NO_OFFENCE_COMMITTED']) %}
   {% endif %}
 
-  {% set offenceOptions = offenceOptions | addDivider() %}
+  {% set offenceOptions = offenceOptions | addExclusive('OFFENCE_NOT_RECORDED') | addDivider() %}
 
   {% set selectedOffences = [] %}
   {% for o in offences %}
