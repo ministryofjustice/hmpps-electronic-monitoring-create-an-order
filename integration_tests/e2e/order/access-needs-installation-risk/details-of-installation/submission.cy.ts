@@ -89,12 +89,26 @@ context('details of installation page', () => {
       uri: `/orders/${mockOrderId}${apiPath}`,
       body: {
         riskCategory: ['RISK_TO_GENDER', 'DANGEROUS_ANIMALS'],
-        riskDetails: 'Risk to gender: women\nAdditional risk details: some details',
+        riskDetails: 'Risk to gender: women Additional risk details: some details',
         genderRiskDetails: '',
       },
     }).should('be.true')
 
     Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers')
+
+    cy.task('stubCemoGetOrder', {
+      httpStatus: 200,
+      id: mockOrderId,
+      status: 'IN_PROGRESS',
+      order: {
+        dataDictionaryVersion: 'DDV6',
+        detailsOfInstallation: {
+          riskCategory: ['RISK_TO_GENDER', 'DANGEROUS_ANIMALS'],
+          riskDetails: 'Risk to gender: women Additional risk details: some details',
+          genderRiskDetails: '',
+        },
+      },
+    })
 
     const editPage = Page.visit(DetailsOfInstallationPage, { orderId: mockOrderId })
 

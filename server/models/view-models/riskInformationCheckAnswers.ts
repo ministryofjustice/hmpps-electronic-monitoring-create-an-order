@@ -7,6 +7,7 @@ import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionC
 import paths from '../../constants/paths'
 import FeatureFlags from '../../utils/featureFlags'
 import { notifyingOrganisationCourts } from '../NotifyingOrganisation'
+import { splitRiskDetails } from '../DetailsOfInstallation'
 
 const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean, uri: string = '') => {
   const { questions } = content.pages.installationAndRisk
@@ -94,9 +95,10 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
   let riskDetailsFromOrder
   let riskDetailsUri
   if (isOrderDataDictionarySameOrAbove('DDV6', order) && FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')) {
+    const storedRiskDetails = splitRiskDetails(order.detailsOfInstallation?.riskDetails)
     riskCategoriesFromOrder = order.detailsOfInstallation?.riskCategory || []
-    genderRiskDetailsFromOrder = order.detailsOfInstallation?.genderRiskDetails
-    riskDetailsFromOrder = order.detailsOfInstallation?.riskDetails
+    genderRiskDetailsFromOrder = order.detailsOfInstallation?.genderRiskDetails || storedRiskDetails.genderRiskDetails
+    riskDetailsFromOrder = storedRiskDetails.riskDetails
     riskDetailsUri = paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id)
   } else {
     riskCategoriesFromOrder = order.installationAndRisk?.riskCategory || []

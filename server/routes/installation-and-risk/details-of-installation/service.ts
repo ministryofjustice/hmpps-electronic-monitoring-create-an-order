@@ -1,7 +1,10 @@
 import { ZodError } from 'zod'
 import RestClient from '../../../data/restClient'
 import { AuthenticatedRequestInput } from '../../../interfaces/request'
-import DetailsOfInstallationModel, { DetailsOfInstallation } from '../../../models/DetailsOfInstallation'
+import DetailsOfInstallationModel, {
+  DetailsOfInstallation,
+  mergeRiskDetails,
+} from '../../../models/DetailsOfInstallation'
 import { ValidationResult } from '../../../models/Validation'
 import { SanitisedError } from '../../../sanitisedError'
 import { convertBackendErrorToValidationError, convertZodErrorToValidationError } from '../../../utils/errors'
@@ -23,9 +26,7 @@ export default class DetailsOfInstallationService {
 
       const dataToSend = {
         ...parsedData,
-        riskDetails: parsedData.genderRiskDetails?.trim()
-          ? `Risk to gender: ${parsedData.genderRiskDetails}\nAdditional risk details: ${parsedData.riskDetails}`
-          : parsedData.riskDetails,
+        riskDetails: mergeRiskDetails(parsedData.riskDetails, parsedData.genderRiskDetails),
         genderRiskDetails: '',
       }
 

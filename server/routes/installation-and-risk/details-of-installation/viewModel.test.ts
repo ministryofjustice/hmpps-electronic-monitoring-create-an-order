@@ -29,6 +29,21 @@ describe('details of installation view model', () => {
     expect(result.riskDetails.value).toBe('some details')
   })
 
+  it('splits risk details back out of a merged riskDetails value', () => {
+    const order = {
+      detailsOfInstallation: {
+        riskCategory: ['RISK_TO_GENDER'],
+        riskDetails: 'Risk to gender: women Additional risk details: some details',
+        genderRiskDetails: '',
+      },
+    } as Order
+
+    const result = DetailsOfInstallationModel.construct(order, {} as DetailsOfInstallationInput, [])
+
+    expect(result.riskDetails.value).toBe('some details')
+    expect(result.genderRiskDetails.value).toBe('women')
+  })
+
   it('returns errors with form data', () => {
     const order = {} as Order
     const formData = {
