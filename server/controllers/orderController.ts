@@ -83,7 +83,12 @@ export default class OrderController {
       sections,
       error: error && error.length > 0 ? error[0] : undefined,
       createNewOrderVersionEnabled: createNewOrderVersionEnabled && isMostRecentVersion,
-      timelineItems: TimelineModel.mapToTimelineItems(completedOrderVersions, order.id, currentVersion),
+      timelineItems: TimelineModel.mapToTimelineItems(
+        res.locals.content!,
+        completedOrderVersions,
+        order.id,
+        currentVersion,
+      ),
       isMostRecentVersion,
       isVariationType: isVariationType(order.type),
     })
