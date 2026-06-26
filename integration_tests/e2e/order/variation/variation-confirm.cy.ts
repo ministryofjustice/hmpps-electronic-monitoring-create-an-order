@@ -8,12 +8,12 @@ const mockOriginalId = '00a00000-79cd-49f9-a498-b1f07c543b8a'
 const mockVariationId = '11a11111-79cd-49f9-a498-b1f07c543b8a'
 const variationPath = '/copy-as-variation'
 
-const stubVariationOrder = (fmsResultDate: Date, startDate: Date) => {
+const stubVariationOrder = (fmsResultDate: Date, startDate: Date, type: string = 'REQUEST') => {
   cy.task('stubCemoGetOrder', {
     httpStatus: 200,
     id: mockOriginalId,
     status: 'IN_PROGRESS',
-    type: 'VARIATION',
+    type,
     order: {
       monitoringConditions: {
         startDate,
@@ -184,6 +184,20 @@ context('Variation', () => {
           const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 33).setHours(0, 0, 0, 0)) // 33 days before today
           const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 32).setHours(0, 0, 0, 0)) // 32 days before today
           stubVariationOrder(fmsResultDate, startDate)
+          page.confirmButton().should('exist')
+
+          page.confirmButton().click()
+
+          Page.verifyOnPage(IsAddressChangePage)
+        })
+
+        it('should proceed to the is address changed page when copying from variation', () => {
+          cy.visit(`/order/${mockOriginalId}/edit`)
+          const page = Page.verifyOnPage(ConfirmVariationPage)
+
+          const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 16).setHours(0, 0, 0, 0)) // 16 days before today
+          const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 15 days before today
+          stubVariationOrder(fmsResultDate, startDate, 'VARIATION')
           page.confirmButton().should('exist')
 
           page.confirmButton().click()
