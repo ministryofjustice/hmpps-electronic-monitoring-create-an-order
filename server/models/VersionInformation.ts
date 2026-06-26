@@ -9,6 +9,8 @@ const VersionInformationModel = z.object({
   submittedBy: z.string().nullable().optional(),
   versionId: z.string().uuid(),
   versionNumber: z.number(),
+  notifyingOrganisation: z.string().nullable().optional(),
+  notifyingOrganisationName: z.string().nullable().optional(),
 })
 
 export type VersionInformation = z.infer<typeof VersionInformationModel>
