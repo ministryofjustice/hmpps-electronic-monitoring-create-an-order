@@ -24,7 +24,7 @@ export const OffenceFormValidator = (dateRequired: boolean | null, multiOffence:
     offenceType: multiOffence ? z.string().optional() : z.string().min(1, validationErrors.offence.offenceTypeRequired),
     offenceDate: dateRequired ? DateInputModel(validationErrors.offence.offenceDate) : z.string().optional(),
     offences: multiOffence
-      ? z.array(z.string()).min(1, validationErrors.offence.offenceTypeRequired)
+      ? z.array(z.string()).default([]).pipe(z.array(z.string()).min(1, validationErrors.offence.offenceTypeRequired))
       : z.array(z.string()).optional(),
   })
 

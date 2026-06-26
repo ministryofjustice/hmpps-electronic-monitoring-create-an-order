@@ -74,13 +74,12 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
 
   get genderIdentityField(): FormRadiosComponent {
     const label = "What is the device wearer's gender?"
-    return new FormRadiosComponent(this.form, label, [
-      'Male',
-      'Female',
-      'Non binary',
-      'Not able to provide this information',
-      'Self identify',
-    ])
+    return new FormRadiosComponent(
+      this.form,
+      label,
+      ['Male', 'Female', 'Non binary', 'Not able to provide this information', 'Self identify'],
+      true,
+    )
   }
 
   // Disabilities
@@ -130,7 +129,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
 
   get interpreterRequiredField(): FormRadiosComponent {
     const label = 'Is an interpreter needed?'
-    return new FormRadiosComponent(this.form, label, ['Yes', 'No'])
+    return new FormRadiosComponent(this.form, label, ['Yes', 'No'], true)
   }
 
   get languageField(): FormAutocompleteComponent {
