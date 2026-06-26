@@ -1,6 +1,7 @@
 import RestClient from '../data/restClient'
 import OrderListModel, { OrderList } from '../models/OrderList'
 import { AuthenticatedRequestInput } from '../interfaces/request'
+import { OrderListInformation, OrderListInformationList } from '../models/OrderListInformation'
 
 export type OrderSearchInput = AuthenticatedRequestInput & {
   searchTerm: string
@@ -9,13 +10,13 @@ export type OrderSearchInput = AuthenticatedRequestInput & {
 export default class OrderSearchService {
   constructor(private readonly apiClient: RestClient) {}
 
-  async listOrders(input: AuthenticatedRequestInput): Promise<OrderList> {
+  async listOrders(input: AuthenticatedRequestInput): Promise<OrderListInformation[]> {
     const result = await this.apiClient.get({
       path: '/api/orders',
       token: input.accessToken,
     })
 
-    return OrderListModel.parse(result)
+    return OrderListInformationList.parse(result)
   }
 
   async searchOrders(input: OrderSearchInput): Promise<OrderList> {
