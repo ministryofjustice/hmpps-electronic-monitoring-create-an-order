@@ -7,7 +7,7 @@ export default class IsRejectionPage extends AppFormPage {
   public form = new IsRejectionFormComponent()
 
   constructor() {
-    super('', paths.ORDER.IS_REJECTION)
+    super('Are you making changes to this form because the original was rejected by email?', paths.ORDER.IS_REJECTION)
   }
 
   get yesRadioButton(): PageElement {
