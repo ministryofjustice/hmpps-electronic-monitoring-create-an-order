@@ -9,6 +9,7 @@ type Input = {
   accessToken: string
   dateRequired: boolean
   orderId: string
+  multiOffence: boolean
 }
 
 type RemoveOffenceInput = {
@@ -22,7 +23,18 @@ export default class OffenceService {
 
   updateOffence = async (input: Input) => {
     try {
-      const requestBody = OffenceFormValidator(input.dateRequired).parse(input.formData)
+      const validatedInput = OffenceFormValidator(input.dateRequired, input.multiOffence).parse(input.formData)
+
+      const requestBody = input.multiOffence
+        ? {
+            ...validatedInput,
+            offences: validatedInput.offences,
+            offenceType: validatedInput.offences?.[0] ?? '',
+          }
+        : {
+            ...validatedInput,
+            offences: validatedInput.offenceType ? [validatedInput.offenceType] : [],
+          }
 
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/offence`,

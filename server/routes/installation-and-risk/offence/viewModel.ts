@@ -1,34 +1,44 @@
 import { Offence } from '../../../models/Offence'
 import { Order } from '../../../models/Order'
 import { ValidationResult } from '../../../models/Validation'
-import { DateField, ViewModel } from '../../../models/view-models/utils'
+import { DateField } from '../../../models/view-models/utils'
 import { createGovukErrorSummary } from '../../../utils/errors'
 import { deserialiseDateTime, getError } from '../../../utils/utils'
 import { OffenceInput } from './formModel'
 
-type OffenceViewModel = ViewModel<Pick<OffenceInput, 'offenceType'>> & {
+type OffenceItemViewModel = {
+  offenceType: { value: string; error?: ReturnType<typeof getError> }
   offenceDate: DateField
+}
+
+type OffenceViewModel = {
+  offences: OffenceItemViewModel[]
   showDate: boolean
   isHomeOffice: boolean
+  errorSummary: ReturnType<typeof createGovukErrorSummary>
 }
+
+const emptyDate = (): DateField => ({ value: { day: '', month: '', year: '' } })
 
 const contructFromOrder = (
   order: Order,
-  offence: Offence | undefined,
+  currentOffence: Offence | undefined,
   showDate: boolean,
   isHomeOffice: boolean,
 ): OffenceViewModel => {
-  return {
-    offenceType: {
-      value: offence?.offenceType || '',
-    },
-    offenceDate: {
-      value: deserialiseDateTime(offence?.offenceDate),
-    },
-    showDate,
-    isHomeOffice,
-    errorSummary: null,
-  }
+  const offences: OffenceItemViewModel[] = !showDate
+    ? (order.offences || []).map(o => ({
+        offenceType: { value: o.offenceType || '' },
+        offenceDate: { value: deserialiseDateTime(o.offenceDate) },
+      }))
+    : [
+        {
+          offenceType: { value: currentOffence?.offenceType || '' },
+          offenceDate: { value: deserialiseDateTime(currentOffence?.offenceDate) },
+        },
+      ]
+
+  return { offences, showDate, isHomeOffice, errorSummary: null }
 }
 
 const constructFromFormData = (
@@ -37,23 +47,32 @@ const constructFromFormData = (
   showDate: boolean,
   isHomeOffice: boolean,
 ): OffenceViewModel => {
-  return {
-    offenceType: {
-      value: formData?.offenceType || '',
-      error: getError(errors, 'offenceType'),
-    },
-    offenceDate: {
-      value: {
-        day: formData.offenceDate?.day || '',
-        month: formData.offenceDate?.month || '',
-        year: formData.offenceDate?.year || '',
+  let offences: OffenceItemViewModel[]
+
+  if (!showDate) {
+    const selected = formData.offences ?? []
+    offences = (selected.length ? selected : ['']).map(value => ({
+      offenceType: { value },
+      offenceDate: emptyDate(),
+    }))
+    offences[0].offenceType.error = getError(errors, 'offences')
+  } else {
+    offences = [
+      {
+        offenceType: { value: formData?.offenceType || '', error: getError(errors, 'offenceType') },
+        offenceDate: {
+          value: {
+            day: formData.offenceDate?.day || '',
+            month: formData.offenceDate?.month || '',
+            year: formData.offenceDate?.year || '',
+          },
+          error: getError(errors, 'offenceDate'),
+        },
       },
-      error: getError(errors, 'offenceDate'),
-    },
-    showDate,
-    isHomeOffice,
-    errorSummary: createGovukErrorSummary(errors),
+    ]
   }
+
+  return { offences, showDate, isHomeOffice, errorSummary: createGovukErrorSummary(errors) }
 }
 
 const construct = (
