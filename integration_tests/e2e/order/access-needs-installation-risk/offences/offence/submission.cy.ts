@@ -71,7 +71,6 @@ context('Offence submissions', () => {
       }).should('be.true')
       Page.verifyOnPage(OffenceListPage)
     })
-    // veryify if radio
   })
 
   context('Notifying organisation is prison', () => {

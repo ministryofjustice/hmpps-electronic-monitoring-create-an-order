@@ -18,10 +18,10 @@ export type AboutDeviceWearerFormData = {
   disabilities?: string
   otherDisability?: string
 }
+const getByLegend = true
 
 export default class AboutDeviceWearerFormComponent extends FormComponent {
   // FIELDS
-
   // NAMES
 
   get firstNameField(): FormInputComponent {
@@ -78,7 +78,7 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
       this.form,
       label,
       ['Male', 'Female', 'Non binary', 'Not able to provide this information', 'Self identify'],
-      true,
+      getByLegend,
     )
   }
 
@@ -86,38 +86,48 @@ export default class AboutDeviceWearerFormComponent extends FormComponent {
 
   get disabilityField(): FormRadiosComponent {
     const label = 'Does the device wearer have any of the disabilities or health conditions listed?'
-    return new FormRadiosComponent(this.form, label, [
-      'Visual impairment or blindness not corrected by wearing glasses',
-      'Deafness or serious hearing impairment',
-      'Physical disability or mobility issue',
-      'Fine motor or dexterity impairment',
-      'Neurodiversity including conditions affecting learning, understanding or concentration',
-      'Condition affecting the memory or retaining information',
-      'Mental health condition',
-      'Health condition affecting stamina, breathing or causing fatigue',
-      'Conditions affecting social skills and behaviour',
-      'The device wearer has a disability or health condition not listed',
-      'Not able to provide this information',
-    ])
+    return new FormRadiosComponent(
+      this.form,
+      label,
+      [
+        'Visual impairment or blindness not corrected by wearing glasses',
+        'Deafness or serious hearing impairment',
+        'Physical disability or mobility issue',
+        'Fine motor or dexterity impairment',
+        'Neurodiversity including conditions affecting learning, understanding or concentration',
+        'Condition affecting the memory or retaining information',
+        'Mental health condition',
+        'Health condition affecting stamina, breathing or causing fatigue',
+        'Conditions affecting social skills and behaviour',
+        'The device wearer has a disability or health condition not listed',
+        'Not able to provide this information',
+      ],
+      getByLegend,
+    )
   }
 
   get disabilityFieldDDv5(): FormRadiosComponent {
     const label = 'Does the device wearer have any of the disabilities or health conditions listed?'
-    return new FormRadiosComponent(this.form, label, [
-      'Visual impairment or blindness not corrected by wearing glasses',
-      'Deafness or serious hearing impairment',
-      'Physical disability or mobility issue',
-      'Fine motor or dexterity impairment',
-      'Skin condition',
-      'Neurodiversity including conditions affecting learning, understanding or concentration',
-      'Condition affecting the memory or retaining information',
-      'Mental health condition',
-      'Health condition affecting stamina, breathing or causing fatigue',
-      'Conditions affecting social skills and behaviour',
-      'The device wearer has a disability or health condition not listed',
-      'The device wearer does not have any of the disabilities or health conditions listed',
-      'Not able to provide this information',
-    ])
+    return new FormRadiosComponent(
+      this.form,
+      label,
+      [
+        'Visual impairment or blindness not corrected by wearing glasses',
+        'Deafness or serious hearing impairment',
+        'Physical disability or mobility issue',
+        'Fine motor or dexterity impairment',
+        'Skin condition',
+        'Neurodiversity including conditions affecting learning, understanding or concentration',
+        'Condition affecting the memory or retaining information',
+        'Mental health condition',
+        'Health condition affecting stamina, breathing or causing fatigue',
+        'Conditions affecting social skills and behaviour',
+        'The device wearer has a disability or health condition not listed',
+        'The device wearer does not have any of the disabilities or health conditions listed',
+        'Not able to provide this information',
+      ],
+      getByLegend,
+    )
   }
 
   get otherDisabilityField(): FormInputComponent {
