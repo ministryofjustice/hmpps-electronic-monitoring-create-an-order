@@ -196,6 +196,9 @@ context('Service-Request-Types', () => {
 
   afterEach(() => {
     cy.task('resetFeatureFlags')
+
+    // change name so we can search for order
+    deviceWearerDetails.firstName += 'a'
   })
 
   it('Should able to make REINSTALL_AT_DIFFERENT_ADDRESS change', () => {
@@ -228,5 +231,30 @@ context('Service-Request-Types', () => {
     }
 
     fillInVariations('I need to change something else in the form', 'Change to an order', true, fullVariationDetails)
+  })
+
+  it('Creating a variation from a variation skips is rejection page', () => {
+    const fullVariationDetails = {
+      variationType: 'The curfew hours',
+      variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
+      variationDetails: 'Change to address',
+    }
+
+    fillInVariations('I need to change something else in the form', 'Change to an order', true, fullVariationDetails)
+
+    const indexPage = Page.visit(IndexPage)
+    indexPage.searchNav.click()
+
+    const searchPage = Page.verifyOnPage(SearchPage)
+    searchPage.searchBox.type(deviceWearerDetails.firstName)
+    searchPage.searchButton.click()
+    searchPage.ordersList.contains(deviceWearerDetails.firstName).click()
+
+    const summaryPage = Page.verifyOnPage(OrderSummaryPage)
+    summaryPage.makeChangesButton.click()
+
+    Page.verifyOnPage(ConfirmVariationPage).confirm()
+
+    Page.verifyOnPage(IsAddressChangePage)
   })
 })
