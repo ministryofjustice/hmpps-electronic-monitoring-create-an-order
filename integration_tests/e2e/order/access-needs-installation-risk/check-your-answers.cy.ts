@@ -599,6 +599,7 @@ context('installation and risk - check your answers', () => {
         order: {
           detailsOfInstallation: {
             riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
+            genderRiskDetails: '',
             riskDetails: 'some risk details',
           },
           dataDictionaryVersion: 'DDV6',
@@ -615,6 +616,40 @@ context('installation and risk - check your answers', () => {
         {
           key: 'What are the possible risks at the installation address? (optional)',
           value: 'Safeguarding child',
+        },
+        {
+          key: 'Any other risks to be aware of? (optional)',
+          value: 'some risk details',
+        },
+      ])
+
+      page.installationRiskSection.shouldNotHaveItem('What sex or gender are they a risk to?')
+    })
+
+    it('shows risk answers for gender', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        order: {
+          detailsOfInstallation: {
+            riskCategory: ['RISK_TO_GENDER'],
+            genderRiskDetails: 'Women',
+            riskDetails: 'some risk details',
+          },
+          dataDictionaryVersion: 'DDV6',
+        },
+      })
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.installationRiskSection.shouldExist()
+      page.installationRiskSection.shouldHaveItems([
+        {
+          key: "At installation what are the possible risks from the device wearer's behaviour?",
+          value: 'Offensive towards someone because of their sex or gender',
+        },
+        {
+          key: 'What sex or gender are they a risk to?',
+          value: 'Women',
         },
         {
           key: 'Any other risks to be aware of? (optional)',
