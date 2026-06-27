@@ -57,7 +57,7 @@ jobs:
           node-version-file: ${{ inputs.node_version_file }}
       - name: restore cache
         id: restore-cache
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         env:
           cache-name: node-modules
         with:
