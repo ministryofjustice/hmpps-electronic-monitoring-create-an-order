@@ -171,4 +171,103 @@ context('Offence list page', () => {
       Page.verifyOnPage(OrderTasksPage)
     })
   })
+
+  context('Adding multiple offences to be rendered in list', () => {
+    const firstOffence = {
+      id: uuidv4(),
+      offenceType: 'THEFT_OFFENCES',
+      offenceDate: '2025-01-12T00:00:00Z',
+    }
+
+    const secondOffence = {
+      id: uuidv4(),
+      offenceType: 'ROBBERY',
+      offenceDate: '2025-03-04T00:00:00Z',
+    }
+
+    const courtInterestedParties = {
+      notifyingOrganisation: 'CROWN_COURT',
+      notifyingOrganisationName: '',
+      notifyingOrganisationEmail: '',
+      responsibleOfficerName: '',
+      responsibleOfficerPhoneNumber: '',
+      responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+      responsibleOrganisationAddress: {
+        addressType: 'RESPONSIBLE_ORGANISATION',
+        addressLine1: '',
+        addressLine2: '',
+        addressLine3: '',
+        addressLine4: '',
+        postcode: '',
+      },
+      responsibleOrganisationEmail: '',
+      responsibleOrganisationPhoneNumber: '',
+      responsibleOrganisationRegion: '',
+    }
+
+    const stubOrderWithOffences = (offences: Array<typeof firstOffence>) =>
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          interestedParties: courtInterestedParties,
+          offences,
+        },
+      })
+
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+      cy.task('stubCemoSubmitOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        subPath: '/offence',
+        response: {
+          offenceType: 'THEFT_OFFENCES',
+          offenceDate: '2020-01-01T00:00:00Z',
+        },
+      })
+      stubOrderWithOffences([firstOffence])
+      cy.signIn()
+    })
+
+    it('Should add another offence via the list and render every offence with its date', () => {
+      const listPage = Page.visit(OffenceListPage, { orderId: mockOrderId })
+      listPage.form.summaryList.shouldHaveItem('Theft Offences', 'on 12/01/2025')
+
+      listPage.form.fillInWith({
+        addOffence: 'Yes',
+      })
+      listPage.form.saveAndContinueButton.click()
+      const offencePage = Page.verifyOnPage(OffencePage)
+
+      stubOrderWithOffences([firstOffence, secondOffence])
+      offencePage.form.fillInWith({
+        offenceType: 'Robbery',
+        offenceDate: new Date(2025, 2, 4),
+      })
+      offencePage.form.saveAndContinueButton.click()
+
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOrderId}/offence`,
+        body: {
+          offenceType: 'ROBBERY',
+          offenceDate: '2025-03-04T00:00:00.000Z',
+        },
+      }).should('be.true')
+
+      const updatedListPage = Page.verifyOnPage(OffenceListPage)
+      updatedListPage.form.summaryList.shouldHaveItems([
+        { key: 'Theft Offences', value: 'on 12/01/2025' },
+        { key: 'Robbery', value: 'on 04/03/2025' },
+      ])
+
+      updatedListPage.form.fillInWith({
+        addOffence: 'No',
+      })
+      updatedListPage.form.saveAndContinueButton.click()
+      Page.verifyOnPage(OffenceOtherInfoPage)
+    })
+  })
 })

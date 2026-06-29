@@ -32,8 +32,9 @@ export default class OffenceService {
             offenceType: validatedInput.offences?.[0] ?? '',
           }
         : {
-            ...validatedInput,
-            offences: validatedInput.offenceType ? [validatedInput.offenceType] : [],
+            id: validatedInput.id,
+            offenceType: validatedInput.offenceType,
+            offenceDate: validatedInput.offenceDate,
           }
 
       const result = await this.apiClient.put({

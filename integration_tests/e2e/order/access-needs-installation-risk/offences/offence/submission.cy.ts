@@ -66,7 +66,6 @@ context('Offence submissions', () => {
         body: {
           offenceType: 'THEFT_OFFENCES',
           offenceDate: '2025-01-01T00:00:00.000Z',
-          offences: ['THEFT_OFFENCES'],
         },
       }).should('be.true')
       Page.verifyOnPage(OffenceListPage)
