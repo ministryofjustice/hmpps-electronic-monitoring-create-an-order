@@ -96,7 +96,7 @@ context('Offence submissions', () => {
         offenceType: 'Terrorism offence',
       })
       page.form.saveAndContinueButton.click()
-      Page.verifyOnPage(SpecialOrderPage, { orderId: mockOrderId }, undefined, 'Access needs and installation risk')
+      Page.verifyOnPage(SpecialOrderPage, { orderId: mockOrderId }, undefined, 'Risk information')
     })
 
     it('Submitting valid offence', () => {

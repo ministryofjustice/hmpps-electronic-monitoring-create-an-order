@@ -12,7 +12,7 @@ const offenceContent: OffenceContent = {
       hint: 'For example, 31 3 1980',
     },
   },
-  section: 'Access needs and installation risk',
+  section: 'Risk information',
   title: 'What type of offences did the device wearer commit?',
 }
 
