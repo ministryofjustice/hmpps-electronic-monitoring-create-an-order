@@ -29,12 +29,12 @@ describe('details of installation view model', () => {
     expect(result.riskDetails.value).toBe('some details')
   })
 
-  it('splits risk details back out of a merged riskDetails value', () => {
+  it('returns gender risk details from the order', () => {
     const order = {
       detailsOfInstallation: {
         riskCategory: ['RISK_TO_GENDER'],
-        riskDetails: 'Risk to gender: women Additional risk details: some details',
-        genderRiskDetails: '',
+        riskDetails: 'some details',
+        genderRiskDetails: 'women',
       },
     } as Order
 

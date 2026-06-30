@@ -89,8 +89,8 @@ context('details of installation page', () => {
       uri: `/orders/${mockOrderId}${apiPath}`,
       body: {
         riskCategory: ['RISK_TO_GENDER', 'DANGEROUS_ANIMALS'],
-        riskDetails: 'Risk to gender: women Additional risk details: some details',
-        genderRiskDetails: '',
+        riskDetails: 'some details',
+        genderRiskDetails: 'women',
       },
     }).should('be.true')
 
@@ -104,8 +104,8 @@ context('details of installation page', () => {
         dataDictionaryVersion: 'DDV6',
         detailsOfInstallation: {
           riskCategory: ['RISK_TO_GENDER', 'DANGEROUS_ANIMALS'],
-          riskDetails: 'Risk to gender: women Additional risk details: some details',
-          genderRiskDetails: '',
+          riskDetails: 'some details',
+          genderRiskDetails: 'women',
         },
       },
     })

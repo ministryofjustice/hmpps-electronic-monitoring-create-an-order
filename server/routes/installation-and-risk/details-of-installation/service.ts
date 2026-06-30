@@ -1,10 +1,7 @@
 import { ZodError } from 'zod'
 import RestClient from '../../../data/restClient'
 import { AuthenticatedRequestInput } from '../../../interfaces/request'
-import DetailsOfInstallationModel, {
-  DetailsOfInstallation,
-  mergeRiskDetails,
-} from '../../../models/DetailsOfInstallation'
+import DetailsOfInstallationModel, { DetailsOfInstallation } from '../../../models/DetailsOfInstallation'
 import { ValidationResult } from '../../../models/Validation'
 import { SanitisedError } from '../../../sanitisedError'
 import { convertBackendErrorToValidationError, convertZodErrorToValidationError } from '../../../utils/errors'
@@ -24,15 +21,9 @@ export default class DetailsOfInstallationService {
     try {
       const parsedData = DetailsOfInstallationValidator.parse(input.data)
 
-      const dataToSend = {
-        ...parsedData,
-        riskDetails: mergeRiskDetails(parsedData.riskDetails, parsedData.genderRiskDetails),
-        genderRiskDetails: '',
-      }
-
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/details-of-installation`,
-        data: dataToSend,
+        data: parsedData,
         token: input.accessToken,
       })
       return DetailsOfInstallationModel.parse(result)

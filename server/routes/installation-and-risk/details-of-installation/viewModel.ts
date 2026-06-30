@@ -6,7 +6,6 @@ import I18n from '../../../types/i18n'
 import { createGovukErrorSummary } from '../../../utils/errors'
 import { getError } from '../../../utils/utils'
 import { DetailsOfInstallationInput } from './formModel'
-import { splitRiskDetails } from '../../../models/DetailsOfInstallation'
 
 type DetailsOfInstallationModel = ViewModel<Omit<DetailsOfInstallationInput, 'action'>>
 
@@ -16,8 +15,7 @@ const construct = (
   errors: ValidationResult,
 ): DetailsOfInstallationModel => {
   const content = getContent('en', order.dataDictionaryVersion)
-  const storedRiskDetails = splitRiskDetails(order.detailsOfInstallation?.riskDetails)
-  const storedGenderRiskDetails = order.detailsOfInstallation?.genderRiskDetails || storedRiskDetails.genderRiskDetails
+
   return {
     possibleRisk: {
       values: getPossibleRiskValues(formData?.possibleRisk, order.detailsOfInstallation?.riskCategory, content),
@@ -27,11 +25,11 @@ const construct = (
       values: getRiskCategoryValues(formData?.riskCategory, order.detailsOfInstallation?.riskCategory, content),
     },
     riskDetails: {
-      value: formData?.riskDetails || storedRiskDetails.riskDetails || '',
+      value: formData?.riskDetails || order.detailsOfInstallation?.riskDetails || '',
       error: getError(errors, 'riskDetails'),
     },
     genderRiskDetails: {
-      value: formData?.genderRiskDetails || storedGenderRiskDetails || '',
+      value: formData?.genderRiskDetails || order.detailsOfInstallation?.genderRiskDetails || '',
       error: getError(errors, 'genderRiskDetails'),
     },
     errorSummary: createGovukErrorSummary(errors),
