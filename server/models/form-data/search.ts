@@ -2,6 +2,7 @@ import config from '../../config'
 import paths from '../../constants/paths'
 import { AddressTypeEnum } from '../Address'
 import { Order } from '../Order'
+import { OrderListInformation } from '../OrderListInformation'
 
 type OrderListViewModel = {
   orders: {
@@ -30,7 +31,7 @@ export type OrderSearchViewModel = {
   searchTerm?: string
 }
 
-function getDisplayName(order: Order): string {
+function getDisplayName(order: OrderListInformation): string {
   if (order.deviceWearer.firstName === null && order.deviceWearer.lastName === null) {
     return 'Not supplied'
   }
@@ -87,7 +88,7 @@ export const constructSearchViewModel = (orders: Array<Order>, searchTerm: strin
   }
 }
 
-export function constructListViewModel(orders: Array<Order>): OrderListViewModel {
+export function constructListViewModel(orders: OrderListInformation[]): OrderListViewModel {
   return {
     orders: orders.map((order, index) => ({
       name: getDisplayName(order),
@@ -101,7 +102,7 @@ export function constructListViewModel(orders: Array<Order>): OrderListViewModel
   }
 }
 
-const getStatusTags = (order: Order) => {
+const getStatusTags = (order: OrderListInformation) => {
   const statusTags = []
 
   if (order.type === 'VARIATION') {

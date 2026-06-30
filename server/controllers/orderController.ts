@@ -48,6 +48,10 @@ export default class OrderController {
   }
 
   private shouldShowIsRejectionPage = (order: Order): boolean => {
+    if (isVariationType(order.type)) {
+      return false
+    }
+
     const fmsResultDate = order.fmsResultDate ? new Date(order.fmsResultDate) : new Date(1900, 0, 0)
     const startDate = order.monitoringConditions.startDate
       ? new Date(order.monitoringConditions.startDate)
@@ -83,7 +87,12 @@ export default class OrderController {
       sections,
       error: error && error.length > 0 ? error[0] : undefined,
       createNewOrderVersionEnabled: createNewOrderVersionEnabled && isMostRecentVersion,
-      timelineItems: TimelineModel.mapToTimelineItems(completedOrderVersions, order.id, currentVersion),
+      timelineItems: TimelineModel.mapToTimelineItems(
+        res.locals.content!,
+        completedOrderVersions,
+        order.id,
+        currentVersion,
+      ),
       isMostRecentVersion,
       isVariationType: isVariationType(order.type),
     })

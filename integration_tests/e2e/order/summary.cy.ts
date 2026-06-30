@@ -1985,7 +1985,7 @@ context('Order Summary', () => {
     })
   })
 
-  const versionInformation = (override: Order) => {
+  const versionInformation = (override: Partial<Order>) => {
     return {
       orderId: uuidv4(),
       versionId: uuidv4(),
@@ -1994,6 +1994,8 @@ context('Order Summary', () => {
       fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0),
       type: 'REQUEST',
       status: 'SUBMITTED',
+      notifyingOrganisation: 'PRISON',
+      notifyingOrganisationName: 'WHITEMOOR_PRISON',
       ...override,
     }
   }
@@ -2040,7 +2042,7 @@ context('Order Summary', () => {
 
       page.timeline.element.should('exist')
       page.timeline.formSubmittedComponent.element.should('exist')
-      page.timeline.formSubmittedComponent.usernameIs('Person One')
+      page.timeline.formSubmittedComponent.bylineContains('Person One')
       page.timeline.formSubmittedComponent.resultDateIs('1 January 2025 at 10:30am')
       page.timeline.formSubmittedComponent.description
         .contains('View submitted form')
@@ -2049,11 +2051,13 @@ context('Order Summary', () => {
           'href',
           paths.ORDER.SUMMARY_VERSION.replace(':orderId', mockOrderId).replace(':versionId', versionOne.versionId),
         )
+      page.timeline.formSubmittedComponent.bylineContains('From Whitemoor Prison')
       page.timeline.formVariationComponent.element.should('exist')
-      page.timeline.formVariationComponent.usernameIs('Person Two')
+      page.timeline.formVariationComponent.bylineContains('Person Two')
       page.timeline.formVariationComponent.resultDateIs('3 January 2025 at 10:30am')
       page.timeline.formVariationComponent.variationTextIs('Change to an order')
       page.timeline.formVariationComponent.description.contains('You are viewing this version of the form')
+      page.timeline.formVariationComponent.bylineContains('From Whitemoor Prison')
     })
 
     it('Submitted request', () => {
@@ -2073,7 +2077,7 @@ context('Order Summary', () => {
 
       page.timeline.element.should('exist')
       page.timeline.formSubmittedComponent.element.should('exist')
-      page.timeline.formSubmittedComponent.usernameIs('John Smith')
+      page.timeline.formSubmittedComponent.bylineContains('John Smith')
       page.timeline.formSubmittedComponent.resultDateIs('1 January 2025 at 10:30am')
     })
 
@@ -2094,7 +2098,7 @@ context('Order Summary', () => {
 
       page.timeline.element.should('exist')
       page.timeline.formFailedComponent.element.should('exist')
-      page.timeline.formFailedComponent.usernameIs('John Smith')
+      page.timeline.formFailedComponent.bylineContains('John Smith')
       page.timeline.formFailedComponent.resultDateIs('1 January 2025 at 10:30am')
     })
 
@@ -2115,7 +2119,7 @@ context('Order Summary', () => {
 
       page.timeline.element.should('exist')
       page.timeline.formRejectedComponent.element.should('exist')
-      page.timeline.formRejectedComponent.usernameIs('John Smith')
+      page.timeline.formRejectedComponent.bylineContains('John Smith')
       page.timeline.formRejectedComponent.resultDateIs('1 January 2025 at 10:30am')
     })
   })
