@@ -8,6 +8,7 @@ import AuditService from '../services/auditService'
 import OrderSearchService from '../services/orderSearchService'
 import OrderSearchController from './orderSearchController'
 import { createMockRequest, createMockResponse } from '../../test/mocks/mockExpress'
+import { OrderListInformation } from '../models/OrderListInformation'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderSearchService')
@@ -119,9 +120,23 @@ describe('OrderSearchController', () => {
   })
 
   describe('list orders', () => {
+    const convertOrderToInformation = (order: Order): OrderListInformation => {
+      return {
+        id: order.id,
+        versionId: order.versionId,
+        status: order.status,
+        type: order.type,
+        firstName: order.deviceWearer.firstName,
+        lastName: order.deviceWearer.lastName,
+        notifyingOrganisation: order.interestedParties?.notifyingOrganisation,
+      }
+    }
     it('should render a view containing users orders', async () => {
       const secondDraftOrder = getMockOrder({ interestedParties: createInterestedParties() })
-      mockOrderService.listOrders.mockResolvedValue([mockDraftOrder, secondDraftOrder])
+      mockOrderService.listOrders.mockResolvedValue([
+        convertOrderToInformation(mockDraftOrder),
+        convertOrderToInformation(secondDraftOrder),
+      ])
 
       await orderController.list(req, res, next)
 
