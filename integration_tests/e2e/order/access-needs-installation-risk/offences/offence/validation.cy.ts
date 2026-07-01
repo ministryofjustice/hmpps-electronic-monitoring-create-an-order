@@ -3,6 +3,7 @@ import Page from '../../../../../pages/page'
 import OffencePage from './offencePage'
 
 const mockOrderId = uuidv4()
+const isRadio = true
 const stubOrder = (notifyingOrganisation = 'CROWN_COURT') => {
   cy.task('stubCemoGetOrder', {
     httpStatus: 200,
@@ -43,7 +44,7 @@ context('Offence validations', () => {
       const page = Page.visit(OffencePage, { orderId: mockOrderId })
 
       page.form.saveAndContinueButton.click()
-      page.form.offenceTypeField.shouldHaveValidationMessage('Select the type of offence the device wearer committed')
+      page.form.getOffenceTypeField(isRadio).shouldHaveValidationMessage('Required')
       page.form.offenceDateField.shouldHaveValidationMessage('Enter date of offence the device wearer committed')
     })
 
@@ -54,9 +55,7 @@ context('Offence validations', () => {
         offenceDate: new Date(Date.now() + 1000 * 60 * 60 * 24),
       })
       page.form.saveAndContinueButton.click()
-      page.form.offenceDateField.shouldHaveValidationMessage(
-        'Date of offence the device wearer committed must be in the past',
-      )
+      page.errorSummary.shouldHaveError('Date of offence the device wearer committed must be in the past')
     })
   })
 
@@ -75,7 +74,9 @@ context('Offence validations', () => {
       page.errorSummary.shouldExist()
       page.errorSummary.shouldHaveError('Select the type of offence the device wearer committed')
       page.errorSummary.shouldNotHaveError('Enter date of offence the device wearer committed')
-      page.form.offenceTypeField.shouldHaveValidationMessage('Select the type of offence the device wearer committed')
+      page.form
+        .getOffenceTypeField(!isRadio)
+        .shouldHaveValidationMessage('Select the type of offence the device wearer committed')
     })
   })
 })

@@ -8,7 +8,7 @@ const offenceListPageContent: OffenceListPageContent = {
       text: 'Are there any other offences that the device wearer has committed?',
     },
   },
-  section: 'Access needs and installation risk',
+  section: 'Risk information',
   title: 'Offences committed',
 }
 

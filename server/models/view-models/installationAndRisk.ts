@@ -6,10 +6,14 @@ import { ValidationResult } from '../Validation'
 import { MultipleChoiceField, ViewModel } from './utils'
 import possibleRisks from '../../i18n/en/reference/possibleRisks'
 import riskCategories from '../../i18n/en/reference/riskCategories'
+import Offences from '../../i18n/en/reference/offences'
 import { Order } from '../Order'
 import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
 
-type InstallationAndRiskViewModel = ViewModel<Omit<InstallationAndRisk, 'riskCategory' | 'possibleRisk'>> & {
+type InstallationAndRiskViewModel = ViewModel<
+  Omit<InstallationAndRisk, 'riskCategory' | 'possibleRisk' | 'offences'>
+> & {
+  offences: MultipleChoiceField
   riskCategory: MultipleChoiceField
   possibleRisk: MultipleChoiceField
   ddVersion5: boolean
@@ -24,6 +28,10 @@ const constructFromFormData = (
     offence: {
       value: formData.offence || '',
       error: getError(validationErrors, 'offence'),
+    },
+    offences: {
+      values: formData.offences || [],
+      error: getError(validationErrors, 'offences'),
     },
     offenceAdditionalDetails: {
       value: formData.offenceAdditionalDetails || '',
@@ -59,6 +67,9 @@ const createFromEntity = (order: Order): InstallationAndRiskViewModel => {
   return {
     offence: {
       value: installationAndRisk?.offence || '',
+    },
+    offences: {
+      values: installationAndRisk?.offences?.filter(it => Object.keys(Offences).indexOf(it) !== -1) || [],
     },
     offenceAdditionalDetails: {
       value: installationAndRisk?.offenceAdditionalDetails || '',

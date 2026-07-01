@@ -151,6 +151,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         riskDetails: 'some risk details',
         mappaLevel: null,
         mappaCaseType: null,
+        offences: null,
       },
     })
     const req = createMockRequest({ order })
@@ -256,6 +257,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         riskDetails: 'some risk details',
         mappaLevel: null,
         mappaCaseType: null,
+        offences: null,
       },
     })
     const req = createMockRequest({ order })
@@ -362,6 +364,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         riskDetails: 'some risk details',
         mappaLevel: null,
         mappaCaseType: null,
+        offences: null,
       },
       mappa: {
         level: 'MAPPA_ONE',

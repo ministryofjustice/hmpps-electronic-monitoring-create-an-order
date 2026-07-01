@@ -6,6 +6,6 @@ export default class OffencePage extends AppFormPage {
   public form = new OffenceComponent()
 
   constructor() {
-    super('Offence details', paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM)
+    super('What type of offences did the device wearer commit?', paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM)
   }
 }

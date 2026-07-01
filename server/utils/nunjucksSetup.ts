@@ -66,6 +66,8 @@ const removeOptions = (items: Array<CheckboxItem>, itemsToRemove: string[]): Arr
   return items.filter(item => !itemsToRemove.includes(item.value))
 }
 
+type Option = { value?: string; [key: string]: unknown }
+
 export default function nunjucksSetup(app: express.Express): void {
   app.set('view engine', 'njk')
 
@@ -110,4 +112,8 @@ export default function nunjucksSetup(app: express.Express): void {
     // @ts-expect-error/filter is unknown as import does not have typing
     njkEnv.addFilter(name, filter)
   })
+  // Deselect for checkboxes
+  njkEnv.addFilter('addExclusive', (options: Option[], value: string) =>
+    options.map(o => (o.value === value ? { ...o, behaviour: 'exclusive' } : o)),
+  )
 }

@@ -8,7 +8,7 @@ const dapaClauseListPageContent: DapoClauseListPageConent = {
       text: 'Are there any other DAPO order clauses?',
     },
   },
-  section: 'Access needs and installation risk',
+  section: 'Risk information',
   title: 'DAPO order clauses',
 }
 

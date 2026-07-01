@@ -52,18 +52,25 @@ export default class OffenceController {
     const order = req.order!
     const offenceId = req.params.offenceId as string
     req.body.id = offenceId
+    const dateRequired = this.courts.indexOf(order.interestedParties?.notifyingOrganisation) !== -1
+    const multiOffence = !dateRequired
     const formData = OffenceFormModel.parse(req.body)
-    if (formData.offenceType === 'TERRORISM_OFFENCE') {
+
+    const isTerroristOffence = multiOffence
+      ? (formData.offences ?? []).includes('TERRORISM_OFFENCE')
+      : formData.offenceType === 'TERRORISM_OFFENCE'
+
+    if (isTerroristOffence) {
       req.flash('SpecialOrderSection', res.locals.content!.pages.offence.section)
       res.redirect(paths.ORDER.SPECIAL_ORDER.replace(':orderId', order.id))
       return
     }
-    const dateRequired = this.courts.indexOf(order.interestedParties?.notifyingOrganisation) !== -1
     const result = await this.service.updateOffence({
       formData,
       orderId: order.id,
       accessToken: res.locals.user.token,
       dateRequired,
+      multiOffence,
     })
     if (isValidationResult(result)) {
       req.flash('formData', formData)
@@ -83,6 +90,8 @@ export default class OffenceController {
       } else {
         res.redirect(paths.INSTALLATION_AND_RISK.OFFENCE_OTHER_INFO.replace(':orderId', order.id))
       }
+    } else {
+      res.redirect(res.locals.orderSummaryUri)
     }
   }
 }
