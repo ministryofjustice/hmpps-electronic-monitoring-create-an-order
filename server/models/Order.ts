@@ -70,6 +70,7 @@ const OrderModel = z.object({
   offenceAdditionalDetails: OffenceAdditionalDetailsModel.nullable().optional(),
   submittedBy: z.string().nullable().optional(),
   versionId: z.string().uuid(),
+  isOwner: z.boolean().default(true),
 })
 
 export type Order = z.infer<typeof OrderModel>
