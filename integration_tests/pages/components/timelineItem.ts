@@ -13,7 +13,7 @@ export default class TimelineItem {
     return cy.get(`@${this.elementCacheId}-element`, { log: false })
   }
 
-  usernameIs(username: string) {
+  bylineContains(username: string) {
     this.element.get('.moj-timeline__byline').contains(username)
   }
 

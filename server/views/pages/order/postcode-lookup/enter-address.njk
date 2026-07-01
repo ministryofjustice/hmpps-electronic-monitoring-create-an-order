@@ -3,6 +3,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "moj/components/alert/macro.njk" import mojAlert %}
 
 {% set section = content.section %}
 {% set heading = content.title %}
@@ -10,8 +11,12 @@
 {% set helpText = content.helpText %}
 {% set questions = content.questions %}
 {% set singleQuestionPage = true %}
-
-{% block formInputs %}
+{% set alertMessage = isFailObtainAddress%}
+{% set alertMessageVariant = 'warning'%}
+{% set alertMessageTitle = 'Some information could not be imported'%}
+{% set alertMessageDismissible = false%}
+{% set alertMessageHtml = 'The address lookup service is temporarily unavailable. Enter the address manually.'%}
+{% block formInputs %}     
 
   {{ govukInput({
     label: { text: questions.addressLine1.text },

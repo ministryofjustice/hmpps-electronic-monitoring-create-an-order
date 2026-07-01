@@ -9,6 +9,7 @@ import ManualAddressPageContent from '../../../types/i18n/pages/manualAddress'
 
 type AddressViewModel = ViewModel<Address> & {
   content: ManualAddressPageContent
+  isFailObtainAddress: boolean
 }
 
 const constructFromFormData = (
@@ -16,6 +17,7 @@ const constructFromFormData = (
   formData: AddressFormData,
   content: I18n,
   validationErrors: ValidationResult,
+  isFailObtainAddress: boolean,
 ): AddressViewModel => {
   return {
     addressType: {
@@ -41,12 +43,18 @@ const constructFromFormData = (
       value: formData.postcode,
       error: getError(validationErrors, 'postcode'),
     },
+    isFailObtainAddress,
     content: getContent(content, addressType),
     errorSummary: createGovukErrorSummary(validationErrors),
   }
 }
 
-const constructFromEntity = (addressType: AddressType, addresses: Array<Address>, content: I18n): AddressViewModel => {
+const constructFromEntity = (
+  addressType: AddressType,
+  addresses: Array<Address>,
+  content: I18n,
+  isFailObtainAddress: boolean,
+): AddressViewModel => {
   const currentAddress = addresses.find(address => address.addressType === addressType.toUpperCase())
 
   return {
@@ -68,6 +76,7 @@ const constructFromEntity = (addressType: AddressType, addresses: Array<Address>
     postcode: {
       value: currentAddress?.postcode ?? '',
     },
+    isFailObtainAddress,
     content: getContent(content, addressType),
     errorSummary: null,
   }
@@ -79,12 +88,13 @@ const construct = (
   formData: AddressFormData,
   content: I18n,
   validationErrors: ValidationResult,
+  isFailObtainAddress: boolean,
 ): AddressViewModel => {
   if (validationErrors.length > 0) {
-    return constructFromFormData(addressType, formData, content, validationErrors)
+    return constructFromFormData(addressType, formData, content, validationErrors, isFailObtainAddress)
   }
 
-  return constructFromEntity(addressType, addresses, content)
+  return constructFromEntity(addressType, addresses, content, isFailObtainAddress)
 }
 
 function getContent(content: I18n, addressType: AddressType): ManualAddressPageContent {
