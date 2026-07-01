@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../pages/page'
 import AddressResultPage from './addressResultPage'
 import ConfirmAddressPage from '../confirm-address/confirmAddressPage'
+import EnterAddressPage from '../enter-address/enterAddressPage'
 
 context('address results', () => {
   const mockOrderId = uuidv4()
@@ -116,6 +117,25 @@ context('address results', () => {
           hasAnotherAddress: true,
         },
       }).should('be.true')
+    })
+  })
+
+  context('on fail to obtain postcode', () => {
+    beforeEach(() => {
+      cy.task('stubOSDataHubPostcode', {
+        httpStatus: 500,
+        postcode: 'SW1A2AA',
+        body: {},
+      })
+    })
+
+    it('Should redirect to enter address page and show alert banner', () => {
+      Page.visit(AddressResultPage, { orderId: mockOrderId, addressType: 'PRIMARY' }, { postcode: 'SW1A 2AA' })
+
+      Page.verifyOnPage(EnterAddressPage)
+      cy.get('.moj-alert__content').contains(
+        'The address lookup service is temporarily unavailable. Enter the address manually.',
+      )
     })
   })
 })

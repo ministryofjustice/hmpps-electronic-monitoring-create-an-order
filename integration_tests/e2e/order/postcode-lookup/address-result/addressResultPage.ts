@@ -7,7 +7,7 @@ export default class AddressResultPage extends AppFormPage {
 
   constructor() {
     super(
-      /(Select the .* address) | (No results found) | (Too many results found)/gm,
+      /(Select the .* address) | (No results found) | (Too many results found) | (What is the device wearer's address?)/gm,
       paths.POSTCODE_LOOKUP.ADDRESS_RESULT,
     )
   }
