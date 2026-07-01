@@ -116,6 +116,8 @@ interface ValidationErrors {
     possibleRiskRequired: string
     riskDetailsRequired: string
     riskDetailsTooLong: string
+    genderRiskDetailsRequired: string
+    genderRiskDetailsTooLong: string
     offenceAdditionalDetailsTooLong: string
   }
   isMappa: {
@@ -389,6 +391,8 @@ const validationErrors: ValidationErrors = {
     possibleRiskRequired: "Select all the possible risks from the device wearer's behaviour",
     riskDetailsRequired: 'Enter any other risks to be aware of',
     riskDetailsTooLong: 'Any other risks to be aware of must be 500 characters or less',
+    genderRiskDetailsRequired: 'Enter what sex or gender they are a risk to',
+    genderRiskDetailsTooLong: 'Gender risk details to be aware of must be 100 characters or less',
     offenceAdditionalDetailsTooLong:
       'Any other information to be aware of about the offence committed must be 500 characters or less',
   },

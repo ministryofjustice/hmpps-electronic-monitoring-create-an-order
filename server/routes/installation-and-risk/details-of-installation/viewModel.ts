@@ -15,6 +15,7 @@ const construct = (
   errors: ValidationResult,
 ): DetailsOfInstallationModel => {
   const content = getContent('en', order.dataDictionaryVersion)
+
   return {
     possibleRisk: {
       values: getPossibleRiskValues(formData?.possibleRisk, order.detailsOfInstallation?.riskCategory, content),
@@ -26,6 +27,10 @@ const construct = (
     riskDetails: {
       value: formData?.riskDetails || order.detailsOfInstallation?.riskDetails || '',
       error: getError(errors, 'riskDetails'),
+    },
+    genderRiskDetails: {
+      value: formData?.genderRiskDetails || order.detailsOfInstallation?.genderRiskDetails || '',
+      error: getError(errors, 'genderRiskDetails'),
     },
     errorSummary: createGovukErrorSummary(errors),
   }

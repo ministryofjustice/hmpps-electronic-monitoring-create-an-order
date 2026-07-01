@@ -29,12 +29,28 @@ describe('details of installation view model', () => {
     expect(result.riskDetails.value).toBe('some details')
   })
 
+  it('returns gender risk details from the order', () => {
+    const order = {
+      detailsOfInstallation: {
+        riskCategory: ['RISK_TO_GENDER'],
+        riskDetails: 'some details',
+        genderRiskDetails: 'women',
+      },
+    } as Order
+
+    const result = DetailsOfInstallationModel.construct(order, {} as DetailsOfInstallationInput, [])
+
+    expect(result.riskDetails.value).toBe('some details')
+    expect(result.genderRiskDetails.value).toBe('women')
+  })
+
   it('returns errors with form data', () => {
     const order = {} as Order
     const formData = {
       possibleRisk: [],
       riskCategory: ['HISTORY_OF_SUBSTANCE_ABUSE'],
       riskDetails: 'some details',
+      genderRiskDetails: '',
       action: '',
     } as DetailsOfInstallationInput
     const errors = [{ error: 'some error', field: 'possibleRisk' }] as ValidationResult

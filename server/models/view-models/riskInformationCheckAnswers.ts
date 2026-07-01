@@ -90,10 +90,12 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
   }
 
   let riskCategoriesFromOrder
+  let genderRiskDetailsFromOrder
   let riskDetailsFromOrder
   let riskDetailsUri
   if (isOrderDataDictionarySameOrAbove('DDV6', order) && FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')) {
     riskCategoriesFromOrder = order.detailsOfInstallation?.riskCategory || []
+    genderRiskDetailsFromOrder = order.detailsOfInstallation?.genderRiskDetails
     riskDetailsFromOrder = order.detailsOfInstallation?.riskDetails
     riskDetailsUri = paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id)
   } else {
@@ -114,6 +116,11 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
       answerOpts,
     ),
   )
+
+  if (possibleRisks.includes('RISK_TO_GENDER') && genderRiskDetailsFromOrder) {
+    answers.push(createAnswer(questions.genderRiskDetails.text, genderRiskDetailsFromOrder, riskDetailsUri, answerOpts))
+  }
+
   const riskCategories = riskCategoriesFromOrder.filter(
     it => Object.keys(content.reference.riskCategories).indexOf(it) !== -1,
   )

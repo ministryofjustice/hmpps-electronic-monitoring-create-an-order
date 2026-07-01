@@ -202,11 +202,12 @@ context('Order Summary', () => {
             offenceAdditionalDetails: 'mock offence additional details',
             riskCategory: null,
             riskDetails: null,
+            genderRiskDetails: null,
             mappaLevel: null,
             mappaCaseType: null,
           },
           offences: [],
-          detailsOfInstallation: { riskCategory: ['some category'], riskDetails: '' },
+          detailsOfInstallation: { riskCategory: ['some category'], riskDetails: '', genderRiskDetails: '' },
           offenceAdditionalDetails: { additionalDetails: 'details' },
         },
       })
@@ -502,6 +503,7 @@ context('Order Summary', () => {
             mappaLevel: null,
             riskCategory: null,
             riskDetails: null,
+            genderRiskDetails: null,
             offence: null,
             offenceAdditionalDetails: null,
           },
@@ -538,6 +540,7 @@ context('Order Summary', () => {
           detailsOfInstallation: {
             riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
             riskDetails: 'some risk details',
+            genderRiskDetails: '',
           },
           enforcementZoneConditions: [
             {
@@ -805,6 +808,7 @@ context('Order Summary', () => {
             mappaLevel: null,
             riskCategory: null,
             riskDetails: null,
+            genderRiskDetails: null,
             offence: null,
             offenceAdditionalDetails: null,
           },
@@ -841,6 +845,7 @@ context('Order Summary', () => {
           detailsOfInstallation: {
             riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
             riskDetails: 'some risk details',
+            genderRiskDetails: '',
           },
           enforcementZoneConditions: [
             {
@@ -1022,6 +1027,7 @@ context('Order Summary', () => {
             mappaLevel: null,
             riskCategory: null,
             riskDetails: null,
+            genderRiskDetails: null,
             offence: null,
             offenceAdditionalDetails: null,
           },
@@ -1058,6 +1064,7 @@ context('Order Summary', () => {
           detailsOfInstallation: {
             riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
             riskDetails: 'some risk details',
+            genderRiskDetails: '',
           },
           enforcementZoneConditions: [
             {
@@ -1385,6 +1392,7 @@ context('Order Summary', () => {
             mappaLevel: null,
             riskCategory: null,
             riskDetails: null,
+            genderRiskDetails: null,
             offence: null,
             offenceAdditionalDetails: null,
           },
@@ -1419,6 +1427,7 @@ context('Order Summary', () => {
           detailsOfInstallation: {
             riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
             riskDetails: 'some risk details',
+            genderRiskDetails: '',
           },
           mappa: { isMappa: 'NO' },
           enforcementZoneConditions: [
@@ -1721,6 +1730,7 @@ context('Order Summary', () => {
             mappaLevel: null,
             riskCategory: null,
             riskDetails: null,
+            genderRiskDetails: null,
             offence: null,
             offenceAdditionalDetails: null,
           },
@@ -1755,6 +1765,7 @@ context('Order Summary', () => {
           detailsOfInstallation: {
             riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
             riskDetails: 'some risk details',
+            genderRiskDetails: '',
           },
           additionalDocuments: [{ id: uuidv4(), fileName: '', fileType: AttachmentType.LICENCE }],
           orderParameters: { havePhoto: false },
@@ -1812,6 +1823,7 @@ context('Order Summary', () => {
             mappaLevel: null,
             riskCategory: null,
             riskDetails: null,
+            genderRiskDetails: null,
             offence: null,
             offenceAdditionalDetails: null,
           },
@@ -1846,6 +1858,7 @@ context('Order Summary', () => {
           detailsOfInstallation: {
             riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
             riskDetails: 'some risk details',
+            genderRiskDetails: '',
           },
           addresses: [],
           additionalDocuments: [{ id: uuidv4(), fileName: '', fileType: AttachmentType.LICENCE }],
@@ -1908,6 +1921,7 @@ context('Order Summary', () => {
             mappaLevel: null,
             riskCategory: null,
             riskDetails: null,
+            genderRiskDetails: null,
             offence: null,
             offenceAdditionalDetails: null,
           },
@@ -1942,6 +1956,7 @@ context('Order Summary', () => {
           detailsOfInstallation: {
             riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
             riskDetails: 'some risk details',
+            genderRiskDetails: '',
           },
           monitoringConditions: {
             orderType: null,
@@ -2174,6 +2189,7 @@ context('Order Summary', () => {
             mappaLevel: null,
             riskCategory: null,
             riskDetails: null,
+            genderRiskDetails: null,
             offence: null,
             offenceAdditionalDetails: null,
           },
@@ -2208,6 +2224,7 @@ context('Order Summary', () => {
           detailsOfInstallation: {
             riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
             riskDetails: 'some risk details',
+            genderRiskDetails: '',
           },
           mappa: { isMappa: 'NO' },
           enforcementZoneConditions: [
@@ -2395,6 +2412,7 @@ context('Order Summary', () => {
             mappaLevel: null,
             riskCategory: null,
             riskDetails: null,
+            genderRiskDetails: null,
             offence: null,
             offenceAdditionalDetails: null,
           },
@@ -2429,6 +2447,7 @@ context('Order Summary', () => {
           detailsOfInstallation: {
             riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
             riskDetails: 'some risk details',
+            genderRiskDetails: '',
           },
           mappa: { isMappa: 'NO' },
           enforcementZoneConditions: [
@@ -2673,6 +2692,7 @@ context('Order Summary', () => {
             mappaLevel: null,
             riskCategory: null,
             riskDetails: null,
+            genderRiskDetails: null,
             offence: null,
             offenceAdditionalDetails: null,
           },
