@@ -31,7 +31,8 @@ const populateOrder =
         req.order = order
         res.locals.orderId = order.id
         res.locals.orderStatus = order.status
-        res.locals.isOrderEditable = order.status === OrderStatusEnum.Enum.IN_PROGRESS
+        res.locals.isOrderEditable = order.status === OrderStatusEnum.Enum.IN_PROGRESS && order.isOwner
+        res.locals.isViewOnly = order.status === OrderStatusEnum.Enum.IN_PROGRESS && !order.isOwner
         res.locals.content = getContent(Locales.en, order.dataDictionaryVersion)
       }
 
