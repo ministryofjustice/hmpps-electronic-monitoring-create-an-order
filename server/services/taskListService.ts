@@ -319,7 +319,7 @@ export default class TaskListService {
           STATES.required,
           STATES.notRequired,
         ),
-        completed: order.offences.length > 0,
+        completed: (order.offences?.length ?? 0) > 0,
       })
       tasks.push({
         section: SECTIONS.riskInformation,
@@ -345,7 +345,7 @@ export default class TaskListService {
           STATES.required,
           STATES.notRequired,
         ),
-        completed: order.dapoClauses.length > 0,
+        completed: (order.dapoClauses?.length ?? 0) > 0,
       })
 
       tasks.push({

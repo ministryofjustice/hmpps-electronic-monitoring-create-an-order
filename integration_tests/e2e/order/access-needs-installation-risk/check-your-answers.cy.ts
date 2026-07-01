@@ -702,7 +702,7 @@ context('installation and risk - check your answers', () => {
 
       const offencePage = Page.verifyOnPage(OffencePage)
 
-      offencePage.form.offenceTypeField.shouldHaveValue('Sexual offences')
+      offencePage.form.getOffenceTypeField().shouldHaveValue('Sexual offences')
     })
   })
 })

@@ -57,6 +57,7 @@ context('Access needs and installation risk information', () => {
           uri: `/orders/${mockOrderId}${apiPath}`,
           body: {
             offence: 'ROBBERY',
+            offences: null,
             offenceAdditionalDetails: '',
             riskCategory: ['SEXUAL_OFFENCES', 'HISTORY_OF_SUBSTANCE_ABUSE'],
             riskDetails: 'Mock risk',

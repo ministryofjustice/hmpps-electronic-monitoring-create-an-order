@@ -1,20 +1,19 @@
 import OffenceContent from '../../../types/i18n/pages/offence'
 
 const offenceContent: OffenceContent = {
-  helpText:
-    'Enter details of the offence the device wearer has committed. You will be able to add more offences later if you need to.',
+  helpText: '',
   legend: '',
   questions: {
     offenceType: {
-      text: 'What type of offence did the device wearer commit?',
+      text: '',
     },
     offenceDate: {
       text: 'What was the date of the offence?',
       hint: 'For example, 31 3 1980',
     },
   },
-  section: 'Access needs and installation risk',
-  title: 'Offence details',
+  section: 'Risk information',
+  title: 'What type of offences did the device wearer commit?',
 }
 
 export default offenceContent

@@ -6,6 +6,6 @@ export default class OffenceListPage extends AppFormPage {
   public form = new OffenceListComponent()
 
   constructor(title: string = 'Offences committed') {
-    super(title, paths.INSTALLATION_AND_RISK.OFFENCE_LIST, 'Access needs and installation risk')
+    super(title, paths.INSTALLATION_AND_RISK.OFFENCE_LIST, 'Risk information')
   }
 }

@@ -96,7 +96,7 @@ context('Offence submissions', () => {
         offenceType: 'Terrorism offence',
       })
       page.form.saveAndContinueButton.click()
-      Page.verifyOnPage(SpecialOrderPage, { orderId: mockOrderId }, undefined, 'Access needs and installation risk')
+      Page.verifyOnPage(SpecialOrderPage, { orderId: mockOrderId }, undefined, 'Risk information')
     })
 
     it('Submitting valid offence', () => {
@@ -109,6 +109,26 @@ context('Offence submissions', () => {
         uri: `/orders/${mockOrderId}${apiPath}`,
         body: {
           offenceType: 'THEFT_OFFENCES',
+          offences: ['THEFT_OFFENCES'],
+        },
+      }).should('be.true')
+      Page.verifyOnPage(OffenceOtherInfoPage)
+    })
+
+    it('Submitting multiple valid offences', () => {
+      const page = Page.visit(OffencePage, { orderId: mockOrderId })
+      page.form.fillInWith({
+        offenceType: 'Theft Offences',
+      })
+      page.form.fillInWith({
+        offenceType: 'Sexual offence',
+      })
+      page.form.saveAndContinueButton.click()
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOrderId}${apiPath}`,
+        body: {
+          offences: ['SEXUAL_OFFENCES', 'THEFT_OFFENCES'],
+          offenceType: 'SEXUAL_OFFENCES',
         },
       }).should('be.true')
       Page.verifyOnPage(OffenceOtherInfoPage)
