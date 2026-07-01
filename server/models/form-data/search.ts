@@ -31,12 +31,12 @@ export type OrderSearchViewModel = {
   searchTerm?: string
 }
 
-function getDisplayName(order: OrderListInformation): string {
-  if (order.deviceWearer.firstName === null && order.deviceWearer.lastName === null) {
+function getDisplayName(firstName: string | null, lastName: string | null): string {
+  if (firstName === null && lastName === null) {
     return 'Not supplied'
   }
 
-  return `${order.deviceWearer.firstName || ''} ${order.deviceWearer.lastName || ''}`
+  return `${firstName || ''} ${lastName || ''}`
 }
 
 const formatDateTime = (dateToFormat: string): string => {
@@ -68,7 +68,7 @@ const createOrderItem = (order: Order) => {
   const currentAddress = order.addresses.find(address => address.addressType === AddressTypeEnum.Values.PRIMARY)
 
   return {
-    name: getDisplayName(order),
+    name: getDisplayName(order.deviceWearer.firstName, order.deviceWearer.lastName),
     href: paths.ORDER.SUMMARY.replace(':orderId', order.id),
     dob: order.deviceWearer.dateOfBirth ? formatDateTime(order.deviceWearer.dateOfBirth) : '',
     youth: getYouthStatus(order),
@@ -88,14 +88,14 @@ export const constructSearchViewModel = (orders: Array<Order>, searchTerm: strin
   }
 }
 
-export function constructListViewModel(orders: OrderListInformation[]): OrderListViewModel {
+export function constructListViewModel(ordersInformationList: OrderListInformation[]): OrderListViewModel {
   return {
-    orders: orders.map((order, index) => ({
-      name: getDisplayName(order),
-      href: order.interestedParties?.notifyingOrganisation
-        ? paths.ORDER.SUMMARY.replace(':orderId', order.id)
-        : paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', order.id),
-      statusTags: getStatusTags(order),
+    orders: ordersInformationList.map((orderInformation, index) => ({
+      name: getDisplayName(orderInformation.firstName, orderInformation.lastName),
+      href: orderInformation.notifyingOrganisation
+        ? paths.ORDER.SUMMARY.replace(':orderId', orderInformation.id)
+        : paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', orderInformation.id),
+      statusTags: getStatusTags(orderInformation),
       index,
     })),
     variationAsNewOrderEnabled: config.variationAsNewOrder.enabled,
