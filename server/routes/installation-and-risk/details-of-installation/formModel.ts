@@ -43,6 +43,7 @@ export const DetailsOfInstallationValidator = z
   .transform(({ riskCategory, possibleRisk, ...formData }) => ({
     riskCategory: [...possibleRisk, ...riskCategory],
     ...formData,
+    genderRiskDetails: possibleRisk.includes('RISK_TO_GENDER') ? formData.genderRiskDetails : '',
   }))
 
 export type DetailsOfInstallationInput = z.infer<typeof DetailsOfInstallationFormModel>
