@@ -174,7 +174,16 @@
       </div>
         </div>
       {% endif %}
-  
+      {% if order.status === "ERROR" %}
+        {% set receiptUrl = "/order/" + orderId + "/version/" + versionId + "/receipt" 
+          if versionId else "/order/" + orderId + "/receipt" %}
+        {{ govukButton({
+          text: "View and download form",
+          id: "view-and-download-button",
+          href: receiptUrl,
+          classes: "govuk-button--secondary"
+        }) }}
+      {% endif %}
     </div>
 
     <div class="govuk-grid-column-one-third">

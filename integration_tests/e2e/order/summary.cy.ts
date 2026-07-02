@@ -2137,6 +2137,19 @@ context('Order Summary', () => {
       page.timeline.formRejectedComponent.bylineContains('John Smith')
       page.timeline.formRejectedComponent.resultDateIs('1 January 2025 at 10:30am')
     })
+
+    it('Show download form button on failed to submit', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'ERROR',
+      })
+
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.viewAndDownloadButton.should('be.visible')
+
+      page.viewAndDownloadButton.should('have.attr', 'href', `/order/${mockOrderId}/receipt`)
+    })
   })
 
   context('Complete order, submitted', () => {
