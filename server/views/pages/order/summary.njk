@@ -174,7 +174,17 @@
       </div>
         </div>
       {% endif %}
-  
+      {% if isViewOnly %} 
+      <form action="/order/{{ order.id }}/update-order-owner" method="put" data-module="form-spinner" data->       
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-button-group">
+            {{ govukButton({
+                text: "Assign form to me",
+                preventDoubleClick: true
+            }) }}
+        </div>
+        </form>
+      {% endif %}
     </div>
 
     <div class="govuk-grid-column-one-third">
