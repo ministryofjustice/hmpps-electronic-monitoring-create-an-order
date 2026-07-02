@@ -12,7 +12,7 @@ const createViewModel = (order: Order, content: I18n | undefined) => {
   const licence = order.additionalDocuments.find(x => x.fileType === AttachmentType.LICENCE)
   const photo = order.additionalDocuments.find(x => x.fileType === AttachmentType.PHOTO_ID)
   const courtOrder = order.additionalDocuments.find(x => x.fileType === AttachmentType.COURT_ORDER)
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' || !order.isOwner }
   const answers = []
 
   if (
@@ -85,7 +85,7 @@ export default createViewModel
 function createAttachmentAnswer(attachment: Attachment | undefined, text: string, uri: string, order: Order) {
   return createAnswer(text, createFileNameLink(attachment, order.id), uri, {
     valueType: 'html',
-    ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
+    ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' || !order.isOwner,
   })
 }
 
