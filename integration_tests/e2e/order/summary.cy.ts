@@ -1824,6 +1824,7 @@ context('Order Summary', () => {
             ...mockApiOrder(),
             id: mockOrderId,
             status: 'IN_PROGRESS',
+            lastUpdatedBy: 'Test User',
             deviceWearer: {
               nomisId: '',
               pncId: null,
@@ -1878,6 +1879,12 @@ context('Order Summary', () => {
           orderId: mockOrderId,
         })
         const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+        page.ownerBanner.should('exist')
+        page.ownerBanner.should(
+          'contain.text',
+          'You cannot make changes to this form because it is assigned to Test User.',
+        )
 
         page.interestedPartiesTask.shouldHaveStatus('Incomplete')
         page.interestedPartiesTask.link.should('not.exist')

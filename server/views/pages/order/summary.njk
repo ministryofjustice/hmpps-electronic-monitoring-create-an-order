@@ -10,6 +10,7 @@
 {% from "govuk/components/task-list/macro.njk" import govukTaskList %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {%- from "moj/components/timeline/macro.njk" import mojTimeline -%}
+{% from "moj/components/alert/macro.njk" import mojAlert %}
 
 {% block beforeContent %}
   {{ govukBackLink({
@@ -23,6 +24,15 @@
     <div class="govuk-grid-column-two-thirds">
 
       {% set heading = 'Electronic Monitoring application form for ' + order.deviceWearer.firstName + ' ' + order.deviceWearer.lastName if (order.status === 'SUBMITTED') or (order.deviceWearer.firstName)  else "Electronic Monitoring application form" %}
+
+      {% if isViewOnly %}
+        {{ mojAlert({
+          variant: "warning",
+          title: "",
+          text: "You cannot make changes to this form because it is assigned to " + order.lastUpdatedBy + '.'
+        }) }} 
+      {% endif %}
+
 
       <h1 class="govuk-heading-l">
         {{ heading }}

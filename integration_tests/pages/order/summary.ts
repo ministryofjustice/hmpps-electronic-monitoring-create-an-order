@@ -101,6 +101,10 @@ export default class OrderTasksPage extends AppPage {
     return new Timeline()
   }
 
+  get ownerBanner(): PageElement {
+    return cy.get('.moj-alert')
+  }
+
   fillInNewCurfewOrderWith({
     deviceWearerDetails,
     responsibleAdultDetails,
