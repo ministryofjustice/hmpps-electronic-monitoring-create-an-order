@@ -92,13 +92,13 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.1071.0",
+    "@aws-sdk/client-sqs": "^3.1075.0",
     "@ministryofjustice/frontend": "^5.2.1",
     "@secretlint/secretlint-rule-pattern": "^11.7.1",
     "@types/multer": "^2.1.0",
     "accessible-autocomplete": "^3.0.1",
     "agentkeepalive": "^4.6.0",
-    "applicationinsights": "^3.15.0",
+    "applicationinsights": "^3.15.1",
     "body-parser": "^2.3.0",
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
@@ -154,8 +154,8 @@
     "aws-sdk-client-mock": "^4.1.0",
     "axe-core": "^4.12.1",
     "chokidar": "^3.6.0",
-    "concurrently": "^9.2.1",
-    "cypress": "^15.17.0",
+    "concurrently": "^9.2.3",
+    "cypress": "^15.18.0",
     "cypress-axe": "^1.7.0",
     "cypress-multi-reporters": "^2.0.5",
     "cypress-parallel": "^0.15.0",
@@ -177,8 +177,8 @@
     "micromatch": "^4.0.8",
     "mocha-junit-reporter": "^2.2.1",
     "nock": "^13.5.6",
-    "pg": "^8.21.0",
-    "prettier": "^3.8.4",
+    "pg": "^8.22.0",
+    "prettier": "^3.8.5",
     "prettier-plugin-jinja-template": "^2.2.0",
     "secretlint": "^11.7.1",
     "supertest": "^7.2.2",
@@ -187,7 +187,7 @@
   },
   "overrides": {
     "cypress": {
-      "qs": "^6.15.2"
+      "qs": "^6.15.3"
     },
     "find-cypress-specs": {
       "tsx": "^4.22.4"
@@ -196,7 +196,7 @@
       "esbuild": "^0.28.1"
     },
     "@aws-sdk/client-sqs": {
-      "fast-xml-parser": "^5.9.2"
+      "fast-xml-parser": "^5.9.3"
     },
     "mocha": {
       "serialize-javascript": "^7.0.6",
@@ -204,8 +204,8 @@
     },
     "uuid": "^11.1.1",
     "picomatch": "^4.0.4",
-    "protobufjs": "^8.6.4",
+    "protobufjs": "^8.6.5",
     "@opentelemetry/core": "^2.8.0",
-    "js-yaml": "^4.2.0"
+    "js-yaml": "^4.3.0"
   }
 }
