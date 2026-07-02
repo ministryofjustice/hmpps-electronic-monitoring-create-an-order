@@ -245,7 +245,7 @@ const createAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOpt
 
 const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean) => {
   const ignoreActions = {
-    ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR',
+    ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' || !order.isOwner,
   }
 
   return {

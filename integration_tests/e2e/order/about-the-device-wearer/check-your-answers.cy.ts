@@ -884,6 +884,55 @@ context('Device wearer - check your answers', () => {
     })
   })
 
+  context('view only version', () => {
+    const mockVersionId = uuidv4()
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        versionId: mockVersionId,
+        status: 'IN_PROGRESS',
+        order: {
+          deviceWearer: {
+            nomisId: 'nomis',
+            pncId: 'pnc',
+            deliusId: 'delius',
+            prisonNumber: 'prison',
+            homeOfficeReferenceNumber: '',
+            complianceAndEnforcementPersonReference: 'cepr',
+            courtCaseReferenceNumber: 'ccrn',
+            firstName: 'test',
+            lastName: 'tester',
+            alias: 'tes',
+            dateOfBirth: '2000-01-01T00:00:00Z',
+            adultAtTimeOfInstallation: true,
+            sex: 'MALE',
+            gender: 'MALE',
+            disabilities: 'MENTAL_HEALTH',
+            otherDisability: null,
+            noFixedAbode: null,
+            interpreterRequired: false,
+          },
+          DeviceWearerResponsibleAdult: null,
+          isOwner: false,
+        },
+      })
+
+      cy.signIn()
+    })
+
+    const pageHeading = 'Check your answers'
+
+    it('no change links', () => {
+      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading, false)
+      page.changeLinks.should('not.exist')
+      page.continueButton().should('not.exist')
+    })
+  })
+
   context('Unhealthy backend', () => {
     beforeEach(() => {
       cy.task('reset')
