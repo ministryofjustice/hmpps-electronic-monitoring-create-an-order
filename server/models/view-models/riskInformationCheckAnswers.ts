@@ -11,7 +11,7 @@ import { notifyingOrganisationCourts } from '../NotifyingOrganisation'
 const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean, uri: string = '') => {
   const { questions } = content.pages.installationAndRisk
 
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' }
+  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' || !order.isOwner }
   const answers = []
 
   const isHomeOfficeUser = order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE'

@@ -335,6 +335,43 @@ context('installation and risk - check your answers', () => {
     })
   })
 
+  context('view only version', () => {
+    const mockVersionId = uuidv4()
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        versionId: mockVersionId,
+        status: 'IN_PROGRESS',
+        order: {
+          installationAndRisk: {
+            offence: 'SEXUAL_OFFENCES',
+            offenceAdditionalDetails: 'some offence details',
+            riskCategory: ['RISK_TO_GENDER', 'IOM'],
+            riskDetails: 'some risk details',
+            mappaLevel: 'MAPPA 1',
+            mappaCaseType: 'SOC (Serious Organised Crime)',
+          },
+          fmsResultDate: new Date('2024 12 14'),
+          isOwner: false,
+        },
+      })
+
+      cy.signIn()
+    })
+
+    const pageHeading = 'Check your answers'
+
+    it('no change links', () => {
+      const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading, false)
+      page.changeLinks.should('not.exist')
+      page.continueButton().should('not.exist')
+    })
+  })
+
   context('DDV4', () => {
     const pageHeading = 'View answers'
     beforeEach(() => {

@@ -144,6 +144,7 @@ context('Contact Information - check your answers', () => {
       const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
       page.changeLinks.should('not.exist')
+      page.continueButton().should('not.exist')
     })
   })
 
