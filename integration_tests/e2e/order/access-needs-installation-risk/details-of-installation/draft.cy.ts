@@ -5,7 +5,6 @@ import DetailsOfInstallationPage from './DetailsOfInstallationPage'
 const mockOrderId = uuidv4()
 context('details of installation page', () => {
   beforeEach(() => {
-    cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
     cy.task('stubCemoGetOrder', {

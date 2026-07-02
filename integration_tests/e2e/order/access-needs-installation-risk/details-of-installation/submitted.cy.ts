@@ -6,7 +6,6 @@ const mockOrderId = uuidv4()
 
 context('details of installation page', () => {
   beforeEach(() => {
-    cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
     const testFlags = { OFFENCE_FLOW_ENABLED: 'true' }
@@ -39,9 +38,5 @@ context('details of installation page', () => {
     page.form.riskCategoryField.shouldHaveValue('Safeguarding child')
     page.form.riskDetailsField.shouldBeDisabled()
     page.form.riskDetailsField.shouldHaveValue('some details')
-  })
-
-  afterEach(() => {
-    cy.task('reset')
   })
 })
