@@ -20,6 +20,7 @@ context('details of installation page', () => {
         detailsOfInstallation: {
           riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
           riskDetails: 'some details',
+          genderRiskDetails: '',
         },
         dataDictionaryVersion: 'DDV6',
       },

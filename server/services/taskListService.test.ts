@@ -1447,7 +1447,7 @@ describe('TaskListService', () => {
         }),
         dapoClauses: [],
         offences: [{ offenceType: 'offenceType', offenceDate: new Date().toISOString() }],
-        detailsOfInstallation: { riskCategory: ['some category'], riskDetails: '' },
+        detailsOfInstallation: { riskCategory: ['some category'], genderRiskDetails: '', riskDetails: '' },
         offenceAdditionalDetails: { additionalDetails: 'details' },
       })
 
@@ -1482,7 +1482,7 @@ describe('TaskListService', () => {
           offenceAdditionalDetails: 'mock offence additional details',
         }),
         offences: [],
-        detailsOfInstallation: { riskCategory: ['some category'], riskDetails: '' },
+        detailsOfInstallation: { riskCategory: ['some category'], genderRiskDetails: '', riskDetails: '' },
         offenceAdditionalDetails: { additionalDetails: 'details' },
       })
 
@@ -1512,7 +1512,7 @@ describe('TaskListService', () => {
           notifyingOrganisation: 'FAMILY_COURT',
         }),
         dapoClauses: [{ date: new Date().toISOString(), clause: 'clause' }],
-        detailsOfInstallation: { riskCategory: ['some category'], riskDetails: '' },
+        detailsOfInstallation: { riskCategory: ['some category'], genderRiskDetails: '', riskDetails: '' },
       })
 
       const taskListService = new TaskListService(mockOrderChecklistService)

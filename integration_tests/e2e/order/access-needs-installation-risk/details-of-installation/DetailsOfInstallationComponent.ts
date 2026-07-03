@@ -4,6 +4,7 @@ import FormTextareaComponent from '../../../../pages/components/formTextareaComp
 
 type DetailsOfInstallationData = {
   possibleRisks?: string[]
+  genderRiskDetails?: string
   riskCategories?: string[]
   riskDetails?: string
 }
@@ -42,6 +43,11 @@ export default class DetailsOfInstallationComponent extends FormComponent {
     return new FormTextareaComponent(this.form, label)
   }
 
+  get genderRiskDetailsField(): FormTextareaComponent {
+    const label = 'What sex or gender are they a risk to?'
+    return new FormTextareaComponent(this.form, label)
+  }
+
   fillInWith(input: DetailsOfInstallationData) {
     if (input.possibleRisks) {
       this.possibleRiskField.set(input.possibleRisks)
@@ -51,6 +57,9 @@ export default class DetailsOfInstallationComponent extends FormComponent {
     }
     if (input.riskDetails) {
       this.riskDetailsField.set(input.riskDetails)
+    }
+    if (input.genderRiskDetails) {
+      this.genderRiskDetailsField.set(input.genderRiskDetails)
     }
   }
 }

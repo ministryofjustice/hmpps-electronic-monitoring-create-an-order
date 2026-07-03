@@ -6,6 +6,7 @@ type InstallationAndRiskPageContent = QuestionPageContent<
   | 'offence'
   | 'offenceAdditionalDetails'
   | 'riskCategory'
+  | 'genderRiskDetails'
   | 'riskDetails'
   | 'possibleRisk'
 >

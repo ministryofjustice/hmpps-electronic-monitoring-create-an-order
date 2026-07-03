@@ -16,6 +16,10 @@ const detailsOfInstallationPageContent: DetailsOfInstallationPageContent = {
       text: 'Any other risks to be aware of? (optional)',
       hint: "Provide additional risk information about the device wearer's behaviour or the installation address.",
     },
+    genderRiskDetails: {
+      text: 'What sex or gender are they a risk to?',
+      hint: 'For example, Women',
+    },
   },
   section: 'Risk information',
   title: 'Risk at installation',

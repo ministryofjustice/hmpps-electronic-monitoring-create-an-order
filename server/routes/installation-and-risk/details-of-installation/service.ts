@@ -20,6 +20,7 @@ export default class DetailsOfInstallationService {
   ): Promise<DetailsOfInstallation | ValidationResult> {
     try {
       const parsedData = DetailsOfInstallationValidator.parse(input.data)
+
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/details-of-installation`,
         data: parsedData,
