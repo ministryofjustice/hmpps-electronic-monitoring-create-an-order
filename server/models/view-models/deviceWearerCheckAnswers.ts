@@ -8,9 +8,7 @@ import {
   AnswerOptions,
   createAddressAnswer,
 } from '../../utils/checkYourAnswers'
-import FeatureFlags from '../../utils/featureFlags'
 import { formatDateTime, lookup } from '../../utils/utils'
-import { AddressType } from '../Address'
 import { Order } from '../Order'
 
 const createOtherDisabilityAnswer = (order: Order, content: I18n, uri: string, answerOpts: AnswerOptions) => {
@@ -170,15 +168,7 @@ const createContactDetailsAnswers = (order: Order, content: I18n, answerOpts: An
   ]
 }
 
-const getAddressUri = (addressType: AddressType, orderId: string, postcodeEnabled: boolean) => {
-  const uri = postcodeEnabled
-    ? paths.POSTCODE_LOOKUP.ADDRESS_LIST.replace(':orderId', orderId)
-    : paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', orderId)
-
-  return uri
-    .replace(':addressType(primary|secondary|tertiary)', addressType.toLowerCase())
-    .replace(':addressType', addressType)
-}
+const getAddressUri = (orderId: string) => paths.POSTCODE_LOOKUP.ADDRESS_LIST.replace(':orderId', orderId)
 
 const createAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const noFixedAbodeUri = paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id)
@@ -186,8 +176,6 @@ const createAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOpt
   const primaryAddress = order.addresses.find(({ addressType }) => addressType === 'PRIMARY')
   const secondaryAddress = order.addresses.find(({ addressType }) => addressType === 'SECONDARY')
   const tertiaryAddress = order.addresses.find(({ addressType }) => addressType === 'TERTIARY')
-
-  const postcodeEnabled = FeatureFlags.getInstance().get('POSTCODE_LOOKUP_ENABLED')
 
   const answers = [
     createBooleanAnswer(
@@ -200,43 +188,26 @@ const createAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOpt
 
   if (primaryAddress) {
     answers.push(
-      createAddressAnswer(
-        content.pages.primaryAddress.legend,
-        primaryAddress,
-        getAddressUri(primaryAddress.addressType, order.id, postcodeEnabled),
-        answerOpts,
-      ),
+      createAddressAnswer(content.pages.primaryAddress.legend, primaryAddress, getAddressUri(order.id), answerOpts),
     )
   }
 
   if (secondaryAddress) {
-    if (postcodeEnabled) {
-      answers.push(
-        createAnswer(
-          content.pages.addressList.questions.addAnother.text,
-          'Yes',
-          paths.POSTCODE_LOOKUP.ADDRESS_LIST.replace(':orderId', order.id),
-        ),
-      )
-    }
     answers.push(
-      createAddressAnswer(
-        content.pages.secondaryAddress.legend,
-        secondaryAddress,
-        getAddressUri(secondaryAddress.addressType, order.id, postcodeEnabled),
-        answerOpts,
+      createAnswer(
+        content.pages.addressList.questions.addAnother.text,
+        'Yes',
+        paths.POSTCODE_LOOKUP.ADDRESS_LIST.replace(':orderId', order.id),
       ),
+    )
+    answers.push(
+      createAddressAnswer(content.pages.secondaryAddress.legend, secondaryAddress, getAddressUri(order.id), answerOpts),
     )
   }
 
   if (tertiaryAddress) {
     answers.push(
-      createAddressAnswer(
-        content.pages.tertiaryAddress.legend,
-        tertiaryAddress,
-        getAddressUri(tertiaryAddress.addressType, order.id, postcodeEnabled),
-        answerOpts,
-      ),
+      createAddressAnswer(content.pages.tertiaryAddress.legend, tertiaryAddress, getAddressUri(order.id), answerOpts),
     )
   }
 
