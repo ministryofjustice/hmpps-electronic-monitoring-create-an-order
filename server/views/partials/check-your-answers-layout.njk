@@ -51,7 +51,7 @@
       <form method="post">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-button-group">
-          {% if not isOrderEditable %}
+          {% if not isOrderEditable or isViewOnly%}
             {{ govukButton({
               text: "Return to the main form menu",
               name: "action",

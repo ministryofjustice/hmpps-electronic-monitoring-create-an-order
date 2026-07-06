@@ -119,6 +119,33 @@ context('Contact Information - check your answers', () => {
         .changeLinkByQuestion("What is the device wearer's main address?")
         .should('have.attr', 'href', paths.POSTCODE_LOOKUP.ADDRESS_LIST.replace(':orderId', mockOrderId))
     })
+
+    it('change links should not exist when in view mode', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          dataDictionaryVersion: 'DDV5',
+          addresses: [
+            {
+              addressType: 'PRIMARY',
+              addressLine1: '10 downing street',
+              addressLine2: '',
+              addressLine3: 'London',
+              addressLine4: 'ENGLAND',
+              postcode: 'SW1A 2AA',
+            },
+          ],
+          isOwner: false,
+        },
+      })
+
+      const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.changeLinks.should('not.exist')
+      page.continueButton().should('not.exist')
+    })
   })
 
   context('Device Wearer has no fixed address', () => {

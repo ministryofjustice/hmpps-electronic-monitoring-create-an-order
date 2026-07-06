@@ -215,6 +215,7 @@ export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
   offences: [],
   mappa: null,
   offenceAdditionalDetails: null,
+  isOwner: true,
   ...overrideProperties,
 })
 
@@ -285,6 +286,7 @@ export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order =
     category: 'CATEGORY_ONE',
   },
   offenceAdditionalDetails: null,
+  isOwner: true,
   ...overrideProperties,
 })
 

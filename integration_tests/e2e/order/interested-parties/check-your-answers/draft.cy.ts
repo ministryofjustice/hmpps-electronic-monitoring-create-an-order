@@ -264,4 +264,42 @@ context('interested parties check answers page', () => {
       })
     })
   })
+  context('view only version', () => {
+    const mockVersionId = uuidv4()
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        versionId: mockVersionId,
+        status: 'IN_PROGRESS',
+        order: {
+          dataDictionaryVersion: 'DDV6',
+          interestedParties: {
+            notifyingOrganisation: 'PROBATION',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: 'test@test.com',
+            responsibleOfficerName: 'John Smith',
+            responsibleOfficerPhoneNumber: '01234567890',
+            responsibleOrganisation: 'PROBATION',
+            responsibleOrganisationRegion: 'GREATER_MANCHESTER',
+            responsibleOrganisationEmail: 'test2@test.com',
+          },
+          isOwner: false,
+        },
+      })
+
+      cy.signIn()
+    })
+
+    const pageHeading = 'Check your answers'
+
+    it('no change links', () => {
+      const page = Page.visit(InterestedPartiesCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading, false)
+      page.changeLinks.should('not.exist')
+      page.continueButton().should('not.exist')
+    })
+  })
 })
