@@ -10,7 +10,6 @@ import { Locales } from '../../types/i18n/locale'
 import { DataDictionaryVersions } from '../../types/i18n/dataDictionaryVersion'
 import OrderChecklistModel from '../../models/OrderChecklist'
 import OrderChecklistService from '../../services/orderChecklistService'
-import FeatureFlags from '../../utils/featureFlags'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
@@ -228,13 +227,7 @@ describe('ContactDetailsCheckAnswersController', () => {
     })
   })
 
-  it('should link address changes to postcode lookup when postcode lookup is enabled', async () => {
-    const mockGet = jest.fn((flag: string) => flag === 'POSTCODE_LOOKUP_ENABLED')
-    const mockGetValue = jest.fn(() => '')
-    jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
-      get: mockGet,
-      getValue: mockGetValue,
-    } as never)
+  it('should link address changes to postcode lookup', async () => {
     const primaryAddress = createAddress({
       addressType: 'PRIMARY',
       addressLine1: '10 Downing Street',
@@ -666,10 +659,7 @@ describe('ContactDetailsCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.CONTACT_INFORMATION.ADDRESSES.replace(
-                  ':addressType(primary|secondary|tertiary)',
-                  'primary',
-                ).replace(':orderId', order.id),
+                href: paths.POSTCODE_LOOKUP.ADDRESS_LIST.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's main address?",
               },
@@ -686,10 +676,7 @@ describe('ContactDetailsCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.CONTACT_INFORMATION.ADDRESSES.replace(
-                  ':addressType(primary|secondary|tertiary)',
-                  'secondary',
-                ).replace(':orderId', order.id),
+                href: paths.POSTCODE_LOOKUP.ADDRESS_LIST.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's second address?",
               },
@@ -706,10 +693,7 @@ describe('ContactDetailsCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.CONTACT_INFORMATION.ADDRESSES.replace(
-                  ':addressType(primary|secondary|tertiary)',
-                  'tertiary',
-                ).replace(':orderId', order.id),
+                href: paths.POSTCODE_LOOKUP.ADDRESS_LIST.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's third address?",
               },

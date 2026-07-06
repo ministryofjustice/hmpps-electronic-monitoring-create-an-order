@@ -102,20 +102,7 @@ type SectionBlock = {
 
 type FormData = Record<string, string | boolean>
 
-export const canBeCompleted = (task: Task, formData: FormData): boolean => {
-  if (([PAGES.secondaryAddress, PAGES.tertiaryAddress] as Page[]).includes(task.name)) {
-    if (task.name === PAGES.secondaryAddress) {
-      if (!(formData.hasAnotherAddress === true && formData.addressType === 'primary')) {
-        return false
-      }
-    }
-    if (task.name === PAGES.tertiaryAddress) {
-      if (!(formData.hasAnotherAddress === true && formData.addressType === 'secondary')) {
-        return false
-      }
-    }
-  }
-
+export const canBeCompleted = (task: Task): boolean => {
   return COMPLETABLE_STATES.includes(task.state)
 }
 
@@ -245,59 +232,18 @@ export default class TaskListService {
       completed: isNotNullOrUndefined(order.deviceWearer.noFixedAbode),
     })
 
-    if (FeatureFlags.getInstance().get('POSTCODE_LOOKUP_ENABLED')) {
-      tasks.push({
-        section: SECTIONS.aboutTheDeviceWearer,
-        name: PAGES.primaryAddress,
-        path: paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':addressType', 'PRIMARY'),
-        state: convertBooleanToEnum<State>(
-          order.deviceWearer.noFixedAbode,
-          STATES.cantBeStarted,
-          STATES.notRequired,
-          STATES.required,
-        ),
-        completed: isCompletedAddress(order, 'PRIMARY'),
-      })
-    } else {
-      tasks.push({
-        section: SECTIONS.aboutTheDeviceWearer,
-        name: PAGES.primaryAddress,
-        path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'primary'),
-        state: convertBooleanToEnum<State>(
-          order.deviceWearer.noFixedAbode,
-          STATES.cantBeStarted,
-          STATES.notRequired,
-          STATES.required,
-        ),
-        completed: isCompletedAddress(order, 'PRIMARY'),
-      })
-
-      tasks.push({
-        section: SECTIONS.aboutTheDeviceWearer,
-        name: PAGES.secondaryAddress,
-        path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'secondary'),
-        state: convertBooleanToEnum<State>(
-          order.deviceWearer.noFixedAbode,
-          STATES.cantBeStarted,
-          STATES.notRequired,
-          STATES.optional,
-        ),
-        completed: isCompletedAddress(order, 'SECONDARY'),
-      })
-
-      tasks.push({
-        section: SECTIONS.aboutTheDeviceWearer,
-        name: PAGES.tertiaryAddress,
-        path: paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'tertiary'),
-        state: convertBooleanToEnum<State>(
-          order.deviceWearer.noFixedAbode,
-          STATES.cantBeStarted,
-          STATES.notRequired,
-          STATES.optional,
-        ),
-        completed: isCompletedAddress(order, 'TERTIARY'),
-      })
-    }
+    tasks.push({
+      section: SECTIONS.aboutTheDeviceWearer,
+      name: PAGES.primaryAddress,
+      path: paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':addressType', 'PRIMARY'),
+      state: convertBooleanToEnum<State>(
+        order.deviceWearer.noFixedAbode,
+        STATES.cantBeStarted,
+        STATES.notRequired,
+        STATES.required,
+      ),
+      completed: isCompletedAddress(order, 'PRIMARY'),
+    })
 
     tasks.push({
       section: SECTIONS.aboutTheDeviceWearer,
@@ -550,9 +496,7 @@ export default class TaskListService {
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
       name: PAGES.installationAddress,
-      path: FeatureFlags.getInstance().get('POSTCODE_LOOKUP_ENABLED')
-        ? paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':addressType', 'INSTALLATION')
-        : paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':addressType(installation)', 'installation'),
+      path: paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':addressType', 'INSTALLATION'),
       state: convertBooleanToEnum<State>(
         order.installationLocation?.location === 'PRISON' ||
           order.installationLocation?.location === 'PROBATION_OFFICE' ||
@@ -693,7 +637,7 @@ export default class TaskListService {
   }
 
   getAvailableTasks = (tasks: Task[], formData: FormData, currentPage: Page) => {
-    return tasks.filter(task => canBeCompleted(task, formData) || isCurrentPage(task, currentPage))
+    return tasks.filter(task => canBeCompleted(task) || isCurrentPage(task, currentPage))
   }
 
   getCurrentSectionTasks(tasks: Task[], currentPage: Page): Task[] {
@@ -711,9 +655,7 @@ export default class TaskListService {
   getNextCheckYourAnswersPage(currentPage: Page, order: Order, versionId?: string) {
     const tasks = this.getTasks(order)
 
-    const checkYourAnswersTasks = tasks.filter(
-      task => canBeCompleted(task, {}) && task.path.includes('check-your-answers'),
-    )
+    const checkYourAnswersTasks = tasks.filter(task => canBeCompleted(task) && task.path.includes('check-your-answers'))
 
     const currentTaskIndex = this.getCurrentTaskIndex(checkYourAnswersTasks, currentPage)
 
@@ -743,7 +685,7 @@ export default class TaskListService {
   }
 
   isSectionComplete(tasks: Task[], order: Order, section: Section): boolean {
-    const tasksCompleted = tasks.every(task => (canBeCompleted(task, {}) ? task.completed : true))
+    const tasksCompleted = tasks.every(task => (canBeCompleted(task) ? task.completed : true))
     if (section === SECTIONS.electronicMonitoringCondition) {
       const anyConditionCompleted =
         order.monitoringConditionsAlcohol?.startDate !== undefined ||
@@ -779,7 +721,7 @@ export default class TaskListService {
         if (order.status !== 'IN_PROGRESS' || completed) {
           path = this.getCheckYourAnswersPathForSection(sectionsTasks)
         } else {
-          const firstAvailableTask = sectionsTasks.find(task => canBeCompleted(task, {}))
+          const firstAvailableTask = sectionsTasks.find(task => canBeCompleted(task))
           path = (firstAvailableTask || sectionsTasks[0]).path
         }
 
@@ -810,7 +752,7 @@ export default class TaskListService {
   getNextTaskPath(sectionTasks: Task[], orderId: string, versionId?: string) {
     let path: string
 
-    const firstAvailableTask = sectionTasks.find(task => canBeCompleted(task, {}))
+    const firstAvailableTask = sectionTasks.find(task => canBeCompleted(task))
 
     path = (firstAvailableTask || sectionTasks[0]).path
 

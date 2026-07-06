@@ -109,7 +109,7 @@ export default class SectionService {
   }
 
   private isSectionComplete(tasks: Task[], order: Order, section: SectionName): boolean {
-    const tasksCompleted = tasks.every(task => (canBeCompleted(task, {}) ? task.completed : true))
+    const tasksCompleted = tasks.every(task => (canBeCompleted(task) ? task.completed : true))
 
     if (section === SECTIONS.electronicMonitoringCondition) {
       const anyConditionCompleted =
