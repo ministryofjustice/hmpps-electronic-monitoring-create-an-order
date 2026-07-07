@@ -129,7 +129,7 @@ describe('authorised user', () => {
         .get(`/search`)
         .expect('Content-Type', /html/)
         .expect(res => {
-          expect(res.text).toContain('Search for a submitted form')
+          expect(res.text).toContain('Search for a form')
         })
     })
   })

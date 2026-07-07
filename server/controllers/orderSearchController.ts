@@ -64,7 +64,6 @@ export default class OrderSearchController {
       model.searchTerm = formData.searchTerm
       model.noResults = true
     }
-
     res.render('pages/search', model)
   }
 }

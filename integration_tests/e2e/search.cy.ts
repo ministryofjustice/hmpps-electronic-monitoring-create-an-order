@@ -40,8 +40,8 @@ context('Search', () => {
       page.subNav.should('exist')
       page.subNav.contains('Draft forms').should('have.attr', 'href', `/`)
       page.subNav.contains('Draft forms').should('not.have.attr', 'aria-current', 'page')
-      page.subNav.contains('Submitted forms').should('have.attr', 'href', `/search`)
-      page.subNav.contains('Submitted forms').should('have.attr', 'aria-current', `page`)
+      page.subNav.contains('Search for a form').should('have.attr', 'href', `/search`)
+      page.subNav.contains('Search for a form').should('have.attr', 'aria-current', `page`)
 
       // Search
       page.searchButton.should('exist')
@@ -66,10 +66,10 @@ context('Search', () => {
       Page.verifyOnPage(IndexPage)
     })
 
-    it('should navigate to search page when the submitted forms nav link is clicked', () => {
+    it('should navigate to search page when the Search for a form nav link is clicked', () => {
       const page = Page.visit(SearchPage)
 
-      page.subNav.contains('Submitted forms').click()
+      page.subNav.contains('Search for a form').click()
 
       Page.verifyOnPage(SearchPage)
     })
@@ -198,12 +198,10 @@ context('Search', () => {
       }
 
       let page: SearchPage
-
       beforeEach(() => {
         cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [mockOrder] })
         page = Page.visit(SearchPage)
       })
-
       describe('when searching by name', () => {
         beforeEach(() => {
           page.searchBox.type('Bob Builder')
@@ -212,6 +210,7 @@ context('Search', () => {
 
         it('should show correct headings', () => {
           page.ordersList.contains('Name')
+          page.ordersList.contains('Status')
           page.ordersList.contains('Date of birth')
           page.ordersList.contains('Personal ID number')
           page.ordersList.contains('Start date')
@@ -221,11 +220,25 @@ context('Search', () => {
 
         it('should show correct order details', () => {
           page.ordersList.contains('Bob Builder')
+          page.ordersList.contains('Submitted')
           page.ordersList.contains('some id')
           page.ordersList.contains('Glossop')
           page.ordersList.contains('20/11/2000')
           page.ordersList.find('tbody td').should('not.contain', 'Youth')
         })
+      })
+
+      it('should show correct order details for draft order', () => {
+        const draftOrder = {
+          ...basicOrder,
+          status: 'IN_PROGRESS',
+        }
+
+        cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [draftOrder] })
+        page = Page.visit(SearchPage)
+        page.searchBox.type('Bob Builder')
+        page.searchButton.click()
+        page.ordersList.contains('Draft')
       })
 
       describe('when searching by personal ID number', () => {

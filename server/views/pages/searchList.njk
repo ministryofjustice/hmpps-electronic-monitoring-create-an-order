@@ -28,7 +28,7 @@
         value: searchTerm
       },
       label: {
-        text: 'Search for a submitted form',
+        text: 'Search for a form',
         classes: "govuk-!-font-weight-bold"
       },
       hint: {
@@ -111,12 +111,25 @@
         {{ order.name }}
       </a>
       {% endset %}
-
+    
+    {% set status %}   
+        <div id="order-{{ order.index }}-status">
+          {% for tag in order.statusTags %}           
+            {% if tag.type == 'SUBMITTED' %}
+              {% set colour = "green" %}          
+            {% elif tag.type == 'DRAFT' %}
+              {% set colour = "grey" %}
+            {% endif %}
+            <strong class="govuk-tag govuk-tag--{{ colour }} govuk-!-margin-right-2">{{ tag.text }}</strong>
+          {% endfor %}
+        </div>
+    {% endset %}
       {% set row = [
         { html: name },
+       
         { text: order.dob }
       ] %}
-
+     
       {% if showYouth %}
         {% set row = (row.push({ text: order.youth }), row) %}
       {% endif %}
@@ -126,31 +139,34 @@
         { text: order.location },
         { text: order.startDate },
         { text: order.endDate },
-        { text: order.lastUpdated }
+        { text: order.lastUpdated },
+         {html: status}
       ), row) %}
 
       {% set tableRows = (tableRows.push(row), tableRows) %}
     {% endfor %}
 
     {% set normalHeaders = [
-      { text: "Name" },
+      { text: "Name" },     
       { text: "Date of birth" },
       { text: "Personal ID number" },
       { text: "Town or city" },
       { text: "Start date" },
       { text: "End date" },
-      { text: "Last updated" }
+      { text: "Last updated" },
+       { text: "Status" }
     ] %}
 
     {% set youthHeaders = [
-      { text: "Name" },
+      { text: "Name" },     
       { text: "Date of birth" },
       { text: "Youth" },
       { text: "Personal ID number" },
       { text: "Town or city" },
       { text: "Start date" },
       { text: "End date" },
-      { text: "Last updated" }
+      { text: "Last updated" },
+      { text: "Status" }
     ] %}
 
     {{ govukTable({
