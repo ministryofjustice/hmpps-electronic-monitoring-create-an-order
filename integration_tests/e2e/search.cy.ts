@@ -40,8 +40,8 @@ context('Search', () => {
       page.subNav.should('exist')
       page.subNav.contains('Draft forms').should('have.attr', 'href', `/`)
       page.subNav.contains('Draft forms').should('not.have.attr', 'aria-current', 'page')
-      page.subNav.contains('Submitted forms').should('have.attr', 'href', `/search`)
-      page.subNav.contains('Submitted forms').should('have.attr', 'aria-current', `page`)
+      page.subNav.contains('Search for a form').should('have.attr', 'href', `/search`)
+      page.subNav.contains('Search for a form').should('have.attr', 'aria-current', `page`)
 
       // Search
       page.searchButton.should('exist')
@@ -66,10 +66,10 @@ context('Search', () => {
       Page.verifyOnPage(IndexPage)
     })
 
-    it('should navigate to search page when the submitted forms nav link is clicked', () => {
+    it('should navigate to search page when the Search for a form nav link is clicked', () => {
       const page = Page.visit(SearchPage)
 
-      page.subNav.contains('Submitted forms').click()
+      page.subNav.contains('Search for a form').click()
 
       Page.verifyOnPage(SearchPage)
     })
