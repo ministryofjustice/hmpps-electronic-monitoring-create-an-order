@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import NoFixedAbodePage from '../../../pages/order/contact-information/no-fixed-abode'
-import PrimaryAddressPage from '../../../pages/order/contact-information/primary-address'
+import FindAddressPage from '../postcode-lookup/find-address/findAddressPage'
 import OrderSummaryPage from '../../../pages/order/summary'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 
@@ -72,7 +72,7 @@ context('Contact information', () => {
         page.form.fillInWith(validFormData)
         page.form.saveAndContinueButton.click()
 
-        Page.verifyOnPage(PrimaryAddressPage)
+        Page.verifyOnPage(FindAddressPage)
       })
 
       it('should return to the summary page', () => {

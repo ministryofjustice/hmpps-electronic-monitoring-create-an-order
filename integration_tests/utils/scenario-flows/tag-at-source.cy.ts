@@ -1,9 +1,11 @@
 import { createAddressPreview, trimSeconds } from '../../../server/utils/utils'
 import MonitoringConditionsCheckYourAnswersPage from '../../pages/order/monitoring-conditions/check-your-answers'
-import InstallationAddressPage from '../../pages/order/monitoring-conditions/installation-address'
 import InstallationAppointmentPage from '../../pages/order/monitoring-conditions/installation-appointment'
 import InstallationLocationPage from '../../pages/order/monitoring-conditions/installation-location'
 import Page from '../../pages/page'
+import FindAddressPage from '../../e2e/order/postcode-lookup/find-address/findAddressPage'
+import ConfirmAddressPage from '../../e2e/order/postcode-lookup/confirm-address/confirmAddressPage'
+import EnterAddressPage from '../../e2e/order/postcode-lookup/enter-address/enterAddressPage'
 
 export default function fillInTagAtSourceWith(
   installationLocation,
@@ -20,9 +22,15 @@ export default function fillInTagAtSourceWith(
     installationAppointmentPage.form.saveAndContinueButton.click()
   }
   if (installationAddressDetails) {
-    const installationAddress = Page.verifyOnPage(InstallationAddressPage)
-    installationAddress.form.fillInWith(installationAddressDetails)
-    installationAddress.form.saveAndContinueButton.click()
+    const findAddressPage = Page.verifyOnPage(FindAddressPage)
+    findAddressPage.form.manualAddressLink.click()
+
+    const enterAddressPage = Page.verifyOnPage(EnterAddressPage)
+    enterAddressPage.form.fillInWith(installationAddressDetails)
+    enterAddressPage.form.continueButton.click()
+
+    const confirmAddressPage = Page.verifyOnPage(ConfirmAddressPage)
+    confirmAddressPage.form.useAddressButton.click()
   }
 }
 

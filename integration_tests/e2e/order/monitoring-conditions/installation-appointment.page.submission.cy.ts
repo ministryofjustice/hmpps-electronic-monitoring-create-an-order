@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { faker } from '@faker-js/faker'
 import Page from '../../../pages/page'
 import InstallationAppointmentPage from '../../../pages/order/monitoring-conditions/installation-appointment'
-import InstallationAddressPage from '../../../pages/order/monitoring-conditions/installation-address'
+import FindAddressPage from '../postcode-lookup/find-address/findAddressPage'
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 
 const mockOrderId = uuidv4()
@@ -52,7 +52,7 @@ context('Monitoring conditions', () => {
             appointmentTimeDetails: '',
           },
         }).should('be.true')
-        Page.verifyOnPage(InstallationAddressPage)
+        Page.verifyOnPage(FindAddressPage)
       })
 
       context('when the address is primary', () => {
