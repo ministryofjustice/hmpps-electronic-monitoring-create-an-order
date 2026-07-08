@@ -18,4 +18,8 @@ export default class AddressListComponent extends SingleQuestionFormComponent {
       ['Yes', 'No'],
     )
   }
+
+  shouldBeDisabled(): void {
+    this.additionalAddresses.shouldBeDisabled()
+  }
 }
