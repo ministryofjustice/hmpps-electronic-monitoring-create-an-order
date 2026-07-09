@@ -140,8 +140,8 @@ context('Index', () => {
       page.subNav.should('exist')
       page.subNav.contains('Draft forms').should('have.attr', 'href', `/`)
       page.subNav.contains('Draft forms').should('have.attr', 'aria-current', 'page')
-      page.subNav.contains('Submitted forms').should('have.attr', 'href', `/search`)
-      page.subNav.contains('Submitted forms').should('not.have.attr', 'aria-current', `page`)
+      page.subNav.contains('Search for a form').should('have.attr', 'href', `/search`)
+      page.subNav.contains('Search for a form').should('not.have.attr', 'aria-current', `page`)
 
       // Order list
       page.orders.should('exist').should('have.length', 3)
@@ -215,7 +215,7 @@ context('Index', () => {
     it('should navigate to the search page', () => {
       const page = Page.visit(IndexPage)
 
-      page.subNav.contains('Submitted forms').click()
+      page.subNav.contains('Search for a form').click()
 
       Page.verifyOnPage(SearchPage)
     })

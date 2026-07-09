@@ -24,7 +24,7 @@ export default class IndexPage extends AppPage {
   }
 
   get searchNav(): PageElement {
-    return cy.contains('.moj-sub-navigation a', 'Submitted forms')
+    return cy.contains('.moj-sub-navigation a', 'Search for a form')
   }
 
   OrderFor(name: string): PageElement {
