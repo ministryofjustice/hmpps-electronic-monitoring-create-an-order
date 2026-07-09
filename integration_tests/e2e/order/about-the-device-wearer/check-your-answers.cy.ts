@@ -48,10 +48,6 @@ context('Device wearer - check your answers', () => {
       cy.signIn()
     })
 
-    afterEach(() => {
-      cy.task('resetFeatureFlags')
-    })
-
     const pageHeading = 'Check your answers'
 
     it('should not show addresses section', () => {
@@ -115,9 +111,6 @@ context('Device wearer - check your answers', () => {
       cy.signIn()
     })
 
-    afterEach(() => {
-      cy.task('resetFeatureFlags')
-    })
     const pageHeading = 'Check your answers'
 
     it('should show main address section', () => {
@@ -286,10 +279,8 @@ context('Device wearer - check your answers', () => {
           },
         ])
       })
-      context('postcode flow enabled', () => {
+      context('postcode flow', () => {
         it('shows other addresses question', () => {
-          cy.task('setFeatureFlags', { POSTCODE_LOOKUP_ENABLED: true })
-
           const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
           page.deviceWearerAddressesSection.shouldExist()
@@ -306,8 +297,6 @@ context('Device wearer - check your answers', () => {
               value: '2 Dunlin Close, Bolton, Greater Manchester, ENGLAND, BL2 1EW',
             },
           ])
-
-          cy.task('resetFeatureFlags')
         })
       })
     })
