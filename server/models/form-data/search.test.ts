@@ -1,6 +1,4 @@
-import {
-  getMockOrderListInformation,
-} from '../../../test/mocks/mockOrder'
+import { getMockOrderListInformation } from '../../../test/mocks/mockOrder'
 import { OrderStatusEnum, OrderTypeEnum } from '../Order'
 import { constructListViewModel } from './search'
 

@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from 'express'
-import { createInterestedParties, createMonitoringConditions, getMockOrder, getMockOrderListInformation } from '../../test/mocks/mockOrder'
+import { createMonitoringConditions, getMockOrder, getMockOrderListInformation } from '../../test/mocks/mockOrder'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
 import { Order, OrderStatusEnum, OrderTypeEnum } from '../models/Order'
@@ -13,7 +13,6 @@ jest.mock('../services/auditService')
 jest.mock('../services/orderSearchService')
 jest.mock('../data/hmppsAuditClient')
 
-const mockDraftOrder = getMockOrder()
 const mockDate = new Date(2000, 10, 20).toISOString()
 
 const mock500Error: SanitisedError = {

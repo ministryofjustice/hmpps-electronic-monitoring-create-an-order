@@ -8,7 +8,7 @@ const OrderListInformationModel = z.object({
   type: OrderTypeEnum,
   firstName: z.string().nullable().optional(),
   lastName: z.string().nullable().optional(),
-  notifyingOrganisation: z.string().nullable().optional(),  
+  notifyingOrganisation: z.string().nullable().optional(),
   lastUpdatedBy: z.string().nullable().optional(),
   lastUpdatedDateTime: z.string().datetime().nullable().optional(),
 })
