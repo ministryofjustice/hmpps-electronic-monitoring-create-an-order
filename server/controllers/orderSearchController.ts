@@ -5,6 +5,7 @@ import { AuditService, OrderSearchService } from '../services'
 import config from '../config'
 import { constructSearchViewModel, constructListViewModel, OrderSearchViewModel } from '../models/form-data/search'
 import logger from '../../logger'
+import { ListOrdersQueryParser } from '../models/form-data/OrderListView'
 
 const SearchOrderFormDataParser = z.object({
   searchTerm: z.string().nullable().optional(),
@@ -22,13 +23,15 @@ export default class OrderSearchController {
       correlationId: req.id,
     })
 
-    try {
-      const orders = await this.orderSearchService.listOrders({ accessToken: res.locals.user.token })
+    const { view } = ListOrdersQueryParser.parse(req.query)
 
-      res.render('pages/index', constructListViewModel(orders))
+    try {
+      const orders = await this.orderSearchService.listOrders({ accessToken: res.locals.user.token }, view)
+
+      res.render('pages/index', constructListViewModel(orders, view))
     } catch (e) {
       logger.warn(`List orders ${e} `)
-      res.render('pages/index', constructListViewModel([]))
+      res.render('pages/index', constructListViewModel([], view))
     }
   }
 

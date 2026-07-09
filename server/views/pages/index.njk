@@ -21,6 +21,30 @@
   {% set draftActive = true %}
   {% include "./formsNav.njk" %}
 
+  {if draftActive}
+  <form method="get" action="/" novalidate class="govuk-!-margin-bottom-6">
+  <div class="moj-action-bar__filter">
+    {{ govukSelect({
+      id: "view",
+      name: "view",
+      label: {
+        text: "Showing:"
+      },
+      formGroup: {
+        classes: "govuk-!-display-inline-block govuk-!-margin-right-2 govuk-!-margin-bottom-0"
+      },
+      items: viewOptions
+    }) }}
+
+    {{ govukButton({
+      text: "Filter",
+      classes: "govuk-button--secondary"
+    }) }}
+  </div>
+</form>
+  
+  {endif}
+
   {% include "./orderList.njk" %}
 
 {% endblock %}

@@ -3,6 +3,7 @@ import paths from '../../constants/paths'
 import { AddressTypeEnum } from '../Address'
 import { Order } from '../Order'
 import { OrderListInformation } from '../OrderListInformation'
+import { OrderListView } from './OrderListView'
 
 type OrderListViewModel = {
   orders: {
@@ -12,6 +13,7 @@ type OrderListViewModel = {
     index: number
   }[]
   variationAsNewOrderEnabled: boolean
+  viewOptions: Array<any>
 }
 
 export type OrderSearchViewModel = {
@@ -30,6 +32,12 @@ export type OrderSearchViewModel = {
   noResults?: boolean
   searchTerm?: string
 }
+
+export const OrderListViewEnum = [
+  {value: 'MY_ORDERS', text: 'My drafts', selected: true },
+  {value: 'FAILED_ORDERS', text: 'My failed to submit', selected: false },
+  {value: 'PRISON_ORDERS', text: 'My prison drafts', selected: false }
+]
 
 function getDisplayName(order: OrderListInformation): string {
   if (order.deviceWearer.firstName === null && order.deviceWearer.lastName === null) {
@@ -88,19 +96,24 @@ export const constructSearchViewModel = (orders: Array<Order>, searchTerm: strin
   }
 }
 
-export function constructListViewModel(orders: OrderListInformation[]): OrderListViewModel {
+export function constructListViewModel(orders: OrderListInformation[], view: OrderListView): OrderListViewModel {
   return {
     orders: orders.map((order, index) => ({
       name: getDisplayName(order),
       href: order.interestedParties?.notifyingOrganisation
         ? paths.ORDER.SUMMARY.replace(':orderId', order.id)
         : paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', order.id),
-      lastUpdated: order.lastUpdatedBy,
-      lastUpdatedDateTime: formatDateTime(order.lastUpdatedDateTime!!),
+      lastUpdatedBy: order.lastUpdatedBy,
+      lastUpdatedDateTime: order.lastUpdatedDateTime ? formatDateTime(order.lastUpdatedDateTime) : '',
       statusTags: getStatusTags(order),
       index,
     })),
     variationAsNewOrderEnabled: config.variationAsNewOrder.enabled,
+    viewOptions: OrderListViewEnum.map(option => ({
+     value: option.value,
+     text: option.text,
+     selected: option.value === view,
+    })),
   }
 }
 
