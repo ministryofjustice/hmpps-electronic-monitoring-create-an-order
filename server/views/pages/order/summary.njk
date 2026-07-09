@@ -196,42 +196,42 @@
     </div>
 
     <div class="govuk-grid-column-one-third">
-        {% if order.status != 'IN_PROGRESS' %}
+        {% if order.status != 'IN_PROGRESS' or isViewOnly %}
           {% if timelineItems | length %}
             {% set processedTimeLineItems = [] %}
-          {% for item in timelineItems %}
-            {% if item.href %}
-              {% set itemHtml %}               
-               <p> {{ item.text if item.text }} </p>
-                <div class="govuk-!-margin-top-2">
-                  <a href="{{ item.href }}">View submitted form</a>
-                </div>
-              {% endset %}
-            {% else %}
-              {% set itemHtml %}              
-                <p> {{ item.text if item.text }} </p>
-                <div class="govuk-!-margin-top-2">
-                  <p>You are viewing this version of the form</p>
-                </div>
-              {% endset %}
-            {% endif %}
+            {% for item in timelineItems %}
+              {% if item.href %}
+                {% set itemHtml %}               
+                 <p> {{ item.text if item.text }} </p>
+                  <div class="govuk-!-margin-top-2">
+                    <a href="{{ item.href }}">View submitted form</a>
+                  </div>
+                {% endset %}
+              {% else %}
+                {% set itemHtml %}              
+                  <p> {{ item.text if item.text }} </p>
+                  <div class="govuk-!-margin-top-2">
+                    <p>You are viewing this version of the form</p>
+                  </div>
+                {% endset %}
+              {% endif %}
 
-            {% set byLineHtml %}
-               {{ item.byline.text}}
-               <br />
-                <span class='moj-timeline__from'>{{ item.notifyingOrganisationDetails if item.notifyingOrganisationDetails }}</span>
-              {% endset %}
-            {% set processedItem = {
-              label: item.label,
-              datetime: item.datetime,
-              byline: {
-                html: byLineHtml
-              },
-              html: itemHtml
-            } %}
-            {% set processedTimeLineItems = (processedTimeLineItems.push(processedItem), processedTimeLineItems) %}
-          {% endfor %}
-          {{ mojTimeline({
+              {% set byLineHtml %}
+                 {{ item.byline.text}}
+                 <br />
+                  <span class='moj-timeline__from'>{{ item.notifyingOrganisationDetails if item.notifyingOrganisationDetails }}</span>
+                {% endset %}
+              {% set processedItem = {
+                label: item.label,
+                datetime: item.datetime,
+                byline: {
+                  html: byLineHtml
+                },
+                html: itemHtml
+              } %}
+              {% set processedTimeLineItems = (processedTimeLineItems.push(processedItem), processedTimeLineItems) %}
+            {% endfor %}
+            {{ mojTimeline({
               items: processedTimeLineItems
             })}}
           {% endif %}

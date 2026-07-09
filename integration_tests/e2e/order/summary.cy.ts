@@ -1815,7 +1815,7 @@ context('Order Summary', () => {
     })
 
     describe('viewing an unowned order', () => {
-      it('incomplete sections do not have links', () => {
+      beforeEach(() => {
         cy.task('stubCemoGetOrder', {
           httpStatus: 200,
           id: mockOrderId,
@@ -1873,11 +1873,15 @@ context('Order Summary', () => {
             isOwner: false,
           },
         })
+
         cy.task('stubCemoGetVersions', {
           httpStatus: 200,
           versions: [],
           orderId: mockOrderId,
         })
+      })
+
+      it('incomplete sections do not have links', () => {
         const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
         page.ownerBanner.should('exist')
@@ -1897,7 +1901,49 @@ context('Order Summary', () => {
         page.additionalDocumentsTask.shouldHaveStatus('Incomplete')
         page.additionalDocumentsTask.link.should('not.exist')
         page.submitOrderButton.should('not.exist')
-        cy.task('resetFeatureFlags')
+      })
+
+      it('should show the timeline with past versions', () => {
+        const versionOneId = uuidv4()
+        const versionTwoId = uuidv4()
+        const versionOne = versionInformation({
+          submittedBy: 'Person One',
+          versionId: versionOneId,
+          fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0).toISOString(),
+        })
+        const versionTwo = versionInformation({
+          submittedBy: 'Person Two',
+          versionId: versionTwoId,
+          type: 'VARIATION',
+          fmsResultDate: new Date(2025, 0, 3, 10, 30, 0, 0).toISOString(),
+        })
+
+        cy.task('stubCemoGetVersions', {
+          httpStatus: 200,
+          versions: [versionOne, versionTwo],
+          orderId: mockOrderId,
+        })
+
+        const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+        page.timeline.element.should('exist')
+        page.timeline.formSubmittedComponent.element.should('exist')
+        page.timeline.formSubmittedComponent.bylineContains('Person One')
+        page.timeline.formSubmittedComponent.resultDateIs('1 January 2025 at 10:30am')
+        page.timeline.formSubmittedComponent.description
+          .contains('View submitted form')
+          .should(
+            'have.attr',
+            'href',
+            paths.ORDER.SUMMARY_VERSION.replace(':orderId', mockOrderId).replace(':versionId', versionOne.versionId),
+          )
+        page.timeline.formSubmittedComponent.bylineContains('From Whitemoor Prison')
+
+        page.timeline.formVariationComponent.element.should('exist')
+        page.timeline.formVariationComponent.bylineContains('Person Two')
+        page.timeline.formVariationComponent.resultDateIs('3 January 2025 at 10:30am')
+        page.timeline.formVariationComponent.variationTextIs('Change to an order')
+        page.timeline.formVariationComponent.bylineContains('From Whitemoor Prison')
       })
     })
   })
