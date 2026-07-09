@@ -193,7 +193,7 @@ describe('OrderSearchController', () => {
 
       await orderController.list(req, res, next)
 
-      expect(mockOrderService.listOrders).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' }, 'MY_DRAFTS')
+      expect(mockOrderService.listOrders).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' }, 'MY_ORDERS')
       expect(res.render).toHaveBeenCalledWith(
         'pages/index',
         expect.objectContaining({
