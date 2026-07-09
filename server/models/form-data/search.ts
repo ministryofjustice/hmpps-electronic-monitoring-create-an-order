@@ -24,7 +24,6 @@ export type OrderSearchViewModel = {
     startDate: string
     endDate: string
     lastUpdated: string
-    statusTags: { text: string; type: string }[]
   }[]
   variationAsNewOrderEnabled: boolean
   emptySearch?: boolean
@@ -78,7 +77,6 @@ const createOrderItem = (order: Order) => {
     startDate: order.monitoringConditions?.startDate ? formatDateTime(order.monitoringConditions?.startDate) : '',
     endDate: order.monitoringConditions?.endDate ? formatDateTime(order.monitoringConditions?.endDate) : '',
     lastUpdated: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : '',
-    statusTags: getSearchStatusTags(order),
   }
 }
 
@@ -97,24 +95,13 @@ export function constructListViewModel(orders: OrderListInformation[]): OrderLis
       href: order.interestedParties?.notifyingOrganisation
         ? paths.ORDER.SUMMARY.replace(':orderId', order.id)
         : paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', order.id),
+      lastUpdated: order.lastUpdatedBy,
+      lastUpdatedDateTime: formatDateTime(order.lastUpdatedDateTime!!),
       statusTags: getStatusTags(order),
       index,
     })),
     variationAsNewOrderEnabled: config.variationAsNewOrder.enabled,
   }
-}
-
-const getSearchStatusTags = (order: OrderListInformation) => {
-  const statusTags = []
-
-  if (order?.status === 'SUBMITTED') {
-    statusTags.push({ text: 'Submitted', type: 'SUBMITTED' })
-  }
-
-  if (order?.status === 'IN_PROGRESS') {
-    statusTags.push({ text: 'Draft', type: 'DRAFT' })
-  }
-  return statusTags
 }
 
 const getStatusTags = (order: OrderListInformation) => {

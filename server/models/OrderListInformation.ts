@@ -9,6 +9,8 @@ const OrderListInformationModel = z.object({
   type: OrderTypeEnum,
   deviceWearer: DeviceWearerModel,
   interestedParties: InterestedPartiesModel.nullable(),
+  lastUpdatedBy: z.string().nullable().optional(),
+  lastUpdatedDateTime: z.string().datetime().nullable().optional(),
 })
 
 export type OrderListInformation = z.infer<typeof OrderListInformationModel>

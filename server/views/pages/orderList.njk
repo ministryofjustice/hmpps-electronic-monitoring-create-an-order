@@ -21,6 +21,22 @@
     {% endfor %}
   </div>
   {% endset %}
+  { if user === prisonOrYouthn }
+    {% set row = [
+    {
+      html: name
+    },
+    {
+      html: lastUpdatedDateTime
+    },
+    {
+      html: lastUpdatedBy
+    }
+    {
+      html: status
+    }
+  ] %}
+  {elseif}
   {% set row = [
     {
       html: name
@@ -28,6 +44,7 @@
       html: status
     }
   ] %}
+  {% endif %}
   {% set tableRows = (tableRows.push(row), tableRows) %}
 {% endfor %}
 <div id="ordersList">
