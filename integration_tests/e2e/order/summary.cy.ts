@@ -13,6 +13,7 @@ import DetailsOfInstallationPage from './access-needs-installation-risk/details-
 import ResponsibleOfficerPage from './interested-parties/responsible-officer/responsibleOfficerPage'
 import InterestedPartiesCheckYourAnswersPage from './interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
 import DeviceWearerCheckYourAnswersPage from '../../pages/order/about-the-device-wearer/check-your-answers'
+import mockApiOrder from '../../utils/data/ApiOrder'
 
 const mockOrderId = uuidv4()
 
@@ -1632,51 +1633,27 @@ context('Order Summary', () => {
         httpStatus: 200,
         id: mockOrderId,
         status: 'IN_PROGRESS',
-        order: {
-          id: mockOrderId,
-          status: 'IN_PROGRESS',
-          deviceWearer: {
-            nomisId: '',
-            pncId: null,
-            deliusId: null,
-            prisonNumber: null,
-            homeOfficeReferenceNumber: null,
-            complianceAndEnforcementPersonReference: null,
-            courtCaseReferenceNumber: null,
-            firstName: 'Joe',
-            lastName: 'Bloggs',
-            alias: null,
-            dateOfBirth: null,
-            adultAtTimeOfInstallation: false,
-            sex: null,
-            gender: null,
-            disabilities: '',
-            noFixedAbode: false,
-            interpreterRequired: null,
-          },
-          interestedParties: {
-            notifyingOrganisation: 'PRISON',
-            notifyingOrganisationName: 'ALTCOURSE_PRISON',
-            notifyingOrganisationEmail: 'notifying@organisation',
+        order: mockApiOrder(),
+      })
 
-            responsibleOfficerFirstName: null,
-            responsibleOfficerLastName: '',
-            responsibleOfficerEmail: '@email',
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
+      })
 
-            responsibleOrganisation: null,
-            responsibleOrganisationEmail: '',
-            responsibleOrganisationRegion: '',
-          },
-          deviceWearerResponsibleAdult: {
-            contactNumber: null,
-            fullName: null,
-            otherRelationshipDetails: null,
-            relationship: null,
-          },
-          additionalDocuments: [{ id: uuidv4(), fileName: '', fileType: AttachmentType.LICENCE }],
-          orderParameters: { havePhoto: false },
-          isValid: true,
-        },
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.electronicMonitoringTask.shouldHaveStatus('Cannot start yet')
+      page.electronicMonitoringTask.link.should('not.exist')
+      page.submitOrderButton.should('be.disabled')
+    })
+    it('should display monitoring condition task as Not Cannot start yet when device wearer not complete', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: mockApiOrder(),
       })
 
       cy.task('stubCemoGetVersions', {
@@ -1697,69 +1674,7 @@ context('Order Summary', () => {
         httpStatus: 200,
         id: mockOrderId,
         status: 'SUBMITTED',
-        order: {
-          id: mockOrderId,
-          status: 'IN_PROGRESS',
-          deviceWearerResponsibleAdult: {
-            contactNumber: null,
-            fullName: null,
-            otherRelationshipDetails: null,
-            relationship: null,
-          },
-          addresses: [
-            {
-              addressType: 'PRIMARY',
-              addressLine1: '',
-              addressLine2: '',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: '',
-            },
-          ],
-          installationAndRisk: {
-            mappaCaseType: null,
-            mappaLevel: null,
-            riskCategory: null,
-            riskDetails: null,
-            offence: null,
-            offenceAdditionalDetails: null,
-          },
-          interestedParties: {
-            notifyingOrganisation: 'HOME_OFFICE',
-            notifyingOrganisationName: '',
-            notifyingOrganisationEmail: '',
-            responsibleOfficerName: '',
-            responsibleOfficerPhoneNumber: '',
-            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
-            responsibleOrganisationAddress: {
-              addressType: 'RESPONSIBLE_ORGANISATION',
-              addressLine1: '',
-              addressLine2: '',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: '',
-            },
-            responsibleOrganisationEmail: '',
-            responsibleOrganisationPhoneNumber: '',
-            responsibleOrganisationRegion: '',
-          },
-          offences: [
-            {
-              id: 'offence id',
-              offenceType: 'SEXUAL_OFFENCES',
-            },
-          ],
-          offenceAdditionalDetails: {
-            additionalDetails: 'mock offence details',
-          },
-          detailsOfInstallation: {
-            riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
-            riskDetails: 'some risk details',
-          },
-          additionalDocuments: [{ id: uuidv4(), fileName: '', fileType: AttachmentType.LICENCE }],
-          orderParameters: { havePhoto: false },
-          isValid: true,
-        },
+        order: mockApiOrder(),
       })
       cy.task('stubCemoGetVersions', {
         httpStatus: 200,
@@ -1779,8 +1694,8 @@ context('Order Summary', () => {
         id: mockOrderId,
         status: 'SUBMITTED',
         order: {
+          ...mockApiOrder(),
           id: mockOrderId,
-          status: 'IN_PROGRESS',
           deviceWearer: {
             nomisId: '',
             pncId: null,
@@ -1807,49 +1722,6 @@ context('Order Summary', () => {
             relationship: null,
           },
           contactDetails: { contactNumber: '', phoneNumberAvailable: false },
-          installationAndRisk: {
-            mappaCaseType: null,
-            mappaLevel: null,
-            riskCategory: null,
-            riskDetails: null,
-            offence: null,
-            offenceAdditionalDetails: null,
-          },
-          interestedParties: {
-            notifyingOrganisation: 'HOME_OFFICE',
-            notifyingOrganisationName: '',
-            notifyingOrganisationEmail: '',
-            responsibleOfficerName: '',
-            responsibleOfficerPhoneNumber: '',
-            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
-            responsibleOrganisationAddress: {
-              addressType: 'RESPONSIBLE_ORGANISATION',
-              addressLine1: '',
-              addressLine2: '',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: '',
-            },
-            responsibleOrganisationEmail: '',
-            responsibleOrganisationPhoneNumber: '',
-            responsibleOrganisationRegion: '',
-          },
-          offences: [
-            {
-              id: 'offence id',
-              offenceType: 'SEXUAL_OFFENCES',
-            },
-          ],
-          offenceAdditionalDetails: {
-            additionalDetails: 'mock offence details',
-          },
-          detailsOfInstallation: {
-            riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
-            riskDetails: 'some risk details',
-          },
-          addresses: [],
-          additionalDocuments: [{ id: uuidv4(), fileName: '', fileType: AttachmentType.LICENCE }],
-          orderParameters: { havePhoto: false },
         },
       })
       cy.task('stubCemoGetVersions', {
@@ -1875,6 +1747,7 @@ context('Order Summary', () => {
         id: mockOrderId,
         status: 'SUBMITTED',
         order: {
+          ...mockApiOrder(),
           id: mockOrderId,
           status: 'IN_PROGRESS',
           deviceWearer: {
@@ -1903,46 +1776,6 @@ context('Order Summary', () => {
             relationship: null,
           },
           contactDetails: { contactNumber: '', phoneNumberAvailable: false },
-          installationAndRisk: {
-            mappaCaseType: null,
-            mappaLevel: null,
-            riskCategory: null,
-            riskDetails: null,
-            offence: null,
-            offenceAdditionalDetails: null,
-          },
-          interestedParties: {
-            notifyingOrganisation: 'HOME_OFFICE',
-            notifyingOrganisationName: '',
-            notifyingOrganisationEmail: '',
-            responsibleOfficerName: '',
-            responsibleOfficerPhoneNumber: '',
-            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
-            responsibleOrganisationAddress: {
-              addressType: 'RESPONSIBLE_ORGANISATION',
-              addressLine1: '',
-              addressLine2: '',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: '',
-            },
-            responsibleOrganisationEmail: '',
-            responsibleOrganisationPhoneNumber: '',
-            responsibleOrganisationRegion: '',
-          },
-          offences: [
-            {
-              id: 'offence id',
-              offenceType: 'SEXUAL_OFFENCES',
-            },
-          ],
-          offenceAdditionalDetails: {
-            additionalDetails: 'mock offence details',
-          },
-          detailsOfInstallation: {
-            riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
-            riskDetails: 'some risk details',
-          },
           monitoringConditions: {
             orderType: null,
             curfew: false,
@@ -1962,9 +1795,6 @@ context('Order Summary', () => {
             isValid: true,
             offenceType: null,
           },
-          addresses: [],
-          additionalDocuments: [{ id: uuidv4(), fileName: '', fileType: AttachmentType.LICENCE }],
-          orderParameters: { havePhoto: false },
         },
       })
       cy.task('stubCemoGetVersions', {
@@ -1982,6 +1812,93 @@ context('Order Summary', () => {
       )
       page.submitOrderButton.should('be.disabled')
       cy.task('resetFeatureFlags')
+    })
+
+    describe('viewing an unowned order', () => {
+      it('incomplete sections do not have links', () => {
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'SUBMITTED',
+          order: {
+            ...mockApiOrder(),
+            id: mockOrderId,
+            status: 'IN_PROGRESS',
+            lastUpdatedBy: 'Test User',
+            deviceWearer: {
+              nomisId: '',
+              pncId: null,
+              deliusId: null,
+              prisonNumber: null,
+              homeOfficeReferenceNumber: null,
+              complianceAndEnforcementPersonReference: null,
+              courtCaseReferenceNumber: null,
+              firstName: 'Joe',
+              lastName: 'Bloggs',
+              alias: null,
+              dateOfBirth: null,
+              adultAtTimeOfInstallation: false,
+              sex: null,
+              gender: null,
+              disabilities: '',
+              noFixedAbode: true,
+              interpreterRequired: null,
+            },
+            deviceWearerResponsibleAdult: {
+              contactNumber: null,
+              fullName: null,
+              otherRelationshipDetails: null,
+              relationship: null,
+            },
+            contactDetails: { contactNumber: '', phoneNumberAvailable: false },
+            monitoringConditions: {
+              orderType: null,
+              curfew: false,
+              exclusionZone: false,
+              trail: false,
+              mandatoryAttendance: false,
+              alcohol: false,
+              orderTypeDescription: null,
+              conditionType: null,
+              startDate: null,
+              endDate: null,
+              sentenceType: null,
+              issp: null,
+              hdc: null,
+              prarr: null,
+              pilot: null,
+              isValid: true,
+              offenceType: null,
+            },
+            isOwner: false,
+          },
+        })
+        cy.task('stubCemoGetVersions', {
+          httpStatus: 200,
+          versions: [],
+          orderId: mockOrderId,
+        })
+        const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+        page.ownerBanner.should('exist')
+        page.ownerBanner.should(
+          'contain.text',
+          'You cannot make changes to this form because it is assigned to Test User.',
+        )
+
+        page.interestedPartiesTask.shouldHaveStatus('Incomplete')
+        page.interestedPartiesTask.link.should('not.exist')
+        page.aboutTheDeviceWearerTask.shouldHaveStatus('Complete')
+        page.aboutTheDeviceWearerTask.link.should('exist')
+        page.riskInformationTask.shouldHaveStatus('Incomplete')
+        page.riskInformationTask.link.should('not.exist')
+        page.electronicMonitoringTask.shouldHaveStatus('Incomplete')
+        page.electronicMonitoringTask.link.should('not.exist')
+        page.additionalDocumentsTask.shouldHaveStatus('Incomplete')
+        page.additionalDocumentsTask.link.should('not.exist')
+        page.submitOrderButton.should('not.exist')
+        cy.task('resetFeatureFlags')
+      })
     })
   })
 

@@ -70,6 +70,7 @@ const mockApiOrder = (status: Order['status'] = 'IN_PROGRESS', type: Order['type
   offences: [],
   mappa: null,
   offenceAdditionalDetails: null,
+  isOwner: true,
 })
 
 export default mockApiOrder

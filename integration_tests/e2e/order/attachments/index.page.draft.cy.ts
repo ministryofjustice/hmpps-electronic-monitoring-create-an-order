@@ -131,5 +131,33 @@ context('Attachments', () => {
         Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
       })
     })
+
+    context('view only version', () => {
+      const mockVersionId = uuidv4()
+      beforeEach(() => {
+        cy.task('reset')
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          versionId: mockVersionId,
+          status: 'IN_PROGRESS',
+          order: {
+            isOwner: false,
+          },
+        })
+
+        cy.signIn()
+      })
+
+      const pageHeading = 'Check your answers'
+
+      it('no change links', () => {
+        const page = Page.visit(AttachmentSummaryPage, { orderId: mockOrderId }, {}, pageHeading, false)
+        page.changeLinks.should('not.exist')
+        page.continueButton().should('not.exist')
+      })
+    })
   })
 })
