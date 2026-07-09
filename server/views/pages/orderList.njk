@@ -21,16 +21,16 @@
     {% endfor %}
   </div>
   {% endset %}
-{% if isPrisonUser %}
+{% if isPrisonOrYouthUser %}
     {% set row = [
     {
       html: name
     },
     {
-      html: lastUpdatedDateTime
+      text: order.lastUpdatedDateTime
     },
     {
-      html: lastUpdatedBy
+      text: order.lastUpdatedBy
     },
     {
       html: status
@@ -48,7 +48,7 @@
   {% set tableRows = (tableRows.push(row), tableRows) %}
 {% endfor %}
 <div id="ordersList">
-{% if isPrisonUser %}
+{% if isPrisonOrYouthUser %}
   {% set tableHead = [
     { text: "Name", classes: "govuk-!-width-one-half" },
     { text: "Last updated" },

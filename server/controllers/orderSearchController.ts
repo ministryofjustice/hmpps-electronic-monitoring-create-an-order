@@ -11,6 +11,11 @@ const SearchOrderFormDataParser = z.object({
   searchTerm: z.string().nullable().optional(),
 })
 
+const IsPrisonOrYouthUser = (res: Response): boolean => {
+  const cohort = res.locals.user.cohort?.cohort
+  return cohort === 'PRISON' // youth prison?
+}
+
 export default class OrderSearchController {
   constructor(
     private readonly auditService: AuditService,
@@ -22,16 +27,17 @@ export default class OrderSearchController {
       who: res.locals.user.username,
       correlationId: req.id,
     })
-
-    const { view } = ListOrdersQueryParser.parse(req.query)
+    const canFilterViews = IsPrisonOrYouthUser(res)
+    const { view: requestedView } = ListOrdersQueryParser.parse(req.query)
+    const view = canFilterViews ? requestedView : 'MY_DRAFTS'
 
     try {
       const orders = await this.orderSearchService.listOrders({ accessToken: res.locals.user.token }, view)
 
-      res.render('pages/index', constructListViewModel(orders, view))
+      res.render('pages/index', constructListViewModel(orders, view, canFilterViews))
     } catch (e) {
       logger.warn(`List orders ${e} `)
-      res.render('pages/index', constructListViewModel([], view))
+      res.render('pages/index', constructListViewModel([], view, canFilterViews))
     }
   }
 

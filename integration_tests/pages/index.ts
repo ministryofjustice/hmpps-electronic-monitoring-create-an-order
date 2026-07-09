@@ -23,6 +23,18 @@ export default class IndexPage extends AppPage {
     return cy.get('.moj-sub-navigation')
   }
 
+  get viewFilter(): PageElement {
+    return cy.get('select#view')
+  }
+
+  get viewFilterButton(): PageElement {
+    return cy.contains('button', 'Filter')
+  }
+
+  get orderListHeaders(): PageElement {
+    return this.ordersList.find('thead th')
+  }
+
   get searchNav(): PageElement {
     return cy.contains('.moj-sub-navigation a', 'Search for a form')
   }

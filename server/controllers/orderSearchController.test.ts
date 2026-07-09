@@ -133,12 +133,14 @@ describe('OrderSearchController', () => {
               href: `/order/${mockDraftOrder.id}/interest-parties/notifying-organisation`,
               index: 0,
               name: 'Not supplied',
+              lastUpdatedDateTime: '',
               statusTags: [{ type: 'DRAFT', text: 'Draft' }],
             },
             {
               href: `/order/${secondDraftOrder.id}/summary`,
               index: 1,
               name: 'Not supplied',
+              lastUpdatedDateTime: '',
               statusTags: [{ type: 'DRAFT', text: 'Draft' }],
             },
           ],
@@ -157,6 +159,56 @@ describe('OrderSearchController', () => {
           orders: [],
         }),
       )
+    })
+
+    it.each(['PRISON'] as const)( // Youth??
+      'should pass the requested view to the service and show the filter for %s users',
+      async cohort => {
+        mockOrderService.listOrders.mockResolvedValue([])
+        res.locals.user.cohort = { cohort }
+        req.query = { view: 'FAILED_ORDERS' }
+
+        await orderController.list(req, res, next)
+
+        expect(mockOrderService.listOrders).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' }, 'FAILED_ORDERS')
+        expect(res.render).toHaveBeenCalledWith(
+          'pages/index',
+          expect.objectContaining({
+            isPrisonOrYouthUser: true,
+            viewOptions: [
+              { value: 'MY_DRAFTS', text: 'My drafts', selected: false },
+              { value: 'FAILED_ORDERS', text: 'My failed to submit', selected: true },
+              { value: 'PRISON_ORDERS', text: 'My prison drafts', selected: false },
+            ],
+          }),
+        )
+      },
+    )
+
+    it('should ignore the requested view and hide the filter for other users', async () => {
+      mockOrderService.listOrders.mockResolvedValue([])
+      res.locals.user.cohort = { cohort: 'PROBATION' }
+      req.query = { view: 'PRISON_ORDERS' }
+
+      await orderController.list(req, res, next)
+
+      expect(mockOrderService.listOrders).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' }, 'MY_DRAFTS')
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/index',
+        expect.objectContaining({
+          isPrisonOrYouthUser: false,
+        }),
+      )
+    })
+
+    it('should fall back to MY_DRAFTS when the requested view is not recognised', async () => {
+      mockOrderService.listOrders.mockResolvedValue([])
+      res.locals.user.cohort = { cohort: 'PRISON' }
+      req.query = { view: 'NOT_A_VIEW' }
+
+      await orderController.list(req, res, next)
+
+      expect(mockOrderService.listOrders).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' }, 'MY_DRAFTS')
     })
   })
   describe('search orders', () => {

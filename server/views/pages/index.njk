@@ -6,6 +6,8 @@
 {%- from "moj/components/search/macro.njk" import mojSearch -%}
 {%- from "moj/components/pagination/macro.njk" import mojPagination -%}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 
 {% block content %}
@@ -21,7 +23,7 @@
   {% set draftActive = true %}
   {% include "./formsNav.njk" %}
 
-  {if draftActive}
+{% if isPrisonOrYouthUser %}
   <form method="get" action="/" novalidate class="govuk-!-margin-bottom-6">
   <div class="moj-action-bar__filter">
     {{ govukSelect({
@@ -43,7 +45,7 @@
   </div>
 </form>
   
-  {endif}
+{% endif %}
 
   {% include "./orderList.njk" %}
 

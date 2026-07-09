@@ -3,17 +3,20 @@ import paths from '../../constants/paths'
 import { AddressTypeEnum } from '../Address'
 import { Order } from '../Order'
 import { OrderListInformation } from '../OrderListInformation'
-import { OrderListView } from './OrderListView'
+import { OrderListView, OrderListViewEnum, orderListViewLabels } from './OrderListView'
 
 type OrderListViewModel = {
   orders: {
     name: string
     href: string
     statusTags: { text: string; type: string }[]
+    lastUpdatedBy?: string | null
+    lastUpdatedDateTime: string
     index: number
   }[]
   variationAsNewOrderEnabled: boolean
-  viewOptions: Array<any>
+  isPrisonOrYouthUser: boolean
+  viewOptions: { value: OrderListView, text: string, selected: boolean}[]
 }
 
 export type OrderSearchViewModel = {
@@ -32,12 +35,6 @@ export type OrderSearchViewModel = {
   noResults?: boolean
   searchTerm?: string
 }
-
-export const OrderListViewEnum = [
-  {value: 'MY_ORDERS', text: 'My drafts', selected: true },
-  {value: 'FAILED_ORDERS', text: 'My failed to submit', selected: false },
-  {value: 'PRISON_ORDERS', text: 'My prison drafts', selected: false }
-]
 
 function getDisplayName(order: OrderListInformation): string {
   if (order.deviceWearer.firstName === null && order.deviceWearer.lastName === null) {
@@ -85,6 +82,7 @@ const createOrderItem = (order: Order) => {
     startDate: order.monitoringConditions?.startDate ? formatDateTime(order.monitoringConditions?.startDate) : '',
     endDate: order.monitoringConditions?.endDate ? formatDateTime(order.monitoringConditions?.endDate) : '',
     lastUpdated: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : '',
+    statusTags: getStatusTag(order.status),
   }
 }
 
@@ -96,7 +94,7 @@ export const constructSearchViewModel = (orders: Array<Order>, searchTerm: strin
   }
 }
 
-export function constructListViewModel(orders: OrderListInformation[], view: OrderListView): OrderListViewModel {
+export function constructListViewModel(orders: OrderListInformation[], view: OrderListView, isPrisonOrYouthUser: boolean): OrderListViewModel {
   return {
     orders: orders.map((order, index) => ({
       name: getDisplayName(order),
@@ -109,26 +107,40 @@ export function constructListViewModel(orders: OrderListInformation[], view: Ord
       index,
     })),
     variationAsNewOrderEnabled: config.variationAsNewOrder.enabled,
-    viewOptions: OrderListViewEnum.map(option => ({
-     value: option.value,
-     text: option.text,
-     selected: option.value === view,
-    })),
+    isPrisonOrYouthUser,
+    viewOptions: OrderListViewEnum.options.map(value => ({
+      value,
+      text: orderListViewLabels[value],
+      selected: value === view,
+})),
   }
 }
 
-const getStatusTags = (order: OrderListInformation) => {
+const getStatusTag = (status: OrderListInformation['status']) => {
+  if (status === 'IN_PROGRESS') {
+    return [{ text: 'Draft', type: 'DRAFT' }]
+  }
+  if (status === 'ERROR') {
+    return [{ text: 'Failed to submit', type: 'FAILED' }]
+  }
+  if (status === 'SUBMITTED') {
+    return [{ text: 'Submitted', type: 'SUBMITTED' }]
+  }
+  return []
+}
+
+const getStatusTags = (order: Pick<OrderListInformation, 'status' | 'type'>) => {
   const statusTags = []
 
   if (order.type === 'VARIATION') {
     statusTags.push({ text: 'Change to form', type: 'VARIATION' })
   }
-
+  /*
   if (order.status === 'IN_PROGRESS') {
     statusTags.push({ text: 'Draft', type: 'DRAFT' })
   } else if (order.status === 'ERROR') {
     statusTags.push({ text: 'Failed to submit', type: 'FAILED' })
-  }
-
+  }*/
+  statusTags.push(...getStatusTag(order.status))
   return statusTags
 }

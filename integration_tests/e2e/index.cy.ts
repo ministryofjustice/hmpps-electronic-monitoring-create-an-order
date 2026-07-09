@@ -325,6 +325,108 @@ context('Index', () => {
     })
   })
 
+  context('Filtering the order list', () => {
+    const signInWithCohort = (cohort: Record<string, string>, userId: string) => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId,
+      })
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: cohort,
+      })
+      cy.signIn()
+    }
+
+    const prisonCohort = { cohort: 'PRISON', activeCaseLoadName: 'HMP ABC' }
+
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubCemoListOrders')
+    })
+
+    it('Should show the view filter with all options for prison users', () => {
+      signInWithCohort(prisonCohort, '223456780')
+
+      const page = Page.visit(IndexPage)
+
+      page.viewFilter.should('exist')
+      page.viewFilter.find('option').should('have.length', 3)
+      page.viewFilter.find('option:selected').should('have.text', 'My drafts')
+      page.viewFilter.find('option').eq(1).should('have.text', 'My failed to submit')
+      page.viewFilter.find('option').eq(2).should('have.text', 'My prison drafts')
+      page.viewFilterButton.should('exist')
+      page.checkIsAccessible()
+    })
+
+    it('Should show the view filter for youth users', () => {
+      signInWithCohort({ cohort: 'YOUTH' }, '223456781')
+
+      const page = Page.visit(IndexPage)
+
+      page.viewFilter.should('exist')
+      page.viewFilterButton.should('exist')
+    })
+
+    it('Should not show the view filter for probation users', () => {
+      signInWithCohort({ cohort: 'PROBATION' }, '223456782')
+
+      const page = Page.visit(IndexPage)
+
+      page.viewFilter.should('not.exist')
+      page.viewFilterButton.should('not.exist')
+    })
+
+    it('Should reload the order list with the selected view', () => {
+      signInWithCohort(prisonCohort, '223456783')
+
+      const page = Page.visit(IndexPage)
+
+      page.viewFilter.select('My failed to submit')
+      page.viewFilterButton.click()
+
+      cy.url().should('include', 'view=FAILED_ORDERS')
+      Page.verifyOnPage(IndexPage)
+      page.viewFilter.find('option:selected').should('have.text', 'My failed to submit')
+    })
+
+    it('Should show the last updated columns for prison users', () => {
+      signInWithCohort(prisonCohort, '223456784')
+
+      const page = Page.visit(IndexPage)
+
+      page.orderListHeaders.should('have.length', 4)
+      page.orderListHeaders.eq(0).should('contain.text', 'Name')
+      page.orderListHeaders.eq(1).should('contain.text', 'Last updated')
+      page.orderListHeaders.eq(2).should('contain.text', 'Updated by')
+      page.orderListHeaders.eq(3).should('contain.text', 'Status')
+    })
+
+    it('Should not show the last updated columns for probation users', () => {
+      signInWithCohort({ cohort: 'PROBATION' }, '223456785')
+
+      const page = Page.visit(IndexPage)
+
+      page.orderListHeaders.should('have.length', 2)
+      page.orderListHeaders.eq(0).should('contain.text', 'Name')
+      page.orderListHeaders.eq(1).should('contain.text', 'Status')
+    })
+
+    it('Should ignore a requested view for users who cannot filter', () => {
+      signInWithCohort({ cohort: 'PROBATION' }, '223456786')
+
+      cy.visit('/?view=PRISON_ORDERS')
+
+      const page = Page.verifyOnPage(IndexPage)
+      page.viewFilter.should('not.exist')
+      page.ordersList.should('exist')
+    })
+  })
+
   context('Header', () => {
     beforeEach(() => {
       cy.task('reset')
