@@ -107,7 +107,7 @@ const listOrders = (options: ListOrdersStubOptions = defaultListOrdersOptions): 
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/cemo/api/orders',
+      urlPathPattern: '/cemo/api/orders',
     },
     response: {
       status: options.httpStatus,

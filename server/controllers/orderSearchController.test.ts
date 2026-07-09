@@ -161,7 +161,8 @@ describe('OrderSearchController', () => {
       )
     })
 
-    it.each(['PRISON'] as const)( // Youth??
+    it.each(['PRISON'] as const)(
+      // Youth??
       'should pass the requested view to the service and show the filter for %s users',
       async cohort => {
         mockOrderService.listOrders.mockResolvedValue([])
@@ -176,7 +177,7 @@ describe('OrderSearchController', () => {
           expect.objectContaining({
             isPrisonOrYouthUser: true,
             viewOptions: [
-              { value: 'MY_DRAFTS', text: 'My drafts', selected: false },
+              { value: 'MY_ORDERS', text: 'My drafts', selected: false },
               { value: 'FAILED_ORDERS', text: 'My failed to submit', selected: true },
               { value: 'PRISON_ORDERS', text: 'My prison drafts', selected: false },
             ],
@@ -201,14 +202,14 @@ describe('OrderSearchController', () => {
       )
     })
 
-    it('should fall back to MY_DRAFTS when the requested view is not recognised', async () => {
+    it('should fall back to MY_ORDERS when the requested view is not recognised', async () => {
       mockOrderService.listOrders.mockResolvedValue([])
       res.locals.user.cohort = { cohort: 'PRISON' }
       req.query = { view: 'NOT_A_VIEW' }
 
       await orderController.list(req, res, next)
 
-      expect(mockOrderService.listOrders).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' }, 'MY_DRAFTS')
+      expect(mockOrderService.listOrders).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' }, 'MY_ORDERS')
     })
   })
   describe('search orders', () => {

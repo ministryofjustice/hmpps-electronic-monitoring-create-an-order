@@ -29,7 +29,7 @@ export default class OrderSearchController {
     })
     const canFilterViews = IsPrisonOrYouthUser(res)
     const { view: requestedView } = ListOrdersQueryParser.parse(req.query)
-    const view = canFilterViews ? requestedView : 'MY_DRAFTS'
+    const view = canFilterViews ? requestedView : 'MY_ORDERS'
 
     try {
       const orders = await this.orderSearchService.listOrders({ accessToken: res.locals.user.token }, view)

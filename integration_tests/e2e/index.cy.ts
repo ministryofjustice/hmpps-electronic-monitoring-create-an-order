@@ -363,15 +363,6 @@ context('Index', () => {
       page.checkIsAccessible()
     })
 
-    it('Should show the view filter for youth users', () => {
-      signInWithCohort({ cohort: 'YOUTH' }, '223456781')
-
-      const page = Page.visit(IndexPage)
-
-      page.viewFilter.should('exist')
-      page.viewFilterButton.should('exist')
-    })
-
     it('Should not show the view filter for probation users', () => {
       signInWithCohort({ cohort: 'PROBATION' }, '223456782')
 

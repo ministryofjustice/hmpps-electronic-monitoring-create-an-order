@@ -16,7 +16,7 @@ type OrderListViewModel = {
   }[]
   variationAsNewOrderEnabled: boolean
   isPrisonOrYouthUser: boolean
-  viewOptions: { value: OrderListView, text: string, selected: boolean}[]
+  viewOptions: { value: OrderListView; text: string; selected: boolean }[]
 }
 
 export type OrderSearchViewModel = {
@@ -94,7 +94,11 @@ export const constructSearchViewModel = (orders: Array<Order>, searchTerm: strin
   }
 }
 
-export function constructListViewModel(orders: OrderListInformation[], view: OrderListView, isPrisonOrYouthUser: boolean): OrderListViewModel {
+export function constructListViewModel(
+  orders: OrderListInformation[],
+  view: OrderListView,
+  isPrisonOrYouthUser: boolean,
+): OrderListViewModel {
   return {
     orders: orders.map((order, index) => ({
       name: getDisplayName(order),
@@ -112,7 +116,7 @@ export function constructListViewModel(orders: OrderListInformation[], view: Ord
       value,
       text: orderListViewLabels[value],
       selected: value === view,
-})),
+    })),
   }
 }
 
@@ -140,7 +144,7 @@ const getStatusTags = (order: Pick<OrderListInformation, 'status' | 'type'>) => 
     statusTags.push({ text: 'Draft', type: 'DRAFT' })
   } else if (order.status === 'ERROR') {
     statusTags.push({ text: 'Failed to submit', type: 'FAILED' })
-  }*/
+  } */
   statusTags.push(...getStatusTag(order.status))
   return statusTags
 }
