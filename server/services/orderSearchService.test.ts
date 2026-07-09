@@ -41,8 +41,8 @@ describe('Order Search Service', () => {
         token: '',
         query: { view: 'MY_ORDERS' },
       })
-      const { id, status, type, deviceWearer, interestedParties } = mockNewOrder
-      expect([{ id, status, type, deviceWearer, interestedParties }]).toEqual(expect.objectContaining(orders))
+      const { id, status, type, versionId } = mockNewOrder
+      expect([{ id, status, type, versionId }]).toEqual(expect.objectContaining(orders))
     })
 
     it('should throw an error if the api returns an invalid object', async () => {

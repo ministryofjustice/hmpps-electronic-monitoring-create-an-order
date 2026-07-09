@@ -170,6 +170,32 @@ context('Index', () => {
 
       Page.verifyOnPage(IndexPage)
     })
+
+    it('Should render a row for every order returned by the list', () => {
+      const orderIds = [uuidv4(), uuidv4(), uuidv4(), uuidv4(), uuidv4()]
+      cy.task('stubCemoListOrders', {
+        httpStatus: 200,
+        orders: orderIds.map((id, index) => ({
+          id,
+          versionId: uuidv4(),
+          status: 'IN_PROGRESS',
+          type: 'REQUEST',
+          firstName: 'Draft',
+          lastName: `user${index}`,
+          notifyingOrganisation: 'PRISON',
+          lastUpdatedBy: 'CEMO.USER',
+          lastUpdatedDateTime: '2024-03-10T11:30:00.000Z',
+        })),
+      })
+
+      const page = Page.visit(IndexPage)
+
+      page.orders.should('have.length', orderIds.length)
+      orderIds.forEach((id, index) => {
+        page.TableContains(`Draft user${index}`, 'Draft')
+        page.OrderFor(`Draft user${index}`).find('a').should('have.attr', 'href', `/order/${id}/summary`)
+      })
+    })
   })
 
   context('Submitting a create order request', () => {

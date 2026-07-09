@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from 'express'
-import { createInterestedParties, createMonitoringConditions, getMockOrder } from '../../test/mocks/mockOrder'
+import { createInterestedParties, createMonitoringConditions, getMockOrder, getMockOrderListInformation } from '../../test/mocks/mockOrder'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
 import { Order, OrderStatusEnum, OrderTypeEnum } from '../models/Order'
@@ -120,8 +120,9 @@ describe('OrderSearchController', () => {
 
   describe('list orders', () => {
     it('should render a view containing users orders', async () => {
-      const secondDraftOrder = getMockOrder({ interestedParties: createInterestedParties() })
-      mockOrderService.listOrders.mockResolvedValue([mockDraftOrder, secondDraftOrder])
+      const draftWithoutOrg = getMockOrderListInformation()
+      const draftWithOrg = getMockOrderListInformation({ notifyingOrganisation: 'PRISON', lastUpdatedBy: 'Bob' })
+      mockOrderService.listOrders.mockResolvedValue([draftWithoutOrg, draftWithOrg])
 
       await orderController.list(req, res, next)
 
@@ -130,16 +131,18 @@ describe('OrderSearchController', () => {
         expect.objectContaining({
           orders: [
             {
-              href: `/order/${mockDraftOrder.id}/interest-parties/notifying-organisation`,
+              href: `/order/${draftWithoutOrg.id}/interest-parties/notifying-organisation`,
               index: 0,
               name: 'Not supplied',
+              lastUpdatedBy: null,
               lastUpdatedDateTime: '',
               statusTags: [{ type: 'DRAFT', text: 'Draft' }],
             },
             {
-              href: `/order/${secondDraftOrder.id}/summary`,
+              href: `/order/${draftWithOrg.id}/summary`,
               index: 1,
               name: 'Not supplied',
+              lastUpdatedBy: 'Bob',
               lastUpdatedDateTime: '',
               statusTags: [{ type: 'DRAFT', text: 'Draft' }],
             },

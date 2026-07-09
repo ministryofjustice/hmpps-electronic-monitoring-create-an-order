@@ -36,12 +36,12 @@ export type OrderSearchViewModel = {
   searchTerm?: string
 }
 
-function getDisplayName(order: OrderListInformation): string {
-  if (order.deviceWearer.firstName === null && order.deviceWearer.lastName === null) {
+function formatName(firstName?: string | null, lastName?: string | null): string {
+  if (!firstName && !lastName) {
     return 'Not supplied'
   }
 
-  return `${order.deviceWearer.firstName || ''} ${order.deviceWearer.lastName || ''}`
+  return `${firstName || ''} ${lastName || ''}`
 }
 
 const formatDateTime = (dateToFormat: string): string => {
@@ -73,7 +73,7 @@ const createOrderItem = (order: Order) => {
   const currentAddress = order.addresses.find(address => address.addressType === AddressTypeEnum.Values.PRIMARY)
 
   return {
-    name: getDisplayName(order),
+    name: formatName(order.deviceWearer.firstName, order.deviceWearer.lastName),
     href: paths.ORDER.SUMMARY.replace(':orderId', order.id),
     dob: order.deviceWearer.dateOfBirth ? formatDateTime(order.deviceWearer.dateOfBirth) : '',
     youth: getYouthStatus(order),
@@ -101,8 +101,8 @@ export function constructListViewModel(
 ): OrderListViewModel {
   return {
     orders: orders.map((order, index) => ({
-      name: getDisplayName(order),
-      href: order.interestedParties?.notifyingOrganisation
+      name: formatName(order.firstName, order.lastName),
+      href: order.notifyingOrganisation
         ? paths.ORDER.SUMMARY.replace(':orderId', order.id)
         : paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', order.id),
       lastUpdatedBy: order.lastUpdatedBy,
@@ -139,12 +139,6 @@ const getStatusTags = (order: Pick<OrderListInformation, 'status' | 'type'>) => 
   if (order.type === 'VARIATION') {
     statusTags.push({ text: 'Change to form', type: 'VARIATION' })
   }
-  /*
-  if (order.status === 'IN_PROGRESS') {
-    statusTags.push({ text: 'Draft', type: 'DRAFT' })
-  } else if (order.status === 'ERROR') {
-    statusTags.push({ text: 'Failed to submit', type: 'FAILED' })
-  } */
   statusTags.push(...getStatusTag(order.status))
   return statusTags
 }
