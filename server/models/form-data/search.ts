@@ -40,7 +40,7 @@ export type OrderSearchViewModel = {
 const emptyOrderListMessage: Record<OrderListView, string> = {
   MY_ORDERS: 'You have no draft forms',
   FAILED_ORDERS: 'You have no failed to submit forms',
-  PRISON_ORDERS: 'There are no draft forms for your prison'
+  PRISON_ORDERS: 'There are no draft forms for your prison',
 }
 
 function formatName(firstName?: string | null, lastName?: string | null): string {
@@ -124,7 +124,7 @@ export function constructListViewModel(
       text: orderListViewLabels[value],
       selected: value === view,
     })),
-    emptyOrderListMessage: emptyOrderListMessage[view]
+    emptyOrderListMessage: emptyOrderListMessage[view],
   }
 }
 

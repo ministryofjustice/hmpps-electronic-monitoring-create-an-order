@@ -324,7 +324,7 @@ context('Index', () => {
     })
 
     it('Should show an empty list message when selected view has no orders', () => {
-      cy.task('stubCemoListOrders', {httpStatus: 200, orders: []})
+      cy.task('stubCemoListOrders', { httpStatus: 200, orders: [] })
       signInWithCohort(prisonCohort, '223456782')
       cy.visit('/?view=FAILED_ORDERS')
       Page.verifyOnPage(IndexPage)
