@@ -215,7 +215,7 @@ describe('Order Service', () => {
       })
 
       expect(results.length).toBe(3)
-      expect(results).toEqual([versions[0], versions[1]])
+      expect(results).toEqual([versions[0], versions[1], versions[2]])
     })
   })
 })
