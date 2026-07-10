@@ -87,7 +87,7 @@ export default class OrderService {
         path: `/api/orders/${input.orderId}/versions`,
         token: input.accessToken,
       })
-      return VersionInformationList.parse(result).filter(version => version.status !== 'IN_PROGRESS')
+      return VersionInformationList.parse(result)
     } catch {
       logger.error(`No versions found for orderId: ${input.orderId}`)
       return []

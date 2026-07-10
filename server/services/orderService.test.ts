@@ -202,7 +202,7 @@ describe('Order Service', () => {
       })
     })
 
-    it('should only return submitted and failed versions', async () => {
+    it('should return all versions', async () => {
       const versions = (['SUBMITTED', 'ERROR', 'IN_PROGRESS'] as const).map(status =>
         createVersionInformation({ status }),
       )
@@ -214,7 +214,7 @@ describe('Order Service', () => {
         orderId: mockOrderId,
       })
 
-      expect(results.length).toBe(2)
+      expect(results.length).toBe(3)
       expect(results).toEqual([versions[0], versions[1]])
     })
   })
