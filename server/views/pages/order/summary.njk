@@ -192,6 +192,16 @@
       </div>
         </div>
       {% endif %}
+     {% if order.status === "ERROR" %}
+        {% set receiptUrl = "/order/" + orderId + "/version/" + versionId + "/receipt" 
+          if versionId else "/order/" + orderId + "/receipt" %}
+        {{ govukButton({
+          text: "View and download form",
+          id: "view-and-download-button",
+          href: receiptUrl,
+          classes: "govuk-button--secondary"
+        }) }}
+      {% endif %}
     {% if isViewOnly %}
       <form action="/order/{{ order.id }}/update-order-owner" method="post" data-module="form-spinner">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
