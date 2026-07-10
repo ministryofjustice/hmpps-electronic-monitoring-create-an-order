@@ -90,10 +90,6 @@ context('Check your answers', () => {
       cy.signIn()
     })
 
-    afterEach(() => {
-      cy.task('resetFeatureFlags')
-    })
-
     const pageHeading = 'Check your answers'
 
     it('shows answers for checking', () => {
@@ -411,8 +407,7 @@ context('Check your answers', () => {
       ])
     })
 
-    it('should link installation address changes to postcode lookup when postcode lookup is enabled', () => {
-      cy.task('setFeatureFlags', { POSTCODE_LOOKUP_ENABLED: true })
+    it('should link installation address changes to postcode lookup', () => {
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
         id: mockOrderId,
@@ -1015,10 +1010,6 @@ context('Check your answers', () => {
       })
 
       cy.signIn()
-    })
-
-    afterEach(() => {
-      cy.task('resetFeatureFlags')
     })
 
     it('does not show curfew additional details', () => {

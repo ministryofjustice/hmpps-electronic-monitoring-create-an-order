@@ -8,7 +8,6 @@ import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
 
 context('Postcode Lookup', () => {
   let orderSummaryPage: OrderSummaryPage
-  const testFlags = { POSTCODE_LOOKUP_ENABLED: true }
 
   const deviceWearerDetails = {
     ...createFakeAdultDeviceWearer(),
@@ -20,7 +19,6 @@ context('Postcode Lookup', () => {
   }
 
   beforeEach(() => {
-    cy.task('setFeatureFlags', testFlags)
     cy.task('resetDB')
     cy.task('reset')
 
@@ -72,10 +70,6 @@ context('Postcode Lookup', () => {
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
     orderSummaryPage.aboutTheDeviceWearerTask.click()
-  })
-
-  afterEach(() => {
-    cy.task('resetFeatureFlags')
   })
 
   it('Should able to search for postcode and select address', () => {

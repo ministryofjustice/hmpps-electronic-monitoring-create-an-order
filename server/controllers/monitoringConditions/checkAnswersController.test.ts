@@ -14,7 +14,6 @@ import TaskListService from '../../services/taskListService'
 import CheckAnswersController from './checkAnswersController'
 import OrderChecklistModel from '../../models/OrderChecklist'
 import OrderChecklistService from '../../services/orderChecklistService'
-import FeatureFlags from '../../utils/featureFlags'
 import SectionService from '../../services/sectionsService'
 
 jest.mock('../../data/hmppsAuditClient')
@@ -109,14 +108,8 @@ describe('MonitoringConditionsCheckAnswersController', () => {
       })
     })
 
-    it('should link installation location page when postcode lookup is enabled and location type is primary', async () => {
+    it('should link installation location page when location type is primary', async () => {
       // Given
-      const mockGet = jest.fn((flag: string) => flag === 'POSTCODE_LOOKUP_ENABLED')
-      const mockGetValue = jest.fn(() => '')
-      jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
-        get: mockGet,
-        getValue: mockGetValue,
-      } as never)
       const order = getMockOrder({
         addresses: [
           createAddress({
@@ -165,14 +158,8 @@ describe('MonitoringConditionsCheckAnswersController', () => {
       )
     })
 
-    it('should link installation address changes to postcode lookup when postcode lookup is enabled and location type is prison', async () => {
+    it('should link installation address changes to postcode lookup when location type is prison', async () => {
       // Given
-      const mockGet = jest.fn((flag: string) => flag === 'POSTCODE_LOOKUP_ENABLED')
-      const mockGetValue = jest.fn(() => '')
-      jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
-        get: mockGet,
-        getValue: mockGetValue,
-      } as never)
       const order = getMockOrder({
         addresses: [
           createAddress({

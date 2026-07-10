@@ -4,11 +4,8 @@ import IdentityNumbersPage from '../../pages/order/about-the-device-wearer/ident
 import ResponsibleAdultDetailsPage from '../../pages/order/about-the-device-wearer/responsible-adult-details'
 import ContactDetailsPage from '../../pages/order/contact-information/contact-details'
 import NoFixedAbodePage from '../../pages/order/contact-information/no-fixed-abode'
-import PrimaryAddressPage from '../../pages/order/contact-information/primary-address'
-import SecondaryAddressPage from '../../pages/order/contact-information/secondary-address'
-import TertiaryAddressPage from '../../pages/order/contact-information/tertiary-adddress'
-
 import Page from '../../pages/page'
+import fillinAddress from './postcode-lookup.cy'
 
 export default function fillInAboutTheDeviceWearer({
   deviceWearerDetails,
@@ -41,28 +38,30 @@ export default function fillInAboutTheDeviceWearer({
   noFixedAbode.form.saveAndContinueButton.click()
 
   if (primaryAddressDetails) {
-    const primaryAddressPage = Page.verifyOnPage(PrimaryAddressPage, section)
-    primaryAddressPage.form.fillInWith({
-      ...primaryAddressDetails,
-      hasAnotherAddress: secondaryAddressDetails === undefined ? 'No' : 'Yes',
+    fillinAddress({
+      findAddress: {},
+      addressResult: {},
+      enterAddress: primaryAddressDetails,
+      addAnother: secondaryAddressDetails === undefined ? 'No' : 'Yes',
     })
-    primaryAddressPage.form.saveAndContinueButton.click()
 
     if (secondaryAddressDetails !== undefined) {
-      const secondaryAddressPage = Page.verifyOnPage(SecondaryAddressPage, section)
-      secondaryAddressPage.form.fillInWith({
-        ...secondaryAddressDetails,
-        hasAnotherAddress: tertiaryAddressDetails === undefined ? 'No' : 'Yes',
+      fillinAddress({
+        findAddress: {},
+        addressResult: {},
+        enterAddress: secondaryAddressDetails,
+        addAnother: tertiaryAddressDetails === undefined ? 'No' : 'Yes',
+        addressType: 'SECONDARY',
       })
-      secondaryAddressPage.form.saveAndContinueButton.click()
     }
 
     if (tertiaryAddressDetails !== undefined) {
-      const tertiaryAddressPage = Page.verifyOnPage(TertiaryAddressPage, section)
-      tertiaryAddressPage.form.fillInWith({
-        ...tertiaryAddressDetails,
+      fillinAddress({
+        findAddress: {},
+        addressResult: {},
+        enterAddress: tertiaryAddressDetails,
+        addressType: 'TERTIARY',
       })
-      tertiaryAddressPage.form.saveAndContinueButton.click()
     }
 
     Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')

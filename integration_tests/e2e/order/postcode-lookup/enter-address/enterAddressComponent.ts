@@ -58,4 +58,12 @@ export default class EnterAddressComponent extends FormComponent {
       this.postcodeField.set(address.postcode)
     }
   }
+
+  shouldBeDisabled(): void {
+    this.addressLine1Field.shouldBeDisabled()
+    this.addressLine2Field.shouldBeDisabled()
+    this.addressLine3Field.shouldBeDisabled()
+    this.addressLine4Field.shouldBeDisabled()
+    this.postcodeField.shouldBeDisabled()
+  }
 }
