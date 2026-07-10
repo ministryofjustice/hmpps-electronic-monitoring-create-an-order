@@ -2806,4 +2806,49 @@ context('Order Summary', () => {
       page.additionalDocumentsTask.shouldHaveStatus('Incomplete')
     })
   })
+
+  context('View only order, assign to me', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          isOwner: false,
+        },
+      })
+
+      cy.task('stubCemoGetVersions', { httpStatus: 200, versions: [], orderId: mockOrderId })
+      cy.signIn()
+    })
+
+    it('shows the "Assign form to me" button for order not owned', () => {
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.assignToMeButton.should('be.visible')
+    })
+
+    it('assigns the order to the current user and returns to the summary', () => {
+      cy.task('stubCemoUpdateOrderOwner', {
+        httpStatus: 200,
+        id: mockOrderId,
+        order: { id: mockOrderId, status: 'IN_PROGRESS' },
+      })
+
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.assignToMeButton.click()
+
+      Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId })
+    })
+
+    it('does not show the submit form controls while not owner', () => {
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.submitOrderButton.should('not.exist')
+      page.assignToMeButton.should('be.visible')
+    })
+  })
 })

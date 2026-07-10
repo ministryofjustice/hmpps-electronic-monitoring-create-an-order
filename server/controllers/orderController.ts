@@ -188,4 +188,15 @@ export default class OrderController {
       isVariation: isVariationType(orderType),
     })
   }
+
+  assignOrderOwner: RequestHandler = async (req: Request, res: Response) => {
+    const orderId = req.params.orderId as string
+
+    await this.orderService.assignOrderOwnerToUser({
+      orderId,
+      accessToken: res.locals.user.token,
+    })
+
+    res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+  }
 }

@@ -173,4 +173,12 @@ export default class OrderService {
       throw e
     }
   }
+
+  async assignOrderOwnerToUser(input: OrderRequestInput): Promise<Order> {
+    const result = await this.apiClient.put({
+      path: `/api/orders/${input.orderId}/update-order-owner`,
+      token: input.accessToken,
+    })
+    return OrderModel.parse(result)
+  }
 }

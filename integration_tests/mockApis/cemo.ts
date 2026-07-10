@@ -698,6 +698,43 @@ const resetDB = async () => {
   return true
 }
 
+type UpdateOrderOwnerStubOptions = {
+  httpStatus: number
+  id?: string
+  status?: string
+  order?: Partial<Order>
+}
+
+const defaultUpdateOrderOwnerOptions = {
+  httpStatus: 200,
+  id: uuidv4(),
+  status: 'IN_PROGRESS',
+}
+
+const updateOrderOwner = (options: UpdateOrderOwnerStubOptions = defaultUpdateOrderOwnerOptions): SuperAgentRequest => {
+  const stubOptions = { ...defaultUpdateOrderOwnerOptions, ...options }
+
+  return stubFor({
+    request: {
+      method: 'PUT',
+      urlPattern: `/cemo/api/orders/${stubOptions.id}/update-order-owner`,
+    },
+    response: {
+      status: stubOptions.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody:
+        stubOptions.httpStatus === 200
+          ? {
+              ...mockApiOrder(),
+              id: stubOptions.id,
+              status: stubOptions.status,
+              ...(stubOptions.order ? stubOptions.order : {}),
+            }
+          : null,
+    },
+  })
+}
+
 export default {
   stubCemoCreateOrder: createOrder,
   stubCemoCreateVariation: createVariation,
@@ -716,6 +753,7 @@ export default {
   stubCemoPutResponsibleAdult: putResponsibleAdult,
   stubUploadAttachment: uploadAttachment,
   stubDeleteAttachment: deleteAttachment,
+  stubCemoUpdateOrderOwner: updateOrderOwner,
   getStubbedRequest,
   stubCemoVerifyRequestReceived,
   stubDeleteOrder: deleteOrder,
