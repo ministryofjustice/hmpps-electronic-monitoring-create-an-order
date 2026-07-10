@@ -70,7 +70,7 @@
       }) }}
   {% endif %}
   {% if orders.length == 0 %}
-    <p class="govuk-body">You have no draft forms</p>
+    <p class="govuk-body">{{ emptyOrderListMessage | default('You have no draft forms') }}</p>
   {% endif %}
   {% if next != 0 %}
     {% set nextButton = { text: 'Next', href: ''} %}

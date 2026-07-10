@@ -64,10 +64,17 @@ describe('constructListViewModel', () => {
     expect(model.orders.map(order => order.statusTags)).toEqual([
       [{ text: 'Draft', type: 'DRAFT' }],
       [{ text: 'Failed to submit', type: 'FAILED' }],
-      [
-        { text: 'Change to form', type: 'VARIATION' },
-        { text: 'Draft', type: 'DRAFT' },
-      ],
+      [{ text: 'Change to form', type: 'VARIATION' }],
     ])
+  })
+
+  it('Should show one status per order', () => {
+    const orders = [
+      getMockOrderListInformation({ status: OrderStatusEnum.Enum.IN_PROGRESS, type: OrderTypeEnum.Enum.VARIATION }),
+      getMockOrderListInformation({ status: OrderStatusEnum.Enum.ERROR, type: OrderTypeEnum.Enum.VARIATION }),
+      getMockOrderListInformation({ status: OrderStatusEnum.Enum.IN_PROGRESS, type: OrderTypeEnum.Enum.REQUEST }),
+    ]
+    const model = constructListViewModel(orders, 'MY_ORDERS', true)
+    model.orders.forEach(order => expect(order.statusTags).toHaveLength(1))
   })
 })

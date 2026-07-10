@@ -88,7 +88,7 @@ context('Index', () => {
         .find('a')
         .should('have.attr', 'href', paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', mockOrderId2))
       page.IsAccesible('Failed user2', 1)
-      page.TableContains('vari user3', 'Change to form Draft')
+      page.TableContains('vari user3', 'Change to form')
       page.OrderFor('vari user3').find('a').should('have.attr', 'href', `/order/${mockOrderId3}/summary`)
       page.IsAccesible('vari user3', 2)
 
@@ -323,8 +323,16 @@ context('Index', () => {
       page.checkIsAccessible()
     })
 
+    it('Should show an empty list message when selected view has no orders', () => {
+      cy.task('stubCemoListOrders', {httpStatus: 200, orders: []})
+      signInWithCohort(prisonCohort, '223456782')
+      cy.visit('/?view=FAILED_ORDERS')
+      Page.verifyOnPage(IndexPage)
+      cy.contains('You have no failed to submit forms')
+    })
+
     it('Should not show the view filter for probation users', () => {
-      signInWithCohort({ cohort: 'PROBATION' }, '223456782')
+      signInWithCohort({ cohort: 'PROBATION' }, '')
 
       const page = Page.visit(IndexPage)
 

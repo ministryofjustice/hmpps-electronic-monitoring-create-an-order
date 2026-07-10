@@ -17,6 +17,7 @@ type OrderListViewModel = {
   variationAsNewOrderEnabled: boolean
   isPrisonOrYouthUser: boolean
   viewOptions: { value: OrderListView; text: string; selected: boolean }[]
+  emptyOrderListMessage?: string
 }
 
 export type OrderSearchViewModel = {
@@ -34,6 +35,12 @@ export type OrderSearchViewModel = {
   emptySearch?: boolean
   noResults?: boolean
   searchTerm?: string
+}
+
+const emptyOrderListMessage: Record<OrderListView, string> = {
+  MY_ORDERS: 'You have no draft forms',
+  FAILED_ORDERS: 'You have no failed to submit forms',
+  PRISON_ORDERS: 'There are no draft forms for your prison'
 }
 
 function formatName(firstName?: string | null, lastName?: string | null): string {
@@ -117,6 +124,7 @@ export function constructListViewModel(
       text: orderListViewLabels[value],
       selected: value === view,
     })),
+    emptyOrderListMessage: emptyOrderListMessage[view]
   }
 }
 
@@ -134,11 +142,8 @@ const getStatusTag = (status: OrderListInformation['status']) => {
 }
 
 const getStatusTags = (order: Pick<OrderListInformation, 'status' | 'type'>) => {
-  const statusTags = []
-
-  if (order.type === 'VARIATION') {
-    statusTags.push({ text: 'Change to form', type: 'VARIATION' })
+  if (order.type === 'VARIATION' && order.status === 'IN_PROGRESS') {
+    return [{ text: 'Change to form', type: 'VARIATION' }]
   }
-  statusTags.push(...getStatusTag(order.status))
-  return statusTags
+  return getStatusTag(order.status)
 }
