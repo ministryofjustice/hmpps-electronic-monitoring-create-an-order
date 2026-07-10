@@ -192,7 +192,7 @@
       </div>
         </div>
       {% endif %}
-     {% if order.status === "ERROR" %}
+     {% if order.status == "ERROR" %}
         {% set receiptUrl = "/order/" + orderId + "/version/" + versionId + "/receipt" 
           if versionId else "/order/" + orderId + "/receipt" %}
         {{ govukButton({
