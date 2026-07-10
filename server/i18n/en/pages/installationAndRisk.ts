@@ -22,6 +22,10 @@ const installationAndRiskPageContent: InstallationAndRiskPageContent = {
       text: "At installation what are the possible risks from the device wearer's behaviour?",
       hint: 'Check if there are any alerts for the device wearer. Select all that apply',
     },
+    genderRiskDetails: {
+      text: 'What sex or gender are they a risk to?',
+      hint: 'For example, Women',
+    },
     riskCategory: {
       text: 'What are the possible risks at the installation address? (optional)',
       hint: "Risks relate to the device wearer's behaviour and installation address. Select all that apply",

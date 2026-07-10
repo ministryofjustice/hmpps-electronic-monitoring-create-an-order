@@ -6,7 +6,6 @@ import AboutDeviceWearerPage from './about-the-device-wearer/device-wearer'
 import ResponsibleAdultDetailsPage from './about-the-device-wearer/responsible-adult-details'
 import ContactDetailsPage from './contact-information/contact-details'
 import NoFixedAbodePage from './contact-information/no-fixed-abode'
-import PrimaryAddressPage from './contact-information/primary-address'
 import InterestedPartiesPage from './contact-information/interested-parties'
 import InstallationAndRiskCheckYourAnswersPage from './installation-and-risk/check-your-answers'
 import AttachmentSummaryPage from './attachments/summary'
@@ -17,10 +16,8 @@ import IdentityNumbersPage from './about-the-device-wearer/identity-numbers'
 import UploadPhotoIdPage from './attachments/uploadPhotoId'
 import VariationDetailsPage from './variation/variationDetails'
 import UploadLicencePage from './attachments/uploadLicence'
-import SecondaryAddressPage from './contact-information/secondary-address'
 import ProbationDeliveryUnitPage from './contact-information/probation-delivery-unit'
 import HavePhotoPage from './attachments/havePhoto'
-import TertiaryAddressPage from './contact-information/tertiary-adddress'
 import fillInOrderTypeDescriptionsWith from '../../utils/scenario-flows/orderTypeDescription'
 import fillInTagAtSourceWith from '../../utils/scenario-flows/tag-at-source.cy'
 import fillInCurfewOrderDetailsWith from '../../utils/scenario-flows/curfew.cy'
@@ -43,6 +40,7 @@ import fillInAboutTheDeviceWearer from '../../utils/scenario-flows/about-the-dev
 import ResponsibleOrganisationPage from '../../e2e/order/interested-parties/responsible-organisation/responsibleOrganisationPage'
 import NationalSecurityDirectoratePage from '../../e2e/order/interested-parties/national-security-directorate/nationalSecurityDirectoratePage'
 import ResponsibleOfficerPage from '../../e2e/order/interested-parties/responsible-officer/responsibleOfficerPage'
+import fillinAddress from '../../utils/scenario-flows/postcode-lookup.cy'
 
 export default class OrderTasksPage extends AppPage {
   constructor(isOldVersionPage: boolean = false) {
@@ -616,28 +614,30 @@ export default class OrderTasksPage extends AppPage {
       noFixedAbode.form.saveAndContinueButton.click()
 
       if (primaryAddressDetails) {
-        const primaryAddressPage = Page.verifyOnPage(PrimaryAddressPage)
-        primaryAddressPage.form.fillInWith({
-          ...primaryAddressDetails,
-          hasAnotherAddress: secondaryAddressDetails === undefined ? 'No' : 'Yes',
+        fillinAddress({
+          findAddress: {},
+          addressResult: {},
+          enterAddress: primaryAddressDetails,
+          addAnother: secondaryAddressDetails === undefined ? 'No' : 'Yes',
         })
-        primaryAddressPage.form.saveAndContinueButton.click()
 
         if (secondaryAddressDetails !== undefined) {
-          const secondaryAddressPage = Page.verifyOnPage(SecondaryAddressPage)
-          secondaryAddressPage.form.fillInWith({
-            ...secondaryAddressDetails,
-            hasAnotherAddress: tertiaryAddressDetails === undefined ? 'No' : 'Yes',
+          fillinAddress({
+            findAddress: {},
+            addressResult: {},
+            enterAddress: secondaryAddressDetails,
+            addAnother: tertiaryAddressDetails === undefined ? 'No' : 'Yes',
+            addressType: 'SECONDARY',
           })
-          secondaryAddressPage.form.saveAndContinueButton.click()
         }
 
         if (tertiaryAddressDetails !== undefined) {
-          const tertiaryAddressPage = Page.verifyOnPage(TertiaryAddressPage)
-          tertiaryAddressPage.form.fillInWith({
-            ...tertiaryAddressDetails,
+          fillinAddress({
+            findAddress: {},
+            addressResult: {},
+            enterAddress: tertiaryAddressDetails,
+            addressType: 'TERTIARY',
           })
-          tertiaryAddressPage.form.saveAndContinueButton.click()
         }
       }
       if (interestedParties) {

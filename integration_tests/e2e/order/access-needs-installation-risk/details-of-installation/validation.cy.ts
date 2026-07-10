@@ -28,4 +28,16 @@ context('dapo order clause', () => {
       "Select all the possible risks from the device wearer's behaviour",
     )
   })
+
+  it('shows error if risk to gender selected but no details', () => {
+    const page = Page.visit(DetailsOfInstallationPage, { orderId: mockOrderId })
+
+    page.form.fillInWith({
+      possibleRisks: ['Offensive towards someone because of their sex or gender'],
+    })
+
+    page.form.saveAndContinueButton.click()
+
+    page.form.possibleRiskField.shouldHaveValidationMessage('Enter what sex or gender they are a risk to')
+  })
 })

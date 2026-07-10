@@ -1,7 +1,6 @@
 import { type RequestHandler, Router } from 'express'
 
 import AttachmentsController from '../controllers/attachments/attachmentController'
-import AddressController from '../controllers/contact-information/addressController'
 import ContactDetailsController from '../controllers/contact-information/contactDetailsController'
 import NoFixedAbodeController from '../controllers/contact-information/noFixedAbodeController'
 import InterestedPartiesController from '../controllers/contact-information/interestedPartiesController'
@@ -94,7 +93,6 @@ export default function routes({
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string | string[], handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
-  const addressController = new AddressController(auditService, addressService, taskListService)
   const alcoholMonitoringController = new AlcoholMonitoringController(
     auditService,
     alcoholMonitoringService,
@@ -284,10 +282,6 @@ export default function routes({
   get(paths.CONTACT_INFORMATION.NO_FIXED_ABODE, noFixedAbodeController.view)
   post(paths.CONTACT_INFORMATION.NO_FIXED_ABODE, noFixedAbodeController.update)
 
-  // Device wearer addresses
-  get(paths.CONTACT_INFORMATION.ADDRESSES, addressController.view)
-  post(paths.CONTACT_INFORMATION.ADDRESSES, addressController.update)
-
   // Interested parties
   get(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, interestedPartiesController.view)
   post(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, interestedPartiesController.update)
@@ -327,9 +321,6 @@ export default function routes({
   // Installation appointment page
   get(paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT, installationAppointmentController.view)
   post(paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT, installationAppointmentController.update)
-  // Installation address page
-  get(paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS, addressController.view)
-  post(paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS, addressController.update)
 
   // Trail monitoring page
   get(paths.MONITORING_CONDITIONS.TRAIL, trailMonitoringController.view)

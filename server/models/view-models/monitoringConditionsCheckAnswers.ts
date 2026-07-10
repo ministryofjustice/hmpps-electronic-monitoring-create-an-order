@@ -20,7 +20,6 @@ import {
   AnswerOptions,
 } from '../../utils/checkYourAnswers'
 import I18n from '../../types/i18n'
-import FeatureFlags from '../../utils/featureFlags'
 import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
 import { notifyingOrganisationCourts } from '../NotifyingOrganisation'
 
@@ -200,17 +199,10 @@ const createInstallationAddressAnswers = (order: Order, content: I18n, answerOpt
 }
 
 const getInstallationAddressLink = (order: Order) => {
-  if (FeatureFlags.getInstance().get('POSTCODE_LOOKUP_ENABLED')) {
-    if (order.installationLocation?.location === 'PRIMARY') {
-      return paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION.replace(':orderId', order.id)
-    }
-    return paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', order.id).replace(':addressType', 'INSTALLATION')
+  if (order.installationLocation?.location === 'PRIMARY') {
+    return paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION.replace(':orderId', order.id)
   }
-
-  return paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', order.id).replace(
-    ':addressType(installation)',
-    'installation',
-  )
+  return paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', order.id).replace(':addressType', 'INSTALLATION')
 }
 
 const createSchedulePreview = (schedule: CurfewSchedule) =>

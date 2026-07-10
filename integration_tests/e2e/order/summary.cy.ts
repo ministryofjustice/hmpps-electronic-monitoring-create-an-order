@@ -203,11 +203,12 @@ context('Order Summary', () => {
             offenceAdditionalDetails: 'mock offence additional details',
             riskCategory: null,
             riskDetails: null,
+            genderRiskDetails: null,
             mappaLevel: null,
             mappaCaseType: null,
           },
           offences: [],
-          detailsOfInstallation: { riskCategory: ['some category'], riskDetails: '' },
+          detailsOfInstallation: { riskCategory: ['some category'], riskDetails: '', genderRiskDetails: '' },
           offenceAdditionalDetails: { additionalDetails: 'details' },
         },
       })
@@ -503,6 +504,7 @@ context('Order Summary', () => {
             mappaLevel: null,
             riskCategory: null,
             riskDetails: null,
+            genderRiskDetails: null,
             offence: null,
             offenceAdditionalDetails: null,
           },
@@ -539,6 +541,7 @@ context('Order Summary', () => {
           detailsOfInstallation: {
             riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
             riskDetails: 'some risk details',
+            genderRiskDetails: '',
           },
           enforcementZoneConditions: [
             {
@@ -806,6 +809,7 @@ context('Order Summary', () => {
             mappaLevel: null,
             riskCategory: null,
             riskDetails: null,
+            genderRiskDetails: null,
             offence: null,
             offenceAdditionalDetails: null,
           },
@@ -842,6 +846,7 @@ context('Order Summary', () => {
           detailsOfInstallation: {
             riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
             riskDetails: 'some risk details',
+            genderRiskDetails: '',
           },
           enforcementZoneConditions: [
             {
@@ -1023,6 +1028,7 @@ context('Order Summary', () => {
             mappaLevel: null,
             riskCategory: null,
             riskDetails: null,
+            genderRiskDetails: null,
             offence: null,
             offenceAdditionalDetails: null,
           },
@@ -1059,6 +1065,7 @@ context('Order Summary', () => {
           detailsOfInstallation: {
             riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
             riskDetails: 'some risk details',
+            genderRiskDetails: '',
           },
           enforcementZoneConditions: [
             {
@@ -1386,6 +1393,7 @@ context('Order Summary', () => {
             mappaLevel: null,
             riskCategory: null,
             riskDetails: null,
+            genderRiskDetails: null,
             offence: null,
             offenceAdditionalDetails: null,
           },
@@ -1420,6 +1428,7 @@ context('Order Summary', () => {
           detailsOfInstallation: {
             riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
             riskDetails: 'some risk details',
+            genderRiskDetails: '',
           },
           mappa: { isMappa: 'NO' },
           enforcementZoneConditions: [
@@ -1722,6 +1731,51 @@ context('Order Summary', () => {
             relationship: null,
           },
           contactDetails: { contactNumber: '', phoneNumberAvailable: false },
+          installationAndRisk: {
+            mappaCaseType: null,
+            mappaLevel: null,
+            riskCategory: null,
+            riskDetails: null,
+            genderRiskDetails: null,
+            offence: null,
+            offenceAdditionalDetails: null,
+          },
+          interestedParties: {
+            notifyingOrganisation: 'HOME_OFFICE',
+            notifyingOrganisationName: '',
+            notifyingOrganisationEmail: '',
+            responsibleOfficerName: '',
+            responsibleOfficerPhoneNumber: '',
+            responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+            responsibleOrganisationAddress: {
+              addressType: 'RESPONSIBLE_ORGANISATION',
+              addressLine1: '',
+              addressLine2: '',
+              addressLine3: '',
+              addressLine4: '',
+              postcode: '',
+            },
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationPhoneNumber: '',
+            responsibleOrganisationRegion: '',
+          },
+          offences: [
+            {
+              id: 'offence id',
+              offenceType: 'SEXUAL_OFFENCES',
+            },
+          ],
+          offenceAdditionalDetails: {
+            additionalDetails: 'mock offence details',
+          },
+          detailsOfInstallation: {
+            riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
+            riskDetails: 'some risk details',
+            genderRiskDetails: '',
+          },
+          addresses: [],
+          additionalDocuments: [{ id: uuidv4(), fileName: '', fileType: AttachmentType.LICENCE }],
+          orderParameters: { havePhoto: false },
         },
       })
       cy.task('stubCemoGetVersions', {
@@ -2085,6 +2139,19 @@ context('Order Summary', () => {
       page.timeline.formRejectedComponent.bylineContains('John Smith')
       page.timeline.formRejectedComponent.resultDateIs('1 January 2025 at 10:30am')
     })
+
+    it('Show download form button on failed to submit', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'ERROR',
+      })
+
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.viewAndDownloadButton.should('be.visible')
+
+      page.viewAndDownloadButton.should('have.attr', 'href', `/order/${mockOrderId}/receipt`)
+    })
   })
 
   context('Complete order, submitted', () => {
@@ -2137,6 +2204,7 @@ context('Order Summary', () => {
             mappaLevel: null,
             riskCategory: null,
             riskDetails: null,
+            genderRiskDetails: null,
             offence: null,
             offenceAdditionalDetails: null,
           },
@@ -2171,6 +2239,7 @@ context('Order Summary', () => {
           detailsOfInstallation: {
             riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
             riskDetails: 'some risk details',
+            genderRiskDetails: '',
           },
           mappa: { isMappa: 'NO' },
           enforcementZoneConditions: [
@@ -2358,6 +2427,7 @@ context('Order Summary', () => {
             mappaLevel: null,
             riskCategory: null,
             riskDetails: null,
+            genderRiskDetails: null,
             offence: null,
             offenceAdditionalDetails: null,
           },
@@ -2392,6 +2462,7 @@ context('Order Summary', () => {
           detailsOfInstallation: {
             riskCategory: ['THREATS_OF_VIOLENCE', 'SAFEGUARDING_CHILD'],
             riskDetails: 'some risk details',
+            genderRiskDetails: '',
           },
           mappa: { isMappa: 'NO' },
           enforcementZoneConditions: [
@@ -2636,6 +2707,7 @@ context('Order Summary', () => {
             mappaLevel: null,
             riskCategory: null,
             riskDetails: null,
+            genderRiskDetails: null,
             offence: null,
             offenceAdditionalDetails: null,
           },

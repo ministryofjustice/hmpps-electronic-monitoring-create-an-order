@@ -50,7 +50,6 @@ const paths = {
     CHECK_YOUR_ANSWERS_VERSION: '/order/:orderId/version/:versionId/contact-information/check-your-answers',
     CONTACT_DETAILS: '/order/:orderId/contact-information/contact-details',
     NO_FIXED_ABODE: '/order/:orderId/contact-information/no-fixed-abode',
-    ADDRESSES: '/order/:orderId/contact-information/addresses/:addressType(primary|secondary|tertiary)',
     INTERESTED_PARTIES: '/order/:orderId/contact-information/interested-parties',
     PROBATION_DELIVERY_UNIT: '/order/:orderId/contact-information/probation-delivery-unit',
   },
@@ -83,7 +82,6 @@ const paths = {
   MONITORING_CONDITIONS: {
     INSTALLATION_LOCATION: '/order/:orderId/monitoring-conditions/installation-location',
     INSTALLATION_APPOINTMENT: '/order/:orderId/monitoring-conditions/installation-appointment',
-    INSTALLATION_ADDRESS: '/order/:orderId/monitoring-conditions/:addressType(installation)',
     TRAIL: '/order/:orderId/monitoring-conditions/trail',
     ZONE: '/order/:orderId/monitoring-conditions/zone/:zoneId',
     ZONE_NEW_ITEM: '/order/:orderId/monitoring-conditions/add-to-list/zone',

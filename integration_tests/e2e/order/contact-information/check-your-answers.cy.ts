@@ -47,10 +47,6 @@ context('Contact Information - check your answers', () => {
       cy.signIn()
     })
 
-    afterEach(() => {
-      cy.task('resetFeatureFlags')
-    })
-
     it('Should display the user name visible in header', () => {
       const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
       page.header.userName().should('contain.text', 'J. Smith')
@@ -73,8 +69,7 @@ context('Contact Information - check your answers', () => {
       page.checkIsAccessible()
     })
 
-    it('should link address changes to address list when postcode lookup is enabled', () => {
-      cy.task('setFeatureFlags', { POSTCODE_LOOKUP_ENABLED: true })
+    it('should link address changes to address list', () => {
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
         id: mockOrderId,

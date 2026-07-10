@@ -130,34 +130,8 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
     })
 
-    it('should return primary address if current page is no fixed abode and noFixedAbode is false', () => {
+    it('should return find address if current page is no fixed abode and noFixedAbode is false', () => {
       // Given
-      const currentPage = 'NO_FIXED_ABODE'
-      const taskListService = new TaskListService(mockOrderChecklistService)
-      const order = getMockOrder({
-        deviceWearer: createDeviceWearer({ noFixedAbode: false }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(
-        paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'primary').replace(
-          ':orderId',
-          order.id,
-        ),
-      )
-    })
-
-    it('should return find address when current page is no fixed abode and postcode lookup is enabled', () => {
-      // Given
-      const mockGet = jest.fn((flag: string) => ['POSTCODE_LOOKUP_ENABLED'].includes(flag))
-      const mockGetValue = jest.fn(() => '')
-      jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
-        get: mockGet,
-        getValue: mockGetValue,
-      } as never)
       const currentPage = 'NO_FIXED_ABODE'
       const taskListService = new TaskListService(mockOrderChecklistService)
       const order = getMockOrder({
@@ -171,97 +145,15 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(
         paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':addressType', 'PRIMARY').replace(':orderId', order.id),
       )
-
-      jest.restoreAllMocks()
     })
 
-    it('should return device wearer cya if current page is primary address and hasAnotherAddress is false', () => {
+    it('should return device wearer cya if current page is primary address', () => {
       // Given
       const currentPage = 'PRIMARY_ADDRESS'
       const taskListService = new TaskListService(mockOrderChecklistService)
       const order = getMockOrder({
         deviceWearer: createDeviceWearer({ noFixedAbode: false }),
       })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order, {
-        hasAnotherAddress: false,
-        addressType: 'primary',
-      })
-
-      // Then
-      expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
-    })
-
-    it('should return secondary address if current page is primary address and hasAnotherAddress is true', () => {
-      // Given
-      const currentPage = 'PRIMARY_ADDRESS'
-      const taskListService = new TaskListService(mockOrderChecklistService)
-      const order = getMockOrder({
-        deviceWearer: createDeviceWearer({ noFixedAbode: false }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order, {
-        hasAnotherAddress: true,
-        addressType: 'primary',
-      })
-
-      // Then
-      expect(nextPage).toBe(
-        paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'secondary').replace(
-          ':orderId',
-          order.id,
-        ),
-      )
-    })
-
-    it('should return device wearer cya if current page is secondary address and hasAnotherAddress is false', () => {
-      // Given
-      const currentPage = 'SECONDARY_ADDRESS'
-      const taskListService = new TaskListService(mockOrderChecklistService)
-      const order = getMockOrder({
-        deviceWearer: createDeviceWearer({ noFixedAbode: false }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order, {
-        hasAnotherAddress: false,
-        addressType: 'seconddary',
-      })
-
-      // Then
-      expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
-    })
-
-    it('should return tertiary address if current page is secondary address and hasAnotherAddress is true', () => {
-      // Given
-      const currentPage = 'SECONDARY_ADDRESS'
-      const taskListService = new TaskListService(mockOrderChecklistService)
-      const order = getMockOrder({
-        deviceWearer: createDeviceWearer({ noFixedAbode: false }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order, {
-        hasAnotherAddress: true,
-        addressType: 'secondary',
-      })
-
-      // Then
-      expect(nextPage).toBe(
-        paths.CONTACT_INFORMATION.ADDRESSES.replace(':addressType(primary|secondary|tertiary)', 'tertiary').replace(
-          ':orderId',
-          order.id,
-        ),
-      )
-    })
-
-    it('should return interested parties if current page is tertiary address', () => {
-      // Given
-      const currentPage = 'TERTIARY_ADDRESS'
-      const taskListService = new TaskListService(mockOrderChecklistService)
-      const order = getMockOrder()
 
       // When
       const nextPage = taskListService.getNextPage(currentPage, order)
@@ -337,32 +229,8 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT.replace(':orderId', order.id))
     })
 
-    it('should return installation address if current page is installation appointment', () => {
+    it('should return find installation address if current page is installation appointment', () => {
       // Given
-      const currentPage = 'INSTALLATION_APPOINTMENT'
-      const taskListService = new TaskListService(mockOrderChecklistService)
-      const order = getMockOrder({ installationLocation: { location: 'PRISON' } })
-      order.monitoringConditions.alcohol = true
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(
-        paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':addressType(installation)', 'installation').replace(
-          ':orderId',
-          order.id,
-        ),
-      )
-    })
-
-    it('should return find installation address if current page is installation appointment and postcode lookup is enabled', () => {
-      // Given
-      const mockGet = jest.fn((flag: string) => flag === 'POSTCODE_LOOKUP_ENABLED')
-      const mockGetValue = jest.fn(() => '')
-      jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
-        get: mockGet,
-        getValue: mockGetValue,
-      } as never)
       const currentPage = 'INSTALLATION_APPOINTMENT'
       const taskListService = new TaskListService(mockOrderChecklistService)
       const order = getMockOrder({ installationLocation: { location: 'PRISON' } })
@@ -375,8 +243,6 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(
         paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':addressType', 'INSTALLATION').replace(':orderId', order.id),
       )
-
-      jest.restoreAllMocks()
     })
 
     it('should return check your answers page if current page is installation address and alcohol was selected', () => {
@@ -1447,7 +1313,7 @@ describe('TaskListService', () => {
         }),
         dapoClauses: [],
         offences: [{ offenceType: 'offenceType', offenceDate: new Date().toISOString() }],
-        detailsOfInstallation: { riskCategory: ['some category'], riskDetails: '' },
+        detailsOfInstallation: { riskCategory: ['some category'], genderRiskDetails: '', riskDetails: '' },
         offenceAdditionalDetails: { additionalDetails: 'details' },
       })
 
@@ -1482,7 +1348,7 @@ describe('TaskListService', () => {
           offenceAdditionalDetails: 'mock offence additional details',
         }),
         offences: [],
-        detailsOfInstallation: { riskCategory: ['some category'], riskDetails: '' },
+        detailsOfInstallation: { riskCategory: ['some category'], genderRiskDetails: '', riskDetails: '' },
         offenceAdditionalDetails: { additionalDetails: 'details' },
       })
 
@@ -1512,7 +1378,7 @@ describe('TaskListService', () => {
           notifyingOrganisation: 'FAMILY_COURT',
         }),
         dapoClauses: [{ date: new Date().toISOString(), clause: 'clause' }],
-        detailsOfInstallation: { riskCategory: ['some category'], riskDetails: '' },
+        detailsOfInstallation: { riskCategory: ['some category'], genderRiskDetails: '', riskDetails: '' },
       })
 
       const taskListService = new TaskListService(mockOrderChecklistService)

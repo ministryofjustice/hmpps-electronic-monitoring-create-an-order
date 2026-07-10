@@ -41,28 +41,13 @@ context('Screenshots', () => {
     cy.visit(paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', mockOrderId))
     cy.screenshot('InterestedPartiesPage', { overwrite: true })
 
-    cy.visit(
-      paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', mockOrderId).replace(
-        ':addressType(primary|secondary|tertiary)',
-        'primary',
-      ),
-    )
+    cy.visit(paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'PRIMARY'))
     cy.screenshot('PrimaryAddressPage', { overwrite: true })
 
-    cy.visit(
-      paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', mockOrderId).replace(
-        ':addressType(primary|secondary|tertiary)',
-        'secondary',
-      ),
-    )
+    cy.visit(paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'SECONDARY'))
     cy.screenshot('SecondaryAddressPage', { overwrite: true })
 
-    cy.visit(
-      paths.CONTACT_INFORMATION.ADDRESSES.replace(':orderId', mockOrderId).replace(
-        ':addressType(primary|secondary|tertiary)',
-        'tertiary',
-      ),
-    )
+    cy.visit(paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'TERTIARY'))
     cy.screenshot('TertiaryAddressPage', { overwrite: true })
 
     // monitoring conditions
@@ -116,10 +101,7 @@ context('Screenshots', () => {
     cy.screenshot('ZonePage', { overwrite: true })
 
     cy.visit(
-      paths.MONITORING_CONDITIONS.INSTALLATION_ADDRESS.replace(':orderId', mockOrderId).replace(
-        ':addressType(installation)',
-        'installation',
-      ),
+      paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'INSTALLATION'),
     )
     cy.screenshot('InstallationAddressPage', { overwrite: true })
 

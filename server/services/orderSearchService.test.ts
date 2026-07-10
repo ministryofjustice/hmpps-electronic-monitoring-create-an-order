@@ -4,6 +4,7 @@ import RestClient from '../data/restClient'
 import { SanitisedError } from '../sanitisedError'
 import OrderSearchService from './orderSearchService'
 import mockApiOrder from '../../integration_tests/utils/data/ApiOrder'
+import { OrderListInformation } from '../models/OrderListInformation'
 
 jest.mock('../data/restClient')
 
@@ -33,7 +34,16 @@ describe('Order Search Service', () => {
 
   describe('listOrders', () => {
     it('should get orders from the api', async () => {
-      mockRestClient.get.mockResolvedValue([mockApiResponse])
+      const mockReturnValue: OrderListInformation = {
+        id: mockApiResponse.id,
+        versionId: mockApiResponse.versionId,
+        status: mockApiResponse.status,
+        type: mockApiResponse.type,
+        firstName: mockApiResponse.deviceWearer.firstName,
+        lastName: mockApiResponse.deviceWearer.lastName,
+        notifyingOrganisation: mockApiResponse.interestedParties?.notifyingOrganisation,
+      }
+      mockRestClient.get.mockResolvedValue([mockReturnValue])
       const orderService = new OrderSearchService(mockRestClient)
       const orders = await orderService.listOrders({ accessToken: '' }, 'MY_ORDERS')
       expect(mockRestClient.get).toHaveBeenCalledWith({
