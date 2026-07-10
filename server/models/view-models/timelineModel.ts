@@ -32,6 +32,9 @@ export default class TimelineModel {
   }
 
   private static getTimelineText = (versionInformation: VersionInformation) => {
+    if (versionInformation.status === 'IN_PROGRESS') {
+      return 'Draft'
+    }
     if (versionInformation.type === 'REVOCATION') {
       return 'Monitoring ended'
     }
@@ -56,12 +59,12 @@ export default class TimelineModel {
       },
       text: this.getVariationText(version.type),
       datetime: {
-        timestamp: version.fmsResultDate,
+        timestamp: version.fmsResultDate ?? version.lastUpdatedDateTime,
         type: 'datetime',
       },
       notifyingOrganisationDetails: this.getNotifyingOrganisationText(version, content),
       byline: {
-        text: version.submittedBy,
+        text: version.submittedBy ?? version.lastUpdatedBy,
       },
     }
 

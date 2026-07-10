@@ -71,7 +71,7 @@ const OrderModel = z.object({
   submittedBy: z.string().nullable().optional(),
   versionId: z.string().uuid(),
   lastUpdatedBy: z.string().nullable().optional(),
-  lastUpdatedDateTime: z.string().datetime().nullable().optional(),
+  lastUpdatedDateTime: z.string().datetime({ offset: true }).nullable().optional(),
   isOwner: z.boolean().default(true),
 })
 
