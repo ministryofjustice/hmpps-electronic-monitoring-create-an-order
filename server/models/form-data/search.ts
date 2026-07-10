@@ -3,15 +3,20 @@ import paths from '../../constants/paths'
 import { AddressTypeEnum } from '../Address'
 import { Order } from '../Order'
 import { OrderListInformation } from '../OrderListInformation'
+import { OrderListView, OrderListViewEnum, orderListViewLabels } from './OrderListView'
 
 type OrderListViewModel = {
   orders: {
     name: string
     href: string
     statusTags: { text: string; type: string }[]
+    lastUpdatedBy?: string | null
+    lastUpdatedDateTime: string
     index: number
   }[]
   variationAsNewOrderEnabled: boolean
+  isPrisonOrYouthUser: boolean
+  viewOptions: { value: OrderListView; text: string; selected: boolean }[]
 }
 
 export type OrderSearchViewModel = {
@@ -24,7 +29,6 @@ export type OrderSearchViewModel = {
     startDate: string
     endDate: string
     lastUpdated: string
-    statusTags: { text: string; type: string }[]
   }[]
   variationAsNewOrderEnabled: boolean
   emptySearch?: boolean
@@ -32,12 +36,12 @@ export type OrderSearchViewModel = {
   searchTerm?: string
 }
 
-function getDisplayName(order: OrderListInformation): string {
-  if (order.deviceWearer.firstName === null && order.deviceWearer.lastName === null) {
+function formatName(firstName?: string | null, lastName?: string | null): string {
+  if (!firstName && !lastName) {
     return 'Not supplied'
   }
 
-  return `${order.deviceWearer.firstName || ''} ${order.deviceWearer.lastName || ''}`
+  return `${firstName || ''} ${lastName || ''}`
 }
 
 const formatDateTime = (dateToFormat: string): string => {
@@ -69,7 +73,7 @@ const createOrderItem = (order: Order) => {
   const currentAddress = order.addresses.find(address => address.addressType === AddressTypeEnum.Values.PRIMARY)
 
   return {
-    name: getDisplayName(order),
+    name: formatName(order.deviceWearer.firstName, order.deviceWearer.lastName),
     href: paths.ORDER.SUMMARY.replace(':orderId', order.id),
     dob: order.deviceWearer.dateOfBirth ? formatDateTime(order.deviceWearer.dateOfBirth) : '',
     youth: getYouthStatus(order),
@@ -78,7 +82,7 @@ const createOrderItem = (order: Order) => {
     startDate: order.monitoringConditions?.startDate ? formatDateTime(order.monitoringConditions?.startDate) : '',
     endDate: order.monitoringConditions?.endDate ? formatDateTime(order.monitoringConditions?.endDate) : '',
     lastUpdated: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : '',
-    statusTags: getSearchStatusTags(order),
+    statusTags: getStatusTag(order.status),
   }
 }
 
@@ -90,45 +94,51 @@ export const constructSearchViewModel = (orders: Array<Order>, searchTerm: strin
   }
 }
 
-export function constructListViewModel(orders: OrderListInformation[]): OrderListViewModel {
+export function constructListViewModel(
+  orders: OrderListInformation[],
+  view: OrderListView,
+  isPrisonOrYouthUser: boolean,
+): OrderListViewModel {
   return {
     orders: orders.map((order, index) => ({
-      name: getDisplayName(order),
-      href: order.interestedParties?.notifyingOrganisation
+      name: formatName(order.firstName, order.lastName),
+      href: order.notifyingOrganisation
         ? paths.ORDER.SUMMARY.replace(':orderId', order.id)
         : paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', order.id),
+      lastUpdatedBy: order.lastUpdatedBy,
+      lastUpdatedDateTime: order.lastUpdatedDateTime ? formatDateTime(order.lastUpdatedDateTime) : '',
       statusTags: getStatusTags(order),
       index,
     })),
     variationAsNewOrderEnabled: config.variationAsNewOrder.enabled,
+    isPrisonOrYouthUser,
+    viewOptions: OrderListViewEnum.options.map(value => ({
+      value,
+      text: orderListViewLabels[value],
+      selected: value === view,
+    })),
   }
 }
 
-const getSearchStatusTags = (order: OrderListInformation) => {
-  const statusTags = []
-
-  if (order?.status === 'SUBMITTED') {
-    statusTags.push({ text: 'Submitted', type: 'SUBMITTED' })
+const getStatusTag = (status: OrderListInformation['status']) => {
+  if (status === 'IN_PROGRESS') {
+    return [{ text: 'Draft', type: 'DRAFT' }]
   }
-
-  if (order?.status === 'IN_PROGRESS') {
-    statusTags.push({ text: 'Draft', type: 'DRAFT' })
+  if (status === 'ERROR') {
+    return [{ text: 'Failed to submit', type: 'FAILED' }]
   }
-  return statusTags
+  if (status === 'SUBMITTED') {
+    return [{ text: 'Submitted', type: 'SUBMITTED' }]
+  }
+  return []
 }
 
-const getStatusTags = (order: OrderListInformation) => {
+const getStatusTags = (order: Pick<OrderListInformation, 'status' | 'type'>) => {
   const statusTags = []
 
   if (order.type === 'VARIATION') {
     statusTags.push({ text: 'Change to form', type: 'VARIATION' })
   }
-
-  if (order.status === 'IN_PROGRESS') {
-    statusTags.push({ text: 'Draft', type: 'DRAFT' })
-  } else if (order.status === 'ERROR') {
-    statusTags.push({ text: 'Failed to submit', type: 'FAILED' })
-  }
-
+  statusTags.push(...getStatusTag(order.status))
   return statusTags
 }

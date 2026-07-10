@@ -21,28 +21,51 @@
     {% endfor %}
   </div>
   {% endset %}
-  {% set row = [
+{% if isPrisonOrYouthUser %}
+    {% set row = [
+    {
+      html: name
+    },
+    {
+      text: order.lastUpdatedDateTime
+    },
+    {
+      text: order.lastUpdatedBy
+    },
+    {
+      html: status
+    }
+  ] %}
+{% else %}
+ {% set row = [
     {
       html: name
     }, {
       html: status
     }
   ] %}
+  {% endif %}
   {% set tableRows = (tableRows.push(row), tableRows) %}
 {% endfor %}
 <div id="ordersList">
+{% if isPrisonOrYouthUser %}
+  {% set tableHead = [
+    { text: "Name", classes: "govuk-!-width-one-half" },
+    { text: "Last updated" },
+    { text: "Updated by" },
+    { text: "Status" }
+  ] %}
+{% else %}
+  {% set tableHead = [
+    { text: "Name", classes: "govuk-!-width-two-thirds" },
+    { text: "Status" }
+  ] %}
+{% endif %}
+
   {% if orders.length > 0 %}
     {{ govukTable ({
         firstCellIsHeader: false,
-        head: [
-          {
-            text: "Name",
-            classes: "govuk-!-width-two-thirds"
-          },
-          {
-            text: "Status"
-          }
-        ],
+        head: tableHead,
         rows: tableRows
       }) }}
   {% endif %}

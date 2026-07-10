@@ -35,13 +35,14 @@ describe('Order Search Service', () => {
     it('should get orders from the api', async () => {
       mockRestClient.get.mockResolvedValue([mockApiResponse])
       const orderService = new OrderSearchService(mockRestClient)
-      const orders = await orderService.listOrders({ accessToken: '' })
+      const orders = await orderService.listOrders({ accessToken: '' }, 'MY_ORDERS')
       expect(mockRestClient.get).toHaveBeenCalledWith({
         path: '/api/orders',
         token: '',
+        query: { view: 'MY_ORDERS' },
       })
-      const { id, status, type, deviceWearer, interestedParties } = mockNewOrder
-      expect([{ id, status, type, deviceWearer, interestedParties }]).toEqual(expect.objectContaining(orders))
+      const { id, status, type, versionId } = mockNewOrder
+      expect([{ id, status, type, versionId }]).toEqual(expect.objectContaining(orders))
     })
 
     it('should throw an error if the api returns an invalid object', async () => {
@@ -54,7 +55,7 @@ describe('Order Search Service', () => {
 
       try {
         const orderService = new OrderSearchService(mockRestClient)
-        await orderService.listOrders({ accessToken: '' })
+        await orderService.listOrders({ accessToken: '' }, 'MY_ORDERS')
       } catch (e) {
         expect((e as Error).name).toEqual('ZodError')
       }
@@ -65,7 +66,7 @@ describe('Order Search Service', () => {
 
       try {
         const orderService = new OrderSearchService(mockRestClient)
-        await orderService.listOrders({ accessToken: '' })
+        await orderService.listOrders({ accessToken: '' }, 'MY_ORDERS')
       } catch (e) {
         expect((e as SanitisedError).status).toEqual(500)
         expect((e as SanitisedError).message).toEqual('Internal Server Error')

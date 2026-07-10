@@ -16,6 +16,7 @@ import { CurfewConditions } from '../../server/models/CurfewConditions'
 import { CurfewTimetable } from '../../server/models/CurfewTimetable'
 import { Attachment } from '../../server/models/Attachment'
 import AttachmentType from '../../server/models/AttachmentType'
+import { OrderListInformation } from '../../server/models/OrderListInformation'
 
 export const createDeviceWearer = (overrideProperties?: Partial<DeviceWearer>): DeviceWearer => ({
   nomisId: null,
@@ -293,3 +294,18 @@ export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order =
 export const getMockSubmittedOrder = (overrideProperties?: Partial<Order>) => {
   return getMockOrder({ ...overrideProperties, status: OrderStatusEnum.Enum.SUBMITTED })
 }
+
+export const getMockOrderListInformation = (
+  overrideProperties?: Partial<OrderListInformation>,
+): OrderListInformation => ({
+  id: randomUUID(),
+  versionId: randomUUID(),
+  status: OrderStatusEnum.Enum.IN_PROGRESS,
+  type: OrderTypeEnum.Enum.REQUEST,
+  firstName: null,
+  lastName: null,
+  notifyingOrganisation: null,
+  lastUpdatedBy: null,
+  lastUpdatedDateTime: null,
+  ...overrideProperties,
+})

@@ -2,6 +2,7 @@ import RestClient from '../data/restClient'
 import OrderListModel, { OrderList } from '../models/OrderList'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import { OrderListInformation, OrderListInformationList } from '../models/OrderListInformation'
+import { OrderListView } from '../models/form-data/OrderListView'
 
 export type OrderSearchInput = AuthenticatedRequestInput & {
   searchTerm: string
@@ -10,9 +11,10 @@ export type OrderSearchInput = AuthenticatedRequestInput & {
 export default class OrderSearchService {
   constructor(private readonly apiClient: RestClient) {}
 
-  async listOrders(input: AuthenticatedRequestInput): Promise<OrderListInformation[]> {
+  async listOrders(input: AuthenticatedRequestInput, view: OrderListView): Promise<OrderListInformation[]> {
     const result = await this.apiClient.get({
       path: '/api/orders',
+      query: { view },
       token: input.accessToken,
     })
 

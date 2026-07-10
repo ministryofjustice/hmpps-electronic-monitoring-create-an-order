@@ -1,14 +1,16 @@
 import z from 'zod'
 import { OrderStatusEnum, OrderTypeEnum } from './Order'
-import DeviceWearerModel from './DeviceWearer'
-import InterestedPartiesModel from './InterestedParties'
 
 const OrderListInformationModel = z.object({
   id: z.string().uuid(),
+  versionId: z.string().uuid().nullable().optional(),
   status: OrderStatusEnum,
   type: OrderTypeEnum,
-  deviceWearer: DeviceWearerModel,
-  interestedParties: InterestedPartiesModel.nullable(),
+  firstName: z.string().nullable().optional(),
+  lastName: z.string().nullable().optional(),
+  notifyingOrganisation: z.string().nullable().optional(),
+  lastUpdatedBy: z.string().nullable().optional(),
+  lastUpdatedDateTime: z.string().datetime({offset: true}).nullable().optional(),
 })
 
 export type OrderListInformation = z.infer<typeof OrderListInformationModel>
