@@ -52,7 +52,10 @@ describe('Order Search Service', () => {
         query: { view: 'MY_ORDERS' },
       })
       const { id, status, type, versionId } = mockNewOrder
-      expect([{ id, status, type, versionId }]).toEqual(expect.objectContaining(orders))
+      const { firstName, lastName, notifyingOrganisation } = mockReturnValue
+      expect([{ id, status, type, versionId, firstName, lastName, notifyingOrganisation }]).toEqual(
+        expect.objectContaining(orders),
+      )
     })
 
     it('should throw an error if the api returns an invalid object', async () => {
