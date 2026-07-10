@@ -13,7 +13,7 @@ const SearchOrderFormDataParser = z.object({
 
 const IsPrisonOrYouthUser = (res: Response): boolean => {
   const cohort = res.locals.user.cohort?.cohort
-  return cohort === 'PRISON' // youth prison?
+  return cohort === 'PRISON'
 }
 
 export default class OrderSearchController {
