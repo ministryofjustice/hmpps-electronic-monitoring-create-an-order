@@ -81,13 +81,13 @@ export default class OrderService {
     return OrderModel.parse(result)
   }
 
-  async getCompleteVersions(input: OrderRequestInput): Promise<VersionInformation[]> {
+  async getVersionInformations(input: OrderRequestInput): Promise<VersionInformation[]> {
     try {
       const result = await this.apiClient.get({
         path: `/api/orders/${input.orderId}/versions`,
         token: input.accessToken,
       })
-      return VersionInformationList.parse(result).filter(version => version.status !== 'IN_PROGRESS')
+      return VersionInformationList.parse(result)
     } catch {
       logger.error(`No versions found for orderId: ${input.orderId}`)
       return []
@@ -172,5 +172,13 @@ export default class OrderService {
 
       throw e
     }
+  }
+
+  async assignOrderOwnerToUser(input: OrderRequestInput): Promise<Order> {
+    const result = await this.apiClient.put({
+      path: `/api/orders/${input.orderId}/update-order-owner`,
+      token: input.accessToken,
+    })
+    return OrderModel.parse(result)
   }
 }
