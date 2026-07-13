@@ -176,8 +176,8 @@ context('Contact information', () => {
         page.form.unitField.shouldHaveOption('Buckinghamshire and Milton Keynes')
         page.form.unitField.shouldHaveOption('East Berkshire')
         page.form.unitField.shouldHaveOption('Hampshire North and East')
-        page.form.unitField.shouldHaveOption('Hampshire South and Isle of White') // Note: Typo in enum "White" vs "Wight"
-        page.form.unitField.shouldHaveOption('Hampshire South West')
+        page.form.unitField.shouldHaveOption('Portsmouth & Isle of Wight')
+        page.form.unitField.shouldHaveOption('Southampton, Eastleigh & New Forest')
         page.form.unitField.shouldHaveOption('Oxfordshire')
         page.form.unitField.shouldHaveOption('West Berkshire')
       })
