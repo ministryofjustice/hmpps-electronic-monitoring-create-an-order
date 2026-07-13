@@ -129,7 +129,7 @@ describe('authorised user', () => {
         .get(`/search`)
         .expect('Content-Type', /html/)
         .expect(res => {
-          expect(res.text).toContain('Search for a submitted form')
+          expect(res.text).toContain('Search for a form')
         })
     })
   })
@@ -138,7 +138,7 @@ describe('authorised user', () => {
     it('should render order summary page', async () => {
       auditService.logPageView.mockResolvedValue()
       orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
-      orderService.getCompleteVersions.mockResolvedValue([])
+      orderService.getVersionInformations.mockResolvedValue([])
       mockOrderChecklistService.getChecklist.mockResolvedValue(OrderChecklistModel.parse({}))
       return request(app)
         .get(`/order/${mockSubmittedOrder.id}/summary`)

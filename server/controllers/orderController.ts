@@ -70,7 +70,7 @@ export default class OrderController {
 
     const [sections, completedOrderVersions] = await Promise.all([
       this.sectionService.getSectionsForOrder(order, versionId),
-      this.orderService.getCompleteVersions({
+      this.orderService.getVersionInformations({
         orderId: order.id,
         accessToken: res.locals.user.token,
       }),
@@ -187,5 +187,16 @@ export default class OrderController {
       orderId,
       isVariation: isVariationType(orderType),
     })
+  }
+
+  assignOrderOwner: RequestHandler = async (req: Request, res: Response) => {
+    const orderId = req.params.orderId as string
+
+    await this.orderService.assignOrderOwnerToUser({
+      orderId,
+      accessToken: res.locals.user.token,
+    })
+
+    res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
   }
 }

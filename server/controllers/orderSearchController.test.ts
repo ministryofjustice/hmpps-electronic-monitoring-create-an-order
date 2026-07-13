@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from 'express'
-import { createInterestedParties, createMonitoringConditions, getMockOrder } from '../../test/mocks/mockOrder'
+import { createMonitoringConditions, getMockOrder, getMockOrderListInformation } from '../../test/mocks/mockOrder'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
 import { Order, OrderStatusEnum, OrderTypeEnum } from '../models/Order'
@@ -8,13 +8,11 @@ import AuditService from '../services/auditService'
 import OrderSearchService from '../services/orderSearchService'
 import OrderSearchController from './orderSearchController'
 import { createMockRequest, createMockResponse } from '../../test/mocks/mockExpress'
-import { OrderListInformation } from '../models/OrderListInformation'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderSearchService')
 jest.mock('../data/hmppsAuditClient')
 
-const mockDraftOrder = getMockOrder()
 const mockDate = new Date(2000, 10, 20).toISOString()
 
 const mock500Error: SanitisedError = {
@@ -120,23 +118,10 @@ describe('OrderSearchController', () => {
   })
 
   describe('list orders', () => {
-    const convertOrderToInformation = (order: Order): OrderListInformation => {
-      return {
-        id: order.id,
-        versionId: order.versionId,
-        status: order.status,
-        type: order.type,
-        firstName: order.deviceWearer.firstName,
-        lastName: order.deviceWearer.lastName,
-        notifyingOrganisation: order.interestedParties?.notifyingOrganisation,
-      }
-    }
     it('should render a view containing users orders', async () => {
-      const secondDraftOrder = getMockOrder({ interestedParties: createInterestedParties() })
-      mockOrderService.listOrders.mockResolvedValue([
-        convertOrderToInformation(mockDraftOrder),
-        convertOrderToInformation(secondDraftOrder),
-      ])
+      const draftWithoutOrg = getMockOrderListInformation()
+      const draftWithOrg = getMockOrderListInformation({ notifyingOrganisation: 'PRISON', lastUpdatedBy: 'Bob' })
+      mockOrderService.listOrders.mockResolvedValue([draftWithoutOrg, draftWithOrg])
 
       await orderController.list(req, res, next)
 
@@ -145,15 +130,19 @@ describe('OrderSearchController', () => {
         expect.objectContaining({
           orders: [
             {
-              href: `/order/${mockDraftOrder.id}/interest-parties/notifying-organisation`,
+              href: `/order/${draftWithoutOrg.id}/interest-parties/notifying-organisation`,
               index: 0,
               name: 'Not supplied',
+              lastUpdatedBy: null,
+              lastUpdatedDateTime: '',
               statusTags: [{ type: 'DRAFT', text: 'Draft' }],
             },
             {
-              href: `/order/${secondDraftOrder.id}/summary`,
+              href: `/order/${draftWithOrg.id}/summary`,
               index: 1,
               name: 'Not supplied',
+              lastUpdatedBy: 'Bob',
+              lastUpdatedDateTime: '',
               statusTags: [{ type: 'DRAFT', text: 'Draft' }],
             },
           ],
@@ -172,6 +161,57 @@ describe('OrderSearchController', () => {
           orders: [],
         }),
       )
+    })
+
+    it.each(['PRISON'] as const)(
+      // Youth??
+      'should pass the requested view to the service and show the filter for %s users',
+      async cohort => {
+        mockOrderService.listOrders.mockResolvedValue([])
+        res.locals.user.cohort = { cohort }
+        req.query = { view: 'FAILED_ORDERS' }
+
+        await orderController.list(req, res, next)
+
+        expect(mockOrderService.listOrders).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' }, 'FAILED_ORDERS')
+        expect(res.render).toHaveBeenCalledWith(
+          'pages/index',
+          expect.objectContaining({
+            isPrisonOrYouthUser: true,
+            viewOptions: [
+              { value: 'MY_ORDERS', text: 'My drafts', selected: false },
+              { value: 'FAILED_ORDERS', text: 'My failed to submit', selected: true },
+              { value: 'PRISON_ORDERS', text: 'My prison drafts', selected: false },
+            ],
+          }),
+        )
+      },
+    )
+
+    it('should ignore the requested view and hide the filter for other users', async () => {
+      mockOrderService.listOrders.mockResolvedValue([])
+      res.locals.user.cohort = { cohort: 'PROBATION' }
+      req.query = { view: 'PRISON_ORDERS' }
+
+      await orderController.list(req, res, next)
+
+      expect(mockOrderService.listOrders).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' }, 'MY_ORDERS')
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/index',
+        expect.objectContaining({
+          isPrisonOrYouthUser: false,
+        }),
+      )
+    })
+
+    it('should fall back to MY_ORDERS when the requested view is not recognised', async () => {
+      mockOrderService.listOrders.mockResolvedValue([])
+      res.locals.user.cohort = { cohort: 'PRISON' }
+      req.query = { view: 'NOT_A_VIEW' }
+
+      await orderController.list(req, res, next)
+
+      expect(mockOrderService.listOrders).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' }, 'MY_ORDERS')
     })
   })
   describe('search orders', () => {
@@ -204,6 +244,7 @@ describe('OrderSearchController', () => {
               startDate: '20/11/2000',
               endDate: '20/11/2000',
               lastUpdated: '20/11/2000',
+              statusTags: [{ text: 'Submitted', type: 'SUBMITTED' }],
             },
           ],
         }),
@@ -236,6 +277,7 @@ describe('OrderSearchController', () => {
               startDate: '20/11/2000',
               endDate: '20/11/2000',
               lastUpdated: '20/11/2000',
+              statusTags: [{ text: 'Submitted', type: 'SUBMITTED' }],
             },
           ],
         }),

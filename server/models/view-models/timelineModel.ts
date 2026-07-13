@@ -28,10 +28,21 @@ export default class TimelineModel {
     orderId?: string,
     currentVersionId?: string,
   ): TimelineItem[] => {
-    return versions.map(version => this.mapSingleItem(content, version, orderId, currentVersionId))
+    return versions
+      .map(version => this.mapSingleItem(content, version, orderId, currentVersionId))
+      .sort((a, b) => {
+        const aTime = a.datetime.timestamp ? new Date(a.datetime.timestamp).getTime() : 0
+
+        const bTime = b.datetime.timestamp ? new Date(b.datetime.timestamp).getTime() : 0
+
+        return bTime - aTime
+      })
   }
 
   private static getTimelineText = (versionInformation: VersionInformation) => {
+    if (versionInformation.status === 'IN_PROGRESS') {
+      return 'Draft'
+    }
     if (versionInformation.type === 'REVOCATION') {
       return 'Monitoring ended'
     }
@@ -56,15 +67,14 @@ export default class TimelineModel {
       },
       text: this.getVariationText(version.type),
       datetime: {
-        timestamp: version.fmsResultDate,
+        timestamp: version.fmsResultDate ?? version.lastUpdatedDateTime ?? new Date().toISOString(),
         type: 'datetime',
       },
       notifyingOrganisationDetails: this.getNotifyingOrganisationText(version, content),
       byline: {
-        text: version.submittedBy,
+        text: version.submittedBy ?? version.lastUpdatedBy,
       },
     }
-
     if (orderId && currentVersionId && currentVersionId !== version.versionId) {
       item.href = paths.ORDER.SUMMARY_VERSION.replace(':orderId', orderId).replace(':versionId', version.versionId)
     }

@@ -964,6 +964,75 @@ context('Check your answers', () => {
     })
   })
 
+  context('view only version', () => {
+    const mockVersionId = uuidv4()
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        versionId: mockVersionId,
+        status: 'IN_PROGRESS',
+        order: {
+          monitoringConditions: {
+            startDate: '2025-01-01T00:00:00Z',
+            endDate: '2025-02-01T00:00:00Z',
+            orderType: 'CIVIL',
+            curfew: true,
+            exclusionZone: true,
+            trail: true,
+            mandatoryAttendance: true,
+            alcohol: true,
+            conditionType: 'BAIL_ORDER',
+            orderTypeDescription: 'DAPO',
+            sentenceType: 'IPP',
+            issp: 'YES',
+            hdc: 'NO',
+            prarr: 'UNKNOWN',
+            pilot: '',
+            offenceType: '',
+          },
+          installationLocation: {
+            location: 'INSTALLATION',
+          },
+          addresses: [
+            {
+              addressType: 'INSTALLATION',
+              addressLine1: '10 Downing Street',
+              addressLine2: '',
+              addressLine3: 'London',
+              addressLine4: '',
+              postcode: 'SW1A 2AB',
+            },
+          ],
+          monitoringConditionsTrail: {
+            endDate: '2024-11-11T00:00:00Z',
+            startDate: '2024-11-11T00:00:00Z',
+          },
+          monitoringConditionsAlcohol: {
+            monitoringType: 'ALCOHOL_ABSTINENCE',
+            startDate: '2024-03-27T00:00:00.000Z',
+            endDate: '2025-04-28T00:00:00.000Z',
+          },
+          fmsResultDate: new Date('2024 12 14'),
+          isOwner: false,
+        },
+      })
+
+      cy.signIn()
+    })
+
+    const pageHeading = 'Check your answers'
+
+    it('no change links', () => {
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading, false)
+      page.changeLinks.should('not.exist')
+      page.continueButton().should('not.exist')
+    })
+  })
+
   context('when ddv4 order', () => {
     const pageHeading = 'Check your answers'
     beforeEach(() => {

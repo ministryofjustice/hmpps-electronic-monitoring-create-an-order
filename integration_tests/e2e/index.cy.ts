@@ -3,7 +3,6 @@ import IndexPage from '../pages/index'
 import Page from '../pages/page'
 import SearchPage from '../pages/search'
 import NotifyingOrganisationPage from './order/interested-parties/notifying-organisation/notifyingOrganisationPage'
-import mockApiOrder from '../utils/data/ApiOrder'
 import paths from '../../server/constants/paths'
 
 const mockOrderId = uuidv4()
@@ -27,27 +26,37 @@ context('Index', () => {
         httpStatus: 200,
         orders: [
           {
-            ...mockApiOrder(),
             id: mockOrderId1,
+            versionId: uuidv4(),
+            status: 'IN_PROGRESS',
+            type: 'REQUEST',
             firstName: 'test',
             lastName: 'user1',
             notifyingOrganisation: 'PRISON',
+            lastUpdatedBy: 'CEMO.USER',
+            lastUpdatedDateTime: '2024-03-10T11:30:00.000Z',
           },
           {
-            ...mockApiOrder(),
             id: mockOrderId2,
+            versionId: uuidv4(),
+            status: 'ERROR',
+            type: 'REQUEST',
             firstName: 'Failed',
             lastName: 'user2',
-            status: 'ERROR',
+            notifyingOrganisation: null,
+            lastUpdatedBy: 'CEMO.USER',
+            lastUpdatedDateTime: '2024-03-10T11:30:00.000Z',
           },
           {
-            ...mockApiOrder(),
             id: mockOrderId3,
+            versionId: uuidv4(),
+            status: 'IN_PROGRESS',
+            type: 'VARIATION',
             firstName: 'vari',
             lastName: 'user3',
             notifyingOrganisation: 'PRISON',
-            type: 'VARIATION',
-            status: 'IN_PROGRESS',
+            lastUpdatedBy: 'CEMO.USER',
+            lastUpdatedDateTime: '2024-03-10T11:30:00.000Z',
           },
         ],
       })
@@ -65,8 +74,8 @@ context('Index', () => {
       page.subNav.should('exist')
       page.subNav.contains('Draft forms').should('have.attr', 'href', `/`)
       page.subNav.contains('Draft forms').should('have.attr', 'aria-current', 'page')
-      page.subNav.contains('Submitted forms').should('have.attr', 'href', `/search`)
-      page.subNav.contains('Submitted forms').should('not.have.attr', 'aria-current', `page`)
+      page.subNav.contains('Search for a form').should('have.attr', 'href', `/search`)
+      page.subNav.contains('Search for a form').should('not.have.attr', 'aria-current', `page`)
 
       // Order list
       page.orders.should('exist').should('have.length', 3)
@@ -94,6 +103,32 @@ context('Index', () => {
       page.subNav.contains('Draft forms').should('have.attr', 'href', `/`)
 
       Page.verifyOnPage(IndexPage)
+    })
+
+    it('Should render a row for every order returned by the list', () => {
+      const orderIds = [uuidv4(), uuidv4(), uuidv4(), uuidv4(), uuidv4()]
+      cy.task('stubCemoListOrders', {
+        httpStatus: 200,
+        orders: orderIds.map((id, index) => ({
+          id,
+          versionId: uuidv4(),
+          status: 'IN_PROGRESS',
+          type: 'REQUEST',
+          firstName: 'Draft',
+          lastName: `user${index}`,
+          notifyingOrganisation: 'PRISON',
+          lastUpdatedBy: 'CEMO.USER',
+          lastUpdatedDateTime: '2024-03-10T11:30:00.000Z',
+        })),
+      })
+
+      const page = Page.visit(IndexPage)
+
+      page.orders.should('have.length', orderIds.length)
+      orderIds.forEach((id, index) => {
+        page.TableContains(`Draft user${index}`, 'Draft')
+        page.OrderFor(`Draft user${index}`).find('a').should('have.attr', 'href', `/order/${id}/summary`)
+      })
     })
   })
 
@@ -140,7 +175,7 @@ context('Index', () => {
     it('should navigate to the search page', () => {
       const page = Page.visit(IndexPage)
 
-      page.subNav.contains('Submitted forms').click()
+      page.subNav.contains('Search for a form').click()
 
       Page.verifyOnPage(SearchPage)
     })
@@ -247,6 +282,99 @@ context('Index', () => {
       cy.signIn()
       const page = Page.visit(IndexPage)
       page.header.cohort().should('contain.text', 'Other')
+    })
+  })
+
+  context('Filtering the order list', () => {
+    const signInWithCohort = (cohort: Record<string, string>, userId: string) => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId,
+      })
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: cohort,
+      })
+      cy.signIn()
+    }
+
+    const prisonCohort = { cohort: 'PRISON', activeCaseLoadName: 'HMP ABC' }
+
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubCemoListOrders')
+    })
+
+    it('Should show the view filter with all options for prison users', () => {
+      signInWithCohort(prisonCohort, '223456780')
+
+      const page = Page.visit(IndexPage)
+
+      page.viewFilter.should('exist')
+      page.viewFilter.find('option').should('have.length', 3)
+      page.viewFilter.find('option:selected').should('have.text', 'My drafts')
+      page.viewFilter.find('option').eq(1).should('have.text', 'My failed to submit')
+      page.viewFilter.find('option').eq(2).should('have.text', 'My prison drafts')
+      page.viewFilterButton.should('exist')
+      page.checkIsAccessible()
+    })
+
+    it('Should not show the view filter for probation users', () => {
+      signInWithCohort({ cohort: 'PROBATION' }, '223456782')
+
+      const page = Page.visit(IndexPage)
+
+      page.viewFilter.should('not.exist')
+      page.viewFilterButton.should('not.exist')
+    })
+
+    it('Should reload the order list with the selected view', () => {
+      signInWithCohort(prisonCohort, '223456783')
+
+      const page = Page.visit(IndexPage)
+
+      page.viewFilter.select('My failed to submit')
+      page.viewFilterButton.click()
+
+      cy.url().should('include', 'view=FAILED_ORDERS')
+      Page.verifyOnPage(IndexPage)
+      page.viewFilter.find('option:selected').should('have.text', 'My failed to submit')
+    })
+
+    it('Should show the last updated columns for prison users', () => {
+      signInWithCohort(prisonCohort, '223456784')
+
+      const page = Page.visit(IndexPage)
+
+      page.orderListHeaders.should('have.length', 4)
+      page.orderListHeaders.eq(0).should('contain.text', 'Name')
+      page.orderListHeaders.eq(1).should('contain.text', 'Last updated')
+      page.orderListHeaders.eq(2).should('contain.text', 'Updated by')
+      page.orderListHeaders.eq(3).should('contain.text', 'Status')
+    })
+
+    it('Should not show the last updated columns for probation users', () => {
+      signInWithCohort({ cohort: 'PROBATION' }, '223456785')
+
+      const page = Page.visit(IndexPage)
+
+      page.orderListHeaders.should('have.length', 2)
+      page.orderListHeaders.eq(0).should('contain.text', 'Name')
+      page.orderListHeaders.eq(1).should('contain.text', 'Status')
+    })
+
+    it('Should ignore a requested view for users who cannot filter', () => {
+      signInWithCohort({ cohort: 'PROBATION' }, '223456786')
+
+      cy.visit('/?view=PRISON_ORDERS')
+
+      const page = Page.verifyOnPage(IndexPage)
+      page.viewFilter.should('not.exist')
+      page.ordersList.should('exist')
     })
   })
 

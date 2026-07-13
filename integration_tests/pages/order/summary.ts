@@ -99,6 +99,14 @@ export default class OrderTasksPage extends AppPage {
     return new Timeline()
   }
 
+  get ownerBanner(): PageElement {
+    return cy.get('.moj-alert')
+  }
+
+  get assignToMeButton(): PageElement {
+    return cy.get('button').contains('Assign form to me')
+  }
+
   fillInNewCurfewOrderWith({
     deviceWearerDetails,
     responsibleAdultDetails,
