@@ -9,7 +9,6 @@ import probationRegions from '../../../i18n/en/reference/ddv5/probationRegions'
 
 export type PilotModel = ViewModel<Pick<MonitoringConditions, 'pilot'>> & {
   items: Item[]
-  dapolMessage?: string
   licenceMessage?: string
 }
 
@@ -27,27 +26,6 @@ interface Divider {
 }
 
 type Item = Option | Divider
-
-const getDapolPilotProbationRegionStatus = (order: Order): boolean => {
-  if (order.interestedParties?.responsibleOrganisation === 'PROBATION') {
-    if (order.interestedParties?.responsibleOrganisationRegion) {
-      const listOfProbationRegions = FeatureFlags.getInstance().getValue('DAPOL_PILOT_PROBATION_REGIONS').split(',')
-      return listOfProbationRegions?.indexOf(order.interestedParties.responsibleOrganisationRegion) !== -1
-    }
-  }
-  return false
-}
-
-const getDapolMessage = (order: Order): string => {
-  const isDapolPilotProbationRegion = getDapolPilotProbationRegionStatus(order)
-  if (order.interestedParties?.responsibleOrganisation === 'PROBATION') {
-    if (isDapolPilotProbationRegion) {
-      return ''
-    }
-    return `The device wearer is being managed by the ${probationRegions[order.interestedParties?.responsibleOrganisationRegion as keyof typeof probationRegions]} probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region. Any queries around pilot eligibility need to be raised with the appropriate COM.`
-  }
-  return ''
-}
 
 const getLicencePilotProbationRegionStatus = (order: Order): boolean => {
   if (
@@ -79,20 +57,19 @@ const getLicenceMessage = (order: Order): string => {
 }
 
 const constructModel = (order: Order, data: MonitoringConditions, errors: ValidationResult): PilotModel => {
-  const isDapolPilotProbationRegion = getDapolPilotProbationRegionStatus(order)
+  const isResponsibleOrgProbation = order.interestedParties?.responsibleOrganisation === 'PROBATION'
   const isLicenceProbationRegion = getLicencePilotProbationRegionStatus(order)
   const model: PilotModel = {
     pilot: {
       value: data.pilot || '',
     },
     items: getItems(
-      isDapolPilotProbationRegion,
+      isResponsibleOrgProbation,
       isLicenceProbationRegion,
       data.hdc,
       order.interestedParties?.notifyingOrganisation,
     ),
     errorSummary: null,
-    dapolMessage: getDapolMessage(order),
     licenceMessage: getLicenceMessage(order),
   }
   if (errors && errors.length > 0) {
@@ -103,7 +80,7 @@ const constructModel = (order: Order, data: MonitoringConditions, errors: Valida
 }
 
 const getItems = (
-  isDapolPilotProbationRegion: boolean,
+  isResponsibleOrgProbation: boolean,
   isLicencePilotProbationRegion: boolean,
   hdc?: string | null,
   notifyingOrganisation?: string | null,
@@ -114,7 +91,7 @@ const getItems = (
       {
         text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
         value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
-        disabled: !isDapolPilotProbationRegion,
+        disabled: !isResponsibleOrgProbation,
       },
       { text: 'GPS acquisitive crime (EMAC)', value: 'GPS_ACQUISITIVE_CRIME_PAROLE' },
       { divider: 'or' },
@@ -131,7 +108,7 @@ const getItems = (
       {
         text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
         value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC',
-        disabled: !isDapolPilotProbationRegion,
+        disabled: !isResponsibleOrgProbation,
       },
       { text: 'GPS acquisitive crime (EMAC)', value: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW' },
       { divider: 'or' },
