@@ -10,6 +10,7 @@
 {% from "govuk/components/task-list/macro.njk" import govukTaskList %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {%- from "moj/components/timeline/macro.njk" import mojTimeline -%}
+{% from "moj/components/alert/macro.njk" import mojAlert %}
 
 {% block beforeContent %}
   {{ govukBackLink({
@@ -23,6 +24,15 @@
     <div class="govuk-grid-column-two-thirds">
 
       {% set heading = 'Electronic Monitoring application form for ' + order.deviceWearer.firstName + ' ' + order.deviceWearer.lastName if (order.status === 'SUBMITTED') or (order.deviceWearer.firstName)  else "Electronic Monitoring application form" %}
+
+      {% if isViewOnly %}
+        {{ mojAlert({
+          variant: "warning",
+          title: "",
+          text: "You cannot make changes to this form because it is assigned to " + order.lastUpdatedBy + '.'
+        }) }} 
+      {% endif %}
+
 
       <h1 class="govuk-heading-l">
         {{ heading }}
@@ -94,7 +104,7 @@
                   classes: "govuk-task-list__status--cannot-start-yet"                
           } %}
         {% elif section.completed %}
-             {% if not section.checked %}
+             {% if not section.checked and not isViewOnly %}
 	       {% if isVariationType %}
                  {% set statusArgs = {
                    text: "Optional"
@@ -119,7 +129,7 @@
           } %}
         {% endif %}
 
-        {%  if not section.isReady %}
+        {% if not section.isReady %}
           {% set items = (items.push({
             idPrefix: "order-section",
             title: { text: name },                       
@@ -127,19 +137,27 @@
             classes: 'disabled-link'
           }), items) %}
         {% else %}
-          {% set items = (items.push({
-            idPrefix: "order-section",
-            title: { text: name }, 
-            href: section.path, 
-            status: statusArgs
-          }), items) %}
+	  {% if isViewOnly and not section.completed %}
+            {% set items = (items.push({
+              idPrefix: "order-section",
+              title: { text: name }, 
+              status: statusArgs
+            }), items) %}
+	  {% else %}
+	    {% set items = (items.push({
+              idPrefix: "order-section",
+              title: { text: name }, 
+              href: section.path, 
+              status: statusArgs
+            }), items) %}
+	  {% endif %}
         {% endif %}
 
       {% endfor %}
 
       {{ govukTaskList({ idPrefix: "sections", items: items }) }}
 
-      {% if order.status == "IN_PROGRESS" %}
+      {% if order.status == "IN_PROGRESS" and not isViewOnly %}
         <form action="/order/{{ order.id }}/submit" method="post" data-module="form-spinner" data->       
           <input type="hidden" name="_csrf" value="{{ csrfToken }}">
           <div class="govuk-button-group">
@@ -174,7 +192,7 @@
       </div>
         </div>
       {% endif %}
-      {% if order.status === "ERROR" %}
+     {% if order.status == "ERROR" %}
         {% set receiptUrl = "/order/" + orderId + "/version/" + versionId + "/receipt" 
           if versionId else "/order/" + orderId + "/receipt" %}
         {{ govukButton({
@@ -184,45 +202,56 @@
           classes: "govuk-button--secondary"
         }) }}
       {% endif %}
+    {% if isViewOnly %}
+      <form action="/order/{{ order.id }}/update-order-owner" method="post" data-module="form-spinner">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Assign form to me",
+            preventDoubleClick: true
+          }) }}
+        </div>
+      </form>
+    {% endif %}
     </div>
 
     <div class="govuk-grid-column-one-third">
-        {% if order.status != 'IN_PROGRESS' %}
+        {% if order.status != 'IN_PROGRESS' or isViewOnly %}
           {% if timelineItems | length %}
             {% set processedTimeLineItems = [] %}
-          {% for item in timelineItems %}
-            {% if item.href %}
-              {% set itemHtml %}               
-               <p> {{ item.text if item.text }} </p>
-                <div class="govuk-!-margin-top-2">
-                  <a href="{{ item.href }}">View submitted form</a>
-                </div>
-              {% endset %}
-            {% else %}
-              {% set itemHtml %}              
-                <p> {{ item.text if item.text }} </p>
-                <div class="govuk-!-margin-top-2">
-                  <p>You are viewing this version of the form</p>
-                </div>
-              {% endset %}
-            {% endif %}
+            {% for item in timelineItems %}
+              {% if item.href %}
+                {% set itemHtml %}               
+                 <p> {{ item.text if item.text }} </p>
+                  <div class="govuk-!-margin-top-2">
+                    <a href="{{ item.href }}">View submitted form</a>
+                  </div>
+                {% endset %}
+              {% else %}
+                {% set itemHtml %}              
+                  <p> {{ item.text if item.text }} </p>
+                  <div class="govuk-!-margin-top-2">
+                    <p>You are viewing this version of the form</p>
+                  </div>
+                {% endset %}
+              {% endif %}
 
-            {% set byLineHtml %}
-               {{ item.byline.text}}
-               <br />
-                <span class='moj-timeline__from'>{{ item.notifyingOrganisationDetails if item.notifyingOrganisationDetails }}</span>
-              {% endset %}
-            {% set processedItem = {
-              label: item.label,
-              datetime: item.datetime,
-              byline: {
-                html: byLineHtml
-              },
-              html: itemHtml
-            } %}
-            {% set processedTimeLineItems = (processedTimeLineItems.push(processedItem), processedTimeLineItems) %}
-          {% endfor %}
-          {{ mojTimeline({
+              {% set byLineHtml %}
+                 {{ item.byline.text}}
+                 <br />
+                  <span class='moj-timeline__from'>{{ item.notifyingOrganisationDetails if item.notifyingOrganisationDetails }}</span>
+                {% endset %}
+              {% set processedItem = {
+                label: item.label,
+                datetime: item.datetime,
+                byline: {
+                  html: byLineHtml
+                },
+                html: itemHtml
+              } %}
+              {% set processedTimeLineItems = (processedTimeLineItems.push(processedItem), processedTimeLineItems) %}
+            {% endfor %}
+            {{ mojTimeline({
               items: processedTimeLineItems
             })}}
           {% endif %}

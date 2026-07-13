@@ -5,10 +5,16 @@ import { AuditService, OrderSearchService } from '../services'
 import config from '../config'
 import { constructSearchViewModel, constructListViewModel, OrderSearchViewModel } from '../models/form-data/search'
 import logger from '../../logger'
+import { ListOrdersQueryParser } from '../models/form-data/OrderListView'
 
 const SearchOrderFormDataParser = z.object({
   searchTerm: z.string().nullable().optional(),
 })
+
+const IsPrisonOrYouthUser = (res: Response): boolean => {
+  const cohort = res.locals.user.cohort?.cohort
+  return cohort === 'PRISON'
+}
 
 export default class OrderSearchController {
   constructor(
@@ -21,14 +27,17 @@ export default class OrderSearchController {
       who: res.locals.user.username,
       correlationId: req.id,
     })
+    const canFilterViews = IsPrisonOrYouthUser(res)
+    const { view: requestedView } = ListOrdersQueryParser.parse(req.query)
+    const view = canFilterViews ? requestedView : 'MY_ORDERS'
 
     try {
-      const orders = await this.orderSearchService.listOrders({ accessToken: res.locals.user.token })
+      const orders = await this.orderSearchService.listOrders({ accessToken: res.locals.user.token }, view)
 
-      res.render('pages/index', constructListViewModel(orders))
+      res.render('pages/index', constructListViewModel(orders, view, canFilterViews))
     } catch (e) {
       logger.warn(`List orders ${e} `)
-      res.render('pages/index', constructListViewModel([]))
+      res.render('pages/index', constructListViewModel([], view, canFilterViews))
     }
   }
 
@@ -64,7 +73,6 @@ export default class OrderSearchController {
       model.searchTerm = formData.searchTerm
       model.noResults = true
     }
-
     res.render('pages/search', model)
   }
 }

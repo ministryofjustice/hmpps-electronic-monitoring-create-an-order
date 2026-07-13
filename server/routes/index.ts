@@ -247,6 +247,7 @@ export default function routes({
   post(paths.ORDER.IS_ADDRESS_CHANGE, isAddressChangeController.update)
   get(paths.ORDER.NO_REFITS, noRefitsController.view)
   get(paths.ORDER.NO_CHANGE_RESPONSIBLE_OFFICER, noChangeResonsibleOfficer.view)
+  post(paths.ORDER.UPDATE_ORDER_OWNER, orderController.assignOrderOwner)
   /**
    * ABOUT THE DEVICE WEARER
    */

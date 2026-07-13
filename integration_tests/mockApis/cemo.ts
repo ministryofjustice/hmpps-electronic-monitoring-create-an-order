@@ -32,73 +32,37 @@ const defaultListOrdersOptions: ListOrdersStubOptions = {
   httpStatus: 200,
   orders: [
     {
-      ...mockApiOrder(),
-      deviceWearer: {
-        nomisId: null,
-        pncId: null,
-        deliusId: null,
-        prisonNumber: null,
-        homeOfficeReferenceNumber: null,
-        complianceAndEnforcementPersonReference: null,
-        courtCaseReferenceNumber: null,
-        firstName: 'test',
-        lastName: 'tester',
-        alias: null,
-        dateOfBirth: null,
-        adultAtTimeOfInstallation: null,
-        sex: null,
-        gender: null,
-        disabilities: null,
-        noFixedAbode: null,
-        interpreterRequired: null,
-      },
-    },
-    {
-      ...mockApiOrder(),
-      deviceWearer: {
-        nomisId: null,
-        pncId: null,
-        deliusId: null,
-        prisonNumber: null,
-        homeOfficeReferenceNumber: null,
-        complianceAndEnforcementPersonReference: null,
-        courtCaseReferenceNumber: null,
-        firstName: 'Failed',
-        lastName: 'request',
-        alias: null,
-        dateOfBirth: null,
-        adultAtTimeOfInstallation: null,
-        sex: null,
-        gender: null,
-        disabilities: null,
-        noFixedAbode: null,
-        interpreterRequired: null,
-      },
-      status: 'ERROR',
-    },
-    {
-      ...mockApiOrder(),
-      deviceWearer: {
-        nomisId: null,
-        pncId: null,
-        deliusId: null,
-        prisonNumber: null,
-        homeOfficeReferenceNumber: null,
-        complianceAndEnforcementPersonReference: null,
-        courtCaseReferenceNumber: null,
-        firstName: 'vari',
-        lastName: 'ation',
-        alias: null,
-        dateOfBirth: null,
-        adultAtTimeOfInstallation: null,
-        sex: null,
-        gender: null,
-        disabilities: null,
-        noFixedAbode: null,
-        interpreterRequired: null,
-      },
-      type: 'VARIATION',
+      id: uuidv4(),
+      versionId: uuidv4(),
       status: 'IN_PROGRESS',
+      type: 'REQUEST',
+      firstName: 'test',
+      lastName: 'tester',
+      notifyingOrganisation: 'PRISON',
+      lastUpdatedBy: 'CEMO.USER',
+      lastUpdatedDateTime: '2024-03-10T11:30:00.000Z',
+    },
+    {
+      id: uuidv4(),
+      versionId: uuidv4(),
+      status: 'ERROR',
+      type: 'REQUEST',
+      firstName: 'Failed',
+      lastName: 'request',
+      notifyingOrganisation: 'PRISON',
+      lastUpdatedBy: 'CEMO.USER',
+      lastUpdatedDateTime: '2024-03-10T11:30:00.000Z',
+    },
+    {
+      id: uuidv4(),
+      versionId: uuidv4(),
+      status: 'IN_PROGRESS',
+      type: 'VARIATION',
+      firstName: 'vari',
+      lastName: 'ation',
+      notifyingOrganisation: 'PRISON',
+      lastUpdatedBy: 'CEMO.USER',
+      lastUpdatedDateTime: '2024-03-10T11:30:00.000Z',
     },
   ],
 }
@@ -107,7 +71,7 @@ const listOrders = (options: ListOrdersStubOptions = defaultListOrdersOptions): 
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/cemo/api/orders',
+      urlPathPattern: '/cemo/api/orders',
     },
     response: {
       status: options.httpStatus,
@@ -734,6 +698,43 @@ const resetDB = async () => {
   return true
 }
 
+type UpdateOrderOwnerStubOptions = {
+  httpStatus: number
+  id?: string
+  status?: string
+  order?: Partial<Order>
+}
+
+const defaultUpdateOrderOwnerOptions = {
+  httpStatus: 200,
+  id: uuidv4(),
+  status: 'IN_PROGRESS',
+}
+
+const updateOrderOwner = (options: UpdateOrderOwnerStubOptions = defaultUpdateOrderOwnerOptions): SuperAgentRequest => {
+  const stubOptions = { ...defaultUpdateOrderOwnerOptions, ...options }
+
+  return stubFor({
+    request: {
+      method: 'PUT',
+      urlPattern: `/cemo/api/orders/${stubOptions.id}/update-order-owner`,
+    },
+    response: {
+      status: stubOptions.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody:
+        stubOptions.httpStatus === 200
+          ? {
+              ...mockApiOrder(),
+              id: stubOptions.id,
+              status: stubOptions.status,
+              ...(stubOptions.order ? stubOptions.order : {}),
+            }
+          : null,
+    },
+  })
+}
+
 export default {
   stubCemoCreateOrder: createOrder,
   stubCemoCreateVariation: createVariation,
@@ -752,6 +753,7 @@ export default {
   stubCemoPutResponsibleAdult: putResponsibleAdult,
   stubUploadAttachment: uploadAttachment,
   stubDeleteAttachment: deleteAttachment,
+  stubCemoUpdateOrderOwner: updateOrderOwner,
   getStubbedRequest,
   stubCemoVerifyRequestReceived,
   stubDeleteOrder: deleteOrder,
