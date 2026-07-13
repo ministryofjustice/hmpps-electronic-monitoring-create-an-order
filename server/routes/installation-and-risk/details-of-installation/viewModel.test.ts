@@ -5,7 +5,7 @@ import DetailsOfInstallationModel from './viewModel'
 
 describe('details of installation view model', () => {
   it('returns empty when no values in order', () => {
-    const order = {} as Order
+    const order = { dataDictionaryVersion: 'DDV6' } as Order
 
     const result = DetailsOfInstallationModel.construct(order, {} as DetailsOfInstallationInput, [])
 
@@ -20,6 +20,7 @@ describe('details of installation view model', () => {
         riskCategory: ['HOMOPHOBIC_VIEWS', 'HISTORY_OF_SUBSTANCE_ABUSE'],
         riskDetails: 'some details',
       },
+      dataDictionaryVersion: 'DDV6',
     } as Order
 
     const result = DetailsOfInstallationModel.construct(order, {} as DetailsOfInstallationInput, [])
@@ -36,6 +37,7 @@ describe('details of installation view model', () => {
         riskDetails: 'some details',
         genderRiskDetails: 'women',
       },
+      dataDictionaryVersion: 'DDV6',
     } as Order
 
     const result = DetailsOfInstallationModel.construct(order, {} as DetailsOfInstallationInput, [])
@@ -45,7 +47,7 @@ describe('details of installation view model', () => {
   })
 
   it('returns errors with form data', () => {
-    const order = {} as Order
+    const order = { dataDictionaryVersion: 'DDV6' } as Order
     const formData = {
       possibleRisk: [],
       riskCategory: ['HISTORY_OF_SUBSTANCE_ABUSE'],
