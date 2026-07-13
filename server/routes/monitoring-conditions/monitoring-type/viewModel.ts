@@ -8,7 +8,7 @@ import { MonitoringConditions } from '../model'
 
 type MonitoringTypes = Pick<
   MonitoringConditions,
-  'curfew' | 'exclusionZone' | 'trail' | 'mandatoryAttendance' | 'alcohol'
+  'curfew' | 'exclusionZone' | 'trail' | 'mandatoryAttendance' | 'alcohol' | 'restrictionZone'
 >
 const MonitoringTypesKeys: (keyof MonitoringTypes)[] = [
   'curfew',
@@ -16,6 +16,7 @@ const MonitoringTypesKeys: (keyof MonitoringTypes)[] = [
   'trail',
   'mandatoryAttendance',
   'alcohol',
+  'restrictionZone',
 ]
 export type MonitoringTypeModel = {
   errorSummary: ErrorSummary | null
@@ -117,7 +118,7 @@ const getEnabled = (order: Order): { options: (keyof MonitoringTypes)[]; message
     }
   }
 
-  return { options: ['curfew', 'exclusionZone', 'trail', 'mandatoryAttendance', 'alcohol'] }
+  return { options: ['curfew', 'exclusionZone', 'trail', 'mandatoryAttendance', 'alcohol', 'restrictionZone'] }
 }
 
 const hasFixedAddress = (order: Order): boolean => {

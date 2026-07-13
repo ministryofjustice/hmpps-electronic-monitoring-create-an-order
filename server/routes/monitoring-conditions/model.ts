@@ -57,6 +57,7 @@ const MonitoringConditionsModel = z.object({
   issp: z.string().nullable().optional(),
   prarr: YesNoUnknownEnum.nullable().optional(),
   policeArea: z.string().nullable().optional(),
+  restrictionZone: z.boolean().nullable().optional(),
 })
 
 export type MonitoringConditions = z.infer<typeof MonitoringConditionsModel>
