@@ -1981,23 +1981,25 @@ context('Order Summary', () => {
         const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
         page.timeline.element.should('exist')
-        page.timeline.formSubmittedComponent.element.should('exist')
-        page.timeline.formSubmittedComponent.bylineContains('Person One')
-        page.timeline.formSubmittedComponent.resultDateIs('1 January 2025 at 10:30am')
-        page.timeline.formSubmittedComponent.description
-          .contains('View submitted form')
-          .should(
-            'have.attr',
-            'href',
-            paths.ORDER.SUMMARY_VERSION.replace(':orderId', mockOrderId).replace(':versionId', versionOne.versionId),
-          )
-        page.timeline.formSubmittedComponent.bylineContains('From Whitemoor Prison')
 
         page.timeline.formVariationComponent.element.should('exist')
         page.timeline.formVariationComponent.bylineContains('Person Two')
         page.timeline.formVariationComponent.resultDateIs('3 January 2025 at 10:30am')
         page.timeline.formVariationComponent.variationTextIs('Change to an order')
         page.timeline.formVariationComponent.bylineContains('From Whitemoor Prison')
+        page.timeline.formSubmittedComponent.description
+          .contains('View submitted form')
+          .should(
+            'have.attr',
+            'href',
+            paths.ORDER.SUMMARY_VERSION.replace(':orderId', mockOrderId).replace(':versionId', versionTwo.versionId),
+          )
+
+        page.timeline.formSubmittedComponent.element.should('exist')
+        page.timeline.formSubmittedComponent.bylineContains('Person One')
+        page.timeline.formSubmittedComponent.resultDateIs('1 January 2025 at 10:30am')
+
+        page.timeline.formSubmittedComponent.bylineContains('From Whitemoor Prison')
       })
     })
   })
