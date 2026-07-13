@@ -138,7 +138,7 @@ describe('authorised user', () => {
     it('should render order summary page', async () => {
       auditService.logPageView.mockResolvedValue()
       orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
-      orderService.getCompleteVersions.mockResolvedValue([])
+      orderService.getVersionInformations.mockResolvedValue([])
       mockOrderChecklistService.getChecklist.mockResolvedValue(OrderChecklistModel.parse({}))
       return request(app)
         .get(`/order/${mockSubmittedOrder.id}/summary`)

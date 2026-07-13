@@ -28,7 +28,15 @@ export default class TimelineModel {
     orderId?: string,
     currentVersionId?: string,
   ): TimelineItem[] => {
-    return versions.map(version => this.mapSingleItem(content, version, orderId, currentVersionId))
+    return versions
+      .map(version => this.mapSingleItem(content, version, orderId, currentVersionId))
+      .sort((a, b) => {
+        const aTime = a.datetime.timestamp ? new Date(a.datetime.timestamp).getTime() : 0
+
+        const bTime = b.datetime.timestamp ? new Date(b.datetime.timestamp).getTime() : 0
+
+        return bTime - aTime
+      })
   }
 
   private static getTimelineText = (versionInformation: VersionInformation) => {
@@ -59,7 +67,7 @@ export default class TimelineModel {
       },
       text: this.getVariationText(version.type),
       datetime: {
-        timestamp: version.fmsResultDate ?? version.lastUpdatedDateTime,
+        timestamp: version.fmsResultDate ?? version.lastUpdatedDateTime ?? new Date().toISOString(),
         type: 'datetime',
       },
       notifyingOrganisationDetails: this.getNotifyingOrganisationText(version, content),
@@ -67,7 +75,6 @@ export default class TimelineModel {
         text: version.submittedBy ?? version.lastUpdatedBy,
       },
     }
-
     if (orderId && currentVersionId && currentVersionId !== version.versionId) {
       item.href = paths.ORDER.SUMMARY_VERSION.replace(':orderId', orderId).replace(':versionId', version.versionId)
     }

@@ -70,7 +70,7 @@ export default class OrderController {
 
     const [sections, completedOrderVersions] = await Promise.all([
       this.sectionService.getSectionsForOrder(order, versionId),
-      this.orderService.getCompleteVersions({
+      this.orderService.getVersionInformations({
         orderId: order.id,
         accessToken: res.locals.user.token,
       }),

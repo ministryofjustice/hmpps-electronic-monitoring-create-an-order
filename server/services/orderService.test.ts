@@ -191,7 +191,7 @@ describe('Order Service', () => {
       mockRestClient.get.mockResolvedValue([])
       const orderService = new OrderService(mockRestClient)
 
-      await orderService.getCompleteVersions({
+      await orderService.getVersionInformations({
         accessToken: mockAccessToken,
         orderId: mockOrderId,
       })
@@ -209,7 +209,7 @@ describe('Order Service', () => {
       mockRestClient.get.mockResolvedValue(versions)
       const orderService = new OrderService(mockRestClient)
 
-      const results = await orderService.getCompleteVersions({
+      const results = await orderService.getVersionInformations({
         accessToken: mockAccessToken,
         orderId: mockOrderId,
       })

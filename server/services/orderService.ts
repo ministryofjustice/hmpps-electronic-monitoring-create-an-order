@@ -81,7 +81,7 @@ export default class OrderService {
     return OrderModel.parse(result)
   }
 
-  async getCompleteVersions(input: OrderRequestInput): Promise<VersionInformation[]> {
+  async getVersionInformations(input: OrderRequestInput): Promise<VersionInformation[]> {
     try {
       const result = await this.apiClient.get({
         path: `/api/orders/${input.orderId}/versions`,

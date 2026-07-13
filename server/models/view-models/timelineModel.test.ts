@@ -36,18 +36,18 @@ describe('TimelineModel', () => {
       expect(result).toHaveLength(2)
 
       expect(result[0]).toEqual({
+        label: { text: 'Form submitted' },
+        datetime: { timestamp: '2025-01-01T10:30:00.000Z', type: 'datetime' },
+        byline: { text: 'Bob' },
+        notifyingOrganisationDetails: '',
+      })
+
+      expect(result[1]).toEqual({
         label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
         text: 'Change to an order',
         notifyingOrganisationDetails: 'From Whitemoor Prison',
-      })
-
-      expect(result[1]).toEqual({
-        label: { text: 'Form submitted' },
-        datetime: { timestamp: '2025-01-01T10:30:00.000Z', type: 'datetime' },
-        byline: { text: 'Bob' },
-        notifyingOrganisationDetails: '',
       })
     })
 
