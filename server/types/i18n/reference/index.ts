@@ -38,6 +38,7 @@ import DeviceTypes from './deviceTypes'
 import YouthCustodyServiceRegions from './youthCustodyServiceRegions'
 import YouthCustodyServiceRegionsDDv6 from './ddv6/youthCustodyServiceRegions'
 import PoliceAreasDDv6 from './ddv6/policeAreas'
+import { Override } from '../../utils'
 
 type ReferenceCatalogDDv4 = {
   alcoholMonitoringTypes: AlcoholMonitoringTypes
@@ -74,90 +75,38 @@ type ReferenceCatalogDDv4 = {
   youthCustodyServiceRegions: YouthCustodyServiceRegions
 }
 
-type ReferenceCatalogDDv5 = {
-  alcoholMonitoringTypes: AlcoholMonitoringTypes
-  civilCountyCourts: CivilCountyCourts
-  conditionTypes: ConditionTypes
-  crownCourts: CrownCourtsDDv5
-  disabilities: DisabilitiesDDv5
-  familyCourts: FamilyCourts
-  gender: Gender
-  languages: Languages
-  magistratesCourts: MagistratesCourtsDDv5
-  mappaCategory: MappaCategory
-  mappaLevel: MappaLevel
-  isMappa: IsMappa
-  militaryCourts: MilitaryCourts
-  notifyingOrganisations: NotifyingOrganisationsDDv5
-  offences: Offences
-  orderTypeDescriptions: OrderTypeDescriptions
-  orderTypes: OrderTypes
-  pilots: Pilots
-  prisons: PrisonsDDv5
-  probationRegions: ProbationRegions
-  probationDeliveryUnits: ProbationDeliveryUnits
-  probationRegionDeliveryUnits: ProbationRegionDeliveryUnits
-  relationship: Relationship
-  responsibleOrganisations: ResponsibleOrganisations
-  riskCategories: RiskCategoriesDDv5
-  sentenceTypes: SentenceTypes
-  sex: Sex
-  variationTypes: VariationTypesDDv5
-  yesNoUnknown: YesNoUnknown
-  youthCourts: YouthCourts
-  youthJusticeServiceRegions: YouthJusticeServiceRegions
-  installationLocations: InstallationLocations
-  possibleRisks: PossibleRisks
-  policeAreas: PoliceAreas
-  releaseAddressPoliceAreas: PoliceAreas
-  serviceRequestTypes: ServiceRequestTypes
-  deviceTypes: DeviceTypes
-  youthCustodyServiceRegions: YouthCustodyServiceRegions
-}
+type ReferenceCatalogDDv5 = Override<
+  ReferenceCatalogDDv4,
+  {
+    civilCountyCourts: CivilCountyCourts
+    crownCourts: CrownCourtsDDv5
+    disabilities: DisabilitiesDDv5
+    familyCourts: FamilyCourts
+    magistratesCourts: MagistratesCourtsDDv5
+    militaryCourts: MilitaryCourts
+    notifyingOrganisations: NotifyingOrganisationsDDv5
+    prisons: PrisonsDDv5
+    probationDeliveryUnits: ProbationDeliveryUnits
+    probationRegionDeliveryUnits: ProbationRegionDeliveryUnits
+    riskCategories: RiskCategoriesDDv5
+    variationTypes: VariationTypesDDv5
+    youthCourts: YouthCourts
+  }
+>
 
-type ReferenceCatalogDDv6 = {
-  alcoholMonitoringTypes: AlcoholMonitoringTypes
-  civilCountyCourts: CivilCountyCourts
-  conditionTypes: ConditionTypes
-  crownCourts: CrownCourtsDDv5
-  disabilities: DisabilitiesDDv5
-  familyCourts: FamilyCourts
-  gender: Gender
-  languages: Languages
-  magistratesCourts: MagistratesCourtsDDv5
-  mappaCategory: MappaCategory
-  mappaLevel: MappaLevel
-  isMappa: IsMappa
-  militaryCourts: MilitaryCourts
-  notifyingOrganisations: NotifyingOrganisationsDDv5
-  offences: Offences
-  orderTypeDescriptions: OrderTypeDescriptions
-  orderTypes: OrderTypes
-  pilots: Pilots
-  prisons: PrisonsDDv5
-  probationRegions: ProbationRegions
-  probationDeliveryUnits: ProbationDeliveryUnitsDDv6
-  probationRegionDeliveryUnits: ProbationRegionDeliveryUnits
-  relationship: Relationship
-  responsibleOrganisations: ResponsibleOrganisations
-  riskCategories: RiskCategoriesDDv5
-  sentenceTypes: SentenceTypes
-  sex: Sex
-  variationTypes: VariationTypesDDv5
-  yesNoUnknown: YesNoUnknown
-  youthCourts: YouthCourts
-  youthJusticeServiceRegions: YouthJusticeServiceRegions
-  installationLocations: InstallationLocations
-  possibleRisks: PossibleRisks
-  policeAreas: PoliceAreasDDv6
-  releaseAddressPoliceAreas: PoliceAreas
-  serviceRequestTypes: ServiceRequestTypes
-  deviceTypes: DeviceTypes
-  youthCustodyServiceRegions: YouthCustodyServiceRegionsDDv6
-}
+type ReferenceCatalogDDv6 = Override<
+  ReferenceCatalogDDv5,
+  {
+    probationDeliveryUnits: ProbationDeliveryUnitsDDv6
+    policeAreas: PoliceAreasDDv6
+    youthCustodyServiceRegions: YouthCustodyServiceRegionsDDv6
+  }
+>
 
-type ReferenceCatalog = ReferenceCatalogDDv4 | ReferenceCatalogDDv5 | ReferenceCatalogDDv6
+type ReferenceCatalogDDv7 = ReferenceCatalogDDv6
+
+type ReferenceCatalog = ReferenceCatalogDDv4 | ReferenceCatalogDDv5 | ReferenceCatalogDDv6 | ReferenceCatalogDDv7
 
 export default ReferenceCatalog
 
-export { ReferenceCatalogDDv4, ReferenceCatalogDDv5, ReferenceCatalogDDv6 }
+export { ReferenceCatalogDDv4, ReferenceCatalogDDv5, ReferenceCatalogDDv6, ReferenceCatalogDDv7 }
