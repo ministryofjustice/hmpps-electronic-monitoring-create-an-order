@@ -7,6 +7,7 @@ import fillInAlcoholMonitoringOrderDetailsWith from './alcohol-monitoring.cy'
 import fillInTrailMonitoringOrderDetailsWith from './trail-monitoring.cy'
 import fillInAttendanceMonitoringDetailsWith from './attendance-monitoring.cy'
 import TypesOfMonitoringNeededPage from '../../e2e/order/monitoring-conditions/order-type-description/types-of-monitoring-needed/TypesOfMonitoringNeededPage'
+import { AddToListEnforcementZoneTypes } from '../../../server/routes/monitoring-conditions/model'
 
 export default function fillInMonitoringTypeWith(
   {
@@ -24,7 +25,7 @@ export default function fillInMonitoringTypeWith(
     trailMonitoringDetails = undefined,
     attendanceMonitoringDetails = undefined,
   },
-  enforcementZoneType: 'exclusion' | 'restriction' = 'exclusion',
+  enforcementZoneType: AddToListEnforcementZoneTypes = 'exclusion',
 ): void {
   if (additionalMonitoringConditions) {
     const typesOfMoinitoringNeededPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)

@@ -41,6 +41,7 @@ import ResponsibleOrganisationPage from '../../e2e/order/interested-parties/resp
 import NationalSecurityDirectoratePage from '../../e2e/order/interested-parties/national-security-directorate/nationalSecurityDirectoratePage'
 import ResponsibleOfficerPage from '../../e2e/order/interested-parties/responsible-officer/responsibleOfficerPage'
 import fillinAddress from '../../utils/scenario-flows/postcode-lookup.cy'
+import { AddToListEnforcementZoneTypes } from '../../../server/routes/monitoring-conditions/model'
 
 export default class OrderTasksPage extends AppPage {
   constructor(isOldVersionPage: boolean = false) {
@@ -758,7 +759,7 @@ export default class OrderTasksPage extends AppPage {
 
   fillInEnforcementZoneOrderDetailsWith(
     { enforcementZoneDetails },
-    zoneType: 'exclusion' | 'restriction',
+    zoneType: AddToListEnforcementZoneTypes,
     checkYourAnswerPage = true,
   ) {
     fillInEnforcementZoneListItemDetailsWith(enforcementZoneDetails, zoneType)

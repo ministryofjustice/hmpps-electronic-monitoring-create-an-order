@@ -24,6 +24,9 @@ export const SentenceTypeEnum = z.enum([
   'BAIL_RLAA',
   'BAIL',
 ])
+export const addToListEnforcementZoneTypes = ['exclusion', 'restriction'] as const
+
+export type AddToListEnforcementZoneTypes = (typeof addToListEnforcementZoneTypes)[number]
 
 export const YesNoUnknownEnum = z.enum(['YES', 'NO', 'UNKNOWN'])
 export const PilotTypeEnum = z.enum([

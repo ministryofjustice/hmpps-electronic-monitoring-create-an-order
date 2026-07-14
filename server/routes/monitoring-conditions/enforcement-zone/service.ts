@@ -7,12 +7,13 @@ import { SanitisedError } from '../../../sanitisedError'
 import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../../../utils/errors'
 import { EnforcementZoneAddToListFormData, EnforcementZoneAddToListFormDataValidator } from './formModel'
 import { NotifyingOrganisation } from '../../../models/NotifyingOrganisation'
+import { AddToListEnforcementZoneTypes } from '../model'
 
 type UpdateZoneRequestInput = AuthenticatedRequestInput & {
   orderId: string
   data: EnforcementZoneAddToListFormData
   notifyingOrganisation: NotifyingOrganisation | null
-  zoneType: 'exclusion' | 'restriction'
+  zoneType: AddToListEnforcementZoneTypes
 }
 
 type UploadZoneAttachmentRequestInput = AuthenticatedRequestInput & {

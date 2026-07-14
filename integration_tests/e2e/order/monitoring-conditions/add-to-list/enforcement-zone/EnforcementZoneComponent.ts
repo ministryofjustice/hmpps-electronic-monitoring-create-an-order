@@ -3,6 +3,7 @@ import FormDateTimeComponent from '../../../../../pages/components/formDateTimeC
 import FormFileUploadComponent from '../../../../../pages/components/formFileUploadComponent'
 import FormTextareaComponent from '../../../../../pages/components/formTextareaComponent'
 import FormInputComponent from '../../../../../pages/components/formInputComponent'
+import { AddToListEnforcementZoneTypes } from '../../../../../../server/routes/monitoring-conditions/model'
 
 export type EnforcementZoneAddToListFormData = {
   startDate?: Date
@@ -19,9 +20,9 @@ export type EnforcementZoneAddToListFormData = {
 
 export default class EnforcementZoneAddToListFormComponent extends FormComponent {
   // FIELDS
-  public zoneType: 'exclusion' | 'restriction'
+  public zoneType: AddToListEnforcementZoneTypes
 
-  constructor(zoneType: 'exclusion' | 'restriction') {
+  constructor(zoneType: AddToListEnforcementZoneTypes) {
     super()
     this.zoneType = zoneType
   }

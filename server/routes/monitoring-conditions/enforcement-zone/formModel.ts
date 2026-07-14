@@ -2,6 +2,7 @@ import z from 'zod'
 import { DateTimeInputModel } from '../../../models/form-data/formData'
 import { validationErrors } from '../../../constants/validationErrors'
 import { NotifyingOrganisation } from '../../../models/NotifyingOrganisation'
+import { AddToListEnforcementZoneTypes } from '../model'
 
 const EnforcementZoneAddToListFormDataModel = z.object({
   action: z.string(),
@@ -31,7 +32,7 @@ type EnforcementZoneAddToListFormData = Omit<z.infer<typeof EnforcementZoneAddTo
 
 const EnforcementZoneAddToListFormDataValidator = (
   notifyingOrganisation: NotifyingOrganisation | null,
-  zoneType: 'exclusion' | 'restriction',
+  zoneType: AddToListEnforcementZoneTypes,
 ) =>
   z
     .object({

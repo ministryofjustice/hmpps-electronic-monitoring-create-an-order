@@ -7,6 +7,7 @@ import { EnforcementZoneAddToListFormDataModel } from './formModel'
 import enforcementZoneAddToListViewModel from './viewModel'
 import { ValidationResult } from '../../../models/Validation'
 import EnforcementZoneAddToListService from './service'
+import { AddToListEnforcementZoneTypes } from '../model'
 
 export default class EnforcementZoneAddToListController {
   constructor(
@@ -17,7 +18,7 @@ export default class EnforcementZoneAddToListController {
   update: RequestHandler = async (req: Request, res: Response) => {
     const zoneId = req.params.zoneId as string
     const orderId = req.params.orderId as string
-    const zoneType = req.params.zoneType as 'exclusion' | 'restriction'
+    const zoneType = req.params.zoneType as AddToListEnforcementZoneTypes
     const { interestedParties } = req.order!
 
     const file = req.file as Express.Multer.File

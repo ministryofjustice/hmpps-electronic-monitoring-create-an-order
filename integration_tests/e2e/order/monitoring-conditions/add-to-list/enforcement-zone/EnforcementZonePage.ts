@@ -2,11 +2,12 @@ import { PageElement } from '../../../../../pages/page'
 import paths from '../../../../../../server/constants/paths'
 import AppFormPage from '../../../../../pages/appFormPage'
 import EnforcementZoneAddToListFormComponent from './EnforcementZoneComponent'
+import { AddToListEnforcementZoneTypes } from '../../../../../../server/routes/monitoring-conditions/model'
 
 export default class EnforcementZoneAddToListPage extends AppFormPage {
   public form: EnforcementZoneAddToListFormComponent
 
-  constructor(zoneType: 'exclusion' | 'restriction') {
+  constructor(zoneType: AddToListEnforcementZoneTypes) {
     super(
       `${zoneType.charAt(0).toUpperCase() + zoneType.slice(1)} zone monitoring `,
       paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':zoneType', zoneType),
