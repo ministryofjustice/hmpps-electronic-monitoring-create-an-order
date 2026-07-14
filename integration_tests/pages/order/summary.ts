@@ -159,6 +159,7 @@ export default class OrderTasksPage extends AppPage {
     curfewConditionDetails,
     curfewTimetable,
     enforcementZoneDetails,
+    restrictionZoneDetails,
     secondEnforcementZoneDetails = undefined,
     alcoholMonitoringDetails,
     trailMonitoringDetails,
@@ -253,6 +254,7 @@ export default class OrderTasksPage extends AppPage {
             {
               enforcementZoneDetails,
             },
+            'exclusion',
             false,
           )
           if (secondEnforcementZoneDetails) {
@@ -271,6 +273,13 @@ export default class OrderTasksPage extends AppPage {
               false,
             )
           }
+        }
+        if (condition === 'Restriction zone monitoring') {
+          this.fillInEnforcementZoneOrderDetailsWith(
+            { enforcementZoneDetails: restrictionZoneDetails },
+            'restriction',
+            false,
+          )
         }
 
         if (condition === 'Trail monitoring') {
@@ -398,9 +407,12 @@ export default class OrderTasksPage extends AppPage {
       probationDeliveryUnit,
     })
 
-    this.fillInEnforcementZoneOrderDetailsWith({
-      enforcementZoneDetails,
-    })
+    this.fillInEnforcementZoneOrderDetailsWith(
+      {
+        enforcementZoneDetails,
+      },
+      'exclusion',
+    )
 
     this.fillInAttachmentDetailsWith({
       files,
@@ -437,9 +449,12 @@ export default class OrderTasksPage extends AppPage {
       probationDeliveryUnit,
     })
 
-    this.fillInEnforcementZoneOrderDetailsWith({
-      enforcementZoneDetails,
-    })
+    this.fillInEnforcementZoneOrderDetailsWith(
+      {
+        enforcementZoneDetails,
+      },
+      'exclusion',
+    )
 
     this.fillInAttachmentDetailsWith({
       files,
@@ -741,8 +756,12 @@ export default class OrderTasksPage extends AppPage {
     }
   }
 
-  fillInEnforcementZoneOrderDetailsWith({ enforcementZoneDetails }, checkYourAnswerPage = true) {
-    fillInEnforcementZoneListItemDetailsWith(enforcementZoneDetails)
+  fillInEnforcementZoneOrderDetailsWith(
+    { enforcementZoneDetails },
+    zoneType: 'exclusion' | 'restriction',
+    checkYourAnswerPage = true,
+  ) {
+    fillInEnforcementZoneListItemDetailsWith(enforcementZoneDetails, zoneType)
 
     if (checkYourAnswerPage) {
       const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(

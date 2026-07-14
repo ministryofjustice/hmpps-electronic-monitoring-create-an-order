@@ -8,21 +8,24 @@ import fillInTrailMonitoringOrderDetailsWith from './trail-monitoring.cy'
 import fillInAttendanceMonitoringDetailsWith from './attendance-monitoring.cy'
 import TypesOfMonitoringNeededPage from '../../e2e/order/monitoring-conditions/order-type-description/types-of-monitoring-needed/TypesOfMonitoringNeededPage'
 
-export default function fillInMonitoringTypeWith({
-  monitoringType = undefined,
-  additionalMonitoringConditions = undefined,
-  installationAddressDetails = undefined,
-  installationLocation = undefined,
-  installationAppointment = undefined,
-  curfewConditionDetails = undefined,
-  curfewReleaseDetails = undefined,
-  curfewTimetable = undefined,
-  enforcementZoneDetails = undefined,
-  enforcementZoneListItemDetails = undefined,
-  alcoholMonitoringDetails = undefined,
-  trailMonitoringDetails = undefined,
-  attendanceMonitoringDetails = undefined,
-}): void {
+export default function fillInMonitoringTypeWith(
+  {
+    monitoringType = undefined,
+    additionalMonitoringConditions = undefined,
+    installationAddressDetails = undefined,
+    installationLocation = undefined,
+    installationAppointment = undefined,
+    curfewConditionDetails = undefined,
+    curfewReleaseDetails = undefined,
+    curfewTimetable = undefined,
+    enforcementZoneDetails = undefined,
+    enforcementZoneListItemDetails = undefined,
+    alcoholMonitoringDetails = undefined,
+    trailMonitoringDetails = undefined,
+    attendanceMonitoringDetails = undefined,
+  },
+  enforcementZoneType: 'exclusion' | 'restriction' = 'exclusion',
+): void {
   if (additionalMonitoringConditions) {
     const typesOfMoinitoringNeededPage = Page.verifyOnPage(TypesOfMonitoringNeededPage)
     typesOfMoinitoringNeededPage.form.fillInWith(additionalMonitoringConditions)
@@ -44,7 +47,7 @@ export default function fillInMonitoringTypeWith({
   }
 
   if (enforcementZoneListItemDetails) {
-    fillInEnforcementZoneListItemDetailsWith(enforcementZoneListItemDetails)
+    fillInEnforcementZoneListItemDetailsWith(enforcementZoneListItemDetails, enforcementZoneType)
   }
 
   if (alcoholMonitoringDetails) {

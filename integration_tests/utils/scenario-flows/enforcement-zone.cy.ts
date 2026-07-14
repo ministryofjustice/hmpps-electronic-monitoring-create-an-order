@@ -9,8 +9,11 @@ export default function fillInEnforcementZoneOrderDetailsWith(enforcementZoneDet
   enforcementZonePage.form.saveAndContinueButton.click()
 }
 
-export function fillInEnforcementZoneListItemDetailsWith(enforcementZoneDetails) {
-  const enforcementZonePage = Page.verifyOnPage(EnforcementZoneAddToListPage)
+export function fillInEnforcementZoneListItemDetailsWith(
+  enforcementZoneDetails,
+  zoneType: 'exclusion' | 'restriction' = 'exclusion',
+) {
+  const enforcementZonePage = Page.verifyOnPage(EnforcementZoneAddToListPage, undefined, undefined, zoneType)
   enforcementZonePage.form.fillInWith(enforcementZoneDetails)
   enforcementZonePage.form.saveAndContinueButton.click()
 }

@@ -57,9 +57,9 @@ export default class MonitoringTypeController {
       case 'curfew':
         return paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS
       case 'restrictionZone':
-        return paths.MONITORING_CONDITIONS.ZONE_NEW_ITEM.replace(':zoneType', 'exclusion')
-      case 'exclusionZone':
         return paths.MONITORING_CONDITIONS.ZONE_NEW_ITEM.replace(':zoneType', 'restriction')
+      case 'exclusionZone':
+        return paths.MONITORING_CONDITIONS.ZONE_NEW_ITEM.replace(':zoneType', 'exclusion')
       case 'trail':
         return paths.MONITORING_CONDITIONS.TRAIL
       case 'mandatoryAttendance':
