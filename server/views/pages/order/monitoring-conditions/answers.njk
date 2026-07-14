@@ -68,6 +68,24 @@
     }) }}
   {% endfor %}
 
+    {% if restrictionZone | length > 0 %}
+    <h2 class="govuk-heading-m">Restriction zone monitoring</h2>
+  {% endif %}
+
+   {% for item in restrictionZone %}
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: "Restriction zone monitoring"
+        }
+      },
+      rows: item.item,
+      attributes: {
+          "zoneId": item.zoneId
+        }
+    }) }}
+  {% endfor %}
+
   {% if trail | length > 0 %}
 
     <h2 class="govuk-heading-m">Trail monitoring</h2>
