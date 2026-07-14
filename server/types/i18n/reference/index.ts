@@ -38,6 +38,7 @@ import DeviceTypes from './deviceTypes'
 import YouthCustodyServiceRegions from './youthCustodyServiceRegions'
 import YouthCustodyServiceRegionsDDv6 from './ddv6/youthCustodyServiceRegions'
 import PoliceAreasDDv6 from './ddv6/policeAreas'
+import ProbationDeliveryUnitsDDv7 from './ddv7/probationDeliveryUnits'
 import { Override } from '../../utils'
 
 type ReferenceCatalogDDv4 = {
@@ -103,7 +104,12 @@ type ReferenceCatalogDDv6 = Override<
   }
 >
 
-type ReferenceCatalogDDv7 = ReferenceCatalogDDv6
+type ReferenceCatalogDDv7 = Override<
+  ReferenceCatalogDDv6,
+  {
+    probationDeliveryUnits: ProbationDeliveryUnitsDDv7
+  }
+>
 
 type ReferenceCatalog = ReferenceCatalogDDv4 | ReferenceCatalogDDv5 | ReferenceCatalogDDv6 | ReferenceCatalogDDv7
 
