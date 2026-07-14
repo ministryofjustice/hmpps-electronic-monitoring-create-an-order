@@ -55,6 +55,8 @@ import probationRegionDeliveryUnitsDDv6 from './ddv6/probationRegionDeliveryUnit
 import youthCustodyServiceRegions from './ddv5/youthCustodyServiceRegions'
 import youthCustodyServiceRegionsDDv6 from './ddv6/youthCustodyServiceRegions'
 import notifyingOrganisationsDDv6 from './ddv6/notifyingOrganisations'
+import probationDeliveryUnitsDDv7 from './ddv7/probationDeliveryUnits'
+import probationRegionDeliveryUnitsDDv7 from './ddv7/probationRegionDeliveryUnits'
 
 const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   alcoholMonitoringTypes,
@@ -120,6 +122,8 @@ const referenceCatalogDDv6: ReferenceCatalogDDv6 = {
 
 const referenceCatalogDDv7: ReferenceCatalogDDv7 = {
   ...referenceCatalogDDv6,
+  probationDeliveryUnits: probationDeliveryUnitsDDv7,
+  probationRegionDeliveryUnits: probationRegionDeliveryUnitsDDv7
 }
 
 const getReferenceData = (ddVersion: DataDictionaryVersion): ReferenceCatalog => {
