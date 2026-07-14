@@ -107,7 +107,7 @@ type ReferenceCatalogDDv6 = Override<
 type ReferenceCatalogDDv7 = Override<
   ReferenceCatalogDDv6,
   {
-  probationDeliveryUnits: ProbationDeliveryUnitsDDv7
+    probationDeliveryUnits: ProbationDeliveryUnitsDDv7
   }
 >
 

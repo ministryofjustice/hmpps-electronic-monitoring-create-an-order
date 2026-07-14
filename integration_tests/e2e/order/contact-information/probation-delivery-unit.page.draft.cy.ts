@@ -298,7 +298,7 @@ context('Contact information', () => {
         page.form.unitField.element.get('Tameside').should('not.exist')
       })
     })
-    
+
     context('DDV7', () => {
       const stubGetOrderForRegion = regionName => {
         cy.task('stubCemoGetOrder', {
@@ -335,7 +335,7 @@ context('Contact information', () => {
         page.form.unitField.shouldHaveOption('Buckinghamshire and Milton Keynes')
         page.form.unitField.shouldHaveOption('East Berkshire')
         page.form.unitField.shouldHaveOption('Southampton, Eastleigh and New Forest')
-        page.form.unitField.shouldHaveOption('Portsmouth and Isle of Wight') 
+        page.form.unitField.shouldHaveOption('Portsmouth and Isle of Wight')
         page.form.unitField.shouldHaveOption('Oxfordshire')
         page.form.unitField.shouldHaveOption('West Berkshire')
       })

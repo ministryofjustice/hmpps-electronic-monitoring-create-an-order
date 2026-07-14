@@ -123,7 +123,7 @@ const referenceCatalogDDv6: ReferenceCatalogDDv6 = {
 const referenceCatalogDDv7: ReferenceCatalogDDv7 = {
   ...referenceCatalogDDv6,
   probationDeliveryUnits: probationDeliveryUnitsDDv7,
-  probationRegionDeliveryUnits: probationRegionDeliveryUnitsDDv7
+  probationRegionDeliveryUnits: probationRegionDeliveryUnitsDDv7,
 }
 
 const getReferenceData = (ddVersion: DataDictionaryVersion): ReferenceCatalog => {
