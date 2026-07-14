@@ -16,6 +16,7 @@ export type TypesOfMonitoringNeededModel = ViewModel<unknown> & {
 const MONITORING_TYPE_NAMES = {
   curfew: 'Curfew',
   exclusionZone: 'Exclusion zone monitoring',
+  restrictionZone: 'Restriction zone monitoring',
   trail: 'Trail monitoring',
   mandatoryAttendance: 'Mandatory attendance monitoring',
   alcohol: 'Alcohol monitoring',
@@ -42,14 +43,36 @@ const getItems = (order: Order): Answer[] => {
   }
 
   if (order.enforcementZoneConditions && order.enforcementZoneConditions.length > 0) {
-    order.enforcementZoneConditions.forEach(zone => {
+    const exclusionZones = order.enforcementZoneConditions.filter(it => it.zoneType === 'EXCLUSION')
+    exclusionZones.forEach(zone => {
       items.push(
         createAnswer(
           MONITORING_TYPE_NAMES.exclusionZone,
           `${zone.name}<br>From ${createDatePreview(zone.startDate)} to ${createDatePreview(zone.endDate)}`,
+          paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':orderId', orderId)
+            .replace(':zoneId', `${zone.zoneId}`)
+            .replace(':zoneType', 'exclusion'),
+          {
+            deleteUri: paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE.replace(':orderId', orderId).replace(
+              ':monitoringTypeId',
+              zone.id!,
+            ),
+            valueType: 'html',
+          },
+        ),
+      )
+    })
+
+    const restrictionZone = order.enforcementZoneConditions.filter(it => it.zoneType === 'RESTRICTION')
+
+    restrictionZone.forEach(zone => {
+      items.push(
+        createAnswer(
+          MONITORING_TYPE_NAMES.restrictionZone,
+          `${zone.name}<br>From ${createDatePreview(zone.startDate)} to ${createDatePreview(zone.endDate)}`,
           paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':orderId', orderId).replace(
             ':zoneId',
-            `${zone.zoneId}`,
+            `${zone.zoneId}`.replace(':zoneType', 'restriction'),
           ),
           {
             deleteUri: paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE.replace(':orderId', orderId).replace(
