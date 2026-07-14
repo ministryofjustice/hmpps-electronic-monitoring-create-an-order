@@ -17,6 +17,7 @@ export default class EnforcementZoneAddToListController {
   update: RequestHandler = async (req: Request, res: Response) => {
     const zoneId = req.params.zoneId as string
     const orderId = req.params.orderId as string
+    const zoneType = req.params.zoneType as string
     const { interestedParties } = req.order!
 
     const file = req.file as Express.Multer.File
@@ -54,7 +55,15 @@ export default class EnforcementZoneAddToListController {
     }
 
     if (Object.keys(errorViewModel).length !== 0 || errors.length > 0) {
-      const viewModel = enforcementZoneAddToListViewModel.construct(parseInt(zoneId, 10), req.order!, formData, errors)
+      const { pages } = res.locals!.content!
+      const content = zoneType === 'restriction' ? pages.restrictionZone : pages.exclusionZone
+      const viewModel = enforcementZoneAddToListViewModel.construct(
+        parseInt(zoneId, 10),
+        req.order!,
+        formData,
+        errors,
+        content,
+      )
       res.render(`pages/order/monitoring-conditions/enforcement-zone-add-to-list`, viewModel)
     } else {
       this.auditService.logAuditEvent({
@@ -78,15 +87,23 @@ export default class EnforcementZoneAddToListController {
 
   new: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
+    const zoneType = req.params.zoneType as string
     const zoneIds = order.enforcementZoneConditions?.map(it => (it.zoneId === null ? 0 : it.zoneId))
     const zoneId = (zoneIds.length === 0 ? 0 : Math.max(...zoneIds) + 1).toString()
-    res.redirect(paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':orderId', order.id).replace(':zoneId', zoneId))
+    res.redirect(
+      paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':orderId', order.id)
+        .replace(':zoneId', zoneId)
+        .replace(':zoneType', zoneType),
+    )
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const zoneId = req.params.zoneId as string
+    const zoneType = req.params.zoneType as string
     const order = req.order!
-    const viewModel = enforcementZoneAddToListViewModel.construct(parseInt(zoneId, 10), order, {} as never, [])
+    const { pages } = res.locals!.content!
+    const content = zoneType === 'restriction' ? pages.restrictionZone : pages.exclusionZone
+    const viewModel = enforcementZoneAddToListViewModel.construct(parseInt(zoneId, 10), order, {} as never, [], content)
 
     res.render(`pages/order/monitoring-conditions/enforcement-zone-add-to-list`, viewModel)
   }

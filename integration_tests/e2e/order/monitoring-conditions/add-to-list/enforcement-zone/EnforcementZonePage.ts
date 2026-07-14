@@ -1,13 +1,19 @@
 import { PageElement } from '../../../../../pages/page'
 import paths from '../../../../../../server/constants/paths'
 import AppFormPage from '../../../../../pages/appFormPage'
-import EnforcementZoneAddToListFormComponent from './ExclusionZoneComponent'
+import EnforcementZoneAddToListFormComponent from './EnforcementZoneComponent'
 
 export default class EnforcementZoneAddToListPage extends AppFormPage {
-  public form = new EnforcementZoneAddToListFormComponent()
+  public form: EnforcementZoneAddToListFormComponent
 
-  constructor() {
-    super('Exclusion zone monitoring ', paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST, 'Electronic monitoring required')
+  constructor(zoneType: 'exclusion' | 'restriction') {
+    super(
+      `${zoneType.charAt(0).toUpperCase() + zoneType.slice(1)} zone monitoring `,
+      paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':zoneType', zoneType),
+      'Electronic monitoring required',
+    )
+
+    this.form = new EnforcementZoneAddToListFormComponent(zoneType)
   }
 
   mapToolLink = (): PageElement => cy.get('#map-tool-link')

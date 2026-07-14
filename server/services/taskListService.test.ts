@@ -330,7 +330,9 @@ describe('TaskListService', () => {
 
       // Then
       expect(nextPage).toBe(
-        paths.MONITORING_CONDITIONS.ZONE_NEW_ITEM.replace(':zoneId', '0').replace(':orderId', order.id),
+        paths.MONITORING_CONDITIONS.ZONE_NEW_ITEM.replace(':zoneId', '0')
+          .replace(':orderId', order.id)
+          .replace(':zoneType', 'exclusion'),
       )
     })
 

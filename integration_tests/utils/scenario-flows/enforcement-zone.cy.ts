@@ -1,6 +1,6 @@
 import MonitoringConditionsCheckYourAnswersPage from '../../pages/order/monitoring-conditions/check-your-answers'
 import EnforcementZonePage from '../../pages/order/monitoring-conditions/enforcement-zone'
-import EnforcementZoneAddToListPage from '../../e2e/order/monitoring-conditions/add-to-list/exclusion-zone/ExclusionZonePage'
+import EnforcementZoneAddToListPage from '../../e2e/order/monitoring-conditions/add-to-list/enforcement-zone/EnforcementZonePage'
 import Page from '../../pages/page'
 
 export default function fillInEnforcementZoneOrderDetailsWith(enforcementZoneDetails) {

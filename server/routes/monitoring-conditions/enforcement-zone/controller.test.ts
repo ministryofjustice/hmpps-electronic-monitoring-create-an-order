@@ -10,6 +10,7 @@ import EnforcementZoneTypes from '../../../models/EnforcementZoneTypes'
 import EnforcementZoneAddToListController from './controller'
 import { EnforcementZone } from '../../../models/EnforcementZone'
 import TaskListService from '../../../services/taskListService'
+import getEnglishContent from '../../../i18n/en'
 
 jest.mock('../../../services/auditService')
 jest.mock('../../../data/hmppsAuditClient')
@@ -82,6 +83,7 @@ describe('EnforcementZoneAddToListController', () => {
         },
         editable: false,
         orderId: mockId,
+        content: getEnglishContent('DDV6'),
       },
       redirect: jest.fn(),
       render: jest.fn(),
@@ -103,6 +105,7 @@ describe('EnforcementZoneAddToListController', () => {
     it('Should render with zone details', async () => {
       req.order?.enforcementZoneConditions.push(createMockEnforcementZone())
       req.params.zoneId = '0'
+      req.params.zoneType = 'exclusion'
       await controller.view(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/enforcement-zone-add-to-list', {
@@ -138,6 +141,7 @@ describe('EnforcementZoneAddToListController', () => {
             minutes: '00',
           },
         },
+        content: getEnglishContent('DDV6').pages.exclusionZone,
       })
     })
   })
@@ -145,6 +149,7 @@ describe('EnforcementZoneAddToListController', () => {
   describe('update enforcement zone', () => {
     it('Should render current page with error when service returns error when updating enforcement zone', async () => {
       req.params.zoneId = '0'
+      req.params.zoneType = 'exclusion'
       req.body = createMockBody()
       mockEnforcementZoneAddToListService.updateZone = jest
         .fn()
@@ -200,6 +205,7 @@ describe('EnforcementZoneAddToListController', () => {
           ],
           titleText: 'There is a problem',
         },
+        content: getEnglishContent('DDV6').pages.exclusionZone,
       })
     })
 
@@ -272,6 +278,7 @@ describe('EnforcementZoneAddToListController', () => {
           ],
           titleText: 'There is a problem',
         },
+        content: getEnglishContent('DDV6').pages.exclusionZone,
       })
     })
 

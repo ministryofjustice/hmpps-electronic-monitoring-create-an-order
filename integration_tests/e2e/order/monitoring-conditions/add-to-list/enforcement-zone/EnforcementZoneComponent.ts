@@ -19,6 +19,12 @@ export type EnforcementZoneAddToListFormData = {
 
 export default class EnforcementZoneAddToListFormComponent extends FormComponent {
   // FIELDS
+  public zoneType: 'exclusion' | 'restriction'
+
+  constructor(zoneType: 'exclusion' | 'restriction') {
+    super()
+    this.zoneType = zoneType
+  }
 
   get startDateField(): FormDateTimeComponent {
     return new FormDateTimeComponent(this.form, 'startDate')
@@ -29,7 +35,7 @@ export default class EnforcementZoneAddToListFormComponent extends FormComponent
   }
 
   get nameField(): FormInputComponent {
-    return new FormInputComponent(this.form, 'What name would you give to the exclusion zone?')
+    return new FormInputComponent(this.form, `What name would you give to the ${this.zoneType} zone?`)
   }
 
   get uploadField(): FormFileUploadComponent {
@@ -37,11 +43,11 @@ export default class EnforcementZoneAddToListFormComponent extends FormComponent
   }
 
   get descriptionField(): FormTextareaComponent {
-    return new FormTextareaComponent(this.form, 'Where is the exclusion zone?')
+    return new FormTextareaComponent(this.form, `Where is the ${this.zoneType} zone?`)
   }
 
   get durationField(): FormTextareaComponent {
-    return new FormTextareaComponent(this.form, 'When must the exclusion zone be followed?')
+    return new FormTextareaComponent(this.form, `When must the ${this.zoneType} zone be followed?`)
   }
 
   // FORM HELPERS

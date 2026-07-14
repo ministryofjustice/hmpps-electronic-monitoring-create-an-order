@@ -65,6 +65,7 @@ import addressListContent from './pages/addressList'
 import manualDeviceWearerAddressPageContent from './pages/manualDeviceWearerAddress'
 import manualTagAtSourceAddressPageContent from './pages/manualTagAtSourceAddress'
 import manualCurfewAddressPageContent from './pages/manualCurfewAddress'
+import restrictionZonePageContent from './pages/restrictionZone'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
   return {
@@ -80,6 +81,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       deviceWearer: deviceWearerPageContent,
       editConfirm: editConfirmPageContent,
       exclusionZone: exclusionZonePageContent,
+      restrictionZone: restrictionZonePageContent,
       identityNumbers: identityNumbersPageContent,
       installationAddress: installationAddressPageContent,
       installationAndRisk: installationAndRiskPageContent,
