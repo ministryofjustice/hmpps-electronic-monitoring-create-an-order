@@ -271,6 +271,7 @@ export default class OrderTasksPage extends AppPage {
               {
                 enforcementZoneDetails: secondEnforcementZoneDetails,
               },
+              'exclusion',
               false,
             )
           }

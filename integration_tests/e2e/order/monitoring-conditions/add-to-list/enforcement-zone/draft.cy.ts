@@ -1,9 +1,10 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../../pages/page'
 import EnforcementZoneAddToListPage from './EnforcementZonePage'
+import { AddToListEnforcementZoneTypes } from '../../../../../../server/routes/monitoring-conditions/model'
 
 const mockOrderId = uuidv4()
-const zoneTypes: ('exclusion' | 'restriction')[] = ['exclusion', 'restriction']
+const zoneTypes: AddToListEnforcementZoneTypes[] = ['exclusion', 'restriction']
 zoneTypes.forEach(type => {
   context(`Monitoring conditions - ${type} Zone`, () => {
     context(`Page content `, () => {
