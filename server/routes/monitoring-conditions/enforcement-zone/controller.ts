@@ -17,7 +17,7 @@ export default class EnforcementZoneAddToListController {
   update: RequestHandler = async (req: Request, res: Response) => {
     const zoneId = req.params.zoneId as string
     const orderId = req.params.orderId as string
-    const zoneType = req.params.zoneType as string
+    const zoneType = req.params.zoneType as 'exclusion' | 'restriction'
     const { interestedParties } = req.order!
 
     const file = req.file as Express.Multer.File
@@ -32,6 +32,7 @@ export default class EnforcementZoneAddToListController {
       orderId,
       data: formData,
       notifyingOrganisation: interestedParties?.notifyingOrganisation ?? null,
+      zoneType,
     })
     if (result !== null) {
       errorViewModel = getErrorsViewModel(result)

@@ -29,17 +29,17 @@ type EnforcementZoneFormData = Omit<z.infer<typeof EnforcementZoneFormDataModel>
 const EnforcementZoneFormDataValidator = z
   .object({
     zoneId: z.number().nullable().default(0),
-    startDate: DateTimeInputModel(validationErrors.enforcementZone.startDateTime),
-    endDate: DateTimeInputModel(validationErrors.enforcementZone.endDateTime),
+    startDate: DateTimeInputModel(validationErrors.enforcementZone.startDateTime('exclusion')),
+    endDate: DateTimeInputModel(validationErrors.enforcementZone.endDateTime('exclusion')),
     description: z
       .string()
-      .min(1, validationErrors.enforcementZone.descriptionRequired)
-      .max(200, validationErrors.enforcementZone.descriptionTooLong),
+      .min(1, validationErrors.enforcementZone.descriptionRequired('exclusion'))
+      .max(200, validationErrors.enforcementZone.descriptionTooLong('exclusion')),
     duration: z
       .string()
-      .min(1, validationErrors.enforcementZone.durationRequired)
-      .max(200, validationErrors.enforcementZone.durationTooLong),
-    anotherZone: z.string().min(1, { message: validationErrors.enforcementZone.anotherZoneRequired }),
+      .min(1, validationErrors.enforcementZone.durationRequired('exclusion'))
+      .max(200, validationErrors.enforcementZone.durationTooLong('exclusion')),
+    anotherZone: z.string().min(1, { message: validationErrors.enforcementZone.anotherZoneRequired('exclusion') }),
   })
   .transform(({ ...formData }) => ({
     zoneType: 'EXCLUSION',

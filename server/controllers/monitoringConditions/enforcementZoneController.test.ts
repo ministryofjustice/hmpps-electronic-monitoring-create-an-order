@@ -201,6 +201,7 @@ describe('EnforcementZoneController', () => {
 
     it('Should render current page with error when service return error when upload file', async () => {
       req.params.zoneId = '0'
+      req.params.zoneType = 'exclusion'
       req.body = createMockBody()
       req.file = {
         filename: '',
