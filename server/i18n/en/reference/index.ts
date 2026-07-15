@@ -1,8 +1,9 @@
-import DataDictionaryVersion, { DataDictionaryVersions } from '../../../types/i18n/dataDictionaryVersion'
+import DataDictionaryVersion from '../../../types/i18n/dataDictionaryVersion'
 import ReferenceCatalog, {
   ReferenceCatalogDDv4,
   ReferenceCatalogDDv5,
   ReferenceCatalogDDv6,
+  ReferenceCatalogDDv7,
 } from '../../../types/i18n/reference'
 import alcoholMonitoringTypes from './alcoholMonitoringTypes'
 import deviceTypes from './deviceTypes'
@@ -54,6 +55,8 @@ import probationRegionDeliveryUnitsDDv6 from './ddv6/probationRegionDeliveryUnit
 import youthCustodyServiceRegions from './ddv5/youthCustodyServiceRegions'
 import youthCustodyServiceRegionsDDv6 from './ddv6/youthCustodyServiceRegions'
 import notifyingOrganisationsDDv6 from './ddv6/notifyingOrganisations'
+import probationDeliveryUnitsDDv7 from './ddv7/probationDeliveryUnits'
+import probationRegionDeliveryUnitsDDv7 from './ddv7/probationRegionDeliveryUnits'
 
 const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
   alcoholMonitoringTypes,
@@ -91,95 +94,52 @@ const referenceCatalogDDv4: ReferenceCatalogDDv4 = {
 }
 
 const referenceCatalogDDv5: ReferenceCatalogDDv5 = {
-  alcoholMonitoringTypes,
-  deviceTypes,
+  ...referenceCatalogDDv4,
   civilCountyCourts,
-  conditionTypes,
   crownCourts: crownCourtsDDv5,
   disabilities: disabilitiesDDv5,
   familyCourts,
-  gender,
-  languages,
   magistratesCourts: magistratesCourtsDDv5,
-  mappaCategory,
-  mappaLevel,
-  isMappa,
   militaryCourts,
   notifyingOrganisations: notifyingOrganisationsDDv5,
-  offences,
-  orderTypeDescriptions,
-  orderTypes,
   pilots: pilotsDDv5,
   prisons: prisonsDDv5,
-  probationRegions,
   probationDeliveryUnits,
-  relationship,
-  responsibleOrganisations,
   riskCategories: riskCategoriesDDv5,
-  sentenceTypes,
-  sex,
   variationTypes: variationTypesDDv5,
-  yesNoUnknown,
   youthCourts,
-  youthJusticeServiceRegions,
   probationRegionDeliveryUnits,
-  installationLocations,
-  possibleRisks,
-  policeAreas,
-  releaseAddressPoliceAreas: policeAreas,
-  serviceRequestTypes,
-  youthCustodyServiceRegions,
 }
 
 const referenceCatalogDDv6: ReferenceCatalogDDv6 = {
-  alcoholMonitoringTypes,
-  deviceTypes,
-  civilCountyCourts,
-  conditionTypes,
-  crownCourts: crownCourtsDDv5,
-  disabilities: disabilitiesDDv5,
-  familyCourts,
-  gender,
-  languages,
-  magistratesCourts: magistratesCourtsDDv5,
-  mappaCategory,
-  mappaLevel,
-  isMappa,
-  militaryCourts,
+  ...referenceCatalogDDv5,
   notifyingOrganisations: notifyingOrganisationsDDv6,
-  offences,
-  orderTypeDescriptions,
-  orderTypes,
-  pilots: pilotsDDv5,
-  prisons: prisonsDDv5,
-  probationRegions,
   probationDeliveryUnits: probationDeliveryUnitsDDv6,
-  relationship,
-  responsibleOrganisations,
-  riskCategories: riskCategoriesDDv5,
-  sentenceTypes,
-  sex,
-  variationTypes: variationTypesDDv5,
-  yesNoUnknown,
-  youthCourts,
-  youthJusticeServiceRegions,
   probationRegionDeliveryUnits: probationRegionDeliveryUnitsDDv6,
-  installationLocations,
-  possibleRisks,
   policeAreas: policeAreasDDv6,
-  releaseAddressPoliceAreas: policeAreas,
-  serviceRequestTypes,
   youthCustodyServiceRegions: youthCustodyServiceRegionsDDv6,
 }
 
+const referenceCatalogDDv7: ReferenceCatalogDDv7 = {
+  ...referenceCatalogDDv6,
+  probationDeliveryUnits: probationDeliveryUnitsDDv7,
+  probationRegionDeliveryUnits: probationRegionDeliveryUnitsDDv7,
+}
+
 const getReferenceData = (ddVersion: DataDictionaryVersion): ReferenceCatalog => {
-  if (ddVersion === DataDictionaryVersions.DDV5) {
-    return referenceCatalogDDv5
+  switch (ddVersion) {
+    case 'DDV4':
+      return referenceCatalogDDv4
+    case 'DDV5':
+      return referenceCatalogDDv5
+    case 'DDV6':
+      return referenceCatalogDDv6
+    case 'DDV7':
+      return referenceCatalogDDv7
+    default: {
+      throw new Error(`Unknown data dictionary version: ${ddVersion}`)
+    }
   }
-  if (ddVersion === DataDictionaryVersions.DDV6) {
-    return referenceCatalogDDv6
-  }
-  return referenceCatalogDDv4
 }
 
 export default getReferenceData

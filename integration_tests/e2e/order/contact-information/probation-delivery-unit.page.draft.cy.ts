@@ -298,5 +298,47 @@ context('Contact information', () => {
         page.form.unitField.element.get('Tameside').should('not.exist')
       })
     })
+
+    context('DDV7', () => {
+      const stubGetOrderForRegion = regionName => {
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: {
+            dataDictionaryVersion: 'DDV7',
+            interestedParties: {
+              notifyingOrganisation: 'PRISON',
+              notifyingOrganisationName: 'FELTHAM_YOUNG_OFFENDER_INSTITUTION',
+              notifyingOrganisationEmail: 'test@test.com',
+              responsibleOfficerName: 'John Smith',
+              responsibleOfficerPhoneNumber: '01234567890',
+              responsibleOrganisation: 'PROBATION',
+              responsibleOrganisationRegion: regionName,
+              responsibleOrganisationEmail: 'test2@test.com',
+            },
+          },
+        })
+      }
+
+      beforeEach(() => {
+        cy.task('reset')
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+        cy.signIn()
+      })
+
+      // SOUTH_CENTRAL
+      it('Should display delivery units for region SOUTH_CENTRAL', () => {
+        stubGetOrderForRegion('SOUTH_CENTRAL')
+        const page = Page.visit(ProbationDeliveryUnitPage, { orderId: mockOrderId })
+
+        page.form.unitField.shouldHaveOption('Buckinghamshire and Milton Keynes')
+        page.form.unitField.shouldHaveOption('East Berkshire')
+        page.form.unitField.shouldHaveOption('Southampton, Eastleigh and New Forest')
+        page.form.unitField.shouldHaveOption('Portsmouth and Isle of Wight')
+        page.form.unitField.shouldHaveOption('Oxfordshire')
+        page.form.unitField.shouldHaveOption('West Berkshire')
+      })
+    })
   })
 })
