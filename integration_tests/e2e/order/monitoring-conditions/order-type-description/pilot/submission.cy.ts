@@ -32,7 +32,6 @@ context('pilot', () => {
     cy.signIn()
 
     const testFlags = {
-      DAPOL_PILOT_PROBATION_REGIONS: 'KENT_SURREY_SUSSEX,WALES',
       LICENCE_VARIATION_PROBATION_REGIONS: 'YORKSHIRE_AND_THE_HUMBER,EAST_MIDLANDS',
     }
 

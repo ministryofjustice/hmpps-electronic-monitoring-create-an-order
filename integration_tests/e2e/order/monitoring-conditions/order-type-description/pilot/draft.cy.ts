@@ -63,7 +63,6 @@ context('pilot', () => {
     cy.signIn()
 
     const testFlags = {
-      DAPOL_PILOT_PROBATION_REGIONS: 'KENT_SURREY_SUSSEX,WALES',
       LICENCE_VARIATION_PROBATION_REGIONS: 'YORKSHIRE_AND_THE_HUMBER,EAST_MIDLANDS',
     }
 
@@ -86,60 +85,6 @@ context('pilot', () => {
     page.form.continueButton.should('exist')
   })
 
-  it('Should disable DAPOL option and display message stating why if probation region not in pilot', () => {
-    cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-    mockDefaultOrder.monitoringConditions.hdc = 'YES'
-    stubGetOrder({
-      ...mockDefaultOrder,
-      interestedParties: {
-        notifyingOrganisation: 'YOUTH_COURT',
-        notifyingOrganisationName: 'PENZANCE_YOUTH_COURT',
-        notifyingOrganisationEmail: 'notifying@organisation',
-        responsibleOrganisation: 'PROBATION',
-        responsibleOrganisationEmail: 'responsible@organisation',
-        responsibleOrganisationRegion: 'YORKSHIRE_AND_THE_HUMBER',
-        responsibleOfficerName: 'name',
-        responsibleOfficerPhoneNumber: '01234567891',
-      },
-    })
-
-    Page.visit(PilotPage, { orderId: mockOrderId })
-
-    cy.get('input[type="radio"][value="DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC"]').should(
-      'be.disabled',
-    )
-
-    cy.get('.govuk-inset-text').contains(
-      'The device wearer is being managed by the Yorkshire and the Humber probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region. Any queries around pilot eligibility need to be raised with the appropriate COM.',
-    )
-  })
-
-  it('Should enable DAPOL option if probation region in pilot', () => {
-    cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-    mockDefaultOrder.monitoringConditions.hdc = 'YES'
-    stubGetOrder({
-      ...mockDefaultOrder,
-      interestedParties: {
-        notifyingOrganisation: 'YOUTH_COURT',
-        notifyingOrganisationName: 'PENZANCE_YOUTH_COURT',
-        notifyingOrganisationEmail: 'notifying@organisation',
-        responsibleOrganisation: 'PROBATION',
-        responsibleOrganisationEmail: 'responsible@organisation',
-        responsibleOrganisationRegion: 'KENT_SURREY_SUSSEX',
-        responsibleOfficerName: 'name',
-        responsibleOfficerPhoneNumber: '01234567891',
-      },
-    })
-
-    const page = Page.visit(PilotPage, { orderId: mockOrderId })
-
-    page.form.pilotField.shouldNotBeDisabled()
-
-    cy.get('input[type="radio"][value="DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC"]').should(
-      'be.enabled',
-    )
-  })
-
   it('Should not show licence variation project option to non-probation user', () => {
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
     mockDefaultOrder.monitoringConditions.hdc = 'YES'
@@ -160,6 +105,28 @@ context('pilot', () => {
     const page = Page.visit(PilotPage, { orderId: mockOrderId })
 
     page.form.pilotField.shouldNotHaveOption('Licence Variation Project')
+  })
+
+  it('dapol option is disabled if not probation user', () => {
+    cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+    mockDefaultOrder.monitoringConditions.hdc = 'YES'
+    stubGetOrder({
+      ...mockDefaultOrder,
+      interestedParties: {
+        notifyingOrganisation: 'HOME_OFFICE',
+        notifyingOrganisationName: '',
+        notifyingOrganisationEmail: 'notifying@organisation',
+        responsibleOrganisation: 'POLICE',
+        responsibleOrganisationEmail: 'responsible@organisation',
+        responsibleOrganisationRegion: '',
+        responsibleOfficerName: 'name',
+        responsibleOfficerPhoneNumber: '01234567891',
+      },
+    })
+
+    const page = Page.visit(PilotPage, { orderId: mockOrderId })
+
+    page.form.pilotField.shouldHaveDisabledOption('Domestic Abuse Perpetrator on Licence (DAPOL)')
   })
 
   it('Should disable licence variation option and display message stating why if probation region not in pilot', () => {
