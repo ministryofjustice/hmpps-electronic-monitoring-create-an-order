@@ -24,7 +24,7 @@ context('order type', () => {
     Page.verifyOnPage(PilotPage)
   })
 
-  it('Should continue to hdc pause page when no selected', () => {
+  it('Should continue to pilot page when no selected', () => {
     const page = Page.visit(HdcPausePage, { orderId: mockOrderId })
 
     page.form.fillInWith('No')
