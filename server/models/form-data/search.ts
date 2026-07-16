@@ -1,9 +1,9 @@
 import config from '../../config'
 import paths from '../../constants/paths'
 import { AddressTypeEnum } from '../Address'
-import { Order } from '../Order'
 import { OrderListInformation } from '../OrderListInformation'
 import { OrderListView, OrderListViewEnum, orderListViewLabels } from './OrderListView'
+import { OrderSearchResult } from '../OrderSearchResult'
 
 type OrderListViewModel = {
   orders: {
@@ -49,13 +49,13 @@ const formatDateTime = (dateToFormat: string): string => {
   return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
 }
 
-const getYouthStatus = (order: Order): string => {
+const getYouthStatus = (order: OrderSearchResult): string => {
   const isMinor = order.deviceWearer?.adultAtTimeOfInstallation === false
 
   return isMinor ? 'Youth' : ''
 }
 
-const getIdList = (order: Order) => {
+const getIdList = (order: OrderSearchResult) => {
   const { nomisId, pncId, deliusId, prisonNumber, complianceAndEnforcementPersonReference, courtCaseReferenceNumber } =
     order.deviceWearer
   const idList = [
@@ -69,7 +69,7 @@ const getIdList = (order: Order) => {
   return idList as string[]
 }
 
-const createOrderItem = (order: Order) => {
+const createOrderItem = (order: OrderSearchResult) => {
   const currentAddress = order.addresses.find(address => address.addressType === AddressTypeEnum.Values.PRIMARY)
 
   return {
@@ -86,7 +86,10 @@ const createOrderItem = (order: Order) => {
   }
 }
 
-export const constructSearchViewModel = (orders: Array<Order>, searchTerm: string): OrderSearchViewModel => {
+export const constructSearchViewModel = (
+  orders: Array<OrderSearchResult>,
+  searchTerm: string,
+): OrderSearchViewModel => {
   return {
     orders: orders.map(order => createOrderItem(order)),
     variationAsNewOrderEnabled: config.variationAsNewOrder.enabled,
