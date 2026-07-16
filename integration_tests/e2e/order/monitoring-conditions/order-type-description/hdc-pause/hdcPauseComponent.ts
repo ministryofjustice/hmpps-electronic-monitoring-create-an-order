@@ -3,7 +3,7 @@ import FormRadiosComponent from '../../../../../pages/components/formRadiosCompo
 
 export default class HdcPauseComponent extends SingleQuestionFormComponent {
   get hdcPauseField(): FormRadiosComponent {
-    const label = 'Are you sure the device wearer is on a Home Detention Curfew(HDC)?'
+    const label = 'Are you sure the device wearer is on a Home Detention Curfew (HDC)?'
     return new FormRadiosComponent(this.form, label, ['Yes', 'No'])
   }
 
