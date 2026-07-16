@@ -1,6 +1,6 @@
 import { Request, RequestHandler, Response } from 'express'
 import MonitoringConditionsStoreService from '../monitoringConditionsStoreService'
-import { HdcFormDataModel } from './formModel'
+import { HdcPauseFormDataModel } from './formModel'
 import { ValidationResult } from '../../../models/Validation'
 import { validationErrors } from '../../../constants/validationErrors'
 import paths from '../../../constants/paths'
@@ -18,7 +18,7 @@ export default class HdcPauseController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const formData = HdcFormDataModel.parse(req.body)
+    const formData = HdcPauseFormDataModel.parse(req.body)
     if (formData.hdcPause === null || formData.hdcPause === undefined) {
       req.flash('validationErrors', [
         {
