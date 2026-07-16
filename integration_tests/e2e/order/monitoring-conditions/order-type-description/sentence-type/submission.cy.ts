@@ -6,6 +6,7 @@ import HdcPage from '../hdc/hdcPage'
 import PilotPage from '../pilot/PilotPage'
 import PrarrPage from '../prarr/PrarrPage'
 import MonitoringTypePage from '../monitoring-type/MonitoringTypesPage'
+import HdcPausePage from '../hdc-pause/hdcPausePage'
 
 const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
   cy.task('stubCemoGetOrder', {
@@ -55,6 +56,10 @@ context('sentenceType form submission', () => {
     const hdcPage = Page.verifyOnPage(HdcPage, { orderId: mockOrderId })
     hdcPage.form.fillInWith('Yes')
     hdcPage.form.continueButton.click()
+
+    const hdcPausePage = Page.verifyOnPage(HdcPausePage)
+    hdcPausePage.form.fillInWith('Yes')
+    hdcPausePage.form.continueButton.click()
 
     const pilotPage = Page.verifyOnPage(PilotPage, { order: mockOrderId })
     pilotPage.form.fillInWith('Domestic Abuse Perpetrator on Licence (DAPOL)')

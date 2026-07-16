@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import PilotPage from './PilotPage'
 import Page from '../../../../../pages/page'
 import HdcPage from '../hdc/hdcPage'
+import HdcPausePage from '../hdc-pause/hdcPausePage'
 
 const mockOrderId = uuidv4()
 const mockDefaultOrder = {
@@ -183,7 +184,9 @@ context('pilot', () => {
 
     hdcPage.form.fillInWith('Yes')
     hdcPage.form.continueButton.click()
-
+    const hdcPausePage = Page.verifyOnPage(HdcPausePage)
+    hdcPausePage.form.fillInWith('Yes')
+    hdcPausePage.form.continueButton.click()
     const pilotPage = Page.verifyOnPage(PilotPage, { orderId: mockOrderId })
 
     pilotPage.form.pilotField.shouldHaveOption('Domestic Abuse Perpetrator on Licence (DAPOL)')
