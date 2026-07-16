@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../../pages/page'
-import HdcPage from './hdcPage'
-import HdcPausePage from '../hdc-pause/hdcPausePage'
+import HdcPausePage from './hdcPausePage'
 
 const mockOrderId = uuidv4()
 context('order type', () => {
@@ -15,12 +14,15 @@ context('order type', () => {
     cy.signIn()
   })
 
-  it('Should continue to hdc pause page', () => {
-    const page = Page.visit(HdcPage, { orderId: mockOrderId })
+  it('Should show errors no answer selected', () => {
+    const page = Page.visit(HdcPausePage, { orderId: mockOrderId })
 
-    page.form.fillInWith('Yes')
+    page.header.userName().should('contain.text', 'J. Smith')
+    page.header.phaseBanner().should('contain.text', 'dev')
+
     page.form.continueButton.click()
 
-    Page.verifyOnPage(HdcPausePage)
+    page.errorSummary.shouldExist()
+    page.form.hdcPauseField.validationMessage.contains('Select Yes if the device wearer is on a HDC')
   })
 })

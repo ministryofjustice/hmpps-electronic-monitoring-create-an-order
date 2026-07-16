@@ -6,36 +6,31 @@ import { validationErrors } from '../../../constants/validationErrors'
 import paths from '../../../constants/paths'
 import constructModel from './viewModel'
 
-export default class HdcController {
+export default class HdcPauseController {
   constructor(private readonly montoringConditionsStoreService: MonitoringConditionsStoreService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const order = req.order!
     const errors = req.flash('validationErrors') as unknown as ValidationResult
 
-    const monitoringConditions = await this.montoringConditionsStoreService.getMonitoringConditions(order)
-
-    const model = constructModel(monitoringConditions, errors)
-    res.render('pages/order/monitoring-conditions/order-type-description/hdc', model)
+    const model = constructModel(errors)
+    res.render('pages/order/monitoring-conditions/order-type-description/hdc-pause', model)
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
     const formData = HdcFormDataModel.parse(req.body)
-    if (formData.hdc === null || formData.hdc === undefined) {
+    if (formData.hdcPause === null || formData.hdcPause === undefined) {
       req.flash('validationErrors', [
         {
           error: validationErrors.monitoringConditions.hdcRequired,
-          field: 'hdc',
+          field: 'hdcPause',
           focusTarget: 'hdc',
         },
       ])
-      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC.replace(':orderId', order.id))
+      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC_PAUSE.replace(':orderId', order.id))
     } else {
-      await this.montoringConditionsStoreService.updateField(order, 'hdc', formData.hdc)
-      if (formData.hdc === 'YES')
-        res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC_PAUSE.replace(':orderId', order.id))
-      else res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT.replace(':orderId', order.id))
+      await this.montoringConditionsStoreService.updateField(order, 'hdc', formData.hdcPause)
+      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT.replace(':orderId', order.id))
     }
   }
 }

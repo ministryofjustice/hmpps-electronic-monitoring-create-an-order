@@ -1,0 +1,60 @@
+{% extends "../../../../partials/form-layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% set section = "Electronic monitoring required" %}
+{% set heading = "HDC releases and re-releases" %}
+{% set singleQuestionPage = true %}
+
+{# {% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "#"
+  }) }}
+{% endblock %} #}
+
+{% block formInputs %}
+
+      <p class="govuk-body">Device wearers must not be released or re-released on HDC on or after 2 September 2026.</p>
+
+      <p class="govuk-body">
+        A device wearer may be re-released only if all of the following apply:
+      </p>
+
+      <ul class="govuk-list govuk-list--bullet">
+          <li>They were on HDC in the community.</li>
+          <li>They were recalled during their HDC period on or after 2 September 2026.</li>
+          <li>The recall was under Section 255(1)(b) (inability to monitor).</li>
+          <li>They are being re-released.</li>
+          <li>They meet HDC policy, eligibility criteria, and pass the risk assessment.</li>
+      </ul>
+      <p class="govuk-body">If you are unsure about eligibility, check with the COM.</p>
+
+   
+
+      {{ govukRadios({
+      classes: "govuk-radios",
+      name: "hdcPause",
+      classes: "govuk-radios--inline",
+      fieldset: {
+        legend: {
+          text: "Are you sure the device wearer is on a Home Detention Curfew(HDC)?",
+          isPageHeading: false,
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      items: [
+        {
+          value: "YES",
+          text: "Yes",
+          disabled: not isOrderEditable
+        },
+        {
+          value: "NO",
+          text: "No",
+          disabled: not isOrderEditable
+        }
+      ],
+      value: hdcPause.value,
+      errorMessage: hdcPause.error
+    }) }}
+
+{% endblock %}
