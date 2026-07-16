@@ -11,12 +11,12 @@ const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
       interestedParties: {
         notifyingOrganisation: notifyingOrg,
         notifyingOrganisationName: '',
-        notifyingOrganisationEmail: '',
+        notifyingOrganisationEmail: 'notifying@organisation',
         responsibleOfficerName: '',
         responsibleOfficerPhoneNumber: '',
         responsibleOrganisation: 'PROBATION',
-        responsibleOrganisationRegion: 'KENT_SURREY_SUSSEX',
-        responsibleOrganisationEmail: '',
+        responsibleOrganisationRegion: 'EAST_MIDLANDS',
+        responsibleOrganisationEmail: 'responsible@organisation',
       },
     },
   })
@@ -30,12 +30,6 @@ context('pilot', () => {
     stubGetOrder()
 
     cy.signIn()
-
-    const testFlags = {
-      DAPOL_PILOT_PROBATION_REGIONS: 'KENT_SURREY_SUSSEX,WALES',
-    }
-
-    cy.task('setFeatureFlags', testFlags)
   })
 
   it('Should submit the form', () => {

@@ -68,15 +68,7 @@ context('Order type descriptions', () => {
 
     cy.signIn()
 
-    const testFlags = {
-      DAPOL_PILOT_PROBATION_REGIONS: 'KENT_SURREY_SUSSEX,WALES',
-    }
     stubPutMonitoringConditions()
-    cy.task('setFeatureFlags', testFlags)
-  })
-
-  afterEach(() => {
-    cy.task('resetFeatureFlags')
   })
 
   it('Notification org is prison, full HDC and pilot flow', () => {

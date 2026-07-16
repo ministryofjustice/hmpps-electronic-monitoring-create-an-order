@@ -34,12 +34,6 @@ context('sentenceType form submission', () => {
     stubGetOrder()
 
     cy.signIn()
-
-    const testFlags = {
-      DAPOL_PILOT_PROBATION_REGIONS: 'KENT_SURREY_SUSSEX,WALES',
-    }
-
-    cy.task('setFeatureFlags', testFlags)
   })
 
   it('Should submit the form and display the correct answers for a Post Release journey', () => {

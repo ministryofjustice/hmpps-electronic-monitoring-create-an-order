@@ -4,12 +4,9 @@ import { createGovukErrorSummary } from '../../../utils/errors'
 import { getError } from '../../../utils/utils'
 import { MonitoringConditions } from '../model'
 import { Order } from '../../../models/Order'
-import FeatureFlags from '../../../utils/featureFlags'
-import probationRegions from '../../../i18n/en/reference/ddv5/probationRegions'
 
 export type PilotModel = ViewModel<Pick<MonitoringConditions, 'pilot'>> & {
   items: Item[]
-  dapolMessage?: string
   licenceMessage?: string
 }
 
@@ -28,35 +25,14 @@ interface Divider {
 
 type Item = Option | Divider
 
-const getDapolPilotProbationRegionStatus = (order: Order): boolean => {
-  if (order.interestedParties?.responsibleOrganisation === 'PROBATION') {
-    if (order.interestedParties?.responsibleOrganisationRegion) {
-      const listOfProbationRegions = FeatureFlags.getInstance().getValue('DAPOL_PILOT_PROBATION_REGIONS').split(',')
-      return listOfProbationRegions?.indexOf(order.interestedParties.responsibleOrganisationRegion) !== -1
-    }
-  }
-  return false
-}
-
-const getDapolMessage = (order: Order): string => {
-  const isDapolPilotProbationRegion = getDapolPilotProbationRegionStatus(order)
-  if (order.interestedParties?.responsibleOrganisation === 'PROBATION') {
-    if (isDapolPilotProbationRegion) {
-      return ''
-    }
-    return `The device wearer is being managed by the ${probationRegions[order.interestedParties?.responsibleOrganisationRegion as keyof typeof probationRegions]} probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region. Any queries around pilot eligibility need to be raised with the appropriate COM.`
-  }
-  return ''
-}
 const constructModel = (order: Order, data: MonitoringConditions, errors: ValidationResult): PilotModel => {
-  const isDapolPilotProbationRegion = getDapolPilotProbationRegionStatus(order)
+  const isResponsibleOrgProbation = order.interestedParties?.responsibleOrganisation === 'PROBATION'
   const model: PilotModel = {
     pilot: {
       value: data.pilot || '',
     },
-    items: getItems(isDapolPilotProbationRegion, data.hdc),
+    items: getItems(isResponsibleOrgProbation, data.hdc),
     errorSummary: null,
-    dapolMessage: getDapolMessage(order),
   }
   if (errors && errors.length > 0) {
     model.pilot!.error = getError(errors, 'pilot')
@@ -65,14 +41,14 @@ const constructModel = (order: Order, data: MonitoringConditions, errors: Valida
   return model
 }
 
-const getItems = (isDapolPilotProbationRegion: boolean, hdc?: string | null): Item[] => {
+const getItems = (isResponsibleOrgProbation: boolean, hdc?: string | null): Item[] => {
   let items: Item[]
   if (hdc === 'NO') {
     items = [
       {
         text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
         value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
-        disabled: !isDapolPilotProbationRegion,
+        disabled: !isResponsibleOrgProbation,
       },
       { text: 'GPS acquisitive crime (EMAC)', value: 'GPS_ACQUISITIVE_CRIME_PAROLE' },
       { divider: 'or' },
@@ -89,7 +65,7 @@ const getItems = (isDapolPilotProbationRegion: boolean, hdc?: string | null): It
       {
         text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
         value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC',
-        disabled: !isDapolPilotProbationRegion,
+        disabled: !isResponsibleOrgProbation,
       },
       { text: 'GPS acquisitive crime (EMAC)', value: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW' },
       { divider: 'or' },
