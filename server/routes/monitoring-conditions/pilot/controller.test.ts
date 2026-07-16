@@ -102,14 +102,6 @@ describe('pilot controller', () => {
               value: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW',
             },
             {
-              disabled: true,
-              text: 'Licence Variation Project',
-              value: 'LICENCE_VARIATION_PROJECT',
-              conditional: {
-                html: 'The pilot is only for probation practitioners varying a licence in response to an escalation of risk or as an alternative to recall.',
-              },
-            },
-            {
               divider: 'or',
             },
             {
@@ -119,8 +111,6 @@ describe('pilot controller', () => {
           ],
           dapolMessage:
             'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region. Any queries around pilot eligibility need to be raised with the appropriate COM.',
-          licenceMessage:
-            'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the Licence Variation pilot they must be managed by an in-scope region.',
         }),
       )
     })
@@ -146,14 +136,6 @@ describe('pilot controller', () => {
               value: 'GPS_ACQUISITIVE_CRIME_PAROLE',
             },
             {
-              disabled: true,
-              text: 'Licence Variation Project',
-              value: 'LICENCE_VARIATION_PROJECT',
-              conditional: {
-                html: 'The pilot is only for probation practitioners varying a licence in response to an escalation of risk or as an alternative to recall.',
-              },
-            },
-            {
               divider: 'or',
             },
             {
@@ -166,8 +148,6 @@ describe('pilot controller', () => {
           ],
           dapolMessage:
             'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region. Any queries around pilot eligibility need to be raised with the appropriate COM.',
-          licenceMessage:
-            'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the Licence Variation pilot they must be managed by an in-scope region.',
         }),
       )
     })

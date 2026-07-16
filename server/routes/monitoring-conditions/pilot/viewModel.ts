@@ -48,52 +48,15 @@ const getDapolMessage = (order: Order): string => {
   }
   return ''
 }
-
-const getLicencePilotProbationRegionStatus = (order: Order): boolean => {
-  if (
-    order.interestedParties?.notifyingOrganisation === 'PROBATION' &&
-    order.interestedParties?.responsibleOrganisation === 'PROBATION'
-  ) {
-    if (order.interestedParties?.responsibleOrganisationRegion) {
-      const listOfProbationRegions = FeatureFlags.getInstance()
-        .getValue('LICENCE_VARIATION_PROBATION_REGIONS')
-        .split(',')
-      return listOfProbationRegions?.indexOf(order.interestedParties.responsibleOrganisationRegion) !== -1
-    }
-  }
-  return false
-}
-
-const getLicenceMessage = (order: Order): string => {
-  const isLicencePilotProbationRegion = getLicencePilotProbationRegionStatus(order)
-  if (
-    order.interestedParties?.notifyingOrganisation === 'PROBATION' &&
-    order.interestedParties?.responsibleOrganisation === 'PROBATION'
-  ) {
-    if (isLicencePilotProbationRegion) {
-      return ''
-    }
-    return `The device wearer is being managed by the ${probationRegions[order.interestedParties?.responsibleOrganisationRegion as keyof typeof probationRegions]} probation region. To be eligible for the Licence Variation pilot they must be managed by an in-scope region.`
-  }
-  return ''
-}
-
 const constructModel = (order: Order, data: MonitoringConditions, errors: ValidationResult): PilotModel => {
   const isDapolPilotProbationRegion = getDapolPilotProbationRegionStatus(order)
-  const isLicenceProbationRegion = getLicencePilotProbationRegionStatus(order)
   const model: PilotModel = {
     pilot: {
       value: data.pilot || '',
     },
-    items: getItems(
-      isDapolPilotProbationRegion,
-      isLicenceProbationRegion,
-      data.hdc,
-      order.interestedParties?.notifyingOrganisation,
-    ),
+    items: getItems(isDapolPilotProbationRegion, data.hdc),
     errorSummary: null,
     dapolMessage: getDapolMessage(order),
-    licenceMessage: getLicenceMessage(order),
   }
   if (errors && errors.length > 0) {
     model.pilot!.error = getError(errors, 'pilot')
@@ -102,12 +65,7 @@ const constructModel = (order: Order, data: MonitoringConditions, errors: Valida
   return model
 }
 
-const getItems = (
-  isDapolPilotProbationRegion: boolean,
-  isLicencePilotProbationRegion: boolean,
-  hdc?: string | null,
-  notifyingOrganisation?: string | null,
-): Item[] => {
+const getItems = (isDapolPilotProbationRegion: boolean, hdc?: string | null): Item[] => {
   let items: Item[]
   if (hdc === 'NO') {
     items = [
@@ -140,17 +98,6 @@ const getItems = (
         value: 'UNKNOWN',
       },
     ]
-  }
-
-  if (notifyingOrganisation === 'PROBATION') {
-    items.splice(2, 0, {
-      text: 'Licence Variation Project',
-      value: 'LICENCE_VARIATION_PROJECT',
-      conditional: {
-        html: 'The pilot is only for probation practitioners varying a licence in response to an escalation of risk or as an alternative to recall.',
-      },
-      disabled: !isLicencePilotProbationRegion,
-    })
   }
 
   return items
