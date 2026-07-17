@@ -8,7 +8,7 @@ import CurfewConditionsPageContent from './pages/curfewConditions'
 import CurfewReleaseDatePageContent from './pages/curfewReleaseDate'
 import CurfewTimeTablePageContent from './pages/curfewTimeTable'
 import DeviceWearerPageContent from './pages/deviceWearer'
-import ExclusionZonePageContent from './pages/exclusionZone'
+import EnforcementZonePageContent from './pages/enforcementZone'
 import HavePhotoPageContent from './pages/havePhoto'
 import IdentityNumbersPageContent from './pages/identityNumbers'
 import InstallationAndRiskPageContent from './pages/installationAndRisk'
@@ -55,7 +55,8 @@ type I18n = {
     deleteConfirm: ConfirmationPageContent
     deviceWearer: DeviceWearerPageContent
     editConfirm: ConfirmationPageContent
-    exclusionZone: ExclusionZonePageContent
+    exclusionZone: EnforcementZonePageContent
+    restrictionZone: EnforcementZonePageContent
     havePhoto: HavePhotoPageContent
     haveCourtOrder: HaveCourtOrderPageContent
     identityNumbers: IdentityNumbersPageContent

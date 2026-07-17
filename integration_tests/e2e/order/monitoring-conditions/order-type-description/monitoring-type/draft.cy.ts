@@ -128,6 +128,7 @@ context('monitoring types', () => {
     page.form.monitoringTypesField.shouldNotBeDisabled()
     page.form.monitoringTypesField.shouldHaveEnabledOption('Curfew')
     page.form.monitoringTypesField.shouldHaveEnabledOption('Exclusion zone monitoring')
+    page.form.monitoringTypesField.shouldHaveEnabledOption('Restriction zone monitoring')
     page.form.monitoringTypesField.shouldHaveEnabledOption('Trail monitoring')
     page.form.monitoringTypesField.shouldHaveEnabledOption('Mandatory attendance monitoring')
     page.form.monitoringTypesField.shouldHaveEnabledOption('Alcohol monitoring')

@@ -127,6 +127,34 @@ context('Types of monitoring needed', () => {
     page.form.summaryList.shouldNotHaveItem('Curfew')
   })
 
+  it('Should display Restriction zone monitoring in summary list when added', () => {
+    stubGetOrder({
+      monitoringConditions: createMonitoringConditions({
+        exclusionZone: true,
+      }),
+      enforcementZoneConditions: [
+        {
+          id: '0',
+          zoneType: 'RESTRICTION',
+          name: 'Mock Zone Name',
+          startDate: '2025-07-15T00:00:00Z',
+          endDate: '2025-08-15T00:00:00Z',
+          description: null,
+          duration: null,
+          fileName: null,
+          fileId: null,
+          zoneId: 0,
+        },
+      ],
+    })
+
+    const page = Page.visit(TypesOfMonitoringNeededPage, { orderId: mockOrderId })
+
+    page.form.summaryList.shouldExist()
+    page.form.summaryList.shouldHaveItem('Restriction zone monitoring', 'Mock Zone NameFrom 15/07/2025 to 15/08/2025')
+    page.form.summaryList.shouldNotHaveItem('Curfew')
+  })
+
   it('Should display Mandatory attendance monitoring in summary list when added', () => {
     stubGetOrder({
       monitoringConditions: createMonitoringConditions({

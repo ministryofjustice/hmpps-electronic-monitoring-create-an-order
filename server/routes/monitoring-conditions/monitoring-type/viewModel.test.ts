@@ -16,6 +16,7 @@ describe('model', () => {
       trail: { disabled: false },
       mandatoryAttendance: { disabled: false },
       alcohol: { disabled: false },
+      restrictionZone: { disabled: false },
       errorSummary: null,
     }
 
@@ -32,6 +33,7 @@ describe('model', () => {
       trail: { disabled: false },
       mandatoryAttendance: { disabled: false },
       alcohol: { disabled: false },
+      restrictionZone: { disabled: false },
       error: { text: 'some error' },
       errorSummary: { errorList: [{ href: '#monitoringType', text: 'some error' }], titleText: 'There is a problem' },
     }

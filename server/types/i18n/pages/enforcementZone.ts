@@ -1,7 +1,7 @@
 import QuestionPageContent from './questionPage'
 
-type ExclusionZonePageContent = QuestionPageContent<
+type EnforcementZonePageContent = QuestionPageContent<
   'anotherZone' | 'description' | 'duration' | 'endDate' | 'name' | 'file' | 'startDate'
 >
 
-export default ExclusionZonePageContent
+export default EnforcementZonePageContent

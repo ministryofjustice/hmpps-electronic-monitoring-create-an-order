@@ -69,7 +69,7 @@ context('The kitchen sink', () => {
       pilot: 'GPS acquisitive crime (EMAC)',
       typeOfAcquistiveCrime: 'Burglary in a Dwelling - Indictable only',
       policeForceArea: 'Avon and Somerset',
-      monitoringCondition: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring'],
+      monitoringCondition: ['Curfew', 'Exclusion zone monitoring', 'Restriction zone monitoring', 'Trail monitoring'],
     }
     const curfewReleaseDetails = {
       startTime: { hours: '19', minutes: '00' },
@@ -98,6 +98,15 @@ context('The kitchen sink', () => {
     ])
     const primaryEnforcementZoneDetails = {
       zoneType: 'Exclusion zone',
+      startDate: new Date(currentDate.getFullYear(), 4, 1),
+      endDate: new Date(currentDate.getFullYear() + 1, 4, 1, 23, 59, 0),
+      uploadFile: files.licence,
+      description: 'A test description: Lorum ipsum dolar sit amet...',
+      duration: 'A test duration: one, two, three...',
+      name: 'test name',
+    }
+    const primaryRestrictionZoneDetails = {
+      zoneType: 'Restriction zone',
       startDate: new Date(currentDate.getFullYear(), 4, 1),
       endDate: new Date(currentDate.getFullYear() + 1, 4, 1, 23, 59, 0),
       uploadFile: files.licence,
@@ -142,6 +151,7 @@ context('The kitchen sink', () => {
         curfewConditionDetails,
         curfewTimetable,
         enforcementZoneDetails: primaryEnforcementZoneDetails,
+        restrictionZoneDetails: primaryRestrictionZoneDetails,
         alcoholMonitoringDetails: undefined,
         trailMonitoringDetails: trailMonitoringOrder,
         attendanceMonitoringDetails: undefined,
