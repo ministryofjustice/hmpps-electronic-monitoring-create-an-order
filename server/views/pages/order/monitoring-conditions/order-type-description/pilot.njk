@@ -8,11 +8,6 @@
 {% set questionName = "Pilot"%}
 {% block formInputs %}
     {% set hint %}
-        {% if licenceMessage %}
-            {{ govukInsetText({
-              text: licenceMessage
-            }) }}
-        {% endif %}
         {{ questions.pilot.hint }}
     {% endset %}
 

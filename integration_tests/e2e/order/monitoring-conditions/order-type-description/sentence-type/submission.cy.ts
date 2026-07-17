@@ -34,12 +34,6 @@ context('sentenceType form submission', () => {
     stubGetOrder()
 
     cy.signIn()
-
-    const testFlags = {
-      LICENCE_VARIATION_PROBATION_REGIONS: 'YORKSHIRE_AND_THE_HUMBER,EAST_MIDLANDS',
-    }
-
-    cy.task('setFeatureFlags', testFlags)
   })
 
   it('Should submit the form and display the correct answers for a Post Release journey', () => {

@@ -68,15 +68,7 @@ context('Order type descriptions', () => {
 
     cy.signIn()
 
-    const testFlags = {
-      LICENCE_VARIATION_PROBATION_REGIONS: 'YORKSHIRE_AND_THE_HUMBER,EAST_MIDLANDS',
-    }
     stubPutMonitoringConditions()
-    cy.task('setFeatureFlags', testFlags)
-  })
-
-  afterEach(() => {
-    cy.task('resetFeatureFlags')
   })
 
   it('Notification org is prison, full HDC and pilot flow', () => {
