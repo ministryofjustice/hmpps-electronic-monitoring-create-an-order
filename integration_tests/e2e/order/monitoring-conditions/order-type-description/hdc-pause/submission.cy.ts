@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../../pages/page'
-import HdcPage from './hdcPage'
-import HdcPausePage from '../hdc-pause/hdcPausePage'
+import HdcPausePage from './hdcPausePage'
+import PilotPage from '../pilot/PilotPage'
 
 const mockOrderId = uuidv4()
 context('order type', () => {
@@ -16,11 +16,20 @@ context('order type', () => {
   })
 
   it('Should continue to hdc pause page', () => {
-    const page = Page.visit(HdcPage, { orderId: mockOrderId })
+    const page = Page.visit(HdcPausePage, { orderId: mockOrderId })
 
     page.form.fillInWith('Yes')
     page.form.continueButton.click()
 
-    Page.verifyOnPage(HdcPausePage)
+    Page.verifyOnPage(PilotPage)
+  })
+
+  it('Should continue to pilot page when no selected', () => {
+    const page = Page.visit(HdcPausePage, { orderId: mockOrderId })
+
+    page.form.fillInWith('No')
+    page.form.continueButton.click()
+
+    Page.verifyOnPage(PilotPage)
   })
 })

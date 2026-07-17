@@ -103,6 +103,7 @@ const paths = {
       ORDER_TYPE: '/order/:orderId/monitoring-conditions/order-type-description/order-type',
       SENTENCE_TYPE: '/order/:orderId/monitoring-conditions/order-type-description/sentence-type',
       HDC: '/order/:orderId/monitoring-conditions/order-type-description/hdc',
+      HDC_PAUSE: '/order/:orderId/monitoring-conditions/order-type-description/hdc-pause',
       ISSP: '/order/:orderId/monitoring-conditions/order-type-description/issp',
       PRARR: '/order/:orderId/monitoring-conditions/order-type-description/prarr',
       POLICE_AREA: '/order/:orderId/monitoring-conditions/order-type-description/police-area',
