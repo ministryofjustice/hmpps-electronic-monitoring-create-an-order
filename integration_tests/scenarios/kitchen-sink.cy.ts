@@ -160,6 +160,7 @@ context('The kitchen sink', () => {
         installationLocation: undefined,
         installationAppointment: undefined,
         newDeviceWearerFlow: true,
+        restrictionZoneDetails: undefined,
       })
       orderSummaryPage.submitOrderButton.click()
 

@@ -161,6 +161,7 @@ context('Mandatory fields only', () => {
         installationLocation: undefined,
         installationAppointment: undefined,
         newDeviceWearerFlow: true,
+        restrictionZoneDetails: undefined,
       })
       orderSummaryPage.submitOrderButton.click()
 
@@ -296,6 +297,7 @@ context('Mandatory fields only', () => {
         installationLocation: undefined,
         installationAppointment: undefined,
         newDeviceWearerFlow: true,
+        restrictionZoneDetails: undefined,
       })
       orderSummaryPage.submitOrderButton.click()
 
