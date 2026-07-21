@@ -42,6 +42,7 @@ import NationalSecurityDirectoratePageConetent from './pages/national-security-d
 import IsAddressChangePageContent from './pages/isAddressChange'
 import AddressListContent from './pages/addressList'
 import ManualAddressPageContent from './pages/manualAddress'
+import IsrDualRunSelectionPageContent from './pages/isrDualRunSelection'
 
 type I18n = {
   pages: {
@@ -79,6 +80,7 @@ type I18n = {
     uploadCourtOrder: UploadDocumentPageContent
     variationDetails: VariationDetailsPageContent
     isRejection: IsRejectionPageContent
+    isrDualRunSelection: IsrDualRunSelectionPageContent
     serviceRequestType: ServiceRequestTypePageContent
     dapo: DapoContent
     offence: OffenceContent
