@@ -114,7 +114,7 @@ export class ISRMonitoringEligibilityService {
       }
     }
 
-    if (!hasFixedAddress(order)) {
+    if (!hasFixedAddress(order) && !isYouth(order)) {
       if (notifyingOrganisation === 'HOME_OFFICE') {
         return {
           options: ['trail', 'exclusionZone'],
