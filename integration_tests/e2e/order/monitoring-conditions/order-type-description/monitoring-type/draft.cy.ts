@@ -474,7 +474,7 @@ context('new ISR monitoring types', () => {
     monitoringTypePage.form.message.contains('Alcohol monitoring is not allowed because the device wearer is a youth.')
   })
 
-  it('youth, SDS, HDC no, EMAC', () => {
+  it('youth, SDS, HDC no, GPS', () => {
     stubGetOrder({
       notifyingOrg: 'PROBATION',
       deviceWearer: createDeviceWearer(false),
