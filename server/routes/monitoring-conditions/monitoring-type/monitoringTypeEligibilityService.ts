@@ -113,7 +113,6 @@ export class ISRMonitoringEligibilityService {
         return {
           options: ['alcohol'],
           message: eligibilityMessagesISR.noFixedAddress,
-          exception: true,
         }
       }
       return {
@@ -126,7 +125,6 @@ export class ISRMonitoringEligibilityService {
         return {
           options: ['alcohol'],
           message: eligibilityMessagesISR.noFixedAddress,
-          exception: true,
         }
       }
       return {
