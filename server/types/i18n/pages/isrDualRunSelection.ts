@@ -1,5 +1,5 @@
 import QuestionPageContent from './questionPage'
 
-type IsrDualRunSelectionPageContent = QuestionPageContent<'isrEnabled'>
+type SetSentencingActPageContent = QuestionPageContent<'isSentencingAct'>
 
-export default IsrDualRunSelectionPageContent
+export default SetSentencingActPageContent
