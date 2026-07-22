@@ -30,6 +30,7 @@ export const eligibilityMessagesISR = {
   noFixedAddressHomeOffice:
     'The device wearer has no fixed address so only Trail monitoring and Exclusion zone monitoring is allowed.',
   youthAlcoholExcluded: 'Alcohol monitoring is not allowed because the device wearer is a youth.',
+  youthNoFixedAddress: 'The device wearer has no fixed address and is a youth so no monitoring is allowed.',
 }
 
 const hasFixedAddress = (order: Order): boolean => {
@@ -93,24 +94,43 @@ export class ISRMonitoringEligibilityService {
   getEnabled(order: Order): MonitoringTypeEligibility {
     const notifyingOrganisation = order.interestedParties?.notifyingOrganisation
 
-    if (order.monitoringConditions.hdc === 'NO') {
-      if (order.monitoringConditions.pilot === 'UNKNOWN') {
+    if (isYouth(order)) {
+      if (!hasFixedAddress(order)) {
         return {
-          options: ['curfew', 'exclusionZone', 'trail', 'mandatoryAttendance', 'alcohol', 'restrictionZone'],
+          options: [],
+          message: eligibilityMessagesISR.youthNoFixedAddress,
+          exception: true,
         }
       }
+      return {
+        options: ['curfew', 'exclusionZone', 'trail', 'mandatoryAttendance'],
+        message: eligibilityMessagesISR.youthAlcoholExcluded,
+      }
+    }
 
-      if (order.monitoringConditions.pilot === 'GPS_ACQUISITIVE_CRIME_PAROLE') {
-        if (!hasFixedAddress(order)) {
-          return {
-            options: [],
-            message: eligibilityMessages.hdcNoPilotGPSNoFixedAddress,
-            exception: true,
-          }
-        }
+    if (order.monitoringConditions.pilot === 'UNKNOWN') {
+      if (!hasFixedAddress(order)) {
         return {
-          options: ['curfew', 'exclusionZone', 'trail', 'mandatoryAttendance', 'alcohol', 'restrictionZone'],
+          options: ['alcohol'],
+          message: eligibilityMessagesISR.noFixedAddress,
+          exception: true,
         }
+      }
+      return {
+        options: ['curfew', 'exclusionZone', 'trail', 'mandatoryAttendance', 'alcohol', 'restrictionZone'],
+      }
+    }
+
+    if (order.monitoringConditions.pilot === 'GPS_ACQUISITIVE_CRIME_PAROLE') {
+      if (!hasFixedAddress(order)) {
+        return {
+          options: ['alcohol'],
+          message: eligibilityMessagesISR.noFixedAddress,
+          exception: true,
+        }
+      }
+      return {
+        options: ['curfew', 'exclusionZone', 'trail', 'mandatoryAttendance', 'alcohol', 'restrictionZone'],
       }
     }
 
@@ -125,13 +145,6 @@ export class ISRMonitoringEligibilityService {
       return {
         options: ['alcohol'],
         message: eligibilityMessagesISR.noFixedAddress,
-      }
-    }
-
-    if (isYouth(order)) {
-      return {
-        options: ['curfew', 'exclusionZone', 'trail', 'mandatoryAttendance'],
-        message: eligibilityMessagesISR.youthAlcoholExcluded,
       }
     }
 
