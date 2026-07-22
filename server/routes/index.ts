@@ -44,6 +44,7 @@ import SpecialOrderController from './special-order/controller'
 import IsAddressChangeController from './variations/is-address-change/controller'
 import NoRefitsController from './variations/no-refits/controller'
 import NoChangeResponsibleOfficerController from './variations/no-change-responsible-officer/controller'
+import SentencingActSelection from './sentencing-act-selection/controller'
 
 export default function routes({
   alcoholMonitoringService,
@@ -86,6 +87,7 @@ export default function routes({
   updateInterestedPartiesService,
   postcodeService,
   sectionService,
+  sentencingActService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -211,6 +213,7 @@ export default function routes({
 
   const noRefitsController = new NoRefitsController()
   const noChangeResonsibleOfficer = new NoChangeResponsibleOfficerController()
+  const setSentencingAct = new SentencingActSelection(sentencingActService)
   router.param('orderId', populateOrder(orderService))
 
   get('/', orderSearchController.list)
@@ -391,6 +394,10 @@ export default function routes({
   post(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS_VERSION, interestedPartiesCheckYourAsnwerController.update)
   get(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS, interestedPartiesCheckYourAsnwerController.view)
   post(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS, interestedPartiesCheckYourAsnwerController.update)
+
+  // Sentencing act
+  get(paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION, setSentencingAct.view)
+  post(paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION, setSentencingAct.update)
 
   router.use(
     paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.BASE_PATH,
