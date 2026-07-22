@@ -646,13 +646,45 @@ context('new ISR monitoring types', () => {
   })
 
   context('No condition available', () => {
-    it('should disable continue button', () => {
+    it('should disable continue button, no more options pilot unknown', () => {
       stubGetOrder({
         addresses: createAddresses(true),
         monitoringConditions: createMonitoringConditions({
           alcohol: true,
           hdc: 'YES',
           pilot: 'UNKNOWN',
+        }),
+        monitoringConditionsAlcohol: {
+          endDate: null,
+          installationLocation: null,
+          monitoringType: null,
+          prisonName: null,
+          probationOfficeName: null,
+          startDate: null,
+        },
+      })
+
+      const page = Page.visit(MonitoringTypePage, { orderId: mockOrderId })
+
+      page.form.monitoringTypesField.shouldHaveDisabledOption('Alcohol')
+      page.form.monitoringTypesField.shouldHaveDisabledOption('Trail')
+      page.form.monitoringTypesField.shouldHaveDisabledOption('Exclusion zone monitoring')
+      page.form.monitoringTypesField.shouldHaveDisabledOption('Curfew')
+      page.form.monitoringTypesField.shouldHaveDisabledOption('Mandatory attendance monitoring')
+      page.form.monitoringTypesField.shouldHaveDisabledOption('Restriction zone monitoring')
+      page.form.ReturnToMonitoringListPageButton.should('exist')
+      page.form.continueButton.should('be.disabled')
+
+      page.form.message.contains('There are no additional eligible monitoring types available to add')
+    })
+
+    it('should disable continue button, no more options pilot GPS', () => {
+      stubGetOrder({
+        addresses: createAddresses(true),
+        monitoringConditions: createMonitoringConditions({
+          alcohol: true,
+          hdc: 'YES',
+          pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
         }),
         monitoringConditionsAlcohol: {
           endDate: null,
