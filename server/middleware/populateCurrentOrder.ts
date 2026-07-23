@@ -34,6 +34,7 @@ const populateOrder =
         res.locals.isOrderEditable = order.status === OrderStatusEnum.Enum.IN_PROGRESS
         res.locals.isViewOnly = order.status === OrderStatusEnum.Enum.IN_PROGRESS && !order.isOwner
         res.locals.content = getContent(Locales.en, order.dataDictionaryVersion)
+        res.locals.isSentencingAct = order.isSentencingAct
       }
 
       next()

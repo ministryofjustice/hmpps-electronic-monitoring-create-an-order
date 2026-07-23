@@ -3,6 +3,7 @@ import Page from '../../../../pages/page'
 import NotifyingOrganisationPage from './notifyingOrganisationPage'
 import OrderTasksPage from '../../../../pages/order/summary'
 import mockApiOrder from '../../../../utils/data/ApiOrder'
+import SentencingActPage from '../sentencing-act/sentencingActPage'
 
 const mockOrderId = uuidv4()
 context('Submit notifying organisations', () => {
@@ -36,9 +37,52 @@ context('Submit notifying organisations', () => {
         versions: [],
         orderId: mockOrder.id,
       })
+
+      cy.task('stubCemoSetSentencingAct', { httpStatus: 200, id: mockOrderId })
     })
 
-    it('should  routes summary page', () => {
+    it('should routes summary page', () => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '123456780',
+      })
+
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: { cohort: 'PRISON', activeCaseLoadName: 'HMP ABC' },
+      })
+
+      cy.signIn()
+
+      const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
+
+      page.form.fillInWith({
+        notifyingOrganisation: 'Prison service',
+        notifyingOrganisationEmailAddress: 'a@b.com',
+        prison: 'Altcourse Prison',
+      })
+
+      page.form.continueButton.click()
+
+      Page.verifyOnPage(SentencingActPage).answer('no')
+
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOrderId}${submitPath}`,
+        body: {
+          notifyingOrganisation: 'PRISON',
+          notifyingOrganisationName: 'ALTCOURSE_PRISON',
+          notifyingOrganisationEmail: 'a@b.com',
+        },
+      }).should('be.true')
+
+      Page.verifyOnPage(OrderTasksPage)
+    })
+
+    it('should route to the sentencing act page if user is prison', () => {
       cy.task('stubSignIn', {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
@@ -73,7 +117,7 @@ context('Submit notifying organisations', () => {
           notifyingOrganisationEmail: 'a@b.com',
         },
       }).should('be.true')
-      Page.verifyOnPage(OrderTasksPage)
+      cy.url().should('include', `/order/${mockOrderId}/interest-parties/sentencing-act-selection`)
     })
 
     it('other cohort can submit order', () => {
@@ -224,7 +268,13 @@ context('Submit notifying organisations', () => {
   context('Variation', () => {
     beforeEach(() => {
       cy.task('reset')
-      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'], stubCohort: false })
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: { cohort: 'OTHER' },
+      })
       cy.signIn()
     })
 
