@@ -2945,7 +2945,7 @@ context('Order Summary', () => {
 
     it('shows the Sentencing Act message when order is flagged', () => {
       stubOrderWithSentencingAct(true)
-      Page.visit(OrderTasksPage, { orderIf: mockOrderId })
+      Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
       cy.get('.govuk-notification-banner').should(
         'contain.text',
@@ -2955,7 +2955,7 @@ context('Order Summary', () => {
 
     it('doesnt show the Sentencing Act banner when order is not sentencing act', () => {
       stubOrderWithSentencingAct(false)
-      Page.visit(OrderTasksPage, { orderIf: mockOrderId })
+      Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
       cy.get('.govuk-notification-banner').should('not.exist')
     })
