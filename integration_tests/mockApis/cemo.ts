@@ -746,7 +746,7 @@ const defaultSetSentencingActStubOptions = {
 }
 
 const setSentencingAct = (options: SetSentencingActStubOptions = defaultSetSentencingActStubOptions) => {
-  stubFor({
+  return stubFor({
     request: {
       method: 'PUT',
       urlPattern: `/cemo/api/orders/${options.id}/sentencing-act`,
