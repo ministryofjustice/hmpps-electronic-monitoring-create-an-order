@@ -64,6 +64,7 @@ export default class NotifingOrganisationController extends InterestedPartiesBas
 
     if (isPrisonOrYouthUser && selectedPrisonService) {
       res.redirect(paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION.replace(':orderId', order.id))
+      return
     }
 
     res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
