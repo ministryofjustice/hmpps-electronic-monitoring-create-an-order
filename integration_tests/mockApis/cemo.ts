@@ -735,6 +735,30 @@ const updateOrderOwner = (options: UpdateOrderOwnerStubOptions = defaultUpdateOr
   })
 }
 
+type SetSentencingActStubOptions = {
+  httpStatus: number
+  id: string
+}
+
+const defaultSetSentencingActStubOptions = {
+  httpStatus: 200,
+  id: uuidv4(),
+}
+
+const setSentencingAct = (options: SetSentencingActStubOptions = defaultSetSentencingActStubOptions) => {
+  stubFor({
+    request: {
+      method: 'PUT',
+      urlPattern: `/cemo/api/orders/${options.id}/sentencing-act`,
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: {},
+    },
+  })
+}
+
 export default {
   stubCemoCreateOrder: createOrder,
   stubCemoCreateVariation: createVariation,
@@ -751,6 +775,7 @@ export default {
   stubCemoSubmitOrder: submitOrder,
   stubCemoUpdateContactDetails: updateContactDetails,
   stubCemoPutResponsibleAdult: putResponsibleAdult,
+  stubCemoSetSentencingAct: setSentencingAct,
   stubUploadAttachment: uploadAttachment,
   stubDeleteAttachment: deleteAttachment,
   stubCemoUpdateOrderOwner: updateOrderOwner,

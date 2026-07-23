@@ -51,8 +51,7 @@ export default class SentencingActSelection extends YesNoQuestionPageController 
       res.redirect(paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION.replace(':orderId', orderId))
       return
     }
-    res.redirect(
-      paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', orderId),
-    ) // CONFIRM THIS IS THE CORRECT PAGE IN THE FLOW
+
+    res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
   }
 }
