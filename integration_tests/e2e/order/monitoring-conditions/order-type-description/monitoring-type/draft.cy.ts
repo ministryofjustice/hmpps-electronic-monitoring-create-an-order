@@ -377,24 +377,6 @@ context('new ISR monitoring types', () => {
     )
   })
 
-  it('youth, no fixed address', () => {
-    stubGetOrder({
-      notifyingOrg: 'PROBATION',
-      deviceWearer: createDeviceWearer(false),
-      addresses: createAddresses(true),
-    })
-    const monitoringTypePage = Page.visit(MonitoringTypePage, { orderId: mockOrderId })
-
-    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Curfew')
-    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Exclusion zone monitoring')
-    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Trail')
-    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Mandatory attendance monitoring')
-
-    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Alcohol')
-    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Restriction zone monitoring')
-    monitoringTypePage.form.message.contains('Alcohol monitoring is not allowed because the device wearer is a youth.')
-  })
-
   it('home office, no fixed address', () => {
     stubGetOrder({ notifyingOrg: 'HOME_OFFICE', addresses: createAddresses(true) })
     const monitoringTypePage = Page.visit(MonitoringTypePage, { orderId: mockOrderId })
@@ -408,6 +390,25 @@ context('new ISR monitoring types', () => {
     monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Restriction zone monitoring')
     monitoringTypePage.form.message.contains(
       'The device wearer has no fixed address so only Trail monitoring and Exclusion zone monitoring is allowed.',
+    )
+  })
+
+  it('youth, no fixed address', () => {
+    stubGetOrder({
+      notifyingOrg: 'PROBATION',
+      deviceWearer: createDeviceWearer(false),
+      addresses: createAddresses(true),
+    })
+    const monitoringTypePage = Page.visit(MonitoringTypePage, { orderId: mockOrderId })
+
+    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Curfew')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Exclusion zone monitoring')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Trail')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Mandatory attendance monitoring')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Alcohol')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Restriction zone monitoring')
+    monitoringTypePage.form.message.contains(
+      'The device wearer has no fixed address and is a youth so no monitoring is allowed.',
     )
   })
 
@@ -437,6 +438,50 @@ context('new ISR monitoring types', () => {
       deviceWearer: createDeviceWearer(false),
       monitoringConditions: createMonitoringConditions({
         sentenceType: 'SECTION_91',
+      }),
+    })
+    const monitoringTypePage = Page.visit(MonitoringTypePage, { orderId: mockOrderId })
+
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Curfew')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Exclusion zone monitoring')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Trail')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Mandatory attendance monitoring')
+
+    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Alcohol')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Restriction zone monitoring')
+    monitoringTypePage.form.message.contains('Alcohol monitoring is not allowed because the device wearer is a youth.')
+  })
+
+  it('youth, SDS, HDC no, pilot unknown', () => {
+    stubGetOrder({
+      notifyingOrg: 'PROBATION',
+      deviceWearer: createDeviceWearer(false),
+      monitoringConditions: createMonitoringConditions({
+        sentenceType: 'STANDARD_DETERMINATE_SENTENCE',
+        hdc: 'NO',
+        pilot: 'UNKNOWN',
+      }),
+    })
+    const monitoringTypePage = Page.visit(MonitoringTypePage, { orderId: mockOrderId })
+
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Curfew')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Exclusion zone monitoring')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Trail')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Mandatory attendance monitoring')
+
+    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Alcohol')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Restriction zone monitoring')
+    monitoringTypePage.form.message.contains('Alcohol monitoring is not allowed because the device wearer is a youth.')
+  })
+
+  it('youth, SDS, HDC no, GPS', () => {
+    stubGetOrder({
+      notifyingOrg: 'PROBATION',
+      deviceWearer: createDeviceWearer(false),
+      monitoringConditions: createMonitoringConditions({
+        sentenceType: 'STANDARD_DETERMINATE_SENTENCE',
+        hdc: 'NO',
+        pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
       }),
     })
     const monitoringTypePage = Page.visit(MonitoringTypePage, { orderId: mockOrderId })
@@ -490,7 +535,7 @@ context('new ISR monitoring types', () => {
     monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Alcohol')
   })
 
-  it('no fixed address, sds, hdc no, pilot GPS', () => {
+  it('no fixed address, hdc no, pilot GPS', () => {
     stubGetOrder({
       notifyingOrg: 'PROBATION',
       addresses: createAddresses(true),
@@ -502,14 +547,39 @@ context('new ISR monitoring types', () => {
     })
     const monitoringTypePage = Page.visit(MonitoringTypePage, { orderId: mockOrderId })
 
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Alcohol')
+
     monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Curfew')
     monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Exclusion zone monitoring')
     monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Trail')
     monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Mandatory attendance monitoring')
-    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Alcohol')
     monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Restriction zone monitoring')
     monitoringTypePage.form.message.contains(
-      'No monitoring types can be selected because the device wearer is not on a Home Detention Curfew (HDC) and has no fixed address.',
+      'The device wearer has no fixed address so only Alcohol monitoring is allowed.',
+    )
+  })
+
+  it('no fixed address, hdc no, pilot unknown', () => {
+    stubGetOrder({
+      notifyingOrg: 'PROBATION',
+      addresses: createAddresses(true),
+      monitoringConditions: createMonitoringConditions({
+        sentenceType: 'STANDARD_DETERMINATE_SENTENCE',
+        hdc: 'NO',
+        pilot: 'UNKNOWN',
+      }),
+    })
+    const monitoringTypePage = Page.visit(MonitoringTypePage, { orderId: mockOrderId })
+
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Alcohol')
+
+    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Curfew')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Exclusion zone monitoring')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Trail')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Mandatory attendance monitoring')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Restriction zone monitoring')
+    monitoringTypePage.form.message.contains(
+      'The device wearer has no fixed address so only Alcohol monitoring is allowed.',
     )
   })
 
@@ -576,13 +646,45 @@ context('new ISR monitoring types', () => {
   })
 
   context('No condition available', () => {
-    it('should disable continue button', () => {
+    it('should disable continue button, no more options pilot unknown', () => {
       stubGetOrder({
         addresses: createAddresses(true),
         monitoringConditions: createMonitoringConditions({
           alcohol: true,
           hdc: 'YES',
           pilot: 'UNKNOWN',
+        }),
+        monitoringConditionsAlcohol: {
+          endDate: null,
+          installationLocation: null,
+          monitoringType: null,
+          prisonName: null,
+          probationOfficeName: null,
+          startDate: null,
+        },
+      })
+
+      const page = Page.visit(MonitoringTypePage, { orderId: mockOrderId })
+
+      page.form.monitoringTypesField.shouldHaveDisabledOption('Alcohol')
+      page.form.monitoringTypesField.shouldHaveDisabledOption('Trail')
+      page.form.monitoringTypesField.shouldHaveDisabledOption('Exclusion zone monitoring')
+      page.form.monitoringTypesField.shouldHaveDisabledOption('Curfew')
+      page.form.monitoringTypesField.shouldHaveDisabledOption('Mandatory attendance monitoring')
+      page.form.monitoringTypesField.shouldHaveDisabledOption('Restriction zone monitoring')
+      page.form.ReturnToMonitoringListPageButton.should('exist')
+      page.form.continueButton.should('be.disabled')
+
+      page.form.message.contains('There are no additional eligible monitoring types available to add')
+    })
+
+    it('should disable continue button, no more options pilot GPS', () => {
+      stubGetOrder({
+        addresses: createAddresses(true),
+        monitoringConditions: createMonitoringConditions({
+          alcohol: true,
+          hdc: 'YES',
+          pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
         }),
         monitoringConditionsAlcohol: {
           endDate: null,
