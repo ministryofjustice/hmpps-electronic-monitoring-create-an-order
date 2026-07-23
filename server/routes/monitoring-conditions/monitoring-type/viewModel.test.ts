@@ -43,7 +43,7 @@ describe('model', () => {
 })
 
 describe('sentencing act dual running rules', () => {
-  const order = (isSentencingAct: boolean | undefined) => {
+  const mockOrder = (isSentencingAct: boolean | undefined) => {
     const order = getMockOrder()
     order.monitoringConditions.hdc = 'NO'
     order.monitoringConditions.pilot = 'UNKNOWN'
@@ -52,10 +52,10 @@ describe('sentencing act dual running rules', () => {
     order.isSentencingAct = isSentencingAct
     return order
   }
-  
-  it ('applies the default rules when the flag is not set', () => {
-    const model = constructModel(order(undefined), [])
-    
+
+  it('applies the default rules when the flag is not set', () => {
+    const model = constructModel(mockOrder(undefined), [])
+
     expect(model.alcohol?.disabled).toBe(false)
     expect(model.curfew?.disabled).toBe(true)
     expect(model.exclusionZone?.disabled).toBe(true)
@@ -64,9 +64,9 @@ describe('sentencing act dual running rules', () => {
     expect(model.restrictionZone?.disabled).toBe(true)
   })
 
-    it ('applies the isr/sentencing act rules when flag is set', () => {
-    const model = constructModel(order(true), [])
-    
+  it('applies the isr/sentencing act rules when flag is set', () => {
+    const model = constructModel(mockOrder(true), [])
+
     expect(model.alcohol?.disabled).toBe(false)
     expect(model.curfew?.disabled).toBe(false)
     expect(model.exclusionZone?.disabled).toBe(false)
@@ -74,4 +74,4 @@ describe('sentencing act dual running rules', () => {
     expect(model.mandatoryAttendance?.disabled).toBe(false)
     expect(model.restrictionZone?.disabled).toBe(false)
   })
-  })
+})
