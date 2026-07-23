@@ -50,7 +50,7 @@ context('Submit notifying organisations', () => {
         httpStatus: 200,
         method: 'GET',
         subPath: 'user-cohort',
-        response: { cohort: 'PRISON', activeCaseLoadName: 'HMP ABC' },
+        response: { cohort: 'HOME_OFFICE', activeCaseLoadName: 'HMP ABC' },
       })
 
       cy.signIn()
@@ -74,6 +74,44 @@ context('Submit notifying organisations', () => {
         },
       }).should('be.true')
       Page.verifyOnPage(OrderTasksPage)
+    })
+
+    it('should route to the sentencing act page if user is prison', () => {
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '123456780',
+      })
+
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: { cohort: 'PRISON', activeCaseLoadName: 'HMP ABC' },
+      })
+
+      cy.signIn()
+
+      const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
+
+      page.form.fillInWith({
+        notifyingOrganisation: 'Prison service',
+        notifyingOrganisationEmailAddress: 'a@b.com',
+        prison: 'Altcourse Prison',
+      })
+
+      page.form.continueButton.click()
+
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOrderId}${submitPath}`,
+        body: {
+          notifyingOrganisation: 'PRISON',
+          notifyingOrganisationName: 'ALTCOURSE_PRISON',
+          notifyingOrganisationEmail: 'a@b.com',
+        },
+      }).should('be.true')
+      cy.url().should('include', `/order/${mockOrderId}/interested-parties/sentencing-act-selection`)
     })
 
     it('other cohort can submit order', () => {
