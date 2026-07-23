@@ -68,16 +68,7 @@ context('Order type descriptions', () => {
 
     cy.signIn()
 
-    const testFlags = {
-      DAPOL_PILOT_PROBATION_REGIONS: 'KENT_SURREY_SUSSEX,WALES',
-      LICENCE_VARIATION_PROBATION_REGIONS: 'YORKSHIRE_AND_THE_HUMBER,EAST_MIDLANDS',
-    }
     stubPutMonitoringConditions()
-    cy.task('setFeatureFlags', testFlags)
-  })
-
-  afterEach(() => {
-    cy.task('resetFeatureFlags')
   })
 
   it('Notification org is prison, full HDC and pilot flow', () => {
@@ -341,6 +332,79 @@ context('Order type descriptions', () => {
     }).should('be.true')
   })
 
+  context('HDC Pause', () => {
+    it('HdcPause is yes, hdc yes, submit hdc as YES', () => {
+      stubGetOrder('PRISON')
+      const monitoringOrderTypeDescription = {
+        sentenceType: 'Standard Determinate Sentence',
+        hdc: 'Yes',
+        pilot: 'GPS acquisitive crime (EMAC)',
+        typeOfAcquistiveCrime: 'Aggravated Burglary',
+        policeForceArea: 'Kent',
+        prarr: 'Yes',
+        monitoringCondition: 'Trail monitoring',
+        hdcPause: 'Yes',
+      }
+      Page.visit(OrderTypePage, { orderId: mockOrderId })
+      fillInOrderTypeDescriptionsWith(monitoringOrderTypeDescription)
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOrderId}/monitoring-conditions`,
+        body: {
+          orderType: 'POST_RELEASE',
+          conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
+          sentenceType: 'STANDARD_DETERMINATE_SENTENCE',
+          curfew: null,
+          exclusionZone: null,
+          trail: null,
+          mandatoryAttendance: null,
+          alcohol: null,
+          startDate: null,
+          endDate: null,
+          hdc: 'YES',
+          pilot: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW',
+          offenceType: 'Aggravated Burglary in a Dwelling',
+          prarr: 'YES',
+          policeArea: 'KENT',
+        },
+      }).should('be.true')
+    })
+
+    it('Hdc yes,HdcPause is no, submit hdc as NO', () => {
+      stubGetOrder('PRISON')
+      const monitoringOrderTypeDescription = {
+        sentenceType: 'Standard Determinate Sentence',
+        hdc: 'Yes',
+        pilot: 'GPS acquisitive crime (EMAC)',
+        typeOfAcquistiveCrime: 'Aggravated Burglary',
+        policeForceArea: 'Kent',
+        prarr: 'Yes',
+        monitoringCondition: 'Trail monitoring',
+        hdcPause: 'No',
+      }
+      Page.visit(OrderTypePage, { orderId: mockOrderId })
+      fillInOrderTypeDescriptionsWith(monitoringOrderTypeDescription)
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOrderId}/monitoring-conditions`,
+        body: {
+          orderType: 'POST_RELEASE',
+          conditionType: 'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
+          sentenceType: 'STANDARD_DETERMINATE_SENTENCE',
+          curfew: null,
+          exclusionZone: null,
+          trail: null,
+          mandatoryAttendance: null,
+          alcohol: null,
+          startDate: null,
+          endDate: null,
+          hdc: 'NO',
+          pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+          offenceType: 'Aggravated Burglary in a Dwelling',
+          prarr: 'YES',
+          policeArea: 'KENT',
+        },
+      }).should('be.true')
+    })
+  })
   context('DDv6', () => {
     it('Notification org is Probation, order type Post Release, sentence Section SDS, Pilot DAPOL, HDC no', () => {
       stubGetOrder('PROBATION', 'DDV6')

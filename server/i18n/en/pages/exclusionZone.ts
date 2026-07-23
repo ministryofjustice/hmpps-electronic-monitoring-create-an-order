@@ -1,6 +1,6 @@
-import ExclusionZonePageContent from '../../../types/i18n/pages/exclusionZone'
+import EnforcementZonePageContent from '../../../types/i18n/pages/enforcementZone'
 
-const exclusionZonePageContent: ExclusionZonePageContent = {
+const exclusionZonePageContent: EnforcementZonePageContent = {
   helpText: '',
   legend: '',
   questions: {
@@ -26,6 +26,7 @@ const exclusionZonePageContent: ExclusionZonePageContent = {
     },
     file: {
       text: 'Monitoring zone map (optional)',
+      hint: 'Upload a map to show us where the exclusion zone is.',
     },
     startDate: {
       text: 'What date does exclusion zone monitoring start?',

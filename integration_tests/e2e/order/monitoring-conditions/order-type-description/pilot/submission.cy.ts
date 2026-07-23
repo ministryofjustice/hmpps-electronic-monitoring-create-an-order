@@ -30,22 +30,12 @@ context('pilot', () => {
     stubGetOrder()
 
     cy.signIn()
-
-    const testFlags = {
-      DAPOL_PILOT_PROBATION_REGIONS: 'KENT_SURREY_SUSSEX,WALES',
-      LICENCE_VARIATION_PROBATION_REGIONS: 'YORKSHIRE_AND_THE_HUMBER,EAST_MIDLANDS',
-    }
-
-    cy.task('setFeatureFlags', testFlags)
   })
 
   it('Should submit the form', () => {
     const page = Page.visit(PilotPage, { orderId: mockOrderId })
 
-    page.form.fillInWith('Licence Variation Project')
-    const hintText =
-      'The pilot is only for probation practitioners varying a licence in response to an escalation of risk or as an alternative to recall.'
-    page.form.pilotField.element.contains(hintText)
+    page.form.fillInWith('Domestic Abuse Perpetrator on Licence (DAPOL)')
     page.form.continueButton.click()
 
     Page.verifyOnPage(PrarrPage, 'Check your answers')

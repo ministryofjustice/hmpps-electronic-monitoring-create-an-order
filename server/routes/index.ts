@@ -16,7 +16,6 @@ import AttendanceMonitoringAddToListController from './monitoring-conditions/att
 import CurfewConditionsController from '../controllers/monitoringConditions/curfewConditionsController'
 import CurfewReleaseDateController from '../controllers/monitoringConditions/curfewReleaseDateController'
 import CurfewTimetableController from '../controllers/monitoringConditions/curfewTimetableController'
-import EnforcementZoneController from '../controllers/monitoringConditions/enforcementZoneController'
 import EnforcementZoneAddToListController from './monitoring-conditions/enforcement-zone/controller'
 import TrailMonitoringController from '../controllers/monitoringConditions/trailMonitoringController'
 import MonitoringConditionsCheckAnswersController from '../controllers/monitoringConditions/checkAnswersController'
@@ -68,7 +67,6 @@ export default function routes({
   trailMonitoringService,
   variationService,
   probationDeliveryUnitService,
-  zoneService,
   zoneAddToListService,
   installationLocationService,
   installationAppointmentService,
@@ -162,7 +160,6 @@ export default function routes({
     taskListService,
   )
   const trailMonitoringController = new TrailMonitoringController(auditService, trailMonitoringService, taskListService)
-  const zoneController = new EnforcementZoneController(auditService, zoneService, taskListService)
   const zoneControllerAddToList = new EnforcementZoneAddToListController(auditService, zoneAddToListService)
   const monitoringConditionsCheckYourAnswersController = new MonitoringConditionsCheckAnswersController(
     auditService,
@@ -357,10 +354,6 @@ export default function routes({
   // Curfew dates page
   get(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE, curfewTimetableController.view)
   post(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE, curfewTimetableController.update)
-
-  // Exclusion Inclusion Zone
-  get(paths.MONITORING_CONDITIONS.ZONE, zoneController.view)
-  post(paths.MONITORING_CONDITIONS.ZONE, zoneController.update)
 
   // Exclusion Inclusion Zone Add To List
   get(paths.MONITORING_CONDITIONS.ZONE_NEW_ITEM, zoneControllerAddToList.new)

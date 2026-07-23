@@ -7,11 +7,11 @@
 {% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 {% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 {% from "../../../partials/dateTimeInput.njk" import dateTimeInput %}
-{% set section = content.pages.exclusionZone.section %}
-{% set heading = content.pages.exclusionZone.title %}
-{% set legend = content.pages.exclusionZone.legend %}
-{% set helpText = content.pages.exclusionZone.helpText %}
-{% set questions = content.pages.exclusionZone.questions %}
+{% set section = content.section %}
+{% set heading = content.title %}
+{% set legend = content.legend %}
+{% set helpText = content.helpText %}
+{% set questions = content.questions %}
 {% block formInputs %}
 
 
@@ -67,16 +67,9 @@
     disabled: not isOrderEditable
   }) }}
 
-  {% call govukFieldset({
-    legend: {
-      text: "Monitoring zone map (optional)",
-      classes: "govuk-fieldset__legend--s",
-      isPageHeading: false
-    }
-  }) %}
     {% set fileHintHTML %}
       <p class="govuk-hint">
-        Upload a map to show us where the exclusion zone is.
+       {{questions.file.hint}}
       </p>
 
       <p class="govuk-hint">
@@ -92,7 +85,8 @@
       id: "file",
       name: "file",
       label: {
-        text: questions.file.text
+        text: questions.file.text,
+        classes: 'govuk-fieldset__legend--s'
       },
       hint: {
         html: fileHintHTML
@@ -100,7 +94,7 @@
       errorMessage: file.error,
       disabled: not isOrderEditable
     }) }}
-  {% endcall %}
+
 
   {{ govukCharacterCount({
     name: "description",

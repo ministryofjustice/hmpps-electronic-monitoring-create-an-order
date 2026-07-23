@@ -5,10 +5,11 @@ import { createGovukErrorSummary } from '../../../utils/errors'
 import { ErrorSummary } from '../../../utils/govukFrontEndTypes/errorSummary'
 import { getError, isNotNullOrUndefined } from '../../../utils/utils'
 import { MonitoringConditions } from '../model'
+import { getMonitoringEligibilityService } from './monitoringTypeEligibilityService'
 
 type MonitoringTypes = Pick<
   MonitoringConditions,
-  'curfew' | 'exclusionZone' | 'trail' | 'mandatoryAttendance' | 'alcohol'
+  'curfew' | 'exclusionZone' | 'trail' | 'mandatoryAttendance' | 'alcohol' | 'restrictionZone'
 >
 const MonitoringTypesKeys: (keyof MonitoringTypes)[] = [
   'curfew',
@@ -16,6 +17,7 @@ const MonitoringTypesKeys: (keyof MonitoringTypes)[] = [
   'trail',
   'mandatoryAttendance',
   'alcohol',
+  'restrictionZone',
 ]
 export type MonitoringTypeModel = {
   errorSummary: ErrorSummary | null
@@ -30,7 +32,7 @@ export type MonitoringTypeModel = {
 }
 
 const constructModel = (order: Order, errors: ValidationResult): MonitoringTypeModel => {
-  const enabled = getEnabled(order)
+  const enabled = getMonitoringEligibilityService(true).getEnabled(order)
 
   const model: MonitoringTypeModel = {
     message: enabled.message,
@@ -68,65 +70,6 @@ const isConditionDisabled = (order: Order, condition: keyof MonitoringTypes) => 
     default:
       return false
   }
-}
-
-const getEnabled = (order: Order): { options: (keyof MonitoringTypes)[]; message?: string; exception?: boolean } => {
-  if (order.monitoringConditions.hdc === 'NO') {
-    if (order.monitoringConditions.pilot === 'UNKNOWN') {
-      return {
-        options: ['alcohol'],
-        message:
-          "Some monitoring types can't be selected because the device wearer is not on a Home Detention Curfew (HDC) or part of any pilots.",
-      }
-    }
-    if (order.monitoringConditions.pilot === 'GPS_ACQUISITIVE_CRIME_PAROLE') {
-      if (!hasFixedAddress(order)) {
-        return {
-          options: [],
-          message:
-            'No monitoring types can be selected because the device wearer is not on a Home Detention Curfew (HDC) and has no fixed address.',
-          exception: true,
-        }
-      }
-      return {
-        options: ['trail'],
-        message:
-          "Some monitoring types can't be selected because the device wearer is not on a Home Detention Curfew (HDC).",
-      }
-    }
-  }
-
-  if (!hasFixedAddress(order)) {
-    if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE') {
-      return {
-        options: ['trail', 'exclusionZone', 'alcohol'],
-        message: "Some monitoring types can't be selected because the device wearer has no fixed address.",
-      }
-    }
-    return {
-      options: ['alcohol'],
-      message: "Some monitoring types can't be selected because the device wearer has no fixed address.",
-    }
-  }
-
-  if (isYouth(order)) {
-    return {
-      options: ['curfew', 'exclusionZone', 'trail', 'mandatoryAttendance'],
-      message:
-        'Alcohol monitoring is not an option because the device wearer is not 18 years old or older when the electonic monitoring device is installed.',
-    }
-  }
-
-  return { options: ['curfew', 'exclusionZone', 'trail', 'mandatoryAttendance', 'alcohol'] }
-}
-
-const hasFixedAddress = (order: Order): boolean => {
-  const primaryAddress = order.addresses.find(({ addressType }) => addressType === 'PRIMARY')
-  return primaryAddress !== undefined
-}
-
-const isYouth = (order: Order): boolean => {
-  return !order.deviceWearer.adultAtTimeOfInstallation
 }
 
 export default constructModel

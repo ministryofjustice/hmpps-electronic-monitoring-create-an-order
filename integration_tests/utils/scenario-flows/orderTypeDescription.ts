@@ -1,4 +1,5 @@
 import DapolMissedInErrorPage from '../../e2e/order/monitoring-conditions/order-type-description/dapol-missed-in-error/dapolMissedInErrorPage'
+import HdcPausePage from '../../e2e/order/monitoring-conditions/order-type-description/hdc-pause/hdcPausePage'
 import HdcPage from '../../e2e/order/monitoring-conditions/order-type-description/hdc/hdcPage'
 import IsspPage from '../../e2e/order/monitoring-conditions/order-type-description/issp/isspPage'
 import MonitoringTypePage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-type/MonitoringTypesPage'
@@ -29,6 +30,7 @@ export default function fillInOrderTypeDescriptionsWith({
   prarr = undefined,
   monitoringCondition = undefined,
   dapolMissedInError = undefined,
+  hdcPause = undefined,
 }): void {
   // commented out due to ELM-4526, page is always redirected from
   // Order type page
@@ -47,6 +49,15 @@ export default function fillInOrderTypeDescriptionsWith({
   if (hdc) {
     const hdcPage = Page.verifyOnPage(HdcPage)
     fillinSingleQuestionFormWith(hdcPage.form, hdc)
+    if (hdc === 'Yes' && !hdcPause) {
+      const hdcPausePage = Page.verifyOnPage(HdcPausePage)
+      fillinSingleQuestionFormWith(hdcPausePage.form, hdc)
+    }
+  }
+
+  if (hdcPause) {
+    const hdcPausePage = Page.verifyOnPage(HdcPausePage)
+    fillinSingleQuestionFormWith(hdcPausePage.form, hdcPause)
   }
 
   // Pilot page

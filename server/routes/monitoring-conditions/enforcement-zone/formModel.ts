@@ -2,6 +2,7 @@ import z from 'zod'
 import { DateTimeInputModel } from '../../../models/form-data/formData'
 import { validationErrors } from '../../../constants/validationErrors'
 import { NotifyingOrganisation } from '../../../models/NotifyingOrganisation'
+import { AddToListEnforcementZoneTypes } from '../model'
 
 const EnforcementZoneAddToListFormDataModel = z.object({
   action: z.string(),
@@ -29,27 +30,30 @@ const EnforcementZoneAddToListFormDataModel = z.object({
 
 type EnforcementZoneAddToListFormData = Omit<z.infer<typeof EnforcementZoneAddToListFormDataModel>, 'action'>
 
-const EnforcementZoneAddToListFormDataValidator = (notifyingOrganisation: NotifyingOrganisation | null) =>
+const EnforcementZoneAddToListFormDataValidator = (
+  notifyingOrganisation: NotifyingOrganisation | null,
+  zoneType: AddToListEnforcementZoneTypes,
+) =>
   z
     .object({
       zoneId: z.number().nullable().default(0),
-      startDate: DateTimeInputModel(validationErrors.enforcementZone.startDateTime),
+      startDate: DateTimeInputModel(validationErrors.enforcementZone.startDateTime(zoneType)),
       endDate:
         notifyingOrganisation !== 'HOME_OFFICE'
-          ? DateTimeInputModel(validationErrors.enforcementZone.endDateTime)
+          ? DateTimeInputModel(validationErrors.enforcementZone.endDateTime(zoneType))
           : z.any().optional(),
-      name: z.string().min(1, validationErrors.enforcementZone.nameRequired),
+      name: z.string().min(1, validationErrors.enforcementZone.nameRequired(zoneType)),
       description: z
         .string()
-        .min(1, validationErrors.enforcementZone.descriptionRequired)
-        .max(500, validationErrors.enforcementZone.descriptionTooLong),
+        .min(1, validationErrors.enforcementZone.descriptionRequired(zoneType))
+        .max(500, validationErrors.enforcementZone.descriptionTooLong(zoneType)),
       duration: z
         .string()
-        .min(1, validationErrors.enforcementZone.durationRequired)
-        .max(200, validationErrors.enforcementZone.durationTooLong),
+        .min(1, validationErrors.enforcementZone.durationRequired(zoneType))
+        .max(200, validationErrors.enforcementZone.durationTooLong(zoneType)),
     })
     .transform(({ ...formData }) => ({
-      zoneType: 'EXCLUSION',
+      zoneType: zoneType.toUpperCase(),
       ...formData,
     }))
 

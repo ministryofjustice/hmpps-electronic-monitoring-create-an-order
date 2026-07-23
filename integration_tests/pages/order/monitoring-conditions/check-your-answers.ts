@@ -68,4 +68,9 @@ export default class MonitoringConditionsCheckYourAnswersPage extends CheckYourA
     const label = 'Exclusion zone monitoring'
     return new SummaryListComponent(label, true, searchTerm)
   }
+
+  restrictionZoneMonitoringSections(searchTerm = undefined): SummaryListComponent {
+    const label = 'Restriction zone monitoring'
+    return new SummaryListComponent(label, true, searchTerm)
+  }
 }

@@ -73,14 +73,14 @@ interface ValidationErrors {
     curfewDetailsTooLong: string
   }
   enforcementZone: {
-    descriptionRequired: string
-    descriptionTooLong: string
-    durationRequired: string
-    durationTooLong: string
-    startDateTime: DateTimeErrorMessages
-    endDateTime: DateTimeErrorMessages
-    nameRequired: string
-    anotherZoneRequired: string
+    descriptionRequired: (zoneType: string) => string
+    descriptionTooLong: (zoneType: string) => string
+    durationRequired: (zoneType: string) => string
+    durationTooLong: (zoneType: string) => string
+    startDateTime: (zoneType: string) => DateTimeErrorMessages
+    endDateTime: (zoneType: string) => DateTimeErrorMessages
+    nameRequired: (zoneType: string) => string
+    anotherZoneRequired: (zoneType: string) => string
   }
   trailMonitoring: {
     startDateTime: DateTimeErrorMessages
@@ -324,14 +324,14 @@ const validationErrors: ValidationErrors = {
     curfewDetailsTooLong: 'Detail of the curfew address boundary must be 500 characters or less',
   },
   enforcementZone: {
-    startDateTime: getMonitoringConditionStartDateTimeErrorMessages('exclusion zone'),
-    endDateTime: getMonitoringConditionEndDateTimeErrorMessages('exclusion zone', true),
-    descriptionRequired: 'Enter where the exclusion zone is required',
-    descriptionTooLong: 'Where is the exclusion zone must be 500 characters or less',
-    durationRequired: 'Enter when the exclusion zone must be followed',
-    nameRequired: 'Enter the name of the exclusion zone',
-    durationTooLong: 'When must the exclusion zone be followed must be 200 characters or less',
-    anotherZoneRequired: 'Select ‘Yes’ if you need to add another exclusion zone',
+    startDateTime: (zoneType: string) => getMonitoringConditionStartDateTimeErrorMessages(`${zoneType} zone`),
+    endDateTime: (zoneType: string) => getMonitoringConditionEndDateTimeErrorMessages(`${zoneType} zone`, true),
+    descriptionRequired: (zoneType: string) => `Enter where the ${zoneType} zone is required`,
+    descriptionTooLong: (zoneType: string) => `Where is the ${zoneType} zone must be 500 characters or less`,
+    durationRequired: (zoneType: string) => `Enter when the ${zoneType} zone must be followed`,
+    nameRequired: (zoneType: string) => `Enter the name of the ${zoneType} zone`,
+    durationTooLong: (zoneType: string) => `When must the ${zoneType} zone be followed must be 200 characters or less`,
+    anotherZoneRequired: (zoneType: string) => `Select ‘Yes’ if you need to add another ${zoneType} zone`,
   },
   trailMonitoring: {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('trail monitoring'),
