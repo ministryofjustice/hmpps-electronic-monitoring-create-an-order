@@ -38,7 +38,7 @@ context('Submit notifying organisations', () => {
         orderId: mockOrder.id,
       })
 
-      cy.task('stubCemoSetSentencingAct', {httpStatus: 200, id: mockOrderId})
+      cy.task('stubCemoSetSentencingAct', { httpStatus: 200, id: mockOrderId })
     })
 
     it('should routes summary page', () => {
@@ -273,7 +273,7 @@ context('Submit notifying organisations', () => {
         httpStatus: 200,
         method: 'GET',
         subPath: 'user-cohort',
-        response: { cohort: 'OTHER' }
+        response: { cohort: 'OTHER' },
       })
       cy.signIn()
     })
