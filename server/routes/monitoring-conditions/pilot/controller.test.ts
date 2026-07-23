@@ -139,9 +139,6 @@ describe('pilot controller', () => {
             {
               text: 'They are not part of any of these pilots',
               value: 'UNKNOWN',
-              conditional: {
-                html: 'To be eligible for tagging the device wearer must either be part of a pilot or have Alcohol Monitoring on Licence (AML) as a licence condition.',
-              },
             },
           ],
         }),
