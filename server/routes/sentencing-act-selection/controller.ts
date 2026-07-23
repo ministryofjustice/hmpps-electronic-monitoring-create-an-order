@@ -23,8 +23,8 @@ export default class SentencingActSelection extends YesNoQuestionPageController 
     return super.getView(
       req,
       res,
-      res.locals.content!.pages.isrDualRunSelection.questions.isrEnabled.text,
-      res.locals.content!.pages.isrDualRunSelection.title,
+      res.locals.content!.pages.setSentencingAct.questions.isSentencingAct.text,
+      res.locals.content!.pages.setSentencingAct.title,
       value,
     )
   }

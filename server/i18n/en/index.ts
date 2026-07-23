@@ -66,7 +66,7 @@ import manualDeviceWearerAddressPageContent from './pages/manualDeviceWearerAddr
 import manualTagAtSourceAddressPageContent from './pages/manualTagAtSourceAddress'
 import manualCurfewAddressPageContent from './pages/manualCurfewAddress'
 import restrictionZonePageContent from './pages/restrictionZone'
-import setSentencingActSelectionPageContent from './pages/isrDualRunSelection'
+import setSentencingActSelectionPageContent from './pages/setSentencingAct'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
   return {
@@ -106,7 +106,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       installationLocation: installationLocationPageContent,
       installationAppointment: installationAppointmentPageContent,
       isRejection: isRejectionPageContent,
-      isrDualRunSelection: setSentencingActSelectionPageContent,
+      setSentencingAct: setSentencingActSelectionPageContent,
       serviceRequestType: serviceRequestTypePageContent,
       dapo: dapoContent,
       offence: offenceContent,
