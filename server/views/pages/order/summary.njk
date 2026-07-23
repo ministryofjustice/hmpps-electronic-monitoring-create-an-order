@@ -27,9 +27,12 @@
 
         {% set html %}
           <p class="govuk-notification-banner__heading">
-            {% if order.isSentencingAct %}
+            {% if order.isSentencingAct && order.status === 'SUBMITTED' %}
               This order is subject to the Sentencing Act 2026 changes.
-            {% else %}
+              You are viewing a submitted order.
+            {% elseif order.isSentencingAct %}
+              This order is subject to the Sentencing Act 2026 changes.
+            {% elseif order.status === 'SUBMITTED' %}
               You are viewing a submitted order.
             {% endif %}
           </p>
@@ -38,7 +41,6 @@
         {{ govukNotificationBanner({
           html: html
         }) }}
-      {% endif %}
 
       {% set heading = 'Electronic Monitoring application form for ' + order.deviceWearer.firstName + ' ' + order.deviceWearer.lastName if (order.status === 'SUBMITTED') or (order.deviceWearer.firstName)  else "Electronic Monitoring application form" %}
 

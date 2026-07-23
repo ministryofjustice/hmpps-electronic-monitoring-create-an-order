@@ -2925,4 +2925,37 @@ context('Order Summary', () => {
       page.assignToMeButton.should('be.visible')
     })
   })
+
+  context('Sentencing act banner', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', {name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER']})
+      cy.task('stubCemoGetVersions', {httpStatus: 200, versions: [], orderId: mockOrderId})
+      cy.signIn()
+    })
+
+    const stubOrderWithSentencingAct = (isSentencingAct: boolean) => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'SUBMITTED',
+        order: {...mockApiOrder(), id: mockOrderId, status: 'IN_PROGRESS', isSentencingAct}
+      })
+    }
+
+    it('shows the Sentencing Act message when order is flagged', () => {
+      stubOrderWithSentencingAct(true)
+      Page.visit(OrderTasksPage, {orderIf: mockOrderId})
+
+      cy.get('.govuk-notification-banner').should('contain.text', 'This order is subject to the Sentencing Act 2026 changes.')
+    })
+
+
+    it('doesnt show the Sentencing Act banner when order is not sentencing act', () => {
+      stubOrderWithSentencingAct(false)
+      Page.visit(OrderTasksPage, {orderIf: mockOrderId})
+
+      cy.get('.govuk-notification-banner').should('not.exist')
+    })
+  }) 
 })

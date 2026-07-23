@@ -41,3 +41,37 @@ describe('model', () => {
     expect(model).toEqual(expected)
   })
 })
+
+describe('sentencing act dual running rules', () => {
+  const order = (isSentencingAct: boolean | undefined) => {
+    const order = getMockOrder()
+    order.monitoringConditions.hdc = 'NO'
+    order.monitoringConditions.pilot = 'UNKNOWN'
+    order.addresses.push(createAddress())
+    order.deviceWearer.adultAtTimeOfInstallation = true
+    order.isSentencingAct = isSentencingAct
+    return order
+  }
+  
+  it ('applies the default rules when the flag is not set', () => {
+    const model = constructModel(order(undefined), [])
+    
+    expect(model.alcohol?.disabled).toBe(false)
+    expect(model.curfew?.disabled).toBe(true)
+    expect(model.exclusionZone?.disabled).toBe(true)
+    expect(model.trail?.disabled).toBe(true)
+    expect(model.mandatoryAttendance?.disabled).toBe(true)
+    expect(model.restrictionZone?.disabled).toBe(true)
+  })
+
+    it ('applies the isr/sentencing act rules when flag is set', () => {
+    const model = constructModel(order(true), [])
+    
+    expect(model.alcohol?.disabled).toBe(false)
+    expect(model.curfew?.disabled).toBe(false)
+    expect(model.exclusionZone?.disabled).toBe(false)
+    expect(model.trail?.disabled).toBe(false)
+    expect(model.mandatoryAttendance?.disabled).toBe(false)
+    expect(model.restrictionZone?.disabled).toBe(false)
+  })
+  })
