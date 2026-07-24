@@ -9,6 +9,7 @@ import InterestedPartiesBaseController from '../base/interestedPartiesBaseContro
 import UpdateInterestedPartiesService from '../interestedPartiesService'
 import { InterestedParties } from '../model'
 import { filterNullValues } from '../../../utils/utils'
+import isVariationType from '../../../utils/isVariationType'
 
 export default class NotifingOrganisationController extends InterestedPartiesBaseController {
   constructor(
@@ -58,6 +59,16 @@ export default class NotifingOrganisationController extends InterestedPartiesBas
       accessToken: res.locals.user.token,
       orderId: order.id,
     })
+
+    const isPrisonOrYouthUser = cohort === 'PRISON'
+    const selectedPrisonService = validationResult.data.notifyingOrganisation === 'PRISON'
+    const shouldAskSentencingAct =
+      order.isSentencingAct === null || order.isSentencingAct === undefined || isVariationType(order.type)
+
+    if (isPrisonOrYouthUser && selectedPrisonService && shouldAskSentencingAct) {
+      res.redirect(paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION.replace(':orderId', order.id))
+      return
+    }
 
     res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
   }

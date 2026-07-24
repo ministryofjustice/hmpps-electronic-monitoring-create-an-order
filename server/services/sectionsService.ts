@@ -133,8 +133,8 @@ export default class SectionService {
   }
 
   private shouldShowInterestedParties(order: Order): boolean {
-    const startDate = order.monitoringConditions.startDate
-      ? new Date(order.monitoringConditions.startDate)
+    const startDate = order.monitoringConditions?.startDate
+      ? new Date(order.monitoringConditions?.startDate)
       : new Date(2040, 0, 0)
     const startDateIsInFuture = startDate >= new Date()
 

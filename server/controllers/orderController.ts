@@ -53,8 +53,8 @@ export default class OrderController {
     }
 
     const fmsResultDate = order.fmsResultDate ? new Date(order.fmsResultDate) : new Date(1900, 0, 0)
-    const startDate = order.monitoringConditions.startDate
-      ? new Date(order.monitoringConditions.startDate)
+    const startDate = order.monitoringConditions?.startDate
+      ? new Date(order.monitoringConditions?.startDate)
       : new Date(1900, 0, 0)
     const compareDate = fmsResultDate < startDate ? fmsResultDate : startDate
     compareDate.setDate(compareDate.getDate() + 30)

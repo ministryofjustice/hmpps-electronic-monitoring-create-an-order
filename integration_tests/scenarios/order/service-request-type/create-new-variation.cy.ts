@@ -10,6 +10,7 @@ import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-su
 import ReceiptPage from '../../../pages/order/receipt'
 import IsAddressChangePage from '../../../e2e/order/edit-order/is-address-change/isAddressChangePage'
 import NotifyingOrganisationPage from '../../../e2e/order/interested-parties/notifying-organisation/notifyingOrganisationPage'
+import SentencingActPage from '../../../e2e/order/interested-parties/sentencing-act/sentencingActPage'
 
 context('Service-Request-Types', () => {
   const testFlags = {
@@ -89,6 +90,12 @@ context('Service-Request-Types', () => {
     const notifyingOrganisationPage = Page.verifyOnPage(NotifyingOrganisationPage)
     notifyingOrganisationPage.form.fillInWith(interestedParties)
     notifyingOrganisationPage.form.continueButton.click()
+
+    cy.url().then(url => {
+      if (url.includes('/interest-parties/sentencing-act-selection')) {
+        Page.verifyOnPage(SentencingActPage).answer('no')
+      }
+    })
 
     const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 

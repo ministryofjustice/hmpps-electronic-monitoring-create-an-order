@@ -170,6 +170,9 @@ interface ValidationErrors {
   isAddressChange: {
     isAddressChangeRequired: string
   }
+  sentencingActSelection: {
+    required: string
+  }
 }
 
 export interface DateErrorMessages {
@@ -461,6 +464,9 @@ const validationErrors: ValidationErrors = {
   },
   isAddressChange: {
     isAddressChangeRequired: 'Select Yes if the device wearer’s primary address has changed',
+  },
+  sentencingActSelection: {
+    required: 'Select Yes if the device wearer is being released on or after September 2026',
   },
 }
 

@@ -32,7 +32,7 @@ export type MonitoringTypeModel = {
 }
 
 const constructModel = (order: Order, errors: ValidationResult): MonitoringTypeModel => {
-  const enabled = getMonitoringEligibilityService(true).getEnabled(order)
+  const enabled = getMonitoringEligibilityService(order.isSentencingAct === true).getEnabled(order)
 
   const model: MonitoringTypeModel = {
     message: enabled.message,
