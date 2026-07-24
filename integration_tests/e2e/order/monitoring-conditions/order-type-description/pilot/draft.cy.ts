@@ -62,6 +62,12 @@ context('pilot', () => {
     stubGetOrder({ ...mockDefaultOrder })
 
     cy.signIn()
+
+    const testFlags = {
+      DAPOL_PILOT_PROBATION_REGIONS: 'KENT_SURREY_SUSSEX,WALES',
+    }
+
+    cy.task('setFeatureFlags', testFlags)
   })
 
   it('Page accessible', () => {
@@ -100,6 +106,59 @@ context('pilot', () => {
     const page = Page.visit(PilotPage, { orderId: mockOrderId })
 
     page.form.pilotField.shouldNotHaveOption('Licence Variation Project')
+  })
+
+  it('Should disable DAPOL option and display message stating why if probation region not in pilot and isp is no', () => {
+    cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+    mockDefaultOrder.monitoringConditions.hdc = 'YES'
+    stubGetOrder({
+      ...mockDefaultOrder,
+      interestedParties: {
+        notifyingOrganisation: 'YOUTH_COURT',
+        notifyingOrganisationName: 'PENZANCE_YOUTH_COURT',
+        notifyingOrganisationEmail: 'notifying@organisation',
+        responsibleOrganisation: 'PROBATION',
+        responsibleOrganisationEmail: 'responsible@organisation',
+        responsibleOrganisationRegion: 'YORKSHIRE_AND_THE_HUMBER',
+        responsibleOfficerName: 'name',
+        responsibleOfficerPhoneNumber: '01234567891',
+      },
+    })
+
+    Page.visit(PilotPage, { orderId: mockOrderId })
+
+    cy.get('input[type="radio"][value="DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC"]').should(
+      'be.disabled',
+    )
+
+    cy.get('.govuk-inset-text').contains(
+      'The device wearer is being managed by the Yorkshire and the Humber probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region. Any queries around pilot eligibility need to be raised with the appropriate COM.',
+    )
+  })
+
+  it('Should enabled DAPOL option and display message stating why if probation region not in pilot and isp is yes', () => {
+    cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+    mockDefaultOrder.monitoringConditions.hdc = 'YES'
+    stubGetOrder({
+      ...mockDefaultOrder,
+      interestedParties: {
+        notifyingOrganisation: 'YOUTH_COURT',
+        notifyingOrganisationName: 'PENZANCE_YOUTH_COURT',
+        notifyingOrganisationEmail: 'notifying@organisation',
+        responsibleOrganisation: 'PROBATION',
+        responsibleOrganisationEmail: 'responsible@organisation',
+        responsibleOrganisationRegion: 'YORKSHIRE_AND_THE_HUMBER',
+        responsibleOfficerName: 'name',
+        responsibleOfficerPhoneNumber: '01234567891',
+      },
+      isSentencingAct: true,
+    })
+
+    Page.visit(PilotPage, { orderId: mockOrderId })
+
+    cy.get('input[type="radio"][value="DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC"]').should(
+      'be.enabled',
+    )
   })
 
   it('dapol option is disabled if not probation user', () => {
