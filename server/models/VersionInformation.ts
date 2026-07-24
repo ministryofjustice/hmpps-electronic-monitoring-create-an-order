@@ -13,7 +13,6 @@ const VersionInformationModel = z.object({
   notifyingOrganisationName: z.string().nullable().optional(),
   lastUpdatedDateTime: z.string().datetime().nullable().optional(),
   lastUpdatedBy: z.string().nullable().optional(),
-  isSentencingAct: z.boolean().nullable().optional(),
 })
 
 export type VersionInformation = z.infer<typeof VersionInformationModel>

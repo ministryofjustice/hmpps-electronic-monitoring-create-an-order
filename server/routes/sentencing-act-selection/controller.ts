@@ -4,6 +4,7 @@ import { validationErrors } from '../../constants/validationErrors'
 import YesNoQuestionPageController from '../baseControllers/yes-no-question-page/controller'
 import SentencingActService from './SentencingActService'
 import { isValidationResult } from '../../models/Validation'
+import { isNullOrUndefined } from '../../utils/utils'
 
 export default class SentencingActSelection extends YesNoQuestionPageController {
   constructor(private readonly sentencingActService: SentencingActService) {
@@ -13,7 +14,7 @@ export default class SentencingActSelection extends YesNoQuestionPageController 
   view: RequestHandler = async (req: Request, res: Response) => {
     const current = req.order!.isSentencingAct
     let value
-    if (current == null || current === undefined) {
+    if (isNullOrUndefined(value)) {
       value = undefined
     } else if (current) {
       value = 'yes'
