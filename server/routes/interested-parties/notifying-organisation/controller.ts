@@ -61,8 +61,9 @@ export default class NotifingOrganisationController extends InterestedPartiesBas
 
     const isPrisonOrYouthUser = cohort === 'PRISON'
     const selectedPrisonService = validationResult.data.notifyingOrganisation === 'PRISON'
+    const notAnsweredIsSentencingAct = order.isSentencingAct === null || order.isSentencingAct === undefined
 
-    if (isPrisonOrYouthUser && selectedPrisonService) {
+    if (isPrisonOrYouthUser && selectedPrisonService && notAnsweredIsSentencingAct) {
       res.redirect(paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION.replace(':orderId', order.id))
       return
     }
