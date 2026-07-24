@@ -15,7 +15,7 @@ const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
         responsibleOfficerName: '',
         responsibleOfficerPhoneNumber: '',
         responsibleOrganisation: 'PROBATION',
-        responsibleOrganisationRegion: 'EAST_MIDLANDS',
+        responsibleOrganisationRegion: 'WALES',
         responsibleOrganisationEmail: 'responsible@organisation',
       },
     },
@@ -30,6 +30,12 @@ context('pilot', () => {
     stubGetOrder()
 
     cy.signIn()
+
+    const testFlags = {
+      DAPOL_PILOT_PROBATION_REGIONS: 'KENT_SURREY_SUSSEX,WALES',
+    }
+
+    cy.task('setFeatureFlags', testFlags)
   })
 
   it('Should submit the form', () => {
