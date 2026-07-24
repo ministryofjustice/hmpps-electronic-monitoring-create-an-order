@@ -7,6 +7,7 @@ import ConfirmVariationPage from '../../../pages/order/variation/confirmVariatio
 import IsRejectionPage from '../../../e2e/order/edit-order/is-rejection/isRejectionPage'
 import InterestedPartiesCheckYourAnswersPage from '../../../e2e/order/interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
 import NotifyingOrganisationPage from '../../../e2e/order/interested-parties/notifying-organisation/notifyingOrganisationPage'
+import SentencingActPage from '../../../e2e/order/interested-parties/sentencing-act/sentencingActPage'
 
 context('Interested parties flow', () => {
   const fmsCaseId: string = uuidv4()
@@ -65,6 +66,13 @@ context('Interested parties flow', () => {
     Page.verifyOnPage(IsRejectionPage).isNotRejection()
     const yourDetailsPage = Page.verifyOnPage(NotifyingOrganisationPage)
     yourDetailsPage.form.continueButton.click()
+
+    cy.url().then(url => {
+      if (url.includes('/interest-parties/sentencing-act-selection')) {
+        Page.verifyOnPage(SentencingActPage).answer('no')
+      }
+    })
+
     const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
     orderSummaryPage.interestedPartiesTask.click()
