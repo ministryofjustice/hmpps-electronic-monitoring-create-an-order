@@ -93,7 +93,7 @@ describe('pilot controller', () => {
         expect.objectContaining({
           items: [
             {
-              disabled: false,
+              disabled: true,
               text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
               value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC',
             },
@@ -109,6 +109,8 @@ describe('pilot controller', () => {
               value: 'UNKNOWN',
             },
           ],
+          dapolMessage:
+            'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region. Any queries around pilot eligibility need to be raised with the appropriate COM.',
         }),
       )
     })
@@ -125,7 +127,7 @@ describe('pilot controller', () => {
         expect.objectContaining({
           items: [
             {
-              disabled: false,
+              disabled: true,
               text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
               value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
             },
@@ -141,6 +143,8 @@ describe('pilot controller', () => {
               value: 'UNKNOWN',
             },
           ],
+          dapolMessage:
+            'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region. Any queries around pilot eligibility need to be raised with the appropriate COM.',
         }),
       )
     })

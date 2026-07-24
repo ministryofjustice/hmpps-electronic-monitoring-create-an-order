@@ -8,8 +8,14 @@
 {% set questionName = "Pilot"%}
 {% block formInputs %}
     {% set hint %}
-        {{ questions.pilot.hint }}
+      {% if dapolMessage %}
+        {{ govukInsetText({
+          text: dapolMessage
+        }) }}
+      {% endif %}
+      {{ questions.pilot.hint }}
     {% endset %}
+
 
     {{ govukRadios({
       name: "pilot",
