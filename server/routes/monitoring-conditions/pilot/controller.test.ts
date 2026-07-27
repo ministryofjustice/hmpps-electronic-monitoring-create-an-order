@@ -102,6 +102,14 @@ describe('pilot controller', () => {
               value: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW',
             },
             {
+              disabled: true,
+              text: 'Licence Variation Project',
+              value: 'LICENCE_VARIATION_PROJECT',
+              conditional: {
+                html: 'The pilot is only for probation practitioners varying a licence in response to an escalation of risk or as an alternative to recall.',
+              },
+            },
+            {
               divider: 'or',
             },
             {
@@ -134,6 +142,14 @@ describe('pilot controller', () => {
             {
               text: 'GPS acquisitive crime (EMAC)',
               value: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+            },
+            {
+              disabled: true,
+              text: 'Licence Variation Project',
+              value: 'LICENCE_VARIATION_PROJECT',
+              conditional: {
+                html: 'The pilot is only for probation practitioners varying a licence in response to an escalation of risk or as an alternative to recall.',
+              },
             },
             {
               divider: 'or',
