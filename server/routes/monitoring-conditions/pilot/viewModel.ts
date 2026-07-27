@@ -93,7 +93,7 @@ const getDapolMessage = (order: Order): string => {
 const constructModel = (order: Order, data: MonitoringConditions, errors: ValidationResult): PilotModel => {
   const isDapolPilotProbationRegion = getDapolPilotProbationRegionStatus(order)
   const isLicenceProbationRegion = getLicencePilotProbationRegionStatus(order)
-  const isSentencingAct = order?.isSentencingAct ?? false;
+  const isSentencingAct = order?.isSentencingAct ?? false
   const model: PilotModel = {
     pilot: {
       value: data.pilot || '',
@@ -103,7 +103,7 @@ const constructModel = (order: Order, data: MonitoringConditions, errors: Valida
       isLicenceProbationRegion,
       data.hdc,
       order.interestedParties?.notifyingOrganisation,
-      isSentencingAct
+      isSentencingAct,
     ),
     dapolMessage: getDapolMessage(order),
     errorSummary: null,
@@ -121,7 +121,7 @@ const getItems = (
   isLicencePilotProbationRegion: boolean,
   hdc?: string | null,
   notifyingOrganisation?: string | null,
-  isSentencingAct : boolean = false
+  isSentencingAct: boolean = false,
 ): Item[] => {
   let items: Item[]
   if (hdc === 'NO') {
@@ -154,7 +154,7 @@ const getItems = (
     ]
   }
 
-   if (notifyingOrganisation === 'PROBATION' && !isSentencingAct) {
+  if (notifyingOrganisation === 'PROBATION' && !isSentencingAct) {
     items.splice(2, 0, {
       text: 'Licence Variation Project',
       value: 'LICENCE_VARIATION_PROJECT',

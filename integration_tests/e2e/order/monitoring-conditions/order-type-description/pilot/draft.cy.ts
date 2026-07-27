@@ -102,7 +102,7 @@ context('pilot', () => {
         responsibleOfficerName: 'name',
         responsibleOfficerPhoneNumber: '01234567891',
       },
-      isSentencingAct: false
+      isSentencingAct: false,
     })
 
     const page = Page.visit(PilotPage, { orderId: mockOrderId })
@@ -163,7 +163,7 @@ context('pilot', () => {
     )
   })
 
-    it('Should enable licence variation project option if probation user and region in pilot and is not sentencing act', () => {
+  it('Should enable licence variation project option if probation user and region in pilot and is not sentencing act', () => {
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
     mockDefaultOrder.monitoringConditions.hdc = 'YES'
     stubGetOrder({
@@ -178,13 +178,13 @@ context('pilot', () => {
         responsibleOfficerName: 'name',
         responsibleOfficerPhoneNumber: '01234567891',
       },
-      isSentencingAct: false
+      isSentencingAct: false,
     })
 
-    const page = Page.visit(PilotPage, { orderId: mockOrderId })
+    Page.visit(PilotPage, { orderId: mockOrderId })
 
     cy.get('input[type="radio"][value="LICENCE_VARIATION_PROJECT"]').should('be.enabled')
-    })
+  })
 
   it('dapol option is disabled if not probation user', () => {
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -225,10 +225,10 @@ context('pilot', () => {
       },
     })
 
-    const page = Page.visit(PilotPage, { orderId: mockOrderId })
+    Page.visit(PilotPage, { orderId: mockOrderId })
 
     cy.get('input[type="radio"][value="LICENCE_VARIATION_PROJECT"]').should('be.disabled')
-    
+
     cy.contains(
       '.govuk-inset-text',
       'The device wearer is being managed by the London probation region. To be eligible for the Licence Variation pilot they must be managed by an in-scope region.',
