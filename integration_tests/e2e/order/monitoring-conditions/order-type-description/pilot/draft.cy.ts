@@ -65,6 +65,7 @@ context('pilot', () => {
 
     const testFlags = {
       DAPOL_PILOT_PROBATION_REGIONS: 'KENT_SURREY_SUSSEX,WALES',
+      LICENCE_VARIATION_PROBATION_REGIONS: 'YORKSHIRE_AND_THE_HUMBER,EAST_MIDLANDS',
     }
 
     cy.task('setFeatureFlags', testFlags)
@@ -101,6 +102,7 @@ context('pilot', () => {
         responsibleOfficerName: 'name',
         responsibleOfficerPhoneNumber: '01234567891',
       },
+      isSentencingAct: false
     })
 
     const page = Page.visit(PilotPage, { orderId: mockOrderId })
@@ -161,6 +163,29 @@ context('pilot', () => {
     )
   })
 
+    it('Should enable licence variation project option if probation user and region in pilot and is not sentencing act', () => {
+    cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+    mockDefaultOrder.monitoringConditions.hdc = 'YES'
+    stubGetOrder({
+      ...mockDefaultOrder,
+      interestedParties: {
+        notifyingOrganisation: 'PROBATION',
+        notifyingOrganisationName: '',
+        notifyingOrganisationEmail: 'notifying@organisation',
+        responsibleOrganisation: 'PROBATION',
+        responsibleOrganisationEmail: 'responsible@organisation',
+        responsibleOrganisationRegion: 'YORKSHIRE_AND_THE_HUMBER',
+        responsibleOfficerName: 'name',
+        responsibleOfficerPhoneNumber: '01234567891',
+      },
+      isSentencingAct: false
+    })
+
+    const page = Page.visit(PilotPage, { orderId: mockOrderId })
+
+    cy.get('input[type="radio"][value="LICENCE_VARIATION_PROJECT"]').should('be.enabled')
+    })
+
   it('dapol option is disabled if not probation user', () => {
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
     mockDefaultOrder.monitoringConditions.hdc = 'YES'
@@ -183,7 +208,7 @@ context('pilot', () => {
     page.form.pilotField.shouldHaveDisabledOption('Domestic Abuse Perpetrator on Licence (DAPOL)')
   })
 
-  it('Should not show licence variation option or display message to probation users', () => {
+  it('Should disable licence variation option and display message stating why if probation region not in pilot', () => {
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
     mockDefaultOrder.monitoringConditions.hdc = 'YES'
     stubGetOrder({
@@ -202,12 +227,12 @@ context('pilot', () => {
 
     const page = Page.visit(PilotPage, { orderId: mockOrderId })
 
-    page.form.pilotField.shouldNotHaveOption('Licence Variation Project')
-
+    cy.get('input[type="radio"][value="LICENCE_VARIATION_PROJECT"]').should('be.disabled')
+    
     cy.contains(
       '.govuk-inset-text',
       'The device wearer is being managed by the London probation region. To be eligible for the Licence Variation pilot they must be managed by an in-scope region.',
-    ).should('not.exist')
+    )
   })
 
   it('hdc yes', () => {
