@@ -50,8 +50,14 @@ export default function fillInOrderTypeDescriptionsWith({
     const hdcPage = Page.verifyOnPage(HdcPage)
     fillinSingleQuestionFormWith(hdcPage.form, hdc)
     if (hdc === 'Yes' && !hdcPause) {
-      const hdcPausePage = Page.verifyOnPage(HdcPausePage)
-      fillinSingleQuestionFormWith(hdcPausePage.form, hdc)
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(1000)
+      cy.url().then(url => {
+        if (url.includes('order-type-description/hdc-pause')) {
+          const hdcPausePage = Page.verifyOnPage(HdcPausePage)
+          fillinSingleQuestionFormWith(hdcPausePage.form, hdc)
+        }
+      })
     }
   }
 

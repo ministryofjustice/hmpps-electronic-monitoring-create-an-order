@@ -190,11 +190,15 @@ export default class OrderTasksPage extends AppPage {
       responsibleOrgPage.form.fillInWith(interestedParties)
       responsibleOrgPage.form.continueButton.click()
 
-      if (interestedParties.responsibleOrganisation.toUpperCase() === 'PROBATION') {
+      /* if (interestedParties.responsibleOrganisation.toUpperCase() === 'PROBATION') {
         const nationalSecurityDirectoratePage = Page.verifyOnPage(NationalSecurityDirectoratePage)
         nationalSecurityDirectoratePage.form.fillInWith('No')
         nationalSecurityDirectoratePage.form.continueButton.click()
-      }
+      } */
+
+      const nationalSecurityDirectoratePage = Page.verifyOnPage(NationalSecurityDirectoratePage)
+      nationalSecurityDirectoratePage.form.fillInWith('No')
+      nationalSecurityDirectoratePage.form.continueButton.click()
 
       if (
         interestedParties.responsibleOrganisation.toUpperCase() === 'PROBATION' &&
