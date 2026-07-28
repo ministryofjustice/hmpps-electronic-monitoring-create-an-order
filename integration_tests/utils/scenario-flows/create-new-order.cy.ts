@@ -12,8 +12,9 @@ export default function createNewOrder({ notifyingOrganisation, stubSignin = tru
   const notifyingOrganisationPage = Page.verifyOnPage(NotifyingOrganisationPage)
   notifyingOrganisationPage.form.fillInWith(notifyingOrganisation)
   notifyingOrganisationPage.form.continueButton.click()
-  
+
   // Kitchen sink moves too quickly, this was here to avoid breaking existing tests
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(1000)
   cy.url().then(url => {
     if (url.includes('/interest-parties/sentencing-act-selection')) {
