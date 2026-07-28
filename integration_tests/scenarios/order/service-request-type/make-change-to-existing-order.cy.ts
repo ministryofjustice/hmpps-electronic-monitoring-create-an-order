@@ -145,11 +145,9 @@ context('Service-Request-Types', () => {
     const yourDetailsPage = Page.verifyOnPage(NotifyingOrganisationPage)
     yourDetailsPage.form.continueButton.click()
 
-    cy.url().then(url => {
-      if (url.includes('/interest-parties/sentencing-act-selection')) {
-        Page.verifyOnPage(SentencingActPage).answer('no')
-      }
-    })
+    const sentencingActPage = Page.verifyOnPage(SentencingActPage)
+    sentencingActPage.form.fillInWith('No')
+    sentencingActPage.continueButton.click()
 
     orderSummaryPage.fillInVariationsDetails({ variationDetails: variation })
     orderSummaryPage.aboutTheDeviceWearerTask.click()

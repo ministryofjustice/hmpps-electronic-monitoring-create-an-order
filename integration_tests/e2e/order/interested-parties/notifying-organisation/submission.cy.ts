@@ -68,7 +68,9 @@ context('Submit notifying organisations', () => {
 
       page.form.continueButton.click()
 
-      Page.verifyOnPage(SentencingActPage).answer('no')
+      const sentencingActPage = Page.verifyOnPage(SentencingActPage)
+      sentencingActPage.form.fillInWith('No')
+      sentencingActPage.continueButton.click()
 
       cy.task('stubCemoVerifyRequestReceived', {
         uri: `/orders/${mockOrderId}${submitPath}`,
