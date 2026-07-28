@@ -75,6 +75,7 @@ const stubGetOrder = ({
   curfewTimeTable = [],
   monitoringConditionsTrail = null,
   monitoringConditionsAlcohol = null,
+  isSentencingAct = false,
 } = {}) => {
   cy.task('stubCemoGetOrder', {
     httpStatus: 200,
@@ -98,18 +99,18 @@ const stubGetOrder = ({
       curfewTimeTable,
       monitoringConditionsTrail,
       monitoringConditionsAlcohol,
+      isSentencingAct,
     },
   })
 }
 
 const mockOrderId = uuidv4()
-// we are skipping the old monitoring types eligibility flow
-context.skip('monitoring types', () => {
+context('monitoring types', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-    stubGetOrder()
+    stubGetOrder({ isSentencingAct: false })
 
     cy.signIn()
   })
@@ -129,7 +130,6 @@ context.skip('monitoring types', () => {
     page.form.monitoringTypesField.shouldNotBeDisabled()
     page.form.monitoringTypesField.shouldHaveEnabledOption('Curfew')
     page.form.monitoringTypesField.shouldHaveEnabledOption('Exclusion zone monitoring')
-    page.form.monitoringTypesField.shouldHaveEnabledOption('Restriction zone monitoring')
     page.form.monitoringTypesField.shouldHaveEnabledOption('Trail monitoring')
     page.form.monitoringTypesField.shouldHaveEnabledOption('Mandatory attendance monitoring')
     page.form.monitoringTypesField.shouldHaveEnabledOption('Alcohol monitoring')
@@ -318,6 +318,30 @@ context.skip('monitoring types', () => {
       page.form.continueButton.should('be.disabled')
 
       page.form.message.contains('There are no additional eligible monitoring types available to add')
+    })
+  })
+
+  context('isSentencingAct order', () => {
+    it('should render the restriction zone field', () => {
+      stubGetOrder({ isSentencingAct: true })
+
+      const page = Page.visit(MonitoringTypePage, { orderId: mockOrderId })
+
+      page.header.userName().should('contain.text', 'J. Smith')
+      page.header.phaseBanner().should('contain.text', 'dev')
+
+      page.form.monitoringTypesField.shouldExist()
+      page.form.monitoringTypesField.shouldNotBeDisabled()
+      page.form.monitoringTypesField.shouldHaveEnabledOption('Curfew')
+      page.form.monitoringTypesField.shouldHaveEnabledOption('Exclusion zone monitoring')
+      page.form.monitoringTypesField.shouldHaveEnabledOption('Trail monitoring')
+      page.form.monitoringTypesField.shouldHaveEnabledOption('Restriction zone monitoring')
+      page.form.monitoringTypesField.shouldHaveEnabledOption('Mandatory attendance monitoring')
+      page.form.monitoringTypesField.shouldHaveEnabledOption('Alcohol monitoring')
+
+      page.form.continueButton.should('exist')
+
+      page.form.ReturnToMonitoringListPageButton.should('not.exist')
     })
   })
 })

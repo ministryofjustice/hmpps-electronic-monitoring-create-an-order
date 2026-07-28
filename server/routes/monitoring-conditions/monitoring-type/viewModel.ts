@@ -25,6 +25,7 @@ export type MonitoringTypeModel = {
   message?: string
   exception?: boolean
   allconditionsDisabled?: boolean
+  showRestrictionZone?: boolean
 } & {
   [K in keyof MonitoringTypes]: {
     disabled?: boolean
@@ -32,8 +33,8 @@ export type MonitoringTypeModel = {
 }
 
 const constructModel = (order: Order, errors: ValidationResult): MonitoringTypeModel => {
-  const enabled = getMonitoringEligibilityService(order.isSentencingAct === true).getEnabled(order)
-
+  const isSentencingAct = order.isSentencingAct === true
+  const enabled = getMonitoringEligibilityService(isSentencingAct).getEnabled(order)
   const model: MonitoringTypeModel = {
     message: enabled.message,
     exception: enabled.exception,
@@ -52,7 +53,7 @@ const constructModel = (order: Order, errors: ValidationResult): MonitoringTypeM
     model.allconditionsDisabled = true
   }
 
-  return model
+  return { ...model, showRestrictionZone: isSentencingAct }
 }
 
 const isConditionDisabled = (order: Order, condition: keyof MonitoringTypes) => {

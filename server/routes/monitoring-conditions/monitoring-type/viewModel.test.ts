@@ -5,6 +5,7 @@ import { createAddress, getMockOrder } from '../../../../test/mocks/mockOrder'
 describe('model', () => {
   const mockOrder = getMockOrder()
   mockOrder.addresses.push(createAddress())
+  mockOrder.isSentencingAct = false
   mockOrder.deviceWearer.adultAtTimeOfInstallation = true
 
   it('empty form data', () => {
@@ -16,8 +17,9 @@ describe('model', () => {
       trail: { disabled: false },
       mandatoryAttendance: { disabled: false },
       alcohol: { disabled: false },
-      restrictionZone: { disabled: false },
+      restrictionZone: { disabled: true },
       errorSummary: null,
+      showRestrictionZone: false,
     }
 
     expect(model).toEqual(expected)
@@ -33,9 +35,10 @@ describe('model', () => {
       trail: { disabled: false },
       mandatoryAttendance: { disabled: false },
       alcohol: { disabled: false },
-      restrictionZone: { disabled: false },
+      restrictionZone: { disabled: true },
       error: { text: 'some error' },
       errorSummary: { errorList: [{ href: '#monitoringType', text: 'some error' }], titleText: 'There is a problem' },
+      showRestrictionZone: false,
     }
 
     expect(model).toEqual(expected)

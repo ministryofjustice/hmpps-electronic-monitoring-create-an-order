@@ -86,7 +86,7 @@ export class DefaultMonitoringEligibilityService {
       }
     }
 
-    return { options: ['curfew', 'exclusionZone', 'trail', 'mandatoryAttendance', 'alcohol', 'restrictionZone'] }
+    return { options: ['curfew', 'exclusionZone', 'trail', 'mandatoryAttendance', 'alcohol'] }
   }
 }
 

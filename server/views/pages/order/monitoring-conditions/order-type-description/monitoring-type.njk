@@ -36,7 +36,50 @@
   {% endset %}
 {% endif %}
 
-
+{% set monitoringItems = [
+  {
+    value: "curfew",
+    text: "Curfew",
+    hint: { text: "Monitoring the device wearer adheres to set times and days that they must remain at a location." },
+    disabled: curfew.disabled
+  },
+  {
+    value: "exclusionZone",
+    text: "Exclusion zone monitoring",
+    hint: { text: "Prevents the device wearer entering areas or visiting locations at set times." },
+    disabled: exclusionZone.disabled
+  }
+] %}
+{% if showRestrictionZone %}
+  {% set monitoringItems = monitoringItems.concat([
+    {
+      value: "restrictionZone",
+      text: "Restriction zone monitoring",
+      hint: { text: "Prevents the device wearer leaving areas or visiting locations at set times." },
+      disabled: restrictionZone.disabled
+    }
+  ]) %}
+{% endif %}
+{% set monitoringItems = monitoringItems.concat([
+  {
+    value: "trail",
+    text: "Trail monitoring",
+    hint: { text: "Recording and gathering data on movements of the device wearer throughout the day." },
+    disabled: trail.disabled
+  },
+  {
+    value: "mandatoryAttendance",
+    text: "Mandatory attendance monitoring",
+    hint: { text: "Recording the device wearer's attendance at arranged meetings or places." },
+    disabled: mandatoryAttendance.disabled
+  },
+  {
+    value: "alcohol",
+    text: "Alcohol monitoring",
+    hint: { text: "Measuring alcohol levels of the device wearer or recording they are abstaining from drinking alcohol." },
+    disabled: alcohol.disabled
+  }
+]) %}
 
 {{ govukRadios({
   name: "monitoringType",
@@ -49,56 +92,7 @@
   hint: {
     text: questions.monitoringRequired.hint
   },
-  items: [
-    {
-      value: "curfew",
-      text: "Curfew",
-      hint: {
-        text: "Monitoring the device wearer adheres to set times and days that they must remain at a location."
-      },
-      disabled: curfew.disabled
-    },
-    {
-      value: "exclusionZone",
-      text: "Exclusion zone monitoring",
-      hint: {
-        text: "Prevents the device wearer entering areas or visiting locations at set times."
-      },
-      disabled: exclusionZone.disabled
-    },
-    {
-      value: "restrictionZone",
-      text: "Restriction zone monitoring",
-      hint: {
-        text: "Prevents the device wearer leaving areas or visiting locations at set times."
-      },
-      disabled: restrictionZone.disabled
-    },
-    {
-      value: "trail",
-      text: "Trail monitoring",
-      hint: {
-        text: "Recording and gathering data on movements of the device wearer throughout the day."
-      },
-      disabled: trail.disabled
-    },
-    {
-      value: "mandatoryAttendance",
-      text: "Mandatory attendance monitoring",
-      hint: {
-        text: "Recording the device wearer's attendance at arranged meetings or places."
-      },
-      disabled: mandatoryAttendance.disabled
-    },
-    {
-      value: "alcohol",
-      text: "Alcohol monitoring",
-      hint: {
-        text: "Measuring alcohol levels of the device wearer or recording they are abstaining from drinking alcohol."
-      },
-      disabled: alcohol.disabled
-    }
-  ],
+  items: monitoringItems,
   errorMessage: error,
   disabled: not isOrderEditable
 }) }}
