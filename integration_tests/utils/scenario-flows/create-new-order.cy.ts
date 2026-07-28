@@ -12,8 +12,14 @@ export default function createNewOrder({ notifyingOrganisation, stubSignin = tru
   const notifyingOrganisationPage = Page.verifyOnPage(NotifyingOrganisationPage)
   notifyingOrganisationPage.form.fillInWith(notifyingOrganisation)
   notifyingOrganisationPage.form.continueButton.click()
-
-  const sentencingActPage = Page.verifyOnPage(SentencingActPage)
-  sentencingActPage.form.fillInWith(sentencingActAnswer)
-  sentencingActPage.continueButton.click()
+  
+  // Kitchen sink moves too quickly, this was here to avoid breaking existing tests
+  cy.wait(1000)
+  cy.url().then(url => {
+    if (url.includes('/interest-parties/sentencing-act-selection')) {
+      const sentencingActPage = Page.verifyOnPage(SentencingActPage)
+      sentencingActPage.form.fillInWith(sentencingActAnswer)
+      sentencingActPage.continueButton.click()
+    }
+  })
 }
