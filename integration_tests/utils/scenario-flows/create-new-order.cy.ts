@@ -3,7 +3,7 @@ import SentencingActPage from '../../e2e/order/interested-parties/sentencing-act
 import IndexPage from '../../pages'
 import Page from '../../pages/page'
 
-export default function createNewOrder({ notifyingOrganisation, stubSignin = true }): void {
+export default function createNewOrder({ notifyingOrganisation, stubSignin = true, sentencingActAnswer = 'no' }): void {
   if (stubSignin) {
     cy.signIn()
   }
@@ -15,7 +15,7 @@ export default function createNewOrder({ notifyingOrganisation, stubSignin = tru
 
   cy.url().then(url => {
     if (url.includes('/interest-parties/sentencing-act-selection')) {
-      Page.verifyOnPage(SentencingActPage).answer('no')
+      Page.verifyOnPage(SentencingActPage).form.fillInWith(sentencingActAnswer)
     }
   })
 }
