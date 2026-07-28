@@ -1,6 +1,7 @@
 import paths from '../../../../../server/constants/paths'
 import SentencingActFormComponent from './sentencingActFormComponent'
 import AppFormPage from '../../../../pages/appFormPage'
+import { PageElement } from '../../../../pages/page'
 
 export default class SentencingActPage extends AppFormPage {
   public form = new SentencingActFormComponent()

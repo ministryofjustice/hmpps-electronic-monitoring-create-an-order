@@ -9,7 +9,6 @@ import SubmitSuccessPage from '../pages/order/submit-success'
 import { stubAttachments } from './utils'
 import SearchPage from '../pages/search'
 import createNewOrder from '../utils/scenario-flows/create-new-order.cy'
-import SentencingActPage from '../e2e/order/interested-parties/sentencing-act/sentencingActPage'
 
 context('The kitchen sink', () => {
   const takeScreenshots = config.screenshots_enabled
@@ -137,8 +136,6 @@ context('The kitchen sink', () => {
     it('Should successfully submit the order to the FMS API', () => {
       createNewOrder({ notifyingOrganisation: interestedParties, sentencingActAnswer: 'Yes' })
 
-      Page.verifyOnPage(SentencingActPage).form.fillInWith('Yes')
-      Page.verifyOnPage(SentencingActPage).continueButton.click()
       const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       orderSummaryPage.fillInNewOrderWith({
         deviceWearerDetails,

@@ -13,9 +13,7 @@ export default function createNewOrder({ notifyingOrganisation, stubSignin = tru
   notifyingOrganisationPage.form.fillInWith(notifyingOrganisation)
   notifyingOrganisationPage.form.continueButton.click()
 
-  cy.url().then(url => {
-    if (url.includes('/interest-parties/sentencing-act-selection')) {
-      Page.verifyOnPage(SentencingActPage).form.fillInWith(sentencingActAnswer)
-    }
-  })
+  const sentencingActPage = Page.verifyOnPage(SentencingActPage)
+  sentencingActPage.form.fillInWith(sentencingActAnswer)
+  sentencingActPage.continueButton.click()
 }
