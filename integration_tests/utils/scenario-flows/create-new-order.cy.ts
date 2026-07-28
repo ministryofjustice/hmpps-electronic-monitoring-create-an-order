@@ -3,7 +3,7 @@ import SentencingActPage from '../../e2e/order/interested-parties/sentencing-act
 import IndexPage from '../../pages'
 import Page from '../../pages/page'
 
-export default function createNewOrder({ notifyingOrganisation, stubSignin = true, sentencingActAnswer = 'no' }): void {
+export default function createNewOrder({ notifyingOrganisation, stubSignin = true, sentencingActAnswer = 'No' }): void {
   if (stubSignin) {
     cy.signIn()
   }
