@@ -236,6 +236,7 @@ context('pilot', () => {
   })
 
   it('hdc yes', () => {
+    stubGetOrder({ ...mockDefaultOrder, isSentencingAct: true })
     const hdcPage = Page.visit(HdcPage, { orderId: mockOrderId })
 
     hdcPage.form.fillInWith('Yes')
