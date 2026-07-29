@@ -6,36 +6,39 @@ import OffenceExistingItemPage from './offenceExistingItemPage'
 
 const mockOrderId = uuidv4()
 const isRadio = true
-const stubOrder = (notifyingOrganisation = 'CROWN_COURT', offences: Offence[] = []) => {
-  cy.task('stubCemoGetOrder', {
-    httpStatus: 200,
-    id: mockOrderId,
-    status: 'IN_PROGRESS',
-    order: {
-      interestedParties: {
-        notifyingOrganisation,
-        notifyingOrganisationName: '',
-        notifyingOrganisationEmail: '',
-        responsibleOfficerName: '',
-        responsibleOfficerPhoneNumber: '',
-        responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
-        responsibleOrganisationAddress: {
-          addressType: 'RESPONSIBLE_ORGANISATION',
-          addressLine1: '',
-          addressLine2: '',
-          addressLine3: '',
-          addressLine4: '',
-          postcode: '',
+
+context('Draft Offences DDv6', () => {
+  const stubOrder = (notifyingOrganisation = 'CROWN_COURT', offences: Offence[] = []) => {
+    cy.task('stubCemoGetOrder', {
+      httpStatus: 200,
+      id: mockOrderId,
+      status: 'IN_PROGRESS',
+      order: {
+        dataDictionaryVersion: 'DDV6',
+        interestedParties: {
+          notifyingOrganisation,
+          notifyingOrganisationName: '',
+          notifyingOrganisationEmail: '',
+          responsibleOfficerName: '',
+          responsibleOfficerPhoneNumber: '',
+          responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+          responsibleOrganisationAddress: {
+            addressType: 'RESPONSIBLE_ORGANISATION',
+            addressLine1: '',
+            addressLine2: '',
+            addressLine3: '',
+            addressLine4: '',
+            postcode: '',
+          },
+          responsibleOrganisationEmail: '',
+          responsibleOrganisationPhoneNumber: '',
+          responsibleOrganisationRegion: '',
         },
-        responsibleOrganisationEmail: '',
-        responsibleOrganisationPhoneNumber: '',
-        responsibleOrganisationRegion: '',
+        offences,
       },
-      offences,
-    },
-  })
-}
-context('Draft Offences', () => {
+    })
+  }
+
   context('Notifying organisation is court', () => {
     beforeEach(() => {
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -58,6 +61,14 @@ context('Draft Offences', () => {
       cy.get('#offenceDate').should('exist')
       page.form.shouldHaveAllOptions()
       page.form.getOffenceTypeField(isRadio).shouldNotHaveOption('They have not committed an offence')
+    })
+
+    it('Should not display DDv7 options', () => {
+      const page = Page.visit(OffencePage, { orderId: mockOrderId })
+      page.form.getOffenceTypeField().shouldExist()
+      page.form.shouldHaveAllOptions()
+      page.form.getOffenceTypeField().shouldNotHaveOption('Racial offences and hate crimes')
+      page.form.getOffenceTypeField().shouldNotHaveOption('Firearms and battery offences')
     })
 
     it('Should load offence type and offence date from existing offence', () => {
@@ -132,6 +143,72 @@ context('Draft Offences', () => {
       cy.get('#offenceDate').should('not.exist')
       page.form.shouldHaveAllOptions()
       page.form.getOffenceTypeField().shouldHaveOption('They have not committed an offence')
+    })
+  })
+})
+
+context('Draft Offences DDv7', () => {
+  const stubOrder = (notifyingOrganisation = 'CROWN_COURT', offences: Offence[] = []) => {
+    cy.task('stubCemoGetOrder', {
+      httpStatus: 200,
+      id: mockOrderId,
+      status: 'IN_PROGRESS',
+      order: {
+        dataDictionaryVersion: 'DDV7',
+        interestedParties: {
+          notifyingOrganisation,
+          notifyingOrganisationName: '',
+          notifyingOrganisationEmail: '',
+          responsibleOfficerName: '',
+          responsibleOfficerPhoneNumber: '',
+          responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+          responsibleOrganisationAddress: {
+            addressType: 'RESPONSIBLE_ORGANISATION',
+            addressLine1: '',
+            addressLine2: '',
+            addressLine3: '',
+            addressLine4: '',
+            postcode: '',
+          },
+          responsibleOrganisationEmail: '',
+          responsibleOrganisationPhoneNumber: '',
+          responsibleOrganisationRegion: '',
+        },
+        offences,
+      },
+    })
+  }
+
+  context('Notifying organisation is court', () => {
+    beforeEach(() => {
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.signIn()
+    })
+
+    it('Should display all offence options and show date question', () => {
+      stubOrder()
+      const page = Page.visit(OffencePage, { orderId: mockOrderId })
+      page.header.userName().should('contain.text', 'J. Smith')
+      page.header.phaseBanner().should('contain.text', 'dev')
+      page.form.saveAndContinueButton.should('exist')
+      page.form.saveAsDraftButton.should('exist')
+      page.form.shouldNotBeDisabled(isRadio)
+      page.errorSummary.shouldNotExist()
+      page.backButton.should('exist')
+      page.checkIsAccessible()
+      page.form.getOffenceTypeField(isRadio).shouldExist()
+      cy.get('#offenceDate').should('exist')
+      page.form.shouldHaveAllOptions()
+      page.form.getOffenceTypeField(isRadio).shouldNotHaveOption('They have not committed an offence')
+    })
+
+    it('Should display DDv7 options', () => {
+      const page = Page.visit(OffencePage, { orderId: mockOrderId })
+      page.form.getOffenceTypeField().shouldExist()
+      page.form.shouldHaveAllOptions()
+      page.form.getOffenceTypeField().shouldHaveOption('Racial offences and hate crimes')
+      page.form.getOffenceTypeField().shouldHaveOption('Firearms and battery offences')
     })
   })
 })

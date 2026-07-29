@@ -1,13 +1,15 @@
-import Offences from '../../../types/i18n/reference/offences'
+import OffencesDDv7 from '../../../../types/i18n/reference/ddv7/offences'
 
-const offences: Offences = {
+const offencesDDv7: OffencesDDv7 = {
   VIOLENCE_AGAINST_THE_PERSON: 'Violence against the person',
+  RACIAL_OFFENCES_AND_HATE_CRIMES: 'Racial offences and hate crimes',
   SEXUAL_OFFENCES: 'Sexual offences',
   ROBBERY: 'Robbery',
   THEFT_OFFENCES: 'Theft Offences',
   CRIMINAL_DAMAGE_AND_ARSON: 'Criminal damage and arson',
   DRUG_OFFENCES: 'Drug offences',
   POSSESSION_OF_WEAPONS: 'Possession of weapons',
+  FIREARMS_AND_BATTERY: 'Firearms and battery offences',
   PUBLIC_ORDER_OFFENCES: 'Public order offences',
   MISCELLANEOUS_CRIMES_AGAINST_SOCIETY: 'Miscellaneous crimes against society',
   FRAUD_OFFENCES: 'Fraud Offences',
@@ -18,4 +20,4 @@ const offences: Offences = {
   NO_OFFENCE_COMMITTED: 'They have not committed an offence',
 }
 
-export default offences
+export default offencesDDv7

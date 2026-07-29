@@ -13,6 +13,7 @@ import IsMappa from './isMappa'
 import MilitaryCourts from './militaryCourts'
 import NotifyingOrganisations, { NotifyingOrganisationsDDv5 } from './notifyingOrganisations'
 import Offences from './offences'
+import OffencesDDv7 from './ddv7/offences'
 import OrderTypeDescriptions from './orderTypeDescriptions'
 import OrderTypes from './orderTypes'
 import Pilots from './pilots'
@@ -108,6 +109,7 @@ type ReferenceCatalogDDv7 = Override<
   ReferenceCatalogDDv6,
   {
     probationDeliveryUnits: ProbationDeliveryUnitsDDv7
+    offences: OffencesDDv7
   }
 >
 
