@@ -30,6 +30,7 @@ import mappaLevel from './mappaLevel'
 import isMappa from './isMappa'
 import notifyingOrganisations from './notifyingOrganisations'
 import offences from './offences'
+import offencesDDv7 from './ddv7/offences'
 import orderTypeDescriptions from './orderTypeDescriptions'
 import orderTypes from './orderTypes'
 import prisons from './prisons'
@@ -124,6 +125,7 @@ const referenceCatalogDDv7: ReferenceCatalogDDv7 = {
   ...referenceCatalogDDv6,
   probationDeliveryUnits: probationDeliveryUnitsDDv7,
   probationRegionDeliveryUnits: probationRegionDeliveryUnitsDDv7,
+  offences: offencesDDv7,
 }
 
 const getReferenceData = (ddVersion: DataDictionaryVersion): ReferenceCatalog => {
