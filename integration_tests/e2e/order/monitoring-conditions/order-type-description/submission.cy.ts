@@ -31,6 +31,7 @@ const stubGetOrder = (notifyingOrg: string = 'PROBATION', ddVersion = 'DDV5') =>
         },
       ],
       dataDictionaryVersion: ddVersion,
+      isSentencingAct: true,
     },
   })
 }

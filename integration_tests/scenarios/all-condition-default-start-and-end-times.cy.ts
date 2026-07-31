@@ -134,7 +134,7 @@ context('The kitchen sink', () => {
     }
 
     it('With default start time and end time, british time is send to FMS', () => {
-      createNewOrder({ notifyingOrganisation: interestedParties })
+      createNewOrder({ notifyingOrganisation: interestedParties, sentencingActAnswer: 'Yes' })
 
       const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       cacheOrderId()

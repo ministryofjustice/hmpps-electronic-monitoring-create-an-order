@@ -9,7 +9,7 @@ const setSentencingActSelectionPageContent: SetSentencingActPageContent = {
     },
   },
   section: '',
-  title: '',
+  title: 'Sentencing act',
 }
 
 export default setSentencingActSelectionPageContent

@@ -23,6 +23,7 @@ const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
         responsibleOrganisationRegion: 'KENT_SURREY_SUSSEX',
         responsibleOrganisationEmail: '',
       },
+      isSentencingAct: true,
     },
   })
 }

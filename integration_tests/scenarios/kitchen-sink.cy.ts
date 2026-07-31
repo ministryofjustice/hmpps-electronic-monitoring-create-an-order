@@ -134,7 +134,7 @@ context('The kitchen sink', () => {
     }
 
     it('Should successfully submit the order to the FMS API', () => {
-      createNewOrder({ notifyingOrganisation: interestedParties })
+      createNewOrder({ notifyingOrganisation: interestedParties, sentencingActAnswer: 'No' })
 
       const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       orderSummaryPage.fillInNewOrderWith({

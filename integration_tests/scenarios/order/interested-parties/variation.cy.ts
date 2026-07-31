@@ -67,9 +67,13 @@ context('Interested parties flow', () => {
     const yourDetailsPage = Page.verifyOnPage(NotifyingOrganisationPage)
     yourDetailsPage.form.continueButton.click()
 
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(1000)
     cy.url().then(url => {
       if (url.includes('/interest-parties/sentencing-act-selection')) {
-        Page.verifyOnPage(SentencingActPage).answer('no')
+        const sentencingActPage = Page.verifyOnPage(SentencingActPage)
+        sentencingActPage.form.fillInWith('No')
+        sentencingActPage.continueButton.click()
       }
     })
 
