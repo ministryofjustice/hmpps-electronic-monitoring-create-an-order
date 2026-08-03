@@ -63,8 +63,7 @@ const EnforcementZoneAddToListFormDataValidator = (
           message: mustNoInPast,
           path: ['endDate'],
           params: { focusPath: 'day' },
-        }
-        )
+        })
       }
     })
     .transform(({ ...formData }) => ({

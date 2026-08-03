@@ -71,8 +71,8 @@ const getItems = (order: Order): Answer[] => {
           MONITORING_TYPE_NAMES.restrictionZone,
           `${zone.name}<br>From ${createDatePreview(zone.startDate)} to ${createDatePreview(zone.endDate)}`,
           paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':orderId', orderId)
-          .replace(':zoneId',`${zone.zoneId}`)
-          .replace(':zoneType', 'restriction'),
+            .replace(':zoneId', `${zone.zoneId}`)
+            .replace(':zoneType', 'restriction'),
           {
             deleteUri: paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE.replace(':orderId', orderId).replace(
               ':monitoringTypeId',
