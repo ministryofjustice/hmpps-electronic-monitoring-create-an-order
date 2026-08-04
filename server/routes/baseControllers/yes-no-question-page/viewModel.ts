@@ -15,16 +15,16 @@ const constructModel = (
   errors: ValidationResult,
   question: string,
   questionTitle: string,
-  hideBack: boolean = false
+  hideBack: boolean = false,
 ): YesNoQuestionPageViewModel => {
   const model: YesNoQuestionPageViewModel = {
     answer: { value: data || '' },
     errorSummary: null,
     question,
     questionTitle,
-    hideBack
+    hideBack,
   }
-  
+
   if (errors && errors.length) {
     model.answer!.error = getError(errors, 'answer')
     model.errorSummary = createGovukErrorSummary(errors)

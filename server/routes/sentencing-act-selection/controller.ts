@@ -29,7 +29,7 @@ export default class SentencingActSelection extends YesNoQuestionPageController 
       res.locals.content!.pages.setSentencingAct.questions.isSentencingAct.text,
       res.locals.content!.pages.setSentencingAct.title,
       value,
-      hideBack
+      hideBack,
     )
   }
 
