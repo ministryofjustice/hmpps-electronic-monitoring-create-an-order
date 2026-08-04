@@ -780,10 +780,10 @@ context('Order Summary', () => {
         httpStatus: 200,
         id: mockOrderId,
         status: 'IN_PROGRESS',
-        isSentencingAct: false,
         order: {
           id: mockOrderId,
           status: 'IN_PROGRESS',
+          isSentencingAct: false,
           deviceWearer: {
             nomisId: '',
             pncId: null,
@@ -1000,10 +1000,10 @@ context('Order Summary', () => {
         httpStatus: 200,
         id: mockOrderId,
         status: 'SUBMITTED',
-        isSentencingAct: false,
         order: {
           id: mockOrderId,
           status: 'IN_PROGRESS',
+          isSentencingAct: false,
           deviceWearer: {
             nomisId: '',
             pncId: null,
