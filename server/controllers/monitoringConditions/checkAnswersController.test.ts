@@ -495,7 +495,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'What monitoring does the device wearer need?',
             },
             value: {
-              html: 'Alcohol monitoring<br/>Trail monitoring<br/>Curfew<br/>Exclusion zone monitoring<br/>Mandatory attendance monitoring',
+              html: 'Alcohol monitoring<br/>Trail monitoring<br/>Curfew<br/>Exclusion zone monitoring<br/>Restriction zone monitoring<br/>Mandatory attendance monitoring',
             },
             actions: {
               items: [
