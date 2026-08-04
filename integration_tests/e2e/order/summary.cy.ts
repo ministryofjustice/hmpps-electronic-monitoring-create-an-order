@@ -30,6 +30,7 @@ context('Order Summary', () => {
         status: 'IN_PROGRESS',
         order: {
           dataDictionaryVersion: 'DDV6',
+          isSentencingAct: false,
           interestedParties: {
             notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: 'ALTCOURSE_PRISON',
@@ -232,6 +233,7 @@ context('Order Summary', () => {
         status: 'IN_PROGRESS',
         order: {
           type: 'VARIATION',
+          isSentencingAct: false,
           interestedParties: {
             notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: 'ALTCOURSE_PRISON',
@@ -289,6 +291,7 @@ context('Order Summary', () => {
         status: 'IN_PROGRESS',
         order: {
           type: 'VARIATION',
+          isSentencingAct: false,
           interestedParties: {
             notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: 'ALTCOURSE_PRISON',
@@ -317,6 +320,7 @@ context('Order Summary', () => {
         status: 'IN_PROGRESS',
         order: {
           type: 'REVOCATION',
+          isSentencingAct: false,
           interestedParties: {
             notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: 'ALTCOURSE_PRISON',
@@ -345,6 +349,7 @@ context('Order Summary', () => {
         status: 'IN_PROGRESS',
         order: {
           type: 'END_MONITORING',
+          isSentencingAct: false,
           interestedParties: {
             notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: 'ALTCOURSE_PRISON',
@@ -373,6 +378,7 @@ context('Order Summary', () => {
         status: 'IN_PROGRESS',
         order: {
           type: 'REINSTALL_DEVICE',
+          isSentencingAct: false,
           interestedParties: {
             notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: 'ALTCOURSE_PRISON',
@@ -401,6 +407,7 @@ context('Order Summary', () => {
         status: 'IN_PROGRESS',
         order: {
           type: 'REINSTALL_AT_DIFFERENT_ADDRESS',
+          isSentencingAct: false,
           interestedParties: {
             notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: 'ALTCOURSE_PRISON',
@@ -470,6 +477,7 @@ context('Order Summary', () => {
         order: {
           id: mockOrderId,
           status: 'IN_PROGRESS',
+          isSentencingAct: false,
           deviceWearer: {
             nomisId: '',
             pncId: null,
@@ -772,6 +780,7 @@ context('Order Summary', () => {
         httpStatus: 200,
         id: mockOrderId,
         status: 'IN_PROGRESS',
+        isSentencingAct: false,
         order: {
           id: mockOrderId,
           status: 'IN_PROGRESS',
@@ -991,6 +1000,7 @@ context('Order Summary', () => {
         httpStatus: 200,
         id: mockOrderId,
         status: 'SUBMITTED',
+        isSentencingAct: false,
         order: {
           id: mockOrderId,
           status: 'IN_PROGRESS',
@@ -2175,6 +2185,7 @@ context('Order Summary', () => {
           status: 'SUBMITTED',
           submittedBy: 'John Smith',
           fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0),
+          isSentencingAct: false,
           deviceWearer: {
             nomisId: '',
             pncId: null,
