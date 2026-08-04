@@ -82,7 +82,7 @@ zoneTypes.forEach(type => {
           const validFormData = {
             zoneType: `EXCLUSION`,
             startDate: new Date(`2024-12-10T00:00:00.000Z`),
-            endDate: new Date(`2024-12-11T00:00:00.000Z`),
+            endDate: new Date(`2029-12-11T00:00:00.000Z`),
             name: `A test name: Lorem ipsum dolor sit amet...`,
             description: `A test description: Lorem ipsum dolor sit amet...`,
             duration: `A test duration: Lorem ipsum dolor sit amet...`,

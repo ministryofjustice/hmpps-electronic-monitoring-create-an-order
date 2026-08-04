@@ -164,8 +164,11 @@ const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n
   if (order.curfewConditions?.startDate !== undefined) {
     typesSelected.push('Curfew')
   }
-  if (order.enforcementZoneConditions.length !== 0) {
+  if (order.enforcementZoneConditions.some(it => it.zoneType !== 'RESTRICTION')) {
     typesSelected.push('Exclusion zone monitoring')
+  }
+  if (order.enforcementZoneConditions.some(it => it.zoneType === 'RESTRICTION')) {
+    typesSelected.push('Restriction zone monitoring')
   }
   if (order.mandatoryAttendanceConditions.length !== 0) {
     typesSelected.push('Mandatory attendance monitoring')

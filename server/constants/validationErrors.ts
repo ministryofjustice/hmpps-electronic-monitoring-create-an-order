@@ -231,7 +231,7 @@ const getMonitoringConditionEndDateTimeErrorMessages = (
       mustIncludeYear: `End date for ${type} must include a year`,
       yearMustIncludeFourNumbers: `Year must include 4 numbers`,
       required: required ? `Enter end date for ${type}` : undefined,
-      mustNoInPast: notInPast ? `End date of  ${type} must be in the future` : undefined,
+      mustNoInPast: notInPast ? `End date of ${type} must be in the future` : undefined,
       mustAfterStartDate: `End date must be after start date`,
     },
     time: {
@@ -328,7 +328,7 @@ const validationErrors: ValidationErrors = {
   },
   enforcementZone: {
     startDateTime: (zoneType: string) => getMonitoringConditionStartDateTimeErrorMessages(`${zoneType} zone`),
-    endDateTime: (zoneType: string) => getMonitoringConditionEndDateTimeErrorMessages(`${zoneType} zone`, true),
+    endDateTime: (zoneType: string) => getMonitoringConditionEndDateTimeErrorMessages(`${zoneType} zone`, true, true),
     descriptionRequired: (zoneType: string) => `Enter where the ${zoneType} zone is required`,
     descriptionTooLong: (zoneType: string) => `Where is the ${zoneType} zone must be 500 characters or less`,
     durationRequired: (zoneType: string) => `Enter when the ${zoneType} zone must be followed`,

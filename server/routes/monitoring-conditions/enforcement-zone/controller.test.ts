@@ -18,6 +18,13 @@ jest.mock('../../../services/attachmentService')
 jest.mock('../../../data/restClient')
 
 const mockId = uuidv4()
+const futureEndDateValue = {
+  day: '15',
+  month: '02',
+  year: (new Date().getFullYear() + 2).toString(),
+  hours: '23',
+  minutes: '59',
+}
 
 describe('EnforcementZoneAddToListController', () => {
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
@@ -173,13 +180,7 @@ describe('EnforcementZoneAddToListController', () => {
         },
         endDate: {
           error: undefined,
-          value: {
-            day: '15',
-            month: '02',
-            year: '2026',
-            hours: '23',
-            minutes: '59',
-          },
+          value: futureEndDateValue,
         },
         file: {
           error: undefined,
@@ -245,13 +246,7 @@ describe('EnforcementZoneAddToListController', () => {
         },
         endDate: {
           error: undefined,
-          value: {
-            day: '15',
-            month: '02',
-            year: '2026',
-            hours: '23',
-            minutes: '59',
-          },
+          value: futureEndDateValue,
         },
         file: {
           error: {
@@ -333,13 +328,7 @@ const createMockBody = (action: string = 'submit'): ZoneAddToListFormDataModel =
       hours: '00',
       minutes: '00',
     },
-    endDate: {
-      day: '15',
-      month: '02',
-      year: '2026',
-      hours: '23',
-      minutes: '59',
-    },
+    endDate: futureEndDateValue,
     zoneType: EnforcementZoneTypes.EXCLUSION,
     name: 'MockName',
     duration: 'MockDuration',

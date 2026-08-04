@@ -9,6 +9,12 @@ const mockOrderId = uuidv4()
 const apiPath = '/enforcementZone'
 const uploadApiPath = '/attachment'
 const zoneTypes: (`exclusion` | `restriction`)[] = [`exclusion`, `restriction`]
+
+const zoneStartDate = new Date('2035-12-10T00:00:00.000Z')
+const zoneEndDate = new Date('2035-12-11T00:00:00.000Z')
+const zoneStartDatePayload = '2035-12-10T00:00:00.000Z'
+const zoneEndDatePayload = '2035-12-11T23:59:00.000Z'
+
 zoneTypes.forEach(type => {
   context(`Monitoring conditions - ${type} Zone`, () => {
     context('Submitting a valid Exclusion zone order', () => {
@@ -54,8 +60,8 @@ zoneTypes.forEach(type => {
             orderId: mockOrderId,
             zoneType: zoneTypeId,
             zoneId: 1,
-            startDate: '2024-10-10',
-            endDate: '2024-10-11',
+            startDate: zoneStartDatePayload,
+            endDate: zoneEndDatePayload,
             name: 'A test name: Lorem ipsum dolor sit amet...',
             description: 'A test description: Lorem ipsum dolor sit amet...',
             duration: 'A test duration: Lorem ipsum dolor sit amet...',
@@ -69,8 +75,8 @@ zoneTypes.forEach(type => {
         const page = Page.visit(EnforcementZoneAddToListPage, { orderId: mockOrderId, zoneId: 1 }, undefined, type)
         const validFormData = {
           zoneType,
-          startDate: new Date('2024-12-10T00:00:00.000Z'),
-          endDate: new Date('2024-12-11T00:00:00.000Z'),
+          startDate: zoneStartDate,
+          endDate: zoneEndDate,
           name: 'A test name: Lorem ipsum dolor sit amet...',
           description: 'A test description: Lorem ipsum dolor sit amet...',
           duration: 'A test duration: Lorem ipsum dolor sit amet...',
@@ -85,8 +91,8 @@ zoneTypes.forEach(type => {
             zoneType: zoneTypeId,
             zoneId: 1,
 
-            startDate: '2024-12-10T00:00:00.000Z',
-            endDate: '2024-12-11T23:59:00.000Z',
+            startDate: zoneStartDatePayload,
+            endDate: zoneEndDatePayload,
             name: 'A test name: Lorem ipsum dolor sit amet...',
             description: 'A test description: Lorem ipsum dolor sit amet...',
             duration: 'A test duration: Lorem ipsum dolor sit amet...',
@@ -136,7 +142,7 @@ zoneTypes.forEach(type => {
 
         const validFormData = {
           zoneType,
-          startDate: new Date('2024-12-10T00:00:00.000Z'),
+          startDate: zoneStartDate,
           name: 'A test name: Lorem ipsum dolor sit amet...',
           description: 'A test description: Lorem ipsum dolor sit amet...',
           duration: 'A test duration: Lorem ipsum dolor sit amet...',
@@ -150,7 +156,7 @@ zoneTypes.forEach(type => {
           body: {
             zoneType: zoneTypeId,
             zoneId: 1,
-            startDate: '2024-12-10T00:00:00.000Z',
+            startDate: zoneStartDatePayload,
             name: 'A test name: Lorem ipsum dolor sit amet...',
             description: 'A test description: Lorem ipsum dolor sit amet...',
             duration: 'A test duration: Lorem ipsum dolor sit amet...',
@@ -163,8 +169,8 @@ zoneTypes.forEach(type => {
 
         const validFormData = {
           zoneType,
-          startDate: new Date('2024-12-10T00:00:00.000Z'),
-          endDate: new Date('2024-12-11T00:00:00.000Z'),
+          startDate: zoneStartDate,
+          endDate: zoneEndDate,
           name: 'A test name: Lorem ipsum dolor sit amet...',
           description: 'A test description: Lorem ipsum dolor sit amet...',
           duration: 'A test duration: Lorem ipsum dolor sit amet...',
@@ -181,8 +187,8 @@ zoneTypes.forEach(type => {
 
         const validFormData = {
           zoneType,
-          startDate: new Date('2024-12-10T00:00:00.000Z'),
-          endDate: new Date('2024-12-11T00:00:00.000Z'),
+          startDate: zoneStartDate,
+          endDate: zoneEndDate,
           name: 'A test name: Lorem ipsum dolor sit amet...',
           description: 'A test description: Lorem ipsum dolor sit amet...',
           duration: 'A test duration: Lorem ipsum dolor sit amet...',
@@ -239,8 +245,8 @@ zoneTypes.forEach(type => {
             orderId: mockOrderId,
             zoneType: zoneTypeId,
             zoneId,
-            startDate: '2024-10-10',
-            endDate: '2024-10-11',
+            startDate: zoneStartDatePayload,
+            endDate: zoneEndDatePayload,
             name: 'A test name: Lorem ipsum dolor sit amet...',
             description: 'A test description: Lorem ipsum dolor sit amet...',
             duration: 'A test duration: Lorem ipsum dolor sit amet...',
@@ -262,8 +268,8 @@ zoneTypes.forEach(type => {
 
         const validFormData = {
           zoneType,
-          startDate: new Date('2024-12-10T00:00:00.000Z'),
-          endDate: new Date('2024-12-11T00:00:00.000Z'),
+          startDate: zoneStartDate,
+          endDate: zoneEndDate,
           name: 'A test name: Lorem ipsum dolor sit amet...',
           description: 'A test description: Lorem ipsum dolor sit amet...',
           duration: 'A test duration: Lorem ipsum dolor sit amet...',
@@ -293,8 +299,8 @@ zoneTypes.forEach(type => {
         const page = Page.visit(EnforcementZoneAddToListPage, { orderId: mockOrderId, zoneId: 1 }, undefined, type)
 
         const validFormData: EnforcementZoneAddToListFormData = {
-          startDate: new Date('2024-12-10T00:00:00.000Z'),
-          endDate: new Date('2024-12-11T00:00:00.000Z'),
+          startDate: zoneStartDate,
+          endDate: zoneEndDate,
           name: 'A test name: Lorem ipsum dolor sit amet...',
           description: 'A test description: Lorem ipsum dolor sit amet...',
           duration: 'A test duration: Lorem ipsum dolor sit amet...',
@@ -315,8 +321,8 @@ zoneTypes.forEach(type => {
 
         const validFormData = {
           zoneType,
-          startDate: new Date('2024-12-10T00:00:00.000Z'),
-          endDate: new Date('2024-12-11T00:00:00.000Z'),
+          startDate: zoneStartDate,
+          endDate: zoneEndDate,
           name: 'A test name: Lorem ipsum dolor sit amet...',
           description: 'A test description: Lorem ipsum dolor sit amet...',
           duration: 'A test duration: Lorem ipsum dolor sit amet...',

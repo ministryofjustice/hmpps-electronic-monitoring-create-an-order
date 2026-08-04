@@ -52,6 +52,20 @@ const EnforcementZoneAddToListFormDataValidator = (
         .min(1, validationErrors.enforcementZone.durationRequired(zoneType))
         .max(200, validationErrors.enforcementZone.durationTooLong(zoneType)),
     })
+    .superRefine((val, ctx) => {
+      if (notifyingOrganisation === 'HOME_OFFICE') {
+        return
+      }
+      const { mustNoInPast } = validationErrors.enforcementZone.endDateTime(zoneType).date
+      if (mustNoInPast && typeof val.endDate === 'string' && new Date(val.endDate) <= new Date()) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: mustNoInPast,
+          path: ['endDate'],
+          params: { focusPath: 'day' },
+        })
+      }
+    })
     .transform(({ ...formData }) => ({
       zoneType: zoneType.toUpperCase(),
       ...formData,
