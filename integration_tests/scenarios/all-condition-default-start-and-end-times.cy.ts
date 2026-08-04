@@ -262,6 +262,11 @@ context('The kitchen sink', () => {
                 start_date: formatAsFmsDateTime(primaryEnforcementZoneDetails.startDate, 0, 0),
                 end_date: formatAsFmsDateTime(primaryEnforcementZoneDetails.endDate, 23, 59),
               },
+              {
+                condition: 'Restriction Zone',
+                start_date: formatAsFmsDateTime(primaryEnforcementZoneDetails.startDate, 0, 0),
+                end_date: formatAsFmsDateTime(primaryEnforcementZoneDetails.endDate, 23, 59),
+              },
             ],
             exclusion_allday: '',
             interim_court_date: '',
@@ -356,6 +361,14 @@ context('The kitchen sink', () => {
               },
             ],
             inclusion_zones: [],
+            restriction_zones: [
+              {
+                description: primaryRestrictionZoneDetails.description,
+                duration: primaryRestrictionZoneDetails.duration,
+                start: formatAsFmsDate(primaryRestrictionZoneDetails.startDate),
+                end: formatAsFmsDate(primaryRestrictionZoneDetails.endDate),
+              },
+            ],
             abstinence: '',
             schedule: '',
             checkin_schedule: [],
