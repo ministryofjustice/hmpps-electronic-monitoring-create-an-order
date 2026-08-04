@@ -7,6 +7,7 @@ import { YesNoQuestionFormData } from './formModel'
 export type YesNoQuestionPageViewModel = ViewModel<YesNoQuestionFormData> & {
   question: string
   questionTitle: string
+  hideBack: boolean
 }
 
 const constructModel = (
@@ -14,14 +15,16 @@ const constructModel = (
   errors: ValidationResult,
   question: string,
   questionTitle: string,
+  hideBack: boolean = false
 ): YesNoQuestionPageViewModel => {
   const model: YesNoQuestionPageViewModel = {
     answer: { value: data || '' },
     errorSummary: null,
     question,
     questionTitle,
+    hideBack
   }
-
+  
   if (errors && errors.length) {
     model.answer!.error = getError(errors, 'answer')
     model.errorSummary = createGovukErrorSummary(errors)

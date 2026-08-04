@@ -12,6 +12,8 @@ export default class SentencingActSelection extends YesNoQuestionPageController 
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {
+    // Hiding the back button on this page as a temp fix against disrupting order flow
+    const hideBack = true
     const current = req.order!.isSentencingAct
     let value
     if (isNullOrUndefined(value)) {
@@ -27,6 +29,7 @@ export default class SentencingActSelection extends YesNoQuestionPageController 
       res.locals.content!.pages.setSentencingAct.questions.isSentencingAct.text,
       res.locals.content!.pages.setSentencingAct.title,
       value,
+      hideBack
     )
   }
 

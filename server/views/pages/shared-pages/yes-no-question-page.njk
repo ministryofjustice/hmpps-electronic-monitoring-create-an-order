@@ -6,10 +6,12 @@
 {% set questions = content.pages.isAddressChange.questions %}
 {% set questionName = questionTitle%}
 {% block beforeContent %}
+  {% if not hideBack %}
     {{ govukBackLink({
-    text: "Back",
-    href: "/order/" + order.id + "/edit"
-  }) }}
+      text: "Back",
+      href: "/order/" + order.id + "/edit"
+    }) }}
+  {% endif %}
 {% endblock %}
 
 {% set isOrderEditable = true %}

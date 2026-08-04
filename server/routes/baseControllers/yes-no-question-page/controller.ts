@@ -12,9 +12,10 @@ export default abstract class YesNoQuestionPageController {
     question: string,
     pageTitle: string,
     value: string | undefined = undefined,
+    hideBack: boolean = false
   ) {
     const errors = req.flash('validationErrors') as unknown as ValidationResult
-    res.render('pages/shared-pages/yes-no-question-page', constructModel(value, errors, question, pageTitle))
+    res.render('pages/shared-pages/yes-no-question-page', constructModel(value, errors, question, pageTitle, hideBack))
   }
 
   protected tryGetValidFormData(
