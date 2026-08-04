@@ -690,6 +690,7 @@ describe('TaskListService', () => {
         contactDetails: createContactDetails(),
         installationAndRisk: createInstallationAndRisk(),
         interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }),
+        isSentencingAct: true,
         enforcementZoneConditions: [createEnforcementZoneCondition()],
         addresses: [
           createAddress({ addressType: 'PRIMARY' }),
@@ -788,6 +789,7 @@ describe('TaskListService', () => {
           placeName: 'primary',
           appointmentDate: 'date',
         },
+        isSentencingAct: true,
         additionalDocuments: [createAttatchment(), createAttatchment({ fileType: AttachmentType.PHOTO_ID })],
         orderParameters: { havePhoto: true },
       })
@@ -1155,6 +1157,7 @@ describe('TaskListService', () => {
       it('should navigate to CYA when notifying and responsible organisations are to check', async () => {
         const order = getMockOrder({
           interestedParties: createInterestedParties({ responsibleOfficerFirstName: 'mockUser' }),
+          isSentencingAct: true,
         })
         const taskListService = new TaskListService(mockOrderChecklistService)
 
@@ -1177,6 +1180,7 @@ describe('TaskListService', () => {
           interestedParties: createInterestedParties({
             responsibleOfficerFirstName: 'mockUser',
           }),
+          isSentencingAct: false,
         })
         mockOrderChecklistService.getChecklist.mockResolvedValueOnce({
           ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS: true,
@@ -1394,6 +1398,43 @@ describe('TaskListService', () => {
       expect(riskInformationSection?.completed).toBe(true)
 
       jest.restoreAllMocks()
+    })
+
+    it('should not route to the sentencing act page if a prison user has already answered', async () => {
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({
+          responsibleOfficerFirstName: 'mockUser',
+          notifyingOrganisation: 'PRISON',
+        }),
+        isSentencingAct: true,
+      })
+      const taskListService = new TaskListService(mockOrderChecklistService)
+      const sections = await taskListService.getSections(order)
+      const interestedParties = sections.find(
+        section => section.name === 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+      )
+      expect(interestedParties!.path).not.toBe(
+        paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION.replace(':orderId', order.id),
+      )
+    })
+
+    it('should route to the sentencing act page if a prison user has not answered', async () => {
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({
+          responsibleOfficerFirstName: 'mockUser',
+          notifyingOrganisation: 'PRISON',
+        }),
+        isSentencingAct: null,
+      })
+      const taskListService = new TaskListService(mockOrderChecklistService)
+      const sections = await taskListService.getSections(order)
+      const interestedParties = sections.find(
+        section => section.name === 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
+      )
+      expect(interestedParties?.completed).toBe(false)
+      expect(interestedParties!.path).toBe(
+        paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION.replace(':orderId', order.id),
+      )
     })
   })
   describe('getNextCheckYourAnswersPage', () => {

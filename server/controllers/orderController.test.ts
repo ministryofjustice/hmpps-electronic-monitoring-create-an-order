@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto'
-import { getMockOrder } from '../../test/mocks/mockOrder'
+import { createInterestedParties, getMockOrder } from '../../test/mocks/mockOrder'
 import { createMockRequest, createMockResponse } from '../../test/mocks/mockExpress'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
@@ -63,6 +63,19 @@ describe('OrderController', () => {
           order: mockOrder,
         }),
       )
+    })
+
+    it('should redirect to sentencing act page when not set and user is prison instead of summary', async () => {
+      const mockOrder = getMockOrder({
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }),
+      })
+      const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
+      const res = createMockResponse()
+      const next = jest.fn()
+      req.flash = jest.fn().mockReturnValue([])
+
+      await orderController.summary(req, res, next)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/interest-parties/sentencing-act-selection`)
     })
   })
 
