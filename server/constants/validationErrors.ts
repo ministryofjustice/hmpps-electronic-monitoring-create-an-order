@@ -466,7 +466,7 @@ const validationErrors: ValidationErrors = {
     isAddressChangeRequired: 'Select Yes if the device wearer’s primary address has changed',
   },
   sentencingActSelection: {
-    required: 'Select Yes if the device wearer is being released on or after October 1st 2026',
+    required: 'Select Yes if the device wearer is being released on or after 1 October 2026',
   },
 }
 
