@@ -111,13 +111,14 @@
                 name: "action",
                 value: "continue"
             }) }}
-
+            {% if not hideCancelButton %}
             {{ govukButton({
                 text: "Save as draft" if not backButtonText else backButtonText,
                 classes: "govuk-button--secondary",
                 name: "action",
                 value: "back"
             }) }}
+            {% endif %}
           {% else %}
             <a id="backToSummary" class="govuk-link" href="{{ orderSummaryUri }}">
                 Return back to form section menu

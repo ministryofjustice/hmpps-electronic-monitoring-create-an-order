@@ -5,7 +5,7 @@ const setSentencingActSelectionPageContent: SetSentencingActPageContent = {
   legend: '',
   questions: {
     isSentencingAct: {
-      text: 'Is the device wearer being released on or after 2 September 2026?',
+      text: 'Is the device wearer being released on or after 1 October 2026?',
     },
   },
   section: '',

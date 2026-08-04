@@ -3,7 +3,7 @@ import FormRadiosComponent from '../../../../pages/components/formRadiosComponen
 
 export default class SentencingActFormComponent extends FormComponent {
   get isSentencingActChangeField(): FormRadiosComponent {
-    const label = 'Is the device wearer being released on or after 2 September 2026?'
+    const label = 'Is the device wearer being released on or after 1 October 2026?'
     return new FormRadiosComponent(this.form, label, ['Yes', 'No'])
   }
 
