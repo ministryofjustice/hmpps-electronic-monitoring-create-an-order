@@ -10,19 +10,10 @@ const apiPath = '/enforcementZone'
 const uploadApiPath = '/attachment'
 const zoneTypes: (`exclusion` | `restriction`)[] = [`exclusion`, `restriction`]
 
-const localMidnight = (daysFromNow: number): Date => {
-  const d = new Date()
-  d.setDate(d.getDate() + daysFromNow)
-  d.setHours(0, 0, 0, 0)
-  return d
-}
-
-const zoneStartDate = localMidnight(30)
-const zoneEndDate = localMidnight(60)
-const dateAsPayload = (d: Date, hour: number, minuite: number): string =>
-  new Date(d.getFullYear(), d.getMonth(), d.getDate(), hour, minuite).toISOString()
-const zoneStartDatePayload = dateAsPayload(zoneStartDate, 0, 0)
-const zoneEndDatePayload = dateAsPayload(zoneEndDate, 23, 59)
+const zoneStartDate = new Date('2035-12-10T00:00:00.000Z')
+const zoneEndDate = new Date('2035-12-11T00:00:00.000Z')
+const zoneStartDatePayload = '2035-12-10T00:00:00.000Z'
+const zoneEndDatePayload = '2035-12-11T23:59:00.000Z'
 
 zoneTypes.forEach(type => {
   context(`Monitoring conditions - ${type} Zone`, () => {
