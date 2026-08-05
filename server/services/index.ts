@@ -11,7 +11,6 @@ import CurfewReleaseDateService from './curfewReleaseDateService'
 import CurfewTimetableService from './curfewTimetableService'
 import DeviceWearerResponsibleAdultService from './deviceWearerResponsibleAdultService'
 import DeviceWearerService from './deviceWearerService'
-import EnforcementZoneService from './enforcementZoneServices'
 import EnforcementZoneAddToListService from '../routes/monitoring-conditions/enforcement-zone/service'
 import InstallationAndRiskService from './installationAndRiskService'
 import InterestedPartiesService from './interestedPartiesService'
@@ -49,6 +48,7 @@ import OffenceOtherInfoService from '../routes/installation-and-risk/offence-oth
 import InterestedPartiesStoreService from '../routes/interested-parties/interestedPartiesStoreService'
 import UpdateInterestedPartiesService from '../routes/interested-parties/interestedPartiesService'
 import PostcodeService from '../routes/postcode-lookup/postcodeService'
+import SentencingActService from '../routes/sentencing-act-selection/SentencingActService'
 import SectionService from './sectionsService'
 
 export const services = () => {
@@ -68,7 +68,6 @@ export const services = () => {
   const deviceWearerService = new DeviceWearerService(cemoApiClient)
   const installationAndRiskService = new InstallationAndRiskService(cemoApiClient)
   const interestedPartiesService = new InterestedPartiesService(cemoApiClient)
-  const zoneService = new EnforcementZoneService(cemoApiClient)
   const zoneAddToListService = new EnforcementZoneAddToListService(cemoApiClient)
   const orderSearchService = new OrderSearchService(cemoApiClient)
   const orderService = new OrderService(cemoApiClient)
@@ -95,6 +94,7 @@ export const services = () => {
 
   const mappaService = new MappaService(cemoApiClient)
   const detailsOfInstallationService = new DetailsOfInstallationService(cemoApiClient)
+  const sentencingActService = new SentencingActService(cemoApiClient)
 
   const interestedPartiesStoreService = new InterestedPartiesStoreService(
     config.redis.enabled ? new RedisStore(createRedisClient()) : new InMemoryStore(),
@@ -136,7 +136,6 @@ export const services = () => {
     taskListService,
     trailMonitoringService,
     variationService,
-    zoneService,
     zoneAddToListService,
     probationDeliveryUnitService,
     installationLocationService,
@@ -158,6 +157,7 @@ export const services = () => {
     updateInterestedPartiesService,
     postcodeService,
     sectionService,
+    sentencingActService,
   }
 }
 
@@ -174,7 +174,6 @@ export {
   CurfewTimetableService,
   DeviceWearerResponsibleAdultService,
   DeviceWearerService,
-  EnforcementZoneService,
   EnforcementZoneAddToListService,
   InstallationAndRiskService,
   OrderSearchService,
@@ -195,4 +194,5 @@ export {
   UserCohortService,
   MappaService,
   SectionService as SectionsService,
+  SentencingActService,
 }

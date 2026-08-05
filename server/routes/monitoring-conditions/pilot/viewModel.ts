@@ -28,7 +28,48 @@ interface Divider {
 
 type Item = Option | Divider
 
+const getLicencePilotProbationRegionStatus = (order: Order): boolean => {
+  if (order.isSentencingAct === true) {
+    return true
+  }
+
+  if (
+    order.interestedParties?.notifyingOrganisation === 'PROBATION' &&
+    order.interestedParties?.responsibleOrganisation === 'PROBATION'
+  ) {
+    if (order.interestedParties?.responsibleOrganisationRegion) {
+      const listOfProbationRegions = FeatureFlags.getInstance()
+        .getValue('LICENCE_VARIATION_PROBATION_REGIONS')
+        .split(',')
+      return listOfProbationRegions?.indexOf(order.interestedParties.responsibleOrganisationRegion) !== -1
+    }
+  }
+  return false
+}
+
+const getLicenceMessage = (order: Order): string => {
+  if (order.isSentencingAct === true) {
+    return ''
+  }
+
+  const isLicencePilotProbationRegion = getLicencePilotProbationRegionStatus(order)
+  if (
+    order.interestedParties?.notifyingOrganisation === 'PROBATION' &&
+    order.interestedParties?.responsibleOrganisation === 'PROBATION'
+  ) {
+    if (isLicencePilotProbationRegion) {
+      return ''
+    }
+    return `The device wearer is being managed by the ${probationRegions[order.interestedParties?.responsibleOrganisationRegion as keyof typeof probationRegions]} probation region. To be eligible for the Licence Variation pilot they must be managed by an in-scope region.`
+  }
+  return ''
+}
+
 const getDapolPilotProbationRegionStatus = (order: Order): boolean => {
+  if (order.isSentencingAct === true) {
+    return true
+  }
+
   if (order.interestedParties?.responsibleOrganisation === 'PROBATION') {
     if (order.interestedParties?.responsibleOrganisationRegion) {
       const listOfProbationRegions = FeatureFlags.getInstance().getValue('DAPOL_PILOT_PROBATION_REGIONS').split(',')
@@ -49,38 +90,10 @@ const getDapolMessage = (order: Order): string => {
   return ''
 }
 
-const getLicencePilotProbationRegionStatus = (order: Order): boolean => {
-  if (
-    order.interestedParties?.notifyingOrganisation === 'PROBATION' &&
-    order.interestedParties?.responsibleOrganisation === 'PROBATION'
-  ) {
-    if (order.interestedParties?.responsibleOrganisationRegion) {
-      const listOfProbationRegions = FeatureFlags.getInstance()
-        .getValue('LICENCE_VARIATION_PROBATION_REGIONS')
-        .split(',')
-      return listOfProbationRegions?.indexOf(order.interestedParties.responsibleOrganisationRegion) !== -1
-    }
-  }
-  return false
-}
-
-const getLicenceMessage = (order: Order): string => {
-  const isLicencePilotProbationRegion = getLicencePilotProbationRegionStatus(order)
-  if (
-    order.interestedParties?.notifyingOrganisation === 'PROBATION' &&
-    order.interestedParties?.responsibleOrganisation === 'PROBATION'
-  ) {
-    if (isLicencePilotProbationRegion) {
-      return ''
-    }
-    return `The device wearer is being managed by the ${probationRegions[order.interestedParties?.responsibleOrganisationRegion as keyof typeof probationRegions]} probation region. To be eligible for the Licence Variation pilot they must be managed by an in-scope region.`
-  }
-  return ''
-}
-
 const constructModel = (order: Order, data: MonitoringConditions, errors: ValidationResult): PilotModel => {
   const isDapolPilotProbationRegion = getDapolPilotProbationRegionStatus(order)
   const isLicenceProbationRegion = getLicencePilotProbationRegionStatus(order)
+  const isSentencingAct = order?.isSentencingAct ?? false
   const model: PilotModel = {
     pilot: {
       value: data.pilot || '',
@@ -90,9 +103,10 @@ const constructModel = (order: Order, data: MonitoringConditions, errors: Valida
       isLicenceProbationRegion,
       data.hdc,
       order.interestedParties?.notifyingOrganisation,
+      isSentencingAct,
     ),
-    errorSummary: null,
     dapolMessage: getDapolMessage(order),
+    errorSummary: null,
     licenceMessage: getLicenceMessage(order),
   }
   if (errors && errors.length > 0) {
@@ -107,6 +121,7 @@ const getItems = (
   isLicencePilotProbationRegion: boolean,
   hdc?: string | null,
   notifyingOrganisation?: string | null,
+  isSentencingAct: boolean = false,
 ): Item[] => {
   let items: Item[]
   if (hdc === 'NO') {
@@ -121,9 +136,6 @@ const getItems = (
       {
         text: 'They are not part of any of these pilots',
         value: 'UNKNOWN',
-        conditional: {
-          html: 'To be eligible for tagging the device wearer must either be part of a pilot or have Alcohol Monitoring on Licence (AML) as a licence condition.',
-        },
       },
     ]
   } else {
@@ -142,7 +154,7 @@ const getItems = (
     ]
   }
 
-  if (notifyingOrganisation === 'PROBATION') {
+  if (notifyingOrganisation === 'PROBATION' && !isSentencingAct) {
     items.splice(2, 0, {
       text: 'Licence Variation Project',
       value: 'LICENCE_VARIATION_PROJECT',

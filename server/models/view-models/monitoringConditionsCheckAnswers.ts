@@ -164,8 +164,11 @@ const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n
   if (order.curfewConditions?.startDate !== undefined) {
     typesSelected.push('Curfew')
   }
-  if (order.enforcementZoneConditions.length !== 0) {
+  if (order.enforcementZoneConditions.some(it => it.zoneType !== 'RESTRICTION')) {
     typesSelected.push('Exclusion zone monitoring')
+  }
+  if (order.enforcementZoneConditions.some(it => it.zoneType === 'RESTRICTION')) {
+    typesSelected.push('Restriction zone monitoring')
   }
   if (order.mandatoryAttendanceConditions.length !== 0) {
     typesSelected.push('Mandatory attendance monitoring')
@@ -333,10 +336,40 @@ const createExclusionZoneAnswers = (order: Order, content: I18n, answerOpts: Ans
 
   return order.enforcementZoneConditions
     .sort((a, b) => ((a.zoneId || 0) > (b.zoneId || 0) ? 1 : -1))
+    .filter(it => it.zoneType === 'EXCLUSION')
     .map(enforcementZone => {
       const fileName = enforcementZone.fileName || 'No file selected'
       const zoneId = enforcementZone.zoneId || 0
-      const zoneUri = uri ? uri.replace(':zoneId', zoneId.toString()) : ''
+      const zoneUri = uri ? uri.replace(':zoneId', zoneId.toString()).replace(':zoneType', 'exclusion') : ''
+      const items = [createDateAnswer(questions.startDate.text, enforcementZone.startDate, zoneUri, answerOpts)]
+      if (enforcementZone.endDate) {
+        items.push(createDateAnswer(questions.endDate.text, enforcementZone.endDate, zoneUri, answerOpts))
+      }
+      items.push(createAnswer(questions.description.text, enforcementZone.description, zoneUri, answerOpts))
+      items.push(createAnswer(questions.duration.text, enforcementZone.duration, zoneUri, answerOpts))
+      items.push(createAnswer(questions.file.text, fileName, zoneUri, answerOpts))
+      if (enforcementZone.name) {
+        items.push(createAnswer(questions.name.text, enforcementZone.name, zoneUri, answerOpts))
+      }
+      return { item: items, zoneId: enforcementZone.zoneId }
+    })
+}
+
+const createRestrictionZoneAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
+  const uri = paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':orderId', order.id)
+  const { questions } = content.pages.restrictionZone
+
+  if (order.enforcementZoneConditions.length === 0) {
+    return []
+  }
+
+  return order.enforcementZoneConditions
+    .sort((a, b) => ((a.zoneId || 0) > (b.zoneId || 0) ? 1 : -1))
+    .filter(it => it.zoneType === 'RESTRICTION')
+    .map(enforcementZone => {
+      const fileName = enforcementZone.fileName || 'No file selected'
+      const zoneId = enforcementZone.zoneId || 0
+      const zoneUri = uri ? uri.replace(':zoneId', zoneId.toString()).replace(':zoneType', 'restriction') : ''
       const items = [createDateAnswer(questions.startDate.text, enforcementZone.startDate, zoneUri, answerOpts)]
       if (enforcementZone.endDate) {
         items.push(createDateAnswer(questions.endDate.text, enforcementZone.endDate, zoneUri, answerOpts))
@@ -511,6 +544,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
     curfewReleaseDate: createCurfewReleaseDateAnswers(order, content, ignoreActions),
     curfewTimetable: createCurfewTimetableAnswers(order, ignoreActions),
     exclusionZone: createExclusionZoneAnswers(order, content, ignoreActions),
+    restrictionZone: createRestrictionZoneAnswers(order, content, ignoreActions),
     trail: createTrailAnswers(order, content, ignoreActions),
     attendance: createAttendanceAnswers(order, content, ignoreActions),
     alcohol: createAlcoholAnswers(order, content, ignoreActions),

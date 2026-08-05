@@ -3,7 +3,7 @@ import MonitoringTypePage from './MonitoringTypesPage'
 import Page from '../../../../../pages/page'
 import { MonitoringConditions } from '../../../../../../server/routes/monitoring-conditions/model'
 
-const createDevicerWearer = (youth: boolean = true) => {
+const createDeviceWearer = (youth: boolean = true) => {
   return {
     nomisId: 'nomis',
     pncId: 'pnc',
@@ -67,7 +67,7 @@ const createMonitoringConditions = (override: Partial<MonitoringConditions> = {}
 
 const stubGetOrder = ({
   notifyingOrg = 'PROBATION',
-  deviceWearer = createDevicerWearer(),
+  deviceWearer = createDeviceWearer(),
   addresses = createAddresses(),
   monitoringConditions = createMonitoringConditions(),
   curfewConditions = null,
@@ -75,6 +75,7 @@ const stubGetOrder = ({
   curfewTimeTable = [],
   monitoringConditionsTrail = null,
   monitoringConditionsAlcohol = null,
+  isSentencingAct = false,
 } = {}) => {
   cy.task('stubCemoGetOrder', {
     httpStatus: 200,
@@ -98,6 +99,7 @@ const stubGetOrder = ({
       curfewTimeTable,
       monitoringConditionsTrail,
       monitoringConditionsAlcohol,
+      isSentencingAct,
     },
   })
 }
@@ -108,7 +110,7 @@ context('monitoring types', () => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-    stubGetOrder()
+    stubGetOrder({ isSentencingAct: false })
 
     cy.signIn()
   })
@@ -216,7 +218,7 @@ context('monitoring types', () => {
   })
 
   it('youth', () => {
-    stubGetOrder({ notifyingOrg: 'PROBATION', deviceWearer: createDevicerWearer(false) })
+    stubGetOrder({ notifyingOrg: 'PROBATION', deviceWearer: createDeviceWearer(false) })
     const monitoringTypesPage = Page.visit(MonitoringTypePage, { orderId: mockOrderId })
 
     monitoringTypesPage.form.monitoringTypesField.shouldHaveEnabledOption('Curfew')
@@ -225,7 +227,7 @@ context('monitoring types', () => {
     monitoringTypesPage.form.monitoringTypesField.shouldHaveEnabledOption('Mandatory attendance monitoring')
     monitoringTypesPage.form.monitoringTypesField.shouldHaveDisabledOption('Alcohol')
     monitoringTypesPage.form.message.contains(
-      'Alcohol monitoring is not an option because the device wearer is not 18 years old or older when the electonic monitoring device is installed.',
+      'Alcohol monitoring is not an option because the device wearer is not 18 years old or older when the electronic monitoring device is installed.',
     )
   })
 
@@ -316,6 +318,30 @@ context('monitoring types', () => {
       page.form.continueButton.should('be.disabled')
 
       page.form.message.contains('There are no additional eligible monitoring types available to add')
+    })
+  })
+
+  context('isSentencingAct order', () => {
+    it('should render the restriction zone field', () => {
+      stubGetOrder({ isSentencingAct: true })
+
+      const page = Page.visit(MonitoringTypePage, { orderId: mockOrderId })
+
+      page.header.userName().should('contain.text', 'J. Smith')
+      page.header.phaseBanner().should('contain.text', 'dev')
+
+      page.form.monitoringTypesField.shouldExist()
+      page.form.monitoringTypesField.shouldNotBeDisabled()
+      page.form.monitoringTypesField.shouldHaveEnabledOption('Curfew')
+      page.form.monitoringTypesField.shouldHaveEnabledOption('Exclusion zone monitoring')
+      page.form.monitoringTypesField.shouldHaveEnabledOption('Trail monitoring')
+      page.form.monitoringTypesField.shouldHaveEnabledOption('Restriction zone monitoring')
+      page.form.monitoringTypesField.shouldHaveEnabledOption('Mandatory attendance monitoring')
+      page.form.monitoringTypesField.shouldHaveEnabledOption('Alcohol monitoring')
+
+      page.form.continueButton.should('exist')
+
+      page.form.ReturnToMonitoringListPageButton.should('not.exist')
     })
   })
 })

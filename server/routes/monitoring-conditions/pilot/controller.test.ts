@@ -119,8 +119,6 @@ describe('pilot controller', () => {
           ],
           dapolMessage:
             'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region. Any queries around pilot eligibility need to be raised with the appropriate COM.',
-          licenceMessage:
-            'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the Licence Variation pilot they must be managed by an in-scope region.',
         }),
       )
     })
@@ -159,15 +157,10 @@ describe('pilot controller', () => {
             {
               text: 'They are not part of any of these pilots',
               value: 'UNKNOWN',
-              conditional: {
-                html: 'To be eligible for tagging the device wearer must either be part of a pilot or have Alcohol Monitoring on Licence (AML) as a licence condition.',
-              },
             },
           ],
           dapolMessage:
             'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region. Any queries around pilot eligibility need to be raised with the appropriate COM.',
-          licenceMessage:
-            'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the Licence Variation pilot they must be managed by an in-scope region.',
         }),
       )
     })

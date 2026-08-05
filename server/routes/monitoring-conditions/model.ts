@@ -24,6 +24,9 @@ export const SentenceTypeEnum = z.enum([
   'BAIL_RLAA',
   'BAIL',
 ])
+export const addToListEnforcementZoneTypes = ['exclusion', 'restriction'] as const
+
+export type AddToListEnforcementZoneTypes = (typeof addToListEnforcementZoneTypes)[number]
 
 export const YesNoUnknownEnum = z.enum(['YES', 'NO', 'UNKNOWN'])
 export const PilotTypeEnum = z.enum([
@@ -37,7 +40,14 @@ export const PilotTypeEnum = z.enum([
   'GPS_ACQUISITIVE_CRIME_PAROLE',
   'UNKNOWN',
 ])
-export const MonitoringTypesEnum = z.enum(['curfew', 'exclusionZone', 'trail', 'mandatoryAttendance', 'alcohol'])
+export const MonitoringTypesEnum = z.enum([
+  'curfew',
+  'exclusionZone',
+  'trail',
+  'mandatoryAttendance',
+  'alcohol',
+  'restrictionZone',
+])
 
 const MonitoringConditionsModel = z.object({
   orderType: OrderTypeEnum.nullable().optional(),
@@ -57,6 +67,7 @@ const MonitoringConditionsModel = z.object({
   issp: z.string().nullable().optional(),
   prarr: YesNoUnknownEnum.nullable().optional(),
   policeArea: z.string().nullable().optional(),
+  restrictionZone: z.boolean().nullable().optional(),
 })
 
 export type MonitoringConditions = z.infer<typeof MonitoringConditionsModel>

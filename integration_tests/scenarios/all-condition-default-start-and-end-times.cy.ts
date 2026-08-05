@@ -69,7 +69,7 @@ context('The kitchen sink', () => {
       pilot: 'GPS acquisitive crime (EMAC)',
       typeOfAcquistiveCrime: 'Burglary in a Dwelling - Indictable only',
       policeForceArea: 'Avon and Somerset',
-      monitoringCondition: ['Curfew', 'Exclusion zone monitoring', 'Trail monitoring'],
+      monitoringCondition: ['Curfew', 'Exclusion zone monitoring', 'Restriction zone monitoring', 'Trail monitoring'],
     }
     const curfewReleaseDetails = {
       startTime: { hours: '19', minutes: '00' },
@@ -105,6 +105,15 @@ context('The kitchen sink', () => {
       duration: 'A test duration: one, two, three...',
       name: 'test name',
     }
+    const primaryRestrictionZoneDetails = {
+      zoneType: 'Restriction zone',
+      startDate: new Date(currentDate.getFullYear(), 4, 1),
+      endDate: new Date(currentDate.getFullYear() + 1, 4, 1, 23, 59, 0),
+      uploadFile: files.licence,
+      description: 'A test description: Lorum ipsum dolar sit amet...',
+      duration: 'A test duration: one, two, three...',
+      name: 'test name',
+    }
     const trailMonitoringOrder = {
       startDate: new Date(currentDate.getFullYear(), 11, 1),
       endDate: new Date(currentDate.getFullYear() + 1, 11, 1, 23, 59, 0),
@@ -125,7 +134,7 @@ context('The kitchen sink', () => {
     }
 
     it('With default start time and end time, british time is send to FMS', () => {
-      createNewOrder({ notifyingOrganisation: interestedParties })
+      createNewOrder({ notifyingOrganisation: interestedParties, sentencingActAnswer: 'Yes' })
 
       const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       cacheOrderId()
@@ -142,6 +151,7 @@ context('The kitchen sink', () => {
         curfewConditionDetails,
         curfewTimetable,
         enforcementZoneDetails: primaryEnforcementZoneDetails,
+        restrictionZoneDetails: primaryRestrictionZoneDetails,
         alcoholMonitoringDetails: undefined,
         trailMonitoringDetails: trailMonitoringOrder,
         attendanceMonitoringDetails: undefined,
@@ -252,6 +262,11 @@ context('The kitchen sink', () => {
                 start_date: formatAsFmsDateTime(primaryEnforcementZoneDetails.startDate, 0, 0),
                 end_date: formatAsFmsDateTime(primaryEnforcementZoneDetails.endDate, 23, 59),
               },
+              {
+                condition: 'Restriction Zone',
+                start_date: formatAsFmsDateTime(primaryEnforcementZoneDetails.startDate, 0, 0),
+                end_date: formatAsFmsDateTime(primaryEnforcementZoneDetails.endDate, 23, 59),
+              },
             ],
             exclusion_allday: '',
             interim_court_date: '',
@@ -346,6 +361,14 @@ context('The kitchen sink', () => {
               },
             ],
             inclusion_zones: [],
+            restriction_zones: [
+              {
+                description: primaryRestrictionZoneDetails.description,
+                duration: primaryRestrictionZoneDetails.duration,
+                start: formatAsFmsDate(primaryRestrictionZoneDetails.startDate),
+                end: formatAsFmsDate(primaryRestrictionZoneDetails.endDate),
+              },
+            ],
             abstinence: '',
             schedule: '',
             checkin_schedule: [],

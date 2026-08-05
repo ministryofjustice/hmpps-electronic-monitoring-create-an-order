@@ -22,6 +22,7 @@ context('Contact information', () => {
           status: 'IN_PROGRESS',
           order: {
             dataDictionaryVersion: 'DDV5',
+            isSentencingAct: false,
             interestedParties: {
               notifyingOrganisation: 'PRISON',
               notifyingOrganisationName: 'FELTHAM_YOUNG_OFFENDER_INSTITUTION',
