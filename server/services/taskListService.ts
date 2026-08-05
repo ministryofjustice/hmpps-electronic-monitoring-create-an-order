@@ -67,6 +67,7 @@ const PAGES = {
   installationAppointment: 'INSTALLATION_APPOINTMENT',
   responsibleOrganisation: 'RESPONSIBLE_ORGANISATION',
   responsibleOfficer: 'RESPONSIBLE_OFFICER',
+  sentencingAct: 'SENTENCING_ACT',
 } as const
 
 type Page = (typeof PAGES)[keyof typeof PAGES]
@@ -156,6 +157,17 @@ export default class TaskListService {
       path: paths.VARIATION.VARIATION_DETAILS,
       state: isVariationType(order.type) ? STATES.required : STATES.disabled,
       completed: isNotNullOrUndefined(order.variationDetails),
+    })
+
+    tasks.push({
+      section: SECTIONS.interestedParties,
+      name: PAGES.sentencingAct,
+      path: paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION,
+      state:
+        order.interestedParties?.notifyingOrganisation === 'PRISON' && isNullOrUndefined(order.isSentencingAct)
+          ? STATES.required
+          : STATES.disabled,
+      completed: isNotNullOrUndefined(order.isSentencingAct),
     })
 
     if (

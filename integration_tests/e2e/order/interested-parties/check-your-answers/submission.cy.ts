@@ -25,6 +25,7 @@ context('interested parties check answers page', () => {
         status: 'IN_PROGRESS',
         order: {
           dataDictionaryVersion: 'DDV5',
+          isSentencingAct: false,
           interestedParties: {
             notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: 'ALTCOURSE_PRISON',
@@ -66,6 +67,7 @@ context('interested parties check answers page', () => {
         status: 'SUBMITTED',
         order: {
           dataDictionaryVersion: 'DDV5',
+          isSentencingAct: false,
           interestedParties: {
             notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: 'ALTCOURSE_PRISON',

@@ -8,7 +8,7 @@ export default class SentencingActPage extends AppFormPage {
 
   constructor() {
     super(
-      'Is the device wearer being released on or after 2 September 2026?',
+      'Is the device wearer being released on or after 1 October 2026?',
       paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION,
     )
   }

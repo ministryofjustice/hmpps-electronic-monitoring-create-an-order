@@ -25,7 +25,7 @@ context('orderType', () => {
 
     page.header.userName().should('contain.text', 'J. Smith')
     page.header.phaseBanner().should('contain.text', 'dev')
-    cy.get('p').contains('Device wearers must not be released on HDC on or after 2 September 2026.').should('exist')
+    cy.get('p').contains('Device wearers must not be released on HDC on or after 1 October 2026.').should('exist')
     cy.get('p')
       .contains('They can ony be re-released on HDC on after this date if all of the following conditions are met:')
       .should('exist')
@@ -33,7 +33,7 @@ context('orderType', () => {
     cy.get('ul')
       .children()
       .get('li')
-      .contains('They were recalled during their HDC period on or after 2 September 2026.')
+      .contains('They were recalled during their HDC period on or after 1 October 2026.')
       .should('exist')
     cy.get('ul')
       .children()
