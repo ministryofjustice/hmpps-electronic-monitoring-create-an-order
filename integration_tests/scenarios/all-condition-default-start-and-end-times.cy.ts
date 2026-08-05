@@ -346,7 +346,7 @@ context('The kitchen sink', () => {
               },
             ],
             inclusion_zones: [],
-            restriction_zones__added: [],
+            restriction_zones: [],
             abstinence: '',
             schedule: '',
             checkin_schedule: [],
