@@ -86,7 +86,7 @@ context('pilot', () => {
     page.form.continueButton.should('exist')
   })
 
-  it('Should disable DAPOL option and display message stating why if probation region not in pilot', () => {
+  it('Should disable DAPOL option and display message stating why if probation region not in pathfinder or programme', () => {
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
     mockDefaultOrder.monitoringConditions.hdc = 'YES'
     stubGetOrder({
@@ -110,7 +110,7 @@ context('pilot', () => {
     )
 
     cy.get('.govuk-inset-text').contains(
-      'The device wearer is being managed by the Yorkshire and the Humber probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region. Any queries around pilot eligibility need to be raised with the appropriate COM.',
+      'The device wearer is being managed by the Yorkshire and the Humber probation region. To be eligible for the DAPOL pathfinder or programme they must be managed by an in-scope region. Any queries around pathfinder or programme eligibility need to be raised with the appropriate COM.',
     )
   })
 
@@ -184,7 +184,7 @@ context('pilot', () => {
     cy.get('input[type="radio"][value="LICENCE_VARIATION_PROJECT"]').should('be.disabled')
 
     cy.get('.govuk-inset-text').contains(
-      'The device wearer is being managed by the London probation region. To be eligible for the Licence Variation pilot they must be managed by an in-scope region.',
+      'The device wearer is being managed by the London probation region. To be eligible for the Licence Variation pathfinder or programme they must be managed by an in-scope region.',
     )
   })
 
@@ -221,9 +221,9 @@ context('pilot', () => {
 
     pilotPage.form.pilotField.shouldHaveOption('Domestic Abuse Perpetrator on Licence (DAPOL)')
     pilotPage.form.pilotField.shouldHaveOption('GPS acquisitive crime (EMAC)')
-    pilotPage.form.pilotField.shouldHaveOption('They are not part of any of these pilots')
+    pilotPage.form.pilotField.shouldHaveOption('They are not part of any of these pathfinders or programmes')
 
-    pilotPage.form.fillInWith('They are not part of any of these pilots')
+    pilotPage.form.fillInWith('They are not part of any of these pathfinders or programmes')
   })
 
   it('hdc no', () => {
@@ -236,12 +236,12 @@ context('pilot', () => {
 
     pilotPage.form.pilotField.shouldHaveOption('Domestic Abuse Perpetrator on Licence (DAPOL)')
     pilotPage.form.pilotField.shouldHaveOption('GPS acquisitive crime (EMAC)')
-    pilotPage.form.pilotField.shouldHaveOption('They are not part of any of these pilots')
+    pilotPage.form.pilotField.shouldHaveOption('They are not part of any of these pathfinders or programmes')
 
     const hintText =
-      'To be eligible for tagging the device wearer must either be part of a pilot or have Alcohol Monitoring on Licence (AML) as a licence condition.'
+      'To be eligible for tagging the device wearer must either be part of a pathfinder or programme or have Alcohol Monitoring on Licence (AML) as a licence condition.'
     pilotPage.form.pilotField.element.contains(hintText).should('be.hidden')
-    pilotPage.form.fillInWith('They are not part of any of these pilots')
+    pilotPage.form.fillInWith('They are not part of any of these pathfinders or programmes')
     pilotPage.form.pilotField.element.contains(hintText)
   })
 })

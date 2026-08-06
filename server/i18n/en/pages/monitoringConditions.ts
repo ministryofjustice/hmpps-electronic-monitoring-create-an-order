@@ -27,11 +27,11 @@ const monitoringConditionsPageContent: MonitoringConditionsPageContent = {
       text: 'What is the order type?',
     },
     orderTypeDescription: {
-      text: 'What pilot project is the device wearer part of?',
+      text: 'What pathfinder or programme is the device wearer part of?',
       hint: 'This is on Create and Vary a Licence (CVL) on the page you print the licence',
     },
     pilot: {
-      text: 'What pilot project is the device wearer part of?',
+      text: 'What pathfinder or programme is the device wearer part of?',
       hint: 'This is on Create and Vary a Licence (CVL) on the page you print the licence',
     },
     prarr: {

@@ -4,7 +4,7 @@ import paths from '../../../../../../server/constants/paths'
 export default class HardStopPage extends AppFormPage {
   constructor() {
     super(
-      'Device wearer is not eligible for the acquisitive crime pilot',
+      'Device wearer is not eligible for the acquisitive crime pathfinder or programme',
       paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HARD_STOP,
     )
   }

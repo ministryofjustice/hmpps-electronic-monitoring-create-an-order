@@ -34,9 +34,9 @@ context('hard stop page', () => {
     page.form.continueButton.click()
 
     Page.verifyOnPage(HardStopPage)
-    cy.contains('Device wearer is not eligible for the acquisitive crime pilot').should('exist')
+    cy.contains('Device wearer is not eligible for the acquisitive crime pathfinder or programme').should('exist')
     cy.contains(
-      'To be eligible for the acquisitive crime pilot the device wearer must have committed an acquisitive offence',
+      'To be eligible for the acquisitive crime pathfinder or programme the device wearer must have committed an acquisitive offence',
     ).should('exist')
   })
 
@@ -47,9 +47,9 @@ context('hard stop page', () => {
     page.form.continueButton.click()
 
     Page.verifyOnPage(HardStopPage)
-    cy.contains('Device wearer is not eligible for the acquisitive crime pilot').should('exist')
+    cy.contains('Device wearer is not eligible for the acquisitive crime pathfinder or programme').should('exist')
     cy.contains(
-      "To be eligible for the acquisitive crime pilot the device wearer's release address must be in an in-scope police force area.",
+      "To be eligible for the acquisitive crime pathfinder or programme the device wearer's release address must be in an in-scope police force area.",
     ).should('exist')
   })
 })

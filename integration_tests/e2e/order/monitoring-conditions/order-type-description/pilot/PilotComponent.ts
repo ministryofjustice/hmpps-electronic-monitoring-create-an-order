@@ -4,7 +4,7 @@ import { PageElement } from '../../../../../pages/page'
 
 export default class PilotComponent extends SingleQuestionFormComponent {
   get pilotField(): FormRadiosComponent {
-    const label = 'What pilot project is the device wearer part of?'
+    const label = 'What pathfinder or programme is the device wearer part of?'
     return new FormRadiosComponent(this.form, label, [])
   }
 

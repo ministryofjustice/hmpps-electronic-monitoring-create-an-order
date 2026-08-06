@@ -107,6 +107,7 @@ const paths = {
       PRARR: '/order/:orderId/monitoring-conditions/order-type-description/prarr',
       POLICE_AREA: '/order/:orderId/monitoring-conditions/order-type-description/police-area',
       PILOT: '/order/:orderId/monitoring-conditions/order-type-description/pilot',
+      PATHFINDER_PROGRAMME: '/order/:orderId/monitoring-conditions/order-type-description/pathfinder-programme',
       DAPOL_MISSED_IN_ERROR: '/order/:orderId/monitoring-conditions/order-type-description/dapol-missed-in-error',
       MONITORING_TYPE: '/order/:orderId/monitoring-conditions/order-type-description/monitoring-type',
       TYPES_OF_MONITORING_NEEDED:

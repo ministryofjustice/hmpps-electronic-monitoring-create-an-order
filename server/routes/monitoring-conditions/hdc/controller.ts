@@ -33,7 +33,9 @@ export default class HdcController {
       res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC.replace(':orderId', order.id))
     } else {
       await this.montoringConditionsStoreService.updateField(order, 'hdc', formData.hdc)
-      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT.replace(':orderId', order.id))
+      res.redirect(
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PATHFINDER_PROGRAMME.replace(':orderId', order.id),
+      )
     }
   }
 }

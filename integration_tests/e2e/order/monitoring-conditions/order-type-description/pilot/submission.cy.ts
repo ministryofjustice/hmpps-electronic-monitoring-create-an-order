@@ -44,7 +44,7 @@ context('pilot', () => {
 
     page.form.fillInWith('Licence Variation Project')
     const hintText =
-      'The pilot is only for probation practitioners varying a licence in response to an escalation of risk or as an alternative to recall.'
+      'The pathfinder or programme is only for probation practitioners varying a licence in response to an escalation of risk or as an alternative to recall.'
     page.form.pilotField.element.contains(hintText)
     page.form.continueButton.click()
 

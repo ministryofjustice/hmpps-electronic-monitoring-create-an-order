@@ -66,6 +66,9 @@ const createOrderTypeDescriptionRouter = (
   router.get('/pilot', asyncMiddleware(pilotController.view))
   router.post('/pilot', asyncMiddleware(pilotController.update))
 
+  router.get('/pathfinder-programme', asyncMiddleware(pilotController.view))
+  router.post('/pathfinder-programme', asyncMiddleware(pilotController.update))
+
   router.get('/dapol-missed-in-error', asyncMiddleware(dapolMissedInErrorController.view))
   router.post('/dapol-missed-in-error', asyncMiddleware(dapolMissedInErrorController.update))
 

@@ -97,7 +97,7 @@ context('Order type descriptions', () => {
 
     verifyValueInCheckYourAnswerPage(
       page,
-      'What pilot project is the device wearer part of?',
+      'What pathfinder or programme is the device wearer part of?',
       monitoringOrderTypeDescription.pilot,
     )
 
