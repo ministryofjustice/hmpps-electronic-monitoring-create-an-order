@@ -63,6 +63,7 @@ const createOrderTypeDescriptionRouter = (
   router.get('/hdc', asyncMiddleware(hdcController.view))
   router.post('/hdc', asyncMiddleware(hdcController.update))
 
+  // pilot to be phased out, replacement is pathfinder-programme
   router.get('/pilot', asyncMiddleware(pilotController.view))
   router.post('/pilot', asyncMiddleware(pilotController.update))
 
