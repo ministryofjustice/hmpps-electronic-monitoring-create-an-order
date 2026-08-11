@@ -76,7 +76,7 @@ const getEnabled = (order: Order): { options: (keyof MonitoringTypes)[]; message
       return {
         options: ['alcohol'],
         message:
-          "Some monitoring types can't be selected because the device wearer is not on a Home Detention Curfew (HDC) or part of any pilots.",
+          "Some monitoring types can't be selected because the device wearer is not on a Home Detention Curfew (HDC) or part of any pathfinders or programmes.",
       }
     }
     if (order.monitoringConditions.pilot === 'GPS_ACQUISITIVE_CRIME_PAROLE') {

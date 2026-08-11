@@ -61,7 +61,7 @@ context('Screenshots', () => {
     cy.visit(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC.replace(':orderId', mockOrderId))
     cy.screenshot('HdcPage', { overwrite: true })
 
-    cy.visit(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT.replace(':orderId', mockOrderId))
+    cy.visit(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PATHFINDER_PROGRAMME.replace(':orderId', mockOrderId))
     cy.screenshot('PilotPage', { overwrite: true })
 
     cy.visit(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.OFFENCE_TYPE.replace(':orderId', mockOrderId))
