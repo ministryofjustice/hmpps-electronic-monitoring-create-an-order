@@ -457,7 +457,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           },
           {
             key: {
-              text: 'What pilot project is the device wearer part of?',
+              text: 'What pathfinder or programme is the device wearer part of?',
             },
             value: {
               text: 'GPS acquisitive crime (EMAC)',
@@ -465,9 +465,12 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             actions: {
               items: [
                 {
-                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT.replace(':orderId', order.id),
+                  href: paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PATHFINDER_PROGRAMME.replace(
+                    ':orderId',
+                    order.id,
+                  ),
                   text: 'Change',
-                  visuallyHiddenText: 'what pilot project is the device wearer part of?',
+                  visuallyHiddenText: 'what pathfinder or programme is the device wearer part of?',
                 },
               ],
             },

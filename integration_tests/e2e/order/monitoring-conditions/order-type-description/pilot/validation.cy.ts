@@ -19,12 +19,14 @@ context('order type', () => {
     cy.signIn()
   })
 
-  it('Should show errors when I do not select pilot', () => {
+  it('Should show errors when I do not select pathfinder or programme', () => {
     const page = Page.visit(PilotPage, { orderId: mockOrderId })
 
     page.form.continueButton.click()
 
     page.errorSummary.shouldExist()
-    page.form.pilotField.validationMessage.contains('Select the type of pilot the device wearer is part of')
+    page.form.pilotField.validationMessage.contains(
+      'Select the type of pathfinder or programme the device wearer is part of',
+    )
   })
 })

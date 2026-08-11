@@ -123,7 +123,7 @@ context('Check your answers', () => {
 
       page.monitoringConditionsSection.shouldExist()
       page.monitoringConditionsSection.shouldHaveItem(
-        'What pilot project is the device wearer part of?',
+        'What pathfinder or programme is the device wearer part of?',
         'GPS acquisitive crime (EMAC)',
       )
       page.installationAddressSection().shouldExist()
@@ -1154,7 +1154,7 @@ context('Check your answers', () => {
 
       page.monitoringConditionsSection.shouldExist()
       page.monitoringConditionsSection.shouldHaveItem(
-        'What pilot project is the device wearer part of?',
+        'What pathfinder or programme is the device wearer part of?',
         'GPS acquisitive crime (EMAC)',
       )
     })

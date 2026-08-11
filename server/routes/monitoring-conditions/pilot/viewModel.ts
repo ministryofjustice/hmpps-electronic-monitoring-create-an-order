@@ -33,10 +33,7 @@ const getLicencePilotProbationRegionStatus = (order: Order): boolean => {
     return true
   }
 
-  if (
-    order.interestedParties?.notifyingOrganisation === 'PROBATION' &&
-    order.interestedParties?.responsibleOrganisation === 'PROBATION'
-  ) {
+  if (order.interestedParties?.responsibleOrganisation === 'PROBATION') {
     if (order.interestedParties?.responsibleOrganisationRegion) {
       const listOfProbationRegions = FeatureFlags.getInstance()
         .getValue('LICENCE_VARIATION_PROBATION_REGIONS')
@@ -60,7 +57,7 @@ const getLicenceMessage = (order: Order): string => {
     if (isLicencePilotProbationRegion) {
       return ''
     }
-    return `The device wearer is being managed by the ${probationRegions[order.interestedParties?.responsibleOrganisationRegion as keyof typeof probationRegions]} probation region. To be eligible for the Licence Variation pilot they must be managed by an in-scope region.`
+    return `The device wearer is being managed by the ${probationRegions[order.interestedParties?.responsibleOrganisationRegion as keyof typeof probationRegions]} probation region. To be eligible for the Licence Variation pathfinder or programme they must be managed by an in-scope region.`
   }
   return ''
 }
@@ -85,7 +82,7 @@ const getDapolMessage = (order: Order): string => {
     if (isDapolPilotProbationRegion) {
       return ''
     }
-    return `The device wearer is being managed by the ${probationRegions[order.interestedParties?.responsibleOrganisationRegion as keyof typeof probationRegions]} probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region. Any queries around pilot eligibility need to be raised with the appropriate COM.`
+    return `The device wearer is being managed by the ${probationRegions[order.interestedParties?.responsibleOrganisationRegion as keyof typeof probationRegions]} probation region. To be eligible for the DAPOL pathfinder or programme they must be managed by an in-scope region. Any queries around pathfinder or programme eligibility need to be raised with the appropriate COM.`
   }
   return ''
 }
@@ -134,8 +131,11 @@ const getItems = (
       { text: 'GPS acquisitive crime (EMAC)', value: 'GPS_ACQUISITIVE_CRIME_PAROLE' },
       { divider: 'or' },
       {
-        text: 'They are not part of any of these pilots',
+        text: 'They are not part of any of these pathfinders or programmes',
         value: 'UNKNOWN',
+        conditional: {
+          html: 'To be eligible for tagging the device wearer must either be part of a pathfinder or programme or have Alcohol Monitoring on Licence (AML) as a licence condition.',
+        },
       },
     ]
   } else {
@@ -148,7 +148,7 @@ const getItems = (
       { text: 'GPS acquisitive crime (EMAC)', value: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW' },
       { divider: 'or' },
       {
-        text: 'They are not part of any of these pilots',
+        text: 'They are not part of any of these pathfinders or programmes',
         value: 'UNKNOWN',
       },
     ]
@@ -159,7 +159,7 @@ const getItems = (
       text: 'Licence Variation Project',
       value: 'LICENCE_VARIATION_PROJECT',
       conditional: {
-        html: 'The pilot is only for probation practitioners varying a licence in response to an escalation of risk or as an alternative to recall.',
+        html: 'The pathfinder or programme is only for probation practitioners varying a licence in response to an escalation of risk or as an alternative to recall.',
       },
       disabled: !isLicencePilotProbationRegion,
     })

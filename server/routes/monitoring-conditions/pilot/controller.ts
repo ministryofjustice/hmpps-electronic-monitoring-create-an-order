@@ -27,7 +27,9 @@ export default class PilotController {
 
     if (formData.pilot === null || formData.pilot === undefined) {
       req.flash('validationErrors', [{ error: validationErrors.monitoringConditions.pilotRequired, field: 'pilot' }])
-      res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT.replace(':orderId', order.id))
+      res.redirect(
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PATHFINDER_PROGRAMME.replace(':orderId', order.id),
+      )
       return
     }
 

@@ -106,19 +106,21 @@ describe('pilot controller', () => {
               text: 'Licence Variation Project',
               value: 'LICENCE_VARIATION_PROJECT',
               conditional: {
-                html: 'The pilot is only for probation practitioners varying a licence in response to an escalation of risk or as an alternative to recall.',
+                html: 'The pathfinder or programme is only for probation practitioners varying a licence in response to an escalation of risk or as an alternative to recall.',
               },
             },
             {
               divider: 'or',
             },
             {
-              text: 'They are not part of any of these pilots',
+              text: 'They are not part of any of these pathfinders or programmes',
               value: 'UNKNOWN',
             },
           ],
           dapolMessage:
-            'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region. Any queries around pilot eligibility need to be raised with the appropriate COM.',
+            'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the DAPOL pathfinder or programme they must be managed by an in-scope region. Any queries around pathfinder or programme eligibility need to be raised with the appropriate COM.',
+          licenceMessage:
+            'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the Licence Variation pathfinder or programme they must be managed by an in-scope region.',
         }),
       )
     })
@@ -148,19 +150,24 @@ describe('pilot controller', () => {
               text: 'Licence Variation Project',
               value: 'LICENCE_VARIATION_PROJECT',
               conditional: {
-                html: 'The pilot is only for probation practitioners varying a licence in response to an escalation of risk or as an alternative to recall.',
+                html: 'The pathfinder or programme is only for probation practitioners varying a licence in response to an escalation of risk or as an alternative to recall.',
               },
             },
             {
               divider: 'or',
             },
             {
-              text: 'They are not part of any of these pilots',
+              text: 'They are not part of any of these pathfinders or programmes',
               value: 'UNKNOWN',
+              conditional: {
+                html: 'To be eligible for tagging the device wearer must either be part of a pathfinder or programme or have Alcohol Monitoring on Licence (AML) as a licence condition.',
+              },
             },
           ],
           dapolMessage:
-            'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the DAPOL pilot they must be managed by an in-scope region. Any queries around pilot eligibility need to be raised with the appropriate COM.',
+            'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the DAPOL pathfinder or programme they must be managed by an in-scope region. Any queries around pathfinder or programme eligibility need to be raised with the appropriate COM.',
+          licenceMessage:
+            'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the Licence Variation pathfinder or programme they must be managed by an in-scope region.',
         }),
       )
     })
@@ -168,7 +175,7 @@ describe('pilot controller', () => {
     it('validation errors', async () => {
       req.flash = jest.fn().mockReturnValueOnce([
         {
-          error: 'Select the type of pilot the device wearer is part of',
+          error: 'Select the type of pathfinder or programme the device wearer is part of',
           field: 'pilot',
         },
       ])
@@ -178,9 +185,14 @@ describe('pilot controller', () => {
       expect(res.render).toHaveBeenCalledWith(
         expect.anything(),
         expect.objectContaining({
-          pilot: { value: '', error: { text: 'Select the type of pilot the device wearer is part of' } },
+          pilot: {
+            value: '',
+            error: { text: 'Select the type of pathfinder or programme the device wearer is part of' },
+          },
           errorSummary: {
-            errorList: [{ href: '#pilot', text: 'Select the type of pilot the device wearer is part of' }],
+            errorList: [
+              { href: '#pilot', text: 'Select the type of pathfinder or programme the device wearer is part of' },
+            ],
             titleText: 'There is a problem',
           },
         }),
@@ -196,11 +208,11 @@ describe('pilot controller', () => {
       await controller.update(req, res, next)
 
       expect(req.flash).toHaveBeenCalledWith('validationErrors', [
-        { error: 'Select the type of pilot the device wearer is part of', field: 'pilot' },
+        { error: 'Select the type of pathfinder or programme the device wearer is part of', field: 'pilot' },
       ])
 
       expect(res.redirect).toHaveBeenCalledWith(
-        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT.replace(':orderId', req.order!.id),
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PATHFINDER_PROGRAMME.replace(':orderId', req.order!.id),
       )
     })
 

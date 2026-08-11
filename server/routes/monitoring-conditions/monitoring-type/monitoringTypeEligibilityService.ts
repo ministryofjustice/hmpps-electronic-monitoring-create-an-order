@@ -15,7 +15,7 @@ export type MonitoringTypeEligibility = {
 
 export const eligibilityMessages = {
   hdcNoPilotUnknown:
-    "Some monitoring types can't be selected because the device wearer is not on a Home Detention Curfew (HDC) or part of any pilots.",
+    "Some monitoring types can't be selected because the device wearer is not on a Home Detention Curfew (HDC) or part of any pathfinders or programmes.",
   hdcNoPilotGPS:
     "Some monitoring types can't be selected because the device wearer is not on a Home Detention Curfew (HDC).",
   hdcNoPilotGPSNoFixedAddress:

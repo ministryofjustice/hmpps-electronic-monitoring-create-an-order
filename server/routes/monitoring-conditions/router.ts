@@ -66,9 +66,13 @@ const createOrderTypeDescriptionRouter = (
 
   router.get('/hdc-pause', asyncMiddleware(hdcPauseController.view))
   router.post('/hdc-pause', asyncMiddleware(hdcPauseController.update))
+  // pilot to be phased out, replacement is pathfinder-programme
 
   router.get('/pilot', asyncMiddleware(pilotController.view))
   router.post('/pilot', asyncMiddleware(pilotController.update))
+
+  router.get('/pathfinder-programme', asyncMiddleware(pilotController.view))
+  router.post('/pathfinder-programme', asyncMiddleware(pilotController.update))
 
   router.get('/dapol-missed-in-error', asyncMiddleware(dapolMissedInErrorController.view))
   router.post('/dapol-missed-in-error', asyncMiddleware(dapolMissedInErrorController.update))

@@ -149,7 +149,7 @@ This allows you to make changes to the API and test against them.
 
 3. Run the server in test mode. Two options:
 
-    - Run with auto-restart on changes: `npm run start-scenarios:dev`
+    - Run with auto-restart on changes: `nnpm run start-scenarios:dev`
     - Run without auto-restart: `npm run start-scenarios`   
 
 4. Run the tests using Cypress. Two options:

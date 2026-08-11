@@ -41,7 +41,10 @@ context('pilot', () => {
   it('Should submit the form', () => {
     const page = Page.visit(PilotPage, { orderId: mockOrderId })
 
-    page.form.fillInWith('Domestic Abuse Perpetrator on Licence (DAPOL)')
+    page.form.fillInWith('Licence Variation Project')
+    const hintText =
+      'The pathfinder or programme is only for probation practitioners varying a licence in response to an escalation of risk or as an alternative to recall.'
+    page.form.pilotField.element.contains(hintText)
     page.form.continueButton.click()
 
     Page.verifyOnPage(PrarrPage, 'Check your answers')

@@ -282,8 +282,8 @@ const validationErrors: ValidationErrors = {
   monitoringConditions: {
     conditionTypeRequired: 'Select order type condition',
     monitoringTypeRequired: 'Select monitoring required',
-    orderTypeDescriptionRequired: 'Select the type of pilot the device wearer is part of',
-    pilotRequired: 'Select the type of pilot the device wearer is part of',
+    orderTypeDescriptionRequired: 'Select the type of pathfinder or programme the device wearer is part of',
+    pilotRequired: 'Select the type of pathfinder or programme the device wearer is part of',
     dapolMissedRequired: 'Select Yes if DAPOL was missed in error at the point of release',
     orderTypeRequired: 'Select the order type',
     sentenceTypeRequired: 'Select the type of sentence the device wearer has been given',
