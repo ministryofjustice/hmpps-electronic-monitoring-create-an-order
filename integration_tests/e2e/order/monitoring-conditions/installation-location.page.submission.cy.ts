@@ -5,6 +5,7 @@ import InstallationAppointmentPage from '../../../pages/order/monitoring-conditi
 
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import CheckYourAnswersPage from '../../../pages/checkYourAnswersPage'
+import { InterestedParties } from '../../../../server/models/InterestedParties'
 
 const mockOrderId = uuidv4()
 const apiPath = '/installation-location'
@@ -79,6 +80,20 @@ context('Monitoring conditions', () => {
       offenceType: '',
     }
 
+    const createInterestedParties = (override: Partial<InterestedParties> = {}) => {
+      return {
+        notifyingOrganisation: 'PRISON',
+        notifyingOrganisationName: 'SUDBURY_PRISON',
+        notifyingOrganisationEmail: 'notifying@organisation',
+        responsibleOrganisation: 'POLICE',
+        responsibleOfficerPhoneNumber: '01234567891',
+        responsibleOrganisationEmail: 'responsible@organisation',
+        responsibleOrganisationRegion: '',
+        responsibleOfficerName: 'name',
+        ...override,
+      }
+    }
+
     const stubGetOrder = monitoringConditions => {
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
@@ -87,6 +102,7 @@ context('Monitoring conditions', () => {
         order: {
           ...mockDefaultOrder,
           monitoringConditions,
+          interestedParties: createInterestedParties({ notifyingOrganisationName: 'SUDBURY_PRISON' }),
         },
       })
     }
@@ -334,7 +350,10 @@ context('Monitoring conditions', () => {
             httpStatus: 200,
             id: mockOrderId,
             status: 'IN_PROGRESS',
-            order: mockCompletedOrder,
+            order: {
+              ...mockCompletedOrder,
+              interestedParties: createInterestedParties({ notifyingOrganisationName: 'SUDBURY_PRISON' }),
+            },
           })
 
           const cyaPage = Page.visit(

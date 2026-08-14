@@ -2,10 +2,10 @@ import TypesOfMonitoringNeededPage from '../../e2e/order/monitoring-conditions/o
 import RemoveMonitoringTypePage from '../../e2e/order/monitoring-conditions/remove-monitoring-type/RemoveMonitoringTypePage'
 import Page from '../../pages/page'
 
-export default function removeMonitoringCondition(removeConditionDetials) {
+export default function removeMonitoringCondition(removeConditionDetails) {
   const page = Page.verifyOnPage(TypesOfMonitoringNeededPage)
 
-  page.actionLinkByLabel(removeConditionDetials.conditionLable, 'Delete').click()
+  page.actionLinkByLabel(removeConditionDetails.conditionLabel, 'Delete').click()
 
   const confirmDeletePage = Page.verifyOnPage(RemoveMonitoringTypePage)
   confirmDeletePage.confirmRemoveButton().click()

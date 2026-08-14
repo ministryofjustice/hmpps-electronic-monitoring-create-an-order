@@ -167,8 +167,10 @@ context('Installation location page', () => {
       const page = Page.visit(InstallationLocationPage, {
         orderId: mockOrderId,
       })
-      page.form.shouldNotBeDisabled()
-      page.form.locationField.shouldHaveOption('10 Downing Street, London, SW1A 2AB')
+      page.form.locationField.shouldHaveEnabledOption('10 Downing Street, London, SW1A 2AB')
+      page.form.locationField.shouldHaveOption('At a prison')
+      page.form.locationField.shouldHaveEnabledOption('At a probation office')
+      page.form.locationField.shouldHaveEnabledOption('At another address')
     })
   })
 
@@ -187,8 +189,37 @@ context('Installation location page', () => {
       page.form.locationField.shouldHaveOption('At a probation office')
       page.form.locationField.shouldHaveOption('At an immigration removal centre')
     })
+
+    it('Should not grey out at a prison option', () => {
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      stubGetOrder({
+        ...mockDefaultOrder,
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'HOME_OFFICE' }),
+      })
+
+      const page = Page.visit(InstallationLocationPage, {
+        orderId: mockOrderId,
+      })
+
+      page.form.locationField.shouldHaveEnabledOption('At a prison')
+    })
   })
+
   context('when part of pilot', () => {
+    it('Should not grey out at a prison option', () => {
+      stubGetOrder({
+        ...mockDefaultOrder,
+        interestedParties: createInterestedParties({ notifyingOrganisationName: 'SUDBURY_PRISON' }),
+      })
+
+      const page = Page.visit(InstallationLocationPage, {
+        orderId: mockOrderId,
+      })
+
+      page.form.locationField.shouldHaveEnabledOption('At a prison')
+    })
+
     it('Should display install at source generic text', () => {
       stubGetOrder({
         ...mockDefaultOrder,
@@ -212,6 +243,7 @@ context('Installation location page', () => {
         cy.get('.govuk-details__text').contains(detail).should('be.visible')
       })
     })
+
     context('and no fixed address', () => {
       it('Should display install at source alcohol text', () => {
         stubGetOrder({
@@ -241,6 +273,21 @@ context('Installation location page', () => {
           cy.get('.govuk-details__text').contains(detail).should('be.visible')
         })
       })
+    })
+  })
+
+  context('when not part of pilot', () => {
+    it('Should grey out at a prison option', () => {
+      stubGetOrder({
+        ...mockDefaultOrder,
+        interestedParties: createInterestedParties({ notifyingOrganisationName: 'FELTHAM_PRISON' }),
+      })
+
+      const page = Page.visit(InstallationLocationPage, {
+        orderId: mockOrderId,
+      })
+
+      page.form.locationField.shouldHaveDisabledOption('At a prison')
     })
   })
 
