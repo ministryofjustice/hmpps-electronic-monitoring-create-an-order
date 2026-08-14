@@ -17,6 +17,8 @@ export default class OrderController {
     private readonly sectionService: SectionService,
   ) {}
 
+  static sentencingActEnabled = (): boolean => FeatureFlags.getInstance().get('SENTENCING_ACT_ENABLED')
+
   create: RequestHandler = async (req: Request, res: Response) => {
     const formData = CreateOrderFormDataParser.parse(req.body)
     if (FeatureFlags.getInstance().get('SERVICE_REQUEST_TYPE_ENABLED') && formData.type === 'VARIATION') {
@@ -70,6 +72,7 @@ export default class OrderController {
     // guarding against forcing SA question on read only
     const isEditable = order.status !== 'SUBMITTED' && order.status !== 'ERROR' && order.isOwner
     if (
+      OrderController.sentencingActEnabled() &&
       !versionId &&
       isEditable &&
       order.interestedParties?.notifyingOrganisation === 'PRISON' &&

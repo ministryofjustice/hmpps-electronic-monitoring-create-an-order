@@ -34,6 +34,7 @@ export default class FeatureFlags {
       OFFENCE_FLOW_ENABLED: process.env.OFFENCE_FLOW_ENABLED === 'true',
       DOWNLOAD_FMS_REQUEST_JSON_ENABLED: process.env.DOWNLOAD_FMS_REQUEST_JSON_ENABLED === 'true',
       TECHNOLOGY_PORTAL_PILOT_PRISONS: process.env.TECHNOLOGY_PORTAL_PILOT_PRISONS ?? '',
+      SENTENCING_ACT_ENABLED: process.env.SENTENCING_ACT_ENABLED === 'true',
     }
   }
 
