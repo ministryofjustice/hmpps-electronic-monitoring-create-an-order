@@ -92,7 +92,7 @@ describe('populateCurrentOrder', () => {
     const next = jest.fn()
     const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED })
     mockOrderService.getOrder.mockResolvedValue(mockOrder)
-
+    mockOrder.isSentencingAct = false
     // When
     await populateCurrentOrder(mockOrderService)(req, res, next, uuidv4(), 'orderId')
 
@@ -111,6 +111,7 @@ describe('populateCurrentOrder', () => {
     const next = jest.fn()
     const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.IN_PROGRESS })
     mockOrderService.getOrder.mockResolvedValue(mockOrder)
+    mockOrder.isSentencingAct = false
 
     // When
     await populateCurrentOrder(mockOrderService)(req, res, next, uuidv4(), 'orderId')
