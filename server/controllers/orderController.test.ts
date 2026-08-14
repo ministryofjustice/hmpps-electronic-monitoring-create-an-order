@@ -19,7 +19,7 @@ jest.mock('../data/restClient')
 const mockSentencingActFlag = (enabled: boolean) => {
   jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
     get: jest.fn((flag: string) => flag === 'SENTENCING_ACT_ENABLED' && enabled),
-    getValue: jest.fn(() => '')
+    getValue: jest.fn(() => ''),
   } as never)
 }
 
@@ -100,9 +100,9 @@ describe('OrderController', () => {
       const next = jest.fn()
       req.flash = jest.fn().mockReturnValue([])
       mockSentencingActFlag(false)
- 
+
       await orderController.summary(req, res, next)
- 
+
       expect(res.redirect).not.toHaveBeenCalled()
       expect(res.render).toHaveBeenCalledWith('pages/order/summary', expect.objectContaining({ order: mockOrder }))
     })
