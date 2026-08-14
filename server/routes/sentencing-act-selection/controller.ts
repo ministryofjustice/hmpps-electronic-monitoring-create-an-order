@@ -16,7 +16,13 @@ export default class SentencingActSelection extends YesNoQuestionPageController 
 
   view: RequestHandler = async (req: Request, res: Response) => {
     if (!SentencingActSelection.isPageEnabled()) {
-      return res.redirect(paths.ORDER.SUMMARY.replace(':orderId', req.params.orderId as string))
+      const orderId = req.params.orderId as string
+      await this.sentencingActService.setSentencingActFlag({
+        accessToken: res.locals.user.token,
+        orderId,
+        isSentencingAct: false,
+      })
+      return res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
     }
     // Hiding the back button on this page as a temp fix against disrupting order flow
     const hideBackAndCancel = true

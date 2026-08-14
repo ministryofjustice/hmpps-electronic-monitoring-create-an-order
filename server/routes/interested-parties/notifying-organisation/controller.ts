@@ -10,7 +10,6 @@ import UpdateInterestedPartiesService from '../interestedPartiesService'
 import { InterestedParties } from '../model'
 import { filterNullValues } from '../../../utils/utils'
 import isVariationType from '../../../utils/isVariationType'
-import FeatureFlags from '../../../utils/featureFlags'
 
 export default class NotifingOrganisationController extends InterestedPartiesBaseController {
   constructor(
@@ -60,13 +59,12 @@ export default class NotifingOrganisationController extends InterestedPartiesBas
       accessToken: res.locals.user.token,
       orderId: order.id,
     })
-    const sentencingActEnabled = FeatureFlags.getInstance().get('SENTENCING_ACT_ENABLED')
     const isPrisonOrYouthUser = cohort === 'PRISON'
     const selectedPrisonService = validationResult.data.notifyingOrganisation === 'PRISON'
     const shouldAskSentencingAct =
       order.isSentencingAct === null || order.isSentencingAct === undefined || isVariationType(order.type)
 
-    if (sentencingActEnabled && isPrisonOrYouthUser && selectedPrisonService && shouldAskSentencingAct) {
+    if (isPrisonOrYouthUser && selectedPrisonService && shouldAskSentencingAct) {
       res.redirect(paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION.replace(':orderId', order.id))
       return
     }

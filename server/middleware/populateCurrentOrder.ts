@@ -6,7 +6,6 @@ import { OrderStatusEnum } from '../models/Order'
 import { OrderService } from '../services'
 import getContent from '../i18n'
 import { Locales } from '../types/i18n/locale'
-import FeatureFlags from '../utils/featureFlags'
 
 const populateOrder =
   (orderService: OrderService): RequestParamHandler =>
@@ -28,10 +27,6 @@ const populateOrder =
         } else {
           order = await orderService.getOrder({ accessToken: token, orderId })
           res.locals.orderSummaryUri = paths.ORDER.SUMMARY.replace(':orderId', order.id)
-        }
-
-        if (!FeatureFlags.getInstance().get('SENTENCING_ACT_ENABLED')) {
-          order = { ...order, isSentencingAct: false }
         }
 
         req.order = order

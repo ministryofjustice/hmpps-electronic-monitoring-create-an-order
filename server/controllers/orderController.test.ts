@@ -90,22 +90,6 @@ describe('OrderController', () => {
       await orderController.summary(req, res, next)
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/interest-parties/sentencing-act-selection`)
     })
-
-    it('should render the summary instead of redirecting when SENTENCING_ACT_ENABLED is off', async () => {
-      const mockOrder = getMockOrder({
-        interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }),
-      })
-      const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
-      const res = createMockResponse()
-      const next = jest.fn()
-      req.flash = jest.fn().mockReturnValue([])
-      mockSentencingActFlag(false)
-
-      await orderController.summary(req, res, next)
-
-      expect(res.redirect).not.toHaveBeenCalled()
-      expect(res.render).toHaveBeenCalledWith('pages/order/summary', expect.objectContaining({ order: mockOrder }))
-    })
   })
 
   describe('create', () => {
