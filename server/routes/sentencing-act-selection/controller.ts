@@ -49,11 +49,6 @@ export default class SentencingActSelection extends YesNoQuestionPageController 
   update: RequestHandler = async (req: Request, res: Response) => {
     const orderId = req.params.orderId as string
 
-    if (!SentencingActSelection.isPageEnabled()) {
-      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
-      return
-    }
-
     const formData = super.tryGetValidFormData(
       req,
       res,
