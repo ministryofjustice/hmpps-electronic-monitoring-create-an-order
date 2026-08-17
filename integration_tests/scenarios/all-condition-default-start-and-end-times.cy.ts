@@ -263,7 +263,7 @@ context('The kitchen sink', () => {
                 end_date: formatAsFmsDateTime(primaryEnforcementZoneDetails.endDate, 23, 59),
               },
               {
-                condition: 'Restriction Zone',
+                condition: 'Restriction Zones',
                 start_date: formatAsFmsDateTime(primaryEnforcementZoneDetails.startDate, 0, 0),
                 end_date: formatAsFmsDateTime(primaryEnforcementZoneDetails.endDate, 23, 59),
               },

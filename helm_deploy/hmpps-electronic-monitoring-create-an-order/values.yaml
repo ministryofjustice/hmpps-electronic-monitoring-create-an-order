@@ -43,6 +43,7 @@ generic-service:
     GOTENBERG_API_URL: http://hmpps-electronic-monitoring-create-an-order-gotenberg
     DOWNLOAD_FMS_REQUEST_JSON_ENABLED: 'false'
     TECHNOLOGY_PORTAL_PILOT_PRISONS: 'HDI,HLI,HMI,LEI,LHI,MDI,WEI,MKI'
+    SENTENCING_ACT_ENABLED: 'false'
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:

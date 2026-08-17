@@ -59,7 +59,6 @@ export default class NotifingOrganisationController extends InterestedPartiesBas
       accessToken: res.locals.user.token,
       orderId: order.id,
     })
-
     const isPrisonOrYouthUser = cohort === 'PRISON'
     const selectedPrisonService = validationResult.data.notifyingOrganisation === 'PRISON'
     const shouldAskSentencingAct =

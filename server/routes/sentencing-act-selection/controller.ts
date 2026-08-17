@@ -5,13 +5,25 @@ import YesNoQuestionPageController from '../baseControllers/yes-no-question-page
 import SentencingActService from './SentencingActService'
 import { isValidationResult } from '../../models/Validation'
 import { isNullOrUndefined } from '../../utils/utils'
+import FeatureFlags from '../../utils/featureFlags'
 
 export default class SentencingActSelection extends YesNoQuestionPageController {
   constructor(private readonly sentencingActService: SentencingActService) {
     super()
   }
 
+  static isPageEnabled = (): boolean => FeatureFlags.getInstance().get('SENTENCING_ACT_ENABLED')
+
   view: RequestHandler = async (req: Request, res: Response) => {
+    if (!SentencingActSelection.isPageEnabled()) {
+      const orderId = req.params.orderId as string
+      await this.sentencingActService.setSentencingActFlag({
+        accessToken: res.locals.user.token,
+        orderId,
+        isSentencingAct: false,
+      })
+      return res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+    }
     // Hiding the back button on this page as a temp fix against disrupting order flow
     const hideBackAndCancel = true
     const current = req.order!.isSentencingAct
@@ -36,6 +48,7 @@ export default class SentencingActSelection extends YesNoQuestionPageController 
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const orderId = req.params.orderId as string
+
     const formData = super.tryGetValidFormData(
       req,
       res,

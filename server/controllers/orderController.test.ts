@@ -9,11 +9,23 @@ import AuditService from '../services/auditService'
 import OrderService from '../services/orderService'
 import OrderController from './orderController'
 import SectionService from '../services/sectionsService'
+import FeatureFlags from '../utils/featureFlags'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
 jest.mock('../data/hmppsAuditClient')
 jest.mock('../data/restClient')
+
+const mockSentencingActFlag = (enabled: boolean) => {
+  jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
+    get: jest.fn((flag: string) => flag === 'SENTENCING_ACT_ENABLED' && enabled),
+    getValue: jest.fn(() => ''),
+  } as never)
+}
+
+afterEach(() => {
+  jest.restoreAllMocks()
+})
 
 describe('OrderController', () => {
   let mockRestClient: jest.Mocked<RestClient>
@@ -73,6 +85,7 @@ describe('OrderController', () => {
       const res = createMockResponse()
       const next = jest.fn()
       req.flash = jest.fn().mockReturnValue([])
+      mockSentencingActFlag(true)
 
       await orderController.summary(req, res, next)
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/interest-parties/sentencing-act-selection`)
