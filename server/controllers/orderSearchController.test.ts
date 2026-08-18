@@ -338,7 +338,6 @@ describe('OrderSearchController', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/search', {
         orders: [],
-        variationAsNewOrderEnabled: true,
       })
     })
   })

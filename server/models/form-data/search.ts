@@ -1,4 +1,3 @@
-import config from '../../config'
 import paths from '../../constants/paths'
 import { AddressTypeEnum } from '../Address'
 import { OrderListInformation } from '../OrderListInformation'
@@ -14,7 +13,6 @@ type OrderListViewModel = {
     lastUpdatedDateTime: string
     index: number
   }[]
-  variationAsNewOrderEnabled: boolean
   isPrisonOrYouthUser: boolean
   viewOptions: { value: OrderListView; text: string; selected: boolean }[]
 }
@@ -30,7 +28,6 @@ export type OrderSearchViewModel = {
     endDate: string
     lastUpdated: string
   }[]
-  variationAsNewOrderEnabled: boolean
   emptySearch?: boolean
   noResults?: boolean
   searchTerm?: string
@@ -92,7 +89,6 @@ export const constructSearchViewModel = (
 ): OrderSearchViewModel => {
   return {
     orders: orders.map(order => createOrderItem(order)),
-    variationAsNewOrderEnabled: config.variationAsNewOrder.enabled,
     searchTerm,
   }
 }
@@ -113,7 +109,6 @@ export function constructListViewModel(
       statusTags: getStatusTags(order),
       index,
     })),
-    variationAsNewOrderEnabled: config.variationAsNewOrder.enabled,
     isPrisonOrYouthUser,
     viewOptions: OrderListViewEnum.options.map(value => ({
       value,
