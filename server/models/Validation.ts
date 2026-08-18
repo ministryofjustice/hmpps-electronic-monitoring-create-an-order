@@ -1,12 +1,12 @@
 import z from 'zod'
 
-export const ValidationErrorModel = z.object({
+const ValidationErrorModel = z.object({
   error: z.string(),
   field: z.string(),
   focusTarget: z.string().optional(),
 })
 
-export const ListItemValidationErrorModel = z.object({
+const ListItemValidationErrorModel = z.object({
   errors: z.array(ValidationErrorModel),
   index: z.number().int(),
 })
@@ -19,7 +19,7 @@ export type ValidationResult = z.infer<typeof ValidationResultModel>
 
 export const ListValidationResultModel = z.array(ListItemValidationErrorModel)
 
-export type ListItemValidationError = z.infer<typeof ListItemValidationErrorModel>
+type ListItemValidationError = z.infer<typeof ListItemValidationErrorModel>
 
 export type ListValidationResult = z.infer<typeof ListValidationResultModel>
 

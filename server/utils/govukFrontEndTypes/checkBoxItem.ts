@@ -64,7 +64,7 @@ export type CheckboxItem = {
   behaviour?: string
 }
 
-export type CheckboxItemConditional = {
+type CheckboxItemConditional = {
   /*
       Provide content for the conditional reveal.
     */

@@ -59,9 +59,6 @@ const DeviceWearerFormDataValidator = z.object({
   ),
 })
 
-// The output of validation should be an object that can be sent to the API
-type DeviceWearerApiRequestBody = z.infer<typeof DeviceWearerFormDataValidator>
-
 const IdentityNumbersFormDataModel = FormDataModel.extend({
   identityNumbers: MultipleChoiceInputModel.pipe(z.array(IdentityNumbersEnum)),
   nomisId: z.string().optional(),
@@ -156,7 +153,6 @@ type IdentityNumbersFormData = Omit<z.infer<typeof IdentityNumbersFormDataModel>
 export {
   DeviceWearerFormData,
   DeviceWearerFormDataParser,
-  DeviceWearerApiRequestBody,
   DeviceWearerFormDataValidator,
   IdentityNumbersFormData,
   IdentityNumbersFormDataModel,

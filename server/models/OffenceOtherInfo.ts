@@ -5,6 +5,4 @@ const OffenceOtherInfoModel = z.object({
   additionalDetails: z.string().nullable().optional(),
 })
 
-export type OffenceOtherInfo = z.infer<typeof OffenceOtherInfoModel>
-
 export default OffenceOtherInfoModel

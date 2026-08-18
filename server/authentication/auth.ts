@@ -16,7 +16,7 @@ passport.deserializeUser((user, done) => {
   done(null, user as Express.User)
 })
 
-export type AuthenticationMiddleware = (tokenVerifier: TokenVerifier) => RequestHandler
+type AuthenticationMiddleware = (tokenVerifier: TokenVerifier) => RequestHandler
 
 const authenticationMiddleware: AuthenticationMiddleware = verifyToken => {
   return async (req, res, next) => {

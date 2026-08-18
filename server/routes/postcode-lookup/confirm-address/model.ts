@@ -71,5 +71,3 @@ function getContent(content: I18n, addressType: ConfirmationAddressType): Confir
 }
 
 export default { construct }
-
-export type { ConfirmAddressModel, ConfirmationAddressType }

@@ -16,5 +16,4 @@ const VersionInformationModel = z.object({
 })
 
 export type VersionInformation = z.infer<typeof VersionInformationModel>
-export default VersionInformationModel
 export const VersionInformationList = z.array(VersionInformationModel)

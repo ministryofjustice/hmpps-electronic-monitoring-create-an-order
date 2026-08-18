@@ -4,7 +4,7 @@ import { createGovukErrorSummary } from '../../../utils/errors'
 import { getError } from '../../../utils/utils'
 import { MonitoringConditions } from '../model'
 
-export type HdcModel = ViewModel<Pick<MonitoringConditions, 'hdc'>>
+type HdcModel = ViewModel<Pick<MonitoringConditions, 'hdc'>>
 
 const contructModel = (data: MonitoringConditions, errors: ValidationResult): HdcModel => {
   const model: HdcModel = {

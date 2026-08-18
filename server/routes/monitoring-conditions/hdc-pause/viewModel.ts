@@ -3,7 +3,7 @@ import { TextField, ViewModelBase } from '../../../models/view-models/utils'
 import { createGovukErrorSummary } from '../../../utils/errors'
 import { getError } from '../../../utils/utils'
 
-export type HdcPauseModel = ViewModelBase & {
+type HdcPauseModel = ViewModelBase & {
   hdcPause: TextField
 }
 

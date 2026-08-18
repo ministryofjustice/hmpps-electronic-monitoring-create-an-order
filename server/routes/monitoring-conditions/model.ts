@@ -1,12 +1,12 @@
 import z from 'zod'
 
-export const OrderTypeEnum = z.enum(['CIVIL', 'COMMUNITY', 'IMMIGRATION', 'POST_RELEASE', 'BAIL'])
-export const ConditionTypeEnum = z.enum([
+const OrderTypeEnum = z.enum(['CIVIL', 'COMMUNITY', 'IMMIGRATION', 'POST_RELEASE', 'BAIL'])
+const ConditionTypeEnum = z.enum([
   'LICENSE_CONDITION_OF_A_CUSTODIAL_ORDER',
   'REQUIREMENT_OF_A_COMMUNITY_ORDER',
   'BAIL_ORDER',
 ])
-export const SentenceTypeEnum = z.enum([
+const SentenceTypeEnum = z.enum([
   'STANDARD_DETERMINATE_SENTENCE',
   'EXTENDED_DETERMINATE_SENTENCE',
   'IPP',
@@ -24,12 +24,11 @@ export const SentenceTypeEnum = z.enum([
   'BAIL_RLAA',
   'BAIL',
 ])
-export const addToListEnforcementZoneTypes = ['exclusion', 'restriction'] as const
 
-export type AddToListEnforcementZoneTypes = (typeof addToListEnforcementZoneTypes)[number]
+export type AddToListEnforcementZoneTypes = 'exclusion' | 'restriction'
 
 export const YesNoUnknownEnum = z.enum(['YES', 'NO', 'UNKNOWN'])
-export const PilotTypeEnum = z.enum([
+const PilotTypeEnum = z.enum([
   'ACQUISITIVE_CRIME_PROJECT',
   'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_PROJECT',
   'LICENCE_VARIATION_PROJECT',

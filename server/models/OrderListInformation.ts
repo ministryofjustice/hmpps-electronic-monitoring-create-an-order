@@ -14,5 +14,4 @@ const OrderListInformationModel = z.object({
 })
 
 export type OrderListInformation = z.infer<typeof OrderListInformationModel>
-export default OrderListInformationModel
 export const OrderListInformationList = z.array(OrderListInformationModel)

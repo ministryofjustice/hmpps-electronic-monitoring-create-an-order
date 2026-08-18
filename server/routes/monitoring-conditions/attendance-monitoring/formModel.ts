@@ -35,8 +35,6 @@ const AttendanceMonitoringAddToListFormDataModel = z.object({
 
 type AttendanceMonitoringAddToListFormData = z.infer<typeof AttendanceMonitoringAddToListFormDataModel>
 
-export default AttendanceMonitoringAddToListFormDataModel
-
 const AttendanceMonitoringAddToListFormDataValidator = z
   .object({
     id: z.string().nullable(),
@@ -61,11 +59,8 @@ const AttendanceMonitoringAddToListFormDataValidator = z
     ...formData,
   }))
 
-type AttendanceMonitoringAddToListApiRequestBody = z.infer<typeof AttendanceMonitoringAddToListFormDataValidator>
-
 export {
   AttendanceMonitoringAddToListFormDataModel,
-  AttendanceMonitoringAddToListApiRequestBody,
   AttendanceMonitoringAddToListFormDataValidator,
   AttendanceMonitoringAddToListFormData,
 }

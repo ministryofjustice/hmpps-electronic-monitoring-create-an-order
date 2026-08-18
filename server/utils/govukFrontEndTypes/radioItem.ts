@@ -59,7 +59,7 @@ export type RadiosItem = {
   attributes?: Record<string, unknown>
 }
 
-export type RadiosItemConditional = {
+type RadiosItemConditional = {
   /*
       Provide content for the conditional reveal.
     */

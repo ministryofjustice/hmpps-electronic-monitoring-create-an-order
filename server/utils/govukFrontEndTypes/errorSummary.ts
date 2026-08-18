@@ -36,7 +36,7 @@ export type ErrorSummary = {
   attributes?: Record<string, unknown>
 }
 
-export type ErrorListItem = {
+type ErrorListItem = {
   /*
       Href attribute for the error link item. If provided item will be an anchor.
     */

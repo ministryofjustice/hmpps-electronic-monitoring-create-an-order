@@ -4,7 +4,7 @@ import { createGovukErrorSummary } from '../../../utils/errors'
 import { getError } from '../../../utils/utils'
 import { MonitoringConditions } from '../model'
 
-export type IsspModel = ViewModel<Pick<MonitoringConditions, 'issp'>>
+type IsspModel = ViewModel<Pick<MonitoringConditions, 'issp'>>
 
 const contructModel = (data: MonitoringConditions, errors: ValidationResult): IsspModel => {
   const model: IsspModel = {

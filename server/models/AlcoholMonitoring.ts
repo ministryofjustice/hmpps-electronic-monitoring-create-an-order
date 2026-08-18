@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const AlcoholMonitoringTypeEnum = z.enum(['ALCOHOL_LEVEL', 'ALCOHOL_ABSTINENCE']).nullable()
+const AlcoholMonitoringTypeEnum = z.enum(['ALCOHOL_LEVEL', 'ALCOHOL_ABSTINENCE']).nullable()
 
 const AlcoholMonitoringModel = z.object({
   id: z.string().optional(),

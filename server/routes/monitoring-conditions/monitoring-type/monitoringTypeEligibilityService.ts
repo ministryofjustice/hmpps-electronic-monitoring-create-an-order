@@ -2,7 +2,7 @@
 import { MonitoringConditions } from '../model'
 import { Order } from '../../../models/Order'
 
-export type MonitoringTypes = Pick<
+type MonitoringTypes = Pick<
   MonitoringConditions,
   'curfew' | 'exclusionZone' | 'trail' | 'mandatoryAttendance' | 'alcohol' | 'restrictionZone'
 >
@@ -13,7 +13,7 @@ export type MonitoringTypeEligibility = {
   exception?: boolean
 }
 
-export const eligibilityMessages = {
+const eligibilityMessages = {
   hdcNoPilotUnknown:
     "Some monitoring types can't be selected because the device wearer is not on a Home Detention Curfew (HDC) or part of any pathfinders or programmes.",
   hdcNoPilotGPS:
@@ -25,7 +25,7 @@ export const eligibilityMessages = {
     'Alcohol monitoring is not an option because the device wearer is not 18 years old or older when the electronic monitoring device is installed.',
 }
 
-export const eligibilityMessagesISR = {
+const eligibilityMessagesISR = {
   noFixedAddress: 'The device wearer has no fixed address so only Alcohol monitoring is allowed.',
   noFixedAddressHomeOffice:
     'The device wearer has no fixed address so only Trail monitoring and Exclusion zone monitoring is allowed.',

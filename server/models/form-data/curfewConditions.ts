@@ -34,6 +34,4 @@ const CurfewConditionsFormDataValidator = (notifyingOrganisation: NotifyingOrgan
         : z.any().optional(),
   })
 
-type CurfewConditionsApiRequestBody = z.infer<ReturnType<typeof CurfewConditionsFormDataValidator>>
-
-export { CurfewConditionsFormDataModel, CurfewConditionsApiRequestBody, CurfewConditionsFormDataValidator }
+export { CurfewConditionsFormDataModel, CurfewConditionsFormDataValidator }

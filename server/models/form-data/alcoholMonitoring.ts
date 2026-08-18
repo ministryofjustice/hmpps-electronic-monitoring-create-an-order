@@ -35,6 +35,4 @@ const AlcoholMonitoringFormDataValidator = z
     ...formData,
   }))
 
-type AlcoholMonitoringApiRequestBody = z.infer<typeof AlcoholMonitoringFormDataValidator>
-
-export { AlcoholMonitoringFormDataModel, AlcoholMonitoringApiRequestBody, AlcoholMonitoringFormDataValidator }
+export { AlcoholMonitoringFormDataModel, AlcoholMonitoringFormDataValidator }

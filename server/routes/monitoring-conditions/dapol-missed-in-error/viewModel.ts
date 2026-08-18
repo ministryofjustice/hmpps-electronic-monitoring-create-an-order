@@ -4,7 +4,7 @@ import { createGovukErrorSummary } from '../../../utils/errors'
 import { getError } from '../../../utils/utils'
 import { MonitoringConditions } from '../model'
 
-export type DapolMissedInErrorModel = ViewModel<Pick<MonitoringConditions, 'dapolMissedInError'>>
+type DapolMissedInErrorModel = ViewModel<Pick<MonitoringConditions, 'dapolMissedInError'>>
 
 const constructModel = (data: MonitoringConditions, errors: ValidationResult): DapolMissedInErrorModel => {
   const model: DapolMissedInErrorModel = {

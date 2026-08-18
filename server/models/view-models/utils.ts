@@ -1,22 +1,11 @@
 import { ErrorSummary } from '../../utils/govukFrontEndTypes/errorSummary'
 import { Address, AddressTypeEnum } from '../Address'
 
-export type AddressType = {
-  addressLine1: string
-  addressLine2: string
-  addressLine3: string
-  addressLine4: string
-  postcode: string
-}
-
-export type AddressField = FormField & {
-  value: AddressType
-}
 export type ErrorMessage = {
   text: string
 }
 
-export type FormField = {
+type FormField = {
   error?: ErrorMessage
 }
 
@@ -24,7 +13,7 @@ export type TextField = FormField & {
   value: string
 }
 
-export type Time = {
+type Time = {
   hours: string
   minutes: string
 }
@@ -33,7 +22,7 @@ export type TimeField = FormField & {
   value: Time
 }
 
-export type TimeSpan = {
+type TimeSpan = {
   startHours: string
   startMinutes: string
   endHours: string
@@ -44,7 +33,7 @@ export type TimeSpanField = FormField & {
   value: TimeSpan
 }
 
-export type Date = {
+type Date = {
   day: string
   month: string
   year: string

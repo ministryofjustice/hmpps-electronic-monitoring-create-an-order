@@ -7,7 +7,7 @@ import { ErrorSummary } from '../../../utils/govukFrontEndTypes/errorSummary'
 import { getError } from '../../../utils/utils'
 import { FileRequiredFormData } from '../fileRequiredFormModel'
 
-export type FileRequiredViewModel = {
+type FileRequiredViewModel = {
   title?: string
   question: {
     text?: string

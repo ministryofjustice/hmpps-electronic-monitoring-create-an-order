@@ -27,7 +27,7 @@ export const IdentityNumbersEnum = z.enum([
   'COURT_CASE_REFERENCE_NUMBER',
 ])
 
-export const SexEnum = z.enum(['MALE', 'FEMALE', 'PREFER_NOT_TO_SAY', 'UNKNOWN'])
+const SexEnum = z.enum(['MALE', 'FEMALE', 'PREFER_NOT_TO_SAY', 'UNKNOWN'])
 
 const DeviceWearerModel = z.object({
   nomisId: z.string().nullable(),

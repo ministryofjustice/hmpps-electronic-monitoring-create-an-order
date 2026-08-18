@@ -2,9 +2,6 @@ import paths from '../../../../../../server/constants/paths'
 import AppFormPage from '../../../../../pages/appFormPage'
 import OffenceOtherInfoComponent from './offenceOtherInfoComponent'
 
-export type OffenceOtherInfoInput = {
-  isAdditionalInfo?: string
-}
 export default class OffenceOtherInfoPage extends AppFormPage {
   public form = new OffenceOtherInfoComponent()
 

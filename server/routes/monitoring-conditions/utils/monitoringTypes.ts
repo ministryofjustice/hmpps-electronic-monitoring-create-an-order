@@ -12,7 +12,7 @@ export type MonitoringType =
   | EnforcementZone
   | AlcoholMonitoring
 
-export type MonitoringTypeText =
+type MonitoringTypeText =
   | 'Curfew'
   | 'Mandatory attendance monitoring'
   | 'Trail monitoring'
@@ -74,5 +74,3 @@ export const getAllMonitoringTypes = (order: Order): MonitoringType[] => {
     ...order.mandatoryAttendanceConditions,
   ].filter(type => type !== null && type !== undefined)
 }
-
-export default findMonitoringTypeById

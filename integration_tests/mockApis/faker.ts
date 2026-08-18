@@ -121,12 +121,12 @@ export type PersonOfInterest = {
   relationship?: string
 }
 
-export const createFakeUkPhoneNumber = (): string => {
+const createFakeUkPhoneNumber = (): string => {
   const format = faker.helpers.arrayElement(validUkPhoneNumbers)
   return format[1] + `00${faker.number.int({ min: format[2] as number, max: format[3] as number })}`.slice(-3)
 }
 
-export const createFakePerson = (dob: Date, firstNameOverride?: string): Partial<PersonOfInterest> => {
+const createFakePerson = (dob: Date, firstNameOverride?: string): Partial<PersonOfInterest> => {
   const sexType = faker.person.sexType()
   const firstName = firstNameOverride ?? faker.person.firstName(sexType)
   const middleName = faker.person.middleName(sexType)
@@ -288,7 +288,7 @@ export const createFakeInterestedParties = (
   }
 }
 
-export const createFakeYouth = (firstName?: string): PersonOfInterest => {
+const createFakeYouth = (firstName?: string): PersonOfInterest => {
   const dob = faker.date.birthdate({ mode: 'age', min: 13, max: 17 })
 
   return {
@@ -297,7 +297,7 @@ export const createFakeYouth = (firstName?: string): PersonOfInterest => {
   } as PersonOfInterest
 }
 
-export const createFakeAdult = (firstName?: string): PersonOfInterest => {
+const createFakeAdult = (firstName?: string): PersonOfInterest => {
   const dob = faker.date.birthdate({ mode: 'age', min: 18, max: 49 }) // anyone over 50 is apparently considered "older"
 
   return {
@@ -361,5 +361,3 @@ export const createFakeResponsibleAdult = (): PersonOfInterest => {
     relationship,
   }
 }
-
-export default faker

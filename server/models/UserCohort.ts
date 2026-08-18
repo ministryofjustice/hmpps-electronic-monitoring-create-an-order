@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const CohortEnum = z.enum(['PRISON', 'PROBATION', 'COURT', 'HOME_OFFICE', 'OTHER'])
+const CohortEnum = z.enum(['PRISON', 'PROBATION', 'COURT', 'HOME_OFFICE', 'OTHER'])
 const UserCohortModel = z.object({
   cohort: CohortEnum,
   activeCaseLoadName: z.string().nullable().optional(),

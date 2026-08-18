@@ -71,11 +71,8 @@ const EnforcementZoneAddToListFormDataValidator = (
       ...formData,
     }))
 
-type EnforcementZoneAddToListApiRequestBody = z.infer<ReturnType<typeof EnforcementZoneAddToListFormDataValidator>>
-
 export {
   EnforcementZoneAddToListFormDataModel,
-  EnforcementZoneAddToListApiRequestBody,
   EnforcementZoneAddToListFormDataValidator,
   EnforcementZoneAddToListFormData,
 }

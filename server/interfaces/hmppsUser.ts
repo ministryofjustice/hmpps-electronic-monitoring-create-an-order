@@ -1,11 +1,11 @@
 import { UserCohort } from '../models/UserCohort'
 
-export type AuthSource = 'nomis' | 'delius' | 'external' | 'azuread'
+type AuthSource = 'nomis' | 'delius' | 'external' | 'azuread'
 
 /**
  * These are the details that all user types share.
  */
-export interface BaseUser {
+interface BaseUser {
   authSource: AuthSource
   username: string
   userId: string
@@ -26,7 +26,7 @@ export interface BaseUser {
  * retrieve the user case load (which prisons that a prison user has access
  * to) and store it here, an example can be found in `hmpps-prisoner-profile`.
  */
-export interface PrisonUser extends BaseUser {
+interface PrisonUser extends BaseUser {
   authSource: 'nomis'
   staffId: number
 }
@@ -35,7 +35,7 @@ export interface PrisonUser extends BaseUser {
  * Probation users are those that have a user account in nDelius.
  * HMPPS Auth automatically grants these users a `ROLE_PROBATION` role.
  */
-export interface ProbationUser extends BaseUser {
+interface ProbationUser extends BaseUser {
   authSource: 'delius'
 }
 
@@ -44,7 +44,7 @@ export interface ProbationUser extends BaseUser {
  * database. These accounts are created for users that need access to HMPPS
  * services but have neither NOMIS nor nDelius access.
  */
-export interface ExternalUser extends BaseUser {
+interface ExternalUser extends BaseUser {
   authSource: 'external'
 }
 
@@ -57,7 +57,7 @@ export interface ExternalUser extends BaseUser {
  * possible that a user of this type could attempt to access the service,
  * and would have no user roles associated.
  */
-export interface AzureADUser extends BaseUser {
+interface AzureADUser extends BaseUser {
   authSource: 'azuread'
 }
 

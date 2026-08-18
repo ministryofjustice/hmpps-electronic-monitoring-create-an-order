@@ -37,9 +37,5 @@ const TrailMonitoringFormDataValidator = (notifyingOrganisation: NotifyingOrgani
         : z.string().optional(),
   })
 
-type TrailMonitoringApiRequestBody = z.infer<ReturnType<typeof TrailMonitoringFormDataValidator>>
-
-export { TrailMonitoringFormDataModel, TrailMonitoringApiRequestBody, TrailMonitoringFormDataValidator }
+export { TrailMonitoringFormDataModel, TrailMonitoringFormDataValidator }
 export type TrailMonitoringFormData = z.infer<typeof TrailMonitoringFormDataModel>
-
-export default TrailMonitoringFormDataModel

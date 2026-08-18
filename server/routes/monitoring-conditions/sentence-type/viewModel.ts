@@ -6,13 +6,13 @@ import { getError } from '../../../utils/utils'
 
 type SentenceTypeQuestion = { question: string; value: string }
 
-export type SentenceTypeModel = ViewModel<Pick<MonitoringConditions, 'sentenceType'>> & {
+type SentenceTypeModel = ViewModel<Pick<MonitoringConditions, 'sentenceType'>> & {
   sentenceTypeQuestions: SentenceTypeQuestion[]
   pageHeading: string
   orderType: MonitoringConditions['orderType']
 }
 
-export const getQuestions = (orderType: MonitoringConditions['orderType']): SentenceTypeQuestion[] => {
+const getQuestions = (orderType: MonitoringConditions['orderType']): SentenceTypeQuestion[] => {
   switch (orderType) {
     case 'POST_RELEASE':
       return [

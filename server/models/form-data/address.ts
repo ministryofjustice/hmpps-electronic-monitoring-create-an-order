@@ -36,6 +36,4 @@ const AddressFormDataValidator = z
     }
   })
 
-type AddressApiRequestBody = z.infer<typeof AddressFormDataValidator>
-
-export { AddressFormDataModel, AddressApiRequestBody, AddressFormDataValidator }
+export { AddressFormDataModel, AddressFormDataValidator }

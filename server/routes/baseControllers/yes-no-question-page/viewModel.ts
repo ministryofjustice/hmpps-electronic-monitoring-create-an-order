@@ -4,7 +4,7 @@ import { createGovukErrorSummary } from '../../../utils/errors'
 import { getError } from '../../../utils/utils'
 import { YesNoQuestionFormData } from './formModel'
 
-export type YesNoQuestionPageViewModel = ViewModel<YesNoQuestionFormData> & {
+type YesNoQuestionPageViewModel = ViewModel<YesNoQuestionFormData> & {
   question: string
   questionTitle: string
   hideBack: boolean

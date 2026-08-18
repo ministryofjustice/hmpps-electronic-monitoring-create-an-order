@@ -33,4 +33,3 @@ const OrderSearchResultModel = z.object({
 })
 export const OrderSearchResultsModel = z.array(OrderSearchResultModel)
 export type OrderSearchResult = z.infer<typeof OrderSearchResultModel>
-export default OrderSearchResultModel

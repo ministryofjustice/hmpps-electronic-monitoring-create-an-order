@@ -101,20 +101,7 @@ export const createMultipleChoiceAnswer = (
   return createAnswer(key, values.join('<br/>'), uri, { ...opts, valueType: 'html' })
 }
 
-const createTimeRangePreview = (from: Optional<string>, to: Optional<string>) =>
-  isNullOrUndefined(from) && isNullOrUndefined(to)
-    ? ''
-    : `${isNullOrUndefined(from) ? '' : from} - ${isNullOrUndefined(to) ? '' : to}`
-
-export const createTimeRangeAnswer = (
-  key: string,
-  from: Optional<string>,
-  to: Optional<string>,
-  uri: string,
-  opts: AnswerOptions = {},
-): Answer => createAnswer(key, createTimeRangePreview(from, to), uri, opts)
-
-export const createMultipleAddressAnswer = (
+const createMultipleAddressAnswer = (
   key: string,
   values: Array<AddressWithoutType>,
   uri: string,

@@ -13,7 +13,7 @@ import { getError, lookup } from '../../../utils/utils'
 
 type OffenceListSummaryItem = Answer
 
-export type OffenceListComponentModel = ViewModel<unknown> & {
+type OffenceListComponentModel = ViewModel<unknown> & {
   items: OffenceListSummaryItem[]
   pageContent: DapoClauseListPageConent | OffenceListPageContent
   addAnother: { value: string; error?: { text: string } }

@@ -3,9 +3,7 @@ import { DataDictionaryVersionEnum, Order, OrderStatusEnum, OrderTypeEnum } from
 import { DeviceWearer } from '../../server/models/DeviceWearer'
 import { MonitoringConditions } from '../../server/models/MonitoringConditions'
 import { Address } from '../../server/models/Address'
-import { ContactDetails } from '../../server/models/ContactDetails'
 import { DeviceWearerResponsibleAdult } from '../../server/models/DeviceWearerResponsibleAdult'
-import { InstallationAndRisk } from '../../server/models/InstallationAndRisk'
 import { InterestedParties } from '../../server/models/InterestedParties'
 import { EnforcementZone } from '../../server/models/EnforcementZone'
 import { TrailMonitoring } from '../../server/models/TrailMonitoring'
@@ -13,7 +11,6 @@ import { AlcoholMonitoring } from '../../server/models/AlcoholMonitoring'
 import { AttendanceMonitoring } from '../../server/models/AttendanceMonitoring'
 import { CurfewReleaseDate } from '../../server/models/CurfewReleaseDate'
 import { CurfewConditions } from '../../server/models/CurfewConditions'
-import { CurfewTimetable } from '../../server/models/CurfewTimetable'
 import { Attachment } from '../../server/models/Attachment'
 import AttachmentType from '../../server/models/AttachmentType'
 import { OrderListInformation } from '../../server/models/OrderListInformation'
@@ -47,23 +44,6 @@ export const createResponsibleAdult = (
   fullName: null,
   otherRelationshipDetails: null,
   relationship: null,
-  ...overrideProperties,
-})
-
-export const createContactDetails = (overrideProperties?: Partial<ContactDetails>): ContactDetails => ({
-  contactNumber: '',
-  phoneNumberAvailable: false,
-  ...overrideProperties,
-})
-
-export const createInstallationAndRisk = (overrideProperties?: Partial<InstallationAndRisk>): InstallationAndRisk => ({
-  mappaCaseType: null,
-  mappaLevel: null,
-  riskCategory: null,
-  riskDetails: null,
-  offence: null,
-  offenceAdditionalDetails: null,
-  offences: null,
   ...overrideProperties,
 })
 
@@ -176,17 +156,7 @@ export const createCurfewConditions = (overrideProperties?: Partial<CurfewCondit
   ...overrideProperties,
 })
 
-export const createCurfewTimeTable = (overrideProperties?: Partial<CurfewTimetable>): CurfewTimetable => [
-  {
-    curfewAddress: '',
-    dayOfWeek: '',
-    endTime: '',
-    startTime: '',
-    ...overrideProperties,
-  },
-]
-
-export const createAttatchment = (overrideProperties?: Partial<Attachment>): Attachment => {
+const createAttatchment = (overrideProperties?: Partial<Attachment>): Attachment => {
   return { id: '', fileName: '', fileType: AttachmentType.LICENCE, ...overrideProperties }
 }
 

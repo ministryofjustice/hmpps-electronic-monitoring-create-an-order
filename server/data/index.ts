@@ -20,8 +20,6 @@ import RestClient from './restClient'
 import OSDataHubClient from './postcode/osDataHub/osDataHubClient'
 import AddressMapper from './postcode/osDataHub/addressMapper'
 
-type RestClientBuilder<T> = (token: string) => T
-
 export const dataAccess = () => ({
   applicationInfo,
   hmppsAuthClient: new HmppsAuthClient(
@@ -36,6 +34,4 @@ export const dataAccess = () => ({
   ),
 })
 
-export type DataAccess = ReturnType<typeof dataAccess>
-
-export { HmppsAuthClient, RestClientBuilder, HmppsAuditClient }
+export default dataAccess

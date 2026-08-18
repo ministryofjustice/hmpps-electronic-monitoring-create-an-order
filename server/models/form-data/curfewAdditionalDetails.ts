@@ -35,10 +35,4 @@ const CurfewAdditionalDetailsFormDataValidator = z
     }
   })
 
-type CurfewAdditionalDetailsApiRequestBody = z.infer<typeof CurfewAdditionalDetailsFormDataValidator>
-
-export {
-  CurfewAdditionalDetailsFormDataModel,
-  CurfewAdditionalDetailsApiRequestBody,
-  CurfewAdditionalDetailsFormDataValidator,
-}
+export { CurfewAdditionalDetailsFormDataModel, CurfewAdditionalDetailsFormDataValidator }

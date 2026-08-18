@@ -4,7 +4,7 @@ import { isNotNullOrEmptyString } from '../utils/utils'
 import OrderChecklistService from './orderChecklistService'
 import TaskListService, { canBeCompleted, Task } from './taskListService'
 
-export const SECTIONS = {
+const SECTIONS = {
   interestedParties: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
   aboutTheDeviceWearer: 'ABOUT_THE_DEVICE_WEARER',
   riskInformation: 'RISK_INFORMATION',

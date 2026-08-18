@@ -4,7 +4,7 @@ import type { RequestHandler } from 'express'
 import logger from '../../logger'
 import asyncMiddleware from './asyncMiddleware'
 
-export enum HMPPS_AUTH_ROLES {
+enum HMPPS_AUTH_ROLES {
   ROLE_EM_CEMO__CREATE_ORDER = 'ROLE_EM_CEMO__CREATE_ORDER',
   ROLE_EM_CEMO_HOME_OFFICE = 'ROLE_EM_CEMO_HOME_OFFICE',
 }

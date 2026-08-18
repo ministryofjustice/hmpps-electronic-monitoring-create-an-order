@@ -10,7 +10,7 @@ export const notifyingOrganisationCourts = [
   'YOUTH_COURT',
 ] as const
 
-export const notifyingOrganisations = [
+const notifyingOrganisations = [
   'HOME_OFFICE',
   'PRISON',
   'PROBATION',

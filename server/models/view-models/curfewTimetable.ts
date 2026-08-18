@@ -8,12 +8,12 @@ import { ValidationResult, ValidationError } from '../Validation'
 import { createGovukErrorSummary } from '../../utils/errors'
 import { Address } from '../Address'
 
-export type Timetable = {
+type Timetable = {
   timeSpan: TimeSpanField
   addresses: MultipleChoiceField
 }
 
-export type CurfewTimetableViewModel = ViewModel<unknown> & {
+type CurfewTimetableViewModel = ViewModel<unknown> & {
   curfewTimetable: {
     monday: Timetable[]
     tuesday: Timetable[]
@@ -26,7 +26,7 @@ export type CurfewTimetableViewModel = ViewModel<unknown> & {
   addressViews: AddressViews
 }
 
-export type CurfewTimetableApiDto = {
+type CurfewTimetableApiDto = {
   dayOfWeek: string
   startTime: string
   endTime: string

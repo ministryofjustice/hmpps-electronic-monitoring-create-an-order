@@ -1,7 +1,7 @@
 import { MonitoringConditions } from '../model'
 import { Order } from '../../../models/Order'
 
-export type HardStopModel = {
+type HardStopModel = {
   hardStopText: string
   order: {
     id: string

@@ -16,7 +16,7 @@ export const formatAsFmsDateTime = (date: Date, hour?: number, minute?: number) 
   return `${year}-${month}-${day} ${hoursString}:${minuteString}:00`
 }
 
-export const stripWhitespace = (str: string) => str.split(/\s+/).join('')
+const stripWhitespace = (str: string) => str.split(/\s+/).join('')
 
 // Serco expects phone numbers to be formatted according to International Direct Dialling format
 // e.g. 00 44 20 7946 0000
