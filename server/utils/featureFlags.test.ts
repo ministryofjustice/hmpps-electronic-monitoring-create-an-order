@@ -19,6 +19,7 @@ const mockFlags = {
   OFFENCE_FLOW_ENABLED: false,
   DOWNLOAD_FMS_REQUEST_JSON_ENABLED: false,
   TECHNOLOGY_PORTAL_PILOT_PRISONS: '',
+  SENTENCING_ACT_ENABLED: false,
 }
 
 jest.mock('fs')

@@ -73,6 +73,7 @@ export default function fillInNewOrder({ startDate = null, files, newDeviceWeare
     installationLocation: undefined,
     installationAppointment: undefined,
     newDeviceWearerFlow,
+    restrictionZoneDetails: undefined,
   })
 
   orderSummaryPage.submitOrderButton.click()
