@@ -122,9 +122,6 @@ export default {
   sqs: {
     audit: auditConfig(),
   },
-  variationAsNewOrder: {
-    enabled: get('VARIATION_AS_NEW_ORDER_ENABLED', 'false') === 'true',
-  },
   tagAtSourcePilotPrions: get('TAG_AT_SOURCE_PILOT_PRISONS', ''),
   dapolPilotProbationRegions: get('DAPOL_PILOT_PROBATION_REGIONS', ''),
   licenceVariationProbationRegions: get('LICENCE_VARIATION_PROBATION_REGIONS', ''),
