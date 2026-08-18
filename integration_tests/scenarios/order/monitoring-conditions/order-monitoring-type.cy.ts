@@ -91,7 +91,7 @@ context('Monitoring type list flow', () => {
     zoneType: 'Exclusion zone',
     startDate: new Date(currentDate.getFullYear(), 4, 1),
     endDate: new Date(currentDate.getFullYear() + 1, 4, 1, 23, 59, 0),
-    description: 'A test description: Lorum ipsum dolar sit amet...',
+    description: 'A test description: Lorem ipsum dolor sit amet...',
     duration: 'A test duration: one, two, three...',
     name: 'Test Zone',
   }
@@ -120,7 +120,7 @@ context('Monitoring type list flow', () => {
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
 
-    const interestedParties = createFakeInterestedParties('Prison', 'Home Office', 'Altcourse Prison', null)
+    const interestedParties = createFakeInterestedParties('Prison', 'Home Office', 'Sudbury Prison', null)
     createNewOrder({
       notifyingOrganisation: interestedParties,
     })
@@ -268,7 +268,7 @@ context('Monitoring type list flow', () => {
       zoneType: 'Exclusion zone',
       startDate: new Date(currentDate.getFullYear(), 4, 1),
       endDate: new Date(currentDate.getFullYear() + 1, 4, 1, 23, 59, 0),
-      description: '2 A test description: Lorum ipsum dolar sit amet...',
+      description: '2 A test description: Lorem ipsum dolor sit amet...',
       duration: '2 A test duration: one, two, three...',
       name: 'Test Zone 2',
     }
@@ -277,7 +277,7 @@ context('Monitoring type list flow', () => {
       zoneType: 'Exclusion zone',
       startDate: new Date(currentDate.getFullYear(), 4, 1),
       endDate: new Date(currentDate.getFullYear() + 1, 4, 1, 23, 59, 0),
-      description: '3 A test description: Lorum ipsum dolar sit amet...',
+      description: '3 A test description: Lorem ipsum dolor sit amet...',
       duration: '3 A test duration: one, two, three...',
       name: 'Test Zone 3',
     }
@@ -300,17 +300,29 @@ context('Monitoring type list flow', () => {
 
     fillInMonitoringTypeWith({
       additionalMonitoringConditions: 'No',
+      installationLocation: installationLocationDetails,
+      installationAppointment: installationAppointmentDetails,
+      installationAddressDetails: installationAddress,
     })
 
     verifyResult({
+      installationLocation: installationLocationDetails,
+      installationAppointment: installationAppointmentDetails,
+      installationAddressDetails: installationAddress,
       enforcementZoneDetails: enforcementZone,
     })
 
     verifyResult({
+      installationLocation: installationLocationDetails,
+      installationAppointment: installationAppointmentDetails,
+      installationAddressDetails: installationAddress,
       enforcementZoneDetails: { searchTerm: "[zoneId='1']", ...enforcementZone2 },
     })
 
     verifyResult({
+      installationLocation: installationLocationDetails,
+      installationAppointment: installationAppointmentDetails,
+      installationAddressDetails: installationAddress,
       enforcementZoneDetails: { searchTerm: "[zoneId='2']", ...enforcementZone3 },
     })
   })
@@ -344,14 +356,23 @@ context('Monitoring type list flow', () => {
 
     fillInMonitoringTypeWith({
       additionalMonitoringConditions: 'No',
+      installationLocation: installationLocationDetails,
+      installationAppointment: installationAppointmentDetails,
+      installationAddressDetails: installationAddress,
     })
 
     verifyResult({
       attendanceMonitoringDetails: attendanceMonitoring,
+      installationLocation: installationLocationDetails,
+      installationAppointment: installationAppointmentDetails,
+      installationAddressDetails: installationAddress,
     })
 
     verifyResult({
       attendanceMonitoringDetails: { searchTerm: "[attendance='2']", ...attendanceMonitoring2 },
+      installationLocation: installationLocationDetails,
+      installationAppointment: installationAppointmentDetails,
+      installationAddressDetails: installationAddress,
     })
   })
 
@@ -368,15 +389,21 @@ context('Monitoring type list flow', () => {
     })
 
     removeMonitoringCondition({
-      conditionLable: 'Alcohol monitoring',
+      conditionLabel: 'Alcohol monitoring',
     })
 
     fillInMonitoringTypeWith({
       additionalMonitoringConditions: 'No',
+      installationLocation: installationLocationDetails,
+      installationAppointment: installationAppointmentDetails,
+      installationAddressDetails: installationAddress,
     })
 
     verifyResult({
       trailMonitoringDetails: trail,
+      installationLocation: installationLocationDetails,
+      installationAppointment: installationAppointmentDetails,
+      installationAddressDetails: installationAddress,
     })
   })
 })
