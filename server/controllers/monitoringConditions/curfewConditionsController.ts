@@ -1,18 +1,12 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../constants/paths'
 import { isValidationResult } from '../../models/Validation'
-import { AuditService } from '../../services'
 import CurfewConditionsService from '../../services/curfewConditionsService'
 import { CurfewConditionsFormDataModel } from '../../models/form-data/curfewConditions'
 import CurfewConditionsViewModel from '../../models/view-models/curfewConditions'
-import TaskListService from '../../services/taskListService'
 
 export default class CurfewConditionsController {
-  constructor(
-    private readonly auditService: AuditService,
-    private readonly curfewConditionsService: CurfewConditionsService,
-    private readonly taskListService: TaskListService,
-  ) {}
+  constructor(private readonly curfewConditionsService: CurfewConditionsService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const errors = req.flash('validationErrors')

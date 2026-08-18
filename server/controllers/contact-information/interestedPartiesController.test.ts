@@ -1,6 +1,4 @@
 import RestClient from '../../data/restClient'
-import HmppsAuditClient from '../../data/hmppsAuditClient'
-import AuditService from '../../services/auditService'
 import TaskListService from '../../services/taskListService'
 import InterestedPartiesController from './interestedPartiesController'
 import InterestedPartiesService from '../../services/interestedPartiesService'
@@ -28,8 +26,6 @@ const createMockOrder = getMockOrder({
 
 describe('InterestedPartiesController', () => {
   let mockRestClient: jest.Mocked<RestClient>
-  let mockAuditClient: jest.Mocked<HmppsAuditClient>
-  let mockAuditService: jest.Mocked<AuditService>
   let mockInterestedPartiesService: jest.Mocked<InterestedPartiesService>
   let interestedPartiesController: InterestedPartiesController
   const taskListService = {
@@ -38,24 +34,13 @@ describe('InterestedPartiesController', () => {
   } as unknown as jest.Mocked<TaskListService>
 
   beforeEach(() => {
-    mockAuditClient = new HmppsAuditClient({
-      queueUrl: '',
-      enabled: true,
-      region: '',
-      serviceName: '',
-    }) as jest.Mocked<HmppsAuditClient>
     mockRestClient = new RestClient('cemoApi', {
       url: '',
       timeout: { response: 0, deadline: 0 },
       agent: { timeout: 0 },
     }) as jest.Mocked<RestClient>
-    mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockInterestedPartiesService = new InterestedPartiesService(mockRestClient) as jest.Mocked<InterestedPartiesService>
-    interestedPartiesController = new InterestedPartiesController(
-      mockAuditService,
-      mockInterestedPartiesService,
-      taskListService,
-    )
+    interestedPartiesController = new InterestedPartiesController(mockInterestedPartiesService, taskListService)
 
     jest.useFakeTimers()
     jest.setSystemTime(new Date('2020-01-01'))

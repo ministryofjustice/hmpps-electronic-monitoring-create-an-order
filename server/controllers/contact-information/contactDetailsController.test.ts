@@ -1,6 +1,4 @@
-import HmppsAuditClient from '../../data/hmppsAuditClient'
 import RestClient from '../../data/restClient'
-import AuditService from '../../services/auditService'
 import ContactDetailsService from '../../services/contactDetailsService'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 import { getMockOrder } from '../../../test/mocks/mockOrder'
@@ -15,8 +13,6 @@ jest.mock('../../data/restClient')
 
 describe('ContactDetailsController', () => {
   let mockRestClient: jest.Mocked<RestClient>
-  let mockAuditClient: jest.Mocked<HmppsAuditClient>
-  let mockAuditService: jest.Mocked<AuditService>
   let mockContactDetailsService: jest.Mocked<ContactDetailsService>
   let contactDetailsController: ContactDetailsController
   const taskListService = {
@@ -25,24 +21,13 @@ describe('ContactDetailsController', () => {
   } as unknown as jest.Mocked<TaskListService>
 
   beforeEach(() => {
-    mockAuditClient = new HmppsAuditClient({
-      queueUrl: '',
-      enabled: true,
-      region: '',
-      serviceName: '',
-    }) as jest.Mocked<HmppsAuditClient>
     mockRestClient = new RestClient('cemoApi', {
       url: '',
       timeout: { response: 0, deadline: 0 },
       agent: { timeout: 0 },
     }) as jest.Mocked<RestClient>
-    mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockContactDetailsService = new ContactDetailsService(mockRestClient) as jest.Mocked<ContactDetailsService>
-    contactDetailsController = new ContactDetailsController(
-      mockAuditService,
-      mockContactDetailsService,
-      taskListService,
-    )
+    contactDetailsController = new ContactDetailsController(mockContactDetailsService, taskListService)
   })
 
   describe('get', () => {

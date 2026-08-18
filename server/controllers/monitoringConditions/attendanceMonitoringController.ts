@@ -2,15 +2,11 @@ import { Request, RequestHandler, Response } from 'express'
 import paths from '../../constants/paths'
 import { isValidationResult } from '../../models/Validation'
 import AttendanceMonitoringService from '../../services/attendanceMonitoringService'
-import TaskListService from '../../services/taskListService'
 import { AttendanceMonitoringFormDataModel } from '../../models/form-data/attendanceMonitoring'
 import attendanceMonitoringViewModel from '../../models/view-models/attendanceMonitoring'
 
 export default class AttendanceMonitoringController {
-  constructor(
-    private readonly attendanceMonitoringService: AttendanceMonitoringService,
-    private readonly taskListService: TaskListService,
-  ) {}
+  constructor(private readonly attendanceMonitoringService: AttendanceMonitoringService) {}
 
   new: RequestHandler = async (req: Request, res: Response) => {
     const errors = req.flash('validationErrors')

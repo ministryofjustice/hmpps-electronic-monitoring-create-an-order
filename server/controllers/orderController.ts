@@ -1,5 +1,5 @@
 import { Request, RequestHandler, Response } from 'express'
-import { AuditService, OrderService } from '../services'
+import { OrderService } from '../services'
 import paths from '../constants/paths'
 import { CreateOrderFormDataParser } from '../models/form-data/order'
 import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
@@ -12,7 +12,6 @@ import { isNullOrUndefined } from '../utils/utils'
 
 export default class OrderController {
   constructor(
-    private readonly auditService: AuditService,
     private readonly orderService: OrderService,
     private readonly sectionService: SectionService,
   ) {}

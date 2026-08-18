@@ -1,18 +1,12 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../constants/paths'
 import { isValidationResult } from '../../models/Validation'
-import { AuditService } from '../../services'
 import CurfewAdditionalDetailsService from '../../services/curfewAdditionalDetailsService'
 import CurfewAdditionalDetailsViewModel from '../../models/view-models/curfewAdditionalDetails'
-import TaskListService from '../../services/taskListService'
 import { CurfewAdditionalDetailsFormDataModel } from '../../models/form-data/curfewAdditionalDetails'
 
 export default class CurfewAdditionalDetailsController {
-  constructor(
-    private readonly auditService: AuditService,
-    private readonly curfewAdditionalDetailsService: CurfewAdditionalDetailsService,
-    private readonly taskListService: TaskListService,
-  ) {}
+  constructor(private readonly curfewAdditionalDetailsService: CurfewAdditionalDetailsService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const { curfewConditions: model } = req.order!

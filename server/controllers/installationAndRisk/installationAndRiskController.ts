@@ -1,7 +1,6 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../constants/paths'
 import { isValidationResult } from '../../models/Validation'
-import { AuditService } from '../../services'
 import InstallationAndRiskService from '../../services/installationAndRiskService'
 import TaskListService from '../../services/taskListService'
 import InstallationAndRiskFormDataModel from '../../models/form-data/installationAndRisk'
@@ -9,7 +8,6 @@ import installationAndRiskViewModel from '../../models/view-models/installationA
 
 export default class InstallationAndRiskController {
   constructor(
-    private readonly auditService: AuditService,
     private readonly installationAndRiskService: InstallationAndRiskService,
     private readonly taskListService: TaskListService,
   ) {}

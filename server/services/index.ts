@@ -74,7 +74,7 @@ export const services = () => {
   const orderChecklistService = new OrderChecklistService(
     config.redis.enabled ? new RedisOrderChecklistStore(createRedisClient()) : new InMemoryOrderChecklistStore(),
   )
-  const taskListService = new TaskListService(orderChecklistService)
+  const taskListService = new TaskListService()
   const trailMonitoringService = new TrailMonitoringService(cemoApiClient)
   const variationService = new VariationService(cemoApiClient)
   const probationDeliveryUnitService = new ProbationDeliveryUnitService(cemoApiClient)

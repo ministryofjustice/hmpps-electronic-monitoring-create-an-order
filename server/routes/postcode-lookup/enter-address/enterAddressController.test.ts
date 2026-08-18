@@ -4,7 +4,6 @@ import { createDeviceWearer, getMockOrder } from '../../../../test/mocks/mockOrd
 import RestClient from '../../../data/restClient'
 import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
 import AddressService from '../../../services/addressService'
-import PostcodeService from '../postcodeService'
 import ViewModel from './viewModel'
 
 jest.mock('../../../services/orderService')
@@ -39,7 +38,6 @@ describe('EnterAddressController', () => {
   let mockRestClient: jest.Mocked<RestClient>
   let enterAddressController: EnterAddressController
   let mockAddressService: jest.Mocked<AddressService>
-  let mockPostcodeService: jest.Mocked<PostcodeService>
 
   beforeEach(() => {
     jest.restoreAllMocks()
@@ -50,10 +48,7 @@ describe('EnterAddressController', () => {
     }) as jest.Mocked<RestClient>
 
     mockAddressService = new AddressService(mockRestClient) as jest.Mocked<AddressService>
-    mockPostcodeService = {
-      buildUrl: jest.fn(),
-    } as unknown as jest.Mocked<PostcodeService>
-    enterAddressController = new EnterAddressController(mockAddressService, mockPostcodeService)
+    enterAddressController = new EnterAddressController(mockAddressService)
   })
 
   describe('getEnterAddress', () => {
