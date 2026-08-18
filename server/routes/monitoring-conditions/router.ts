@@ -13,6 +13,7 @@ import PoliceAreaController from './police-area/controller'
 import TypesOfMonitoringNeededController from './types-of-monitoring-needed/controller'
 import HardStopController from './hard-stop/controller'
 import DapolMissedInErrorController from './dapol-missed-in-error/controller'
+import HdcPauseController from './hdc-pause/controller'
 
 const createOrderTypeDescriptionRouter = (
   services: Pick<
@@ -35,7 +36,7 @@ const createOrderTypeDescriptionRouter = (
   )
 
   const hdcController = new HdcController(monitoringConditionsStoreService)
-
+  const hdcPauseController = new HdcPauseController(monitoringConditionsStoreService)
   const pilotController = new PilotController(monitoringConditionsStoreService)
 
   const dapolMissedInErrorController = new DapolMissedInErrorController(monitoringConditionsStoreService)
@@ -63,7 +64,10 @@ const createOrderTypeDescriptionRouter = (
   router.get('/hdc', asyncMiddleware(hdcController.view))
   router.post('/hdc', asyncMiddleware(hdcController.update))
 
+  router.get('/hdc-pause', asyncMiddleware(hdcPauseController.view))
+  router.post('/hdc-pause', asyncMiddleware(hdcPauseController.update))
   // pilot to be phased out, replacement is pathfinder-programme
+
   router.get('/pilot', asyncMiddleware(pilotController.view))
   router.post('/pilot', asyncMiddleware(pilotController.update))
 

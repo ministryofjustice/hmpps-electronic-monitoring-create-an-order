@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto'
-import { getMockOrder } from '../../test/mocks/mockOrder'
+import { createInterestedParties, getMockOrder } from '../../test/mocks/mockOrder'
 import { createMockRequest, createMockResponse } from '../../test/mocks/mockExpress'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
@@ -9,11 +9,23 @@ import AuditService from '../services/auditService'
 import OrderService from '../services/orderService'
 import OrderController from './orderController'
 import SectionService from '../services/sectionsService'
+import FeatureFlags from '../utils/featureFlags'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
 jest.mock('../data/hmppsAuditClient')
 jest.mock('../data/restClient')
+
+const mockSentencingActFlag = (enabled: boolean) => {
+  jest.spyOn(FeatureFlags, 'getInstance').mockReturnValue({
+    get: jest.fn((flag: string) => flag === 'SENTENCING_ACT_ENABLED' && enabled),
+    getValue: jest.fn(() => ''),
+  } as never)
+}
+
+afterEach(() => {
+  jest.restoreAllMocks()
+})
 
 describe('OrderController', () => {
   let mockRestClient: jest.Mocked<RestClient>
@@ -63,6 +75,20 @@ describe('OrderController', () => {
           order: mockOrder,
         }),
       )
+    })
+
+    it('should redirect to sentencing act page when not set and user is prison instead of summary', async () => {
+      const mockOrder = getMockOrder({
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }),
+      })
+      const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
+      const res = createMockResponse()
+      const next = jest.fn()
+      req.flash = jest.fn().mockReturnValue([])
+      mockSentencingActFlag(true)
+
+      await orderController.summary(req, res, next)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/interest-parties/sentencing-act-selection`)
     })
   })
 

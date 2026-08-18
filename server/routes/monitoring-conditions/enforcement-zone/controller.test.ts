@@ -10,6 +10,7 @@ import EnforcementZoneTypes from '../../../models/EnforcementZoneTypes'
 import EnforcementZoneAddToListController from './controller'
 import { EnforcementZone } from '../../../models/EnforcementZone'
 import TaskListService from '../../../services/taskListService'
+import getEnglishContent from '../../../i18n/en'
 
 jest.mock('../../../services/auditService')
 jest.mock('../../../data/hmppsAuditClient')
@@ -17,6 +18,13 @@ jest.mock('../../../services/attachmentService')
 jest.mock('../../../data/restClient')
 
 const mockId = uuidv4()
+const futureEndDateValue = {
+  day: '15',
+  month: '02',
+  year: (new Date().getFullYear() + 2).toString(),
+  hours: '23',
+  minutes: '59',
+}
 
 describe('EnforcementZoneAddToListController', () => {
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
@@ -82,6 +90,7 @@ describe('EnforcementZoneAddToListController', () => {
         },
         editable: false,
         orderId: mockId,
+        content: getEnglishContent('DDV6'),
       },
       redirect: jest.fn(),
       render: jest.fn(),
@@ -103,6 +112,7 @@ describe('EnforcementZoneAddToListController', () => {
     it('Should render with zone details', async () => {
       req.order?.enforcementZoneConditions.push(createMockEnforcementZone())
       req.params.zoneId = '0'
+      req.params.zoneType = 'exclusion'
       await controller.view(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/enforcement-zone-add-to-list', {
@@ -138,6 +148,7 @@ describe('EnforcementZoneAddToListController', () => {
             minutes: '00',
           },
         },
+        content: getEnglishContent('DDV6').pages.exclusionZone,
       })
     })
   })
@@ -145,6 +156,7 @@ describe('EnforcementZoneAddToListController', () => {
   describe('update enforcement zone', () => {
     it('Should render current page with error when service returns error when updating enforcement zone', async () => {
       req.params.zoneId = '0'
+      req.params.zoneType = 'exclusion'
       req.body = createMockBody()
       mockEnforcementZoneAddToListService.updateZone = jest
         .fn()
@@ -168,13 +180,7 @@ describe('EnforcementZoneAddToListController', () => {
         },
         endDate: {
           error: undefined,
-          value: {
-            day: '15',
-            month: '02',
-            year: '2026',
-            hours: '23',
-            minutes: '59',
-          },
+          value: futureEndDateValue,
         },
         file: {
           error: undefined,
@@ -200,11 +206,13 @@ describe('EnforcementZoneAddToListController', () => {
           ],
           titleText: 'There is a problem',
         },
+        content: getEnglishContent('DDV6').pages.exclusionZone,
       })
     })
 
     it('Should render current page with error when service returns error when upload file', async () => {
       req.params.zoneId = '0'
+      req.params.zoneType = 'exclusion'
       req.body = createMockBody()
       req.file = {
         filename: '',
@@ -238,13 +246,7 @@ describe('EnforcementZoneAddToListController', () => {
         },
         endDate: {
           error: undefined,
-          value: {
-            day: '15',
-            month: '02',
-            year: '2026',
-            hours: '23',
-            minutes: '59',
-          },
+          value: futureEndDateValue,
         },
         file: {
           error: {
@@ -272,6 +274,7 @@ describe('EnforcementZoneAddToListController', () => {
           ],
           titleText: 'There is a problem',
         },
+        content: getEnglishContent('DDV6').pages.exclusionZone,
       })
     })
 
@@ -325,13 +328,7 @@ const createMockBody = (action: string = 'submit'): ZoneAddToListFormDataModel =
       hours: '00',
       minutes: '00',
     },
-    endDate: {
-      day: '15',
-      month: '02',
-      year: '2026',
-      hours: '23',
-      minutes: '59',
-    },
+    endDate: futureEndDateValue,
     zoneType: EnforcementZoneTypes.EXCLUSION,
     name: 'MockName',
     duration: 'MockDuration',

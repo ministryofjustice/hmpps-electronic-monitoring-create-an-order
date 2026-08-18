@@ -92,7 +92,6 @@ describe('populateCurrentOrder', () => {
     const next = jest.fn()
     const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED })
     mockOrderService.getOrder.mockResolvedValue(mockOrder)
-
     // When
     await populateCurrentOrder(mockOrderService)(req, res, next, uuidv4(), 'orderId')
 
