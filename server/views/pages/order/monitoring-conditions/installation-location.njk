@@ -42,7 +42,7 @@
         {
           value: "PRISON",
           text: reference.PRISON,
-          disabled: not isOrderEditable
+          disabled: not isOrderEditable or not enablePrisonOption
         },
         {
           value: "PROBATION_OFFICE",
@@ -51,7 +51,7 @@
         }
     ] %}
 
-  {% if showImmigrationRemovalCentre %}
+  {% if isHomeOfficeNotifyingOrg %}
       {% set items = items.concat([{
       value: "IMMIGRATION_REMOVAL_CENTRE",
       text: reference.IMMIGRATION_REMOVAL_CENTRE,
