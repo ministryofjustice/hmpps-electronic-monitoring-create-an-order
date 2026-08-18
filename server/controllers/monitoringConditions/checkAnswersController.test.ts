@@ -100,6 +100,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
         curfew: [],
         curfewTimetable: [],
         exclusionZone: [],
+        restrictionZone: [],
         goToNextSectionNavigation: true,
         trail: [],
         attendance: [],
@@ -336,6 +337,16 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             fileId: null,
             zoneId: 0,
           },
+          {
+            zoneType: 'RESTRICTION' as EnforcementZoneTypes,
+            startDate: '2024-11-11T01:00:00Z',
+            endDate: '2024-12-11T00:00:00Z',
+            description: 'Description here',
+            duration: 'Duration here',
+            fileName: 'zone.png',
+            fileId: null,
+            zoneId: 2,
+          },
         ],
         monitoringConditionsTrail: {
           startDate: '2024-11-11T00:00:00Z',
@@ -487,7 +498,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
               text: 'What monitoring does the device wearer need?',
             },
             value: {
-              html: 'Alcohol monitoring<br/>Trail monitoring<br/>Curfew<br/>Exclusion zone monitoring<br/>Mandatory attendance monitoring',
+              html: 'Alcohol monitoring<br/>Trail monitoring<br/>Curfew<br/>Exclusion zone monitoring<br/>Restriction zone monitoring<br/>Mandatory attendance monitoring',
             },
             actions: {
               items: [
@@ -628,10 +639,9 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 actions: {
                   items: [
                     {
-                      href: paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':zoneId', '0').replace(
-                        ':orderId',
-                        order.id,
-                      ),
+                      href: paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':zoneId', '0')
+                        .replace(':orderId', order.id)
+                        .replace(':zoneType', 'exclusion'),
                       text: 'Change',
                       visuallyHiddenText: 'what date does exclusion zone monitoring start?',
                     },
@@ -648,10 +658,9 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 actions: {
                   items: [
                     {
-                      href: paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':zoneId', '0').replace(
-                        ':orderId',
-                        order.id,
-                      ),
+                      href: paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':zoneId', '0')
+                        .replace(':orderId', order.id)
+                        .replace(':zoneType', 'exclusion'),
                       text: 'Change',
                       visuallyHiddenText: 'what date does exclusion zone monitoring end?',
                     },
@@ -668,10 +677,9 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 actions: {
                   items: [
                     {
-                      href: paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':zoneId', '0').replace(
-                        ':orderId',
-                        order.id,
-                      ),
+                      href: paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':zoneId', '0')
+                        .replace(':orderId', order.id)
+                        .replace(':zoneType', 'exclusion'),
                       text: 'Change',
                       visuallyHiddenText: 'where is the exclusion zone?',
                     },
@@ -688,10 +696,9 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 actions: {
                   items: [
                     {
-                      href: paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':zoneId', '0').replace(
-                        ':orderId',
-                        order.id,
-                      ),
+                      href: paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':zoneId', '0')
+                        .replace(':orderId', order.id)
+                        .replace(':zoneType', 'exclusion'),
                       text: 'Change',
                       visuallyHiddenText: 'when must the exclusion zone be followed?',
                     },
@@ -708,10 +715,9 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 actions: {
                   items: [
                     {
-                      href: paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':zoneId', '0').replace(
-                        ':orderId',
-                        order.id,
-                      ),
+                      href: paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':zoneId', '0')
+                        .replace(':orderId', order.id)
+                        .replace(':zoneType', 'exclusion'),
                       text: 'Change',
                       visuallyHiddenText: 'monitoring zone map (optional)',
                     },
@@ -721,11 +727,13 @@ describe('MonitoringConditionsCheckAnswersController', () => {
             ],
             zoneId: 0,
           },
+        ],
+        restrictionZone: [
           {
             item: [
               {
                 key: {
-                  text: 'What date does exclusion zone monitoring start?',
+                  text: 'What date does restriction zone monitoring start?',
                 },
                 value: {
                   text: '11/11/2024',
@@ -733,19 +741,18 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 actions: {
                   items: [
                     {
-                      href: paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':zoneId', '1').replace(
-                        ':orderId',
-                        order.id,
-                      ),
+                      href: paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':zoneId', '2')
+                        .replace(':orderId', order.id)
+                        .replace(':zoneType', 'restriction'),
                       text: 'Change',
-                      visuallyHiddenText: 'what date does exclusion zone monitoring start?',
+                      visuallyHiddenText: 'what date does restriction zone monitoring start?',
                     },
                   ],
                 },
               },
               {
                 key: {
-                  text: 'What date does exclusion zone monitoring end?',
+                  text: 'What date does restriction zone monitoring end?',
                 },
                 value: {
                   text: '11/12/2024',
@@ -753,19 +760,18 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 actions: {
                   items: [
                     {
-                      href: paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':zoneId', '1').replace(
-                        ':orderId',
-                        order.id,
-                      ),
+                      href: paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':zoneId', '2')
+                        .replace(':orderId', order.id)
+                        .replace(':zoneType', 'restriction'),
                       text: 'Change',
-                      visuallyHiddenText: 'what date does exclusion zone monitoring end?',
+                      visuallyHiddenText: 'what date does restriction zone monitoring end?',
                     },
                   ],
                 },
               },
               {
                 key: {
-                  text: 'Where is the exclusion zone?',
+                  text: 'Where is the restriction zone?',
                 },
                 value: {
                   text: 'Description here',
@@ -773,19 +779,18 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 actions: {
                   items: [
                     {
-                      href: paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':zoneId', '1').replace(
-                        ':orderId',
-                        order.id,
-                      ),
+                      href: paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':zoneId', '2')
+                        .replace(':orderId', order.id)
+                        .replace(':zoneType', 'restriction'),
                       text: 'Change',
-                      visuallyHiddenText: 'where is the exclusion zone?',
+                      visuallyHiddenText: 'where is the restriction zone?',
                     },
                   ],
                 },
               },
               {
                 key: {
-                  text: 'When must the exclusion zone be followed?',
+                  text: 'When must the restriction zone be followed?',
                 },
                 value: {
                   text: 'Duration here',
@@ -793,12 +798,11 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 actions: {
                   items: [
                     {
-                      href: paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':zoneId', '1').replace(
-                        ':orderId',
-                        order.id,
-                      ),
+                      href: paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':zoneId', '2')
+                        .replace(':orderId', order.id)
+                        .replace(':zoneType', 'restriction'),
                       text: 'Change',
-                      visuallyHiddenText: 'when must the exclusion zone be followed?',
+                      visuallyHiddenText: 'when must the restriction zone be followed?',
                     },
                   ],
                 },
@@ -808,15 +812,14 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                   text: 'Monitoring zone map (optional)',
                 },
                 value: {
-                  text: 'No file selected',
+                  text: 'zone.png',
                 },
                 actions: {
                   items: [
                     {
-                      href: paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':zoneId', '1').replace(
-                        ':orderId',
-                        order.id,
-                      ),
+                      href: paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST.replace(':zoneId', '2')
+                        .replace(':orderId', order.id)
+                        .replace(':zoneType', 'restriction'),
                       text: 'Change',
                       visuallyHiddenText: 'monitoring zone map (optional)',
                     },
@@ -824,7 +827,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
                 },
               },
             ],
-            zoneId: 1,
+            zoneId: 2,
           },
         ],
         trail: [

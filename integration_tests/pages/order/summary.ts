@@ -41,6 +41,7 @@ import ResponsibleOrganisationPage from '../../e2e/order/interested-parties/resp
 import NationalSecurityDirectoratePage from '../../e2e/order/interested-parties/national-security-directorate/nationalSecurityDirectoratePage'
 import ResponsibleOfficerPage from '../../e2e/order/interested-parties/responsible-officer/responsibleOfficerPage'
 import fillinAddress from '../../utils/scenario-flows/postcode-lookup.cy'
+import { AddToListEnforcementZoneTypes } from '../../../server/routes/monitoring-conditions/model'
 
 export default class OrderTasksPage extends AppPage {
   constructor(isOldVersionPage: boolean = false) {
@@ -159,6 +160,7 @@ export default class OrderTasksPage extends AppPage {
     curfewConditionDetails,
     curfewTimetable,
     enforcementZoneDetails,
+    restrictionZoneDetails,
     secondEnforcementZoneDetails = undefined,
     alcoholMonitoringDetails,
     trailMonitoringDetails,
@@ -188,11 +190,13 @@ export default class OrderTasksPage extends AppPage {
       responsibleOrgPage.form.fillInWith(interestedParties)
       responsibleOrgPage.form.continueButton.click()
 
-      if (interestedParties.responsibleOrganisation.toUpperCase() === 'PROBATION') {
-        const nationalSecurityDirectoratePage = Page.verifyOnPage(NationalSecurityDirectoratePage)
-        nationalSecurityDirectoratePage.form.fillInWith('No')
-        nationalSecurityDirectoratePage.form.continueButton.click()
-      }
+      cy.url().then(url => {
+        if (url.includes('interest-parties/national-security-directorate')) {
+          const nationalSecurityDirectoratePage = Page.verifyOnPage(NationalSecurityDirectoratePage)
+          nationalSecurityDirectoratePage.form.fillInWith('No')
+          nationalSecurityDirectoratePage.form.continueButton.click()
+        }
+      })
 
       if (
         interestedParties.responsibleOrganisation.toUpperCase() === 'PROBATION' &&
@@ -253,6 +257,7 @@ export default class OrderTasksPage extends AppPage {
             {
               enforcementZoneDetails,
             },
+            'exclusion',
             false,
           )
           if (secondEnforcementZoneDetails) {
@@ -268,9 +273,17 @@ export default class OrderTasksPage extends AppPage {
               {
                 enforcementZoneDetails: secondEnforcementZoneDetails,
               },
+              'exclusion',
               false,
             )
           }
+        }
+        if (condition === 'Restriction zone monitoring') {
+          this.fillInEnforcementZoneOrderDetailsWith(
+            { enforcementZoneDetails: restrictionZoneDetails },
+            'restriction',
+            false,
+          )
         }
 
         if (condition === 'Trail monitoring') {
@@ -398,9 +411,12 @@ export default class OrderTasksPage extends AppPage {
       probationDeliveryUnit,
     })
 
-    this.fillInEnforcementZoneOrderDetailsWith({
-      enforcementZoneDetails,
-    })
+    this.fillInEnforcementZoneOrderDetailsWith(
+      {
+        enforcementZoneDetails,
+      },
+      'exclusion',
+    )
 
     this.fillInAttachmentDetailsWith({
       files,
@@ -437,9 +453,12 @@ export default class OrderTasksPage extends AppPage {
       probationDeliveryUnit,
     })
 
-    this.fillInEnforcementZoneOrderDetailsWith({
-      enforcementZoneDetails,
-    })
+    this.fillInEnforcementZoneOrderDetailsWith(
+      {
+        enforcementZoneDetails,
+      },
+      'exclusion',
+    )
 
     this.fillInAttachmentDetailsWith({
       files,
@@ -741,8 +760,12 @@ export default class OrderTasksPage extends AppPage {
     }
   }
 
-  fillInEnforcementZoneOrderDetailsWith({ enforcementZoneDetails }, checkYourAnswerPage = true) {
-    fillInEnforcementZoneListItemDetailsWith(enforcementZoneDetails)
+  fillInEnforcementZoneOrderDetailsWith(
+    { enforcementZoneDetails },
+    zoneType: AddToListEnforcementZoneTypes,
+    checkYourAnswerPage = true,
+  ) {
+    fillInEnforcementZoneListItemDetailsWith(enforcementZoneDetails, zoneType)
 
     if (checkYourAnswerPage) {
       const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(

@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import PilotPage from './PilotPage'
 import Page from '../../../../../pages/page'
 import HdcPage from '../hdc/hdcPage'
+import HdcPausePage from '../hdc-pause/hdcPausePage'
 
 const mockOrderId = uuidv4()
 const mockDefaultOrder = {
@@ -85,6 +86,28 @@ context('pilot', () => {
 
     page.form.continueButton.should('exist')
   })
+  it('Should not show licence variation project option to non-probation user', () => {
+    cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+    mockDefaultOrder.monitoringConditions.hdc = 'YES'
+    stubGetOrder({
+      ...mockDefaultOrder,
+      interestedParties: {
+        notifyingOrganisation: 'HOME_OFFICE',
+        notifyingOrganisationName: '',
+        notifyingOrganisationEmail: 'notifying@organisation',
+        responsibleOrganisation: 'POLICE',
+        responsibleOrganisationEmail: 'responsible@organisation',
+        responsibleOrganisationRegion: '',
+        responsibleOfficerName: 'name',
+        responsibleOfficerPhoneNumber: '01234567891',
+      },
+      isSentencingAct: false,
+    })
+
+    const page = Page.visit(PilotPage, { orderId: mockOrderId })
+
+    page.form.pilotField.shouldNotHaveOption('Licence Variation Project')
+  })
 
   it('Should disable DAPOL option and display message stating why if probation region not in pathfinder or programme', () => {
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -114,7 +137,7 @@ context('pilot', () => {
     )
   })
 
-  it('Should enable DAPOL option if probation region in pilot', () => {
+  it('Should enabled DAPOL option and display message stating why if probation region not in pilot and isp is yes', () => {
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
     mockDefaultOrder.monitoringConditions.hdc = 'YES'
     stubGetOrder({
@@ -125,22 +148,44 @@ context('pilot', () => {
         notifyingOrganisationEmail: 'notifying@organisation',
         responsibleOrganisation: 'PROBATION',
         responsibleOrganisationEmail: 'responsible@organisation',
-        responsibleOrganisationRegion: 'KENT_SURREY_SUSSEX',
+        responsibleOrganisationRegion: 'YORKSHIRE_AND_THE_HUMBER',
         responsibleOfficerName: 'name',
         responsibleOfficerPhoneNumber: '01234567891',
       },
+      isSentencingAct: true,
     })
 
-    const page = Page.visit(PilotPage, { orderId: mockOrderId })
-
-    page.form.pilotField.shouldNotBeDisabled()
+    Page.visit(PilotPage, { orderId: mockOrderId })
 
     cy.get('input[type="radio"][value="DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC"]').should(
       'be.enabled',
     )
   })
 
-  it('Should not show licence variation project option to non-probation user', () => {
+  it('Should enable licence variation project option if probation user and region in pilot and is not sentencing act', () => {
+    cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+    mockDefaultOrder.monitoringConditions.hdc = 'YES'
+    stubGetOrder({
+      ...mockDefaultOrder,
+      interestedParties: {
+        notifyingOrganisation: 'PROBATION',
+        notifyingOrganisationName: '',
+        notifyingOrganisationEmail: 'notifying@organisation',
+        responsibleOrganisation: 'PROBATION',
+        responsibleOrganisationEmail: 'responsible@organisation',
+        responsibleOrganisationRegion: 'YORKSHIRE_AND_THE_HUMBER',
+        responsibleOfficerName: 'name',
+        responsibleOfficerPhoneNumber: '01234567891',
+      },
+      isSentencingAct: false,
+    })
+
+    Page.visit(PilotPage, { orderId: mockOrderId })
+
+    cy.get('input[type="radio"][value="LICENCE_VARIATION_PROJECT"]').should('be.enabled')
+  })
+
+  it('dapol option is disabled if not probation user', () => {
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
     mockDefaultOrder.monitoringConditions.hdc = 'YES'
     stubGetOrder({
@@ -156,10 +201,8 @@ context('pilot', () => {
         responsibleOfficerPhoneNumber: '01234567891',
       },
     })
-
     const page = Page.visit(PilotPage, { orderId: mockOrderId })
-
-    page.form.pilotField.shouldNotHaveOption('Licence Variation Project')
+    page.form.pilotField.shouldHaveDisabledOption('Domestic Abuse Perpetrator on Licence (DAPOL)')
   })
 
   it('Should disable licence variation option and display message stating why if probation region not in pilot', () => {
@@ -183,40 +226,21 @@ context('pilot', () => {
 
     cy.get('input[type="radio"][value="LICENCE_VARIATION_PROJECT"]').should('be.disabled')
 
-    cy.get('.govuk-inset-text').contains(
+    cy.contains(
+      '.govuk-inset-text',
       'The device wearer is being managed by the London probation region. To be eligible for the Licence Variation pathfinder or programme they must be managed by an in-scope region.',
     )
   })
 
-  it('Should enable licence variation project option if probation user and region in pilot', () => {
-    cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-    mockDefaultOrder.monitoringConditions.hdc = 'YES'
-    stubGetOrder({
-      ...mockDefaultOrder,
-      interestedParties: {
-        notifyingOrganisation: 'PROBATION',
-        notifyingOrganisationName: '',
-        notifyingOrganisationEmail: 'notifying@organisation',
-        responsibleOrganisation: 'PROBATION',
-        responsibleOrganisationEmail: 'responsible@organisation',
-        responsibleOrganisationRegion: 'YORKSHIRE_AND_THE_HUMBER',
-        responsibleOfficerName: 'name',
-        responsibleOfficerPhoneNumber: '01234567891',
-      },
-    })
-
-    const page = Page.visit(PilotPage, { orderId: mockOrderId })
-
-    page.form.pilotField.shouldHaveOption('Licence Variation Project')
-    cy.get('input[type="radio"][value="LICENCE_VARIATION_PROJECT"]').should('be.enabled')
-  })
-
   it('hdc yes', () => {
+    stubGetOrder({ ...mockDefaultOrder, isSentencingAct: true })
     const hdcPage = Page.visit(HdcPage, { orderId: mockOrderId })
 
     hdcPage.form.fillInWith('Yes')
     hdcPage.form.continueButton.click()
-
+    const hdcPausePage = Page.verifyOnPage(HdcPausePage)
+    hdcPausePage.form.fillInWith('Yes')
+    hdcPausePage.form.continueButton.click()
     const pilotPage = Page.verifyOnPage(PilotPage, { orderId: mockOrderId })
 
     pilotPage.form.pilotField.shouldHaveOption('Domestic Abuse Perpetrator on Licence (DAPOL)')

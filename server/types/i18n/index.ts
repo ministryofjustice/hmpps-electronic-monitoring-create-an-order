@@ -8,7 +8,7 @@ import CurfewConditionsPageContent from './pages/curfewConditions'
 import CurfewReleaseDatePageContent from './pages/curfewReleaseDate'
 import CurfewTimeTablePageContent from './pages/curfewTimeTable'
 import DeviceWearerPageContent from './pages/deviceWearer'
-import ExclusionZonePageContent from './pages/exclusionZone'
+import EnforcementZonePageContent from './pages/enforcementZone'
 import HavePhotoPageContent from './pages/havePhoto'
 import IdentityNumbersPageContent from './pages/identityNumbers'
 import InstallationAndRiskPageContent from './pages/installationAndRisk'
@@ -42,6 +42,7 @@ import NationalSecurityDirectoratePageConetent from './pages/national-security-d
 import IsAddressChangePageContent from './pages/isAddressChange'
 import AddressListContent from './pages/addressList'
 import ManualAddressPageContent from './pages/manualAddress'
+import SetSentencingActPageContent from './pages/setSentencingAct'
 
 type I18n = {
   pages: {
@@ -55,7 +56,8 @@ type I18n = {
     deleteConfirm: ConfirmationPageContent
     deviceWearer: DeviceWearerPageContent
     editConfirm: ConfirmationPageContent
-    exclusionZone: ExclusionZonePageContent
+    exclusionZone: EnforcementZonePageContent
+    restrictionZone: EnforcementZonePageContent
     havePhoto: HavePhotoPageContent
     haveCourtOrder: HaveCourtOrderPageContent
     identityNumbers: IdentityNumbersPageContent
@@ -78,6 +80,7 @@ type I18n = {
     uploadCourtOrder: UploadDocumentPageContent
     variationDetails: VariationDetailsPageContent
     isRejection: IsRejectionPageContent
+    setSentencingAct: SetSentencingActPageContent
     serviceRequestType: ServiceRequestTypePageContent
     dapo: DapoContent
     offence: OffenceContent
