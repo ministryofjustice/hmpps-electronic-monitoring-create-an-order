@@ -33,9 +33,12 @@ export default class HdcController {
       res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC.replace(':orderId', order.id))
     } else {
       await this.montoringConditionsStoreService.updateField(order, 'hdc', formData.hdc)
-      res.redirect(
-        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PATHFINDER_PROGRAMME.replace(':orderId', order.id),
-      )
+      if (formData.hdc === 'YES' && order.isSentencingAct === true)
+        res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC_PAUSE.replace(':orderId', order.id))
+      else
+        res.redirect(
+          paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PATHFINDER_PROGRAMME.replace(':orderId', order.id),
+        )
     }
   }
 }

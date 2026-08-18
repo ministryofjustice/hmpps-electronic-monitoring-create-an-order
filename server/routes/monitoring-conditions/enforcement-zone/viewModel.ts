@@ -5,6 +5,7 @@ import { ValidationResult } from '../../../models/Validation'
 import { DateTimeField, TextField, ViewModel } from '../../../models/view-models/utils'
 import { EnforcementZoneAddToListFormData } from './formModel'
 import { Order } from '../../../models/Order'
+import EnforcementZonePageContent from '../../../types/i18n/pages/enforcementZone'
 
 type EnforcementZoneAddToListViewModel = ViewModel<Pick<EnforcementZone, 'description' | 'duration'>> & {
   endDate?: DateTimeField
@@ -12,12 +13,14 @@ type EnforcementZoneAddToListViewModel = ViewModel<Pick<EnforcementZone, 'descri
   file: TextField
   name?: TextField
   showEndate: boolean
+  content: EnforcementZonePageContent
 }
 
 const constructFromFormData = (
   formData: EnforcementZoneAddToListFormData,
   validationErrors: ValidationResult,
   order: Order,
+  content: EnforcementZonePageContent,
 ): EnforcementZoneAddToListViewModel => {
   const viewModel: EnforcementZoneAddToListViewModel = {
     description: {
@@ -48,6 +51,7 @@ const constructFromFormData = (
     },
     showEndate: order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE',
     errorSummary: createGovukErrorSummary(validationErrors),
+    content,
   }
   if (formData.endDate) {
     viewModel.endDate = {
@@ -64,7 +68,11 @@ const constructFromFormData = (
   return viewModel
 }
 
-const createFromEntity = (zoneId: number, order: Order): EnforcementZoneAddToListViewModel => {
+const createFromEntity = (
+  zoneId: number,
+  order: Order,
+  content: EnforcementZonePageContent,
+): EnforcementZoneAddToListViewModel => {
   const enforcementZones = order!.enforcementZoneConditions
   const currentZone = enforcementZones.find(zone => zone.zoneId === zoneId)
 
@@ -89,6 +97,7 @@ const createFromEntity = (zoneId: number, order: Order): EnforcementZoneAddToLis
     },
     showEndate: order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE',
     errorSummary: null,
+    content,
   }
 }
 
@@ -97,12 +106,13 @@ const construct = (
   order: Order,
   formData: EnforcementZoneAddToListFormData,
   errors: ValidationResult,
+  content: EnforcementZonePageContent,
 ): EnforcementZoneAddToListViewModel => {
   if (errors.length > 0) {
-    return constructFromFormData(formData, errors, order)
+    return constructFromFormData(formData, errors, order, content)
   }
 
-  return createFromEntity(zoneId, order)
+  return createFromEntity(zoneId, order, content)
 }
 
 export default {

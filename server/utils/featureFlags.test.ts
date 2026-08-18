@@ -9,7 +9,6 @@ const featureFlagFilePath = path.join(process.cwd(), 'data', 'feature-flags.json
 const defaultFeatureFlagFilePath = path.join(process.cwd(), 'data', 'default-feature-flags.json')
 
 const mockFlags = {
-  ALCOHOL_MONITORING_ENABLED: false,
   CREATE_NEW_ORDER_VERSION_ENABLED: false,
   SERVICE_REQUEST_TYPE_ENABLED: false,
   TAG_AT_SOURCE_PILOT_PRISONS: '',
@@ -18,6 +17,7 @@ const mockFlags = {
   OFFENCE_FLOW_ENABLED: false,
   DOWNLOAD_FMS_REQUEST_JSON_ENABLED: false,
   TECHNOLOGY_PORTAL_PILOT_PRISONS: '',
+  SENTENCING_ACT_ENABLED: false,
 }
 
 jest.mock('fs')

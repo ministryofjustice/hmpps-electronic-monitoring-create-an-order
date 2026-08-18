@@ -30,6 +30,7 @@ context('Order Summary', () => {
         status: 'IN_PROGRESS',
         order: {
           dataDictionaryVersion: 'DDV6',
+          isSentencingAct: false,
           interestedParties: {
             notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: 'ALTCOURSE_PRISON',
@@ -232,6 +233,7 @@ context('Order Summary', () => {
         status: 'IN_PROGRESS',
         order: {
           type: 'VARIATION',
+          isSentencingAct: false,
           interestedParties: {
             notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: 'ALTCOURSE_PRISON',
@@ -289,6 +291,7 @@ context('Order Summary', () => {
         status: 'IN_PROGRESS',
         order: {
           type: 'VARIATION',
+          isSentencingAct: false,
           interestedParties: {
             notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: 'ALTCOURSE_PRISON',
@@ -317,6 +320,7 @@ context('Order Summary', () => {
         status: 'IN_PROGRESS',
         order: {
           type: 'REVOCATION',
+          isSentencingAct: false,
           interestedParties: {
             notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: 'ALTCOURSE_PRISON',
@@ -345,6 +349,7 @@ context('Order Summary', () => {
         status: 'IN_PROGRESS',
         order: {
           type: 'END_MONITORING',
+          isSentencingAct: false,
           interestedParties: {
             notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: 'ALTCOURSE_PRISON',
@@ -373,6 +378,7 @@ context('Order Summary', () => {
         status: 'IN_PROGRESS',
         order: {
           type: 'REINSTALL_DEVICE',
+          isSentencingAct: false,
           interestedParties: {
             notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: 'ALTCOURSE_PRISON',
@@ -401,6 +407,7 @@ context('Order Summary', () => {
         status: 'IN_PROGRESS',
         order: {
           type: 'REINSTALL_AT_DIFFERENT_ADDRESS',
+          isSentencingAct: false,
           interestedParties: {
             notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: 'ALTCOURSE_PRISON',
@@ -470,6 +477,7 @@ context('Order Summary', () => {
         order: {
           id: mockOrderId,
           status: 'IN_PROGRESS',
+          isSentencingAct: false,
           deviceWearer: {
             nomisId: '',
             pncId: null,
@@ -775,6 +783,7 @@ context('Order Summary', () => {
         order: {
           id: mockOrderId,
           status: 'IN_PROGRESS',
+          isSentencingAct: false,
           deviceWearer: {
             nomisId: '',
             pncId: null,
@@ -994,6 +1003,7 @@ context('Order Summary', () => {
         order: {
           id: mockOrderId,
           status: 'IN_PROGRESS',
+          isSentencingAct: false,
           deviceWearer: {
             nomisId: '',
             pncId: null,
@@ -2175,6 +2185,7 @@ context('Order Summary', () => {
           status: 'SUBMITTED',
           submittedBy: 'John Smith',
           fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0),
+          isSentencingAct: false,
           deviceWearer: {
             nomisId: '',
             pncId: null,
@@ -2923,6 +2934,41 @@ context('Order Summary', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.submitOrderButton.should('not.exist')
       page.assignToMeButton.should('be.visible')
+    })
+  })
+
+  context('Sentencing act banner', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+      cy.task('stubCemoGetVersions', { httpStatus: 200, versions: [], orderId: mockOrderId })
+      cy.signIn()
+    })
+
+    const stubOrderWithSentencingAct = (isSentencingAct: boolean) => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'SUBMITTED',
+        order: { ...mockApiOrder(), id: mockOrderId, status: 'IN_PROGRESS', isSentencingAct },
+      })
+    }
+
+    it('shows the Sentencing Act message when order is flagged', () => {
+      stubOrderWithSentencingAct(true)
+      Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      cy.get('.govuk-notification-banner').should(
+        'contain.text',
+        'This order is subject to the Sentencing Act 2026 changes.',
+      )
+    })
+
+    it('doesnt show the Sentencing Act banner when order is not sentencing act', () => {
+      stubOrderWithSentencingAct(false)
+      Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      cy.get('.govuk-notification-banner').should('not.exist')
     })
   })
 })

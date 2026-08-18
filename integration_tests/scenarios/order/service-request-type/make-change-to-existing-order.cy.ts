@@ -18,6 +18,7 @@ import ReceiptPage from '../../../pages/order/receipt'
 import IsAddressChangePage from '../../../e2e/order/edit-order/is-address-change/isAddressChangePage'
 import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
 import NotifyingOrganisationPage from '../../../e2e/order/interested-parties/notifying-organisation/notifyingOrganisationPage'
+import SentencingActPage from '../../../e2e/order/interested-parties/sentencing-act/sentencingActPage'
 
 context('Service-Request-Types', () => {
   let orderSummaryPage: OrderSummaryPage
@@ -104,6 +105,7 @@ context('Service-Request-Types', () => {
       installationLocation: undefined,
       installationAppointment: undefined,
       newDeviceWearerFlow: true,
+      restrictionZoneDetails: undefined,
     })
 
     orderSummaryPage.submitOrderButton.click()
@@ -142,6 +144,11 @@ context('Service-Request-Types', () => {
     }
     const yourDetailsPage = Page.verifyOnPage(NotifyingOrganisationPage)
     yourDetailsPage.form.continueButton.click()
+
+    const sentencingActPage = Page.verifyOnPage(SentencingActPage)
+    sentencingActPage.form.fillInWith('No')
+    sentencingActPage.continueButton.click()
+
     orderSummaryPage.fillInVariationsDetails({ variationDetails: variation })
     orderSummaryPage.aboutTheDeviceWearerTask.click()
     Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').saveAndReturnButton.click()
