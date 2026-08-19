@@ -73,6 +73,32 @@ context('Check your answers', () => {
         responsibleOrganisationRegion: '',
         responsibleOrganisationEmail: '',
       },
+      enforcementZoneConditions: [
+        {
+          id: '0',
+          zoneType: 'EXCLUSION',
+          name: 'Mock Zone Name',
+          startDate: '2025-07-15T00:00:00Z',
+          endDate: '2025-08-15T00:00:00Z',
+          description: 'mock description',
+          duration: 'mock duration',
+          fileName: 'mock file',
+          fileId: 'mock id',
+          zoneId: 0,
+        },
+        {
+          id: '1',
+          zoneType: 'RESTRICTION',
+          name: 'Mock Zone Name',
+          startDate: '2025-07-15T00:00:00Z',
+          endDate: '2025-08-15T00:00:00Z',
+          description: 'mock restriction description',
+          duration: 'mock restriction duration',
+          fileName: 'mock file',
+          fileId: null,
+          zoneId: 0,
+        },
+      ],
       additionalDocuments: [],
       dataDictionaryVersion: 'DDV5',
     }
@@ -473,6 +499,39 @@ context('Check your answers', () => {
 
       page.curfewSection.shouldNotHaveItem('What date does the curfew end?')
       page.exclusionZoneMonitoringSections().shouldNotHaveItem('What date does exclusion zone monitoring end?')
+    })
+
+    it('shoud show exclusion zones and restriction zones', () => {
+      const page = Page.visit(CheckYourAnswers, { orderId: mockOrderId }, {}, pageHeading)
+      const exclusionZoneMonitoringSections = page.exclusionZoneMonitoringSections()
+      exclusionZoneMonitoringSections.shouldExist()
+      exclusionZoneMonitoringSections.shouldHaveItem('What date does exclusion zone monitoring end?', '15/08/2025')
+      exclusionZoneMonitoringSections.shouldHaveItem('What date does exclusion zone monitoring start?', '15/07/2025')
+      exclusionZoneMonitoringSections.shouldHaveItem('Where is the exclusion zone?', 'mock description')
+      exclusionZoneMonitoringSections.shouldHaveItem('When must the exclusion zone be followed?', 'mock duration')
+      exclusionZoneMonitoringSections.shouldHaveItem('Monitoring zone map (optional)', 'mock file')
+      exclusionZoneMonitoringSections.shouldHaveItem(
+        'What name would you give to the exclusion zone?',
+        'Mock Zone Name',
+      )
+
+      const restrictionZoneMonitoringSections = page.restrictionZoneMonitoringSections()
+      restrictionZoneMonitoringSections.shouldExist()
+      restrictionZoneMonitoringSections.shouldHaveItem('What date does restriction zone monitoring end?', '15/08/2025')
+      restrictionZoneMonitoringSections.shouldHaveItem(
+        'What date does restriction zone monitoring start?',
+        '15/07/2025',
+      )
+      restrictionZoneMonitoringSections.shouldHaveItem('Where is the restriction zone?', 'mock restriction description')
+      restrictionZoneMonitoringSections.shouldHaveItem(
+        'When must the restriction zone be followed?',
+        'mock restriction duration',
+      )
+      restrictionZoneMonitoringSections.shouldHaveItem('Monitoring zone map (optional)', 'mock file')
+      restrictionZoneMonitoringSections.shouldHaveItem(
+        'What name would you give to the restriction zone?',
+        'Mock Zone Name',
+      )
     })
 
     it('should allow user to go back to curfew boundary question if no curfew boundary', () => {

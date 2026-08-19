@@ -64,9 +64,11 @@ export type MultipleChoiceField = FormField & {
   values: Array<string>
 }
 
-export type ViewModel<T> = {
+export type ViewModelBase = {
   errorSummary: ErrorSummary | null
-} & {
+}
+
+export type ViewModel<T> = ViewModelBase & {
   [K in keyof T]: T[K] extends Date ? DateField : T[K] extends string[] ? MultipleChoiceField : TextField
 }
 

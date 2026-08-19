@@ -11,7 +11,8 @@ import { createAddressPreview, getError } from '../../utils/utils'
 type InstallationLocationViewModel = ViewModel<InstallationLocation> & {
   primaryAddressView: TextField
   pilotPrison?: boolean
-  showImmigrationRemovalCentre?: boolean
+  isHomeOfficeNotifyingOrg?: boolean
+  enablePrisonOption?: boolean
   fixedAddressExist: boolean
   showInstallationAlreadyTakenPlace?: boolean
 }
@@ -33,8 +34,16 @@ const hasFixedAddress = (order: Order): boolean => {
   return !order.deviceWearer.noFixedAbode || false
 }
 
-const showImmigrationRemovalCente = (order: Order): boolean => {
+const isHomeOfficeNotifyingOrg = (order: Order): boolean => {
   return order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE'
+}
+
+const enablePrisonOption = (order: Order): boolean => {
+  if (getPilotPrisonStatus(order)) {
+    return true
+  }
+
+  return isHomeOfficeNotifyingOrg(order)
 }
 
 const constructFromFormData = (
@@ -52,7 +61,8 @@ const constructFromFormData = (
     primaryAddressView: { value: primaryAddressView },
     pilotPrison: getPilotPrisonStatus(order),
     fixedAddressExist: hasFixedAddress(order),
-    showImmigrationRemovalCentre: showImmigrationRemovalCente(order),
+    isHomeOfficeNotifyingOrg: isHomeOfficeNotifyingOrg(order),
+    enablePrisonOption: enablePrisonOption(order),
   }
 }
 
@@ -69,7 +79,8 @@ const constructFromEntity = (
     errorSummary: null,
     pilotPrison: getPilotPrisonStatus(order),
     fixedAddressExist: hasFixedAddress(order),
-    showImmigrationRemovalCentre: showImmigrationRemovalCente(order),
+    isHomeOfficeNotifyingOrg: isHomeOfficeNotifyingOrg(order),
+    enablePrisonOption: enablePrisonOption(order),
   }
 }
 

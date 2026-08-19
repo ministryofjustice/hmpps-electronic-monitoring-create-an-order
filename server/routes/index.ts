@@ -16,7 +16,6 @@ import AttendanceMonitoringAddToListController from './monitoring-conditions/att
 import CurfewConditionsController from '../controllers/monitoringConditions/curfewConditionsController'
 import CurfewReleaseDateController from '../controllers/monitoringConditions/curfewReleaseDateController'
 import CurfewTimetableController from '../controllers/monitoringConditions/curfewTimetableController'
-import EnforcementZoneController from '../controllers/monitoringConditions/enforcementZoneController'
 import EnforcementZoneAddToListController from './monitoring-conditions/enforcement-zone/controller'
 import TrailMonitoringController from '../controllers/monitoringConditions/trailMonitoringController'
 import MonitoringConditionsCheckAnswersController from '../controllers/monitoringConditions/checkAnswersController'
@@ -45,6 +44,7 @@ import SpecialOrderController from './special-order/controller'
 import IsAddressChangeController from './variations/is-address-change/controller'
 import NoRefitsController from './variations/no-refits/controller'
 import NoChangeResponsibleOfficerController from './variations/no-change-responsible-officer/controller'
+import SentencingActSelection from './sentencing-act-selection/controller'
 
 export default function routes({
   alcoholMonitoringService,
@@ -68,7 +68,6 @@ export default function routes({
   trailMonitoringService,
   variationService,
   probationDeliveryUnitService,
-  zoneService,
   zoneAddToListService,
   installationLocationService,
   installationAppointmentService,
@@ -88,6 +87,7 @@ export default function routes({
   updateInterestedPartiesService,
   postcodeService,
   sectionService,
+  sentencingActService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -162,7 +162,6 @@ export default function routes({
     taskListService,
   )
   const trailMonitoringController = new TrailMonitoringController(auditService, trailMonitoringService, taskListService)
-  const zoneController = new EnforcementZoneController(auditService, zoneService, taskListService)
   const zoneControllerAddToList = new EnforcementZoneAddToListController(auditService, zoneAddToListService)
   const monitoringConditionsCheckYourAnswersController = new MonitoringConditionsCheckAnswersController(
     auditService,
@@ -214,6 +213,7 @@ export default function routes({
 
   const noRefitsController = new NoRefitsController()
   const noChangeResonsibleOfficer = new NoChangeResponsibleOfficerController()
+  const setSentencingAct = new SentencingActSelection(sentencingActService)
   router.param('orderId', populateOrder(orderService))
 
   get('/', orderSearchController.list)
@@ -358,10 +358,6 @@ export default function routes({
   get(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE, curfewTimetableController.view)
   post(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE, curfewTimetableController.update)
 
-  // Exclusion Inclusion Zone
-  get(paths.MONITORING_CONDITIONS.ZONE, zoneController.view)
-  post(paths.MONITORING_CONDITIONS.ZONE, zoneController.update)
-
   // Exclusion Inclusion Zone Add To List
   get(paths.MONITORING_CONDITIONS.ZONE_NEW_ITEM, zoneControllerAddToList.new)
   get(paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST, zoneControllerAddToList.view)
@@ -398,6 +394,10 @@ export default function routes({
   post(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS_VERSION, interestedPartiesCheckYourAsnwerController.update)
   get(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS, interestedPartiesCheckYourAsnwerController.view)
   post(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS, interestedPartiesCheckYourAsnwerController.update)
+
+  // Sentencing act
+  get(paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION, setSentencingAct.view)
+  post(paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION, setSentencingAct.update)
 
   router.use(
     paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.BASE_PATH,

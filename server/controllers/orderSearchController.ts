@@ -2,7 +2,6 @@ import { Request, RequestHandler, Response } from 'express'
 import { z } from 'zod'
 import { Page } from '../services/auditService'
 import { AuditService, OrderSearchService } from '../services'
-import config from '../config'
 import { constructSearchViewModel, constructListViewModel, OrderSearchViewModel } from '../models/form-data/search'
 import logger from '../../logger'
 import { ListOrdersQueryParser } from '../models/form-data/OrderListView'
@@ -47,7 +46,6 @@ export default class OrderSearchController {
     if (formData.searchTerm === undefined || formData.searchTerm === null) {
       const model: OrderSearchViewModel = {
         orders: [],
-        variationAsNewOrderEnabled: config.variationAsNewOrder.enabled,
       }
       res.render('pages/search', model)
       return
@@ -57,7 +55,6 @@ export default class OrderSearchController {
       const model: OrderSearchViewModel = {
         orders: [],
         emptySearch: true,
-        variationAsNewOrderEnabled: config.variationAsNewOrder.enabled,
       }
       res.render('pages/search', model)
       return

@@ -9,14 +9,6 @@
           name: "type",
           value: "REQUEST"
       }) }}
-    {% if variationAsNewOrderEnabled %}
-      {{ govukButton({
-            text: "Change submitted form",
-            name: "type",
-            value: "VARIATION",
-      classes: "govuk-button--secondary"
-        }) }}
-    {% endif %}
   </div>
   
 </form>
