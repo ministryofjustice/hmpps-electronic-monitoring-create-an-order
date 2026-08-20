@@ -24,7 +24,7 @@ export default class DeviceWearerCheckAnswersController {
 
     res.render(
       `pages/order/about-the-device-wearer/check-your-answers`,
-      createViewModel(order, res.locals.content!, isNavigable),
+      createViewModel(order, res.locals.content!, isNavigable, res.locals.user.cohort?.cohort),
     )
   }
 

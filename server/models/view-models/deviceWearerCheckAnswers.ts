@@ -1,3 +1,4 @@
+import { getIdentityNumbers, identityNumberFieldNames } from '../../constants/identityNumbers'
 import paths from '../../constants/paths'
 import I18n from '../../types/i18n'
 import {
@@ -10,6 +11,7 @@ import {
 } from '../../utils/checkYourAnswers'
 import { formatDateTime, lookup } from '../../utils/utils'
 import { Order } from '../Order'
+import { Cohort } from '../UserCohort'
 
 const createOtherDisabilityAnswer = (order: Order, content: I18n, uri: string, answerOpts: AnswerOptions) => {
   if (order.deviceWearer.disabilities.includes('OTHER')) {
@@ -73,32 +75,14 @@ const createDeviceWearerAnswers = (order: Order, content: I18n, answerOpts: Answ
   ]
 }
 
-const createPersonIdentifierAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
+const createPersonIdentifierAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions, cohort?: Cohort) => {
   const uri = paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id)
 
-  return [
-    createAnswer(content.pages.identityNumbers.questions.pncId.text, order.deviceWearer.pncId, uri, answerOpts),
-    createAnswer(content.pages.identityNumbers.questions.nomisId.text, order.deviceWearer.nomisId, uri, answerOpts),
-    createAnswer(
-      content.pages.identityNumbers.questions.prisonNumber.text,
-      order.deviceWearer.prisonNumber,
-      uri,
-      answerOpts,
-    ),
-    createAnswer(content.pages.identityNumbers.questions.deliusId.text, order.deviceWearer.deliusId, uri, answerOpts),
-    createAnswer(
-      content.pages.identityNumbers.questions.complianceAndEnforcementPersonReference.text,
-      order.deviceWearer.complianceAndEnforcementPersonReference,
-      uri,
-      answerOpts,
-    ),
-    createAnswer(
-      content.pages.identityNumbers.questions.courtCaseReferenceNumber.text,
-      order.deviceWearer.courtCaseReferenceNumber,
-      uri,
-      answerOpts,
-    ),
-  ]
+  return getIdentityNumbers(cohort, order.interestedParties?.notifyingOrganisation).map(type => {
+    const name = identityNumberFieldNames[type]
+
+    return createAnswer(content.pages.identityNumbers.questions[name].text, order.deviceWearer[name], uri, answerOpts)
+  })
 }
 
 const createOtherRelationshipAnswer = (order: Order, content: I18n, uri: string, answerOpts: AnswerOptions) => {
@@ -214,14 +198,14 @@ const createAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOpt
   return answers
 }
 
-const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean) => {
+const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean, cohort?: Cohort) => {
   const ignoreActions = {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' || !order.isOwner,
   }
 
   return {
     deviceWearer: createDeviceWearerAnswers(order, content, ignoreActions),
-    personIdentifiers: createPersonIdentifierAnswers(order, content, ignoreActions),
+    personIdentifiers: createPersonIdentifierAnswers(order, content, ignoreActions, cohort),
     responsibleAdult: createResponsibeAdultAnswers(order, content, ignoreActions),
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
     contactDetails: createContactDetailsAnswers(order, content, ignoreActions),

@@ -58,13 +58,13 @@ export default class DeviceWearerController {
   }
 
   viewIdentityNumbers: RequestHandler = async (req, res) => {
-    const { deviceWearer } = req.order!
+    const order = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
 
     res.render(
       'pages/order/about-the-device-wearer/identity-numbers',
-      identityNumbersViewModel.construct(deviceWearer, formData[0] as never, errors as never),
+      identityNumbersViewModel.construct(order, res.locals.user.cohort?.cohort, formData[0] as never, errors as never),
     )
   }
 

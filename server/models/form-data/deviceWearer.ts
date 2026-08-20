@@ -93,9 +93,8 @@ const IdentityNumbersFormDataValidator = z
       })
     }
 
-    // if checkbox ticked, input entered
     if (data.identityNumbers.includes('NOMIS') && !data.nomisId) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['nomisId'], message: 'Enter NOMIS ID' })
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['nomisId'], message: 'Enter prison number' })
     }
     if (data.identityNumbers.includes('PNC') && !data.pncId) {
       ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['pncId'], message: 'Enter PNC ID' })
