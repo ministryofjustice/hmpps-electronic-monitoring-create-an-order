@@ -763,10 +763,9 @@ context('Device wearer - check your answers', () => {
       ])
       page.identityNumbersSection.shouldExist()
       page.identityNumbersSection.shouldHaveItems([
-        { key: 'Police National Computer (PNC)', value: 'pnc' },
-        { key: 'National Offender Management Information System (NOMIS)', value: 'nomis' },
-        { key: 'Prison Number', value: 'prison' },
+        { key: 'Prison number', value: 'nomis' },
         { key: 'Case Reference Number (CRN)', value: 'delius' },
+        { key: 'Police National Computer (PNC)', value: 'pnc' },
         { key: 'Compliance and Enforcement Person Reference (CEPR)', value: 'cepr' },
         { key: 'Court Case Reference Number (CCRN)', value: 'ccrn' },
       ])

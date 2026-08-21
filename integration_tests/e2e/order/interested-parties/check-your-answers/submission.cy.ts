@@ -56,7 +56,7 @@ context('interested parties check answers page', () => {
 
       page.continueButton().click()
 
-      Page.verifyOnPage(IdentityNumbersPage, { orderId: mockOrderId })
+      Page.verifyOnPage(IdentityNumbersPage, { orderId: mockOrderId }, {}, ['nomisId'])
     })
   })
   context('submitted order', () => {
