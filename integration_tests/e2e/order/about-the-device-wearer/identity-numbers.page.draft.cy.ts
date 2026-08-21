@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
+import { notifyingOrganisationCourts } from '../../../../server/models/NotifyingOrganisation'
 
 const mockOrderId = uuidv4()
 
@@ -88,8 +89,8 @@ context('About the device wearer', () => {
       cy.signIn()
     })
     it('Should display the correct inputs for prison user', () => {
-      // Should have correct header
-      const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, ['prisonNumber'])
+      const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, ['nomisId'])
+
       page.form.singleField('nomisId').shouldHaveValue('nomis')
     })
   })
@@ -108,13 +109,41 @@ context('About the device wearer', () => {
       cy.signIn()
     })
     it('Should display the correct inputs for home ofice user', () => {
-      // Should have correct header
       const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, [
         'complianceAndEnforcementPersonReference',
       ])
       page.form.singleField('complianceAndEnforcementPersonReference').shouldHaveValue('cepr')
     })
-    context('Identity numbers probation cohort', () => {
+  })
+  context('Identity numbers probation cohort', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          ...testOrder,
+          deviceWearer: { ...testOrder.deviceWearer, deliusId: 'crn' },
+          interestedParties: { notifyingOrganisation: 'PROBATION' },
+        },
+      })
+
+      cy.signIn()
+    })
+    it('Should display the correct inputs for probation user', () => {
+      const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, ['nomisId', 'deliusId'])
+      page.form.checkboxes.shouldHaveValue('Prison number')
+      page.form.checkboxes.shouldHaveValue('Case Reference Number (CRN)')
+
+      page.form.field('nomisId').shouldHaveValue('nomis')
+      page.form.field('deliusId').shouldHaveValue('crn')
+    })
+  })
+  notifyingOrganisationCourts.forEach(notifyingOrganisation => {
+    context(`Identity numbers ${notifyingOrganisation} cohort`, () => {
       beforeEach(() => {
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -125,24 +154,17 @@ context('About the device wearer', () => {
           status: 'IN_PROGRESS',
           order: {
             ...testOrder,
-            deviceWearer: { ...testOrder.deviceWearer, courtCaseReferenceNumber: 'crn' },
-            interestedParties: { notifyingOrganisation: 'PROBATION' },
+            deviceWearer: { ...testOrder.deviceWearer, courtCaseReferenceNumber: 'ccrn' },
+            interestedParties: { notifyingOrganisation },
           },
         })
 
         cy.signIn()
       })
-      it('Should display the correct inputs for probation user', () => {
-        // Should have correct header
-        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, [
-          'prisonNumber',
-          'courtCaseReferenceNumber',
-        ])
-        page.form.checkboxes.shouldHaveValue('Prison number')
-        page.form.checkboxes.shouldHaveValue('Case Reference Number (CRN)')
+      it('Should display the correct input for court user', () => {
+        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, ['courtCaseReferenceNumber'])
 
-        page.form.field('prisonNumber').shouldHaveValue('nomis')
-        page.form.field('courtCaseReferenceNumber').shouldHaveValue('crn')
+        page.form.singleField('courtCaseReferenceNumber').shouldHaveValue('ccrn')
       })
     })
   })
