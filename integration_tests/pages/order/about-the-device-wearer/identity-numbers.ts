@@ -6,6 +6,25 @@ import IdentityNumbersFormComponent, {
   IdentityNumberName,
 } from '../../components/forms/about-the-device-wearer/identityNumbersForm'
 
+export const identityNumberNamesForNotifyingOrganisation = (notifyingOrganisation?: string): IdentityNumberName[] => {
+  if (notifyingOrganisation === 'Probation') {
+    return ['nomisId', 'deliusId']
+  }
+  if (notifyingOrganisation === 'Prison' || notifyingOrganisation === 'Prison Service') {
+    return ['nomisId']
+  }
+  if (notifyingOrganisation === 'Youth Custody Service') {
+    return ['pncId', 'nomisId']
+  }
+  if (notifyingOrganisation === 'Home Office') {
+    return ['complianceAndEnforcementPersonReference']
+  }
+  if (notifyingOrganisation?.includes('Court')) {
+    return ['courtCaseReferenceNumber']
+  }
+  return ['nomisId', 'deliusId', 'pncId', 'complianceAndEnforcementPersonReference', 'courtCaseReferenceNumber']
+}
+
 export default class IdentityNumbersPage extends AppFormPage {
   form: IdentityNumbersFormComponent
 
