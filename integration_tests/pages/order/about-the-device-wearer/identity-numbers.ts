@@ -7,7 +7,7 @@ import IdentityNumbersFormComponent, {
 } from '../../components/forms/about-the-device-wearer/identityNumbersForm'
 
 export const identityNumberNamesForNotifyingOrganisation = (notifyingOrganisation?: string): IdentityNumberName[] => {
-  if (notifyingOrganisation === 'Probation') {
+  if (notifyingOrganisation === 'Probation' || notifyingOrganisation === 'Probation service') {
     return ['nomisId', 'deliusId']
   }
   if (notifyingOrganisation === 'Prison' || notifyingOrganisation === 'Prison Service') {
