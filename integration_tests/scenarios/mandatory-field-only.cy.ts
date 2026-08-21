@@ -68,6 +68,7 @@ context('Mandatory fields only', () => {
       deliusId: fullDeviceWearerDetails.deliusId,
       pncId: fullDeviceWearerDetails.pncId,
       prisonNumber: fullDeviceWearerDetails.prisonNumber,
+      homeOfficeReferenceNumber: '',
       complianceAndEnforcementPersonReference: fullDeviceWearerDetails.complianceAndEnforcementPersonReference,
       courtCaseReferenceNumber: fullDeviceWearerDetails.courtCaseReferenceNumber,
     }
@@ -199,6 +200,7 @@ context('Mandatory fields only', () => {
       deliusId: fullDeviceWearerDetails.deliusId,
       pncId: fullDeviceWearerDetails.pncId,
       prisonNumber: fullDeviceWearerDetails.prisonNumber,
+      homeOfficeReferenceNumber: '',
       complianceAndEnforcementPersonReference: fullDeviceWearerDetails.complianceAndEnforcementPersonReference,
       courtCaseReferenceNumber: fullDeviceWearerDetails.courtCaseReferenceNumber,
     }

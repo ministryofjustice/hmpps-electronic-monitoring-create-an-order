@@ -14,6 +14,7 @@ const testOrder = {
     pncId: 'pnc',
     deliusId: null,
     prisonNumber: null,
+    homeOfficeReferenceNumber: null,
     complianceAndEnforcementPersonReference: 'cepr',
     courtCaseReferenceNumber: null,
     firstName: 'test',

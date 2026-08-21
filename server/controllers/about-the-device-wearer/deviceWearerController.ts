@@ -75,7 +75,10 @@ export default class DeviceWearerController {
     const result = await this.deviceWearerService.updateIdentityNumbers({
       accessToken: res.locals.user.token,
       orderId: order.id,
-      data: formData,
+      data: {
+        ...formData,
+        homeOfficeReferenceNumber: order.deviceWearer.homeOfficeReferenceNumber ?? '',
+      },
     })
 
     if (isValidationResult(result)) {

@@ -17,6 +17,7 @@ context('pilot', () => {
           pncId: 'pnc',
           deliusId: 'delius',
           prisonNumber: 'prison',
+          homeOfficeReferenceNumber: '',
           complianceAndEnforcementPersonReference: 'cepr',
           courtCaseReferenceNumber: 'ccrn',
           firstName: 'Eoforhild',

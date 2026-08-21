@@ -33,6 +33,7 @@ const DeviceWearerModel = z.object({
   pncId: z.string().nullable(),
   deliusId: z.string().nullable(),
   prisonNumber: z.string().nullable(),
+  homeOfficeReferenceNumber: z.string().nullable().optional(),
   complianceAndEnforcementPersonReference: z.string().nullable(),
   courtCaseReferenceNumber: z.string().nullable(),
   firstName: z.string().nullable(),

@@ -68,6 +68,7 @@ const IdentityNumbersFormDataModel = FormDataModel.extend({
   pncId: z.string().optional(),
   deliusId: z.string().optional(),
   prisonNumber: z.string().optional(),
+  homeOfficeReferenceNumber: z.string().optional(),
   complianceAndEnforcementPersonReference: z.string().optional(),
   courtCaseReferenceNumber: z.string().optional(),
 })
@@ -79,6 +80,7 @@ const IdentityNumbersFormDataValidator = z
     pncId: z.string().optional(),
     deliusId: z.string().optional(),
     prisonNumber: z.string().optional(),
+    homeOfficeReferenceNumber: z.string().optional(),
     complianceAndEnforcementPersonReference: z.string().optional(),
     courtCaseReferenceNumber: z.string().optional(),
   })

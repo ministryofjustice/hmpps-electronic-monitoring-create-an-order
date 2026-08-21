@@ -8,6 +8,7 @@ const mockDeviceWearer = {
   pncId: 'pnc',
   deliusId: 'delius',
   prisonNumber: 'prison',
+  homeOfficeReferenceNumber: null,
   complianceAndEnforcementPersonReference: 'cepr',
   courtCaseReferenceNumber: 'ccrn',
   firstName: 'test',

@@ -53,13 +53,21 @@ const getYouthStatus = (order: OrderSearchResult): string => {
 }
 
 const getIdList = (order: OrderSearchResult) => {
-  const { nomisId, pncId, deliusId, prisonNumber, complianceAndEnforcementPersonReference, courtCaseReferenceNumber } =
-    order.deviceWearer
+  const {
+    nomisId,
+    pncId,
+    deliusId,
+    prisonNumber,
+    homeOfficeReferenceNumber,
+    complianceAndEnforcementPersonReference,
+    courtCaseReferenceNumber,
+  } = order.deviceWearer
   const idList = [
     nomisId,
     pncId,
     deliusId,
     prisonNumber,
+    homeOfficeReferenceNumber,
     complianceAndEnforcementPersonReference,
     courtCaseReferenceNumber,
   ].filter(id => id && id?.length > 0)

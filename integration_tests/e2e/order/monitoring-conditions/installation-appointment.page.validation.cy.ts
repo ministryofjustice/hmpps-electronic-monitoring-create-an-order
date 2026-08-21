@@ -137,6 +137,7 @@ context('Monitoring conditions', () => {
           pncId: 'pnc',
           deliusId: 'delius',
           prisonNumber: 'prison',
+          homeOfficeReferenceNumber: '',
           complianceAndEnforcementPersonReference: 'cepr',
           courtCaseReferenceNumber: 'ccrn',
           firstName: 'test',

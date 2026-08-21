@@ -609,9 +609,7 @@ export default class OrderTasksPage extends AppPage {
     newDeviceWearerFlow = false,
   }): void {
     if (!newDeviceWearerFlow) {
-      const identityNumberNames = identityNumberNamesForNotifyingOrganisation(
-        interestedParties?.notifyingOrganisation,
-      )
+      const identityNumberNames = identityNumberNamesForNotifyingOrganisation(interestedParties?.notifyingOrganisation)
       const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage, {}, {}, identityNumberNames)
       identityNumbersPage.form.fillInWith(deviceWearerDetails)
       identityNumbersPage.form.saveAndContinueButton.click()

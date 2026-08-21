@@ -20,6 +20,7 @@ const mockOrder = getMockOrder({
     pncId: null,
     deliusId: null,
     prisonNumber: null,
+    homeOfficeReferenceNumber: null,
     complianceAndEnforcementPersonReference: null,
     courtCaseReferenceNumber: null,
     firstName: 'tester',
@@ -297,6 +298,7 @@ describe('DeviceWearerController', () => {
           pncId: 'pnc',
           deliusId: 'delius',
           prisonNumber: 'prison',
+          homeOfficeReferenceNumber: '',
           complianceAndEnforcementPersonReference: 'cepr',
           courtCaseReferenceNumber: 'ccrn',
           firstName: 'new',
@@ -323,6 +325,7 @@ describe('DeviceWearerController', () => {
         pncId: null,
         deliusId: null,
         prisonNumber: null,
+        homeOfficeReferenceNumber: null,
         complianceAndEnforcementPersonReference: null,
         courtCaseReferenceNumber: null,
         firstName: 'tester',
@@ -361,6 +364,7 @@ describe('DeviceWearerController', () => {
           pncId: 'pnc',
           deliusId: 'delius',
           prisonNumber: 'prison',
+          homeOfficeReferenceNumber: '',
           complianceAndEnforcementPersonReference: 'cepr',
           courtCaseReferenceNumber: 'ccrn',
           firstName: 'new',
@@ -387,6 +391,7 @@ describe('DeviceWearerController', () => {
         pncId: null,
         deliusId: null,
         prisonNumber: null,
+        homeOfficeReferenceNumber: null,
         complianceAndEnforcementPersonReference: null,
         courtCaseReferenceNumber: null,
         firstName: 'tester',
@@ -424,6 +429,7 @@ describe('DeviceWearerController', () => {
           nomisId: 'nomis',
           pncId: 'pnc',
           deliusId: 'delius',
+          homeOfficeReferenceNumber: '',
           complianceAndEnforcementPersonReference: 'cepr',
           courtCaseReferenceNumber: 'ccrn',
           prisonNumber: 'prison',
@@ -454,6 +460,7 @@ describe('DeviceWearerController', () => {
         pncId: null,
         deliusId: null,
         prisonNumber: null,
+        homeOfficeReferenceNumber: null,
         complianceAndEnforcementPersonReference: null,
         courtCaseReferenceNumber: null,
         firstName: 'tester',
@@ -639,6 +646,7 @@ describe('DeviceWearerController', () => {
     it('should save valid data and redirect to the personal information page', async () => {
       // Given
       const order = getMockOrder()
+      order.deviceWearer.homeOfficeReferenceNumber = 'legacy-home-office-reference'
       const req = createMockRequest({
         order,
         body: {
@@ -651,6 +659,7 @@ describe('DeviceWearerController', () => {
           ],
           nomisId: 'nomis',
           prisonNumber: 'prison',
+          homeOfficeReferenceNumber: '',
           complianceAndEnforcementPersonReference: 'compliance-ref-123',
           courtCaseReferenceNumber: 'court-ref-456',
           pncId: '',
@@ -664,6 +673,7 @@ describe('DeviceWearerController', () => {
         ...order.deviceWearer,
         nomisId: 'nomis',
         prisonNumber: 'prison',
+        homeOfficeReferenceNumber: '',
         complianceAndEnforcementPersonReference: 'compliance-ref-123',
         courtCaseReferenceNumber: 'court-ref-456',
         pncId: null,
@@ -685,6 +695,7 @@ describe('DeviceWearerController', () => {
           data: expect.objectContaining({
             nomisId: 'nomis',
             prisonNumber: 'prison',
+            homeOfficeReferenceNumber: 'legacy-home-office-reference',
             complianceAndEnforcementPersonReference: 'compliance-ref-123',
             courtCaseReferenceNumber: 'court-ref-456',
             pncId: '',

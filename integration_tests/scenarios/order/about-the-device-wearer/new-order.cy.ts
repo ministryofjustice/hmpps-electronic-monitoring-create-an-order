@@ -68,9 +68,7 @@ context('New about device wearer flow', () => {
       { key: 'Is an interpreter needed?', value: 'No' },
     ])
     cyaPage.identityNumbersSection.shouldExist()
-    cyaPage.identityNumbersSection.shouldHaveItems([
-      { key: 'Prison number', value: deviceWearerDetails.nomisId },
-    ])
+    cyaPage.identityNumbersSection.shouldHaveItems([{ key: 'Prison number', value: deviceWearerDetails.nomisId }])
 
     cyaPage.contactDetailsSection.shouldExist()
     cyaPage.contactDetailsSection.shouldHaveItems([
