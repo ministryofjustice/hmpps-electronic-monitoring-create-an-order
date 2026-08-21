@@ -9,7 +9,6 @@ const createDeviceWearer = (youth: boolean = true) => {
     pncId: 'pnc',
     deliusId: 'delius',
     prisonNumber: 'prison',
-    homeOfficeReferenceNumber: '',
     complianceAndEnforcementPersonReference: 'cepr',
     courtCaseReferenceNumber: 'ccrn',
     firstName: 'test',

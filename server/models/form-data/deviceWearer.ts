@@ -68,7 +68,6 @@ const IdentityNumbersFormDataModel = FormDataModel.extend({
   pncId: z.string().optional(),
   deliusId: z.string().optional(),
   prisonNumber: z.string().optional(),
-  homeOfficeReferenceNumber: z.string().optional(),
   complianceAndEnforcementPersonReference: z.string().optional(),
   courtCaseReferenceNumber: z.string().optional(),
 })
@@ -80,7 +79,6 @@ const IdentityNumbersFormDataValidator = z
     pncId: z.string().optional(),
     deliusId: z.string().optional(),
     prisonNumber: z.string().optional(),
-    homeOfficeReferenceNumber: z.string().optional(),
     complianceAndEnforcementPersonReference: z.string().optional(),
     courtCaseReferenceNumber: z.string().optional(),
   })
@@ -104,13 +102,6 @@ const IdentityNumbersFormDataValidator = z
     }
     if (data.identityNumbers.includes('PRISON_NUMBER') && !data.prisonNumber) {
       ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['prisonNumber'], message: 'Enter Prison Number' })
-    }
-    if (data.identityNumbers.includes('HOME_OFFICE') && !data.homeOfficeReferenceNumber) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['homeOfficeReferenceNumber'],
-        message: 'Enter Home Office Reference Number',
-      })
     }
     if (
       data.identityNumbers.includes('COMPLIANCE_AND_ENFORCEMENT_PERSON_REFERENCE') &&
@@ -138,7 +129,6 @@ const IdentityNumbersFormDataValidator = z
       pncId: data.identityNumbers.includes('PNC') ? data.pncId : '',
       deliusId: data.identityNumbers.includes('DELIUS') ? data.deliusId : '',
       prisonNumber: data.identityNumbers.includes('PRISON_NUMBER') ? data.prisonNumber : '',
-      homeOfficeReferenceNumber: data.identityNumbers.includes('HOME_OFFICE') ? data.homeOfficeReferenceNumber : '',
       complianceAndEnforcementPersonReference: data.identityNumbers.includes(
         'COMPLIANCE_AND_ENFORCEMENT_PERSON_REFERENCE',
       )

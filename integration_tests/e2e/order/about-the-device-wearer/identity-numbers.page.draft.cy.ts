@@ -5,12 +5,14 @@ import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/id
 const mockOrderId = uuidv4()
 
 const testOrder = {
+  interestedParties: {
+    notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE',
+  },
   deviceWearer: {
     nomisId: 'nomis',
     pncId: 'pnc',
     deliusId: null,
     prisonNumber: null,
-    homeOfficeReferenceNumber: null,
     complianceAndEnforcementPersonReference: 'cepr',
     courtCaseReferenceNumber: null,
     firstName: 'test',
@@ -28,7 +30,7 @@ const testOrder = {
 }
 
 context('About the device wearer', () => {
-  context('Identity numbers', () => {
+  context('Identity numbers youth cohort', () => {
     context('Viewing a draft order with existing id numbers', () => {
       beforeEach(() => {
         cy.task('reset')
@@ -50,26 +52,97 @@ context('About the device wearer', () => {
         page.errorSummary.shouldNotExist()
         page.checkIsAccessible()
 
-        page.form.checkboxes.shouldHaveOption('Police National Computer (PNC)')
-        page.form.checkboxes.shouldHaveOption('National Offender Management Information System (NOMIS)')
-        page.form.checkboxes.shouldHaveOption('Prison Number')
-        page.form.checkboxes.shouldHaveOption('Case Reference Number (CRN)')
-        page.form.checkboxes.shouldHaveOption('Compliance and Enforcement Person Reference (CEPR)')
-        page.form.checkboxes.shouldHaveOption('Court Case Reference Number (CCRN)')
+        page.form.checkboxes.shouldHaveAllOptions()
       })
 
-      it('Should display the correct inputs', () => {
+      it('Should display the correct inputs for youth user', () => {
         const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
 
-        page.form.checkboxes.shouldHaveValue('National Offender Management Information System (NOMIS)')
+        page.form.checkboxes.shouldHaveValue('Prison number')
         page.form.checkboxes.shouldHaveValue('Police National Computer (PNC)')
-        page.form.checkboxes.shouldHaveValue('Compliance and Enforcement Person Reference (CEPR)')
 
-        page.form.checkboxes.shouldNotHaveValueChecked('Case Reference Number (CRN)')
-        page.form.nomisIdField.shouldHaveValue('nomis')
-        page.form.pncIdField.shouldHaveValue('pnc')
-        page.form.complianceField.shouldHaveValue('cepr')
-        page.form.deliusIdField.shouldHaveValue('')
+        page.form.field('nomisId').shouldHaveValue('nomis')
+        page.form.field('pncId').shouldHaveValue('pnc')
+      })
+
+      it('Should not have unexpected identity number fields', () => {
+        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
+        page.form.checkboxes.shouldNotHaveOption('Case Reference Number (CRN)')
+        page.form.checkboxes.shouldNotHaveOption('Compliance and Enforcement Person Reference (CEPR)')
+        page.form.checkboxes.shouldNotHaveOption('Court Case Reference Number (CCRN)')
+      })
+    })
+  })
+  context('Identity numbers prison cohort', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: { ...testOrder, interestedParties: { notifyingOrganisation: 'PRISON' } },
+      })
+
+      cy.signIn()
+    })
+    it('Should display the correct inputs for prison user', () => {
+      // Should have correct header
+      const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, ['prisonNumber'])
+      page.form.singleField('nomisId').shouldHaveValue('nomis')
+    })
+  })
+  context('Identity numbers home office cohort', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: { ...testOrder, interestedParties: { notifyingOrganisation: 'HOME_OFFICE' } },
+      })
+
+      cy.signIn()
+    })
+    it('Should display the correct inputs for home ofice user', () => {
+      // Should have correct header
+      const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, [
+        'complianceAndEnforcementPersonReference',
+      ])
+      page.form.singleField('complianceAndEnforcementPersonReference').shouldHaveValue('cepr')
+    })
+    context('Identity numbers probation cohort', () => {
+      beforeEach(() => {
+        cy.task('reset')
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: {
+            ...testOrder,
+            deviceWearer: { ...testOrder.deviceWearer, courtCaseReferenceNumber: 'crn' },
+            interestedParties: { notifyingOrganisation: 'PROBATION' },
+          },
+        })
+
+        cy.signIn()
+      })
+      it('Should display the correct inputs for probation user', () => {
+        // Should have correct header
+        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, [
+          'prisonNumber',
+          'courtCaseReferenceNumber',
+        ])
+        page.form.checkboxes.shouldHaveValue('Prison number')
+        page.form.checkboxes.shouldHaveValue('Case Reference Number (CRN)')
+
+        page.form.field('prisonNumber').shouldHaveValue('nomis')
+        page.form.field('courtCaseReferenceNumber').shouldHaveValue('crn')
       })
     })
   })

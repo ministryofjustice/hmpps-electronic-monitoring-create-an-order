@@ -115,7 +115,6 @@ const isCompletedIDNumbers = (order: Order): boolean => {
     isNotNullOrUndefined(order.deviceWearer.pncId),
     isNotNullOrUndefined(order.deviceWearer.deliusId),
     isNotNullOrUndefined(order.deviceWearer.prisonNumber),
-    isNotNullOrUndefined(order.deviceWearer.homeOfficeReferenceNumber),
     isNotNullOrUndefined(order.deviceWearer.complianceAndEnforcementPersonReference),
     isNotNullOrUndefined(order.deviceWearer.courtCaseReferenceNumber),
   ].some(Boolean)

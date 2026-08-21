@@ -16,7 +16,6 @@ const OrderSearchResultModel = z.object({
     pncId: z.string().nullable(),
     deliusId: z.string().nullable(),
     prisonNumber: z.string().nullable(),
-    homeOfficeReferenceNumber: z.string().nullable(),
     complianceAndEnforcementPersonReference: z.string().nullable(),
     courtCaseReferenceNumber: z.string().nullable(),
   }),

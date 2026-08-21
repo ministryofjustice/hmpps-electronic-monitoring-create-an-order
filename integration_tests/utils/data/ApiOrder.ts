@@ -16,7 +16,6 @@ const mockApiOrder = (status: Order['status'] = 'IN_PROGRESS', type: Order['type
     pncId: null,
     deliusId: null,
     prisonNumber: null,
-    homeOfficeReferenceNumber: null,
     complianceAndEnforcementPersonReference: null,
     courtCaseReferenceNumber: null,
     firstName: null,

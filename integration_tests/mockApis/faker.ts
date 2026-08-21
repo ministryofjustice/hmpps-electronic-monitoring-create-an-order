@@ -99,7 +99,6 @@ export type PersonOfInterest = {
   pncId?: string
   deliusId?: string
   prisonNumber?: string
-  homeOfficeReferenceNumber?: string
   complianceAndEnforcementPersonReference?: string
   courtCaseReferenceNumber?: string
 
@@ -312,7 +311,6 @@ export const createFakeAdultDeviceWearer = (firstName?: string): PersonOfInteres
   const pncId = faker.helpers.replaceSymbols('??##/######?')
   const deliusId = faker.helpers.replaceSymbols('X#####')
   const prisonNumber = faker.helpers.replaceSymbols('?#####')
-  const homeOfficeReferenceNumber = fakeAdult.firstName[0] + faker.helpers.replaceSymbols('#######')
   // update when we validate format of cepr, ccrn
   const complianceAndEnforcementPersonReference = fakeAdult.firstName[0] + faker.helpers.replaceSymbols('#######')
   const courtCaseReferenceNumber = faker.helpers.replaceSymbols('?####??')
@@ -322,7 +320,6 @@ export const createFakeAdultDeviceWearer = (firstName?: string): PersonOfInteres
     pncId,
     deliusId,
     prisonNumber,
-    homeOfficeReferenceNumber,
     complianceAndEnforcementPersonReference,
     courtCaseReferenceNumber,
     ...fakeAdult,
@@ -335,7 +332,6 @@ export const createFakeYouthDeviceWearer = (firstName?: string): PersonOfInteres
   const pncId = faker.helpers.replaceSymbols('??##/######?')
   const deliusId = faker.helpers.replaceSymbols('X#####')
   const prisonNumber = faker.helpers.replaceSymbols('?#####')
-  const homeOfficeReferenceNumber = fakeYouth.firstName[0] + faker.helpers.replaceSymbols('#######')
   // update when we validate format of cepr, ccrn
   const complianceAndEnforcementPersonReference = fakeYouth.firstName[0] + faker.helpers.replaceSymbols('#######')
   const courtCaseReferenceNumber = faker.helpers.replaceSymbols('?####??')
@@ -345,7 +341,6 @@ export const createFakeYouthDeviceWearer = (firstName?: string): PersonOfInteres
     pncId,
     deliusId,
     prisonNumber,
-    homeOfficeReferenceNumber,
     complianceAndEnforcementPersonReference,
     courtCaseReferenceNumber,
     ...fakeYouth,

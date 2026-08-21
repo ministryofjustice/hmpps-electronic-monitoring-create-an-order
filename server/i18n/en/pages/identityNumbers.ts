@@ -23,9 +23,6 @@ const identityNumbersPageContent: IdentityNumbersPageContent = {
     prisonNumber: {
       text: 'Prison Number',
     },
-    homeOfficeReferenceNumber: {
-      text: 'Home Office Reference Number',
-    },
   },
   inputLabels: {
     deliusId: 'Enter CRN',
@@ -34,7 +31,6 @@ const identityNumbersPageContent: IdentityNumbersPageContent = {
     complianceAndEnforcementPersonReference: 'Enter Compliance and Enforcement Person Reference',
     courtCaseReferenceNumber: 'Enter Court Case Reference Number',
     prisonNumber: 'Enter Prison Number',
-    homeOfficeReferenceNumber: 'Enter Home Office Reference Number',
   },
   singleQuestionTitles: {
     deliusId: "What is the device wearer's Case Reference Number (CRN)?",
@@ -44,7 +40,6 @@ const identityNumbersPageContent: IdentityNumbersPageContent = {
       "What is the device wearer's Compliance and Enforcement Person Reference (CEPR)?",
     courtCaseReferenceNumber: "What is the device wearer's Court Case Reference Number (CCRN)?",
     prisonNumber: "What is the device wearer's prison number?",
-    homeOfficeReferenceNumber: "What is the device wearer's Home Office Reference Number?",
   },
   section: 'About the device wearer',
   title: 'What identity numbers do you have for the device wearer?',

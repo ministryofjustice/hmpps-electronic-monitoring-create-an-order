@@ -7,7 +7,6 @@ export type IdentityNumberFieldName =
   | 'nomisId'
   | 'deliusId'
   | 'prisonNumber'
-  | 'homeOfficeReferenceNumber'
   | 'complianceAndEnforcementPersonReference'
   | 'courtCaseReferenceNumber'
 
@@ -16,7 +15,6 @@ export const identityNumberFieldNames: Record<IdentityNumberType, IdentityNumber
   NOMIS: 'nomisId',
   DELIUS: 'deliusId',
   PRISON_NUMBER: 'prisonNumber',
-  HOME_OFFICE: 'homeOfficeReferenceNumber',
   COMPLIANCE_AND_ENFORCEMENT_PERSON_REFERENCE: 'complianceAndEnforcementPersonReference',
   COURT_CASE_REFERENCE_NUMBER: 'courtCaseReferenceNumber',
 }
@@ -49,6 +47,10 @@ export const identityNumbersByCohort: Partial<Record<Cohort, IdentityNumberType[
   COURT: ['COURT_CASE_REFERENCE_NUMBER'],
 }
 
+export const identityNumbersByCohortPendingOrg: Partial<Record<Cohort, IdentityNumberType[]>> = {
+  PRISON: ['PNC', 'NOMIS'],
+}
+
 export const getIdentityNumbers = (
   cohort?: Cohort | null,
   notifyingOrganisation?: NotifyingOrganisation | null,
@@ -62,5 +64,7 @@ export const getIdentityNumbers = (
     return identityNumbersByNotifyingOrganisation[notifyingOrganisation] ?? allIdentityNumbers
   }
 
-  return allIdentityNumbers
+  const unselectedOrg = cohort ? identityNumbersByCohortPendingOrg[cohort] : undefined
+
+  return allIdentityNumbers ?? unselectedOrg
 }

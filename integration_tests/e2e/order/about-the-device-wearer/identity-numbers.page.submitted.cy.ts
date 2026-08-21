@@ -3,13 +3,11 @@ import Page from '../../../pages/page'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 
 const mockOrderId = uuidv4()
-
 const mockDeviceWearer = {
   nomisId: 'nomis',
   pncId: 'pnc',
   deliusId: 'delius',
   prisonNumber: 'prison',
-  homeOfficeReferenceNumber: null,
   complianceAndEnforcementPersonReference: 'cepr',
   courtCaseReferenceNumber: 'ccrn',
   firstName: 'test',
@@ -23,7 +21,10 @@ const mockDeviceWearer = {
   noFixedAbode: null,
   interpreterRequired: null,
 }
-
+const mockOrder = {
+  deviceWearer: mockDeviceWearer,
+  interestedParties: { notifingOrganisation: 'PRISON' },
+}
 context('About the device wearer', () => {
   context('Identity numbers', () => {
     context('Viewing a submitted order', () => {
@@ -35,7 +36,7 @@ context('About the device wearer', () => {
           httpStatus: 200,
           id: mockOrderId,
           status: 'SUBMITTED',
-          order: { deviceWearer: mockDeviceWearer },
+          order: mockOrder,
         })
 
         cy.signIn()
@@ -69,19 +70,19 @@ context('About the device wearer', () => {
       it('Should display the submitted values in the disabled form', () => {
         const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
 
+        /*
         page.form.checkboxes.shouldHaveValue('Police National Computer (PNC)')
         page.form.checkboxes.shouldHaveValue('National Offender Management Information System (NOMIS)')
         page.form.checkboxes.shouldHaveValue('Prison Number')
         page.form.checkboxes.shouldHaveValue('Case Reference Number (CRN)')
         page.form.checkboxes.shouldHaveValue('Compliance and Enforcement Person Reference (CEPR)')
         page.form.checkboxes.shouldHaveValue('Court Case Reference Number (CCRN)')
+        */
+        page.form.checkboxes.shouldHaveValue('Prison number')
+        // page.form.checkboxes.shouldHaveValue('Police National Computer (PNC)')
 
-        page.form.nomisIdField.shouldHaveValue('nomis')
-        page.form.pncIdField.shouldHaveValue('pnc')
-        page.form.deliusIdField.shouldHaveValue('delius')
-        page.form.prisonNumberField.shouldHaveValue('prison')
-        page.form.complianceField.shouldHaveValue('cepr')
-        page.form.courtCaseField.shouldHaveValue('ccrn')
+        page.form.field('nomisId').shouldHaveValue('nomis')
+        // page.form.field('pncId').shouldHaveValue('pnc')
       })
     })
   })

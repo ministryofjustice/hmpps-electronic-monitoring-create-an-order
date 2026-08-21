@@ -9,7 +9,6 @@ const mockDeviceWearer = {
   pncId: null,
   deliusId: null,
   prisonNumber: null,
-  homeOfficeReferenceNumber: null,
   complianceAndEnforcementPersonReference: null,
   courtCaseReferenceNumber: null,
   firstName: 'test',
