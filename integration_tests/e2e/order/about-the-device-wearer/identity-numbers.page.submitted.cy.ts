@@ -23,7 +23,7 @@ const mockDeviceWearer = {
 }
 const mockOrder = {
   deviceWearer: mockDeviceWearer,
-  interestedParties: { notifingOrganisation: 'PRISON' },
+  interestedParties: { notifyingOrganisation: 'PRISON' },
 }
 context('About the device wearer', () => {
   context('Identity numbers', () => {
@@ -43,22 +43,22 @@ context('About the device wearer', () => {
       })
 
       it('Should display the user name visible in header', () => {
-        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
+        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, ['nomisId'])
         page.header.userName().should('contain.text', 'J. Smith')
       })
 
       it('Should display the phase banner in header', () => {
-        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
+        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, ['nomisId'])
         page.header.phaseBanner().should('contain.text', 'dev')
       })
 
       it('Should display the submitted order notification', () => {
-        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
+        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, ['nomisId'])
         page.submittedBanner.should('contain', 'You are viewing a submitted order.')
       })
 
       it('Should not allow the user to update the identity numbers details', () => {
-        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
+        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, ['nomisId'])
 
         page.form.saveAndContinueButton.should('not.exist')
         page.form.saveAsDraftButton.should('not.exist')
@@ -68,21 +68,9 @@ context('About the device wearer', () => {
       })
 
       it('Should display the submitted values in the disabled form', () => {
-        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
+        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, ['nomisId'])
 
-        /*
-        page.form.checkboxes.shouldHaveValue('Police National Computer (PNC)')
-        page.form.checkboxes.shouldHaveValue('National Offender Management Information System (NOMIS)')
-        page.form.checkboxes.shouldHaveValue('Prison Number')
-        page.form.checkboxes.shouldHaveValue('Case Reference Number (CRN)')
-        page.form.checkboxes.shouldHaveValue('Compliance and Enforcement Person Reference (CEPR)')
-        page.form.checkboxes.shouldHaveValue('Court Case Reference Number (CCRN)')
-        */
-        page.form.checkboxes.shouldHaveValue('Prison number')
-        // page.form.checkboxes.shouldHaveValue('Police National Computer (PNC)')
-
-        page.form.field('nomisId').shouldHaveValue('nomis')
-        // page.form.field('pncId').shouldHaveValue('pnc')
+        page.form.singleField('nomisId').shouldHaveValue('nomis')
       })
     })
   })

@@ -7,7 +7,7 @@ import IdentityNumbersFormComponent, {
 } from '../../components/forms/about-the-device-wearer/identityNumbersForm'
 
 export default class IdentityNumbersPage extends AppFormPage {
-  form = new IdentityNumbersFormComponent()
+  form: IdentityNumbersFormComponent
 
   constructor(options: IdentityNumberName[] = ['pncId', 'nomisId']) {
     super(
@@ -15,5 +15,6 @@ export default class IdentityNumbersPage extends AppFormPage {
       paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS,
       'About the device wearer',
     )
+    this.form = new IdentityNumbersFormComponent(options)
   }
 }

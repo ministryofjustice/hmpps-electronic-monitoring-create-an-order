@@ -56,10 +56,20 @@ export default class IdentityNumbersFormComponent extends FormComponent {
   }
 
   shouldBeDisabled(): void {
+    if (this.options.length === 1) {
+      this.singleField(this.options[0]).shouldBeDisabled()
+      return
+    }
+
     this.checkboxes.shouldBeDisabled()
   }
 
   shouldNotBeDisabled(): void {
+    if (this.options.length === 1) {
+      this.singleField(this.options[0]).shouldNotBeDisabled()
+      return
+    }
+
     this.checkboxes.shouldNotBeDisabled()
   }
 }

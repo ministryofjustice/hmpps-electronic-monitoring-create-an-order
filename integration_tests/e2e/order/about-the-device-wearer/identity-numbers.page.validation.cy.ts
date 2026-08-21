@@ -1,15 +1,22 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
+import { IdentityNumberName } from '../../../pages/components/forms/about-the-device-wearer/identityNumbersForm'
 
 const mockOrderId = uuidv4()
+const identityNumberFields: IdentityNumberName[] = [
+  'nomisId',
+  'deliusId',
+  'pncId',
+  'complianceAndEnforcementPersonReference',
+  'courtCaseReferenceNumber',
+]
 
 const expectedValidationErrors = {
   noSelection: 'Select all identity numbers that you have for the device wearer',
-  nomisId: 'Enter NOMIS ID',
+  nomisId: 'Enter prison number',
   pncId: 'Enter PNC',
   deliusId: 'Enter CRN',
-  prisonNumber: 'Enter Prison Number',
   complianceAndEnforcementPersonReference: 'Enter Compliance and Enforcement Person Reference',
   courtCaseReferenceNumber: 'Enter Court Case Reference Number',
 }
@@ -27,7 +34,7 @@ context('About the device wearer', () => {
       })
 
       it('Should display error when no checkbox is selected', () => {
-        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
+        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, identityNumberFields)
 
         page.form.saveAndContinueButton.click()
 
@@ -38,13 +45,12 @@ context('About the device wearer', () => {
       })
 
       it('Should display error when checkbox is selected but input is empty', () => {
-        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
+        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, identityNumberFields)
 
         page.form.checkboxes.set([
-          'Police National Computer (PNC)',
-          'National Offender Management Information System (NOMIS)',
-          'Prison Number',
+          'Prison number',
           'Case Reference Number (CRN)',
+          'Police National Computer (PNC)',
           'Compliance and Enforcement Person Reference (CEPR)',
           'Court Case Reference Number (CCRN)',
         ])
@@ -57,18 +63,18 @@ context('About the device wearer', () => {
         page.errorSummary.shouldHaveError(expectedValidationErrors.nomisId)
         page.errorSummary.shouldHaveError(expectedValidationErrors.pncId)
         page.errorSummary.shouldHaveError(expectedValidationErrors.deliusId)
-        page.errorSummary.shouldHaveError(expectedValidationErrors.prisonNumber)
         page.errorSummary.shouldHaveError(expectedValidationErrors.complianceAndEnforcementPersonReference)
         page.errorSummary.shouldHaveError(expectedValidationErrors.courtCaseReferenceNumber)
 
-        page.form.nomisIdField.shouldHaveValidationMessage(expectedValidationErrors.nomisId)
-        page.form.pncIdField.shouldHaveValidationMessage(expectedValidationErrors.pncId)
-        page.form.deliusIdField.shouldHaveValidationMessage(expectedValidationErrors.deliusId)
-        page.form.prisonNumberField.shouldHaveValidationMessage(expectedValidationErrors.prisonNumber)
-        page.form.complianceField.shouldHaveValidationMessage(
-          expectedValidationErrors.complianceAndEnforcementPersonReference,
-        )
-        page.form.courtCaseField.shouldHaveValidationMessage(expectedValidationErrors.courtCaseReferenceNumber)
+        page.form.field('nomisId').shouldHaveValidationMessage(expectedValidationErrors.nomisId)
+        page.form.field('pncId').shouldHaveValidationMessage(expectedValidationErrors.pncId)
+        page.form.field('deliusId').shouldHaveValidationMessage(expectedValidationErrors.deliusId)
+        page.form
+          .field('complianceAndEnforcementPersonReference')
+          .shouldHaveValidationMessage(expectedValidationErrors.complianceAndEnforcementPersonReference)
+        page.form
+          .field('courtCaseReferenceNumber')
+          .shouldHaveValidationMessage(expectedValidationErrors.courtCaseReferenceNumber)
       })
     })
   })

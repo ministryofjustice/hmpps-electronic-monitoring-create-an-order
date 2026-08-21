@@ -3,9 +3,24 @@ import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
+import { IdentityNumberName } from '../../../pages/components/forms/about-the-device-wearer/identityNumbersForm'
 
 const mockOrderId = uuidv4()
 const apiPath = '/device-wearer/identity-numbers'
+const identityNumberFields: IdentityNumberName[] = [
+  'nomisId',
+  'deliusId',
+  'pncId',
+  'complianceAndEnforcementPersonReference',
+  'courtCaseReferenceNumber',
+]
+const validFormData = {
+  nomisId: 'nomis',
+  deliusId: 'delius',
+  pncId: 'pnc',
+  complianceAndEnforcementPersonReference: 'cepr',
+  courtCaseReferenceNumber: 'ccrn',
+}
 
 context('About the device wearer', () => {
   context('Identity numbers', () => {
@@ -43,16 +58,7 @@ context('About the device wearer', () => {
       })
 
       it('should submit a correctly formatted identity numbers submission', () => {
-        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
-
-        const validFormData = {
-          nomisId: 'nomis',
-          pncId: 'pnc',
-          deliusId: 'delius',
-          prisonNumber: 'prison',
-          complianceAndEnforcementPersonReference: 'cepr',
-          courtCaseReferenceNumber: 'ccrn',
-        }
+        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, identityNumberFields)
 
         page.form.fillInWith(validFormData)
         page.form.saveAndContinueButton.click()
@@ -61,17 +67,16 @@ context('About the device wearer', () => {
           uri: `/orders/${mockOrderId}${apiPath}`,
           body: {
             identityNumbers: [
-              'PNC',
               'NOMIS',
-              'PRISON_NUMBER',
               'DELIUS',
+              'PNC',
               'COMPLIANCE_AND_ENFORCEMENT_PERSON_REFERENCE',
               'COURT_CASE_REFERENCE_NUMBER',
             ],
             nomisId: 'nomis',
-            pncId: 'pnc',
             deliusId: 'delius',
-            prisonNumber: 'prison',
+            pncId: 'pnc',
+            prisonNumber: '',
             complianceAndEnforcementPersonReference: 'cepr',
             courtCaseReferenceNumber: 'ccrn',
           },
@@ -79,16 +84,7 @@ context('About the device wearer', () => {
       })
 
       it('should continue to personal details page', () => {
-        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
-
-        const validFormData = {
-          nomisId: 'nomis',
-          pncId: 'pnc',
-          deliusId: 'delius',
-          prisonNumber: 'prison',
-          complianceAndEnforcementPersonReference: 'cepr',
-          courtCaseReferenceNumber: 'ccrn',
-        }
+        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, identityNumberFields)
 
         page.form.fillInWith(validFormData)
         page.form.saveAndContinueButton.click()
@@ -97,16 +93,7 @@ context('About the device wearer', () => {
       })
 
       it('should return to the summary page', () => {
-        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
-
-        const validFormData = {
-          nomisId: 'nomis',
-          pncId: 'pnc',
-          deliusId: 'delius',
-          prisonNumber: 'prison',
-          complianceAndEnforcementPersonReference: 'cepr',
-          courtCaseReferenceNumber: 'ccrn',
-        }
+        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, identityNumberFields)
 
         page.form.fillInWith(validFormData)
         page.form.saveAsDraftButton.click()
