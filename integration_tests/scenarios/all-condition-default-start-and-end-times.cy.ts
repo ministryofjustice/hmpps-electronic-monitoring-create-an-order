@@ -230,7 +230,6 @@ context('The kitchen sink', () => {
           cepr: '',
           interpreter_required: 'false',
           language: '',
-          new_order_case_id: '',
         },
       }).should('be.true')
 

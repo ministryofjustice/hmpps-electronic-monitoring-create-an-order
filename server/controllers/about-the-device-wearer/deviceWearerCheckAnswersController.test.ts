@@ -46,14 +46,20 @@ const responsibleAdult = createResponsibleAdult({
   contactNumber: '07999999999',
 })
 
-const expectedIdentityNumbers = (orderId: string, values: Record<string, string> = {}) =>
-  [
+const expectedIdentityNumbers = (orderId: string, values: Record<string, string> = {}) => {
+  const identityNumbers = [
     ['Prison number', values.nomisId],
     ['Case Reference Number (CRN)', values.deliusId],
     ['Police National Computer (PNC)', values.pncId],
     ['Compliance and Enforcement Person Reference (CEPR)', values.complianceAndEnforcementPersonReference],
     ['Court Case Reference Number (CCRN)', values.courtCaseReferenceNumber],
-  ].map(([key, value]) => ({
+  ]
+
+  if (values.prisonNumber) {
+    identityNumbers.push(['Prison Number', values.prisonNumber])
+  }
+
+  return identityNumbers.map(([key, value]) => ({
     key: { text: key },
     value: { text: value ?? '' },
     actions: {
@@ -66,6 +72,7 @@ const expectedIdentityNumbers = (orderId: string, values: Record<string, string>
       ],
     },
   }))
+}
 
 describe('DeviceWearerCheckAnswersController', () => {
   const taskListService = {
@@ -571,6 +578,7 @@ describe('DeviceWearerCheckAnswersController', () => {
         pncId: 'pnc',
         complianceAndEnforcementPersonReference: 'cepr',
         courtCaseReferenceNumber: 'ccrn',
+        prisonNumber: 'prison',
       }),
       responsibleAdult: [],
       contactDetails: [
@@ -840,6 +848,7 @@ describe('DeviceWearerCheckAnswersController', () => {
         pncId: 'pnc',
         complianceAndEnforcementPersonReference: 'cepr',
         courtCaseReferenceNumber: 'ccrn',
+        prisonNumber: 'prison',
       }),
       responsibleAdult: [
         {
