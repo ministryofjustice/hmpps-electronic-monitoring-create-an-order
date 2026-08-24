@@ -1,6 +1,4 @@
-import HmppsAuditClient from '../../data/hmppsAuditClient'
 import RestClient from '../../data/restClient'
-import AuditService from '../../services/auditService'
 import DeviceWearerService from '../../services/deviceWearerService'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 import { getMockOrder } from '../../../test/mocks/mockOrder'
@@ -39,8 +37,6 @@ const createMockOrder = (noFixedAbode: boolean | null) =>
 
 describe('NoFixedAbodeController', () => {
   let mockRestClient: jest.Mocked<RestClient>
-  let mockAuditClient: jest.Mocked<HmppsAuditClient>
-  let mockAuditService: jest.Mocked<AuditService>
   let mockDeviceWearerService: jest.Mocked<DeviceWearerService>
   let controller: NoFixedAbodeController
   const taskListService = {
@@ -49,20 +45,13 @@ describe('NoFixedAbodeController', () => {
   } as unknown as jest.Mocked<TaskListService>
 
   beforeEach(() => {
-    mockAuditClient = new HmppsAuditClient({
-      queueUrl: '',
-      enabled: true,
-      region: '',
-      serviceName: '',
-    }) as jest.Mocked<HmppsAuditClient>
     mockRestClient = new RestClient('cemoApi', {
       url: '',
       timeout: { response: 0, deadline: 0 },
       agent: { timeout: 0 },
     }) as jest.Mocked<RestClient>
-    mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockDeviceWearerService = new DeviceWearerService(mockRestClient) as jest.Mocked<DeviceWearerService>
-    controller = new NoFixedAbodeController(mockAuditService, mockDeviceWearerService, taskListService)
+    controller = new NoFixedAbodeController(mockDeviceWearerService, taskListService)
   })
 
   describe('get', () => {

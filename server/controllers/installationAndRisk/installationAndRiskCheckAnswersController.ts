@@ -1,6 +1,5 @@
 import { Request, RequestHandler, Response } from 'express'
 import { z } from 'zod'
-import { AuditService } from '../../services'
 import TaskListService from '../../services/taskListService'
 import paths from '../../constants/paths'
 import createViewModel from '../../models/view-models/riskInformationCheckAnswers'
@@ -13,7 +12,6 @@ const CheckYourAnswersFormModel = z.object({
 
 export default class CheckAnswersController {
   constructor(
-    private readonly auditService: AuditService,
     private readonly taskListService: TaskListService,
     private readonly checklistService: OrderChecklistService,
     private readonly sectionService: SectionService,

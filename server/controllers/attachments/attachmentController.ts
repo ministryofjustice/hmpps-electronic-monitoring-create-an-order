@@ -1,5 +1,5 @@
 import { Request, RequestHandler, Response } from 'express'
-import { AttachmentService, AuditService, OrderService } from '../../services'
+import { AttachmentService, AuditService } from '../../services'
 import AttachmentType from '../../models/AttachmentType'
 import paths from '../../constants/paths'
 import TaskListService, { PAGES, Page } from '../../services/taskListService'
@@ -10,7 +10,6 @@ import OrderChecklistService from '../../services/orderChecklistService'
 export default class AttachmentsController {
   constructor(
     private readonly auditService: AuditService,
-    private readonly orderService: OrderService,
     private readonly attachmentService: AttachmentService,
     private readonly taskListService: TaskListService,
     private readonly checklistService: OrderChecklistService,

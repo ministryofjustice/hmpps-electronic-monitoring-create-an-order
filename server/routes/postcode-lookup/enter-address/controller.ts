@@ -5,13 +5,9 @@ import { AddressType } from '../../../models/Address'
 import { isValidationResult } from '../../../models/Validation'
 import { AddressFormDataModel } from '../../../models/form-data/address'
 import AddressService from '../../../services/addressService'
-import PostcodeService from '../postcodeService'
 
 export default class EnterAddressController {
-  constructor(
-    private readonly addressService: AddressService,
-    private readonly postcodeService: PostcodeService,
-  ) {}
+  constructor(private readonly addressService: AddressService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const addressType = req.params.addressType as string

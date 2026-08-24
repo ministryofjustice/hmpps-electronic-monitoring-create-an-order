@@ -4,10 +4,9 @@ import paths from '../../../constants/paths'
 import MonitoringTypesFormDataModel from './formModel'
 import { validationErrors } from '../../../constants/validationErrors'
 import { ValidationResult } from '../../../models/Validation'
-import TaskListService from '../../../services/taskListService'
 
 export default class MonitoringTypeController {
-  constructor(private readonly taskListService: TaskListService) {}
+  constructor() {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!

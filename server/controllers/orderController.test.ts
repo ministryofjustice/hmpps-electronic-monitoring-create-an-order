@@ -1,11 +1,9 @@
 import { randomUUID } from 'crypto'
 import { createInterestedParties, getMockOrder } from '../../test/mocks/mockOrder'
 import { createMockRequest, createMockResponse } from '../../test/mocks/mockExpress'
-import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
 import { OrderStatusEnum } from '../models/Order'
 import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
-import AuditService from '../services/auditService'
 import OrderService from '../services/orderService'
 import OrderController from './orderController'
 import SectionService from '../services/sectionsService'
@@ -29,31 +27,22 @@ afterEach(() => {
 
 describe('OrderController', () => {
   let mockRestClient: jest.Mocked<RestClient>
-  let mockAuditClient: jest.Mocked<HmppsAuditClient>
-  let mockAuditService: jest.Mocked<AuditService>
   let mockOrderService: jest.Mocked<OrderService>
   let orderController: OrderController
   let sectionService: jest.Mocked<SectionService>
 
   beforeEach(() => {
-    mockAuditClient = new HmppsAuditClient({
-      queueUrl: '',
-      enabled: true,
-      region: '',
-      serviceName: '',
-    }) as jest.Mocked<HmppsAuditClient>
     mockRestClient = new RestClient('cemoApi', {
       url: '',
       timeout: { response: 0, deadline: 0 },
       agent: { timeout: 0 },
     }) as jest.Mocked<RestClient>
-    mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockOrderService = new OrderService(mockRestClient) as jest.Mocked<OrderService>
     mockOrderService.getVersionInformations = jest.fn().mockResolvedValue([])
     sectionService = {
       getSectionsForOrder: jest.fn().mockReturnValue(Promise.resolve([])),
     } as unknown as jest.Mocked<SectionService>
-    orderController = new OrderController(mockAuditService, mockOrderService, sectionService)
+    orderController = new OrderController(mockOrderService, sectionService)
   })
 
   describe('summary', () => {

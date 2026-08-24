@@ -3,16 +3,10 @@ import { createMockRequest, createMockResponse } from '../../../../test/mocks/mo
 import MonitoringTypeController from './controller'
 import constructModel from './viewModel'
 import paths from '../../../constants/paths'
-import TaskListService from '../../../services/taskListService'
 
 jest.mock('./viewModel')
 
 describe('monitoring type controller', () => {
-  const mockTaskListService = {
-    getNextCheckYourAnswersPage: jest.fn(),
-    getNextPage: jest.fn(),
-  } as unknown as jest.Mocked<TaskListService>
-
   let controller: MonitoringTypeController
 
   let res: Response
@@ -23,7 +17,7 @@ describe('monitoring type controller', () => {
   beforeEach(() => {
     jest.restoreAllMocks()
 
-    controller = new MonitoringTypeController(mockTaskListService)
+    controller = new MonitoringTypeController()
 
     mockConstructModel.mockReturnValue({ errorSummary: null })
 
@@ -51,9 +45,6 @@ describe('monitoring type controller', () => {
         action: 'continue',
         monitoringType: 'curfew',
       }
-      mockTaskListService.getNextPage = jest
-        .fn()
-        .mockReturnValue(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', req.order!.id))
 
       await controller.update(req, res, next)
 

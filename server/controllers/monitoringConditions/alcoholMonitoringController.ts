@@ -1,17 +1,12 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../constants/paths'
 import { isValidationResult } from '../../models/Validation'
-import { AlcoholMonitoringService, AuditService } from '../../services'
+import { AlcoholMonitoringService } from '../../services'
 import alcoholMonitoringViewModel from '../../models/view-models/alcoholMonitoring'
 import { AlcoholMonitoringFormDataModel } from '../../models/form-data/alcoholMonitoring'
-import TaskListService from '../../services/taskListService'
 
 export default class AlcoholMonitoringController {
-  constructor(
-    private readonly auditService: AuditService,
-    private readonly alcoholMonitoringService: AlcoholMonitoringService,
-    private readonly taskListService: TaskListService,
-  ) {}
+  constructor(private readonly alcoholMonitoringService: AlcoholMonitoringService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!

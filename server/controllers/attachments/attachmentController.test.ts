@@ -8,7 +8,6 @@ import AttachmentType from '../../models/AttachmentType'
 import { OrderStatusEnum } from '../../models/Order'
 import AttachmentService from '../../services/attachmentService'
 import AuditService from '../../services/auditService'
-import OrderService from '../../services/orderService'
 import AttachmentController from './attachmentController'
 import { createMockRequest } from '../../../test/mocks/mockExpress'
 import TaskListService from '../../services/taskListService'
@@ -26,7 +25,6 @@ const mockId = uuidv4()
 describe('AttachmentController', () => {
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
-  let mockOrderService: jest.Mocked<OrderService>
   let mockAttachmentService: jest.Mocked<AttachmentService>
   const taskListService = {
     getNextCheckYourAnswersPage: jest.fn(),
@@ -52,13 +50,11 @@ describe('AttachmentController', () => {
       timeout: { response: 0, deadline: 0 },
       agent: { timeout: 0 },
     }) as jest.Mocked<RestClient>
-    mockOrderService = new OrderService(mockRestClient) as jest.Mocked<OrderService>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockAttachmentService = new AttachmentService(mockRestClient) as jest.Mocked<AttachmentService>
 
     controller = new AttachmentController(
       mockAuditService,
-      mockOrderService,
       mockAttachmentService,
       taskListService,
       mockOrderChecklistService,

@@ -1,13 +1,10 @@
 import type { NextFunction, Request, Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
 import { getMockOrder } from '../../../test/mocks/mockOrder'
-import HmppsAuditClient from '../../data/hmppsAuditClient'
 import RestClient from '../../data/restClient'
-import AuditService from '../../services/auditService'
 import CurfewTimetableService from '../../services/curfewTimetableService'
 import CurfewTimetableController from './curfewTimetableController'
 import paths from '../../constants/paths'
-import TaskListService from '../../services/taskListService'
 
 jest.mock('../../services/auditService')
 jest.mock('../../data/hmppsAuditClient')
@@ -16,34 +13,22 @@ jest.mock('../../data/restClient')
 const mockId = uuidv4()
 
 describe('CurfewTimetableController', () => {
-  let mockAuditClient: jest.Mocked<HmppsAuditClient>
-  let mockAuditService: jest.Mocked<AuditService>
   let mockCurfewTimetableService: jest.Mocked<CurfewTimetableService>
   let controller: CurfewTimetableController
 
-  const taskListService = {
-    getSections: jest.fn().mockReturnValue(Promise.resolve([])),
-  } as unknown as jest.Mocked<TaskListService>
   let req: Request
   let res: Response
   let next: NextFunction
   const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 
   beforeEach(() => {
-    mockAuditClient = new HmppsAuditClient({
-      queueUrl: '',
-      enabled: true,
-      region: '',
-      serviceName: '',
-    }) as jest.Mocked<HmppsAuditClient>
     const mockRestClient = new RestClient('cemoApi', {
       url: '',
       timeout: { response: 0, deadline: 0 },
       agent: { timeout: 0 },
     }) as jest.Mocked<RestClient>
-    mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockCurfewTimetableService = new CurfewTimetableService(mockRestClient) as jest.Mocked<CurfewTimetableService>
-    controller = new CurfewTimetableController(mockAuditService, mockCurfewTimetableService, taskListService)
+    controller = new CurfewTimetableController(mockCurfewTimetableService)
 
     req = {
       // @ts-expect-error stubbing session

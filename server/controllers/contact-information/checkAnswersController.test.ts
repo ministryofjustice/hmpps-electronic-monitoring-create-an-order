@@ -1,6 +1,4 @@
 import { createAddress, createDeviceWearer, getMockOrder } from '../../../test/mocks/mockOrder'
-import HmppsAuditClient from '../../data/hmppsAuditClient'
-import AuditService from '../../services/auditService'
 import CheckAnswersController from './checkAnswersController'
 import TaskListService from '../../services/taskListService'
 import paths from '../../constants/paths'
@@ -23,8 +21,6 @@ describe('ContactDetailsCheckAnswersController', () => {
     getNextPage: jest.fn(),
   } as unknown as jest.Mocked<TaskListService>
   let controller: CheckAnswersController
-  let mockAuditClient: jest.Mocked<HmppsAuditClient>
-  let mockAuditService: jest.Mocked<AuditService>
   const content = getContent(Locales.en, DataDictionaryVersions.DDV5)
   const { questions } = content.pages.interestedParties
   const mockOrderChecklistService = {
@@ -32,14 +28,7 @@ describe('ContactDetailsCheckAnswersController', () => {
     getChecklist: jest.fn().mockResolvedValue(OrderChecklistModel.parse({})),
   } as unknown as jest.Mocked<OrderChecklistService>
   beforeEach(() => {
-    mockAuditClient = new HmppsAuditClient({
-      queueUrl: '',
-      enabled: true,
-      region: '',
-      serviceName: '',
-    }) as jest.Mocked<HmppsAuditClient>
-    mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
-    controller = new CheckAnswersController(mockAuditService, taskListService, mockOrderChecklistService)
+    controller = new CheckAnswersController(taskListService, mockOrderChecklistService)
   })
 
   afterEach(() => {

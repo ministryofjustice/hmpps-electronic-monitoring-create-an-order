@@ -1,6 +1,5 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../constants/paths'
-import { AuditService } from '../../services'
 import DeviceWearerService from '../../services/deviceWearerService'
 import { isValidationResult } from '../../models/Validation'
 import TaskListService from '../../services/taskListService'
@@ -9,7 +8,6 @@ import noFixedAbodeViewModel from '../../models/view-models/noFixedAbode'
 
 export default class NoFixedAbodeController {
   constructor(
-    private readonly auditService: AuditService,
     private readonly deviceWearerService: DeviceWearerService,
     private readonly taskListService: TaskListService,
   ) {}
