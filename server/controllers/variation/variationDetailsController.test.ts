@@ -1,6 +1,4 @@
-import HmppsAuditClient from '../../data/hmppsAuditClient'
 import RestClient from '../../data/restClient'
-import AuditService from '../../services/auditService'
 import TaskListService from '../../services/taskListService'
 import VariationService from '../../services/variationService'
 import VariationDetailsController from './variationDetailsController'
@@ -17,8 +15,6 @@ jest.mock('../../data/restClient')
 
 describe('VariationDetailsController', () => {
   let taskListService: TaskListService
-  let auditClient: jest.Mocked<HmppsAuditClient>
-  let auditService: jest.Mocked<AuditService>
   let restClient: jest.Mocked<RestClient>
   let variationService: VariationService
   let controller: VariationDetailsController
@@ -27,28 +23,16 @@ describe('VariationDetailsController', () => {
     updateChecklist: jest.fn(),
   } as unknown as jest.Mocked<OrderChecklistService>
   beforeEach(() => {
-    auditClient = new HmppsAuditClient({
-      queueUrl: '',
-      enabled: true,
-      region: '',
-      serviceName: '',
-    }) as jest.Mocked<HmppsAuditClient>
     restClient = new RestClient('cemoApi', {
       url: '',
       timeout: { response: 0, deadline: 0 },
       agent: { timeout: 0 },
     }) as jest.Mocked<RestClient>
-    auditService = new AuditService(auditClient) as jest.Mocked<AuditService>
     variationService = new VariationService(restClient)
 
-    taskListService = new TaskListService(mockOrderChecklistService)
+    taskListService = new TaskListService()
 
-    controller = new VariationDetailsController(
-      auditService,
-      variationService,
-      taskListService,
-      mockOrderChecklistService,
-    )
+    controller = new VariationDetailsController(variationService, taskListService, mockOrderChecklistService)
   })
 
   describe('view', () => {

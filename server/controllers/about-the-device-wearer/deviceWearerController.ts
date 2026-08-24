@@ -4,13 +4,11 @@ import { isValidationResult } from '../../models/Validation'
 import { DeviceWearerFormDataParser, IdentityNumbersFormDataModel } from '../../models/form-data/deviceWearer'
 import deviceWearerViewModel from '../../models/view-models/deviceWearer'
 import identityNumbersViewModel from '../../models/view-models/identityNumbers'
-import AuditService from '../../services/auditService'
 import DeviceWearerService from '../../services/deviceWearerService'
 import TaskListService from '../../services/taskListService'
 
 export default class DeviceWearerController {
   constructor(
-    private readonly auditService: AuditService,
     private readonly deviceWearerService: DeviceWearerService,
     private readonly taskListService: TaskListService,
   ) {}

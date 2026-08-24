@@ -1,18 +1,12 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../constants/paths'
 import { isValidationResult } from '../../models/Validation'
-import { AuditService } from '../../services'
 import TrailMonitoringService from '../../services/trailMonitoringService'
 import trailMonitoringViewModel from '../../models/view-models/trailMonitoring'
 import { TrailMonitoringFormDataModel } from '../../models/form-data/trailMonitoring'
-import TaskListService from '../../services/taskListService'
 
 export default class TrailMonitoringController {
-  constructor(
-    private readonly auditService: AuditService,
-    private readonly trailMonitoringService: TrailMonitoringService,
-    private readonly taskListService: TaskListService,
-  ) {}
+  constructor(private readonly trailMonitoringService: TrailMonitoringService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const { monitoringConditionsTrail, interestedParties } = req.order!

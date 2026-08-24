@@ -1,5 +1,4 @@
 import { Request, RequestHandler, Response } from 'express'
-import { AuditService } from '../../services'
 import paths from '../../constants/paths'
 import { isValidationResult } from '../../models/Validation'
 import DeviceWearerResponsibleAdultService from '../../services/deviceWearerResponsibleAdultService'
@@ -9,7 +8,6 @@ import responsibleAdultViewModel from '../../models/view-models/responsibleAdult
 
 export default class DeviceWearerResponsibleAdultController {
   constructor(
-    private readonly auditService: AuditService,
     private readonly deviceWearerResponsibleAdultService: DeviceWearerResponsibleAdultService,
     private readonly taskListService: TaskListService,
   ) {}

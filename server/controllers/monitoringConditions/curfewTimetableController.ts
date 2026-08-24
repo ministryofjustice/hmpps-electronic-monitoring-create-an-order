@@ -2,8 +2,7 @@ import { Request, RequestHandler, Response } from 'express'
 
 import paths from '../../constants/paths'
 import { isValidationListResult } from '../../models/Validation'
-import { AuditService, CurfewTimetableService } from '../../services'
-import TaskListService from '../../services/taskListService'
+import { CurfewTimetableService } from '../../services'
 import { CurfewTimetable } from '../../models/CurfewTimetable'
 import CurfewTimetableFormDataModel, { CurfewTimetableDataModel } from '../../models/form-data/curfewTimetable'
 import curfewTimetableViewModel from '../../models/view-models/curfewTimetable'
@@ -42,11 +41,7 @@ const parseAction = (action?: string): [verb: string | undefined, options: { day
 }
 
 export default class CurfewTimetableController {
-  constructor(
-    private readonly auditService: AuditService,
-    private readonly curfewTimetableService: CurfewTimetableService,
-    private readonly taskListService: TaskListService,
-  ) {}
+  constructor(private readonly curfewTimetableService: CurfewTimetableService) {}
 
   private addTimeToCurfewDay(
     curfewTimetable: CurfewTimetableDataModel,

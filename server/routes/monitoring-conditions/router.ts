@@ -49,7 +49,7 @@ const createOrderTypeDescriptionRouter = (
 
   const prarrController = new PrarrController(monitoringConditionsStoreService, monitoringConditionsUpdateService)
 
-  const monitoringTypeController = new MonitoringTypeController(taskListService)
+  const monitoringTypeController = new MonitoringTypeController()
 
   const policeAreaController = new PoliceAreaController(monitoringConditionsStoreService)
 
