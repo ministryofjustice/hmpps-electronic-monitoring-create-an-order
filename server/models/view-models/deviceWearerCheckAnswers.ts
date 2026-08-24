@@ -10,8 +10,8 @@ import {
   createAddressAnswer,
 } from '../../utils/checkYourAnswers'
 import { formatDateTime, lookup } from '../../utils/utils'
+import { IdentityNumbersEnum } from '../DeviceWearer'
 import { Order } from '../Order'
-import { Cohort } from '../UserCohort'
 
 const createOtherDisabilityAnswer = (order: Order, content: I18n, uri: string, answerOpts: AnswerOptions) => {
   if (order.deviceWearer.disabilities.includes('OTHER')) {
@@ -75,10 +75,15 @@ const createDeviceWearerAnswers = (order: Order, content: I18n, answerOpts: Answ
   ]
 }
 
-const createPersonIdentifierAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions, cohort?: Cohort) => {
+const createPersonIdentifierAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id)
 
-  return getIdentityNumbers(cohort, order.interestedParties?.notifyingOrganisation).map(type => {
+  const userInputAnswers = getIdentityNumbers(undefined, order.interestedParties?.notifyingOrganisation)
+  const existingAnswers = IdentityNumbersEnum.options.filter(
+    type => !userInputAnswers.includes(type) && Boolean(order.deviceWearer[identityNumberFieldNames[type]]),
+  )
+
+  return [...userInputAnswers, ...existingAnswers].map(type => {
     const name = identityNumberFieldNames[type]
 
     return createAnswer(content.pages.identityNumbers.questions[name].text, order.deviceWearer[name], uri, answerOpts)
@@ -198,14 +203,14 @@ const createAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOpt
   return answers
 }
 
-const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean, cohort?: Cohort) => {
+const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean) => {
   const ignoreActions = {
     ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' || !order.isOwner,
   }
 
   return {
     deviceWearer: createDeviceWearerAnswers(order, content, ignoreActions),
-    personIdentifiers: createPersonIdentifierAnswers(order, content, ignoreActions, cohort),
+    personIdentifiers: createPersonIdentifierAnswers(order, content, ignoreActions),
     responsibleAdult: createResponsibeAdultAnswers(order, content, ignoreActions),
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,
     contactDetails: createContactDetailsAnswers(order, content, ignoreActions),

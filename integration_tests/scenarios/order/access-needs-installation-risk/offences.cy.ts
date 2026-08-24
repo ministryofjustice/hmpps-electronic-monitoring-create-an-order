@@ -102,12 +102,7 @@ context('offences', () => {
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'COURT'],
     })
 
-    const interestedParties = createFakeInterestedParties(
-      'Civil and County Court',
-      'Prison',
-      undefined,
-      'North West',
-    )
+    const interestedParties = createFakeInterestedParties('Civil and County Court', 'Prison', undefined, 'North West')
     createNewOrder({ notifyingOrganisation: interestedParties })
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
@@ -331,12 +326,7 @@ context('offences', () => {
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'COURT'],
     })
 
-    const interestedParties = createFakeInterestedParties(
-      'Civil and County Court',
-      'Prison',
-      undefined,
-      'North West',
-    )
+    const interestedParties = createFakeInterestedParties('Civil and County Court', 'Prison', undefined, 'North West')
     createNewOrder({ notifyingOrganisation: interestedParties })
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)

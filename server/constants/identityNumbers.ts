@@ -66,5 +66,5 @@ export const getIdentityNumbers = (
 
   const unselectedOrg = cohort ? identityNumbersByCohortPendingOrg[cohort] : undefined
 
-  return allIdentityNumbers ?? unselectedOrg
+  return unselectedOrg ?? allIdentityNumbers
 }
