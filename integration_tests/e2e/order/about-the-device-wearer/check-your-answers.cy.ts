@@ -151,9 +151,7 @@ context('Device wearer - check your answers', () => {
           )
             ? 'cepr'
             : null,
-          courtCaseReferenceNumber: availableFields.has(identityNumberLabels.courtCaseReferenceNumber)
-            ? 'ccrn'
-            : null,
+          courtCaseReferenceNumber: availableFields.has(identityNumberLabels.courtCaseReferenceNumber) ? 'ccrn' : null,
         }
 
         cy.task('stubCemoGetOrder', {
