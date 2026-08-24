@@ -1,7 +1,6 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../constants/paths'
 import { isValidationResult } from '../../models/Validation'
-import { AuditService } from '../../services'
 import ProbationDeliveryUnitFormDataModel from '../../models/form-data/probationDeliveryUnit'
 import probationDeliveryUnitViewModel from '../../models/view-models/probationDeliveryUnit'
 import TaskListService from '../../services/taskListService'
@@ -12,7 +11,6 @@ import ReferenceData from '../../types/i18n/reference/reference'
 
 export default class ProbationDeliveryUnitController {
   constructor(
-    private readonly auditService: AuditService,
     private readonly probationDeliveryUnitService: ProbationDeliveryUnitService,
     private readonly taskListService: TaskListService,
   ) {}

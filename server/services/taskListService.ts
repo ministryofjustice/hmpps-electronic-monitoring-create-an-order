@@ -3,7 +3,6 @@ import paths from '../constants/paths'
 import { AddressType } from '../models/Address'
 import { convertBooleanToEnum, isNotNullOrEmptyString, isNotNullOrUndefined, isNullOrUndefined } from '../utils/utils'
 import AttachmentType from '../models/AttachmentType'
-import OrderChecklistService from './orderChecklistService'
 import FeatureFlags from '../utils/featureFlags'
 import isVariationType from '../utils/isVariationType'
 import isOrderDataDictionarySameOrAbove from '../utils/dataDictionaryVersionComparer'
@@ -93,14 +92,6 @@ export type Task = {
   completed: boolean
 }
 
-type SectionBlock = {
-  name: Section
-  completed: boolean
-  checked: boolean
-  path: string
-  isReady: boolean
-}
-
 type FormData = Record<string, string | boolean>
 
 export const canBeCompleted = (task: Task): boolean => {
@@ -146,7 +137,7 @@ const isTagAtSourceAvailable = (order: Order): boolean => {
 }
 
 export default class TaskListService {
-  constructor(private readonly checklistService: OrderChecklistService) {}
+  constructor() {}
 
   getTasks(order: Order): Array<Task> {
     const tasks: Array<Task> = []
@@ -660,10 +651,6 @@ export default class TaskListService {
     return tasks.filter(task => task.section === this.getNextSection(tasks, currentPage))
   }
 
-  getSectionCheckYourAnswersPage(sectionTasks: Task[]): Task {
-    return sectionTasks.find(task => task.name.startsWith(CYA_PREFIX))!
-  }
-
   getNextCheckYourAnswersPage(currentPage: Page, order: Order, versionId?: string) {
     const tasks = this.getTasks(order)
 
@@ -690,67 +677,6 @@ export default class TaskListService {
       .slice(this.getCurrentTaskIndex(tasks, currentPage) + 1)
       .find(item => item.name.startsWith('CHECK_ANSWERS'))
     return nextCheckYourAnswersPage ? tasks.findIndex(({ name }) => name === nextCheckYourAnswersPage.name) : -1
-  }
-
-  findTaskBySection(tasks: Task[], section: Section): Task[] {
-    return tasks.filter(task => task.section === section)
-  }
-
-  isSectionComplete(tasks: Task[], order: Order, section: Section): boolean {
-    const tasksCompleted = tasks.every(task => (canBeCompleted(task) ? task.completed : true))
-    if (section === SECTIONS.electronicMonitoringCondition) {
-      const anyConditionCompleted =
-        order.monitoringConditionsAlcohol?.startDate !== undefined ||
-        order.curfewConditions?.startDate !== undefined ||
-        order.monitoringConditionsTrail?.startDate !== undefined ||
-        order.enforcementZoneConditions?.length !== 0 ||
-        order.mandatoryAttendanceConditions?.length !== 0
-      return tasksCompleted && anyConditionCompleted
-    }
-
-    return tasksCompleted
-  }
-
-  isSectionReady(section: Section, tasks: Task[], order: Order): boolean {
-    if (section === SECTIONS.electronicMonitoringCondition) {
-      const deviceWearerTasks = this.findTaskBySection(tasks, SECTIONS.aboutTheDeviceWearer)
-      return this.isSectionComplete(deviceWearerTasks, order, SECTIONS.aboutTheDeviceWearer)
-    }
-    return true
-  }
-
-  async getSections(order: Order, versionId?: string): Promise<SectionBlock[]> {
-    const tasks = this.getTasks(order)
-    const checkList = await this.checklistService.getChecklist(`${order.id}-${order.versionId}`)
-
-    return Object.values(SECTIONS)
-      .filter(section => section !== SECTIONS.variationDetails || isVariationType(order.type))
-      .filter(section => section !== SECTIONS.contactInformation)
-      .map(section => {
-        const sectionsTasks = this.findTaskBySection(tasks, section)
-        const completed = this.isSectionComplete(sectionsTasks, order, section)
-        let path: string
-        if (order.status !== 'IN_PROGRESS' || completed) {
-          path = this.getCheckYourAnswersPathForSection(sectionsTasks)
-        } else {
-          const firstAvailableTask = sectionsTasks.find(task => canBeCompleted(task))
-          path = (firstAvailableTask || sectionsTasks[0]).path
-        }
-
-        path = path.replace(':orderId', order.id)
-
-        if (versionId) {
-          path = path.replace(`order/${order.id}`, `order/${order.id}/version/${versionId}`)
-        }
-
-        return {
-          name: section,
-          completed,
-          checked: checkList[section],
-          path,
-          isReady: this.isSectionReady(section, tasks, order),
-        }
-      })
   }
 
   getCheckYourAnswersPathForSection = (sectionTasks: Task[]) => {

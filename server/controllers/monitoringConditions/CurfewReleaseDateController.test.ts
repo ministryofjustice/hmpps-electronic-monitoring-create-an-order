@@ -1,9 +1,7 @@
 import type { NextFunction, Request, Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
 import { createMonitoringConditions, getMockOrder } from '../../../test/mocks/mockOrder'
-import HmppsAuditClient from '../../data/hmppsAuditClient'
 import RestClient from '../../data/restClient'
-import AuditService from '../../services/auditService'
 import CurfewReleaseDateService from '../../services/curfewReleaseDateService'
 import CurfewReleaseDateController from './curfewReleaseDateController'
 import paths from '../../constants/paths'
@@ -16,8 +14,6 @@ jest.mock('../../data/restClient')
 const mockId = uuidv4()
 
 describe('CurfewReleaseDateController', () => {
-  let mockAuditClient: jest.Mocked<HmppsAuditClient>
-  let mockAuditService: jest.Mocked<AuditService>
   let mockCurfewReleaseDateService: jest.Mocked<CurfewReleaseDateService>
   let controller: CurfewReleaseDateController
   const taskListService = {
@@ -28,20 +24,13 @@ describe('CurfewReleaseDateController', () => {
   let next: NextFunction
 
   beforeEach(() => {
-    mockAuditClient = new HmppsAuditClient({
-      queueUrl: '',
-      enabled: true,
-      region: '',
-      serviceName: '',
-    }) as jest.Mocked<HmppsAuditClient>
     const mockRestClient = new RestClient('cemoApi', {
       url: '',
       timeout: { response: 0, deadline: 0 },
       agent: { timeout: 0 },
     }) as jest.Mocked<RestClient>
-    mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockCurfewReleaseDateService = new CurfewReleaseDateService(mockRestClient) as jest.Mocked<CurfewReleaseDateService>
-    controller = new CurfewReleaseDateController(mockAuditService, mockCurfewReleaseDateService, taskListService)
+    controller = new CurfewReleaseDateController(mockCurfewReleaseDateService)
 
     req = {
       // @ts-expect-error stubbing session

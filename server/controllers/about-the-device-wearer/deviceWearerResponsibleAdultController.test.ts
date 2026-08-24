@@ -1,6 +1,4 @@
-import AuditService from '../../services/auditService'
 import DeviceWearerResponsibleAdultService from '../../services/deviceWearerResponsibleAdultService'
-import HmppsAuditClient from '../../data/hmppsAuditClient'
 import DeviceWearerResponsibleAdultController from './deviceWearerResponsibleAdultController'
 import RestClient from '../../data/restClient'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
@@ -25,8 +23,6 @@ const createMockOrder = (name: string) =>
 
 describe('DeviceWearerResponsibleAdultController', () => {
   let mockRestClient: jest.Mocked<RestClient>
-  let mockAuditClient: jest.Mocked<HmppsAuditClient>
-  let mockAuditService: jest.Mocked<AuditService>
   let mockDeviceWearerResponsibleAdultService: jest.Mocked<DeviceWearerResponsibleAdultService>
   let deviceWearerResponsibleAdultController: DeviceWearerResponsibleAdultController
   const taskListService = {
@@ -35,23 +31,15 @@ describe('DeviceWearerResponsibleAdultController', () => {
   } as unknown as jest.Mocked<TaskListService>
 
   beforeEach(() => {
-    mockAuditClient = new HmppsAuditClient({
-      queueUrl: '',
-      enabled: true,
-      region: '',
-      serviceName: '',
-    }) as jest.Mocked<HmppsAuditClient>
     mockRestClient = new RestClient('cemoApi', {
       url: '',
       timeout: { response: 0, deadline: 0 },
       agent: { timeout: 0 },
     }) as jest.Mocked<RestClient>
-    mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockDeviceWearerResponsibleAdultService = new DeviceWearerResponsibleAdultService(
       mockRestClient,
     ) as jest.Mocked<DeviceWearerResponsibleAdultService>
     deviceWearerResponsibleAdultController = new DeviceWearerResponsibleAdultController(
-      mockAuditService,
       mockDeviceWearerResponsibleAdultService,
       taskListService,
     )

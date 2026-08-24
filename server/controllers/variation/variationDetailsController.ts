@@ -1,5 +1,4 @@
 import { RequestHandler } from 'express'
-import AuditService from '../../services/auditService'
 import TaskListService from '../../services/taskListService'
 import VariationService from '../../services/variationService'
 import { VariationDetailsFormDataParser } from '../../models/form-data/variationDetails'
@@ -10,7 +9,6 @@ import OrderChecklistService from '../../services/orderChecklistService'
 
 export default class VariationDetailsController {
   constructor(
-    private readonly auditService: AuditService,
     private readonly variationDetailsService: VariationService,
     private readonly taskListService: TaskListService,
     private readonly checklistService: OrderChecklistService,

@@ -4,8 +4,6 @@ import AttendanceMonitoringController from './attendanceMonitoringController'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 import RestClient from '../../data/restClient'
 import AttendanceMonitoringService from '../../services/attendanceMonitoringService'
-import TaskListService from '../../services/taskListService'
-import OrderChecklistService from '../../services/orderChecklistService'
 
 const mockConditionId = uuidv4()
 
@@ -19,10 +17,6 @@ describe('attendanceMonitoringController', () => {
   let mockRestClient: jest.Mocked<RestClient>
   let mockAttendanceMonitoringService: jest.Mocked<AttendanceMonitoringService>
   let attendanceMonitoringController: AttendanceMonitoringController
-  const mockOrderChecklistService = {
-    setSectionCheckStatus: jest.fn(),
-  } as unknown as jest.Mocked<OrderChecklistService>
-  const taskListService = new TaskListService(mockOrderChecklistService)
 
   beforeEach(() => {
     mockRestClient = new RestClient('cemoApi', {
@@ -35,10 +29,7 @@ describe('attendanceMonitoringController', () => {
       mockRestClient,
     ) as jest.Mocked<AttendanceMonitoringService>
 
-    attendanceMonitoringController = new AttendanceMonitoringController(
-      mockAttendanceMonitoringService,
-      taskListService,
-    )
+    attendanceMonitoringController = new AttendanceMonitoringController(mockAttendanceMonitoringService)
   })
 
   const validMock = [

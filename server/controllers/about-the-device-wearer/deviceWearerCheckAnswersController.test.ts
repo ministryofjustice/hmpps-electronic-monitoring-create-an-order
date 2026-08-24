@@ -1,6 +1,4 @@
 import { createDeviceWearer, createResponsibleAdult, getMockOrder } from '../../../test/mocks/mockOrder'
-import HmppsAuditClient from '../../data/hmppsAuditClient'
-import AuditService from '../../services/auditService'
 import DeviceWearerCheckAnswersController from './deviceWearerCheckAnswersController'
 import TaskListService from '../../services/taskListService'
 import paths from '../../constants/paths'
@@ -52,28 +50,18 @@ describe('DeviceWearerCheckAnswersController', () => {
     getNextPage: jest.fn(),
   } as unknown as jest.Mocked<TaskListService>
   let controller: DeviceWearerCheckAnswersController
-  let mockAuditClient: jest.Mocked<HmppsAuditClient>
-  let mockAuditService: jest.Mocked<AuditService>
   let mockedSectionService: jest.Mocked<SectionService>
   const mockOrderChecklistService = {
     updateChecklist: jest.fn(),
     getChecklist: jest.fn().mockResolvedValue(OrderChecklistModel.parse({})),
   } as unknown as jest.Mocked<OrderChecklistService>
   beforeEach(() => {
-    mockAuditClient = new HmppsAuditClient({
-      queueUrl: '',
-      enabled: true,
-      region: '',
-      serviceName: '',
-    }) as jest.Mocked<HmppsAuditClient>
-    mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockedSectionService = {
       checkBlankVariationOrNewOrder: jest.fn().mockReturnValue(true),
       getSectionsForOrder: jest.fn(),
     } as unknown as jest.Mocked<SectionService>
 
     controller = new DeviceWearerCheckAnswersController(
-      mockAuditService,
       taskListService,
       mockOrderChecklistService,
       mockedSectionService,

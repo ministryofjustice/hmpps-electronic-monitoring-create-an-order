@@ -1,13 +1,10 @@
 import type { NextFunction, Request, Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
 import { createMonitoringConditions, getMockOrder } from '../../../test/mocks/mockOrder'
-import HmppsAuditClient from '../../data/hmppsAuditClient'
 import RestClient from '../../data/restClient'
-import AuditService from '../../services/auditService'
 import CurfewConditionsService from '../../services/curfewConditionsService'
 import CurfewConditionsController from './curfewConditionsController'
 import paths from '../../constants/paths'
-import TaskListService from '../../services/taskListService'
 
 jest.mock('../../services/auditService')
 jest.mock('../../data/hmppsAuditClient')
@@ -16,32 +13,20 @@ jest.mock('../../data/restClient')
 const mockId = uuidv4()
 
 describe('CurfewConditionsController', () => {
-  let mockAuditClient: jest.Mocked<HmppsAuditClient>
-  let mockAuditService: jest.Mocked<AuditService>
   let mockCurfewReleaseDateService: jest.Mocked<CurfewConditionsService>
   let controller: CurfewConditionsController
-  const taskListService = {
-    getSections: jest.fn().mockReturnValue(Promise.resolve([])),
-  } as unknown as jest.Mocked<TaskListService>
   let req: Request
   let res: Response
   let next: NextFunction
 
   beforeEach(() => {
-    mockAuditClient = new HmppsAuditClient({
-      queueUrl: '',
-      enabled: true,
-      region: '',
-      serviceName: '',
-    }) as jest.Mocked<HmppsAuditClient>
     const mockRestClient = new RestClient('cemoApi', {
       url: '',
       timeout: { response: 0, deadline: 0 },
       agent: { timeout: 0 },
     }) as jest.Mocked<RestClient>
-    mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockCurfewReleaseDateService = new CurfewConditionsService(mockRestClient) as jest.Mocked<CurfewConditionsService>
-    controller = new CurfewConditionsController(mockAuditService, mockCurfewReleaseDateService, taskListService)
+    controller = new CurfewConditionsController(mockCurfewReleaseDateService)
 
     req = {
       // @ts-expect-error stubbing session

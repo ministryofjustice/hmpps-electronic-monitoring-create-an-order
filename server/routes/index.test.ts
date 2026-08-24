@@ -42,7 +42,7 @@ const mockOrderChecklistService = {
   setSectionCheckStatus: jest.fn(),
   getChecklist: jest.fn(),
 } as unknown as jest.Mocked<OrderChecklistService>
-const taskListService = new TaskListService(mockOrderChecklistService)
+const taskListService = new TaskListService()
 const sectionService = {
   checkBlankVariationOrNewOrder: jest.fn().mockReturnValue(true),
   getSectionsForOrder: jest.fn().mockReturnValue([]),

@@ -1,6 +1,6 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../constants/paths'
-import { AuditService, ContactDetailsService } from '../../services'
+import { ContactDetailsService } from '../../services'
 import { isValidationResult } from '../../models/Validation'
 import contactDetailsViewModel from '../../models/view-models/contactDetails'
 import ContactDetailsFormDataModel from '../../models/form-data/contactDetails'
@@ -8,7 +8,6 @@ import TaskListService from '../../services/taskListService'
 
 export default class ContactDetailsController {
   constructor(
-    private readonly auditService: AuditService,
     private readonly contactDetailsService: ContactDetailsService,
     private readonly taskListService: TaskListService,
   ) {}

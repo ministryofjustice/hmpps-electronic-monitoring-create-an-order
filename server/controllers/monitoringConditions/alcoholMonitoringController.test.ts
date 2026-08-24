@@ -1,11 +1,8 @@
-import AuditService from '../../services/auditService'
 import AlcoholMonitoringService from '../../services/alcoholMonitoringService'
-import HmppsAuditClient from '../../data/hmppsAuditClient'
 import AlcoholMonitoringController from './alcoholMonitoringController'
 import RestClient from '../../data/restClient'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 import { getMockOrder } from '../../../test/mocks/mockOrder'
-import TaskListService from '../../services/taskListService'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
@@ -24,34 +21,17 @@ const createMockOrder = (startDate: string | null = null) =>
 
 describe('AlcoholMonitoringController', () => {
   let mockRestClient: jest.Mocked<RestClient>
-  let mockAuditClient: jest.Mocked<HmppsAuditClient>
-  let mockAuditService: jest.Mocked<AuditService>
   let mockAlcoholMonitoringService: jest.Mocked<AlcoholMonitoringService>
   let alcoholMonitoringController: AlcoholMonitoringController
-  const taskListService = {
-    getNextCheckYourAnswersPage: jest.fn(),
-    getNextPage: jest.fn(),
-  } as unknown as jest.Mocked<TaskListService>
 
   beforeEach(() => {
-    mockAuditClient = new HmppsAuditClient({
-      queueUrl: '',
-      enabled: true,
-      region: '',
-      serviceName: '',
-    }) as jest.Mocked<HmppsAuditClient>
     mockRestClient = new RestClient('cemoApi', {
       url: '',
       timeout: { response: 0, deadline: 0 },
       agent: { timeout: 0 },
     }) as jest.Mocked<RestClient>
-    mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockAlcoholMonitoringService = new AlcoholMonitoringService(mockRestClient) as jest.Mocked<AlcoholMonitoringService>
-    alcoholMonitoringController = new AlcoholMonitoringController(
-      mockAuditService,
-      mockAlcoholMonitoringService,
-      taskListService,
-    )
+    alcoholMonitoringController = new AlcoholMonitoringController(mockAlcoholMonitoringService)
   })
 
   describe('view', () => {
