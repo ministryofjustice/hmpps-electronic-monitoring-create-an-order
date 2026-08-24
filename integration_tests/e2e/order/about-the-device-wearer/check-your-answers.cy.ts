@@ -3,9 +3,99 @@ import { NotFoundErrorPage } from '../../../pages/error'
 import Page from '../../../pages/page'
 import CheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import OrderTasksPage from '../../../pages/order/summary'
+import { NotifyingOrganisation } from '../../../../server/models/NotifyingOrganisation'
 
 const mockOrderId = uuidv4()
 const pagePath = '/about-the-device-wearer/check-your-answers'
+
+const identityNumberLabels = {
+  nomisId: 'Prison number',
+  deliusId: 'Case Reference Number (CRN)',
+  pncId: 'Police National Computer (PNC)',
+  complianceAndEnforcementPersonReference: 'Compliance and Enforcement Person Reference (CEPR)',
+  courtCaseReferenceNumber: 'Court Case Reference Number (CCRN)',
+}
+
+const identityNumberCases: Array<{
+  notifyingOrganisation: NotifyingOrganisation
+  expected: Array<{ key: string; value: string }>
+  unexpected: string[]
+}> = [
+  {
+    notifyingOrganisation: 'PRISON',
+    expected: [{ key: identityNumberLabels.nomisId, value: 'nomis' }],
+    unexpected: [
+      identityNumberLabels.deliusId,
+      identityNumberLabels.pncId,
+      identityNumberLabels.complianceAndEnforcementPersonReference,
+      identityNumberLabels.courtCaseReferenceNumber,
+    ],
+  },
+  {
+    notifyingOrganisation: 'HOME_OFFICE',
+    expected: [{ key: identityNumberLabels.complianceAndEnforcementPersonReference, value: 'cepr' }],
+    unexpected: [
+      identityNumberLabels.nomisId,
+      identityNumberLabels.deliusId,
+      identityNumberLabels.pncId,
+      identityNumberLabels.courtCaseReferenceNumber,
+    ],
+  },
+  {
+    notifyingOrganisation: 'PROBATION',
+    expected: [
+      { key: identityNumberLabels.nomisId, value: 'nomis' },
+      { key: identityNumberLabels.deliusId, value: 'delius' },
+    ],
+    unexpected: [
+      identityNumberLabels.pncId,
+      identityNumberLabels.complianceAndEnforcementPersonReference,
+      identityNumberLabels.courtCaseReferenceNumber,
+    ],
+  },
+  {
+    notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE',
+    expected: [
+      { key: identityNumberLabels.pncId, value: 'pnc' },
+      { key: identityNumberLabels.nomisId, value: 'nomis' },
+    ],
+    unexpected: [
+      identityNumberLabels.deliusId,
+      identityNumberLabels.complianceAndEnforcementPersonReference,
+      identityNumberLabels.courtCaseReferenceNumber,
+    ],
+  },
+  {
+    notifyingOrganisation: 'CIVIL_COUNTY_COURT',
+    expected: [{ key: identityNumberLabels.courtCaseReferenceNumber, value: 'ccrn' }],
+    unexpected: [
+      identityNumberLabels.nomisId,
+      identityNumberLabels.deliusId,
+      identityNumberLabels.pncId,
+      identityNumberLabels.complianceAndEnforcementPersonReference,
+    ],
+  },
+]
+
+const deviceWearerWithIdentityNumbers = {
+  nomisId: 'nomis',
+  pncId: 'pnc',
+  deliusId: 'delius',
+  prisonNumber: null,
+  homeOfficeReferenceNumber: null,
+  complianceAndEnforcementPersonReference: 'cepr',
+  courtCaseReferenceNumber: 'ccrn',
+  firstName: null,
+  lastName: null,
+  alias: null,
+  adultAtTimeOfInstallation: null,
+  sex: null,
+  gender: null,
+  dateOfBirth: null,
+  disabilities: null,
+  noFixedAbode: null,
+  interpreterRequired: null,
+}
 
 context('Device wearer - check your answers', () => {
   context('Draft order', () => {
@@ -38,6 +128,75 @@ context('Device wearer - check your answers', () => {
     it('Should be accessible', () => {
       const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
       page.checkIsAccessible()
+    })
+  })
+
+  context('Identity numbers by notifying organisation', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+      cy.signIn()
+    })
+
+    identityNumberCases.forEach(({ notifyingOrganisation, expected, unexpected }) => {
+      it(`shows identity numbers for ${notifyingOrganisation}`, () => {
+        const availableFields = new Set(expected.map(({ key }) => key))
+        const deviceWearer = {
+          ...deviceWearerWithIdentityNumbers,
+          nomisId: availableFields.has(identityNumberLabels.nomisId) ? 'nomis' : null,
+          deliusId: availableFields.has(identityNumberLabels.deliusId) ? 'delius' : null,
+          pncId: availableFields.has(identityNumberLabels.pncId) ? 'pnc' : null,
+          complianceAndEnforcementPersonReference: availableFields.has(
+            identityNumberLabels.complianceAndEnforcementPersonReference,
+          )
+            ? 'cepr'
+            : null,
+          courtCaseReferenceNumber: availableFields.has(identityNumberLabels.courtCaseReferenceNumber)
+            ? 'ccrn'
+            : null,
+        }
+
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: {
+            interestedParties: { notifyingOrganisation },
+            deviceWearer,
+          },
+        })
+
+        const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
+        page.identityNumbersSection.shouldHaveItems(expected)
+        page.identityNumbersSection.shouldNotHaveItems(unexpected)
+      })
+    })
+
+    it('also shows populated legacy identity numbers', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          interestedParties: { notifyingOrganisation: 'PRISON' },
+          deviceWearer: {
+            ...deviceWearerWithIdentityNumbers,
+            deliusId: null,
+            pncId: null,
+            complianceAndEnforcementPersonReference: null,
+            courtCaseReferenceNumber: null,
+            prisonNumber: 'legacy-prison-number',
+            homeOfficeReferenceNumber: 'legacy-home-office-reference',
+          },
+        },
+      })
+
+      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
+      page.identityNumbersSection.shouldHaveItems([
+        { key: identityNumberLabels.nomisId, value: 'nomis' },
+        { key: 'Prison Number', value: 'legacy-prison-number' },
+      ])
+      page.identityNumbersSection.shouldNotHaveItem('Home Office reference number')
     })
   })
 
