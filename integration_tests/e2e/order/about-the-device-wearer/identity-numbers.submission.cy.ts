@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
-import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
+import DeviceWearerSearchResultsPage from '../../../pages/order/about-the-device-wearer/device-wearer-search-results'
 
 const mockOrderId = uuidv4()
 const apiPath = '/device-wearer/identity-numbers'
@@ -37,6 +37,15 @@ context('About the device wearer', () => {
             disabilities: null,
             noFixedAbode: false,
             interpreterRequired: null,
+          },
+        })
+        cy.task('stubCemoRequest', {
+          httpStatus: 200,
+          method: 'GET',
+          subPath: `orders/${mockOrderId}/device-wearer/search-results`,
+          response: {
+            fullName: 'Ermintrude Jones',
+            dateOfBirth: '1974-01-19T00:00:00Z',
           },
         })
 
@@ -80,7 +89,7 @@ context('About the device wearer', () => {
         }).should('be.true')
       })
 
-      it('should continue to personal details page', () => {
+      it('should continue to device wearer search results page', () => {
         const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
 
         const validFormData = {
@@ -95,7 +104,7 @@ context('About the device wearer', () => {
         page.form.fillInWith(validFormData)
         page.form.saveAndContinueButton.click()
 
-        Page.verifyOnPage(AboutDeviceWearerPage, 'About the device wearer')
+        Page.verifyOnPage(DeviceWearerSearchResultsPage, { orderId: mockOrderId }, { searchedIdentifier: 'pnc' })
       })
 
       it('should return to the summary page', () => {

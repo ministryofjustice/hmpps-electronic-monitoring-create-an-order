@@ -588,7 +588,7 @@ describe('DeviceWearerController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/about-the-device-wearer/identity-numbers`)
     })
 
-    it('should save valid data and redirect to the personal information page', async () => {
+    it('should save valid data and redirect to the device wearer search results page', async () => {
       // Given
       const order = getMockOrder()
       const req = createMockRequest({
@@ -624,10 +624,6 @@ describe('DeviceWearerController', () => {
         pncId: null,
       })
 
-      taskListService.getNextPage = jest
-        .fn()
-        .mockReturnValue(`/order/${order.id}/about-the-device-wearer/device-wearer`)
-
       // When
       await deviceWearerController.updateIdentityNumbers(req, res, next)
 
@@ -647,7 +643,9 @@ describe('DeviceWearerController', () => {
         }),
       )
 
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/about-the-device-wearer/device-wearer`)
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/order/${order.id}/about-the-device-wearer/device-wearer-search-results?searchedIdentifier=nomis`,
+      )
     })
 
     it('should save and redirect to the order summary page if the user chooses back', async () => {

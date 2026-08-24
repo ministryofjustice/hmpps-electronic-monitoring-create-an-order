@@ -1,5 +1,6 @@
 import DeviceWearerCheckYourAnswersPage from '../../pages/order/about-the-device-wearer/check-your-answers'
 import AboutDeviceWearerPage from '../../pages/order/about-the-device-wearer/device-wearer'
+import DeviceWearerSearchResultsPage from '../../pages/order/about-the-device-wearer/device-wearer-search-results'
 import IdentityNumbersPage from '../../pages/order/about-the-device-wearer/identity-numbers'
 import ResponsibleAdultDetailsPage from '../../pages/order/about-the-device-wearer/responsible-adult-details'
 import ContactDetailsPage from '../../pages/order/contact-information/contact-details'
@@ -15,9 +16,20 @@ export default function fillInAboutTheDeviceWearer({
   tertiaryAddressDetails = undefined,
   section = 'About the device wearer',
 }): void {
+  const searchedIdentifier =
+    deviceWearerDetails.pncId ||
+    deviceWearerDetails.nomisId ||
+    deviceWearerDetails.prisonNumber ||
+    deviceWearerDetails.deliusId ||
+    deviceWearerDetails.complianceAndEnforcementPersonReference ||
+    deviceWearerDetails.courtCaseReferenceNumber
+
   const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
   identityNumbersPage.form.fillInWith(deviceWearerDetails)
   identityNumbersPage.form.saveAndContinueButton.click()
+
+  const deviceWearerSearchResultsPage = Page.verifyOnPage(DeviceWearerSearchResultsPage, {}, { searchedIdentifier })
+  deviceWearerSearchResultsPage.form.enterDetailsManuallyLink.click()
 
   const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
   aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)

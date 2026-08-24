@@ -45,6 +45,7 @@ import IsAddressChangeController from './variations/is-address-change/controller
 import NoRefitsController from './variations/no-refits/controller'
 import NoChangeResponsibleOfficerController from './variations/no-change-responsible-officer/controller'
 import SentencingActSelection from './sentencing-act-selection/controller'
+import DeviceWearerSearchResultsController from './about-the-device-wearer/device-wearer-search-results/controller'
 
 export default function routes({
   alcoholMonitoringService,
@@ -88,6 +89,7 @@ export default function routes({
   postcodeService,
   sectionService,
   sentencingActService,
+  deviceWearerSearchResultsService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -214,6 +216,7 @@ export default function routes({
   const noRefitsController = new NoRefitsController()
   const noChangeResonsibleOfficer = new NoChangeResponsibleOfficerController()
   const setSentencingAct = new SentencingActSelection(sentencingActService)
+  const deviceWearerSearchResultsController = new DeviceWearerSearchResultsController(deviceWearerSearchResultsService)
   router.param('orderId', populateOrder(orderService))
 
   get('/', orderSearchController.list)
@@ -259,6 +262,10 @@ export default function routes({
   // Identity numbers
   get(paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS, deviceWearerController.viewIdentityNumbers)
   post(paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS, deviceWearerController.updateIdentityNumbers)
+
+  // Device wearer search results
+  get(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_SEARCH_RESULTS, deviceWearerSearchResultsController.view)
+  post(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_SEARCH_RESULTS, deviceWearerSearchResultsController.update)
 
   // Responsible Adult
   get(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT, responsibleAdultController.view)

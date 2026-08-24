@@ -3,6 +3,7 @@ import Page, { PageElement } from '../page'
 import paths from '../../../server/constants/paths'
 import Task from '../components/task'
 import AboutDeviceWearerPage from './about-the-device-wearer/device-wearer'
+import DeviceWearerSearchResultsPage from './about-the-device-wearer/device-wearer-search-results'
 import ResponsibleAdultDetailsPage from './about-the-device-wearer/responsible-adult-details'
 import ContactDetailsPage from './contact-information/contact-details'
 import NoFixedAbodePage from './contact-information/no-fixed-abode'
@@ -607,9 +608,20 @@ export default class OrderTasksPage extends AppPage {
     newDeviceWearerFlow = false,
   }): void {
     if (!newDeviceWearerFlow) {
+      const searchedIdentifier =
+        deviceWearerDetails.pncId ||
+        deviceWearerDetails.nomisId ||
+        deviceWearerDetails.prisonNumber ||
+        deviceWearerDetails.deliusId ||
+        deviceWearerDetails.complianceAndEnforcementPersonReference ||
+        deviceWearerDetails.courtCaseReferenceNumber
+
       const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
       identityNumbersPage.form.fillInWith(deviceWearerDetails)
       identityNumbersPage.form.saveAndContinueButton.click()
+
+      const deviceWearerSearchResultsPage = Page.verifyOnPage(DeviceWearerSearchResultsPage, {}, { searchedIdentifier })
+      deviceWearerSearchResultsPage.form.enterDetailsManuallyLink.click()
 
       const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
       aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)

@@ -14,6 +14,7 @@ import TaskListService from '../services/taskListService'
 import OrderChecklistService from '../services/orderChecklistService'
 import OrderChecklistModel from '../models/OrderChecklist'
 import SectionsService from '../services/sectionsService'
+import DeviceWearerSearchResultsService from './about-the-device-wearer/device-wearer-search-results/service'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -46,6 +47,12 @@ const sectionService = {
   checkBlankVariationOrNewOrder: jest.fn().mockReturnValue(true),
   getSectionsForOrder: jest.fn().mockReturnValue([]),
 } as unknown as jest.Mocked<SectionsService>
+const deviceWearerSearchResultsService = {
+  getSearchResult: jest.fn().mockResolvedValue({ fullName: null, dateOfBirth: null }),
+  confirmSearchResult: jest.fn(),
+  hasSearchMatch: jest.fn().mockReturnValue(false),
+  getDisplayDateOfBirth: jest.fn().mockReturnValue(''),
+} as unknown as jest.Mocked<DeviceWearerSearchResultsService>
 const mockSubmittedOrder = getMockSubmittedOrder()
 const mockDraftOrder = getMockOrder()
 
@@ -76,6 +83,7 @@ describe('authorised user', () => {
         taskListService,
         sectionService,
         orderChecklistService: mockOrderChecklistService,
+        deviceWearerSearchResultsService,
       },
       userSupplier: () => user,
     })
@@ -164,6 +172,28 @@ describe('authorised user', () => {
     })
   })
 
+  describe('GET /order/:orderId/about-the-device-wearer/device-wearer-search-results', () => {
+    it('should render device wearer search results page', () => {
+      auditService.logPageView.mockResolvedValue()
+      orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
+      flashProvider.mockReturnValue([])
+      deviceWearerSearchResultsService.getSearchResult.mockResolvedValue({
+        fullName: 'Ermintrude Jones',
+        dateOfBirth: '1974-01-19T00:00:00Z',
+      })
+      deviceWearerSearchResultsService.hasSearchMatch.mockReturnValue(true)
+      deviceWearerSearchResultsService.getDisplayDateOfBirth.mockReturnValue('19 January 1974')
+
+      return request(app)
+        .get(`/order/${mockSubmittedOrder.id}/about-the-device-wearer/device-wearer-search-results`)
+        .query({ searchedIdentifier: 'A1234BC' })
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          expect(res.text).toContain('About the device wearer')
+        })
+    })
+  })
+
   describe('GET /order/:orderId/contact-information/contact-details', () => {
     it('should render contact details page', () => {
       auditService.logPageView.mockResolvedValue()
@@ -240,6 +270,7 @@ describe('Order Not Found', () => {
         deviceWearerService,
         orderSearchService,
         orderChecklistService: mockOrderChecklistService,
+        deviceWearerSearchResultsService,
       },
       userSupplier: () => user,
     })
@@ -257,6 +288,16 @@ describe('Order Not Found', () => {
     ['POST /order/:orderId/summary', 'post', `/order/${mockId}/delete`],
     ['GET /order/:orderId/about-the-device-wearer', 'get', `/order/${mockId}/about-the-device-wearer`],
     ['POST /order/:orderId/about-the-device-wearer', 'post', `/order/${mockId}/about-the-device-wearer`],
+    [
+      'GET /order/:orderId/about-the-device-wearer/device-wearer-search-results',
+      'get',
+      `/order/${mockId}/about-the-device-wearer/device-wearer-search-results`,
+    ],
+    [
+      'POST /order/:orderId/about-the-device-wearer/device-wearer-search-results',
+      'post',
+      `/order/${mockId}/about-the-device-wearer/device-wearer-search-results`,
+    ],
     [
       'GET /order/:orderId/contact-information/contact-details',
       'get',
@@ -284,6 +325,7 @@ describe('unauthorised user', () => {
         orderService,
         deviceWearerService,
         orderSearchService,
+        deviceWearerSearchResultsService,
       },
       userSupplier: () => unauthorisedUser,
     })
@@ -302,6 +344,16 @@ describe('unauthorised user', () => {
     ['POST /order/:orderId/summary', 'post', '/order/123456789/delete'],
     ['GET /order/:orderId/about-the-device-wearer', 'get', '/order/123456789/about-the-device-wearer'],
     ['POST /order/:orderId/about-the-device-wearer', 'post', '/order/123456789/about-the-device-wearer'],
+    [
+      'GET /order/:orderId/about-the-device-wearer/device-wearer-search-results',
+      'get',
+      '/order/123456789/about-the-device-wearer/device-wearer-search-results',
+    ],
+    [
+      'POST /order/:orderId/about-the-device-wearer/device-wearer-search-results',
+      'post',
+      '/order/123456789/about-the-device-wearer/device-wearer-search-results',
+    ],
     [
       'GET /order/:orderId/contact-information/contact-details',
       'get',
