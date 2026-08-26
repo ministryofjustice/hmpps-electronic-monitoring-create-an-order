@@ -1,3 +1,4 @@
+import { getIdentityNumbers, identityNumberFieldNames } from '../../constants/identityNumbers'
 import paths from '../../constants/paths'
 import I18n from '../../types/i18n'
 import {
@@ -9,6 +10,7 @@ import {
   createAddressAnswer,
 } from '../../utils/checkYourAnswers'
 import { formatDateTime, lookup } from '../../utils/utils'
+import { IdentityNumbersEnum } from '../DeviceWearer'
 import { Order } from '../Order'
 
 const createOtherDisabilityAnswer = (order: Order, content: I18n, uri: string, answerOpts: AnswerOptions) => {
@@ -76,29 +78,16 @@ const createDeviceWearerAnswers = (order: Order, content: I18n, answerOpts: Answ
 const createPersonIdentifierAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id)
 
-  return [
-    createAnswer(content.pages.identityNumbers.questions.pncId.text, order.deviceWearer.pncId, uri, answerOpts),
-    createAnswer(content.pages.identityNumbers.questions.nomisId.text, order.deviceWearer.nomisId, uri, answerOpts),
-    createAnswer(
-      content.pages.identityNumbers.questions.prisonNumber.text,
-      order.deviceWearer.prisonNumber,
-      uri,
-      answerOpts,
-    ),
-    createAnswer(content.pages.identityNumbers.questions.deliusId.text, order.deviceWearer.deliusId, uri, answerOpts),
-    createAnswer(
-      content.pages.identityNumbers.questions.complianceAndEnforcementPersonReference.text,
-      order.deviceWearer.complianceAndEnforcementPersonReference,
-      uri,
-      answerOpts,
-    ),
-    createAnswer(
-      content.pages.identityNumbers.questions.courtCaseReferenceNumber.text,
-      order.deviceWearer.courtCaseReferenceNumber,
-      uri,
-      answerOpts,
-    ),
-  ]
+  const userInputAnswers = getIdentityNumbers(undefined, order.interestedParties?.notifyingOrganisation)
+  const existingAnswers = IdentityNumbersEnum.options.filter(
+    type => !userInputAnswers.includes(type) && Boolean(order.deviceWearer[identityNumberFieldNames[type]]),
+  )
+
+  return [...userInputAnswers, ...existingAnswers].map(type => {
+    const name = identityNumberFieldNames[type]
+
+    return createAnswer(content.pages.identityNumbers.questions[name].text, order.deviceWearer[name], uri, answerOpts)
+  })
 }
 
 const createOtherRelationshipAnswer = (order: Order, content: I18n, uri: string, answerOpts: AnswerOptions) => {

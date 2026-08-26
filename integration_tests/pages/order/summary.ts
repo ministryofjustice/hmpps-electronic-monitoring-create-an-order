@@ -13,7 +13,9 @@ import AttachmentSummaryPage from './attachments/summary'
 import DeviceWearerCheckYourAnswersPage from './about-the-device-wearer/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from './monitoring-conditions/check-your-answers'
 import ContactInformationCheckYourAnswersPage from './contact-information/check-your-answers'
-import IdentityNumbersPage from './about-the-device-wearer/identity-numbers'
+import IdentityNumbersPage, {
+  identityNumberNamesForNotifyingOrganisation,
+} from './about-the-device-wearer/identity-numbers'
 import UploadPhotoIdPage from './attachments/uploadPhotoId'
 import VariationDetailsPage from './variation/variationDetails'
 import UploadLicencePage from './attachments/uploadLicence'
@@ -616,7 +618,8 @@ export default class OrderTasksPage extends AppPage {
         deviceWearerDetails.complianceAndEnforcementPersonReference ||
         deviceWearerDetails.courtCaseReferenceNumber
 
-      const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
+      const identityNumberNames = identityNumberNamesForNotifyingOrganisation(interestedParties?.notifyingOrganisation)
+      const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage, {}, {}, identityNumberNames)
       identityNumbersPage.form.fillInWith(deviceWearerDetails)
       identityNumbersPage.form.saveAndContinueButton.click()
 
@@ -696,6 +699,7 @@ export default class OrderTasksPage extends AppPage {
         primaryAddressDetails,
         secondaryAddressDetails,
         tertiaryAddressDetails,
+        notifyingOrganisation: interestedParties?.notifyingOrganisation,
       })
       const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
       deviceWearerCheckYourAnswersPage.continue()
