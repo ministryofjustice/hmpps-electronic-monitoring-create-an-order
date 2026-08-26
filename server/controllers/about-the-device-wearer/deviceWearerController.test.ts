@@ -635,7 +635,6 @@ describe('DeviceWearerController', () => {
     it('should save valid data and redirect to the device wearer search result page', async () => {
       // Given
       const order = getMockOrder()
-      order.deviceWearer.homeOfficeReferenceNumber = 'legacy-home-office-reference'
       const req = createMockRequest({
         order,
         body: {
@@ -668,9 +667,7 @@ describe('DeviceWearerController', () => {
         pncId: null,
       })
 
-      taskListService.getNextPage = jest
-        .fn()
-        .mockReturnValue(`/order/${order.id}/about-the-device-wearer/device-wearer`)
+      taskListService.getNextPage = jest.fn().mockReturnValue(`/order/${order.id}/about-the-device-wearer`)
 
       // When
       await deviceWearerController.updateIdentityNumbers(req, res, next)
@@ -684,7 +681,6 @@ describe('DeviceWearerController', () => {
           data: expect.objectContaining({
             nomisId: 'nomis',
             prisonNumber: 'prison',
-            homeOfficeReferenceNumber: 'legacy-home-office-reference',
             complianceAndEnforcementPersonReference: 'compliance-ref-123',
             courtCaseReferenceNumber: 'court-ref-456',
             pncId: '',
@@ -713,7 +709,7 @@ describe('DeviceWearerController', () => {
       })
       const res = createMockResponse()
       const next = jest.fn()
-
+      taskListService.getNextPage = jest.fn().mockReturnValue(`/order/${order.id}/about-the-device-wearer`)
       mockDeviceWearerService.updateIdentityNumbers.mockResolvedValue({
         ...order.deviceWearer,
         nomisId: 'nomis',

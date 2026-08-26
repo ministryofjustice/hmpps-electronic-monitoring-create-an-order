@@ -152,7 +152,7 @@ context('About the device wearer', () => {
       })
 
       it('should continue to device wearer search results page', () => {
-        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
+        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, ['nomisId'])
 
         page.form.fillInWith({ nomisId: 'nomis' })
         page.form.saveAndContinueButton.click()

@@ -102,7 +102,12 @@ export default class DeviceWearerController {
           ),
         )
       } else {
-        res.redirect(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id))
+        res.redirect(
+          this.taskListService.getNextPage('IDENTITY_NUMBERS', {
+            ...order,
+            deviceWearer: result,
+          }),
+        )
       }
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
