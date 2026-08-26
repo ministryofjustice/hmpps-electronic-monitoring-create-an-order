@@ -29,7 +29,10 @@ context('About the device wearer', () => {
     })
 
     it("should not show 'Use this device wearer' or 'Save as draft' when no match is found", () => {
-      const page = Page.visit(DeviceWearerSearchResultsPage, { orderId: mockOrderId }, { searchedIdentifier })
+      const page = Page.visit(DeviceWearerSearchResultsPage, {
+        orderId: mockOrderId,
+        identifyNumber: searchedIdentifier,
+      })
 
       page.form.useThisDeviceWearerButton.should('not.exist')
       page.form.saveAsDraftButton.should('not.exist')

@@ -31,7 +31,10 @@ context('About the device wearer', () => {
 
       cy.signIn()
 
-      const page = Page.visit(DeviceWearerSearchResultsPage, { orderId: mockOrderId }, { searchedIdentifier })
+      const page = Page.visit(DeviceWearerSearchResultsPage, {
+        orderId: mockOrderId,
+        identifyNumber: searchedIdentifier,
+      })
 
       page.form.useThisDeviceWearerButton.should('be.enabled')
       page.form.saveAsDraftButton.should('exist')
@@ -61,7 +64,10 @@ context('About the device wearer', () => {
 
       cy.signIn()
 
-      const page = Page.visit(DeviceWearerSearchResultsPage, { orderId: mockOrderId }, { searchedIdentifier })
+      const page = Page.visit(DeviceWearerSearchResultsPage, {
+        orderId: mockOrderId,
+        identifyNumber: searchedIdentifier,
+      })
 
       page.form.useThisDeviceWearerButton.should('not.exist')
       page.form.saveAsDraftButton.should('not.exist')

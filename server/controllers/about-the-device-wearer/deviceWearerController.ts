@@ -1,11 +1,7 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../constants/paths'
 import { isValidationResult } from '../../models/Validation'
-import {
-  DeviceWearerFormDataParser,
-  IdentityNumbersFormData,
-  IdentityNumbersFormDataModel,
-} from '../../models/form-data/deviceWearer'
+import { DeviceWearerFormDataParser, IdentityNumbersFormDataModel } from '../../models/form-data/deviceWearer'
 import deviceWearerViewModel from '../../models/view-models/deviceWearer'
 import identityNumbersViewModel from '../../models/view-models/identityNumbers'
 import DeviceWearerService from '../../services/deviceWearerService'
@@ -85,24 +81,28 @@ export default class DeviceWearerController {
       req.flash('validationErrors', result)
       res.redirect(paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id))
     } else if (action === 'continue') {
-      const searchedIdentifier = this.getSearchedIdentifier(formData)
-      const searchResultsPath = paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_SEARCH_RESULTS.replace(':orderId', order.id)
-      res.redirect(`${searchResultsPath}?searchedIdentifier=${encodeURIComponent(searchedIdentifier)}`)
+      if (
+        order.interestedParties?.notifyingOrganisation === 'PRISON' ||
+        order.interestedParties?.notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE'
+      ) {
+        res.redirect(
+          paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_SEARCH_RESULTS.replace(':orderId', order.id).replace(
+            ':identifyNumber',
+            formData.nomisId!,
+          ),
+        )
+      } else if (order.interestedParties?.notifyingOrganisation === 'PROBATION') {
+        res.redirect(
+          paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_SEARCH_RESULTS.replace(':orderId', order.id).replace(
+            ':identifyNumber',
+            formData.deliusId!,
+          ),
+        )
+      } else {
+        res.redirect(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id))
+      }
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
     }
-  }
-
-  private getSearchedIdentifier = (identityNumbers: IdentityNumbersFormData): string => {
-    return (
-      identityNumbers.pncId ||
-      identityNumbers.nomisId ||
-      identityNumbers.prisonNumber ||
-      identityNumbers.deliusId ||
-      identityNumbers.complianceAndEnforcementPersonReference ||
-      identityNumbers.courtCaseReferenceNumber ||
-      identityNumbers.homeOfficeReferenceNumber ||
-      ''
-    )
   }
 }

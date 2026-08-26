@@ -17,10 +17,10 @@ export default function fillInAboutTheDeviceWearer({
   section = 'About the device wearer',
 }): void {
   const searchedIdentifier =
-    deviceWearerDetails.pncId ||
     deviceWearerDetails.nomisId ||
-    deviceWearerDetails.prisonNumber ||
     deviceWearerDetails.deliusId ||
+    deviceWearerDetails.pncId ||
+    deviceWearerDetails.prisonNumber ||
     deviceWearerDetails.complianceAndEnforcementPersonReference ||
     deviceWearerDetails.courtCaseReferenceNumber
 
@@ -28,7 +28,9 @@ export default function fillInAboutTheDeviceWearer({
   identityNumbersPage.form.fillInWith(deviceWearerDetails)
   identityNumbersPage.form.saveAndContinueButton.click()
 
-  const deviceWearerSearchResultsPage = Page.verifyOnPage(DeviceWearerSearchResultsPage, {}, { searchedIdentifier })
+  const deviceWearerSearchResultsPage = Page.verifyOnPage(DeviceWearerSearchResultsPage, {
+    identifyNumber: searchedIdentifier,
+  })
   deviceWearerSearchResultsPage.form.enterDetailsManuallyLink.click()
 
   const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)

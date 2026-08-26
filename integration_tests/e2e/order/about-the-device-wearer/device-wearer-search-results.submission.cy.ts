@@ -37,7 +37,10 @@ context('About the device wearer', () => {
     })
 
     it('should continue to personal details when using matched device wearer', () => {
-      const page = Page.visit(DeviceWearerSearchResultsPage, { orderId: mockOrderId }, { searchedIdentifier })
+      const page = Page.visit(DeviceWearerSearchResultsPage, {
+        orderId: mockOrderId,
+        identifyNumber: searchedIdentifier,
+      })
       page.form.useThisDeviceWearerButton.click()
 
       cy.task('stubCemoVerifyRequestReceived', {
@@ -51,21 +54,30 @@ context('About the device wearer', () => {
     })
 
     it('should return to identity numbers when searching again', () => {
-      const page = Page.visit(DeviceWearerSearchResultsPage, { orderId: mockOrderId }, { searchedIdentifier })
+      const page = Page.visit(DeviceWearerSearchResultsPage, {
+        orderId: mockOrderId,
+        identifyNumber: searchedIdentifier,
+      })
       page.form.searchAgainLink.click()
 
       Page.verifyOnPage(IdentityNumbersPage, { orderId: mockOrderId })
     })
 
     it('should continue to manual personal details when entering details manually', () => {
-      const page = Page.visit(DeviceWearerSearchResultsPage, { orderId: mockOrderId }, { searchedIdentifier })
+      const page = Page.visit(DeviceWearerSearchResultsPage, {
+        orderId: mockOrderId,
+        identifyNumber: searchedIdentifier,
+      })
       page.form.enterDetailsManuallyLink.click()
 
       Page.verifyOnPage(AboutDeviceWearerPage, { orderId: mockOrderId })
     })
 
     it('should return to summary when saving as draft', () => {
-      const page = Page.visit(DeviceWearerSearchResultsPage, { orderId: mockOrderId }, { searchedIdentifier })
+      const page = Page.visit(DeviceWearerSearchResultsPage, {
+        orderId: mockOrderId,
+        identifyNumber: searchedIdentifier,
+      })
       page.form.saveAsDraftButton.click()
 
       Page.verifyOnPage(OrderSummaryPage)

@@ -30,7 +30,6 @@ describe('DeviceWearerSearchResultsService', () => {
 
     expect(mockRestClient.get).toHaveBeenCalledWith({
       path: '/api/orders/order-123/device-wearer/search-results',
-      query: { searchedIdentifier: 'A1234BC' },
       token: 'fake-token',
     })
     expect(result).toEqual({

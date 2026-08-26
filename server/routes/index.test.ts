@@ -172,7 +172,7 @@ describe('authorised user', () => {
     })
   })
 
-  describe('GET /order/:orderId/about-the-device-wearer/device-wearer-search-results', () => {
+  describe('GET /order/:orderId/about-the-device-wearer/:identifyNumber/device-wearer-search-results', () => {
     it('should render device wearer search results page', () => {
       auditService.logPageView.mockResolvedValue()
       orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
@@ -185,7 +185,7 @@ describe('authorised user', () => {
       deviceWearerSearchResultsService.getDisplayDateOfBirth.mockReturnValue('19 January 1974')
 
       return request(app)
-        .get(`/order/${mockSubmittedOrder.id}/about-the-device-wearer/device-wearer-search-results`)
+        .get(`/order/${mockSubmittedOrder.id}/about-the-device-wearer/nomis/device-wearer-search-results`)
         .query({ searchedIdentifier: 'A1234BC' })
         .expect('Content-Type', /html/)
         .expect(res => {
@@ -289,14 +289,14 @@ describe('Order Not Found', () => {
     ['GET /order/:orderId/about-the-device-wearer', 'get', `/order/${mockId}/about-the-device-wearer`],
     ['POST /order/:orderId/about-the-device-wearer', 'post', `/order/${mockId}/about-the-device-wearer`],
     [
-      'GET /order/:orderId/about-the-device-wearer/device-wearer-search-results',
+      'GET /order/:orderId/about-the-device-wearer/:identifyNumber/device-wearer-search-results',
       'get',
-      `/order/${mockId}/about-the-device-wearer/device-wearer-search-results`,
+      `/order/${mockId}/about-the-device-wearer/nomis/device-wearer-search-results`,
     ],
     [
-      'POST /order/:orderId/about-the-device-wearer/device-wearer-search-results',
+      'POST /order/:orderId/about-the-device-wearer/:identifyNumber/device-wearer-search-results',
       'post',
-      `/order/${mockId}/about-the-device-wearer/device-wearer-search-results`,
+      `/order/${mockId}/about-the-device-wearer/nomis/device-wearer-search-results`,
     ],
     [
       'GET /order/:orderId/contact-information/contact-details',
@@ -345,14 +345,14 @@ describe('unauthorised user', () => {
     ['GET /order/:orderId/about-the-device-wearer', 'get', '/order/123456789/about-the-device-wearer'],
     ['POST /order/:orderId/about-the-device-wearer', 'post', '/order/123456789/about-the-device-wearer'],
     [
-      'GET /order/:orderId/about-the-device-wearer/device-wearer-search-results',
+      'GET /order/:orderId/about-the-device-wearer/:identifyNumber/device-wearer-search-results',
       'get',
-      '/order/123456789/about-the-device-wearer/device-wearer-search-results',
+      '/order/123456789/about-the-device-wearer/nomis/device-wearer-search-results',
     ],
     [
-      'POST /order/:orderId/about-the-device-wearer/device-wearer-search-results',
+      'POST /order/:orderId/about-the-device-wearer/:identifyNumber/device-wearer-search-results',
       'post',
-      '/order/123456789/about-the-device-wearer/device-wearer-search-results',
+      '/order/123456789/about-the-device-wearer/nomis/device-wearer-search-results',
     ],
     [
       'GET /order/:orderId/contact-information/contact-details',

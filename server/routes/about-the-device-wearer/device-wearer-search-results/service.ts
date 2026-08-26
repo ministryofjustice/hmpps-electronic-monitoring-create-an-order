@@ -25,7 +25,6 @@ export default class DeviceWearerSearchResultsService {
   async getSearchResult(input: GetSearchResultInput): Promise<DeviceWearerSearchResultResponse> {
     const response = await this.apiClient.get({
       path: `/api/orders/${input.orderId}/device-wearer/search-results`,
-      query: { searchedIdentifier: input.searchedIdentifier },
       token: input.accessToken,
     })
 

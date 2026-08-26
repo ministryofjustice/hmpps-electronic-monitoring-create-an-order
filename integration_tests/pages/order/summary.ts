@@ -620,7 +620,9 @@ export default class OrderTasksPage extends AppPage {
       identityNumbersPage.form.fillInWith(deviceWearerDetails)
       identityNumbersPage.form.saveAndContinueButton.click()
 
-      const deviceWearerSearchResultsPage = Page.verifyOnPage(DeviceWearerSearchResultsPage, {}, { searchedIdentifier })
+      const deviceWearerSearchResultsPage = Page.verifyOnPage(DeviceWearerSearchResultsPage, {
+        identifyNumber: searchedIdentifier,
+      })
       deviceWearerSearchResultsPage.form.enterDetailsManuallyLink.click()
 
       const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)

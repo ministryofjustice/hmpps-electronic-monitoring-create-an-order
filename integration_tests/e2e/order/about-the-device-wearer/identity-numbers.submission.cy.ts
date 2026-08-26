@@ -14,7 +14,17 @@ context('About the device wearer', () => {
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-        cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: {
+            isSentencingAct: true,
+            interestedParties: {
+              notifyingOrganisation: 'PRISON',
+            },
+          },
+        })
         cy.task('stubCemoSubmitOrder', {
           httpStatus: 200,
           id: mockOrderId,
@@ -104,7 +114,7 @@ context('About the device wearer', () => {
         page.form.fillInWith(validFormData)
         page.form.saveAndContinueButton.click()
 
-        Page.verifyOnPage(DeviceWearerSearchResultsPage, { orderId: mockOrderId }, { searchedIdentifier: 'pnc' })
+        Page.verifyOnPage(DeviceWearerSearchResultsPage, { orderId: mockOrderId, identifyNumber: 'nomis' })
       })
 
       it('should return to the summary page', () => {

@@ -23,8 +23,8 @@ describe('DeviceWearerSearchResultsController', () => {
       const order = getMockOrder()
       const req = createMockRequest({
         order,
-        query: {
-          searchedIdentifier: 'A1234BC',
+        params: {
+          identifyNumber: 'A1234BC',
         },
       })
       const res = createMockResponse()
