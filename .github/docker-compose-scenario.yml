@@ -36,6 +36,7 @@ services:
       - DDV6_COURT_MAPPINGS=true
       - HMPPS_S3_BUCKETNAME=test_bucket
       - MANAGE_USER_URL=http://cemo-wiremock:8080/manage-user
+      - CORE_PERSON_RECORD_URL=http://cemo-wiremock:8080/core-person-record
   cemo-db:
     container_name: cemo-db
     image: postgres:18
