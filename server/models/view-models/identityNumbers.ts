@@ -1,111 +1,79 @@
+import { IdentityNumberFieldName, getIdentityNumbers, identityNumberFieldNames } from '../../constants/identityNumbers'
 import { createGovukErrorSummary } from '../../utils/errors'
+import { ErrorSummary } from '../../utils/govukFrontEndTypes/errorSummary'
 import { getError } from '../../utils/utils'
 import { DeviceWearer, IdentityNumberType } from '../DeviceWearer'
 import { IdentityNumbersFormData } from '../form-data/deviceWearer'
+import { Order } from '../Order'
+import { Cohort } from '../UserCohort'
 import { ValidationResult } from '../Validation'
-import { ViewModel } from './utils'
+import { ErrorMessage } from './utils'
 
-type DeviceWearerViewModel = ViewModel<
-  Pick<
-    DeviceWearer,
-    | 'nomisId'
-    | 'deliusId'
-    | 'pncId'
-    | 'prisonNumber'
-    | 'homeOfficeReferenceNumber'
-    | 'complianceAndEnforcementPersonReference'
-    | 'courtCaseReferenceNumber'
-  >
-> & {
+export type IdentityNumberField = {
+  type: IdentityNumberType
+  name: IdentityNumberFieldName
+  value: string
+  checked: boolean
+  error?: ErrorMessage
+}
+
+type IdentityNumbersViewModel = {
   identityNumbers: {
     values: IdentityNumberType[]
-    error?: { text: string }
+    error?: ErrorMessage
   }
+  identityNumberFields: IdentityNumberField[]
+  isSingleIdentityNumber: boolean
+  errorSummary: ErrorSummary | null
 }
 
-const constructFromFormData = (
-  formData: IdentityNumbersFormData,
+const createFields = (
+  availableIdentityNumbers: IdentityNumberType[],
+  selected: IdentityNumberType[],
+  values: Partial<Record<IdentityNumberFieldName, string | null>>,
   validationErrors: ValidationResult,
-): DeviceWearerViewModel => {
-  return {
-    identityNumbers: {
-      values: formData.identityNumbers,
-      error: getError(validationErrors, 'identityNumbers'),
-    },
-    nomisId: {
-      value: formData.nomisId || '',
-      error: getError(validationErrors, 'nomisId'),
-    },
-    deliusId: {
-      value: formData.deliusId || '',
-      error: getError(validationErrors, 'deliusId'),
-    },
-    pncId: {
-      value: formData.pncId || '',
-      error: getError(validationErrors, 'pncId'),
-    },
-    prisonNumber: {
-      value: formData.prisonNumber || '',
-      error: getError(validationErrors, 'prisonNumber'),
-    },
-    homeOfficeReferenceNumber: {
-      value: formData.homeOfficeReferenceNumber || '',
-      error: getError(validationErrors, 'homeOfficeReferenceNumber'),
-    },
-    complianceAndEnforcementPersonReference: {
-      value: formData.complianceAndEnforcementPersonReference || '',
-      error: getError(validationErrors, 'complianceAndEnforcementPersonReference'),
-    },
-    courtCaseReferenceNumber: {
-      value: formData.courtCaseReferenceNumber || '',
-      error: getError(validationErrors, 'courtCaseReferenceNumber'),
-    },
-    errorSummary: createGovukErrorSummary(validationErrors),
-  }
-}
+): IdentityNumberField[] =>
+  availableIdentityNumbers.map(type => {
+    const name = identityNumberFieldNames[type]
 
-const createFromEntity = (deviceWearer: DeviceWearer): DeviceWearerViewModel => {
-  const identityNumbers: IdentityNumberType[] = []
+    return {
+      type,
+      name,
+      value: values[name] || '',
+      checked: selected.includes(type),
+      error: getError(validationErrors, name),
+    }
+  })
 
-  if (deviceWearer.nomisId) identityNumbers.push('NOMIS')
-  if (deviceWearer.pncId) identityNumbers.push('PNC')
-  if (deviceWearer.deliusId) identityNumbers.push('DELIUS')
-  if (deviceWearer.prisonNumber) identityNumbers.push('PRISON_NUMBER')
-  if (deviceWearer.homeOfficeReferenceNumber) identityNumbers.push('HOME_OFFICE')
-  if (deviceWearer.complianceAndEnforcementPersonReference) {
-    identityNumbers.push('COMPLIANCE_AND_ENFORCEMENT_PERSON_REFERENCE')
-  }
-  if (deviceWearer.courtCaseReferenceNumber) {
-    identityNumbers.push('COURT_CASE_REFERENCE_NUMBER')
-  }
-
-  return {
-    identityNumbers: {
-      values: identityNumbers,
-    },
-    nomisId: { value: deviceWearer.nomisId || '' },
-    deliusId: { value: deviceWearer.deliusId || '' },
-    pncId: { value: deviceWearer.pncId || '' },
-    prisonNumber: { value: deviceWearer.prisonNumber || '' },
-    homeOfficeReferenceNumber: { value: deviceWearer.homeOfficeReferenceNumber || '' },
-    complianceAndEnforcementPersonReference: {
-      value: deviceWearer.complianceAndEnforcementPersonReference || '',
-    },
-    courtCaseReferenceNumber: { value: deviceWearer.courtCaseReferenceNumber || '' },
-    errorSummary: null,
-  }
-}
+const selectedFromEntity = (
+  deviceWearer: DeviceWearer,
+  availableIdentityNumbers: IdentityNumberType[],
+): IdentityNumberType[] =>
+  availableIdentityNumbers.filter(type => Boolean(deviceWearer[identityNumberFieldNames[type]]))
 
 const construct = (
-  deviceWearer: DeviceWearer,
+  order: Order,
+  cohort: Cohort | undefined,
   formData: IdentityNumbersFormData,
-  errors: ValidationResult,
-): DeviceWearerViewModel => {
-  if (errors.length > 0) {
-    return constructFromFormData(formData, errors)
-  }
+  validationErrors: ValidationResult,
+): IdentityNumbersViewModel => {
+  const availableIdentityNumbers = getIdentityNumbers(cohort, order.interestedParties?.notifyingOrganisation)
 
-  return createFromEntity(deviceWearer)
+  const useFormData = validationErrors.length > 0
+  const selected = useFormData
+    ? formData.identityNumbers
+    : selectedFromEntity(order.deviceWearer, availableIdentityNumbers)
+  const values = useFormData ? formData : order.deviceWearer
+
+  return {
+    identityNumbers: {
+      values: selected,
+      error: getError(validationErrors, 'identityNumbers'),
+    },
+    identityNumberFields: createFields(availableIdentityNumbers, selected, values, validationErrors),
+    isSingleIdentityNumber: availableIdentityNumbers.length === 1,
+    errorSummary: useFormData ? createGovukErrorSummary(validationErrors) : null,
+  }
 }
 
 export default {

@@ -1,6 +1,8 @@
 import DeviceWearerCheckYourAnswersPage from '../../pages/order/about-the-device-wearer/check-your-answers'
 import AboutDeviceWearerPage from '../../pages/order/about-the-device-wearer/device-wearer'
-import IdentityNumbersPage from '../../pages/order/about-the-device-wearer/identity-numbers'
+import IdentityNumbersPage, {
+  identityNumberNamesForNotifyingOrganisation,
+} from '../../pages/order/about-the-device-wearer/identity-numbers'
 import ResponsibleAdultDetailsPage from '../../pages/order/about-the-device-wearer/responsible-adult-details'
 import ContactDetailsPage from '../../pages/order/contact-information/contact-details'
 import NoFixedAbodePage from '../../pages/order/contact-information/no-fixed-abode'
@@ -14,8 +16,10 @@ export default function fillInAboutTheDeviceWearer({
   secondaryAddressDetails = undefined,
   tertiaryAddressDetails = undefined,
   section = 'About the device wearer',
+  notifyingOrganisation = undefined,
 }): void {
-  const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
+  const identityNumberNames = identityNumberNamesForNotifyingOrganisation(notifyingOrganisation)
+  const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage, {}, {}, identityNumberNames)
   identityNumbersPage.form.fillInWith(deviceWearerDetails)
   identityNumbersPage.form.saveAndContinueButton.click()
 

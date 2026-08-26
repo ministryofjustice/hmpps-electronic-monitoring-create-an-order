@@ -47,6 +47,7 @@ context('New about device wearer flow', () => {
     fillInAboutTheDeviceWearer({
       deviceWearerDetails,
       primaryAddressDetails,
+      notifyingOrganisation: 'Prison',
     })
     const cyaPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
 
@@ -67,17 +68,7 @@ context('New about device wearer flow', () => {
       { key: 'Is an interpreter needed?', value: 'No' },
     ])
     cyaPage.identityNumbersSection.shouldExist()
-    cyaPage.identityNumbersSection.shouldHaveItems([
-      { key: 'Police National Computer (PNC)', value: deviceWearerDetails.pncId },
-      { key: 'National Offender Management Information System (NOMIS)', value: deviceWearerDetails.nomisId },
-      { key: 'Prison Number', value: deviceWearerDetails.prisonNumber },
-      { key: 'Case Reference Number (CRN)', value: deviceWearerDetails.deliusId },
-      {
-        key: 'Compliance and Enforcement Person Reference (CEPR)',
-        value: deviceWearerDetails.complianceAndEnforcementPersonReference,
-      },
-      { key: 'Court Case Reference Number (CCRN)', value: deviceWearerDetails.courtCaseReferenceNumber },
-    ])
+    cyaPage.identityNumbersSection.shouldHaveItems([{ key: 'Prison number', value: deviceWearerDetails.nomisId }])
 
     cyaPage.contactDetailsSection.shouldExist()
     cyaPage.contactDetailsSection.shouldHaveItems([

@@ -93,9 +93,8 @@ const IdentityNumbersFormDataValidator = z
       })
     }
 
-    // if checkbox ticked, input entered
     if (data.identityNumbers.includes('NOMIS') && !data.nomisId) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['nomisId'], message: 'Enter NOMIS ID' })
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['nomisId'], message: 'Enter prison number' })
     }
     if (data.identityNumbers.includes('PNC') && !data.pncId) {
       ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['pncId'], message: 'Enter PNC ID' })
@@ -105,13 +104,6 @@ const IdentityNumbersFormDataValidator = z
     }
     if (data.identityNumbers.includes('PRISON_NUMBER') && !data.prisonNumber) {
       ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['prisonNumber'], message: 'Enter Prison Number' })
-    }
-    if (data.identityNumbers.includes('HOME_OFFICE') && !data.homeOfficeReferenceNumber) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['homeOfficeReferenceNumber'],
-        message: 'Enter Home Office Reference Number',
-      })
     }
     if (
       data.identityNumbers.includes('COMPLIANCE_AND_ENFORCEMENT_PERSON_REFERENCE') &&
@@ -139,7 +131,6 @@ const IdentityNumbersFormDataValidator = z
       pncId: data.identityNumbers.includes('PNC') ? data.pncId : '',
       deliusId: data.identityNumbers.includes('DELIUS') ? data.deliusId : '',
       prisonNumber: data.identityNumbers.includes('PRISON_NUMBER') ? data.prisonNumber : '',
-      homeOfficeReferenceNumber: data.identityNumbers.includes('HOME_OFFICE') ? data.homeOfficeReferenceNumber : '',
       complianceAndEnforcementPersonReference: data.identityNumbers.includes(
         'COMPLIANCE_AND_ENFORCEMENT_PERSON_REFERENCE',
       )

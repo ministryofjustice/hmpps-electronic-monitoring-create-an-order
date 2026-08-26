@@ -4,6 +4,7 @@ import RestClient from '../../data/restClient'
 import DeviceWearerService from '../../services/deviceWearerService'
 import DeviceWearerController from './deviceWearerController'
 import TaskListService from '../../services/taskListService'
+import { NotifyingOrganisation } from '../../models/NotifyingOrganisation'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
@@ -488,24 +489,78 @@ describe('DeviceWearerController', () => {
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/about-the-device-wearer/identity-numbers',
         expect.objectContaining({
-          nomisId: {
-            value: '',
-          },
-          pncId: {
-            value: '',
-          },
-          deliusId: {
-            value: '',
-          },
-          prisonNumber: {
-            value: '',
-          },
-          homeOfficeReferenceNumber: {
-            value: '',
-          },
+          identityNumbers: { values: [], error: undefined },
+          isSingleIdentityNumber: false,
+          identityNumberFields: expect.arrayContaining([
+            expect.objectContaining({ type: 'NOMIS', name: 'nomisId', value: '', checked: false }),
+            expect.objectContaining({ type: 'PNC', name: 'pncId', value: '', checked: false }),
+            expect.objectContaining({ type: 'DELIUS', name: 'deliusId', value: '', checked: false }),
+          ]),
           errorSummary: null,
         }),
       )
+    })
+
+    it('should render a single input when the notifying organisation has one identity number', async () => {
+      // Given
+      const req = createMockRequest({
+        order: {
+          ...mockOrder,
+          interestedParties: { ...mockOrder.interestedParties!, notifyingOrganisation: 'HOME_OFFICE' },
+        },
+        flash: jest.fn().mockReturnValue([]),
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      // When
+      await deviceWearerController.viewIdentityNumbers(req, res, next)
+
+      // Then
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/order/about-the-device-wearer/identity-numbers',
+        expect.objectContaining({
+          isSingleIdentityNumber: true,
+          identityNumberFields: [
+            expect.objectContaining({
+              type: 'COMPLIANCE_AND_ENFORCEMENT_PERSON_REFERENCE',
+              name: 'complianceAndEnforcementPersonReference',
+              value: '',
+            }),
+          ],
+        }),
+      )
+    })
+
+    it('should render the prison number on its own for a prison, and both options for probation', async () => {
+      // Given
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      const viewFor = async (notifyingOrganisation: NotifyingOrganisation) => {
+        const req = createMockRequest({
+          order: { ...mockOrder, interestedParties: { ...mockOrder.interestedParties!, notifyingOrganisation } },
+          flash: jest.fn().mockReturnValue([]),
+        })
+
+        await deviceWearerController.viewIdentityNumbers(req, res, next)
+
+        return (res.render as jest.Mock).mock.calls.at(-1)![1]
+      }
+
+      // When
+      const prison = await viewFor('PRISON')
+      const probation = await viewFor('PROBATION')
+
+      // Then
+      expect(prison.isSingleIdentityNumber).toBe(true)
+      expect(prison.identityNumberFields.map((field: { name: string }) => field.name)).toEqual(['nomisId'])
+
+      expect(probation.isSingleIdentityNumber).toBe(false)
+      expect(probation.identityNumberFields.map((field: { name: string }) => field.name)).toEqual([
+        'nomisId',
+        'deliusId',
+      ])
     })
   })
 
@@ -580,6 +635,7 @@ describe('DeviceWearerController', () => {
     it('should save valid data and redirect to the personal information page', async () => {
       // Given
       const order = getMockOrder()
+      order.deviceWearer.homeOfficeReferenceNumber = 'legacy-home-office-reference'
       const req = createMockRequest({
         order,
         body: {
@@ -587,7 +643,6 @@ describe('DeviceWearerController', () => {
           identityNumbers: [
             'NOMIS',
             'PRISON_NUMBER',
-            'HOME_OFFICE',
             'COMPLIANCE_AND_ENFORCEMENT_PERSON_REFERENCE',
             'COURT_CASE_REFERENCE_NUMBER',
           ],
@@ -629,6 +684,7 @@ describe('DeviceWearerController', () => {
           data: expect.objectContaining({
             nomisId: 'nomis',
             prisonNumber: 'prison',
+            homeOfficeReferenceNumber: 'legacy-home-office-reference',
             complianceAndEnforcementPersonReference: 'compliance-ref-123',
             courtCaseReferenceNumber: 'court-ref-456',
             pncId: '',

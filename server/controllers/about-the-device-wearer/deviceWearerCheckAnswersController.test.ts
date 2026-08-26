@@ -44,6 +44,34 @@ const responsibleAdult = createResponsibleAdult({
   contactNumber: '07999999999',
 })
 
+const expectedIdentityNumbers = (orderId: string, values: Record<string, string> = {}) => {
+  const identityNumbers = [
+    ['Prison number', values.nomisId],
+    ['Case Reference Number (CRN)', values.deliusId],
+    ['Police National Computer (PNC)', values.pncId],
+    ['Compliance and Enforcement Person Reference (CEPR)', values.complianceAndEnforcementPersonReference],
+    ['Court Case Reference Number (CCRN)', values.courtCaseReferenceNumber],
+  ]
+
+  if (values.prisonNumber) {
+    identityNumbers.push(['Prison Number', values.prisonNumber])
+  }
+
+  return identityNumbers.map(([key, value]) => ({
+    key: { text: key },
+    value: { text: value ?? '' },
+    actions: {
+      items: [
+        {
+          href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', orderId),
+          text: 'Change',
+          visuallyHiddenText: key!.toLowerCase(),
+        },
+      ],
+    },
+  }))
+}
+
 describe('DeviceWearerCheckAnswersController', () => {
   const taskListService = {
     getNextCheckYourAnswersPage: jest.fn(),
@@ -270,110 +298,7 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
       ],
       goToNextSectionNavigation: true,
-      personIdentifiers: [
-        {
-          key: {
-            text: 'Police National Computer (PNC)',
-          },
-          value: {
-            text: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'police national computer (pnc)',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'National Offender Management Information System (NOMIS)',
-          },
-          value: {
-            text: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'national offender management information system (nomis)',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'Prison Number',
-          },
-          value: {
-            text: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'prison number',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'Case Reference Number (CRN)',
-          },
-          value: {
-            text: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'case reference number (crn)',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'Compliance and Enforcement Person Reference (CEPR)',
-          },
-          value: {
-            text: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'compliance and enforcement person reference (cepr)',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'Court Case Reference Number (CCRN)',
-          },
-          value: {
-            text: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'court case reference number (ccrn)',
-              },
-            ],
-          },
-        },
-      ],
+      personIdentifiers: expectedIdentityNumbers(order.id),
       responsibleAdult: [],
       contactDetails: [
         {
@@ -635,110 +560,14 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
       ],
       goToNextSectionNavigation: true,
-      personIdentifiers: [
-        {
-          key: {
-            text: 'Police National Computer (PNC)',
-          },
-          value: {
-            text: 'pnc',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'police national computer (pnc)',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'National Offender Management Information System (NOMIS)',
-          },
-          value: {
-            text: 'nomis',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'national offender management information system (nomis)',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'Prison Number',
-          },
-          value: {
-            text: 'prison',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'prison number',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'Case Reference Number (CRN)',
-          },
-          value: {
-            text: 'delius',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'case reference number (crn)',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'Compliance and Enforcement Person Reference (CEPR)',
-          },
-          value: {
-            text: 'cepr',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'compliance and enforcement person reference (cepr)',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'Court Case Reference Number (CCRN)',
-          },
-          value: {
-            text: 'ccrn',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'court case reference number (ccrn)',
-              },
-            ],
-          },
-        },
-      ],
+      personIdentifiers: expectedIdentityNumbers(order.id, {
+        nomisId: 'nomis',
+        deliusId: 'delius',
+        pncId: 'pnc',
+        complianceAndEnforcementPersonReference: 'cepr',
+        courtCaseReferenceNumber: 'ccrn',
+        prisonNumber: 'prison',
+      }),
       responsibleAdult: [],
       contactDetails: [
         {
@@ -1001,110 +830,14 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
       ],
       goToNextSectionNavigation: true,
-      personIdentifiers: [
-        {
-          key: {
-            text: 'Police National Computer (PNC)',
-          },
-          value: {
-            text: 'pnc',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'police national computer (pnc)',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'National Offender Management Information System (NOMIS)',
-          },
-          value: {
-            text: 'nomis',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'national offender management information system (nomis)',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'Prison Number',
-          },
-          value: {
-            text: 'prison',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'prison number',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'Case Reference Number (CRN)',
-          },
-          value: {
-            text: 'delius',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'case reference number (crn)',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'Compliance and Enforcement Person Reference (CEPR)',
-          },
-          value: {
-            text: 'cepr',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'compliance and enforcement person reference (cepr)',
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'Court Case Reference Number (CCRN)',
-          },
-          value: {
-            text: 'ccrn',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'court case reference number (ccrn)',
-              },
-            ],
-          },
-        },
-      ],
+      personIdentifiers: expectedIdentityNumbers(order.id, {
+        nomisId: 'nomis',
+        deliusId: 'delius',
+        pncId: 'pnc',
+        complianceAndEnforcementPersonReference: 'cepr',
+        courtCaseReferenceNumber: 'ccrn',
+        prisonNumber: 'prison',
+      }),
       responsibleAdult: [
         {
           key: {
