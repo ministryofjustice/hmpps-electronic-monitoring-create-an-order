@@ -7,14 +7,11 @@ import I18n from '../../../types/i18n'
 import TaskListService from '../../../services/taskListService'
 import AddressService from '../../../services/addressService'
 import DeviceWearerService from '../../../services/deviceWearerService'
-import { SanitisedError } from '../../../sanitisedError'
-import CorePersonRecordService from '../core-person-record/service'
 
 export default class ConfirmAddressController {
   constructor(
     private readonly postcodeService: PostcodeService,
     private readonly tasklistService: TaskListService,
-    private readonly corePersonRecordService: CorePersonRecordService,
     private readonly addressService: AddressService,
     private readonly deviceWearerService: DeviceWearerService,
   ) {}
@@ -24,24 +21,8 @@ export default class ConfirmAddressController {
     const addressType = req.params.addressType as AddressType
     const postcode = req.query.postcode as string
     const buildingId = req.query.buildingId as string | undefined
-    const organisationSearchId = this.getOrganisationSearchId(req)
 
-    let address = order.addresses.find(item => item.addressType === addressType) as AddressWithoutType | undefined
-
-    if (organisationSearchId) {
-      try {
-        address = await this.getCorePersonPrimaryAddress(req, res, organisationSearchId)
-      } catch (error) {
-        if ((error as SanitisedError).status !== 404) {
-          throw error
-        }
-      }
-
-      if (!address) {
-        res.redirect(paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id))
-        return
-      }
-    }
+    const address = order.addresses.find(item => item.addressType === addressType) as AddressWithoutType | undefined
 
     if (!address) {
       res.send(404)
@@ -65,7 +46,7 @@ export default class ConfirmAddressController {
       postcode,
       buildingId,
       useDifferentAddressLink,
-      isCorePersonRecordAddress: Boolean(organisationSearchId),
+      isCorePersonRecordAddress: address.addressSource === 'CORE_PERSON_RECORD',
       noFixedAddressLink: paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id),
     })
 
@@ -75,27 +56,12 @@ export default class ConfirmAddressController {
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
     const addressType = (req.params.addressType as string).toUpperCase()
-    const organisationSearchId = this.getOrganisationSearchId(req)
 
     const { action } = req.body
 
     if (action === 'continue') {
-      if (organisationSearchId) {
-        let address: AddressWithoutType | undefined
-
-        try {
-          address = await this.getCorePersonPrimaryAddress(req, res, organisationSearchId)
-        } catch (error) {
-          if ((error as SanitisedError).status !== 404) {
-            throw error
-          }
-        }
-
-        if (!address) {
-          res.redirect(paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id))
-          return
-        }
-
+      const address = order.addresses.find(item => item.addressType === addressType)
+      if (address?.addressSource === 'CORE_PERSON_RECORD') {
         await this.addressService.updateAddress({
           accessToken: res.locals.user.token,
           orderId: order.id,
@@ -118,23 +84,5 @@ export default class ConfirmAddressController {
     }
 
     res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
-  }
-
-  private getOrganisationSearchId(req: Request): string | undefined {
-    return typeof req.query.organisationSearchId === 'string' ? req.query.organisationSearchId : undefined
-  }
-
-  private async getCorePersonPrimaryAddress(
-    req: Request,
-    res: Response,
-    organisationSearchId: string,
-  ): Promise<AddressWithoutType | undefined> {
-    const details = await this.corePersonRecordService.getPersonDetails({
-      accessToken: res.locals.user.token,
-      orderId: req.order!.id,
-      organisationSearchId,
-    })
-
-    return details.addresses.find(address => address.addressType === 'PRIMARY')
   }
 }

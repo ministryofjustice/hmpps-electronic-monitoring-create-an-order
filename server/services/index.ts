@@ -50,7 +50,6 @@ import UpdateInterestedPartiesService from '../routes/interested-parties/interes
 import PostcodeService from '../routes/postcode-lookup/postcodeService'
 import SentencingActService from '../routes/sentencing-act-selection/SentencingActService'
 import SectionService from './sectionsService'
-import CorePersonRecordService from '../routes/postcode-lookup/core-person-record/service'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient, osDataHubClient } = dataAccess()
@@ -61,7 +60,6 @@ export const services = () => {
   const attendanceMonitoringAddToListService = new AttendanceMonitoringAddToListService(cemoApiClient)
   const auditService = new AuditService(hmppsAuditClient)
   const contactDetailsService = new ContactDetailsService(cemoApiClient)
-  const corePersonRecordService = new CorePersonRecordService(cemoApiClient)
   const curfewConditionsService = new CurfewConditionsService(cemoApiClient)
   const curfewReleaseDateService = new CurfewReleaseDateService(cemoApiClient)
   const curfewTimetableService = new CurfewTimetableService(cemoApiClient)
@@ -124,7 +122,6 @@ export const services = () => {
     attendanceMonitoringAddToListService,
     auditService,
     contactDetailsService,
-    corePersonRecordService,
     curfewReleaseDateService,
     curfewConditionsService,
     curfewAdditionalDetailsService,
@@ -171,7 +168,6 @@ export {
   AttendanceMonitoringAddToListService,
   AuditService,
   ContactDetailsService,
-  CorePersonRecordService,
   CurfewConditionsService,
   CurfewAdditionalDetailsService,
   CurfewReleaseDateService,

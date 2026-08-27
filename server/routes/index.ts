@@ -53,7 +53,6 @@ export default function routes({
   attendanceMonitoringAddToListService,
   auditService,
   contactDetailsService,
-  corePersonRecordService,
   curfewConditionsService,
   curfewAdditionalDetailsService,
   curfewReleaseDateService,
@@ -105,11 +104,7 @@ export default function routes({
   const attendanceMonitoringAddToListController = new AttendanceMonitoringAddToListController(
     attendanceMonitoringAddToListService,
   )
-  const contactDetailsController = new ContactDetailsController(
-    contactDetailsService,
-    taskListService,
-    corePersonRecordService,
-  )
+  const contactDetailsController = new ContactDetailsController(contactDetailsService, taskListService)
   const curfewReleaseDateController = new CurfewReleaseDateController(curfewReleaseDateService)
   const curfewTimetableController = new CurfewTimetableController(curfewTimetableService)
   const curfewConditionsController = new CurfewConditionsController(curfewConditionsService)
@@ -385,7 +380,6 @@ export default function routes({
       addressService,
       taskListService,
       auditService,
-      corePersonRecordService,
       deviceWearerService,
     }),
   )

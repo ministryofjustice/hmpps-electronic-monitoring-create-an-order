@@ -446,29 +446,6 @@ const updateContactDetails = (options: UpdateContactDetailsOptions = defaultUpda
     },
   })
 
-type GetDeviceWearerDetailsOptions = {
-  httpStatus: number
-  id: string
-  organisationSearchId: string
-  response: Record<string, unknown>
-}
-
-const getDeviceWearerDetails = (options: GetDeviceWearerDetailsOptions) =>
-  stubFor({
-    request: {
-      method: 'GET',
-      urlPath: `/cemo/api/orders/${options.id}/device-wearer-details`,
-      queryParameters: {
-        organisationSearchId: { equalTo: options.organisationSearchId },
-      },
-    },
-    response: {
-      status: options.httpStatus,
-      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-      jsonBody: options.response,
-    },
-  })
-
 type ApiDeviceWearer = Omit<DeviceWearer, 'disabilities'> & {
   disabilities?: string | null
 }
@@ -794,7 +771,6 @@ export default {
   stubCemoGetOrderWithAttachments: getOrderWithAttachments,
   stubCemoGetVersionWithAttachments: getVersionWithAttachments,
   stubCemoPutContactDetails: updateContactDetails,
-  stubCemoGetDeviceWearerDetails: getDeviceWearerDetails,
   stubCemoPutDeviceWearer: putDeviceWearer,
   stubCemoSubmitOrder: submitOrder,
   stubCemoUpdateContactDetails: updateContactDetails,

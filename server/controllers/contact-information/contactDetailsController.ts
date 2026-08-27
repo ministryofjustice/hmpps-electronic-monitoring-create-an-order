@@ -5,13 +5,11 @@ import { isValidationResult } from '../../models/Validation'
 import contactDetailsViewModel from '../../models/view-models/contactDetails'
 import ContactDetailsFormDataModel from '../../models/form-data/contactDetails'
 import TaskListService from '../../services/taskListService'
-import CorePersonRecordService from '../../routes/postcode-lookup/core-person-record/service'
 
 export default class ContactDetailsController {
   constructor(
     private readonly contactDetailsService: ContactDetailsService,
     private readonly taskListService: TaskListService,
-    private readonly corePersonRecordService: CorePersonRecordService,
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
@@ -39,21 +37,16 @@ export default class ContactDetailsController {
 
       res.redirect(paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', orderId))
     } else if (action === 'continue') {
-      const primaryAddress = req.order!.addresses.find(address => address.addressType === 'PRIMARY')
+      const corePersonPrimaryAddress = req.order!.addresses.find(
+        address => address.addressType === 'PRIMARY' && address.addressSource === 'CORE_PERSON_RECORD',
+      )
       const confirmAddressPath = paths.POSTCODE_LOOKUP.CONFIRM_ADDRESS.replace(':orderId', orderId).replace(
         ':addressType',
         'PRIMARY',
       )
 
-      if (primaryAddress) {
+      if (corePersonPrimaryAddress) {
         res.redirect(confirmAddressPath)
-        return
-      }
-
-      const organisationSearchId = this.corePersonRecordService.getOrganisationSearchId(req.order!)
-
-      if (organisationSearchId) {
-        res.redirect(`${confirmAddressPath}?organisationSearchId=${encodeURIComponent(organisationSearchId)}`)
         return
       }
 

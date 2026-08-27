@@ -14,7 +14,6 @@ const createPostcodeLookupRouter = (
     | 'addressService'
     | 'taskListService'
     | 'auditService'
-    | 'corePersonRecordService'
     | 'deviceWearerService'
   >,
 ): Router => {
@@ -25,7 +24,6 @@ const createPostcodeLookupRouter = (
   const confirmAddressController = new ConfirmAddressController(
     services.postcodeService,
     services.taskListService,
-    services.corePersonRecordService,
     services.addressService,
     services.deviceWearerService,
   )

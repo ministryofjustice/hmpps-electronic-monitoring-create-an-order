@@ -4,7 +4,6 @@ import { createMockRequest, createMockResponse } from '../../../test/mocks/mockE
 import { getMockOrder } from '../../../test/mocks/mockOrder'
 import ContactDetailsController from './contactDetailsController'
 import TaskListService from '../../services/taskListService'
-import CorePersonRecordService from '../../routes/postcode-lookup/core-person-record/service'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
@@ -15,7 +14,6 @@ jest.mock('../../data/restClient')
 describe('ContactDetailsController', () => {
   let mockRestClient: jest.Mocked<RestClient>
   let mockContactDetailsService: jest.Mocked<ContactDetailsService>
-  let mockCorePersonRecordService: jest.Mocked<CorePersonRecordService>
   let contactDetailsController: ContactDetailsController
   const taskListService = {
     getNextCheckYourAnswersPage: jest.fn(),
@@ -29,14 +27,7 @@ describe('ContactDetailsController', () => {
       agent: { timeout: 0 },
     }) as jest.Mocked<RestClient>
     mockContactDetailsService = new ContactDetailsService(mockRestClient) as jest.Mocked<ContactDetailsService>
-    mockCorePersonRecordService = {
-      getOrganisationSearchId: jest.fn(),
-    } as unknown as jest.Mocked<CorePersonRecordService>
-    contactDetailsController = new ContactDetailsController(
-      mockContactDetailsService,
-      taskListService,
-      mockCorePersonRecordService,
-    )
+    contactDetailsController = new ContactDetailsController(mockContactDetailsService, taskListService)
   })
 
   describe('get', () => {
@@ -145,7 +136,7 @@ describe('ContactDetailsController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/contact-information/contact-details`)
     })
 
-    it('should save and redirect to the existing primary address confirmation page', async () => {
+    it('should save and redirect to the stored CPR primary address confirmation page', async () => {
       // Given
       const mockOrder = getMockOrder({
         addresses: [
@@ -156,6 +147,7 @@ describe('ContactDetailsController', () => {
             addressLine3: 'Worcester',
             addressLine4: '',
             postcode: 'WR1 1NL',
+            addressSource: 'CORE_PERSON_RECORD',
           },
         ],
       })
@@ -182,8 +174,20 @@ describe('ContactDetailsController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/confirm-address/PRIMARY`)
     })
 
-    it('should save and redirect to CPR address confirmation for a prison number', async () => {
-      const mockOrder = getMockOrder({ addresses: [] })
+    it('should save and redirect to the fixed address page for a user-entered primary address', async () => {
+      const mockOrder = getMockOrder({
+        addresses: [
+          {
+            addressType: 'PRIMARY',
+            addressLine1: '1 Washington Street',
+            addressLine2: '',
+            addressLine3: 'Worcester',
+            addressLine4: '',
+            postcode: 'WR1 1NL',
+            addressSource: 'USER_ENTERED',
+          },
+        ],
+      })
       const req = createMockRequest({
         order: mockOrder,
         params: { orderId: mockOrder.id },
@@ -195,16 +199,14 @@ describe('ContactDetailsController', () => {
         contactNumber: '01234567890',
         phoneNumberAvailable: true,
       })
-      mockCorePersonRecordService.getOrganisationSearchId.mockReturnValue('A1234BC')
+      taskListService.getNextPage.mockReturnValue(`/order/${mockOrder.id}/contact-information/no-fixed-abode`)
 
       await contactDetailsController.update(req, res, jest.fn())
 
-      expect(res.redirect).toHaveBeenCalledWith(
-        `/order/${mockOrder.id}/confirm-address/PRIMARY?organisationSearchId=A1234BC`,
-      )
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/contact-information/no-fixed-abode`)
     })
 
-    it('should save and redirect to the fixed address page when no CPR identifier is available', async () => {
+    it('should save and redirect to the fixed address page when no CPR primary address is available', async () => {
       const mockOrder = getMockOrder({ addresses: [] })
       const req = createMockRequest({
         order: mockOrder,
@@ -216,7 +218,6 @@ describe('ContactDetailsController', () => {
         contactNumber: '01234567890',
         phoneNumberAvailable: true,
       })
-      mockCorePersonRecordService.getOrganisationSearchId.mockReturnValue(null)
       taskListService.getNextPage.mockReturnValue(`/order/${mockOrder.id}/contact-information/no-fixed-abode`)
 
       await contactDetailsController.update(req, res, jest.fn())
