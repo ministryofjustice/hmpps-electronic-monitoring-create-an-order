@@ -78,5 +78,31 @@ context('About the device wearer', () => {
       cy.contains('We could not find a device wearer that matches A1234BC.')
       page.checkIsAccessible()
     })
+
+    it('should display no results content when remote server responds with 404', () => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+      })
+      cy.task('stubCemoRequest', {
+        httpStatus: 404,
+        method: 'GET',
+        subPath: `orders/${mockOrderId}/device-wearer-details\\?organisationSearchId=${searchedIdentifier}`,
+        response: {},
+      })
+
+      cy.signIn()
+
+      const page = Page.visit(DeviceWearerSearchResultsPage, {
+        orderId: mockOrderId,
+        identifyNumber: searchedIdentifier,
+      })
+
+      page.form.useThisDeviceWearerButton.should('not.exist')
+      page.form.saveAsDraftButton.should('not.exist')
+      cy.contains('We could not find a device wearer that matches A1234BC.')
+      page.checkIsAccessible()
+    })
   })
 })

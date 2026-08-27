@@ -1,6 +1,7 @@
 import z from 'zod'
 import RestClient from '../../../data/restClient'
 import { AuthenticatedRequestInput } from '../../../interfaces/request'
+import { SanitisedError } from '../../../sanitisedError'
 
 const DeviceWearerSearchResultResponseModel = z.object({
   fullName: z.string().nullable().optional(),
@@ -30,21 +31,32 @@ export default class DeviceWearerSearchResultsService {
   constructor(private readonly apiClient: RestClient) {}
 
   async getSearchResult(input: GetSearchResultInput): Promise<DeviceWearerSearchResultResponse> {
-    const response = await this.apiClient.get({
-      path: `/api/orders/${input.orderId}/device-wearer-details`,
-      query: { organisationSearchId: input.searchedIdentifier },
-      token: input.accessToken,
-    })
+    try {
+      const response = await this.apiClient.get({
+        path: `/api/orders/${input.orderId}/device-wearer-details`,
+        query: { organisationSearchId: input.searchedIdentifier },
+        token: input.accessToken,
+      })
 
-    const personDetails = GetCorePersonDetailsResponseModel.parse(response)
-    const fullName = [personDetails.firstName?.trim(), personDetails.lastName?.trim()]
-      .filter((name): name is string => Boolean(name))
-      .join(' ')
+      const personDetails = GetCorePersonDetailsResponseModel.parse(response)
+      const fullName = [personDetails.firstName?.trim(), personDetails.lastName?.trim()]
+        .filter((name): name is string => Boolean(name))
+        .join(' ')
 
-    return DeviceWearerSearchResultResponseModel.parse({
-      fullName: fullName || null,
-      dateOfBirth: personDetails.dateOfBirth ?? null,
-    })
+      return DeviceWearerSearchResultResponseModel.parse({
+        fullName: fullName || null,
+        dateOfBirth: personDetails.dateOfBirth ?? null,
+      })
+    } catch (error) {
+      if ((error as SanitisedError).status === 404) {
+        return DeviceWearerSearchResultResponseModel.parse({
+          fullName: null,
+          dateOfBirth: null,
+        })
+      }
+
+      throw error
+    }
   }
 
   async confirmSearchResult(input: ConfirmSearchResultInput): Promise<void> {

@@ -41,6 +41,33 @@ describe('DeviceWearerSearchResultsService', () => {
     })
   })
 
+  it('returns a default empty result when the remote server responds with 404', async () => {
+    mockRestClient.get.mockRejectedValue({ status: 404 })
+
+    const result = await service.getSearchResult({
+      accessToken: 'fake-token',
+      orderId: 'order-123',
+      searchedIdentifier: 'A1234BC',
+    })
+
+    expect(result).toEqual({
+      fullName: null,
+      dateOfBirth: null,
+    })
+  })
+
+  it('rethrows errors that are not a 404', async () => {
+    mockRestClient.get.mockRejectedValue({ status: 500 })
+
+    await expect(
+      service.getSearchResult({
+        accessToken: 'fake-token',
+        orderId: 'order-123',
+        searchedIdentifier: 'A1234BC',
+      }),
+    ).rejects.toEqual({ status: 500 })
+  })
+
   it('confirms the selected search result', async () => {
     mockRestClient.put.mockResolvedValue({})
 
