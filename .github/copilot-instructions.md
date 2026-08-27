@@ -10,8 +10,8 @@
 
 ## 2. Workflow
 
-- **Start by writing tests.** Write the test first, then implement code to make it pass.
-- **Run tests after every change.** New tests must fail first, then pass after implementation.
+- **Follow TDD at every appropriate level.** Start by writing a failing test, then implement the smallest change that makes it pass. Apply this workflow to unit, integration, and scenario tests when the change warrants that level of coverage.
+- **Use focused tests during red/green iterations.** When fixing a failing test, run only the relevant test or test group after each change; do not run every test suite on every iteration. Run all relevant tests for the changed behaviour once the focused test is green, and run the required completion checks before finishing.
 - **Type checking must pass.** Run `npm run typecheck` before committing — all code must have proper TypeScript types.
 - **NEVER install a new dependency without asking.** Stop and recommend a dependency for the user to add to `package.json`.
 - **All code MUST match the architecture.** Keep business logic out of routers and keep concerns separated.
