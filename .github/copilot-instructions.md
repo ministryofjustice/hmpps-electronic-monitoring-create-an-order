@@ -51,7 +51,7 @@ This project is a **Node.js/Express TypeScript application** for creating electr
 ### Architecture principles
 
 - **Controllers** handle HTTP requests/responses only. Never contain business logic.
-- **Services** contain all business logic. Controllers delegate to services via constructor injection.
+- **Services** contain all business logic. Dependencies are passed to services through the constructor.
 - **Models** define domain types and Zod validators. Keep them in `server/models/`.
 - **Routes** define the Express router and middleware stack. No logic here — routers receive a `Services` object and construct controllers.
 - **Keep concerns separated.** No direct database access in controllers; use services.
@@ -143,13 +143,13 @@ This project uses **Jest** for unit tests and **Cypress** for E2E tests.
   - **Docker run** (CEMO API runs in Docker, matching production):
     1. `docker compose -f docker-compose-scenarios.yml pull` — pulls the latest images.
     2. `docker compose -f docker-compose-scenarios.yml up` — starts the API, test DB, and WireMock.
-    3. `npm run start-scenarios` (or `npm run start-scenarios:dev` for auto-restart) — runs the server in test mode.
-    4. `npm run int-test-scenarios` (headless) or `npm run int-test-ui` (Cypress UI) — runs specs in `integration_tests/scenarios/`.
   - **Local API repo run** (test against a local clone of the CEMO API, e.g. for API changes):
     1. `docker compose -f docker-compose-scenarios.yml up --scale cemo-api=0` — starts only the test DB and WireMock (no containerised API).
     2. Ask the user: "Are you running the CEMO API locally in scenario test mode, ready for me to run the scenario tests against your local API changes?" Do not attempt to clone, configure, or start the API yourself — assume the user has already set it up per the [CEMO API repo](https://github.com/ministryofjustice/hmpps-electronic-monitoring-create-an-order-api) instructions.
-    3. `npm run start-scenarios` (or `npm run start-scenarios:dev`) — runs the server in test mode.
-    4. `npm run int-test-scenarios` (headless) or `npm run int-test-ui` (Cypress UI) — runs specs in `integration_tests/scenarios/`.
+
+  Then for either mode:
+  3. `npm run start-scenarios` (or `npm run start-scenarios:dev`) — runs the server in test mode.
+  4. `npm run int-test-scenarios` (headless) or `npm run int-test-ui` (Cypress UI) — runs specs in `integration_tests/scenarios/`.
 
 **Do not mix Docker Compose stacks.** There are three separate compose files — `docker-compose.yml` (local dev), `docker-compose-test.yml` (integration tests), and `docker-compose-scenarios.yml` (scenario tests) — and they share ports (e.g. `6379` for redis, `3001` for gotenberg). Before starting one, bring down any other stack that may already be running (`docker compose -f <file> down`) to avoid port conflicts or tests running against the wrong containers. Never assume a stack is already up — check with `docker compose -f <file> ps` first.
 
