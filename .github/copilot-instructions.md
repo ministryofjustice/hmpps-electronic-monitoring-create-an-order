@@ -40,7 +40,7 @@ If these instructions do not cover a specific case, stop and ask.
 This project is a **Node.js/Express TypeScript application** for creating electronic monitoring orders. Code is organized **by layer**, not by feature — each layer has its own top-level folder under `server/`.
 
 - **`server/controllers/[feature]/`** — Request handlers, folder name in `camelCase` (e.g. `installationAndRisk`). Controller files are named `[Name]Controller.ts` and default-export a class, e.g. `InstallationAndRiskController`.
-- **`server/services/[feature]Service.ts`** — Business logic as a single flat file per feature (not a folder), default-exporting a class, e.g. `InstallationAndRiskService`. Dependencies (e.g. `RestClient`) are constructor-injected.
+- **`server/services/[feature]Service.ts`** — Business logic as a single flat file per feature (not a folder), default-exporting a class, e.g. `InstallationAndRiskService`. Pass dependencies, such as `RestClient`, into the class constructor.
 - **`server/routes/[feature-kebab-case]/`** — Route definitions, folder name in `kebab-case` (e.g. `installation-and-risk`), with a `router.ts` that exports a factory function taking a `Services` object and wiring up controllers. Larger features have sub-route folders each with their own `controller.ts`.
 - **`server/models/`** — Domain models and form-data validators, `PascalCase` files (e.g. `InstallationAndRisk.ts`), with Zod validators in `server/models/form-data/`.
 - **`server/interfaces/`** — Shared request/response and utility types (e.g. `request.ts`, `result.ts`).
