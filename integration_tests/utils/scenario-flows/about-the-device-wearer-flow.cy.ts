@@ -34,7 +34,7 @@ export default function fillInAboutTheDeviceWearer({
   identityNumbersPage.form.saveAndContinueButton.click()
 
   if (
-    notifyingOrganisation === 'Probation' ||
+    notifyingOrganisation === 'Probation service' ||
     notifyingOrganisation === 'Prison' ||
     notifyingOrganisation === 'Prison Service' ||
     notifyingOrganisation === 'Youth Custody Service'

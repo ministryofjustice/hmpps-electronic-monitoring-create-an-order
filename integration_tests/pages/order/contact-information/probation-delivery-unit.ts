@@ -8,11 +8,7 @@ export default class ProbationDeliveryUnitPage extends AppFormPage {
   public form = new ProbationDeliveryUnitFormComponent()
 
   constructor(section: string = 'Contact information') {
-    super(
-      "What is the Responsible Organisation's Probation Delivery Unit (PDU)?",
-      paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT,
-      section,
-    )
+    super('', paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT, section)
   }
 
   checkOnPage(): void {

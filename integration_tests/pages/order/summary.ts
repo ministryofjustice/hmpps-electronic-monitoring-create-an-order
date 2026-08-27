@@ -622,7 +622,7 @@ export default class OrderTasksPage extends AppPage {
       identityNumbersPage.form.saveAndContinueButton.click()
 
       if (
-        interestedParties?.notifyingOrganisation === 'Probation' ||
+        interestedParties?.notifyingOrganisation === 'Probation service' ||
         interestedParties?.notifyingOrganisation === 'Prison' ||
         interestedParties?.notifyingOrganisation === 'Prison Service' ||
         interestedParties?.notifyingOrganisation === 'Youth Custody Service'
