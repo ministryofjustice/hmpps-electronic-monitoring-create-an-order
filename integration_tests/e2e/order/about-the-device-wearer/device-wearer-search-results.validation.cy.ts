@@ -18,10 +18,12 @@ context('About the device wearer', () => {
       cy.task('stubCemoRequest', {
         httpStatus: 200,
         method: 'GET',
-        subPath: `orders/${mockOrderId}/device-wearer/search-results`,
+        subPath: `orders/${mockOrderId}/device-wearer-details\\?organisationSearchId=${searchedIdentifier}`,
         response: {
-          fullName: null,
+          firstName: null,
+          lastName: null,
           dateOfBirth: null,
+          organisationSearchId: searchedIdentifier,
         },
       })
 

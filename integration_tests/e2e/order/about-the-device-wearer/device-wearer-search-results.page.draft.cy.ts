@@ -22,10 +22,12 @@ context('About the device wearer', () => {
       cy.task('stubCemoRequest', {
         httpStatus: 200,
         method: 'GET',
-        subPath: `orders/${mockOrderId}/device-wearer/search-results`,
+        subPath: `orders/${mockOrderId}/device-wearer-details\\?organisationSearchId=${searchedIdentifier}`,
         response: {
-          fullName: 'Ermintrude Jones',
+          firstName: 'Ermintrude',
+          lastName: 'Jones',
           dateOfBirth: '1974-01-19T00:00:00Z',
+          organisationSearchId: searchedIdentifier,
         },
       })
 
@@ -55,10 +57,12 @@ context('About the device wearer', () => {
       cy.task('stubCemoRequest', {
         httpStatus: 200,
         method: 'GET',
-        subPath: `orders/${mockOrderId}/device-wearer/search-results`,
+        subPath: `orders/${mockOrderId}/device-wearer-details\\?organisationSearchId=${searchedIdentifier}`,
         response: {
-          fullName: null,
+          firstName: null,
+          lastName: null,
           dateOfBirth: null,
+          organisationSearchId: searchedIdentifier,
         },
       })
 

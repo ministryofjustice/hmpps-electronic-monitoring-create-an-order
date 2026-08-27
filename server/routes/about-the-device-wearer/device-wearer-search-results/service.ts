@@ -4,7 +4,14 @@ import { AuthenticatedRequestInput } from '../../../interfaces/request'
 
 const DeviceWearerSearchResultResponseModel = z.object({
   fullName: z.string().nullable().optional(),
-  dateOfBirth: z.string().datetime().nullable().optional(),
+  dateOfBirth: z.string().datetime({ offset: true }).nullable().optional(),
+})
+
+const GetCorePersonDetailsResponseModel = z.object({
+  firstName: z.string().nullable().optional(),
+  lastName: z.string().nullable().optional(),
+  dateOfBirth: z.string().datetime({ offset: true }).nullable().optional(),
+  organisationSearchId: z.string(),
 })
 
 export type DeviceWearerSearchResultResponse = z.infer<typeof DeviceWearerSearchResultResponseModel>
@@ -24,19 +31,28 @@ export default class DeviceWearerSearchResultsService {
 
   async getSearchResult(input: GetSearchResultInput): Promise<DeviceWearerSearchResultResponse> {
     const response = await this.apiClient.get({
-      path: `/api/orders/${input.orderId}/device-wearer/search-results`,
+      path: `/api/orders/${input.orderId}/device-wearer-details`,
+      query: { organisationSearchId: input.searchedIdentifier },
       token: input.accessToken,
     })
 
-    return DeviceWearerSearchResultResponseModel.parse(response)
+    const personDetails = GetCorePersonDetailsResponseModel.parse(response)
+    const fullName = [personDetails.firstName?.trim(), personDetails.lastName?.trim()]
+      .filter((name): name is string => Boolean(name))
+      .join(' ')
+
+    return DeviceWearerSearchResultResponseModel.parse({
+      fullName: fullName || null,
+      dateOfBirth: personDetails.dateOfBirth ?? null,
+    })
   }
 
   async confirmSearchResult(input: ConfirmSearchResultInput): Promise<void> {
-    await this.apiClient.post({
-      path: `/api/orders/${input.orderId}/device-wearer/search-results/confirm`,
+    await this.apiClient.put({
+      path: `/api/orders/${input.orderId}/device-wearer-details`,
       token: input.accessToken,
       data: {
-        searchedIdentifier: input.searchedIdentifier,
+        organisationSearchId: input.searchedIdentifier,
       },
     })
   }

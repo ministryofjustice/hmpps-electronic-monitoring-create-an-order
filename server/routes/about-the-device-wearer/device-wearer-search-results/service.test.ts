@@ -18,8 +18,10 @@ describe('DeviceWearerSearchResultsService', () => {
 
   it('gets search result by searched identifier', async () => {
     mockRestClient.get.mockResolvedValue({
-      fullName: 'Ermintrude Jones',
+      firstName: 'Ermintrude',
+      lastName: 'Jones',
       dateOfBirth: '1974-01-19T00:00:00Z',
+      organisationSearchId: 'A1234BC',
     })
 
     const result = await service.getSearchResult({
@@ -29,7 +31,8 @@ describe('DeviceWearerSearchResultsService', () => {
     })
 
     expect(mockRestClient.get).toHaveBeenCalledWith({
-      path: '/api/orders/order-123/device-wearer/search-results',
+      path: '/api/orders/order-123/device-wearer-details',
+      query: { organisationSearchId: 'A1234BC' },
       token: 'fake-token',
     })
     expect(result).toEqual({
@@ -39,7 +42,7 @@ describe('DeviceWearerSearchResultsService', () => {
   })
 
   it('confirms the selected search result', async () => {
-    mockRestClient.post.mockResolvedValue({})
+    mockRestClient.put.mockResolvedValue({})
 
     await service.confirmSearchResult({
       accessToken: 'fake-token',
@@ -47,10 +50,10 @@ describe('DeviceWearerSearchResultsService', () => {
       searchedIdentifier: 'A1234BC',
     })
 
-    expect(mockRestClient.post).toHaveBeenCalledWith({
-      path: '/api/orders/order-123/device-wearer/search-results/confirm',
+    expect(mockRestClient.put).toHaveBeenCalledWith({
+      path: '/api/orders/order-123/device-wearer-details',
       token: 'fake-token',
-      data: { searchedIdentifier: 'A1234BC' },
+      data: { organisationSearchId: 'A1234BC' },
     })
   })
 

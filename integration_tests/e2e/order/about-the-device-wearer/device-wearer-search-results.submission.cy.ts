@@ -21,16 +21,18 @@ context('About the device wearer', () => {
       cy.task('stubCemoRequest', {
         httpStatus: 200,
         method: 'GET',
-        subPath: `orders/${mockOrderId}/device-wearer/search-results`,
+        subPath: `orders/${mockOrderId}/device-wearer-details\\?organisationSearchId=${searchedIdentifier}`,
         response: {
-          fullName: 'Ermintrude Jones',
+          firstName: 'Ermintrude',
+          lastName: 'Jones',
           dateOfBirth: '1974-01-19T00:00:00Z',
+          organisationSearchId: searchedIdentifier,
         },
       })
       cy.task('stubCemoRequest', {
         httpStatus: 200,
-        method: 'POST',
-        subPath: `orders/${mockOrderId}/device-wearer/search-results/confirm`,
+        method: 'PUT',
+        subPath: `orders/${mockOrderId}/device-wearer-details`,
         response: {},
       })
       cy.signIn()
@@ -44,9 +46,10 @@ context('About the device wearer', () => {
       page.form.useThisDeviceWearerButton.click()
 
       cy.task('stubCemoVerifyRequestReceived', {
-        uri: `/orders/${mockOrderId}/device-wearer/search-results/confirm`,
+        uri: `/orders/${mockOrderId}/device-wearer-details`,
+        method: 'PUT',
         body: {
-          searchedIdentifier,
+          organisationSearchId: searchedIdentifier,
         },
       }).should('be.true')
 
