@@ -4,7 +4,7 @@
 
 1. **Ask for the Jira ticket ID** (`ELM-XXX`) if not provided.
 2. **Clarify any ambiguous requirements** before writing code.
-3. **Run the unit tests** to confirm a clean baseline: `npm test` (Jest — this does NOT run integration or scenario tests, see section 5).
+3. **Run the unit tests** to confirm a clean baseline: `npm test`
 4. **Run the type checker** to confirm TypeScript compilation: `npm run typecheck`.
 5. **Find the nearest analogous existing feature** and follow the same pattern exactly.
 
