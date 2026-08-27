@@ -33,10 +33,17 @@ export default function fillInAboutTheDeviceWearer({
   identityNumbersPage.form.fillInWith(deviceWearerDetails)
   identityNumbersPage.form.saveAndContinueButton.click()
 
-  const deviceWearerSearchResultsPage = Page.verifyOnPage(DeviceWearerSearchResultsPage, {
-    identifyNumber: searchedIdentifier,
-  })
-  deviceWearerSearchResultsPage.form.enterDetailsManuallyLink.click()
+  if (
+    notifyingOrganisation === 'Probation' ||
+    notifyingOrganisation === 'Prison' ||
+    notifyingOrganisation === 'Prison Service' ||
+    notifyingOrganisation === 'Youth Custody Service'
+  ) {
+    const deviceWearerSearchResultsPage = Page.verifyOnPage(DeviceWearerSearchResultsPage, {
+      identifyNumber: searchedIdentifier,
+    })
+    deviceWearerSearchResultsPage.form.enterDetailsManuallyLink.click()
+  }
 
   const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
   aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)

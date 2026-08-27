@@ -621,10 +621,17 @@ export default class OrderTasksPage extends AppPage {
       identityNumbersPage.form.fillInWith(deviceWearerDetails)
       identityNumbersPage.form.saveAndContinueButton.click()
 
-      const deviceWearerSearchResultsPage = Page.verifyOnPage(DeviceWearerSearchResultsPage, {
-        identifyNumber: searchedIdentifier,
-      })
-      deviceWearerSearchResultsPage.form.enterDetailsManuallyLink.click()
+      if (
+        interestedParties?.notifyingOrganisation === 'Probation' ||
+        interestedParties?.notifyingOrganisation === 'Prison' ||
+        interestedParties?.notifyingOrganisation === 'Prison Service' ||
+        interestedParties?.notifyingOrganisation === 'Youth Custody Service'
+      ) {
+        const deviceWearerSearchResultsPage = Page.verifyOnPage(DeviceWearerSearchResultsPage, {
+          identifyNumber: searchedIdentifier,
+        })
+        deviceWearerSearchResultsPage.form.enterDetailsManuallyLink.click()
+      }
 
       const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
       aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
