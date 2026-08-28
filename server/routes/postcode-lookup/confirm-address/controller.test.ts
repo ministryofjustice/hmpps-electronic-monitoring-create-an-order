@@ -45,7 +45,7 @@ describe('ConfirmAddressController', () => {
     const primaryAddress = createAddress({
       addressLine1: '1 Washington Street',
       postcode: 'WR1 1NL',
-      addressSource: 'USER_ENTERED',
+      addressSource: 'CEMO',
     })
     const order = getMockOrder({ addresses: [primaryAddress] })
     const req = createMockRequest({

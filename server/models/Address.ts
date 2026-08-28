@@ -8,7 +8,7 @@ export const AddressTypeEnum = z.enum([
   'INSTALLATION',
   'RESPONSIBLE_ORGANISATION',
 ])
-export const AddressSourceEnum = z.enum(['CORE_PERSON_RECORD', 'USER_ENTERED'])
+export const AddressSourceEnum = z.enum(['CORE_PERSON_RECORD', 'CEMO', 'COMMON_PLATFORM'])
 
 const AddressModel = z.object({
   addressType: AddressTypeEnum,

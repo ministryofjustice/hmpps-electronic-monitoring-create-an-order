@@ -184,7 +184,7 @@ describe('ContactDetailsController', () => {
             addressLine3: 'Worcester',
             addressLine4: '',
             postcode: 'WR1 1NL',
-            addressSource: 'USER_ENTERED',
+            addressSource: 'CEMO',
           },
         ],
       })
