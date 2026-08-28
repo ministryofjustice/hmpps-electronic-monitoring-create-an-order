@@ -19,6 +19,7 @@ export default function fillInAboutTheDeviceWearer({
   tertiaryAddressDetails = undefined,
   section = 'About the device wearer',
   notifyingOrganisation = undefined,
+  loadFromCPR = false,
 }): void {
   const identityNumberNames = identityNumberNamesForNotifyingOrganisation(notifyingOrganisation)
   const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage, {}, {}, identityNumberNames)
@@ -34,6 +35,7 @@ export default function fillInAboutTheDeviceWearer({
   identityNumbersPage.form.saveAndContinueButton.click()
 
   if (
+    notifyingOrganisation === 'Probation' ||
     notifyingOrganisation === 'Probation service' ||
     notifyingOrganisation === 'Prison' ||
     notifyingOrganisation === 'Prison Service' ||
@@ -42,7 +44,11 @@ export default function fillInAboutTheDeviceWearer({
     const deviceWearerSearchResultsPage = Page.verifyOnPage(DeviceWearerSearchResultsPage, {
       identifyNumber: searchedIdentifier,
     })
-    deviceWearerSearchResultsPage.form.enterDetailsManuallyLink.click()
+    if (loadFromCPR) {
+      deviceWearerSearchResultsPage.form.useThisDeviceWearerButton.click()
+    } else {
+      deviceWearerSearchResultsPage.form.enterDetailsManuallyLink.click()
+    }
   }
 
   const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
@@ -55,13 +61,17 @@ export default function fillInAboutTheDeviceWearer({
     responsibleAdultDetailsPage.form.saveAndContinueButton.click()
   }
 
-  const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage, section)
-  contactDetailsPage.form.fillInWith(deviceWearerDetails)
-  contactDetailsPage.form.saveAndContinueButton.click()
+  if (deviceWearerDetails.contactNumber) {
+    const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage, section)
+    contactDetailsPage.form.fillInWith(deviceWearerDetails)
+    contactDetailsPage.form.saveAndContinueButton.click()
+  }
 
-  const noFixedAbode = Page.verifyOnPage(NoFixedAbodePage, section)
-  noFixedAbode.form.fillInWith(deviceWearerDetails)
-  noFixedAbode.form.saveAndContinueButton.click()
+  if (deviceWearerDetails.hasFixedAddress) {
+    const noFixedAbode = Page.verifyOnPage(NoFixedAbodePage, section)
+    noFixedAbode.form.fillInWith(deviceWearerDetails)
+    noFixedAbode.form.saveAndContinueButton.click()
+  }
 
   if (primaryAddressDetails) {
     fillinAddress({
