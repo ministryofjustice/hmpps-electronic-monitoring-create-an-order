@@ -374,94 +374,94 @@ context('Order type descriptions', () => {
     verifyResult({ monitoringOrderTypeDescription })
   })
 
-  // it('Notification org is home office', () => {
-  //   cy.task('stubSignIn', {
-  //     name: 'Cemor Stubs',
-  //     roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'HOME_OFFICE'],
-  //   })
+  it('Notification org is home office', () => {
+    cy.task('stubSignIn', {
+      name: 'Cemor Stubs',
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'HOME_OFFICE'],
+    })
 
-  //   const interestedParties = createFakeInterestedParties('Home Office', 'Home Office', null, null)
+    const interestedParties = createFakeInterestedParties('Home Office', 'Home Office', null, null)
 
-  //   createNewOrder({
-  //     notifyingOrganisation: interestedParties,
-  //   })
+    createNewOrder({
+      notifyingOrganisation: interestedParties,
+    })
 
-  //   orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
-  //   orderSummaryPage.aboutTheDeviceWearerTask.click()
+    orderSummaryPage.aboutTheDeviceWearerTask.click()
 
-  //   const installationLocation = {
-  //     location: 'At a prison',
-  //   }
+    const installationLocation = {
+      location: 'At a prison',
+    }
 
-  //   const installationAppointment = {
-  //     placeName: 'mock prison',
-  //     appointmentDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(13, 0, 0, 0)),
-  //   }
+    const installationAppointment = {
+      placeName: 'mock prison',
+      appointmentDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(13, 0, 0, 0)),
+    }
 
-  //   const installationAddressDetails = createFakeAddress()
-  //   const monitoringOrderTypeDescription = {
-  //     monitoringCondition: 'Trail monitoring',
-  //   }
+    const installationAddressDetails = createFakeAddress()
+    const monitoringOrderTypeDescription = {
+      monitoringCondition: 'Trail monitoring',
+    }
 
-  //   const trailMonitoringOrderWithDeviceType = {
-  //     startDate: new Date(currentDate.getFullYear(), 11, 1),
-  //     endDate: null,
-  //     deviceType: 'A fitted GPS tag',
-  //   }
+    const trailMonitoringOrderWithDeviceType = {
+      startDate: new Date(currentDate.getFullYear(), 11, 1),
+      endDate: null,
+      deviceType: 'A fitted GPS tag',
+    }
 
-  //   orderSummaryPage.fillInGeneralOrderDetailsWith({
-  //     deviceWearerDetails,
-  //     interestedParties,
-  //     primaryAddressDetails,
-  //     installationAndRisk,
-  //     monitoringOrderTypeDescription,
-  //     newDeviceWearerFlow: true,
-  //   })
-  //   verifyResult({
-  //     monitoringOrderTypeDescription,
-  //     trailMonitoring: trailMonitoringOrderWithDeviceType,
-  //     installationLocation,
-  //     installationAppointment,
-  //     installationAddressDetails,
-  //   })
-  // })
+    orderSummaryPage.fillInGeneralOrderDetailsWith({
+      deviceWearerDetails,
+      interestedParties,
+      primaryAddressDetails,
+      installationAndRisk,
+      monitoringOrderTypeDescription,
+      newDeviceWearerFlow: true,
+    })
+    verifyResult({
+      monitoringOrderTypeDescription,
+      trailMonitoring: trailMonitoringOrderWithDeviceType,
+      installationLocation,
+      installationAppointment,
+      installationAddressDetails,
+    })
+  })
 
-  // it('Notification org is Civil', () => {
-  //   cy.task('stubSignIn', {
-  //     name: 'Cemor Stubs',
-  //     roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'HOME_OFFICE'],
-  //   })
+  it('Notification org is Civil', () => {
+    cy.task('stubSignIn', {
+      name: 'Cemor Stubs',
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'HOME_OFFICE'],
+    })
 
-  //   const interestedParties = createFakeInterestedParties(
-  //     'Civil and County Court',
-  //     'Home Office',
-  //     'Bedford County and Civil Court',
-  //     null,
-  //   )
+    const interestedParties = createFakeInterestedParties(
+      'Civil and County Court',
+      'Home Office',
+      'Bedford County and Civil Court',
+      null,
+    )
 
-  //   createNewOrder({
-  //     notifyingOrganisation: interestedParties,
-  //   })
+    createNewOrder({
+      notifyingOrganisation: interestedParties,
+    })
 
-  //   orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
-  //   orderSummaryPage.aboutTheDeviceWearerTask.click()
+    orderSummaryPage.aboutTheDeviceWearerTask.click()
 
-  //   const monitoringOrderTypeDescription = {
-  //     // commented out due to ELM-4526
-  //     // orderType: 'Bail',
-  //     monitoringCondition: 'Trail monitoring',
-  //   }
+    const monitoringOrderTypeDescription = {
+      // commented out due to ELM-4526
+      // orderType: 'Bail',
+      monitoringCondition: 'Trail monitoring',
+    }
 
-  //   orderSummaryPage.fillInGeneralOrderDetailsWith({
-  //     deviceWearerDetails,
-  //     interestedParties,
-  //     primaryAddressDetails,
-  //     installationAndRisk,
-  //     monitoringOrderTypeDescription,
-  //     newDeviceWearerFlow: true,
-  //   })
-  //   verifyResult({ monitoringOrderTypeDescription })
-  // })
+    orderSummaryPage.fillInGeneralOrderDetailsWith({
+      deviceWearerDetails,
+      interestedParties,
+      primaryAddressDetails,
+      installationAndRisk,
+      monitoringOrderTypeDescription,
+      newDeviceWearerFlow: true,
+    })
+    verifyResult({ monitoringOrderTypeDescription })
+  })
 })
