@@ -79,14 +79,21 @@ const createPersonIdentifierAnswers = (order: Order, content: I18n, answerOpts: 
   const uri = paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id)
 
   const userInputAnswers = getIdentityNumbers(undefined, order.interestedParties?.notifyingOrganisation)
+
   const existingAnswers = IdentityNumbersEnum.options.filter(
     type => !userInputAnswers.includes(type) && Boolean(order.deviceWearer[identityNumberFieldNames[type]]),
   )
 
   return [...userInputAnswers, ...existingAnswers].map(type => {
     const name = identityNumberFieldNames[type]
-
-    return createAnswer(content.pages.identityNumbers.questions[name].text, order.deviceWearer[name], uri, answerOpts)
+    let answerOption = answerOpts
+    // Only show change link if identify is entered by the user
+    if (!userInputAnswers.includes(type)) {
+      answerOption = {
+        ignoreActions: true,
+      }
+    }
+    return createAnswer(content.pages.identityNumbers.questions[name].text, order.deviceWearer[name], uri, answerOption)
   })
 }
 
