@@ -37,6 +37,19 @@ export default class ContactDetailsController {
 
       res.redirect(paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', orderId))
     } else if (action === 'continue') {
+      const corePersonPrimaryAddress = req.order!.addresses.find(
+        address => address.addressType === 'PRIMARY' && address.addressSource === 'CORE_PERSON_RECORD',
+      )
+      const confirmAddressPath = paths.POSTCODE_LOOKUP.CONFIRM_ADDRESS.replace(':orderId', orderId).replace(
+        ':addressType',
+        'PRIMARY',
+      )
+
+      if (corePersonPrimaryAddress) {
+        res.redirect(confirmAddressPath)
+        return
+      }
+
       res.redirect(this.taskListService.getNextPage('CONTACT_DETAILS', req.order!))
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))

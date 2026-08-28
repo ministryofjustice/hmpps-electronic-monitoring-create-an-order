@@ -375,7 +375,13 @@ export default function routes({
 
   router.use(
     paths.ORDER.BASE_URL,
-    createPostcodeLookupRouter({ postcodeService, addressService, taskListService, auditService }),
+    createPostcodeLookupRouter({
+      postcodeService,
+      addressService,
+      taskListService,
+      auditService,
+      deviceWearerService,
+    }),
   )
 
   router.use(
