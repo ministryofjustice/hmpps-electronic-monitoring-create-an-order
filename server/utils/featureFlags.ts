@@ -24,7 +24,6 @@ export default class FeatureFlags {
 
   private loadFlagsFromEnv(): FeatureFlagMap {
     return {
-      CREATE_NEW_ORDER_VERSION_ENABLED: process.env.CREATE_NEW_ORDER_VERSION_ENABLED === 'true',
       SERVICE_REQUEST_TYPE_ENABLED: process.env.SERVICE_REQUEST_TYPE_ENABLED === 'true',
       TAG_AT_SOURCE_PILOT_PRISONS: process.env.TAG_AT_SOURCE_PILOT_PRISONS ?? '',
       DAPOL_PILOT_PROBATION_REGIONS: process.env.DAPOL_PILOT_PROBATION_REGIONS ?? '',
