@@ -710,7 +710,7 @@ describe('TaskListService', () => {
   })
 
   describe('get next task path', () => {
-    it('returns the first completable path', () => {
+    it('returns the first incomplete completable path', () => {
       const tasks: Task[] = []
       tasks.push({
         section: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
@@ -732,7 +732,7 @@ describe('TaskListService', () => {
 
       const result = taskListService.getNextTaskPath(tasks, 'mockOrderId')
 
-      expect(result).toBe(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', 'mockOrderId'))
+      expect(result).toBe(paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER.replace(':orderId', 'mockOrderId'))
     })
 
     it('returns the versioned path if version id is provided', () => {

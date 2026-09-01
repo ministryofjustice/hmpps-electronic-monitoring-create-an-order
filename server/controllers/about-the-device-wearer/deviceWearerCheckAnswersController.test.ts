@@ -61,13 +61,16 @@ const expectedIdentityNumbers = (orderId: string, values: Record<string, string>
     key: { text: key },
     value: { text: value ?? '' },
     actions: {
-      items: [
-        {
-          href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', orderId),
-          text: 'Change',
-          visuallyHiddenText: key!.toLowerCase(),
-        },
-      ],
+      items:
+        key === 'Prison Number'
+          ? []
+          : [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', orderId),
+                text: 'Change',
+                visuallyHiddenText: key!.toLowerCase(),
+              },
+            ],
     },
   }))
 }
