@@ -1,7 +1,7 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
 import { validationErrors } from '../../../constants/validationErrors'
-import { ValidationResult } from '../../../models/Validation'
+import { isValidationResult, ValidationResult } from '../../../models/Validation'
 import CurfewReleaseDateService from '../../../services/curfewReleaseDateService'
 import { CurfewDayOfReleaseFormDataModel } from './formModel'
 import { STANDARD_CURFEW_TIMES } from './standardCurfewTimes'
@@ -34,17 +34,24 @@ export default class CurfewDayOfReleaseController {
     }
 
     if (formData.standardCurfewTimes === 'YES') {
-      await this.curfewReleaseDateService.update({
+      const updateResult = await this.curfewReleaseDateService.update({
         accessToken: res.locals.user.token,
         order,
         data: {
           action: 'continue',
+          curfewAddress: order.curfewReleaseDateConditions?.curfewAddress ?? undefined,
           curfewTimesStartHours: STANDARD_CURFEW_TIMES.startHours,
           curfewTimesStartMinutes: STANDARD_CURFEW_TIMES.startMinutes,
           curfewTimesEndHours: STANDARD_CURFEW_TIMES.endHours,
           curfewTimesEndMinutes: STANDARD_CURFEW_TIMES.endMinutes,
         },
       })
+
+      if (isValidationResult(updateResult)) {
+        req.flash('validationErrors', updateResult)
+        res.redirect(paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE.replace(':orderId', order.id))
+        return
+      }
 
       if (formData.action === 'continue') {
         res.redirect(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', order.id))
