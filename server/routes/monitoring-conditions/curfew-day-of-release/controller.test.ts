@@ -2,16 +2,30 @@ import { NextFunction, Request, Response } from 'express'
 import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
 import { getMockOrder } from '../../../../test/mocks/mockOrder'
 import { validationErrors } from '../../../constants/validationErrors'
+import RestClient from '../../../data/restClient'
+import CurfewReleaseDateService from '../../../services/curfewReleaseDateService'
 import CurfewDayOfReleaseController from './controller'
 
+jest.mock('../../../data/restClient')
+jest.mock('../../../services/curfewReleaseDateService')
+
 describe('curfew day of release controller', () => {
+  let mockRestClient: jest.Mocked<RestClient>
+  let curfewReleaseDateService: jest.Mocked<CurfewReleaseDateService>
   let controller: CurfewDayOfReleaseController
   let req: Request
   let res: Response
   let next: NextFunction
 
   beforeEach(() => {
-    controller = new CurfewDayOfReleaseController()
+    mockRestClient = new RestClient('cemoApi', {
+      url: '',
+      timeout: { response: 0, deadline: 0 },
+      agent: { timeout: 0 },
+    }) as jest.Mocked<RestClient>
+    curfewReleaseDateService = new CurfewReleaseDateService(mockRestClient) as jest.Mocked<CurfewReleaseDateService>
+    curfewReleaseDateService.update.mockResolvedValue(undefined)
+    controller = new CurfewDayOfReleaseController(curfewReleaseDateService)
     req = createMockRequest()
     req.flash = jest.fn().mockReturnValue([])
     res = createMockResponse()
@@ -45,7 +59,7 @@ describe('curfew day of release controller', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/monitoring-conditions/curfew/day-of-release`)
     })
 
-    it('continues to the curfew on release day page when an answer is given', async () => {
+    it('continues to the curfew on release day page when the answer is no', async () => {
       const order = getMockOrder()
       req = createMockRequest({ order, body: { action: 'continue', standardCurfewTimes: 'NO' } })
       req.flash = jest.fn()
@@ -53,7 +67,29 @@ describe('curfew day of release controller', () => {
       await controller.update(req, res, next)
 
       expect(req.flash).not.toHaveBeenCalled()
+      expect(curfewReleaseDateService.update).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/monitoring-conditions/curfew/release-date`)
+    })
+
+    it('saves the standard curfew times and skips the release day page when the answer is yes', async () => {
+      const order = getMockOrder()
+      req = createMockRequest({ order, body: { action: 'continue', standardCurfewTimes: 'YES' } })
+      req.flash = jest.fn()
+
+      await controller.update(req, res, next)
+
+      expect(curfewReleaseDateService.update).toHaveBeenCalledWith({
+        accessToken: res.locals.user.token,
+        order,
+        data: {
+          action: 'continue',
+          curfewTimesStartHours: '19',
+          curfewTimesStartMinutes: '00',
+          curfewTimesEndHours: '07',
+          curfewTimesEndMinutes: '00',
+        },
+      })
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/monitoring-conditions/curfew/additional-details`)
     })
   })
 })
