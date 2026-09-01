@@ -115,12 +115,9 @@ describe('curfew day of release controller', () => {
         accessToken: res.locals.user.token,
         order,
         data: {
-          action: 'continue',
           curfewAddress: undefined,
-          curfewTimesStartHours: '19',
-          curfewTimesStartMinutes: '00',
-          curfewTimesEndHours: '07',
-          curfewTimesEndMinutes: '00',
+          startTime: '19:00:00',
+          endTime: '07:00:00',
         },
       })
       expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/monitoring-conditions/curfew/additional-details`)
@@ -172,12 +169,9 @@ describe('curfew day of release controller', () => {
         accessToken: res.locals.user.token,
         order,
         data: {
-          action: 'continue',
           curfewAddress: undefined,
-          curfewTimesStartHours: '19',
-          curfewTimesStartMinutes: '00',
-          curfewTimesEndHours: '07',
-          curfewTimesEndMinutes: '00',
+          startTime: '19:00:00',
+          endTime: '07:00:00',
         },
       })
       expect(res.redirect).toHaveBeenCalledWith(res.locals.orderSummaryUri)

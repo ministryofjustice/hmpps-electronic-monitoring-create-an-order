@@ -38,12 +38,9 @@ export default class CurfewDayOfReleaseController {
         accessToken: res.locals.user.token,
         order,
         data: {
-          action: 'continue',
-          curfewAddress: order.curfewReleaseDateConditions?.curfewAddress ?? undefined,
-          curfewTimesStartHours: STANDARD_CURFEW_TIMES.startHours,
-          curfewTimesStartMinutes: STANDARD_CURFEW_TIMES.startMinutes,
-          curfewTimesEndHours: STANDARD_CURFEW_TIMES.endHours,
-          curfewTimesEndMinutes: STANDARD_CURFEW_TIMES.endMinutes,
+          curfewAddress: order.curfewReleaseDateConditions?.curfewAddress,
+          startTime: STANDARD_CURFEW_TIMES.startTime,
+          endTime: STANDARD_CURFEW_TIMES.endTime,
         },
       })
 
