@@ -205,6 +205,7 @@ context('New about device wearer flow', () => {
       otherDisability: null,
       interpreterRequired: false,
       language: '',
+      hideContactNumberPage: true,
     }
     fillInAboutTheDeviceWearer({
       deviceWearerDetails: partiDeviceWearerDetails,
@@ -275,6 +276,7 @@ context('New about device wearer flow', () => {
       otherDisability: null,
       interpreterRequired: false,
       language: '',
+      hideContactNumberPage: true,
     }
     fillInAboutTheDeviceWearer({
       deviceWearerDetails: partiDeviceWearerDetails,
