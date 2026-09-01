@@ -311,6 +311,7 @@ export default function routes({
 
   // Curfew day of release page
   get(paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE, curfewDayOfReleaseController.view)
+  post(paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE, curfewDayOfReleaseController.update)
 
   // Curfew on release day page
   get(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE, curfewReleaseDateController.view)
