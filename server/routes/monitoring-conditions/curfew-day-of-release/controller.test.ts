@@ -71,6 +71,18 @@ describe('curfew day of release controller', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/monitoring-conditions/curfew/release-date`)
     })
 
+    it('returns to the order summary without saving when the answer is no and saving as draft', async () => {
+      const order = getMockOrder()
+      req = createMockRequest({ order, body: { action: 'back', standardCurfewTimes: 'NO' } })
+      req.flash = jest.fn()
+      res.locals.orderSummaryUri = `/order/${order.id}/summary`
+
+      await controller.update(req, res, next)
+
+      expect(curfewReleaseDateService.update).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith(res.locals.orderSummaryUri)
+    })
+
     it('saves the standard curfew times and skips the release day page when the answer is yes', async () => {
       const order = getMockOrder()
       req = createMockRequest({ order, body: { action: 'continue', standardCurfewTimes: 'YES' } })
@@ -90,6 +102,28 @@ describe('curfew day of release controller', () => {
         },
       })
       expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/monitoring-conditions/curfew/additional-details`)
+    })
+
+    it('saves the standard curfew times and returns to the order summary when saving as draft', async () => {
+      const order = getMockOrder()
+      req = createMockRequest({ order, body: { action: 'back', standardCurfewTimes: 'YES' } })
+      req.flash = jest.fn()
+      res.locals.orderSummaryUri = `/order/${order.id}/summary`
+
+      await controller.update(req, res, next)
+
+      expect(curfewReleaseDateService.update).toHaveBeenCalledWith({
+        accessToken: res.locals.user.token,
+        order,
+        data: {
+          action: 'continue',
+          curfewTimesStartHours: '19',
+          curfewTimesStartMinutes: '00',
+          curfewTimesEndHours: '07',
+          curfewTimesEndMinutes: '00',
+        },
+      })
+      expect(res.redirect).toHaveBeenCalledWith(res.locals.orderSummaryUri)
     })
   })
 })

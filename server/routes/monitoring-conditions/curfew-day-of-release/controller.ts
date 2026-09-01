@@ -46,7 +46,17 @@ export default class CurfewDayOfReleaseController {
         },
       })
 
-      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', order.id))
+      if (formData.action === 'continue') {
+        res.redirect(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', order.id))
+        return
+      }
+
+      res.redirect(res.locals.orderSummaryUri)
+      return
+    }
+
+    if (formData.action !== 'continue') {
+      res.redirect(res.locals.orderSummaryUri)
       return
     }
 
