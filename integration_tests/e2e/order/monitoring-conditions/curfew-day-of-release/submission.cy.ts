@@ -21,6 +21,89 @@ const mockOrderWithCurfewStartDate = {
 }
 
 context('Monitoring conditions - Curfew on day of release', () => {
+  context('Returning to the page', () => {
+    context('with the standard curfew times saved', () => {
+      beforeEach(() => {
+        cy.task('reset')
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: {
+            ...mockOrderWithCurfewStartDate,
+            curfewReleaseDateConditions: {
+              orderId: mockOrderId,
+              startTime: '19:00:00',
+              endTime: '07:00:00',
+              curfewAddress: null,
+              releaseDate: '2025-03-27T00:00:00.000Z',
+            },
+          },
+        })
+
+        cy.signIn()
+      })
+
+      it('should show yes', () => {
+        const page = Page.visit(CurfewDayOfReleasePage, { orderId: mockOrderId })
+
+        page.form.standardCurfewTimesField.shouldHaveValue('Yes')
+      })
+    })
+
+    context('with non-standard curfew times saved', () => {
+      beforeEach(() => {
+        cy.task('reset')
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: {
+            ...mockOrderWithCurfewStartDate,
+            curfewReleaseDateConditions: {
+              orderId: mockOrderId,
+              startTime: '20:00:00',
+              endTime: '07:00:00',
+              curfewAddress: null,
+              releaseDate: '2025-03-27T00:00:00.000Z',
+            },
+          },
+        })
+
+        cy.signIn()
+      })
+
+      it('should show no', () => {
+        const page = Page.visit(CurfewDayOfReleasePage, { orderId: mockOrderId })
+
+        page.form.standardCurfewTimesField.shouldHaveValue('No')
+      })
+    })
+
+    context('with no curfew times saved', () => {
+      beforeEach(() => {
+        cy.task('reset')
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: mockOrderWithCurfewStartDate,
+        })
+
+        cy.signIn()
+      })
+
+      it('should not show an answer', () => {
+        const page = Page.visit(CurfewDayOfReleasePage, { orderId: mockOrderId })
+
+        page.form.standardCurfewTimesField.shouldNotHaveValue()
+      })
+    })
+  })
+
   context('Submitting a valid response', () => {
     beforeEach(() => {
       cy.task('reset')
