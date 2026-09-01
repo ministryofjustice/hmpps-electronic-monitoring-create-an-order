@@ -3,7 +3,6 @@ import ErrorPage from '../../../pages/error'
 import CurfewConditionsPage from '../../../pages/order/monitoring-conditions/curfew-conditions'
 import Page from '../../../pages/page'
 import CurfewDayOfReleasePage from '../../../pages/order/monitoring-conditions/curfew-day-of-release'
-import CurfewReleaseDatePage from '../../../pages/order/monitoring-conditions/curfew-release-date'
 import mockApiOrder from '../../../utils/data/ApiOrder'
 
 const mockOrderId = uuidv4()
@@ -278,7 +277,7 @@ context('Curfew conditions', () => {
           startDate: '2025-03-27T00:00:00.000Z',
         })
       })
-      Page.verifyOnPage(CurfewReleaseDatePage)
+      Page.verifyOnPage(CurfewDayOfReleasePage)
     })
   })
 })
