@@ -45,6 +45,8 @@ const mockDefaultOrder = {
     offenceType: '',
   },
 }
+const noPilotOptionHintText =
+  'To be eligible for tagging the device wearer must either be part of a pathfinder or programme or have Alcohol Monitoring on Licence (AML) as a licence condition.'
 
 const stubGetOrder = order => {
   cy.task('stubCemoGetOrder', {
@@ -107,6 +109,28 @@ context('pilot', () => {
     const page = Page.visit(PilotPage, { orderId: mockOrderId })
 
     page.form.pilotField.shouldNotHaveOption('Licence Variation Project')
+  })
+
+  it('Should not show pilot pathfinders hint when order is sentencing act', () => {
+    cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+    stubGetOrder({
+      ...mockDefaultOrder,
+      interestedParties: {
+        notifyingOrganisation: 'HOME_OFFICE',
+        notifyingOrganisationName: '',
+        notifyingOrganisationEmail: 'notifying@organisation',
+        responsibleOrganisation: 'POLICE',
+        responsibleOrganisationEmail: 'responsible@organisation',
+        responsibleOrganisationRegion: '',
+        responsibleOfficerName: 'name',
+        responsibleOfficerPhoneNumber: '01234567891',
+      },
+      isSentencingAct: true,
+    })
+
+    const page = Page.visit(PilotPage, { orderId: mockOrderId })
+    page.form.fillInWith('They are not part of any of these pathfinders or programmes')
+    page.form.pilotField.element.contains(noPilotOptionHintText).should('not.exist')
   })
 
   it('Should disable DAPOL option and display message stating why if probation region not in pathfinder or programme', () => {
@@ -262,10 +286,8 @@ context('pilot', () => {
     pilotPage.form.pilotField.shouldHaveOption('GPS acquisitive crime (EMAC)')
     pilotPage.form.pilotField.shouldHaveOption('They are not part of any of these pathfinders or programmes')
 
-    const hintText =
-      'To be eligible for tagging the device wearer must either be part of a pathfinder or programme or have Alcohol Monitoring on Licence (AML) as a licence condition.'
-    pilotPage.form.pilotField.element.contains(hintText).should('be.hidden')
+    pilotPage.form.pilotField.element.contains(noPilotOptionHintText).should('be.hidden')
     pilotPage.form.fillInWith('They are not part of any of these pathfinders or programmes')
-    pilotPage.form.pilotField.element.contains(hintText)
+    pilotPage.form.pilotField.element.contains(noPilotOptionHintText)
   })
 })
