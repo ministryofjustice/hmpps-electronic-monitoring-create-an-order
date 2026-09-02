@@ -1,6 +1,7 @@
 import MonitoringConditionsCheckYourAnswersPage from '../../pages/order/monitoring-conditions/check-your-answers'
 import CurfewAdditionalDetailsPage from '../../pages/order/monitoring-conditions/curfew-additional-details'
 import CurfewConditionsPage from '../../pages/order/monitoring-conditions/curfew-conditions'
+import CurfewDayOfReleasePage from '../../pages/order/monitoring-conditions/curfew-day-of-release'
 import CurfewReleaseDatePage from '../../pages/order/monitoring-conditions/curfew-release-date'
 import CurfewTimetablePage from '../../pages/order/monitoring-conditions/curfew-timetable'
 import Page from '../../pages/page'
@@ -13,6 +14,10 @@ export default function fillInCurfewOrderDetailsWith({
   const curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
   curfewConditionsPage.form.fillInWith(curfewConditionDetails)
   curfewConditionsPage.form.saveAndContinueButton.click()
+
+  const curfewDayOfReleasePage = Page.verifyOnPage(CurfewDayOfReleasePage)
+  curfewDayOfReleasePage.form.standardCurfewTimesField.set('No')
+  curfewDayOfReleasePage.form.saveAndContinueButton.click()
 
   const curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
   curfewReleaseDatePage.form.fillInWith(curfewReleaseDetails)
