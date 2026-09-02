@@ -2,12 +2,12 @@ import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
 import { v4 as uuidv4 } from 'uuid'
-import { createAcceptanceApp } from './testutils/acceptanceApp'
-import FakeCemoApiClient from './testutils/fakeCemoApiClient'
-import OrderService from '../services/orderService'
-import DeviceWearerService from '../services/deviceWearerService'
-import TaskListService from '../services/taskListService'
-import mockApiOrder from '../../integration_tests/utils/data/ApiOrder'
+import { createAcceptanceApp } from '../testutils/acceptanceApp'
+import FakeCemoApiClient from '../testutils/fakeCemoApiClient'
+import OrderService from '../../services/orderService'
+import DeviceWearerService from '../../services/deviceWearerService'
+import TaskListService from '../../services/taskListService'
+import mockApiOrder from '../../../integration_tests/utils/data/ApiOrder'
 
 const orderId = uuidv4()
 const orderPath = `/api/orders/${orderId}`
