@@ -10,18 +10,21 @@ export default function fillInCurfewOrderDetailsWith({
   curfewConditionDetails,
   curfewReleaseDetails,
   curfewTimetable,
+  dayOfReleaseAnswer = 'No',
 }): void {
   const curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
   curfewConditionsPage.form.fillInWith(curfewConditionDetails)
   curfewConditionsPage.form.saveAndContinueButton.click()
 
   const curfewDayOfReleasePage = Page.verifyOnPage(CurfewDayOfReleasePage)
-  curfewDayOfReleasePage.form.standardCurfewTimesField.set('No')
+  curfewDayOfReleasePage.form.standardCurfewTimesField.set(dayOfReleaseAnswer)
   curfewDayOfReleasePage.form.saveAndContinueButton.click()
 
-  const curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
-  curfewReleaseDatePage.form.fillInWith(curfewReleaseDetails)
-  curfewReleaseDatePage.form.saveAndContinueButton.click()
+  if (dayOfReleaseAnswer === 'No') {
+    const curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
+    curfewReleaseDatePage.form.fillInWith(curfewReleaseDetails)
+    curfewReleaseDatePage.form.saveAndContinueButton.click()
+  }
 
   const curfewAdditionalDetailsPage = Page.verifyOnPage(CurfewAdditionalDetailsPage)
   curfewAdditionalDetailsPage.form.fillInWith(curfewConditionDetails)
