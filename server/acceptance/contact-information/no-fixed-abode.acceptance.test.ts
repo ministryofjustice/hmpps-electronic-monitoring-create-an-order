@@ -9,6 +9,9 @@ import DeviceWearerService from '../../services/deviceWearerService'
 import TaskListService from '../../services/taskListService'
 import mockApiOrder from '../../../integration_tests/utils/data/ApiOrder'
 
+// eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
+jest.mock('../../utils/featureFlags', () => require('../testutils/fakeFeatureFlags').mockFeatureFlags())
+
 const orderId = uuidv4()
 const orderPath = `/api/orders/${orderId}`
 const deviceWearerPath = `/api/orders/${orderId}/device-wearer/no-fixed-abode`

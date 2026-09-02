@@ -9,6 +9,9 @@ import IsRejectionService from '../routes/is-rejection/service'
 import FeatureFlags from '../utils/featureFlags'
 import mockApiOrder from '../../integration_tests/utils/data/ApiOrder'
 
+// eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
+jest.mock('../utils/featureFlags', () => require('./testutils/fakeFeatureFlags').mockFeatureFlags())
+
 const orderId = uuidv4()
 const orderPath = `/api/orders/${orderId}`
 const pagePath = `/order/${orderId}/is-rejection`

@@ -1,6 +1,6 @@
 // The MAPPA journey is gated behind the OFFENCE_FLOW_ENABLED feature flag
-// (see TaskListService), which FeatureFlags reads from process.env on first
-// use. This must be set before any of the app's modules are imported.
+// (see TaskListService). FeatureFlags is mocked below with this flag forced
+// on, scoped to this test file only.
 import type { Express } from 'express'
 import request from 'supertest'
 import * as cheerio from 'cheerio'
@@ -12,7 +12,10 @@ import MappaService from '../../routes/installation-and-risk/mappa/service'
 import TaskListService from '../../services/taskListService'
 import mockApiOrder from '../../../integration_tests/utils/data/ApiOrder'
 
-process.env.OFFENCE_FLOW_ENABLED = 'true'
+jest.mock('../../utils/featureFlags', () =>
+  // eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
+  require('../testutils/fakeFeatureFlags').mockFeatureFlags({ OFFENCE_FLOW_ENABLED: true }),
+)
 
 const orderId = uuidv4()
 const orderPath = `/api/orders/${orderId}`

@@ -9,6 +9,9 @@ import ProbationDeliveryUnitService from '../../services/probationDeliveryUnitSe
 import TaskListService from '../../services/taskListService'
 import mockApiOrder from '../../../integration_tests/utils/data/ApiOrder'
 
+// eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
+jest.mock('../../utils/featureFlags', () => require('../testutils/fakeFeatureFlags').mockFeatureFlags())
+
 const orderId = uuidv4()
 const orderPath = `/api/orders/${orderId}`
 const probationDeliveryUnitPath = `/api/orders/${orderId}/probation-delivery-unit`
