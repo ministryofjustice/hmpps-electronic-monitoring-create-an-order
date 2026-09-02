@@ -79,4 +79,117 @@ context('interested parties check answers page', () => {
       cy.get('.govuk-details__text').should('not.exist')
     })
   })
+
+  context('with a create order whose start date is in the past', () => {
+    beforeEach(() => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'SUBMITTED',
+        order: {
+          type: 'REQUEST',
+          dataDictionaryVersion: 'DDV6',
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: 'ALTCOURSE_PRISON',
+            notifyingOrganisationEmail: 'notifying@organisation',
+
+            responsibleOfficerFirstName: 'officer',
+            responsibleOfficerLastName: 'name',
+            responsibleOfficerEmail: 'officer@email',
+
+            responsibleOrganisation: 'PROBATION',
+            responsibleOrganisationEmail: 'responsible@organisation',
+            responsibleOrganisationRegion: 'WALES',
+          },
+          probationDeliveryUnit: {
+            unit: 'COUNTY_DURHAM_AND_DARLINGTON',
+          },
+          monitoringConditions: {
+            startDate: new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)),
+            endDate: '2030-02-01T00:00:00Z',
+            orderType: 'CIVIL',
+            curfew: false,
+            exclusionZone: false,
+            trail: true,
+            mandatoryAttendance: false,
+            alcohol: false,
+            conditionType: 'BAIL_ORDER',
+            orderTypeDescription: '',
+            sentenceType: 'IPP',
+            issp: 'YES',
+            hdc: 'NO',
+            prarr: 'UNKNOWN',
+            pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+            offenceType: '',
+          },
+        },
+      })
+    })
+
+    it('shows PDU on the submitted CYA page', () => {
+      const page = Page.visit(InterestedPartiesCheckYourAnswersPage, { orderId: mockOrderId }, {}, 'View answers')
+
+      page.probationDeliveryUnitSection.shouldHaveItems([
+        {
+          key: "What is the Responsible Organisation's Probation Delivery Unit (PDU)",
+          value: 'County Durham and Darlington',
+        },
+      ])
+    })
+  })
+
+  context('with a variation whose start date is in the past', () => {
+    beforeEach(() => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'SUBMITTED',
+        order: {
+          type: 'VARIATION',
+          dataDictionaryVersion: 'DDV6',
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: 'ALTCOURSE_PRISON',
+            notifyingOrganisationEmail: 'notifying@organisation',
+
+            responsibleOfficerFirstName: 'officer',
+            responsibleOfficerLastName: 'name',
+            responsibleOfficerEmail: 'officer@email',
+
+            responsibleOrganisation: 'PROBATION',
+            responsibleOrganisationEmail: 'responsible@organisation',
+            responsibleOrganisationRegion: 'WALES',
+          },
+          probationDeliveryUnit: {
+            unit: 'COUNTY_DURHAM_AND_DARLINGTON',
+          },
+          monitoringConditions: {
+            startDate: new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)),
+            endDate: '2030-02-01T00:00:00Z',
+            orderType: 'CIVIL',
+            curfew: false,
+            exclusionZone: false,
+            trail: true,
+            mandatoryAttendance: false,
+            alcohol: false,
+            conditionType: 'BAIL_ORDER',
+            orderTypeDescription: '',
+            sentenceType: 'IPP',
+            issp: 'YES',
+            hdc: 'NO',
+            prarr: 'UNKNOWN',
+            pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
+            offenceType: '',
+          },
+        },
+      })
+    })
+
+    it('does not show PDU on the submitted CYA page', () => {
+      const page = Page.visit(InterestedPartiesCheckYourAnswersPage, { orderId: mockOrderId }, {}, 'View answers')
+
+      page.probationDeliveryUnitSection.shouldNotExist()
+    })
+  })
 })
