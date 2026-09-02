@@ -4,6 +4,8 @@ import * as cheerio from 'cheerio'
 import { v4 as uuidv4 } from 'uuid'
 import { createAcceptanceApp } from '../testutils/acceptanceApp'
 import FakeCemoApiClient from '../testutils/fakeCemoApiClient'
+import { getRadioOptionLabels, getSelectedRadioLabel } from '../testutils/radioOptions'
+import expectValidationError from '../testutils/assertValidationError'
 import OrderService from '../../services/orderService'
 import DeviceWearerService from '../../services/deviceWearerService'
 import TaskListService from '../../services/taskListService'
@@ -38,13 +40,7 @@ describe('Recording whether the device wearer has a fixed address', () => {
     expect(response.status).toBe(200)
 
     const $ = cheerio.load(response.text)
-    const options = $('input[name="noFixedAbode"]')
-      .map((_, input) =>
-        $(`label[for="${$(input).attr('id')}"]`)
-          .text()
-          .trim(),
-      )
-      .get()
+    const options = getRadioOptionLabels($, 'noFixedAbode')
 
     expect(options).toEqual(['Yes', 'No'])
     expect($('.govuk-error-summary')).toHaveLength(0)
@@ -61,13 +57,8 @@ describe('Recording whether the device wearer has a fixed address', () => {
     const response = await request(app).get(pagePath)
 
     const $ = cheerio.load(response.text)
-    const selected = $('input[name="noFixedAbode"]:checked')
 
-    expect(
-      $(`label[for="${selected.attr('id')}"]`)
-        .text()
-        .trim(),
-    ).toBe('No')
+    expect(getSelectedRadioLabel($, 'noFixedAbode')).toBe('No')
   })
 
   it('tells the API the device wearer has no fixed address when the user answers "No"', async () => {
@@ -83,20 +74,7 @@ describe('Recording whether the device wearer has a fixed address', () => {
     const expectedMessage = 'You must indicate whether the device wearer has a fixed abode'
     api.stubFailure('PUT', deviceWearerPath, 400, [{ field: 'noFixedAbode', error: expectedMessage }])
 
-    // A real session is used so that the flash-based POST-redirect-GET
-    // behaves exactly as it does in the browser.
-    const browser = request.agent(app)
-
-    const submission = await browser.post(pagePath).type('form').send({ action: 'continue' })
-
-    expect(submission.status).toBe(302)
-    expect(submission.headers.location).toBe(pagePath)
-
-    const redisplayed = await browser.get(pagePath)
-    const $ = cheerio.load(redisplayed.text)
-
-    expect($('.govuk-error-summary').text()).toContain(expectedMessage)
-    expect($('.govuk-error-message').text()).toContain(expectedMessage)
+    await expectValidationError(app, pagePath, { action: 'continue' }, expectedMessage)
   })
 
   it('goes on to collect an address when the device wearer has a fixed address', async () => {

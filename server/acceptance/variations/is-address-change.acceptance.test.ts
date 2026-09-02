@@ -4,6 +4,8 @@ import * as cheerio from 'cheerio'
 import { v4 as uuidv4 } from 'uuid'
 import { createAcceptanceApp } from '../testutils/acceptanceApp'
 import FakeCemoApiClient from '../testutils/fakeCemoApiClient'
+import { getRadioOptionLabels } from '../testutils/radioOptions'
+import expectValidationError from '../testutils/assertValidationError'
 import OrderService from '../../services/orderService'
 import ServiceRequestTypeService from '../../routes/variations/serviceRequestTypeService'
 import mockApiOrder from '../../../integration_tests/utils/data/ApiOrder'
@@ -32,13 +34,7 @@ describe('Recording whether the device wearer address has changed', () => {
     expect(response.status).toBe(200)
 
     const $ = cheerio.load(response.text)
-    const options = $('input[name="answer"]')
-      .map((_, input) =>
-        $(`label[for="${$(input).attr('id')}"]`)
-          .text()
-          .trim(),
-      )
-      .get()
+    const options = getRadioOptionLabels($, 'answer')
 
     expect(options).toEqual(['Yes', 'No'])
   })
@@ -46,18 +42,7 @@ describe('Recording whether the device wearer address has changed', () => {
   it('shows the user an error when no answer is given', async () => {
     const expectedMessage = 'Select Yes if the device wearer’s primary address has changed'
 
-    const browser = request.agent(app)
-
-    const submission = await browser.post(pagePath).type('form').send({ action: 'continue' })
-
-    expect(submission.status).toBe(302)
-    expect(submission.headers.location).toBe(pagePath)
-
-    const redisplayed = await browser.get(pagePath)
-    const $ = cheerio.load(redisplayed.text)
-
-    expect($('.govuk-error-summary').text()).toContain(expectedMessage)
-    expect($('.govuk-error-message').text()).toContain(expectedMessage)
+    await expectValidationError(app, pagePath, { action: 'continue' }, expectedMessage)
   })
 
   it('returns the user to the order summary when the cancel button is used', async () => {

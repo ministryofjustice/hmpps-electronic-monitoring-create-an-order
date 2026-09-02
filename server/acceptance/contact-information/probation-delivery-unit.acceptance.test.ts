@@ -4,6 +4,8 @@ import * as cheerio from 'cheerio'
 import { v4 as uuidv4 } from 'uuid'
 import { createAcceptanceApp } from '../testutils/acceptanceApp'
 import FakeCemoApiClient from '../testutils/fakeCemoApiClient'
+import { getRadioOptionLabels, getSelectedRadioLabel } from '../testutils/radioOptions'
+import expectValidationError from '../testutils/assertValidationError'
 import OrderService from '../../services/orderService'
 import ProbationDeliveryUnitService from '../../services/probationDeliveryUnitService'
 import TaskListService from '../../services/taskListService'
@@ -35,15 +37,6 @@ const stubOrderForRegion = (api: FakeCemoApiClient, region: string, dataDictiona
     interestedParties: { ...baseInterestedParties, responsibleOrganisationRegion: region },
   })
 }
-
-const getOptionLabels = ($: cheerio.CheerioAPI): string[] =>
-  $('input[name="unit"]')
-    .map((_, input) =>
-      $(`label[for="${$(input).attr('id')}"]`)
-        .text()
-        .trim(),
-    )
-    .get()
 
 // DDV5 delivery units by probation region, mirroring the previous per-region
 // Cypress coverage in probation-delivery-unit.page.draft.cy.ts.
@@ -198,7 +191,7 @@ describe('Recording the probation delivery unit', () => {
     expect(response.status).toBe(200)
 
     const $ = cheerio.load(response.text)
-    expect(getOptionLabels($)).toContain('Not able to provide this information')
+    expect(getRadioOptionLabels($, 'unit')).toContain('Not able to provide this information')
     expect($('.govuk-error-summary')).toHaveLength(0)
     expect($('.govuk-back-link')).toHaveLength(1)
   })
@@ -210,7 +203,7 @@ describe('Recording the probation delivery unit', () => {
       const response = await request(app).get(pagePath)
       const $ = cheerio.load(response.text)
 
-      expect(getOptionLabels($)).toEqual(expect.arrayContaining(expectedUnits))
+      expect(getRadioOptionLabels($, 'unit')).toEqual(expect.arrayContaining(expectedUnits))
     })
   })
 
@@ -218,7 +211,7 @@ describe('Recording the probation delivery unit', () => {
     stubOrderForRegion(api, 'WEST_MIDLANDS', 'DDV6')
 
     const westMidsResponse = await request(app).get(pagePath)
-    const westMids = getOptionLabels(cheerio.load(westMidsResponse.text))
+    const westMids = getRadioOptionLabels(cheerio.load(westMidsResponse.text), 'unit')
 
     expect(westMids).not.toContain('Staffordshire and Stoke')
     expect(westMids).toEqual(
@@ -232,7 +225,7 @@ describe('Recording the probation delivery unit', () => {
     stubOrderForRegion(api, 'GREATER_MANCHESTER', 'DDV6')
 
     const manchesterResponse = await request(app).get(pagePath)
-    const manchester = getOptionLabels(cheerio.load(manchesterResponse.text))
+    const manchester = getRadioOptionLabels(cheerio.load(manchesterResponse.text), 'unit')
 
     expect(manchester).toEqual(expect.arrayContaining(['Stockport and Tameside', 'Salford and Trafford']))
     expect(manchester).not.toContain('Salford')
@@ -246,7 +239,7 @@ describe('Recording the probation delivery unit', () => {
     const response = await request(app).get(pagePath)
     const $ = cheerio.load(response.text)
 
-    expect(getOptionLabels($)).toEqual(
+    expect(getRadioOptionLabels($, 'unit')).toEqual(
       expect.arrayContaining([
         'Buckinghamshire and Milton Keynes',
         'East Berkshire',
@@ -270,13 +263,8 @@ describe('Recording the probation delivery unit', () => {
 
     const response = await request(app).get(pagePath)
     const $ = cheerio.load(response.text)
-    const selected = $('input[name="unit"]:checked')
 
-    expect(
-      $(`label[for="${selected.attr('id')}"]`)
-        .text()
-        .trim(),
-    ).toBe('County Durham and Darlington')
+    expect(getSelectedRadioLabel($, 'unit')).toBe('County Durham and Darlington')
   })
 
   it('returns the user to the order summary when they save as draft', async () => {
@@ -296,17 +284,6 @@ describe('Recording the probation delivery unit', () => {
     const expectedMessage = "Select the Responsible Organisation's PDU"
     api.stubFailure('PUT', probationDeliveryUnitPath, 400, [{ field: 'unit', error: expectedMessage }])
 
-    const browser = request.agent(app)
-
-    const submission = await browser.post(pagePath).type('form').send({ action: 'continue' })
-
-    expect(submission.status).toBe(302)
-    expect(submission.headers.location).toBe(pagePath)
-
-    const redisplayed = await browser.get(pagePath)
-    const $ = cheerio.load(redisplayed.text)
-
-    expect($('.govuk-error-summary').text()).toContain(expectedMessage)
-    expect($('.govuk-error-message').text()).toContain(expectedMessage)
+    await expectValidationError(app, pagePath, { action: 'continue' }, expectedMessage)
   })
 })

@@ -4,6 +4,7 @@ import * as cheerio from 'cheerio'
 import { v4 as uuidv4 } from 'uuid'
 import { createAcceptanceApp } from './testutils/acceptanceApp'
 import FakeCemoApiClient from './testutils/fakeCemoApiClient'
+import { getRadioOptionLabels } from './testutils/radioOptions'
 import OrderService from '../services/orderService'
 import IsRejectionService from '../routes/is-rejection/service'
 import FeatureFlags from '../utils/featureFlags'
@@ -49,13 +50,7 @@ describe('Recording whether an order edit is because the original was rejected',
     expect(response.status).toBe(200)
 
     const $ = cheerio.load(response.text)
-    const options = $('input[name="answer"]')
-      .map((_, input) =>
-        $(`label[for="${$(input).attr('id')}"]`)
-          .text()
-          .trim(),
-      )
-      .get()
+    const options = getRadioOptionLabels($, 'answer')
 
     expect(options).toEqual(['Yes', 'No'])
   })

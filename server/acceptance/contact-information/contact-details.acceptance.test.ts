@@ -4,6 +4,7 @@ import * as cheerio from 'cheerio'
 import { v4 as uuidv4 } from 'uuid'
 import { createAcceptanceApp } from '../testutils/acceptanceApp'
 import FakeCemoApiClient from '../testutils/fakeCemoApiClient'
+import expectValidationError from '../testutils/assertValidationError'
 import OrderService from '../../services/orderService'
 import ContactDetailsService from '../../services/contactDetailsService'
 import TaskListService from '../../services/taskListService'
@@ -99,37 +100,12 @@ describe('Recording the device wearer contact details', () => {
   it('shows the user an error when no answer is given', async () => {
     const expectedMessage = 'Select Yes if the device wearer has a contact telephone number'
 
-    const browser = request.agent(app)
-
-    const submission = await browser.post(pagePath).type('form').send({ action: 'continue' })
-
-    expect(submission.status).toBe(302)
-    expect(submission.headers.location).toBe(pagePath)
-
-    const redisplayed = await browser.get(pagePath)
-    const $ = cheerio.load(redisplayed.text)
-
-    expect($('.govuk-error-summary').text()).toContain(expectedMessage)
-    expect($('.govuk-error-message').text()).toContain(expectedMessage)
+    await expectValidationError(app, pagePath, { action: 'continue' }, expectedMessage)
   })
 
   it('shows the user an error when "Yes" is answered without a contact number', async () => {
     const expectedMessage = 'Enter the device wearer’s telephone number'
 
-    const browser = request.agent(app)
-
-    const submission = await browser
-      .post(pagePath)
-      .type('form')
-      .send({ action: 'continue', phoneNumberAvailable: 'true' })
-
-    expect(submission.status).toBe(302)
-    expect(submission.headers.location).toBe(pagePath)
-
-    const redisplayed = await browser.get(pagePath)
-    const $ = cheerio.load(redisplayed.text)
-
-    expect($('.govuk-error-summary').text()).toContain(expectedMessage)
-    expect($('.govuk-error-message').text()).toContain(expectedMessage)
+    await expectValidationError(app, pagePath, { action: 'continue', phoneNumberAvailable: 'true' }, expectedMessage)
   })
 })

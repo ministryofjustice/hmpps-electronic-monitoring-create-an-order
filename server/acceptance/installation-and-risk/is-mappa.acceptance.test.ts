@@ -7,6 +7,8 @@ import * as cheerio from 'cheerio'
 import { v4 as uuidv4 } from 'uuid'
 import { createAcceptanceApp } from '../testutils/acceptanceApp'
 import FakeCemoApiClient from '../testutils/fakeCemoApiClient'
+import { getRadioOptionLabels, getSelectedRadioLabel } from '../testutils/radioOptions'
+import expectValidationError from '../testutils/assertValidationError'
 import OrderService from '../../services/orderService'
 import MappaService from '../../routes/installation-and-risk/mappa/service'
 import TaskListService from '../../services/taskListService'
@@ -60,13 +62,7 @@ describe('Recording whether the device wearer is a MAPPA offender', () => {
     expect(response.status).toBe(200)
 
     const $ = cheerio.load(response.text)
-    const options = $('input[name="isMappa"]')
-      .map((_, input) =>
-        $(`label[for="${$(input).attr('id')}"]`)
-          .text()
-          .trim(),
-      )
-      .get()
+    const options = getRadioOptionLabels($, 'isMappa')
 
     expect(options.length).toBeGreaterThanOrEqual(2)
     expect($('.govuk-error-summary')).toHaveLength(0)
@@ -81,13 +77,8 @@ describe('Recording whether the device wearer is a MAPPA offender', () => {
     const response = await request(app).get(pagePath)
 
     const $ = cheerio.load(response.text)
-    const selected = $('input[name="isMappa"]:checked')
 
-    expect(
-      $(`label[for="${selected.attr('id')}"]`)
-        .text()
-        .trim(),
-    ).toBe('Yes')
+    expect(getSelectedRadioLabel($, 'isMappa')).toBe('Yes')
   })
 
   it('goes on to collect MAPPA details when the answer is "Yes"', async () => {
@@ -120,17 +111,6 @@ describe('Recording whether the device wearer is a MAPPA offender', () => {
     const expectedMessage = 'Select Yes if the device wearer is a MAPPA offender'
     api.stubFailure('PUT', isMappaPath, 400, [{ field: 'isMappa', error: expectedMessage }])
 
-    const browser = request.agent(app)
-
-    const submission = await browser.post(pagePath).type('form').send({ action: 'continue' })
-
-    expect(submission.status).toBe(302)
-    expect(submission.headers.location).toBe(pagePath)
-
-    const redisplayed = await browser.get(pagePath)
-    const $ = cheerio.load(redisplayed.text)
-
-    expect($('.govuk-error-summary').text()).toContain(expectedMessage)
-    expect($('.govuk-error-message').text()).toContain(expectedMessage)
+    await expectValidationError(app, pagePath, { action: 'continue' }, expectedMessage)
   })
 })
