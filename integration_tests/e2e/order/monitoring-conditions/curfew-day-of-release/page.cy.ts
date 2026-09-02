@@ -19,7 +19,7 @@ context('Monitoring conditions - Curfew on day of release', () => {
 
     page.form.standardCurfewTimesField.shouldHaveAllOptions()
     page.form.standardCurfewTimesField.shouldHaveHint(
-      'the standard release-day curfew times are 19:00 to 07:00 the following day',
+      'On the day of release the standard times are 19:00 to 07:00 the next day. It can be later if the device wearer has a long way to travel',
     )
   })
 })
