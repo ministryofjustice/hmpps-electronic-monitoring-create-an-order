@@ -9,7 +9,14 @@ context('Monitoring conditions - Curfew on day of release', () => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
     cy.task('stubCemoListOrders')
-    cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+    cy.task('stubCemoGetOrder', {
+      httpStatus: 200,
+      id: mockOrderId,
+      status: 'IN_PROGRESS',
+      order: {
+        interestedParties: { notifyingOrganisation: 'PRISON' },
+      },
+    })
 
     cy.signIn()
   })

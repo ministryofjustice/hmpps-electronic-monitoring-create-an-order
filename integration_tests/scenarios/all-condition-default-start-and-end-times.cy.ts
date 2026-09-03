@@ -77,8 +77,8 @@ context('The kitchen sink', () => {
       address: /Main address/,
     }
     const curfewConditionDetails = {
-      startDate: new Date(currentDate.getFullYear(), 0, 1, 0, 0, 0),
-      endDate: new Date(currentDate.getFullYear() + 1, 0, 1, 23, 59, 0),
+      startDate: new Date(currentDate.getFullYear() + 1, 0, 1, 0, 0, 0),
+      endDate: new Date(currentDate.getFullYear() + 2, 0, 1, 23, 59, 0),
       addresses: [/Main address/],
     }
     const curfewNights = ['MONDAY']
