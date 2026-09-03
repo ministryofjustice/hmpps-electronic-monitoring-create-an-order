@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
-import { createMonitoringConditions, getMockOrder } from '../../../test/mocks/mockOrder'
+import { createInterestedParties, createMonitoringConditions, getMockOrder } from '../../../test/mocks/mockOrder'
 import RestClient from '../../data/restClient'
 import CurfewConditionsService from '../../services/curfewConditionsService'
 import CurfewConditionsController from './curfewConditionsController'
@@ -226,6 +226,7 @@ describe('CurfewConditionsController', () => {
       req.order = getMockOrder({
         id: mockId,
         monitoringConditions: createMonitoringConditions({ curfew: true }),
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }),
       })
       req.body = {
         action: 'continue',
@@ -250,6 +251,37 @@ describe('CurfewConditionsController', () => {
       await controller.update(req, res, next)
 
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/curfew/day-of-release`)
+    })
+
+    it('Should redirect to curfew address boundary page when order is not eligible for curfew day of release', async () => {
+      req.order = getMockOrder({
+        id: mockId,
+        monitoringConditions: createMonitoringConditions({ curfew: true }),
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PROBATION' }),
+      })
+      req.body = {
+        action: 'continue',
+        address: ['PRIMARY', 'SECONDARY'],
+        startDate: {
+          day: '11',
+          month: '09',
+          year: '2024',
+          hours: '00',
+          minutes: '00',
+        },
+        endDate: {
+          day: '11',
+          month: '09',
+          year: '2025',
+          hours: '23',
+          minutes: '59',
+        },
+      }
+      mockCurfewReleaseDateService.update = jest.fn().mockResolvedValue(undefined)
+
+      await controller.update(req, res, next)
+
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/curfew/additional-details`)
     })
 
     it('Should redirect back to summary page', async () => {
