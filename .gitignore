@@ -118,6 +118,8 @@ data/*.json
 .yarn/install-state.gz
 .pnp.*
 
+# worktrees
+.worktrees
 
 .idea
 .vscode

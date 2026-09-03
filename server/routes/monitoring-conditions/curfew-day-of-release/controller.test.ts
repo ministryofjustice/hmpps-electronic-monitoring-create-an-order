@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
-import { getMockOrder } from '../../../../test/mocks/mockOrder'
+import { createInterestedParties, getMockOrder } from '../../../../test/mocks/mockOrder'
 import { validationErrors } from '../../../constants/validationErrors'
 import RestClient from '../../../data/restClient'
 import CurfewReleaseDateService from '../../../services/curfewReleaseDateService'
@@ -26,7 +26,11 @@ describe('curfew day of release controller', () => {
     curfewReleaseDateService = new CurfewReleaseDateService(mockRestClient) as jest.Mocked<CurfewReleaseDateService>
     curfewReleaseDateService.update.mockResolvedValue(undefined)
     controller = new CurfewDayOfReleaseController(curfewReleaseDateService)
-    req = createMockRequest()
+    req = createMockRequest({
+      order: getMockOrder({
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }),
+      }),
+    })
     req.flash = jest.fn().mockReturnValue([])
     res = createMockResponse()
     next = jest.fn()
@@ -44,6 +48,7 @@ describe('curfew day of release controller', () => {
   it('prefills the saved answer when the standard curfew times are already saved', async () => {
     req = createMockRequest({
       order: getMockOrder({
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }),
         curfewReleaseDateConditions: {
           startTime: '19:00:00',
           endTime: '07:00:00',
@@ -60,6 +65,20 @@ describe('curfew day of release controller', () => {
       'pages/order/monitoring-conditions/curfew-day-of-release',
       expect.objectContaining({ standardCurfewTimes: { value: 'YES' } }),
     )
+  })
+
+  it('redirects to the curfew address boundary page when the order is not eligible for curfew day of release', async () => {
+    req = createMockRequest({
+      order: getMockOrder({
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PROBATION' }),
+      }),
+    })
+    req.flash = jest.fn().mockReturnValue([])
+
+    await controller.view(req, res, next)
+
+    expect(res.redirect).toHaveBeenCalledWith(`/order/${req.order!.id}/monitoring-conditions/curfew/additional-details`)
+    expect(res.render).not.toHaveBeenCalled()
   })
 
   describe('update', () => {

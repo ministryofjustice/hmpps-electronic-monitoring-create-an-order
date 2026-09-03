@@ -10,6 +10,9 @@ const mockOrderId = uuidv4()
 
 const mockSubmittedCurfewReleaseDate = {
   ...mockApiOrder('SUBMITTED'),
+  interestedParties: {
+    notifyingOrganisation: 'PRISON',
+  },
   curfewReleaseDateConditions: {
     curfewAddress: 'SECONDARY',
     orderId: mockOrderId,
@@ -53,6 +56,9 @@ const mockInProgressCurfewReleaseDate = {
 
 const mockEmptyCurfewReleaseDate = {
   ...mockApiOrder('SUBMITTED'),
+  interestedParties: {
+    notifyingOrganisation: 'PRISON',
+  },
   monitoringConditions: {
     orderType: null,
     acquisitiveCrime: null,
@@ -136,7 +142,16 @@ context('Curfew monitoring - release date', () => {
 
   context('Draft order', () => {
     beforeEach(() => {
-      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+          },
+        },
+      })
     })
 
     it('Should display the form', () => {
