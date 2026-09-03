@@ -89,8 +89,8 @@ context('Monitoring type list flow', () => {
   ])
   const enforcementZone = {
     zoneType: 'Exclusion zone',
-    startDate: new Date(currentDate.getFullYear(), 4, 1),
-    endDate: new Date(currentDate.getFullYear() + 1, 4, 1, 23, 59, 0),
+    startDate: new Date(currentDate.getFullYear() + 1, 4, 1),
+    endDate: new Date(currentDate.getFullYear() + 2, 4, 1, 23, 59, 0),
     description: 'A test description: Lorem ipsum dolor sit amet...',
     duration: 'A test duration: one, two, three...',
     name: 'Test Zone',

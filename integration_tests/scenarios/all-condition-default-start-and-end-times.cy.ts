@@ -98,8 +98,8 @@ context('The kitchen sink', () => {
     ])
     const primaryEnforcementZoneDetails = {
       zoneType: 'Exclusion zone',
-      startDate: new Date(currentDate.getFullYear(), 4, 1),
-      endDate: new Date(currentDate.getFullYear() + 1, 4, 1, 23, 59, 0),
+      startDate: new Date(currentDate.getFullYear() + 1, 4, 1),
+      endDate: new Date(currentDate.getFullYear() + 2, 4, 1, 23, 59, 0),
       uploadFile: files.licence,
       description: 'A test description: Lorum ipsum dolar sit amet...',
       duration: 'A test duration: one, two, three...',
@@ -107,8 +107,8 @@ context('The kitchen sink', () => {
     }
     const primaryRestrictionZoneDetails = {
       zoneType: 'Restriction zone',
-      startDate: new Date(currentDate.getFullYear(), 4, 1),
-      endDate: new Date(currentDate.getFullYear() + 1, 4, 1, 23, 59, 0),
+      startDate: new Date(currentDate.getFullYear() + 1, 4, 1),
+      endDate: new Date(currentDate.getFullYear() + 2, 4, 1, 23, 59, 0),
       uploadFile: files.licence,
       description: 'A test description: Lorum ipsum dolar sit amet...',
       duration: 'A test duration: one, two, three...',
@@ -287,10 +287,10 @@ context('The kitchen sink', () => {
             offence: '',
             offence_additional_details: 'PFA: Avon and Somerset Constabulary',
             offence_date: '',
-            order_end: formatAsFmsDateTime(trailMonitoringOrder.endDate, 23, 59),
+            order_end: formatAsFmsDateTime(primaryRestrictionZoneDetails.endDate, 23, 59),
             order_id: orderId,
             order_request_type: 'New Order',
-            order_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
+            order_start: formatAsFmsDateTime(trailMonitoringOrder.startDate, 0, 0),
             order_type: 'Post Release',
             order_type_description: '',
             order_type_detail: '',
@@ -329,7 +329,7 @@ context('The kitchen sink', () => {
             conditional_release_end_time: '07:00:00',
             reason_for_order_ending_early: '',
             business_unit: '',
-            service_end_date: formatAsFmsDate(trailMonitoringOrder.endDate),
+            service_end_date: formatAsFmsDate(primaryEnforcementZoneDetails.endDate),
             curfew_description: '',
             curfew_start: formatAsFmsDateTime(curfewConditionDetails.startDate, 0, 0),
             curfew_end: formatAsFmsDateTime(curfewConditionDetails.endDate, 23, 59),
