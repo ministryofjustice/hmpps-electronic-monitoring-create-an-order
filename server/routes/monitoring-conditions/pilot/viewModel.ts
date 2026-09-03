@@ -134,7 +134,9 @@ const getItems = (
         text: 'They are not part of any of these pathfinders or programmes',
         value: 'UNKNOWN',
         conditional: {
-          html: 'To be eligible for tagging the device wearer must either be part of a pathfinder or programme or have Alcohol Monitoring on Licence (AML) as a licence condition.',
+          html: isSentencingAct
+            ? ''
+            : 'To be eligible for tagging the device wearer must either be part of a pathfinder or programme or have Alcohol Monitoring on Licence (AML) as a licence condition.',
         },
       },
     ]
