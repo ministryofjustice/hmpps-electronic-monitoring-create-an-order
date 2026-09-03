@@ -5,6 +5,7 @@ import attendancePageContent from './pages/attendance'
 import contactDetailsPageContent from './pages/contactDetails'
 import curfewConditionsPageContent from './pages/curfewConditions'
 import curfewAdditionalDetailsPageContent from './pages/curfewAdditionalDetails'
+import curfewDayOfReleasePageContent from './pages/curfewDayOfRelease'
 import curfewReleaseDatePageContent from './pages/curfewReleaseDate'
 import curfewTimeTablePageContent from './pages/curfewTimetable'
 import deleteConfirmPageContent from './pages/deleteConfirm'
@@ -76,6 +77,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       contactDetails: contactDetailsPageContent,
       curfewConditions: curfewConditionsPageContent,
       curfewAdditionalDetails: curfewAdditionalDetailsPageContent,
+      curfewDayOfRelease: curfewDayOfReleasePageContent,
       curfewReleaseDate: curfewReleaseDatePageContent,
       curfewTimetable: curfewTimeTablePageContent,
       deleteConfirm: deleteConfirmPageContent,

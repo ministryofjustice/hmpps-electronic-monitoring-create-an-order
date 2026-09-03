@@ -67,6 +67,9 @@ interface ValidationErrors {
     startDateTime: DateTimeErrorMessages
     endDateTime: DateTimeErrorMessages
   }
+  curfewDayOfRelease: {
+    standardCurfewTimesRequired: string
+  }
   curfewAdditionalDetails: {
     changeCurfewDetailsRequired: string
     curfewDetailsRequired: string
@@ -320,6 +323,9 @@ const validationErrors: ValidationErrors = {
   curfewConditions: {
     startDateTime: getMonitoringConditionStartDateTimeErrorMessages('curfew monitoring'),
     endDateTime: getMonitoringConditionEndDateTimeErrorMessages('curfew monitoring', true),
+  },
+  curfewDayOfRelease: {
+    standardCurfewTimesRequired: "Select 'Yes' if you want to use the standard curfew times on the day of release",
   },
   curfewAdditionalDetails: {
     changeCurfewDetailsRequired: "Select 'Yes' if you want to change the standard curfew address boundary",

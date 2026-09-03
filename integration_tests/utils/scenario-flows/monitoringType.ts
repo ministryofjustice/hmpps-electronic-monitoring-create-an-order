@@ -19,6 +19,7 @@ export default function fillInMonitoringTypeWith(
     curfewConditionDetails = undefined,
     curfewReleaseDetails = undefined,
     curfewTimetable = undefined,
+    curfewDayOfReleaseAnswer = 'No',
     enforcementZoneDetails = undefined,
     enforcementZoneListItemDetails = undefined,
     alcoholMonitoringDetails = undefined,
@@ -40,7 +41,12 @@ export default function fillInMonitoringTypeWith(
   }
 
   if (curfewConditionDetails) {
-    fillInCurfewOrderDetailsWith({ curfewConditionDetails, curfewReleaseDetails, curfewTimetable })
+    fillInCurfewOrderDetailsWith({
+      curfewConditionDetails,
+      curfewReleaseDetails,
+      curfewTimetable,
+      dayOfReleaseAnswer: curfewDayOfReleaseAnswer,
+    })
   }
 
   if (enforcementZoneDetails) {

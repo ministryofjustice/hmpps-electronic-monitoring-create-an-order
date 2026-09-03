@@ -47,7 +47,7 @@ const PAGES = {
   monitoringConditions: 'MONITORING_CONDITIONS',
   installationAddress: 'INSTALLATION_ADDRESS',
   curfewConditions: 'CURFEW_CONDITIONS',
-  curfewReleaseDate: 'CURFEW_RELEASE_DATE',
+  curfewDayOfRelease: 'CURFEW_DAY_OF_RELEASE',
   curfewAdditionalDetails: 'CURFEW_ADDITIONAL_DETAILS',
   curfewTimetable: 'CURFEW_TIMETABLE',
   enforcementZoneMonitoring: 'ENFORCEMENT_ZONE_MONITORING',
@@ -371,8 +371,8 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.curfewReleaseDate,
-      path: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE,
+      name: PAGES.curfewDayOfRelease,
+      path: paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE,
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.curfew && order.curfewReleaseDateConditions?.releaseDate === undefined,
         STATES.cantBeStarted,

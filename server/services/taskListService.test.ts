@@ -240,9 +240,9 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
     })
 
-    it('should return curfew timetable if current page is curfew release date', () => {
+    it('should return curfew timetable if current page is curfew day of release', () => {
       // Given
-      const currentPage = 'CURFEW_RELEASE_DATE'
+      const currentPage = 'CURFEW_DAY_OF_RELEASE'
       const taskListService = new TaskListService()
       const order = getMockOrder({
         monitoringConditions: createMonitoringConditions({
@@ -257,7 +257,7 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id))
     })
 
-    it('should return curfew release date if current page is curfew conitions', () => {
+    it('should return curfew day of release if current page is curfew conitions', () => {
       // Given
       const currentPage = 'CURFEW_CONDITIONS'
       const taskListService = new TaskListService()
@@ -271,7 +271,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE.replace(':orderId', order.id))
     })
 
     // skipped test as currently the additonal details page is disabled
@@ -783,6 +783,19 @@ describe('TaskListService', () => {
       const result = taskListService.getNextTaskPath(tasks, mockOrderId)
 
       expect(result).toBe(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', mockOrderId))
+    })
+  })
+
+  describe('getTasks', () => {
+    it('links the curfew release day task to the curfew day of release question page', () => {
+      const taskListService = new TaskListService()
+      const order = getMockOrder({
+        monitoringConditions: createMonitoringConditions({ curfew: true }),
+      })
+
+      const tasks = taskListService.getTasks(order)
+
+      expect(tasks.map(task => task.path)).toContain(paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE)
     })
   })
 })

@@ -4,6 +4,7 @@ import { isValidationResult } from '../../models/Validation'
 import CurfewReleaseDateService from '../../services/curfewReleaseDateService'
 import CurfewReleaseDateFormDataModel from '../../models/form-data/curfewReleaseDate'
 import curfewReleaseDateViewModel from '../../models/view-models/curfewReleaseDate'
+import { serialiseTime } from '../../utils/utils'
 
 export default class CurfewReleaseDateController {
   constructor(private readonly curfewReleaseDateService: CurfewReleaseDateService) {}
@@ -24,7 +25,11 @@ export default class CurfewReleaseDateController {
     const updateResult = await this.curfewReleaseDateService.update({
       accessToken: res.locals.user.token,
       order,
-      data: formData,
+      data: {
+        startTime: serialiseTime(formData.curfewTimesStartHours, formData.curfewTimesStartMinutes),
+        endTime: serialiseTime(formData.curfewTimesEndHours, formData.curfewTimesEndMinutes),
+        curfewAddress: formData.curfewAddress,
+      },
     })
 
     if (isValidationResult(updateResult)) {

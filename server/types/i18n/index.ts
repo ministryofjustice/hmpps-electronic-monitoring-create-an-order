@@ -5,6 +5,7 @@ import ConfirmationPageContent from './pages/confirmationPage'
 import ContactDetailsPageContent from './pages/contactDetails'
 import CurfewAdditionalDetailsPageContent from './pages/curfewAdditionalDetails'
 import CurfewConditionsPageContent from './pages/curfewConditions'
+import CurfewDayOfReleasePageContent from './pages/curfewDayOfRelease'
 import CurfewReleaseDatePageContent from './pages/curfewReleaseDate'
 import CurfewTimeTablePageContent from './pages/curfewTimeTable'
 import DeviceWearerPageContent from './pages/deviceWearer'
@@ -51,6 +52,7 @@ type I18n = {
     contactDetails: ContactDetailsPageContent
     curfewConditions: CurfewConditionsPageContent
     curfewAdditionalDetails: CurfewAdditionalDetailsPageContent
+    curfewDayOfRelease: CurfewDayOfReleasePageContent
     curfewReleaseDate: CurfewReleaseDatePageContent
     curfewTimetable: CurfewTimeTablePageContent
     deleteConfirm: ConfirmationPageContent

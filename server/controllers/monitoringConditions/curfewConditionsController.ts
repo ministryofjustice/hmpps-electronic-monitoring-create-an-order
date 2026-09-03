@@ -37,7 +37,7 @@ export default class CurfewConditionsController {
     }
 
     if (formData.action === 'continue') {
-      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', orderId))
+      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE.replace(':orderId', orderId))
       return
     }
 
