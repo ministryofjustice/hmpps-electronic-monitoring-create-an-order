@@ -1,5 +1,6 @@
-import { CurfewReleaseDate } from '../../../models/CurfewReleaseDate'
-import { serialiseTime } from '../../../utils/utils'
+import { CurfewReleaseDate } from '../models/CurfewReleaseDate'
+import { CurfewSchedule } from '../models/CurfewTimetable'
+import { serialiseTime } from './utils'
 
 const startHours = '19'
 const startMinutes = '00'
@@ -17,5 +18,15 @@ export const STANDARD_CURFEW_TIMES = {
 
 export const isStandardCurfewTimes = (conditions: CurfewReleaseDate | null | undefined): boolean =>
   conditions?.startTime === STANDARD_CURFEW_TIMES.startTime && conditions?.endTime === STANDARD_CURFEW_TIMES.endTime
+
+const DAYS_OF_WEEK = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
+
+export const createStandardCurfewSchedule = (curfewAddress: string | null | undefined): CurfewSchedule[] =>
+  DAYS_OF_WEEK.map(dayOfWeek => ({
+    dayOfWeek,
+    curfewAddress: curfewAddress ?? '',
+    startTime: STANDARD_CURFEW_TIMES.startTime,
+    endTime: STANDARD_CURFEW_TIMES.endTime,
+  }))
 
 export default STANDARD_CURFEW_TIMES

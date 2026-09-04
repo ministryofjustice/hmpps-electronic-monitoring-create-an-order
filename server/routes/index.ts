@@ -109,7 +109,7 @@ export default function routes({
   const contactDetailsController = new ContactDetailsController(contactDetailsService, taskListService)
   const curfewReleaseDateController = new CurfewReleaseDateController(curfewReleaseDateService)
   const curfewDayOfReleaseController = new CurfewDayOfReleaseController(curfewReleaseDateService)
-  const curfewTimetableQuestionController = new CurfewTimetableQuestionController()
+  const curfewTimetableQuestionController = new CurfewTimetableQuestionController(curfewTimetableService)
   const curfewTimetableController = new CurfewTimetableController(curfewTimetableService)
   const curfewConditionsController = new CurfewConditionsController(curfewConditionsService)
   const curfewAdditionalDetailsController = new CurfewAdditionalDetailsController(curfewAdditionalDetailsService)

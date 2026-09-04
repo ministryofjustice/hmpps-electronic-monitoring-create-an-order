@@ -3,7 +3,7 @@ import { ViewModel } from '../../../models/view-models/utils'
 import { ValidationResult } from '../../../models/Validation'
 import { createGovukErrorSummary } from '../../../utils/errors'
 import { getError } from '../../../utils/utils'
-import { isStandardCurfewTimes } from './standardCurfewTimes'
+import { isStandardCurfewTimes } from '../../../utils/standardCurfewTimes'
 
 export type CurfewDayOfReleaseViewModel = ViewModel<{
   standardCurfewTimes: string
