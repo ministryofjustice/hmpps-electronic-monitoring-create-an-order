@@ -21,6 +21,25 @@ export const isStandardCurfewTimes = (conditions: CurfewReleaseDate | null | und
 
 const DAYS_OF_WEEK = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
 
+export const isStandardCurfewSchedule = (
+  schedule: CurfewSchedule[] | null | undefined,
+  curfewAddress: string | null | undefined,
+): boolean => {
+  if (!schedule || schedule.length !== DAYS_OF_WEEK.length) {
+    return false
+  }
+
+  return DAYS_OF_WEEK.every(dayOfWeek => {
+    const entry = schedule.find(item => item.dayOfWeek === dayOfWeek)
+    return (
+      entry !== undefined &&
+      entry.startTime === STANDARD_CURFEW_TIMES.startTime &&
+      entry.endTime === STANDARD_CURFEW_TIMES.endTime &&
+      entry.curfewAddress === curfewAddress
+    )
+  })
+}
+
 export const createStandardCurfewSchedule = (curfewAddress: string | null | undefined): CurfewSchedule[] =>
   DAYS_OF_WEEK.map(dayOfWeek => ({
     dayOfWeek,

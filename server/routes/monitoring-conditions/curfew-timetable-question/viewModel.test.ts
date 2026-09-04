@@ -1,5 +1,6 @@
-import { getMockOrder } from '../../../../test/mocks/mockOrder'
+import { getMockOrder, createCurfewConditions } from '../../../../test/mocks/mockOrder'
 import { validationErrors } from '../../../constants/validationErrors'
+import { createStandardCurfewSchedule } from '../../../utils/standardCurfewTimes'
 import constructModel from './viewModel'
 
 describe('curfew timetable question view model', () => {
@@ -10,6 +11,33 @@ describe('curfew timetable question view model', () => {
       standardCurfewTimes: { value: '' },
       errorSummary: null,
     })
+  })
+
+  it('pre-selects YES when the saved timetable matches the standard curfew times and address', () => {
+    const address = '10 Downing Street, London, SW1A 2AA'
+    const order = getMockOrder({
+      curfewConditions: createCurfewConditions({ curfewAddress: address }),
+      curfewTimeTable: createStandardCurfewSchedule(address),
+    })
+
+    const model = constructModel(order, [])
+
+    expect(model.standardCurfewTimes).toEqual({ value: 'YES' })
+  })
+
+  it('pre-selects NO when the saved timetable is a bespoke schedule', () => {
+    const address = 'Some address'
+    const bespokeSchedule = createStandardCurfewSchedule(address).map((entry, index) =>
+      index === 0 ? { ...entry, startTime: '20:00:00', endTime: '06:00:00' } : entry,
+    )
+    const order = getMockOrder({
+      curfewConditions: createCurfewConditions({ curfewAddress: address }),
+      curfewTimeTable: bespokeSchedule,
+    })
+
+    const model = constructModel(order, [])
+
+    expect(model.standardCurfewTimes).toEqual({ value: 'NO' })
   })
 
   it('adds the validation error to the question and the error summary', () => {

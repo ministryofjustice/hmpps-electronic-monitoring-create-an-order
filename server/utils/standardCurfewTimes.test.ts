@@ -1,5 +1,11 @@
 import { CurfewReleaseDate } from '../models/CurfewReleaseDate'
-import { STANDARD_CURFEW_TIMES, isStandardCurfewTimes, createStandardCurfewSchedule } from './standardCurfewTimes'
+import { CurfewSchedule } from '../models/CurfewTimetable'
+import {
+  STANDARD_CURFEW_TIMES,
+  isStandardCurfewTimes,
+  isStandardCurfewSchedule,
+  createStandardCurfewSchedule,
+} from './standardCurfewTimes'
 
 const createConditions = (overrides: Partial<CurfewReleaseDate> = {}): CurfewReleaseDate => ({
   curfewAddress: null,
@@ -31,6 +37,44 @@ describe('standard curfew times', () => {
     it('is false when no times are saved', () => {
       expect(isStandardCurfewTimes(null)).toBe(false)
       expect(isStandardCurfewTimes(undefined)).toBe(false)
+    })
+  })
+
+  describe('isStandardCurfewSchedule', () => {
+    const address = '10 Downing Street, London, SW1A 2AA'
+    const standardSchedule: CurfewSchedule[] = createStandardCurfewSchedule(address)
+
+    it('is true when all 7 days match the standard times and address', () => {
+      expect(isStandardCurfewSchedule(standardSchedule, address)).toBe(true)
+    })
+
+    it('is false when a day has a different start time', () => {
+      const schedule = standardSchedule.map((entry, index) =>
+        index === 0 ? { ...entry, startTime: '20:00:00' } : entry,
+      )
+      expect(isStandardCurfewSchedule(schedule, address)).toBe(false)
+    })
+
+    it('is false when a day has a different end time', () => {
+      const schedule = standardSchedule.map((entry, index) => (index === 0 ? { ...entry, endTime: '08:00:00' } : entry))
+      expect(isStandardCurfewSchedule(schedule, address)).toBe(false)
+    })
+
+    it('is false when a day has a different address than the given curfew address', () => {
+      const schedule = standardSchedule.map((entry, index) =>
+        index === 0 ? { ...entry, curfewAddress: 'Other address' } : entry,
+      )
+      expect(isStandardCurfewSchedule(schedule, address)).toBe(false)
+    })
+
+    it('is false when a day of the week is missing', () => {
+      expect(isStandardCurfewSchedule(standardSchedule.slice(1), address)).toBe(false)
+    })
+
+    it('is false when there is no schedule', () => {
+      expect(isStandardCurfewSchedule(null, address)).toBe(false)
+      expect(isStandardCurfewSchedule(undefined, address)).toBe(false)
+      expect(isStandardCurfewSchedule([], address)).toBe(false)
     })
   })
 
