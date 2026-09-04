@@ -3,20 +3,22 @@ import { ViewModel } from '../../../models/view-models/utils'
 import { ValidationResult } from '../../../models/Validation'
 import { createGovukErrorSummary } from '../../../utils/errors'
 import { getError } from '../../../utils/utils'
-import { isStandardCurfewTimes } from '../../../utils/standardCurfewTimes'
+import { isStandardCurfewSchedule } from '../../../utils/standardCurfewTimes'
 
-export type CurfewDayOfReleaseViewModel = ViewModel<{
+export type CurfewTimetableQuestionViewModel = ViewModel<{
   standardCurfewTimes: string
 }>
 
-const constructModel = (order: Order, errors: ValidationResult): CurfewDayOfReleaseViewModel => {
-  const releaseDayTimes = order.curfewReleaseDateConditions
+const constructModel = (order: Order, errors: ValidationResult): CurfewTimetableQuestionViewModel => {
+  const { curfewTimeTable } = order
   let standardCurfewTimesAnswer = ''
-  if (releaseDayTimes) {
-    standardCurfewTimesAnswer = isStandardCurfewTimes(releaseDayTimes) ? 'YES' : 'NO'
+  if (curfewTimeTable && curfewTimeTable.length) {
+    standardCurfewTimesAnswer = isStandardCurfewSchedule(curfewTimeTable, order.curfewConditions?.curfewAddress)
+      ? 'YES'
+      : 'NO'
   }
 
-  const model: CurfewDayOfReleaseViewModel = {
+  const model: CurfewTimetableQuestionViewModel = {
     standardCurfewTimes: { value: standardCurfewTimesAnswer },
     errorSummary: null,
   }

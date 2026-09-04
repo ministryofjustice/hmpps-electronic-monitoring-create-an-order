@@ -8,6 +8,7 @@ import CurfewConditionsPageContent from './pages/curfewConditions'
 import CurfewDayOfReleasePageContent from './pages/curfewDayOfRelease'
 import CurfewReleaseDatePageContent from './pages/curfewReleaseDate'
 import CurfewTimeTablePageContent from './pages/curfewTimeTable'
+import CurfewTimetableQuestionPageContent from './pages/curfewTimetableQuestion'
 import DeviceWearerPageContent from './pages/deviceWearer'
 import EnforcementZonePageContent from './pages/enforcementZone'
 import HavePhotoPageContent from './pages/havePhoto'
@@ -55,6 +56,7 @@ type I18n = {
     curfewDayOfRelease: CurfewDayOfReleasePageContent
     curfewReleaseDate: CurfewReleaseDatePageContent
     curfewTimetable: CurfewTimeTablePageContent
+    curfewTimetableQuestion: CurfewTimetableQuestionPageContent
     deleteConfirm: ConfirmationPageContent
     deviceWearer: DeviceWearerPageContent
     editConfirm: ConfirmationPageContent

@@ -96,6 +96,7 @@ const paths = {
     CURFEW_RELEASE_DATE: '/order/:orderId/monitoring-conditions/curfew/release-date',
     CURFEW_CONDITIONS: '/order/:orderId/monitoring-conditions/curfew/conditions',
     CURFEW_ADDITIONAL_DETAILS: '/order/:orderId/monitoring-conditions/curfew/additional-details',
+    CURFEW_TIMETABLE_QUESTION: '/order/:orderId/monitoring-conditions/curfew/timetable-question',
     CURFEW_TIMETABLE: '/order/:orderId/monitoring-conditions/curfew/timetable',
     CHECK_YOUR_ANSWERS: '/order/:orderId/monitoring-conditions/check-your-answers',
     CHECK_YOUR_ANSWERS_VERSION: '/order/:orderId/version/:versionId/monitoring-conditions/check-your-answers',
