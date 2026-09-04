@@ -62,7 +62,14 @@ context('Monitoring conditions - Curfew timetable question - submission', () => 
       httpStatus: 200,
       id: mockOrderId,
       subPath: apiPath,
-      response: [],
+      response: [
+        {
+          dayOfWeek: 'MONDAY',
+          curfewAddress: mockOrder.curfewConditions.curfewAddress,
+          startTime: '19:00:00',
+          endTime: '07:00:00',
+        },
+      ],
     })
 
     const page = Page.visit(CurfewTimetableQuestionPage, { orderId: mockOrderId })
@@ -119,5 +126,76 @@ context('Monitoring conditions - Curfew timetable question - submission', () => 
     }).should('be.true')
 
     Page.verifyOnPage(TypesOfMonitoringNeededPage)
+  })
+
+  it('should save the standard 19:00-07:00 curfew timetable and return to the order summary when I select yes and save as draft', () => {
+    cy.task('stubCemoSubmitOrder', {
+      httpStatus: 200,
+      id: mockOrderId,
+      subPath: apiPath,
+      response: [
+        {
+          dayOfWeek: 'MONDAY',
+          curfewAddress: mockOrder.curfewConditions.curfewAddress,
+          startTime: '19:00:00',
+          endTime: '07:00:00',
+        },
+      ],
+    })
+
+    const page = Page.visit(CurfewTimetableQuestionPage, { orderId: mockOrderId })
+
+    page.form.standardCurfewTimesField.set('Yes')
+    page.form.saveAsDraftButton.click()
+
+    cy.task('stubCemoVerifyRequestReceived', {
+      uri: `/orders/${mockOrderId}${apiPath}`,
+      body: [
+        {
+          dayOfWeek: 'MONDAY',
+          curfewAddress: mockOrder.curfewConditions.curfewAddress,
+          startTime: '19:00:00',
+          endTime: '07:00:00',
+        },
+        {
+          dayOfWeek: 'TUESDAY',
+          curfewAddress: mockOrder.curfewConditions.curfewAddress,
+          startTime: '19:00:00',
+          endTime: '07:00:00',
+        },
+        {
+          dayOfWeek: 'WEDNESDAY',
+          curfewAddress: mockOrder.curfewConditions.curfewAddress,
+          startTime: '19:00:00',
+          endTime: '07:00:00',
+        },
+        {
+          dayOfWeek: 'THURSDAY',
+          curfewAddress: mockOrder.curfewConditions.curfewAddress,
+          startTime: '19:00:00',
+          endTime: '07:00:00',
+        },
+        {
+          dayOfWeek: 'FRIDAY',
+          curfewAddress: mockOrder.curfewConditions.curfewAddress,
+          startTime: '19:00:00',
+          endTime: '07:00:00',
+        },
+        {
+          dayOfWeek: 'SATURDAY',
+          curfewAddress: mockOrder.curfewConditions.curfewAddress,
+          startTime: '19:00:00',
+          endTime: '07:00:00',
+        },
+        {
+          dayOfWeek: 'SUNDAY',
+          curfewAddress: mockOrder.curfewConditions.curfewAddress,
+          startTime: '19:00:00',
+          endTime: '07:00:00',
+        },
+      ],
+    }).should('be.true')
+
+    Page.verifyOnPage(OrderSummaryPage)
   })
 })

@@ -166,8 +166,7 @@ describe('CurfewConditionsController', () => {
     })
 
     describe('Update curfew additional details', () => {
-      // test currently fails as this page is disabled
-      it.skip('Should redirect to next page when action is continue', async () => {
+      it('Should redirect to the curfew timetable question page when action is continue', async () => {
         req.order = getMockOrder({
           id: mockId,
           monitoringConditions: createMonitoringConditions({ curfew: true }),
@@ -180,7 +179,7 @@ describe('CurfewConditionsController', () => {
 
         await controller.update(req, res, next)
 
-        expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/curfew/timetable`)
+        expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/curfew/timetable-question`)
       })
 
       it('Should redirect to summary when action is back', async () => {

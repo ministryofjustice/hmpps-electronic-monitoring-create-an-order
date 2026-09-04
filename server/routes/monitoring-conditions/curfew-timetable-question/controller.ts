@@ -1,7 +1,7 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
 import { validationErrors } from '../../../constants/validationErrors'
-import { ValidationResult } from '../../../models/Validation'
+import { isValidationListResult, ValidationResult } from '../../../models/Validation'
 import CurfewTimetableService from '../../../services/curfewTimetableService'
 import { createStandardCurfewSchedule } from '../../../utils/standardCurfewTimes'
 import { CurfewTimetableQuestionFormDataModel } from './formModel'
@@ -44,11 +44,27 @@ export default class CurfewTimetableQuestionController {
       return
     }
 
-    await this.curfewTimetableService.update({
+    const schedule = createStandardCurfewSchedule(order.curfewConditions?.curfewAddress)
+    const updateResult = await this.curfewTimetableService.update({
       accessToken: res.locals.user.token,
       orderId: order.id,
-      data: createStandardCurfewSchedule(order.curfewConditions?.curfewAddress),
+      data: schedule,
     })
+
+    if (isValidationListResult(updateResult)) {
+      const validationResult = schedule.map((item, index) => ({
+        ...item,
+        errors: updateResult.filter(it => it.index === index).at(0)?.errors ?? [],
+      }))
+      req.flash('validationErrors', validationResult)
+      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id))
+      return
+    }
+
+    if (formData.action !== 'continue') {
+      res.redirect(res.locals.orderSummaryUri)
+      return
+    }
 
     res.redirect(
       paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', order.id),

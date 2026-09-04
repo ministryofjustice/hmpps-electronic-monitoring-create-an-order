@@ -24,7 +24,9 @@ describe('curfew timetable question controller', () => {
       agent: { timeout: 0 },
     }) as jest.Mocked<RestClient>
     curfewTimetableService = new CurfewTimetableService(mockRestClient) as jest.Mocked<CurfewTimetableService>
-    curfewTimetableService.update.mockResolvedValue([])
+    curfewTimetableService.update.mockResolvedValue([
+      { dayOfWeek: 'MONDAY', curfewAddress: '', startTime: '', endTime: '' },
+    ])
     controller = new CurfewTimetableQuestionController(curfewTimetableService)
     req = createMockRequest({
       order: getMockOrder({
@@ -148,6 +150,47 @@ describe('curfew timetable question controller', () => {
       expect(res.redirect).toHaveBeenCalledWith(
         `/order/${order.id}/monitoring-conditions/order-type-description/types-of-monitoring-needed`,
       )
+    })
+
+    it('saves the standard 19:00-07:00 curfew timetable and returns to the order summary when the answer is yes and the action is not continue', async () => {
+      const order = getMockOrder({
+        curfewConditions: {
+          startDate: null,
+          endDate: null,
+          curfewAddress: '10 Downing Street, London, SW1A 2AA',
+          curfewAdditionalDetails: '',
+        },
+      })
+      req = createMockRequest({ order, body: { action: 'back', standardCurfewTimes: 'YES' } })
+      req.flash = jest.fn()
+
+      await controller.update(req, res, next)
+
+      expect(curfewTimetableService.update).toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith(res.locals.orderSummaryUri)
+    })
+
+    it('flashes the errors and redirects to the manual curfew timetable page when the API rejects the standard curfew times', async () => {
+      const order = getMockOrder({
+        curfewConditions: {
+          startDate: null,
+          endDate: null,
+          curfewAddress: '10 Downing Street, London, SW1A 2AA',
+          curfewAdditionalDetails: '',
+        },
+      })
+      const listValidationResult = [{ index: 0, errors: [{ error: 'some error', field: 'startTime' }] }]
+      curfewTimetableService.update.mockResolvedValue(listValidationResult)
+      req = createMockRequest({ order, body: { action: 'continue', standardCurfewTimes: 'YES' } })
+      req.flash = jest.fn()
+
+      await controller.update(req, res, next)
+
+      expect(req.flash).toHaveBeenCalledWith(
+        'validationErrors',
+        expect.arrayContaining([expect.objectContaining({ errors: [{ error: 'some error', field: 'startTime' }] })]),
+      )
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/monitoring-conditions/curfew/timetable`)
     })
   })
 })

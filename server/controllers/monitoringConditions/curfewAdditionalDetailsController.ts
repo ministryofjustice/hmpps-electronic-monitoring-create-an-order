@@ -36,7 +36,7 @@ export default class CurfewAdditionalDetailsController {
     }
 
     if (formData.action === 'continue') {
-      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', orderId))
+      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE_QUESTION.replace(':orderId', orderId))
       return
     }
 
