@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
 import { createInterestedParties, getMockOrder } from '../../../../test/mocks/mockOrder'
+import { validationErrors } from '../../../constants/validationErrors'
 import CurfewTimetableQuestionController from './controller'
 
 describe('curfew timetable question controller', () => {
@@ -28,5 +29,24 @@ describe('curfew timetable question controller', () => {
       'pages/order/monitoring-conditions/curfew-timetable-question',
       expect.anything(),
     )
+  })
+
+  describe('update', () => {
+    it('rejects a submission with no answer and returns to the question page', async () => {
+      const order = getMockOrder()
+      req = createMockRequest({ order, body: { action: 'continue' } })
+      req.flash = jest.fn()
+
+      await controller.update(req, res, next)
+
+      expect(req.flash).toHaveBeenCalledWith('validationErrors', [
+        {
+          error: validationErrors.curfewTimetableQuestion.standardCurfewTimesRequired,
+          field: 'standardCurfewTimes',
+          focusTarget: 'standardCurfewTimes',
+        },
+      ])
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/monitoring-conditions/curfew/timetable-question`)
+    })
   })
 })

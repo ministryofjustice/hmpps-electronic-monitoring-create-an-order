@@ -329,6 +329,7 @@ export default function routes({
 
   // Curfew timetable question page
   get(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE_QUESTION, curfewTimetableQuestionController.view)
+  post(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE_QUESTION, curfewTimetableQuestionController.update)
 
   // Curfew dates page
   get(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE, curfewTimetableController.view)
