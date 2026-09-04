@@ -683,14 +683,13 @@ export default class TaskListService {
     if (sectionTasks[0].section === SECTIONS.additionalDocuments) {
       return sectionTasks[sectionTasks.length - 1].path // TODO: refactor path so that additional docs includes string
     }
-
     return (sectionTasks.find(task => task.path.includes('check-your-answers')) || sectionTasks[0]).path
   }
 
   getNextTaskPath(sectionTasks: Task[], orderId: string, versionId?: string) {
     let path: string
 
-    const firstAvailableTask = sectionTasks.find(task => canBeCompleted(task))
+    const firstAvailableTask = sectionTasks.find(task => canBeCompleted(task) && task.completed === false)
 
     path = (firstAvailableTask || sectionTasks[0]).path
 

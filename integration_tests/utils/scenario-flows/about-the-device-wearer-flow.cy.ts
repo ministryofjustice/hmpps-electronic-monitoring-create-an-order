@@ -3,6 +3,8 @@ import AboutDeviceWearerPage from '../../pages/order/about-the-device-wearer/dev
 import IdentityNumbersPage, {
   identityNumberNamesForNotifyingOrganisation,
 } from '../../pages/order/about-the-device-wearer/identity-numbers'
+import DeviceWearerSearchResultsPage from '../../pages/order/about-the-device-wearer/device-wearer-search-results'
+
 import ResponsibleAdultDetailsPage from '../../pages/order/about-the-device-wearer/responsible-adult-details'
 import ContactDetailsPage from '../../pages/order/contact-information/contact-details'
 import NoFixedAbodePage from '../../pages/order/contact-information/no-fixed-abode'
@@ -17,11 +19,37 @@ export default function fillInAboutTheDeviceWearer({
   tertiaryAddressDetails = undefined,
   section = 'About the device wearer',
   notifyingOrganisation = undefined,
+  loadFromCPR = false,
 }): void {
   const identityNumberNames = identityNumberNamesForNotifyingOrganisation(notifyingOrganisation)
   const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage, {}, {}, identityNumberNames)
+  const searchedIdentifier =
+    deviceWearerDetails.nomisId ||
+    deviceWearerDetails.deliusId ||
+    deviceWearerDetails.pncId ||
+    deviceWearerDetails.prisonNumber ||
+    deviceWearerDetails.complianceAndEnforcementPersonReference ||
+    deviceWearerDetails.courtCaseReferenceNumber
+
   identityNumbersPage.form.fillInWith(deviceWearerDetails)
   identityNumbersPage.form.saveAndContinueButton.click()
+
+  if (
+    notifyingOrganisation === 'Probation' ||
+    notifyingOrganisation === 'Probation service' ||
+    notifyingOrganisation === 'Prison' ||
+    notifyingOrganisation === 'Prison Service' ||
+    notifyingOrganisation === 'Youth Custody Service'
+  ) {
+    const deviceWearerSearchResultsPage = Page.verifyOnPage(DeviceWearerSearchResultsPage, {
+      identifyNumber: searchedIdentifier,
+    })
+    if (loadFromCPR) {
+      deviceWearerSearchResultsPage.form.useThisDeviceWearerButton.click()
+    } else {
+      deviceWearerSearchResultsPage.form.enterDetailsManuallyLink.click()
+    }
+  }
 
   const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
   aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
@@ -33,13 +61,17 @@ export default function fillInAboutTheDeviceWearer({
     responsibleAdultDetailsPage.form.saveAndContinueButton.click()
   }
 
-  const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage, section)
-  contactDetailsPage.form.fillInWith(deviceWearerDetails)
-  contactDetailsPage.form.saveAndContinueButton.click()
+  if (!deviceWearerDetails.hideContactNumberPage) {
+    const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage, section)
+    contactDetailsPage.form.fillInWith(deviceWearerDetails)
+    contactDetailsPage.form.saveAndContinueButton.click()
+  }
 
-  const noFixedAbode = Page.verifyOnPage(NoFixedAbodePage, section)
-  noFixedAbode.form.fillInWith(deviceWearerDetails)
-  noFixedAbode.form.saveAndContinueButton.click()
+  if (deviceWearerDetails.hasFixedAddress) {
+    const noFixedAbode = Page.verifyOnPage(NoFixedAbodePage, section)
+    noFixedAbode.form.fillInWith(deviceWearerDetails)
+    noFixedAbode.form.saveAndContinueButton.click()
+  }
 
   if (primaryAddressDetails) {
     fillinAddress({

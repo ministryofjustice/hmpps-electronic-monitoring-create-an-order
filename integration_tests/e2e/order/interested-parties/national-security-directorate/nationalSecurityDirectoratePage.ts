@@ -6,6 +6,10 @@ export default class NationalSecurityDirectoratePage extends AppFormPage {
   public form = new NationalSecurityDirectorateComponent()
 
   constructor() {
-    super('', paths.INTEREST_PARTIES.NSD, 'About the Responsible Organisation')
+    super(
+      'Is the device wearer being managed by the National Security Directorate (NSD)?',
+      paths.INTEREST_PARTIES.NSD,
+      'About the Responsible Organisation',
+    )
   }
 }
