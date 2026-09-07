@@ -725,6 +725,105 @@ describe('DeviceWearerController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/about-the-device-wearer`)
     })
 
+    it('should search on the PNC number when it is the only identity number entered', async () => {
+      // Given
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE' }),
+      })
+      const req = createMockRequest({
+        order,
+        body: {
+          action: 'continue',
+          identityNumbers: ['PNC'],
+          pncId: 'pnc-123',
+          nomisId: '',
+        },
+        flash: jest.fn(),
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      mockDeviceWearerService.updateIdentityNumbers.mockResolvedValue({
+        ...order.deviceWearer,
+        pncId: 'pnc-123',
+        nomisId: null,
+      })
+
+      // When
+      await deviceWearerController.updateIdentityNumbers(req, res, next)
+
+      // Then
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/order/${order.id}/about-the-device-wearer/pnc-123/device-wearer-search-results`,
+      )
+    })
+
+    it('should search on the prison number when a probation user has not entered a CRN', async () => {
+      // Given
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PROBATION' }),
+      })
+      const req = createMockRequest({
+        order,
+        body: {
+          action: 'continue',
+          identityNumbers: ['NOMIS'],
+          nomisId: 'nomis-123',
+          deliusId: '',
+        },
+        flash: jest.fn(),
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      mockDeviceWearerService.updateIdentityNumbers.mockResolvedValue({
+        ...order.deviceWearer,
+        nomisId: 'nomis-123',
+        deliusId: null,
+      })
+
+      // When
+      await deviceWearerController.updateIdentityNumbers(req, res, next)
+
+      // Then
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/order/${order.id}/about-the-device-wearer/nomis-123/device-wearer-search-results`,
+      )
+    })
+
+    it('should escape a slash in the PNC number so the search url still works', async () => {
+      // Given
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE' }),
+      })
+      const req = createMockRequest({
+        order,
+        body: {
+          action: 'continue',
+          identityNumbers: ['PNC'],
+          pncId: '01/234567A',
+          nomisId: '',
+        },
+        flash: jest.fn(),
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      mockDeviceWearerService.updateIdentityNumbers.mockResolvedValue({
+        ...order.deviceWearer,
+        pncId: '01/234567A',
+        nomisId: null,
+      })
+
+      // When
+      await deviceWearerController.updateIdentityNumbers(req, res, next)
+
+      // Then
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/order/${order.id}/about-the-device-wearer/01%2F234567A/device-wearer-search-results`,
+      )
+    })
+
     it('should save and redirect to the order summary page if the user chooses back', async () => {
       // Given
       const order = getMockOrder()

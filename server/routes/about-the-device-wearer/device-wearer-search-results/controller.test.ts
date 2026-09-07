@@ -51,6 +51,42 @@ describe('DeviceWearerSearchResultsController', () => {
         }),
       )
     })
+
+    it('redirects to the device wearer page when the search fails with a server error', async () => {
+      const order = getMockOrder()
+      const req = createMockRequest({
+        order,
+        params: {
+          identifyNumber: 'A1234BC',
+        },
+      })
+      const res = createMockResponse()
+
+      mockService.getSearchResult.mockRejectedValue({ status: 500 })
+
+      await controller.view(req, res, jest.fn())
+
+      expect(res.render).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith(
+        paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
+      )
+    })
+
+    it('does not swallow errors that are not server errors', async () => {
+      const order = getMockOrder()
+      const req = createMockRequest({
+        order,
+        params: {
+          identifyNumber: 'A1234BC',
+        },
+      })
+      const res = createMockResponse()
+
+      mockService.getSearchResult.mockRejectedValue({ status: 401 })
+
+      await expect(controller.view(req, res, jest.fn())).rejects.toEqual({ status: 401 })
+      expect(res.redirect).not.toHaveBeenCalled()
+    })
   })
 
   describe('update', () => {
