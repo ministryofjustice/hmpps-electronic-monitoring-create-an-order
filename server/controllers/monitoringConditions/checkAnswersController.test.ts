@@ -3,6 +3,7 @@ import {
   createAddress,
   createCurfewConditions,
   createCurfewReleaseDateConditions,
+  createInterestedParties,
   createMonitoringConditions,
   getMockOrder,
 } from '../../../test/mocks/mockOrder'
@@ -232,7 +233,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           mandatoryAttendance: true,
           orderType: 'PRE_TRIAL',
           orderTypeDescription: 'GPS_ACQUISITIVE_CRIME_HDC',
-          startDate: '2024-11-11T01:01:00Z',
+          startDate: '2099-11-11T01:01:00Z',
           trail: true,
           sentenceType: 'EPP',
           issp: 'NO',
@@ -245,6 +246,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           endTime: '11:11:00',
           startTime: '11:11:00',
         }),
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }),
         curfewConditions: createCurfewConditions({
           endDate: '2024-11-11T00:00:00Z',
           startDate: '2024-11-11T00:00:00Z',

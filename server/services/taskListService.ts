@@ -6,6 +6,7 @@ import AttachmentType from '../models/AttachmentType'
 import FeatureFlags from '../utils/featureFlags'
 import isVariationType from '../utils/isVariationType'
 import isOrderDataDictionarySameOrAbove from '../utils/dataDictionaryVersionComparer'
+import shouldShowCurfewDayOfRelease from '../utils/curfewDayOfReleaseEligibility'
 import { notifyingOrganisationCourts } from '../models/NotifyingOrganisation'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
@@ -374,7 +375,9 @@ export default class TaskListService {
       name: PAGES.curfewDayOfRelease,
       path: paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE,
       state: convertBooleanToEnum<State>(
-        order.monitoringConditions.curfew && order.curfewReleaseDateConditions?.releaseDate === undefined,
+        order.monitoringConditions.curfew &&
+          shouldShowCurfewDayOfRelease(order) &&
+          order.curfewReleaseDateConditions?.releaseDate === undefined,
         STATES.cantBeStarted,
         STATES.required,
         STATES.notRequired,

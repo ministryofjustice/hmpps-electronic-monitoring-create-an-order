@@ -1,5 +1,6 @@
 import {
   createDeviceWearer,
+  createInterestedParties,
   createMonitoringConditions,
   getFilledMockOrder,
   getMockOrder,
@@ -265,6 +266,7 @@ describe('TaskListService', () => {
         monitoringConditions: createMonitoringConditions({
           curfew: true,
         }),
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }),
       })
 
       // When
@@ -796,6 +798,19 @@ describe('TaskListService', () => {
       const tasks = taskListService.getTasks(order)
 
       expect(tasks.map(task => task.path)).toContain(paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE)
+    })
+
+    it('marks the curfew day of release task as not required when the order is not eligible for it', () => {
+      const taskListService = new TaskListService()
+      const order = getMockOrder({
+        monitoringConditions: createMonitoringConditions({ curfew: true }),
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PROBATION' }),
+      })
+
+      const tasks = taskListService.getTasks(order)
+      const curfewDayOfReleaseTask = tasks.find(task => task.path === paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE)
+
+      expect(curfewDayOfReleaseTask?.state).toBe('NOT_REQUIRED')
     })
   })
 })

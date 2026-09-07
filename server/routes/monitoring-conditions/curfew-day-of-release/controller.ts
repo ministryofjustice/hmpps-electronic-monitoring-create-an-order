@@ -3,6 +3,7 @@ import paths from '../../../constants/paths'
 import { validationErrors } from '../../../constants/validationErrors'
 import { isValidationResult, ValidationResult } from '../../../models/Validation'
 import CurfewReleaseDateService from '../../../services/curfewReleaseDateService'
+import shouldShowCurfewDayOfRelease from '../../../utils/curfewDayOfReleaseEligibility'
 import { CurfewDayOfReleaseFormDataModel } from './formModel'
 import { STANDARD_CURFEW_TIMES } from './standardCurfewTimes'
 import constructModel from './viewModel'
@@ -11,8 +12,15 @@ export default class CurfewDayOfReleaseController {
   constructor(private readonly curfewReleaseDateService: CurfewReleaseDateService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
+    const order = req.order!
+
+    if (!shouldShowCurfewDayOfRelease(order)) {
+      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', order.id))
+      return
+    }
+
     const errors = req.flash('validationErrors') as unknown as ValidationResult
-    const model = constructModel(req.order!, errors)
+    const model = constructModel(order, errors)
 
     res.render('pages/order/monitoring-conditions/curfew-day-of-release', model)
   }

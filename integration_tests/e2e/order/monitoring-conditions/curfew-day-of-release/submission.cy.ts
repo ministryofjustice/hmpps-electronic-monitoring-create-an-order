@@ -16,6 +16,10 @@ const mockOrderWithCurfewStartDate = {
     endDate: '2026-04-28T00:00:00.000Z',
     curfewAdditionalDetails: '',
   },
+  interestedParties: {
+    notifyingOrganisation: 'PRISON',
+  },
+  isSentencingAct: true,
   status: 'IN_PROGRESS',
   id: mockOrderId,
 }

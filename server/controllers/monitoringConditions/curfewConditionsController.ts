@@ -4,6 +4,7 @@ import { isValidationResult } from '../../models/Validation'
 import CurfewConditionsService from '../../services/curfewConditionsService'
 import { CurfewConditionsFormDataModel } from '../../models/form-data/curfewConditions'
 import CurfewConditionsViewModel from '../../models/view-models/curfewConditions'
+import shouldShowCurfewDayOfRelease from '../../utils/curfewDayOfReleaseEligibility'
 
 export default class CurfewConditionsController {
   constructor(private readonly curfewConditionsService: CurfewConditionsService) {}
@@ -37,7 +38,12 @@ export default class CurfewConditionsController {
     }
 
     if (formData.action === 'continue') {
-      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE.replace(':orderId', orderId))
+      if (shouldShowCurfewDayOfRelease(req.order!)) {
+        res.redirect(paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE.replace(':orderId', orderId))
+        return
+      }
+
+      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', orderId))
       return
     }
 
