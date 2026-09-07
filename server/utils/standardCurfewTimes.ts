@@ -7,6 +7,8 @@ const startMinutes = '00'
 const endHours = '07'
 const endMinutes = '00'
 
+export const STANDARD_CURFEW_ADDRESS = 'PRIMARY_ADDRESS'
+
 export const STANDARD_CURFEW_TIMES = {
   startHours,
   startMinutes,

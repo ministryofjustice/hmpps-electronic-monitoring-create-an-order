@@ -20,6 +20,7 @@ export default function fillInMonitoringTypeWith(
     curfewReleaseDetails = undefined,
     curfewTimetable = undefined,
     curfewDayOfReleaseAnswer = 'No',
+    curfewTimetableQuestionAnswer = 'No',
     enforcementZoneDetails = undefined,
     enforcementZoneListItemDetails = undefined,
     alcoholMonitoringDetails = undefined,
@@ -46,6 +47,7 @@ export default function fillInMonitoringTypeWith(
       curfewReleaseDetails,
       curfewTimetable,
       dayOfReleaseAnswer: curfewDayOfReleaseAnswer,
+      curfewTimetableQuestionAnswer,
     })
   }
 

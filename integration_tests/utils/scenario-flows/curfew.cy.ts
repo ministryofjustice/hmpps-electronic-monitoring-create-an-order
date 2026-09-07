@@ -12,6 +12,7 @@ export default function fillInCurfewOrderDetailsWith({
   curfewReleaseDetails,
   curfewTimetable,
   dayOfReleaseAnswer = 'No',
+  curfewTimetableQuestionAnswer = 'No',
 }): void {
   const curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
   curfewConditionsPage.form.fillInWith(curfewConditionDetails)
@@ -32,12 +33,14 @@ export default function fillInCurfewOrderDetailsWith({
   curfewAdditionalDetailsPage.form.saveAndContinueButton.click()
 
   const curfewTimetableQuestionPage = Page.verifyOnPage(CurfewTimetableQuestionPage)
-  curfewTimetableQuestionPage.form.standardCurfewTimesField.set('No')
+  curfewTimetableQuestionPage.form.standardCurfewTimesField.set(curfewTimetableQuestionAnswer)
   curfewTimetableQuestionPage.form.saveAndContinueButton.click()
 
-  const curfewTimetablePage = Page.verifyOnPage(CurfewTimetablePage)
-  curfewTimetablePage.form.fillInWith(curfewTimetable)
-  curfewTimetablePage.form.saveAndContinueButton.click()
+  if (curfewTimetableQuestionAnswer === 'No') {
+    const curfewTimetablePage = Page.verifyOnPage(CurfewTimetablePage)
+    curfewTimetablePage.form.fillInWith(curfewTimetable)
+    curfewTimetablePage.form.saveAndContinueButton.click()
+  }
 }
 
 export function verifyCurfewInCheckYourAnswersPage({

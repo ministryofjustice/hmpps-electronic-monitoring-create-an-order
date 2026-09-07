@@ -1,6 +1,6 @@
 import { getMockOrder, createCurfewConditions } from '../../../../test/mocks/mockOrder'
 import { validationErrors } from '../../../constants/validationErrors'
-import { createStandardCurfewSchedule } from '../../../utils/standardCurfewTimes'
+import { createStandardCurfewSchedule, STANDARD_CURFEW_ADDRESS } from '../../../utils/standardCurfewTimes'
 import constructModel from './viewModel'
 
 describe('curfew timetable question view model', () => {
@@ -14,10 +14,9 @@ describe('curfew timetable question view model', () => {
   })
 
   it('pre-selects YES when the saved timetable matches the standard curfew times and address', () => {
-    const address = '10 Downing Street, London, SW1A 2AA'
     const order = getMockOrder({
-      curfewConditions: createCurfewConditions({ curfewAddress: address }),
-      curfewTimeTable: createStandardCurfewSchedule(address),
+      curfewConditions: createCurfewConditions(),
+      curfewTimeTable: createStandardCurfewSchedule(STANDARD_CURFEW_ADDRESS),
     })
 
     const model = constructModel(order, [])

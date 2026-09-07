@@ -90,7 +90,7 @@ describe('curfew timetable question controller', () => {
         curfewConditions: {
           startDate: null,
           endDate: null,
-          curfewAddress: '10 Downing Street, London, SW1A 2AA',
+          curfewAddress: 'PRIMARY_ADDRESS',
           curfewAdditionalDetails: '',
         },
       })
@@ -105,43 +105,43 @@ describe('curfew timetable question controller', () => {
         data: [
           {
             dayOfWeek: 'MONDAY',
-            curfewAddress: '10 Downing Street, London, SW1A 2AA',
+            curfewAddress: 'PRIMARY_ADDRESS',
             startTime: '19:00:00',
             endTime: '07:00:00',
           },
           {
             dayOfWeek: 'TUESDAY',
-            curfewAddress: '10 Downing Street, London, SW1A 2AA',
+            curfewAddress: 'PRIMARY_ADDRESS',
             startTime: '19:00:00',
             endTime: '07:00:00',
           },
           {
             dayOfWeek: 'WEDNESDAY',
-            curfewAddress: '10 Downing Street, London, SW1A 2AA',
+            curfewAddress: 'PRIMARY_ADDRESS',
             startTime: '19:00:00',
             endTime: '07:00:00',
           },
           {
             dayOfWeek: 'THURSDAY',
-            curfewAddress: '10 Downing Street, London, SW1A 2AA',
+            curfewAddress: 'PRIMARY_ADDRESS',
             startTime: '19:00:00',
             endTime: '07:00:00',
           },
           {
             dayOfWeek: 'FRIDAY',
-            curfewAddress: '10 Downing Street, London, SW1A 2AA',
+            curfewAddress: 'PRIMARY_ADDRESS',
             startTime: '19:00:00',
             endTime: '07:00:00',
           },
           {
             dayOfWeek: 'SATURDAY',
-            curfewAddress: '10 Downing Street, London, SW1A 2AA',
+            curfewAddress: 'PRIMARY_ADDRESS',
             startTime: '19:00:00',
             endTime: '07:00:00',
           },
           {
             dayOfWeek: 'SUNDAY',
-            curfewAddress: '10 Downing Street, London, SW1A 2AA',
+            curfewAddress: 'PRIMARY_ADDRESS',
             startTime: '19:00:00',
             endTime: '07:00:00',
           },
@@ -157,7 +157,7 @@ describe('curfew timetable question controller', () => {
         curfewConditions: {
           startDate: null,
           endDate: null,
-          curfewAddress: '10 Downing Street, London, SW1A 2AA',
+          curfewAddress: 'PRIMARY_ADDRESS',
           curfewAdditionalDetails: '',
         },
       })
@@ -175,7 +175,7 @@ describe('curfew timetable question controller', () => {
         curfewConditions: {
           startDate: null,
           endDate: null,
-          curfewAddress: '10 Downing Street, London, SW1A 2AA',
+          curfewAddress: 'PRIMARY_ADDRESS',
           curfewAdditionalDetails: '',
         },
       })

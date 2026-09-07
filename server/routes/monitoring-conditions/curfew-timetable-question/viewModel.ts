@@ -3,7 +3,7 @@ import { ViewModel } from '../../../models/view-models/utils'
 import { ValidationResult } from '../../../models/Validation'
 import { createGovukErrorSummary } from '../../../utils/errors'
 import { getError } from '../../../utils/utils'
-import { isStandardCurfewSchedule } from '../../../utils/standardCurfewTimes'
+import { isStandardCurfewSchedule, STANDARD_CURFEW_ADDRESS } from '../../../utils/standardCurfewTimes'
 
 export type CurfewTimetableQuestionViewModel = ViewModel<{
   standardCurfewTimes: string
@@ -13,9 +13,7 @@ const constructModel = (order: Order, errors: ValidationResult): CurfewTimetable
   const { curfewTimeTable } = order
   let standardCurfewTimesAnswer = ''
   if (curfewTimeTable && curfewTimeTable.length) {
-    standardCurfewTimesAnswer = isStandardCurfewSchedule(curfewTimeTable, order.curfewConditions?.curfewAddress)
-      ? 'YES'
-      : 'NO'
+    standardCurfewTimesAnswer = isStandardCurfewSchedule(curfewTimeTable, STANDARD_CURFEW_ADDRESS) ? 'YES' : 'NO'
   }
 
   const model: CurfewTimetableQuestionViewModel = {

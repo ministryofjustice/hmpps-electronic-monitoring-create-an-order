@@ -117,11 +117,12 @@ context('Curfew on day of release', () => {
     cy.task('resetFeatureFlags')
   })
 
-  it('applies the standard curfew times and skips the release day page when I select yes', () => {
+  it('answers yes to the curfew day of release question and yes to the curfew timetable question', () => {
     fillInMonitoringTypeWith({
       monitoringType: 'Curfew',
       curfewConditionDetails: curfew,
       curfewDayOfReleaseAnswer: 'Yes',
+      curfewTimetableQuestionAnswer: 'Yes',
       curfewTimetable: curfewTimetableDetails,
     })
 
@@ -139,12 +140,13 @@ context('Curfew on day of release', () => {
     })
   })
 
-  it('continues to the manual release day page when I select no', () => {
+  it('answers no to the curfew day of release question and no to the curfew timetable question', () => {
     fillInMonitoringTypeWith({
       monitoringType: 'Curfew',
       curfewConditionDetails: curfew,
       curfewDayOfReleaseAnswer: 'No',
       curfewReleaseDetails: nonStandardCurfewReleaseDay,
+      curfewTimetableQuestionAnswer: 'No',
       curfewTimetable: curfewTimetableDetails,
     })
 
