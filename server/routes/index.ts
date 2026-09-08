@@ -8,8 +8,6 @@ import ContactInformationCheckAnswersController from '../controllers/contact-inf
 import DeviceWearerController from '../controllers/about-the-device-wearer/deviceWearerController'
 import ResponsibleAdultController from '../controllers/about-the-device-wearer/deviceWearerResponsibleAdultController'
 import DeviceWearerCheckAnswersController from '../controllers/about-the-device-wearer/deviceWearerCheckAnswersController'
-import InstallationAndRiskController from '../controllers/installationAndRisk/installationAndRiskController'
-import InstallationAndRiskCheckAnswersController from '../controllers/installationAndRisk/installationAndRiskCheckAnswersController'
 import AlcoholMonitoringController from '../controllers/monitoringConditions/alcoholMonitoringController'
 import AttendanceMonitoringController from '../controllers/monitoringConditions/attendanceMonitoringController'
 import AttendanceMonitoringAddToListController from './monitoring-conditions/attendance-monitoring/controller'
@@ -106,12 +104,6 @@ export default function routes({
   const curfewAdditionalDetailsController = new CurfewAdditionalDetailsController(curfewAdditionalDetailsService)
   const deviceWearerController = new DeviceWearerController(deviceWearerService, taskListService)
   const deviceWearerCheckAnswersController = new DeviceWearerCheckAnswersController(
-    taskListService,
-    orderChecklistService,
-    sectionService,
-  )
-  const installationAndRiskController = new InstallationAndRiskController(installationAndRiskService, taskListService)
-  const installationAndRiskCheckAnswersController = new InstallationAndRiskCheckAnswersController(
     taskListService,
     orderChecklistService,
     sectionService,
@@ -216,17 +208,6 @@ export default function routes({
   post(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS, contactInformationCheckAnswersController.update)
   get(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS_VERSION, contactInformationCheckAnswersController.view)
   post(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS_VERSION, contactInformationCheckAnswersController.update)
-
-  /**
-   * INSTALLATION AND RISK
-   */
-  get(paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK, installationAndRiskController.view)
-  post(paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK, installationAndRiskController.update)
-
-  get(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS, installationAndRiskCheckAnswersController.view)
-  post(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS, installationAndRiskCheckAnswersController.update)
-  get(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS_VERSION, installationAndRiskCheckAnswersController.view)
-  post(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS_VERSION, installationAndRiskCheckAnswersController.update)
 
   /**
    * MONITORING CONDITIONS
@@ -344,12 +325,18 @@ export default function routes({
   )
 
   router.use(
-    paths.INSTALLATION_AND_RISK.BASE_URL,
+    [
+      paths.INSTALLATION_AND_RISK.BASE_URL,
+      paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS_VERSION.replace('/check-your-answers', ''),
+    ],
     createInstallationAndRiskRouter({
       dapoService,
       offenceService,
       mappaService,
       detailsOfInstallationService,
+      installationAndRiskService,
+      orderChecklistService,
+      sectionService,
       taskListService,
       offenceOtherInfoService,
     }),
