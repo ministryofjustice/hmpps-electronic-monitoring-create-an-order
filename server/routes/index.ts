@@ -109,17 +109,7 @@ export default function routes({
     }),
   )
   router.use(
-    paths.ABOUT_THE_DEVICE_WEARER.BASE_URL,
-    createAboutTheDeviceWearerRouter({
-      deviceWearerService,
-      deviceWearerResponsibleAdultService,
-      taskListService,
-      orderChecklistService,
-      sectionService,
-    }),
-  )
-  router.use(
-    paths.ABOUT_THE_DEVICE_WEARER.VERSION_BASE_URL,
+    paths.ORDER.BASE_URL,
     createAboutTheDeviceWearerRouter({
       deviceWearerService,
       deviceWearerResponsibleAdultService,
@@ -142,7 +132,7 @@ export default function routes({
   )
 
   router.use(
-    [paths.INSTALLATION_AND_RISK.BASE_URL, paths.INSTALLATION_AND_RISK.VERSION_BASE_URL],
+    paths.ORDER.BASE_URL,
     createInstallationAndRiskRouter({
       dapoService,
       offenceService,

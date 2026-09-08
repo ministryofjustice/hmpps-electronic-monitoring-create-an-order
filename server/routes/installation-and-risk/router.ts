@@ -31,17 +31,12 @@ const createInstallationAndRiskRouter = (
   const router = Router({ mergeParams: true })
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
-  const rel = (path: string) => relativePath(paths.INSTALLATION_AND_RISK.BASE_URL, path)
-  const whenNotVersioned =
-    (handler: RequestHandler): RequestHandler =>
-    (req, res, next) => {
-      if (req.params.versionId) {
-        next('route')
-        return
-      }
-
-      handler(req, res, next)
-    }
+  // This router is mounted at paths.ORDER.BASE_URL (see server/routes/index.ts) so that both the
+  // non-versioned and versioned URL spaces are handled by a single mount. Routes are only
+  // registered for the non-versioned paths below; the check-your-answers page is the only page
+  // that should be viewable for a historical version, so it alone gets an explicit versioned
+  // route registered too.
+  const rel = (path: string) => relativePath(paths.ORDER.BASE_URL, path)
 
   const {
     dapoService,
@@ -73,11 +68,16 @@ const createInstallationAndRiskRouter = (
     taskListService,
   )
 
-  get(rel(paths.INSTALLATION_AND_RISK.BASE_URL), whenNotVersioned(installationAndRiskController.view))
-  post(rel(paths.INSTALLATION_AND_RISK.BASE_URL), whenNotVersioned(installationAndRiskController.update))
+  get(rel(paths.INSTALLATION_AND_RISK.BASE_URL), installationAndRiskController.view)
+  post(rel(paths.INSTALLATION_AND_RISK.BASE_URL), installationAndRiskController.update)
   registerViewUpdate(
     router,
     rel(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS),
+    installationAndRiskCheckAnswersController,
+  )
+  registerViewUpdate(
+    router,
+    rel(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS_VERSION),
     installationAndRiskCheckAnswersController,
   )
   get(rel(paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM), offenceController.view)
