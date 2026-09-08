@@ -37,9 +37,7 @@ import createInstallationAndRiskRouter from './installation-and-risk/router'
 import createAttachmentRouter from './attachments/router'
 import createInterestedPartiesRouter from './interested-parties/router'
 import createOrderRouter from './order/router'
-import InterestedPartiesCheckYourAnswersController from './interested-parties/check-your-answers/controller'
 import IsAddressChangeController from './variations/is-address-change/controller'
-import SentencingActSelection from './sentencing-act-selection/controller'
 
 export default function routes({
   alcoholMonitoringService,
@@ -155,15 +153,8 @@ export default function routes({
     taskListService,
   )
 
-  const interestedPartiesCheckYourAsnwerController = new InterestedPartiesCheckYourAnswersController(
-    taskListService,
-    orderChecklistService,
-    sectionService,
-  )
-
   const serviceRequestTypeController = new ServiceRequestTypeController(serviceRequestTypeService)
   const isAddressChangeController = new IsAddressChangeController(serviceRequestTypeService)
-  const setSentencingAct = new SentencingActSelection(sentencingActService)
   router.param('orderId', populateOrder(orderService))
 
   get('/', orderSearchController.list)
@@ -311,15 +302,6 @@ export default function routes({
   get(paths.VARIATION.CREATE_VARIATION, isAddressChangeController.view)
   post(paths.VARIATION.CREATE_VARIATION, isAddressChangeController.update)
 
-  get(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS_VERSION, interestedPartiesCheckYourAsnwerController.view)
-  post(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS_VERSION, interestedPartiesCheckYourAsnwerController.update)
-  get(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS, interestedPartiesCheckYourAsnwerController.view)
-  post(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS, interestedPartiesCheckYourAsnwerController.update)
-
-  // Sentencing act
-  get(paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION, setSentencingAct.view)
-  post(paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION, setSentencingAct.update)
-
   router.use(
     paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.BASE_PATH,
     createOrderTypeDescriptionRouter({
@@ -340,6 +322,10 @@ export default function routes({
       interestedPartiesStoreService,
       updateInterestedPartiesService,
       probationDeliveryUnitService,
+      taskListService,
+      orderChecklistService,
+      sectionService,
+      sentencingActService,
     }),
   )
 
