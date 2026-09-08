@@ -15,20 +15,18 @@ import asyncMiddleware from '../middleware/asyncMiddleware'
 import populateOrder from '../middleware/populateCurrentOrder'
 import { type Services } from '../services'
 import paths from '../constants/paths'
-import VariationDetailsController from '../controllers/variation/variationDetailsController'
 import CurfewAdditionalDetailsController from '../controllers/monitoringConditions/curfewAdditionalDetailsController'
 import InstallationLocationController from '../controllers/monitoringConditions/installationLocationController'
 import createOrderTypeDescriptionRouter from './monitoring-conditions/router'
 import RemoveMonitoringTypeController from './monitoring-conditions/remove-monitoring-type/controller'
 import createPostcodeLookupRouter from './postcode-lookup/router'
-import ServiceRequestTypeController from './variations/service-request-type/controller'
 import createInstallationAndRiskRouter from './installation-and-risk/router'
 import createAttachmentRouter from './attachments/router'
 import createInterestedPartiesRouter from './interested-parties/router'
 import createContactInformationRouter from './contact-information/router'
 import createOrderRouter from './order/router'
-import IsAddressChangeController from './variations/is-address-change/controller'
 import createAboutTheDeviceWearerRouter from './about-the-device-wearer/router'
+import createVariationsRouter from './variations/router'
 
 export default function routes({
   alcoholMonitoringService,
@@ -95,11 +93,6 @@ export default function routes({
     orderChecklistService,
     sectionService,
   )
-  const variationDetailsController = new VariationDetailsController(
-    variationService,
-    taskListService,
-    orderChecklistService,
-  )
 
   const installationLocationController = new InstallationLocationController(
     installationLocationService,
@@ -111,8 +104,6 @@ export default function routes({
     taskListService,
   )
 
-  const serviceRequestTypeController = new ServiceRequestTypeController(serviceRequestTypeService)
-  const isAddressChangeController = new IsAddressChangeController(serviceRequestTypeService)
   router.param('orderId', populateOrder(orderService))
 
   get('/', orderSearchController.list)
@@ -179,18 +170,6 @@ export default function routes({
   post(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS, monitoringConditionsCheckYourAnswersController.update)
   get(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS_VERSION, monitoringConditionsCheckYourAnswersController.view)
   post(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS_VERSION, monitoringConditionsCheckYourAnswersController.update)
-
-  /**
-   * VARIATIONS
-   */
-  get(paths.VARIATION.VARIATION_DETAILS_VERSION, variationDetailsController.view)
-  post(paths.VARIATION.VARIATION_DETAILS_VERSION, variationDetailsController.update)
-  get(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.view)
-  post(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.update)
-  get(paths.VARIATION.SERVICE_REQUEST_TYPE, serviceRequestTypeController.view)
-  post(paths.VARIATION.SERVICE_REQUEST_TYPE, serviceRequestTypeController.update)
-  get(paths.VARIATION.CREATE_VARIATION, isAddressChangeController.view)
-  post(paths.VARIATION.CREATE_VARIATION, isAddressChangeController.update)
 
   router.use(
     paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.BASE_PATH,
@@ -275,6 +254,15 @@ export default function routes({
       attachmentService,
       orderChecklistService,
       taskListService,
+    }),
+  )
+  router.use(
+    '/',
+    createVariationsRouter({
+      variationService,
+      taskListService,
+      orderChecklistService,
+      serviceRequestTypeService,
     }),
   )
   router.use(
