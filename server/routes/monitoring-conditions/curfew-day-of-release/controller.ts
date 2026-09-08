@@ -5,7 +5,7 @@ import { isValidationResult, ValidationResult } from '../../../models/Validation
 import CurfewReleaseDateService from '../../../services/curfewReleaseDateService'
 import shouldShowCurfewDayOfRelease from '../../../utils/curfewDayOfReleaseEligibility'
 import { CurfewDayOfReleaseFormDataModel } from './formModel'
-import { STANDARD_CURFEW_TIMES } from './standardCurfewTimes'
+import { STANDARD_CURFEW_TIMES } from '../../../utils/standardCurfewTimes'
 import constructModel from './viewModel'
 
 export default class CurfewDayOfReleaseController {

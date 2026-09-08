@@ -8,6 +8,7 @@ import curfewAdditionalDetailsPageContent from './pages/curfewAdditionalDetails'
 import curfewDayOfReleasePageContent from './pages/curfewDayOfRelease'
 import curfewReleaseDatePageContent from './pages/curfewReleaseDate'
 import curfewTimeTablePageContent from './pages/curfewTimetable'
+import curfewTimetableQuestionPageContent from './pages/curfewTimetableQuestion'
 import deleteConfirmPageContent from './pages/deleteConfirm'
 import deviceWearerPageContent from './pages/deviceWearer'
 import editConfirmPageContent from './pages/editConfirm'
@@ -80,6 +81,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       curfewDayOfRelease: curfewDayOfReleasePageContent,
       curfewReleaseDate: curfewReleaseDatePageContent,
       curfewTimetable: curfewTimeTablePageContent,
+      curfewTimetableQuestion: curfewTimetableQuestionPageContent,
       deleteConfirm: deleteConfirmPageContent,
       deviceWearer: deviceWearerPageContent,
       editConfirm: editConfirmPageContent,

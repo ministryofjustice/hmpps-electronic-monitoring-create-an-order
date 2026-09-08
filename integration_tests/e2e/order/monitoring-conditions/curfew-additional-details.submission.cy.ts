@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import CurfewAdditionalDetailsPage from '../../../pages/order/monitoring-conditions/curfew-additional-details'
+import CurfewTimetableQuestionPage from '../../../pages/order/monitoring-conditions/curfew-timetable-question'
 
 const mockOrderId = uuidv4()
 
@@ -26,6 +27,7 @@ context('Monitoring conditions', () => {
             orderId: mockOrderId,
             startDate: null,
             endDate: null,
+            curfewAdditionalDetails: '',
           },
         })
 
@@ -47,6 +49,19 @@ context('Monitoring conditions', () => {
             curfewAdditionalDetails: '',
           },
         }).should('be.true')
+      })
+
+      it('should continue to the curfew timetable question page when I check the no radio button', () => {
+        const page = Page.visit(CurfewAdditionalDetailsPage, {
+          orderId: mockOrderId,
+        })
+
+        page.form.curfewRadios.element.getByLabel('No').check()
+
+        page.form.saveAndContinueButton.click()
+
+        Page.verifyOnPage(CurfewTimetableQuestionPage)
+        cy.url().should('include', `/order/${mockOrderId}/monitoring-conditions/curfew/timetable-question`)
       })
 
       it('should submit when I check yes and fill in the text box', () => {

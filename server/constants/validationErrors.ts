@@ -70,6 +70,9 @@ interface ValidationErrors {
   curfewDayOfRelease: {
     standardCurfewTimesRequired: string
   }
+  curfewTimetableQuestion: {
+    standardCurfewTimesRequired: string
+  }
   curfewAdditionalDetails: {
     changeCurfewDetailsRequired: string
     curfewDetailsRequired: string
@@ -326,6 +329,9 @@ const validationErrors: ValidationErrors = {
   },
   curfewDayOfRelease: {
     standardCurfewTimesRequired: "Select 'Yes' if you want to use the standard curfew times on the day of release",
+  },
+  curfewTimetableQuestion: {
+    standardCurfewTimesRequired: "Select 'Yes' if you want to use the standard curfew times for the curfew timetable",
   },
   curfewAdditionalDetails: {
     changeCurfewDetailsRequired: "Select 'Yes' if you want to change the standard curfew address boundary",
