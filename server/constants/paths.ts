@@ -39,6 +39,8 @@ const paths = {
   },
 
   ABOUT_THE_DEVICE_WEARER: {
+    BASE_URL: '/order/:orderId/about-the-device-wearer',
+    VERSION_BASE_URL: '/order/:orderId/version/:versionId/about-the-device-wearer',
     CHECK_YOUR_ANSWERS: '/order/:orderId/about-the-device-wearer/check-your-answers',
     CHECK_YOUR_ANSWERS_VERSION: '/order/:orderId/version/:versionId/about-the-device-wearer/check-your-answers',
     DEVICE_WEARER: '/order/:orderId/about-the-device-wearer',

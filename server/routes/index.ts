@@ -5,9 +5,6 @@ import ContactDetailsController from '../controllers/contact-information/contact
 import NoFixedAbodeController from '../controllers/contact-information/noFixedAbodeController'
 import InterestedPartiesController from '../controllers/contact-information/interestedPartiesController'
 import ContactInformationCheckAnswersController from '../controllers/contact-information/checkAnswersController'
-import DeviceWearerController from '../controllers/about-the-device-wearer/deviceWearerController'
-import ResponsibleAdultController from '../controllers/about-the-device-wearer/deviceWearerResponsibleAdultController'
-import DeviceWearerCheckAnswersController from '../controllers/about-the-device-wearer/deviceWearerCheckAnswersController'
 import InstallationAndRiskController from '../controllers/installationAndRisk/installationAndRiskController'
 import InstallationAndRiskCheckAnswersController from '../controllers/installationAndRisk/installationAndRiskCheckAnswersController'
 import AlcoholMonitoringController from '../controllers/monitoringConditions/alcoholMonitoringController'
@@ -40,6 +37,7 @@ import createOrderRouter from './order/router'
 import InterestedPartiesCheckYourAnswersController from './interested-parties/check-your-answers/controller'
 import IsAddressChangeController from './variations/is-address-change/controller'
 import SentencingActSelection from './sentencing-act-selection/controller'
+import createAboutTheDeviceWearerRouter from './about-the-device-wearer/router'
 
 export default function routes({
   alcoholMonitoringService,
@@ -104,12 +102,6 @@ export default function routes({
   const curfewTimetableController = new CurfewTimetableController(curfewTimetableService)
   const curfewConditionsController = new CurfewConditionsController(curfewConditionsService)
   const curfewAdditionalDetailsController = new CurfewAdditionalDetailsController(curfewAdditionalDetailsService)
-  const deviceWearerController = new DeviceWearerController(deviceWearerService, taskListService)
-  const deviceWearerCheckAnswersController = new DeviceWearerCheckAnswersController(
-    taskListService,
-    orderChecklistService,
-    sectionService,
-  )
   const installationAndRiskController = new InstallationAndRiskController(installationAndRiskService, taskListService)
   const installationAndRiskCheckAnswersController = new InstallationAndRiskCheckAnswersController(
     taskListService,
@@ -120,10 +112,6 @@ export default function routes({
   const noFixedAbodeController = new NoFixedAbodeController(deviceWearerService, taskListService)
   const interestedPartiesController = new InterestedPartiesController(interestedPartiesService, taskListService)
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
-  const responsibleAdultController = new ResponsibleAdultController(
-    deviceWearerResponsibleAdultService,
-    taskListService,
-  )
   const trailMonitoringController = new TrailMonitoringController(trailMonitoringService)
   const zoneControllerAddToList = new EnforcementZoneAddToListController(auditService, zoneAddToListService)
   const monitoringConditionsCheckYourAnswersController = new MonitoringConditionsCheckAnswersController(
@@ -168,28 +156,6 @@ export default function routes({
 
   get('/', orderSearchController.list)
   get('/search', orderSearchController.search)
-
-  /**
-   * ABOUT THE DEVICE WEARER
-   */
-
-  // Device Wearer
-  get(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER, deviceWearerController.viewDeviceWearer)
-  post(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER, deviceWearerController.updateDeviceWearer)
-
-  // Identity numbers
-  get(paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS, deviceWearerController.viewIdentityNumbers)
-  post(paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS, deviceWearerController.updateIdentityNumbers)
-
-  // Responsible Adult
-  get(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT, responsibleAdultController.view)
-  post(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT, responsibleAdultController.update)
-
-  // Check your answers
-  get(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS, deviceWearerCheckAnswersController.view)
-  post(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS, deviceWearerCheckAnswersController.update)
-  get(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS_VERSION, deviceWearerCheckAnswersController.view)
-  post(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS_VERSION, deviceWearerCheckAnswersController.update)
 
   /**
    * CONTACT INFORMATION
@@ -340,6 +306,26 @@ export default function routes({
       interestedPartiesStoreService,
       updateInterestedPartiesService,
       probationDeliveryUnitService,
+    }),
+  )
+  router.use(
+    paths.ABOUT_THE_DEVICE_WEARER.BASE_URL,
+    createAboutTheDeviceWearerRouter({
+      deviceWearerService,
+      deviceWearerResponsibleAdultService,
+      taskListService,
+      orderChecklistService,
+      sectionService,
+    }),
+  )
+  router.use(
+    paths.ABOUT_THE_DEVICE_WEARER.VERSION_BASE_URL,
+    createAboutTheDeviceWearerRouter({
+      deviceWearerService,
+      deviceWearerResponsibleAdultService,
+      taskListService,
+      orderChecklistService,
+      sectionService,
     }),
   )
 
