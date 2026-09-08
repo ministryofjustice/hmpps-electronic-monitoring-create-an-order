@@ -21,7 +21,6 @@ import TrailMonitoringController from '../controllers/monitoringConditions/trail
 import MonitoringConditionsCheckAnswersController from '../controllers/monitoringConditions/checkAnswersController'
 import ProbationDeliveryUnitController from '../controllers/contact-information/probationDeliveryUnitController'
 import InstallationAppointmentController from '../controllers/monitoringConditions/installationAppointmentController'
-import OrderController from '../controllers/orderController'
 import OrderSearchController from '../controllers/orderSearchController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import populateOrder from '../middleware/populateCurrentOrder'
@@ -30,8 +29,6 @@ import paths from '../constants/paths'
 import VariationDetailsController from '../controllers/variation/variationDetailsController'
 import CurfewAdditionalDetailsController from '../controllers/monitoringConditions/curfewAdditionalDetailsController'
 import InstallationLocationController from '../controllers/monitoringConditions/installationLocationController'
-import ReceiptController from '../controllers/receiptController'
-import IsRejectionController from './is-rejection/controller'
 import createOrderTypeDescriptionRouter from './monitoring-conditions/router'
 import RemoveMonitoringTypeController from './monitoring-conditions/remove-monitoring-type/controller'
 import createPostcodeLookupRouter from './postcode-lookup/router'
@@ -39,11 +36,9 @@ import ServiceRequestTypeController from './variations/service-request-type/cont
 import createInstallationAndRiskRouter from './installation-and-risk/router'
 import createAttachmentRouter from './attachments/router'
 import createInterestedPartiesRouter from './interested-parties/router'
+import createOrderRouter from './order/router'
 import InterestedPartiesCheckYourAnswersController from './interested-parties/check-your-answers/controller'
-import SpecialOrderController from './special-order/controller'
 import IsAddressChangeController from './variations/is-address-change/controller'
-import NoRefitsController from './variations/no-refits/controller'
-import NoChangeResponsibleOfficerController from './variations/no-change-responsible-officer/controller'
 import SentencingActSelection from './sentencing-act-selection/controller'
 
 export default function routes({
@@ -125,7 +120,6 @@ export default function routes({
   const noFixedAbodeController = new NoFixedAbodeController(deviceWearerService, taskListService)
   const interestedPartiesController = new InterestedPartiesController(interestedPartiesService, taskListService)
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
-  const orderController = new OrderController(orderService, sectionService)
   const responsibleAdultController = new ResponsibleAdultController(
     deviceWearerResponsibleAdultService,
     taskListService,
@@ -146,8 +140,6 @@ export default function routes({
     taskListService,
     orderChecklistService,
   )
-  const receiptController = new ReceiptController(fmsRequestService)
-
   const probationDeliveryUnitController = new ProbationDeliveryUnitController(
     probationDeliveryUnitService,
     taskListService,
@@ -169,50 +161,14 @@ export default function routes({
     sectionService,
   )
 
-  const isRejectionController = new IsRejectionController(isRejectionService)
-
   const serviceRequestTypeController = new ServiceRequestTypeController(serviceRequestTypeService)
-  const specialOrderController = new SpecialOrderController()
-
   const isAddressChangeController = new IsAddressChangeController(serviceRequestTypeService)
-
-  const noRefitsController = new NoRefitsController()
-  const noChangeResonsibleOfficer = new NoChangeResponsibleOfficerController()
   const setSentencingAct = new SentencingActSelection(sentencingActService)
   router.param('orderId', populateOrder(orderService))
 
   get('/', orderSearchController.list)
   get('/search', orderSearchController.search)
 
-  // Order
-  post(paths.ORDER.CREATE, orderController.create)
-  get(paths.ORDER.DELETE_SUCCESS, orderController.deleteSuccess)
-  get(paths.ORDER.DELETE_FAILED, orderController.deleteFailed)
-  get(paths.ORDER.SUMMARY, orderController.summary)
-  get(paths.ORDER.SUMMARY_VERSION, orderController.summary)
-  get(paths.ORDER.EDIT, orderController.confirmEdit)
-  get(paths.ORDER.IS_REJECTION, isRejectionController.view)
-  post(paths.ORDER.IS_REJECTION, isRejectionController.update)
-  post(paths.ORDER.VARIATION, orderController.createVariation)
-  get(paths.ORDER.DELETE, orderController.confirmDelete)
-  post(paths.ORDER.DELETE, orderController.delete)
-  post(paths.ORDER.SUBMIT, orderController.submit)
-  get(paths.ORDER.SUBMIT_SUCCESS, orderController.submitSuccess)
-  get(paths.ORDER.SUBMIT_PARTIAL_SUCCESS, orderController.submitPartialSuccess)
-  get(paths.ORDER.SUBMIT_FAILED, orderController.submitFailed)
-  get(paths.ORDER.RECEIPT, receiptController.viewReceipt)
-  get(paths.ORDER.RECEIPT_VERSION, receiptController.viewReceipt)
-  get(paths.ORDER.RECEIPT_DOWNLOAD, receiptController.downloadReceipt)
-  get(paths.ORDER.DOWNLOAD_FMS_DW_REQUEST, receiptController.downloadFmsDeviceWearerRequest)
-  get(paths.ORDER.DOWNLOAD_FMS_MO_REQUEST, receiptController.downloadFmsMonitoringOrderRequest)
-  get(paths.ORDER.RECEIPT_DOWNLOAD, receiptController.downloadReceipt)
-  get(paths.ORDER.SPECIAL_ORDER, specialOrderController.view)
-  post(paths.ORDER.SPECIAL_ORDER, specialOrderController.update)
-  get(paths.ORDER.IS_ADDRESS_CHANGE, isAddressChangeController.view)
-  post(paths.ORDER.IS_ADDRESS_CHANGE, isAddressChangeController.update)
-  get(paths.ORDER.NO_REFITS, noRefitsController.view)
-  get(paths.ORDER.NO_CHANGE_RESPONSIBLE_OFFICER, noChangeResonsibleOfficer.view)
-  post(paths.ORDER.UPDATE_ORDER_OWNER, orderController.assignOrderOwner)
   /**
    * ABOUT THE DEVICE WEARER
    */
@@ -403,6 +359,16 @@ export default function routes({
     createAttachmentRouter({
       attachmentService,
       taskListService,
+    }),
+  )
+  router.use(
+    '/',
+    createOrderRouter({
+      orderService,
+      sectionService,
+      fmsRequestService,
+      isRejectionService,
+      serviceRequestTypeService,
     }),
   )
   return router
