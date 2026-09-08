@@ -26,19 +26,17 @@ import asyncMiddleware from '../middleware/asyncMiddleware'
 import populateOrder from '../middleware/populateCurrentOrder'
 import { type Services } from '../services'
 import paths from '../constants/paths'
-import VariationDetailsController from '../controllers/variation/variationDetailsController'
 import CurfewAdditionalDetailsController from '../controllers/monitoringConditions/curfewAdditionalDetailsController'
 import InstallationLocationController from '../controllers/monitoringConditions/installationLocationController'
 import createOrderTypeDescriptionRouter from './monitoring-conditions/router'
 import RemoveMonitoringTypeController from './monitoring-conditions/remove-monitoring-type/controller'
 import createPostcodeLookupRouter from './postcode-lookup/router'
-import ServiceRequestTypeController from './variations/service-request-type/controller'
 import createInstallationAndRiskRouter from './installation-and-risk/router'
 import createAttachmentRouter from './attachments/router'
 import createInterestedPartiesRouter from './interested-parties/router'
 import createOrderRouter from './order/router'
 import InterestedPartiesCheckYourAnswersController from './interested-parties/check-your-answers/controller'
-import IsAddressChangeController from './variations/is-address-change/controller'
+import createVariationsRouter from './variations/router'
 import SentencingActSelection from './sentencing-act-selection/controller'
 
 export default function routes({
@@ -135,11 +133,6 @@ export default function routes({
     taskListService,
     orderChecklistService,
   )
-  const variationDetailsController = new VariationDetailsController(
-    variationService,
-    taskListService,
-    orderChecklistService,
-  )
   const probationDeliveryUnitController = new ProbationDeliveryUnitController(
     probationDeliveryUnitService,
     taskListService,
@@ -160,9 +153,6 @@ export default function routes({
     orderChecklistService,
     sectionService,
   )
-
-  const serviceRequestTypeController = new ServiceRequestTypeController(serviceRequestTypeService)
-  const isAddressChangeController = new IsAddressChangeController(serviceRequestTypeService)
   const setSentencingAct = new SentencingActSelection(sentencingActService)
   router.param('orderId', populateOrder(orderService))
 
@@ -299,18 +289,6 @@ export default function routes({
   post(paths.ATTACHMENT.FILE_VIEW, attachmentsController.uploadFile)
   get(paths.ATTACHMENT.DOWNLOAD_FILE, attachmentsController.downloadFile)
 
-  /**
-   * VARIATIONS
-   */
-  get(paths.VARIATION.VARIATION_DETAILS_VERSION, variationDetailsController.view)
-  post(paths.VARIATION.VARIATION_DETAILS_VERSION, variationDetailsController.update)
-  get(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.view)
-  post(paths.VARIATION.VARIATION_DETAILS, variationDetailsController.update)
-  get(paths.VARIATION.SERVICE_REQUEST_TYPE, serviceRequestTypeController.view)
-  post(paths.VARIATION.SERVICE_REQUEST_TYPE, serviceRequestTypeController.update)
-  get(paths.VARIATION.CREATE_VARIATION, isAddressChangeController.view)
-  post(paths.VARIATION.CREATE_VARIATION, isAddressChangeController.update)
-
   get(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS_VERSION, interestedPartiesCheckYourAsnwerController.view)
   post(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS_VERSION, interestedPartiesCheckYourAsnwerController.update)
   get(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS, interestedPartiesCheckYourAsnwerController.view)
@@ -359,6 +337,15 @@ export default function routes({
     createAttachmentRouter({
       attachmentService,
       taskListService,
+    }),
+  )
+  router.use(
+    '/',
+    createVariationsRouter({
+      variationService,
+      taskListService,
+      orderChecklistService,
+      serviceRequestTypeService,
     }),
   )
   router.use(
