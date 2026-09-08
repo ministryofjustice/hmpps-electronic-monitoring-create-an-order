@@ -129,7 +129,6 @@ describe('pilot controller', () => {
       mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
         hdc: 'NO',
       })
-
       await controller.view(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith(
@@ -168,6 +167,30 @@ describe('pilot controller', () => {
             'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the DAPOL pathfinder or programme they must be managed by an in-scope region. Any queries around pathfinder or programme eligibility need to be raised with the appropriate COM.',
           licenceMessage:
             'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the Licence Variation pathfinder or programme they must be managed by an in-scope region.',
+        }),
+      )
+    })
+
+    it('hdc isSentencingAct hide hint', async () => {
+      mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
+        hdc: 'NO',
+      })
+      req.order!.isSentencingAct = true
+
+      await controller.view(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({
+          items: expect.arrayContaining([
+            expect.objectContaining({
+              text: 'They are not part of any of these pathfinders or programmes',
+              value: 'UNKNOWN',
+              conditional: {
+                html: '',
+              },
+            }),
+          ]),
         }),
       )
     })
