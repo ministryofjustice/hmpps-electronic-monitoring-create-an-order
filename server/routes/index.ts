@@ -142,10 +142,7 @@ export default function routes({
   )
 
   router.use(
-    [
-      paths.INSTALLATION_AND_RISK.BASE_URL,
-      paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS_VERSION.replace('/check-your-answers', ''),
-    ],
+    [paths.INSTALLATION_AND_RISK.BASE_URL, paths.INSTALLATION_AND_RISK.VERSION_BASE_URL],
     createInstallationAndRiskRouter({
       dapoService,
       offenceService,

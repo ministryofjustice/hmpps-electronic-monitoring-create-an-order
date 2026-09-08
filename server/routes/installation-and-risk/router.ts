@@ -11,7 +11,8 @@ import IsMappaController from './is-mappa/controller'
 import InstallationAndRiskController from '../../controllers/installationAndRisk/installationAndRiskController'
 import InstallationAndRiskCheckAnswersController from '../../controllers/installationAndRisk/installationAndRiskCheckAnswersController'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
-import { registerViewUpdate } from '../routeHelpers'
+import paths from '../../constants/paths'
+import { registerViewUpdate, relativePath } from '../routeHelpers'
 
 const createInstallationAndRiskRouter = (
   services: Pick<
@@ -30,6 +31,7 @@ const createInstallationAndRiskRouter = (
   const router = Router({ mergeParams: true })
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const rel = (path: string) => relativePath(paths.INSTALLATION_AND_RISK.BASE_URL, path)
   const whenNotVersioned =
     (handler: RequestHandler): RequestHandler =>
     (req, res, next) => {
@@ -71,29 +73,33 @@ const createInstallationAndRiskRouter = (
     taskListService,
   )
 
-  get('/', whenNotVersioned(installationAndRiskController.view))
-  post('/', whenNotVersioned(installationAndRiskController.update))
-  registerViewUpdate(router, '/check-your-answers', installationAndRiskCheckAnswersController)
-  get('/offence', offenceController.view)
-  get('/offence/:offenceId', offenceController.view)
-  post('/offence', offenceController.update)
-  post('/offence/:offenceId', offenceController.update)
-  get('/offence-other-info', offenceOtherInfoController.view)
-  post('/offence-other-info', offenceOtherInfoController.update)
-  get('/offence-list', offenceListController.view)
-  post('/offence-list', offenceListController.update)
-  get('/dapo', dapoController.view)
-  post('/dapo', dapoController.update)
-  get('/dapo/:clauseId', dapoController.view)
-  post('/dapo/:clauseId', dapoController.update)
-  get('/delete/:offenceId', deleteController.view)
-  post('/delete/:offenceId', deleteController.update)
-  get('/is-mappa', isMappaController.view)
-  post('/is-mappa', isMappaController.update)
-  get('/mappa', mappaController.view)
-  post('/mappa', mappaController.update)
-  get('/details-of-installation', detailsOfInstallationController.view)
-  post('/details-of-installation', detailsOfInstallationController.update)
+  get(rel(paths.INSTALLATION_AND_RISK.BASE_URL), whenNotVersioned(installationAndRiskController.view))
+  post(rel(paths.INSTALLATION_AND_RISK.BASE_URL), whenNotVersioned(installationAndRiskController.update))
+  registerViewUpdate(
+    router,
+    rel(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS),
+    installationAndRiskCheckAnswersController,
+  )
+  get(rel(paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM), offenceController.view)
+  get(rel(paths.INSTALLATION_AND_RISK.OFFENCE), offenceController.view)
+  post(rel(paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM), offenceController.update)
+  post(rel(paths.INSTALLATION_AND_RISK.OFFENCE), offenceController.update)
+  get(rel(paths.INSTALLATION_AND_RISK.OFFENCE_OTHER_INFO), offenceOtherInfoController.view)
+  post(rel(paths.INSTALLATION_AND_RISK.OFFENCE_OTHER_INFO), offenceOtherInfoController.update)
+  get(rel(paths.INSTALLATION_AND_RISK.OFFENCE_LIST), offenceListController.view)
+  post(rel(paths.INSTALLATION_AND_RISK.OFFENCE_LIST), offenceListController.update)
+  get(rel(paths.INSTALLATION_AND_RISK.DAPO), dapoController.view)
+  post(rel(paths.INSTALLATION_AND_RISK.DAPO), dapoController.update)
+  get(rel(paths.INSTALLATION_AND_RISK.DAPO_ID), dapoController.view)
+  post(rel(paths.INSTALLATION_AND_RISK.DAPO_ID), dapoController.update)
+  get(rel(paths.INSTALLATION_AND_RISK.DELETE), deleteController.view)
+  post(rel(paths.INSTALLATION_AND_RISK.DELETE), deleteController.update)
+  get(rel(paths.INSTALLATION_AND_RISK.IS_MAPPA), isMappaController.view)
+  post(rel(paths.INSTALLATION_AND_RISK.IS_MAPPA), isMappaController.update)
+  get(rel(paths.INSTALLATION_AND_RISK.MAPPA), mappaController.view)
+  post(rel(paths.INSTALLATION_AND_RISK.MAPPA), mappaController.update)
+  get(rel(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION), detailsOfInstallationController.view)
+  post(rel(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION), detailsOfInstallationController.update)
 
   return router
 }

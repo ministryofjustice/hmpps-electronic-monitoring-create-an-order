@@ -4,10 +4,8 @@ import DeviceWearerCheckAnswersController from '../../controllers/about-the-devi
 import ResponsibleAdultController from '../../controllers/about-the-device-wearer/deviceWearerResponsibleAdultController'
 import paths from '../../constants/paths'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
-import { registerViewUpdate } from '../routeHelpers'
+import { registerViewUpdate, relativePath } from '../routeHelpers'
 import { Services } from '../../services'
-
-const relativePath = (basePath: string, path: string): string => path.replace(basePath, '') || '/'
 
 const createAboutTheDeviceWearerRouter = (
   services: Pick<

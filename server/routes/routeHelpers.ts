@@ -11,4 +11,6 @@ export const registerViewUpdate = (router: Router, path: PathParams, controller:
   router.route(path).get(asyncMiddleware(controller.view)).post(asyncMiddleware(controller.update))
 }
 
+export const relativePath = (basePath: string, path: string): string => path.replace(basePath, '') || '/'
+
 export default registerViewUpdate

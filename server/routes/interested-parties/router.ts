@@ -8,6 +8,8 @@ import NotifingOrganisationController from './notifying-organisation/controller'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 import InterestedPartiesCheckYourAnswersController from './check-your-answers/controller'
 import SentencingActSelection from '../sentencing-act-selection/controller'
+import paths from '../../constants/paths'
+import { relativePath } from '../routeHelpers'
 
 const createInterestedPartiesRouter = (
   services: Pick<
@@ -24,6 +26,7 @@ const createInterestedPartiesRouter = (
   const router = Router({ mergeParams: true })
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const rel = (path: string) => relativePath(paths.INTEREST_PARTIES.BASE_URL, path)
 
   const {
     interestedPartiesStoreService,
@@ -53,26 +56,26 @@ const createInterestedPartiesRouter = (
   )
   const sentencingActSelectionController = new SentencingActSelection(sentencingActService)
 
-  get('/notifying-organisation', notifyingOrganisationController.view)
-  post('/notifying-organisation', notifyingOrganisationController.update)
+  get(rel(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION), notifyingOrganisationController.view)
+  post(rel(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION), notifyingOrganisationController.update)
 
-  get('/responsible-officer', responsibleOfficerController.view)
-  post('/responsible-officer', responsibleOfficerController.update)
+  get(rel(paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER), responsibleOfficerController.view)
+  post(rel(paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER), responsibleOfficerController.update)
 
-  get('/responsible-organisation', responsibleOrganisationController.view)
-  post('/responsible-organisation', responsibleOrganisationController.update)
+  get(rel(paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION), responsibleOrganisationController.view)
+  post(rel(paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION), responsibleOrganisationController.update)
 
-  get('/probation-delivery-unit', probationDeliveryUnitController.view)
-  post('/probation-delivery-unit', probationDeliveryUnitController.update)
+  get(rel(paths.INTEREST_PARTIES.PDU), probationDeliveryUnitController.view)
+  post(rel(paths.INTEREST_PARTIES.PDU), probationDeliveryUnitController.update)
 
-  get('/national-security-directorate', nationalSecurityDirectorateController.view)
-  post('/national-security-directorate', nationalSecurityDirectorateController.update)
+  get(rel(paths.INTEREST_PARTIES.NSD), nationalSecurityDirectorateController.view)
+  post(rel(paths.INTEREST_PARTIES.NSD), nationalSecurityDirectorateController.update)
 
-  get('/check-your-answers', interestedPartiesCheckYourAnswersController.view)
-  post('/check-your-answers', interestedPartiesCheckYourAnswersController.update)
+  get(rel(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS), interestedPartiesCheckYourAnswersController.view)
+  post(rel(paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS), interestedPartiesCheckYourAnswersController.update)
 
-  get('/sentencing-act-selection', sentencingActSelectionController.view)
-  post('/sentencing-act-selection', sentencingActSelectionController.update)
+  get(rel(paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION), sentencingActSelectionController.view)
+  post(rel(paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION), sentencingActSelectionController.update)
 
   return router
 }
