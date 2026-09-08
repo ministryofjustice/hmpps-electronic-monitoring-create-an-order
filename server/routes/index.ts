@@ -1,10 +1,6 @@
 import { type RequestHandler, Router } from 'express'
 
 import AttachmentsController from '../controllers/attachments/attachmentController'
-import ContactDetailsController from '../controllers/contact-information/contactDetailsController'
-import NoFixedAbodeController from '../controllers/contact-information/noFixedAbodeController'
-import InterestedPartiesController from '../controllers/contact-information/interestedPartiesController'
-import ContactInformationCheckAnswersController from '../controllers/contact-information/checkAnswersController'
 import DeviceWearerController from '../controllers/about-the-device-wearer/deviceWearerController'
 import ResponsibleAdultController from '../controllers/about-the-device-wearer/deviceWearerResponsibleAdultController'
 import DeviceWearerCheckAnswersController from '../controllers/about-the-device-wearer/deviceWearerCheckAnswersController'
@@ -19,7 +15,6 @@ import CurfewTimetableController from '../controllers/monitoringConditions/curfe
 import EnforcementZoneAddToListController from './monitoring-conditions/enforcement-zone/controller'
 import TrailMonitoringController from '../controllers/monitoringConditions/trailMonitoringController'
 import MonitoringConditionsCheckAnswersController from '../controllers/monitoringConditions/checkAnswersController'
-import ProbationDeliveryUnitController from '../controllers/contact-information/probationDeliveryUnitController'
 import InstallationAppointmentController from '../controllers/monitoringConditions/installationAppointmentController'
 import OrderSearchController from '../controllers/orderSearchController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
@@ -36,6 +31,7 @@ import ServiceRequestTypeController from './variations/service-request-type/cont
 import createInstallationAndRiskRouter from './installation-and-risk/router'
 import createAttachmentRouter from './attachments/router'
 import createInterestedPartiesRouter from './interested-parties/router'
+import createContactInformationRouter from './contact-information/router'
 import createOrderRouter from './order/router'
 import InterestedPartiesCheckYourAnswersController from './interested-parties/check-your-answers/controller'
 import IsAddressChangeController from './variations/is-address-change/controller'
@@ -99,7 +95,6 @@ export default function routes({
   const attendanceMonitoringAddToListController = new AttendanceMonitoringAddToListController(
     attendanceMonitoringAddToListService,
   )
-  const contactDetailsController = new ContactDetailsController(contactDetailsService, taskListService)
   const curfewReleaseDateController = new CurfewReleaseDateController(curfewReleaseDateService)
   const curfewTimetableController = new CurfewTimetableController(curfewTimetableService)
   const curfewConditionsController = new CurfewConditionsController(curfewConditionsService)
@@ -117,8 +112,6 @@ export default function routes({
     sectionService,
   )
   const removeMonitoringTypeController = new RemoveMonitoringTypeController(removeMonitoringTypeService)
-  const noFixedAbodeController = new NoFixedAbodeController(deviceWearerService, taskListService)
-  const interestedPartiesController = new InterestedPartiesController(interestedPartiesService, taskListService)
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
   const responsibleAdultController = new ResponsibleAdultController(
     deviceWearerResponsibleAdultService,
@@ -131,18 +124,10 @@ export default function routes({
     orderChecklistService,
     sectionService,
   )
-  const contactInformationCheckAnswersController = new ContactInformationCheckAnswersController(
-    taskListService,
-    orderChecklistService,
-  )
   const variationDetailsController = new VariationDetailsController(
     variationService,
     taskListService,
     orderChecklistService,
-  )
-  const probationDeliveryUnitController = new ProbationDeliveryUnitController(
-    probationDeliveryUnitService,
-    taskListService,
   )
 
   const installationLocationController = new InstallationLocationController(
@@ -190,32 +175,6 @@ export default function routes({
   post(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS, deviceWearerCheckAnswersController.update)
   get(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS_VERSION, deviceWearerCheckAnswersController.view)
   post(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS_VERSION, deviceWearerCheckAnswersController.update)
-
-  /**
-   * CONTACT INFORMATION
-   */
-
-  // Contact details
-  get(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.view)
-  post(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController.update)
-
-  // No fixed abode
-  get(paths.CONTACT_INFORMATION.NO_FIXED_ABODE, noFixedAbodeController.view)
-  post(paths.CONTACT_INFORMATION.NO_FIXED_ABODE, noFixedAbodeController.update)
-
-  // Interested parties
-  get(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, interestedPartiesController.view)
-  post(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, interestedPartiesController.update)
-
-  // Probation delivery unit
-  get(paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT, probationDeliveryUnitController.view)
-  post(paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT, probationDeliveryUnitController.update)
-
-  // Check your answers
-  get(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS, contactInformationCheckAnswersController.view)
-  post(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS, contactInformationCheckAnswersController.update)
-  get(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS_VERSION, contactInformationCheckAnswersController.view)
-  post(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS_VERSION, contactInformationCheckAnswersController.update)
 
   /**
    * INSTALLATION AND RISK
@@ -340,6 +299,18 @@ export default function routes({
       interestedPartiesStoreService,
       updateInterestedPartiesService,
       probationDeliveryUnitService,
+    }),
+  )
+
+  router.use(
+    '/',
+    createContactInformationRouter({
+      contactDetailsService,
+      deviceWearerService,
+      interestedPartiesService,
+      probationDeliveryUnitService,
+      taskListService,
+      orderChecklistService,
     }),
   )
 

@@ -47,6 +47,7 @@ const paths = {
   },
 
   CONTACT_INFORMATION: {
+    BASE_URL: '/order/:orderId/contact-information',
     CHECK_YOUR_ANSWERS: '/order/:orderId/contact-information/check-your-answers',
     CHECK_YOUR_ANSWERS_VERSION: '/order/:orderId/version/:versionId/contact-information/check-your-answers',
     CONTACT_DETAILS: '/order/:orderId/contact-information/contact-details',
