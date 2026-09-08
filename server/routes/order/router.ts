@@ -1,8 +1,7 @@
-import { type RequestHandler, Router } from 'express'
+import { Router } from 'express'
 import { Services } from '../../services'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 import paths from '../../constants/paths'
-import { registerViewUpdate } from '../routeHelpers'
+import { createFeatureRouter } from '../routeHelpers'
 import OrderController from '../../controllers/orderController'
 import ReceiptController from '../../controllers/receiptController'
 import IsRejectionController from '../is-rejection/controller'
@@ -17,9 +16,7 @@ const createOrderRouter = (
     'orderService' | 'sectionService' | 'fmsRequestService' | 'isRejectionService' | 'serviceRequestTypeService'
   >,
 ): Router => {
-  const router = Router()
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const { router, get, post, viewUpdate } = createFeatureRouter()
 
   const { orderService, sectionService, fmsRequestService, isRejectionService, serviceRequestTypeService } = services
 
@@ -37,7 +34,7 @@ const createOrderRouter = (
   get(paths.ORDER.SUMMARY, orderController.summary)
   get(paths.ORDER.SUMMARY_VERSION, orderController.summary)
   get(paths.ORDER.EDIT, orderController.confirmEdit)
-  registerViewUpdate(router, paths.ORDER.IS_REJECTION, isRejectionController)
+  viewUpdate(paths.ORDER.IS_REJECTION, isRejectionController)
   post(paths.ORDER.VARIATION, orderController.createVariation)
   get(paths.ORDER.DELETE, orderController.confirmDelete)
   post(paths.ORDER.DELETE, orderController.delete)
@@ -50,8 +47,8 @@ const createOrderRouter = (
   get(paths.ORDER.RECEIPT_DOWNLOAD, receiptController.downloadReceipt)
   get(paths.ORDER.DOWNLOAD_FMS_DW_REQUEST, receiptController.downloadFmsDeviceWearerRequest)
   get(paths.ORDER.DOWNLOAD_FMS_MO_REQUEST, receiptController.downloadFmsMonitoringOrderRequest)
-  registerViewUpdate(router, paths.ORDER.SPECIAL_ORDER, specialOrderController)
-  registerViewUpdate(router, paths.ORDER.IS_ADDRESS_CHANGE, isAddressChangeController)
+  viewUpdate(paths.ORDER.SPECIAL_ORDER, specialOrderController)
+  viewUpdate(paths.ORDER.IS_ADDRESS_CHANGE, isAddressChangeController)
   get(paths.ORDER.NO_REFITS, noRefitsController.view)
   get(paths.ORDER.NO_CHANGE_RESPONSIBLE_OFFICER, noChangeResonsibleOfficer.view)
   post(paths.ORDER.UPDATE_ORDER_OWNER, orderController.assignOrderOwner)

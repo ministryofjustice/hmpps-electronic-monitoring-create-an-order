@@ -1,7 +1,6 @@
-import { type RequestHandler, Router } from 'express'
+import { Router } from 'express'
 import { Services } from '../../services'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
-import { registerViewUpdate, relativePath } from '../routeHelpers'
+import { createFeatureRouter } from '../routeHelpers'
 import OrderTypeController from './order-type/controller'
 import SentenceTypeController from './sentence-type/controller'
 import HdcController from './hdc/controller'
@@ -53,10 +52,7 @@ const createOrderTypeDescriptionRouter = (
     | 'sectionService'
   >,
 ): Router => {
-  const router = Router({ mergeParams: true })
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
-  const rel = (path: string) => relativePath(paths.MONITORING_CONDITIONS.BASE_URL, path)
+  const { router, get, post, viewUpdate } = createFeatureRouter(paths.MONITORING_CONDITIONS.BASE_URL)
 
   const {
     monitoringConditionsStoreService,
@@ -124,82 +120,45 @@ const createOrderTypeDescriptionRouter = (
     sectionService,
   )
 
-  registerViewUpdate(router, rel(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE), orderTypeController)
-  registerViewUpdate(
-    router,
-    rel(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE),
-    sentenceTypeController,
-  )
-  registerViewUpdate(router, rel(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC), hdcController)
-  registerViewUpdate(router, rel(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC_PAUSE), hdcPauseController)
-  registerViewUpdate(router, rel(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT), pilotController)
-  registerViewUpdate(
-    router,
-    rel(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PATHFINDER_PROGRAMME),
-    pilotController,
-  )
-  registerViewUpdate(
-    router,
-    rel(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.DAPOL_MISSED_IN_ERROR),
-    dapolMissedInErrorController,
-  )
-  registerViewUpdate(
-    router,
-    rel(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.OFFENCE_TYPE),
-    offenceTypeController,
-  )
-  registerViewUpdate(router, rel(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISSP), isspController)
-  registerViewUpdate(router, rel(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR), prarrController)
-  registerViewUpdate(
-    router,
-    rel(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED),
+  viewUpdate(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE, orderTypeController)
+  viewUpdate(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE, sentenceTypeController)
+  viewUpdate(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC, hdcController)
+  viewUpdate(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HDC_PAUSE, hdcPauseController)
+  viewUpdate(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PILOT, pilotController)
+  viewUpdate(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PATHFINDER_PROGRAMME, pilotController)
+  viewUpdate(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.DAPOL_MISSED_IN_ERROR, dapolMissedInErrorController)
+  viewUpdate(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.OFFENCE_TYPE, offenceTypeController)
+  viewUpdate(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ISSP, isspController)
+  viewUpdate(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.PRARR, prarrController)
+  viewUpdate(
+    paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED,
     typesOfMonitoringNeededController,
   )
-  registerViewUpdate(router, rel(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.POLICE_AREA), policeAreaController)
-  get(rel(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HARD_STOP), hardStopController.view)
-  registerViewUpdate(
-    router,
-    rel(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE),
-    monitoringTypeController,
-  )
-  registerViewUpdate(router, rel(paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE), removeMonitoringTypeController)
-  registerViewUpdate(router, rel(paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION), installationLocationController)
-  registerViewUpdate(
-    router,
-    rel(paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT),
-    installationAppointmentController,
-  )
-  registerViewUpdate(router, rel(paths.MONITORING_CONDITIONS.TRAIL), trailMonitoringController)
-  get(rel(paths.MONITORING_CONDITIONS.ATTENDANCE), attendanceMonitoringController.new)
-  get(rel(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM), attendanceMonitoringController.view)
-  post(rel(paths.MONITORING_CONDITIONS.ATTENDANCE), attendanceMonitoringController.update)
-  post(rel(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM), attendanceMonitoringController.update)
-  get(rel(paths.MONITORING_CONDITIONS.ATTENDANCE_ADD_TO_LIST), attendanceMonitoringAddToListController.new)
-  get(rel(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM_ADD_TO_LIST), attendanceMonitoringAddToListController.view)
-  post(rel(paths.MONITORING_CONDITIONS.ATTENDANCE_ADD_TO_LIST), attendanceMonitoringAddToListController.update)
-  post(rel(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM_ADD_TO_LIST), attendanceMonitoringAddToListController.update)
-  registerViewUpdate(router, rel(paths.MONITORING_CONDITIONS.ALCOHOL), alcoholMonitoringController)
-  registerViewUpdate(router, rel(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE), curfewReleaseDateController)
-  registerViewUpdate(router, rel(paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS), curfewConditionsController)
-  registerViewUpdate(
-    router,
-    rel(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS),
-    curfewAdditionalDetailsController,
-  )
-  registerViewUpdate(router, rel(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE), curfewTimetableController)
-  get(rel(paths.MONITORING_CONDITIONS.ZONE_NEW_ITEM), zoneControllerAddToList.new)
-  get(rel(paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST), zoneControllerAddToList.view)
-  post(rel(paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST), zoneControllerAddToList.update)
-  registerViewUpdate(
-    router,
-    rel(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS),
-    monitoringConditionsCheckYourAnswersController,
-  )
-  registerViewUpdate(
-    router,
-    rel(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS_VERSION),
-    monitoringConditionsCheckYourAnswersController,
-  )
+  viewUpdate(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.POLICE_AREA, policeAreaController)
+  get(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.HARD_STOP, hardStopController.view)
+  viewUpdate(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.MONITORING_TYPE, monitoringTypeController)
+  viewUpdate(paths.MONITORING_CONDITIONS.REMOVE_MONITORING_TYPE, removeMonitoringTypeController)
+  viewUpdate(paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION, installationLocationController)
+  viewUpdate(paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT, installationAppointmentController)
+  viewUpdate(paths.MONITORING_CONDITIONS.TRAIL, trailMonitoringController)
+  get(paths.MONITORING_CONDITIONS.ATTENDANCE, attendanceMonitoringController.new)
+  get(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM, attendanceMonitoringController.view)
+  post(paths.MONITORING_CONDITIONS.ATTENDANCE, attendanceMonitoringController.update)
+  post(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM, attendanceMonitoringController.update)
+  get(paths.MONITORING_CONDITIONS.ATTENDANCE_ADD_TO_LIST, attendanceMonitoringAddToListController.new)
+  get(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM_ADD_TO_LIST, attendanceMonitoringAddToListController.view)
+  post(paths.MONITORING_CONDITIONS.ATTENDANCE_ADD_TO_LIST, attendanceMonitoringAddToListController.update)
+  post(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM_ADD_TO_LIST, attendanceMonitoringAddToListController.update)
+  viewUpdate(paths.MONITORING_CONDITIONS.ALCOHOL, alcoholMonitoringController)
+  viewUpdate(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE, curfewReleaseDateController)
+  viewUpdate(paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS, curfewConditionsController)
+  viewUpdate(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS, curfewAdditionalDetailsController)
+  viewUpdate(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE, curfewTimetableController)
+  get(paths.MONITORING_CONDITIONS.ZONE_NEW_ITEM, zoneControllerAddToList.new)
+  get(paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST, zoneControllerAddToList.view)
+  post(paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST, zoneControllerAddToList.update)
+  viewUpdate(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS, monitoringConditionsCheckYourAnswersController)
+  viewUpdate(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS_VERSION, monitoringConditionsCheckYourAnswersController)
 
   return router
 }
