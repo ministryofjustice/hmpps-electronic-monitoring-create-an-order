@@ -81,6 +81,7 @@ const paths = {
   },
 
   MONITORING_CONDITIONS: {
+    BASE_URL: '/order/:orderId',
     INSTALLATION_LOCATION: '/order/:orderId/monitoring-conditions/installation-location',
     INSTALLATION_APPOINTMENT: '/order/:orderId/monitoring-conditions/installation-appointment',
     TRAIL: '/order/:orderId/monitoring-conditions/trail',
