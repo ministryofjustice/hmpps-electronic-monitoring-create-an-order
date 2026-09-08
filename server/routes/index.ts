@@ -1,6 +1,5 @@
 import { type RequestHandler, Router } from 'express'
 
-import AttachmentsController from '../controllers/attachments/attachmentController'
 import ContactDetailsController from '../controllers/contact-information/contactDetailsController'
 import NoFixedAbodeController from '../controllers/contact-information/noFixedAbodeController'
 import InterestedPartiesController from '../controllers/contact-information/interestedPartiesController'
@@ -89,12 +88,6 @@ export default function routes({
   const post = (path: string | string[], handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
   const alcoholMonitoringController = new AlcoholMonitoringController(alcoholMonitoringService)
-  const attachmentsController = new AttachmentsController(
-    auditService,
-    attachmentService,
-    taskListService,
-    orderChecklistService,
-  )
   const attendanceMonitoringController = new AttendanceMonitoringController(attendanceMonitoringService)
   const attendanceMonitoringAddToListController = new AttendanceMonitoringAddToListController(
     attendanceMonitoringAddToListService,
@@ -291,15 +284,6 @@ export default function routes({
   post(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS_VERSION, monitoringConditionsCheckYourAnswersController.update)
 
   /**
-   * ATTACHMENTS
-   */
-  get(paths.ATTACHMENT.ATTACHMENTS, attachmentsController.view)
-  get(paths.ATTACHMENT.ATTACHMENTS_VERSION, attachmentsController.view)
-  get(paths.ATTACHMENT.FILE_VIEW, attachmentsController.uploadFileView)
-  post(paths.ATTACHMENT.FILE_VIEW, attachmentsController.uploadFile)
-  get(paths.ATTACHMENT.DOWNLOAD_FILE, attachmentsController.downloadFile)
-
-  /**
    * VARIATIONS
    */
   get(paths.VARIATION.VARIATION_DETAILS_VERSION, variationDetailsController.view)
@@ -355,9 +339,11 @@ export default function routes({
     }),
   )
   router.use(
-    paths.ATTACHMENT.ATTACHMENTS,
+    [paths.ATTACHMENT.ATTACHMENTS, paths.ATTACHMENT.ATTACHMENTS_VERSION],
     createAttachmentRouter({
+      auditService,
       attachmentService,
+      orderChecklistService,
       taskListService,
     }),
   )
