@@ -3,8 +3,6 @@ import { type RequestHandler, Router } from 'express'
 import DeviceWearerController from '../controllers/about-the-device-wearer/deviceWearerController'
 import ResponsibleAdultController from '../controllers/about-the-device-wearer/deviceWearerResponsibleAdultController'
 import DeviceWearerCheckAnswersController from '../controllers/about-the-device-wearer/deviceWearerCheckAnswersController'
-import InstallationAndRiskController from '../controllers/installationAndRisk/installationAndRiskController'
-import InstallationAndRiskCheckAnswersController from '../controllers/installationAndRisk/installationAndRiskCheckAnswersController'
 import AlcoholMonitoringController from '../controllers/monitoringConditions/alcoholMonitoringController'
 import AttendanceMonitoringController from '../controllers/monitoringConditions/attendanceMonitoringController'
 import AttendanceMonitoringAddToListController from './monitoring-conditions/attendance-monitoring/controller'
@@ -96,12 +94,6 @@ export default function routes({
     orderChecklistService,
     sectionService,
   )
-  const installationAndRiskController = new InstallationAndRiskController(installationAndRiskService, taskListService)
-  const installationAndRiskCheckAnswersController = new InstallationAndRiskCheckAnswersController(
-    taskListService,
-    orderChecklistService,
-    sectionService,
-  )
   const removeMonitoringTypeController = new RemoveMonitoringTypeController(removeMonitoringTypeService)
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
   const responsibleAdultController = new ResponsibleAdultController(
@@ -159,17 +151,6 @@ export default function routes({
   post(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS, deviceWearerCheckAnswersController.update)
   get(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS_VERSION, deviceWearerCheckAnswersController.view)
   post(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS_VERSION, deviceWearerCheckAnswersController.update)
-
-  /**
-   * INSTALLATION AND RISK
-   */
-  get(paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK, installationAndRiskController.view)
-  post(paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK, installationAndRiskController.update)
-
-  get(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS, installationAndRiskCheckAnswersController.view)
-  post(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS, installationAndRiskCheckAnswersController.update)
-  get(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS_VERSION, installationAndRiskCheckAnswersController.view)
-  post(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS_VERSION, installationAndRiskCheckAnswersController.update)
 
   /**
    * MONITORING CONDITIONS
@@ -285,12 +266,18 @@ export default function routes({
   )
 
   router.use(
-    paths.INSTALLATION_AND_RISK.BASE_URL,
+    [
+      paths.INSTALLATION_AND_RISK.BASE_URL,
+      paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS_VERSION.replace('/check-your-answers', ''),
+    ],
     createInstallationAndRiskRouter({
       dapoService,
       offenceService,
       mappaService,
       detailsOfInstallationService,
+      installationAndRiskService,
+      orderChecklistService,
+      sectionService,
       taskListService,
       offenceOtherInfoService,
     }),
