@@ -88,6 +88,7 @@ export default function routes({
   postcodeService,
   sectionService,
   sentencingActService,
+  riskInformationService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -123,7 +124,11 @@ export default function routes({
   )
   const removeMonitoringTypeController = new RemoveMonitoringTypeController(removeMonitoringTypeService)
   const noFixedAbodeController = new NoFixedAbodeController(deviceWearerService, taskListService)
-  const interestedPartiesController = new InterestedPartiesController(interestedPartiesService, taskListService)
+  const interestedPartiesController = new InterestedPartiesController(
+    interestedPartiesService,
+    taskListService,
+    riskInformationService,
+  )
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
   const orderController = new OrderController(orderService, sectionService)
   const responsibleAdultController = new ResponsibleAdultController(
@@ -384,6 +389,7 @@ export default function routes({
       interestedPartiesStoreService,
       updateInterestedPartiesService,
       probationDeliveryUnitService,
+      riskInformationService,
     }),
   )
 

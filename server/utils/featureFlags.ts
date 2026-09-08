@@ -9,10 +9,17 @@ const defaultFeatureFlagFilePath = path.join(process.cwd(), 'data', 'default-fea
 export default class FeatureFlags {
   private static instance: FeatureFlags
 
+  private readonly flags: FeatureFlagMap
+
+  private readonly useInMemoryFlags = process.env.JEST_WORKER_ID !== undefined
+
   private constructor() {
-    const flags = { ...this.loadFlagsFromEnv() }
-    this.writeFlagsToFile(featureFlagFilePath, flags)
-    this.writeFlagsToFile(defaultFeatureFlagFilePath, flags)
+    this.flags = this.loadFlagsFromEnv()
+
+    if (!this.useInMemoryFlags) {
+      this.writeFlagsToFile(featureFlagFilePath, this.flags)
+      this.writeFlagsToFile(defaultFeatureFlagFilePath, this.flags)
+    }
   }
 
   static getInstance(): FeatureFlags {
@@ -37,6 +44,11 @@ export default class FeatureFlags {
   }
 
   async resetFeatureFlags() {
+    if (this.useInMemoryFlags) {
+      Object.assign(this.flags, this.loadFlagsFromEnv())
+      return null
+    }
+
     return fs.promises.copyFile(defaultFeatureFlagFilePath, featureFlagFilePath).then(() => null)
   }
 
@@ -46,6 +58,13 @@ export default class FeatureFlags {
   }
 
   public async setFlag(flagName: string, value: boolean) {
+    if (this.useInMemoryFlags) {
+      if (flagName in this.flags) {
+        this.flags[flagName] = value
+      }
+      return null
+    }
+
     return fs.promises
       .readFile(featureFlagFilePath, 'utf-8')
       .then(data => {
@@ -61,7 +80,11 @@ export default class FeatureFlags {
       .then(() => null)
   }
 
-  public getAll(): Record<string, boolean> {
+  public getAll(): FeatureFlagMap {
+    if (this.useInMemoryFlags) {
+      return { ...this.flags }
+    }
+
     return JSON.parse(fs.readFileSync(featureFlagFilePath, 'utf-8'))
   }
 
@@ -70,14 +93,14 @@ export default class FeatureFlags {
     if (!(flagName in flags)) {
       throw new Error(`Feature flag "${flagName}" not defined.`)
     }
-    return flags[flagName]
+    return flags[flagName] as boolean
   }
 
   public getValue(flagName: string): string {
-    const flags = JSON.parse(fs.readFileSync(featureFlagFilePath, 'utf-8'))
+    const flags = this.getAll()
     if (!(flagName in flags)) {
       throw new Error(`Feature flag "${flagName}" not defined.`)
     }
-    return flags[flagName]
+    return flags[flagName] as string
   }
 }

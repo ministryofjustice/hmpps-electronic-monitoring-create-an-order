@@ -7,6 +7,7 @@ import FeatureFlags from '../utils/featureFlags'
 import isVariationType from '../utils/isVariationType'
 import isOrderDataDictionarySameOrAbove from '../utils/dataDictionaryVersionComparer'
 import { notifyingOrganisationCourts } from '../models/NotifyingOrganisation'
+import { getRiskInformationTasks } from '../routes/installation-and-risk/riskInformationTasks'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
@@ -257,79 +258,7 @@ export default class TaskListService {
     })
 
     if (FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')) {
-      tasks.push({
-        section: SECTIONS.riskInformation,
-        name: PAGES.offence,
-        path: paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM,
-        state: convertBooleanToEnum<State>(
-          order.interestedParties?.notifyingOrganisation !== 'FAMILY_COURT' &&
-            order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE',
-          STATES.cantBeStarted,
-          STATES.required,
-          STATES.notRequired,
-        ),
-        completed: (order.offences?.length ?? 0) > 0,
-      })
-      tasks.push({
-        section: SECTIONS.riskInformation,
-        name: PAGES.offenceOtherInfo,
-        path: paths.INSTALLATION_AND_RISK.OFFENCE_OTHER_INFO,
-        state: convertBooleanToEnum<State>(
-          order.interestedParties?.notifyingOrganisation !== 'FAMILY_COURT' &&
-            order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE',
-          STATES.cantBeStarted,
-          STATES.required,
-          STATES.notRequired,
-        ),
-        completed: isNotNullOrUndefined(order.offenceAdditionalDetails),
-      })
-
-      tasks.push({
-        section: SECTIONS.riskInformation,
-        name: PAGES.dapo,
-        path: paths.INSTALLATION_AND_RISK.DAPO,
-        state: convertBooleanToEnum<State>(
-          order.interestedParties?.notifyingOrganisation === 'FAMILY_COURT',
-          STATES.cantBeStarted,
-          STATES.required,
-          STATES.notRequired,
-        ),
-        completed: (order.dapoClauses?.length ?? 0) > 0,
-      })
-
-      tasks.push({
-        section: SECTIONS.riskInformation,
-        name: PAGES.detailsOfInstallation,
-        path: paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION,
-        state: STATES.required,
-        completed: isNotNullOrUndefined(order.detailsOfInstallation),
-      })
-
-      tasks.push({
-        section: SECTIONS.riskInformation,
-        name: PAGES.isMappa,
-        path: paths.INSTALLATION_AND_RISK.IS_MAPPA,
-        state: convertBooleanToEnum<State>(
-          order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE',
-          STATES.cantBeStarted,
-          STATES.required,
-          STATES.notRequired,
-        ),
-        completed: isNotNullOrUndefined(order.mappa?.isMappa),
-      })
-
-      tasks.push({
-        section: SECTIONS.riskInformation,
-        name: PAGES.mappa,
-        path: paths.INSTALLATION_AND_RISK.MAPPA,
-        state: convertBooleanToEnum<State>(
-          order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE' && order.mappa?.isMappa === 'YES',
-          STATES.cantBeStarted,
-          STATES.required,
-          STATES.notRequired,
-        ),
-        completed: isNotNullOrUndefined(order.mappa?.level) && isNotNullOrUndefined(order.mappa?.category),
-      })
+      tasks.push(...getRiskInformationTasks(order))
     } else {
       tasks.push({
         section: SECTIONS.riskInformation,
@@ -338,15 +267,14 @@ export default class TaskListService {
         state: STATES.required,
         completed: isNotNullOrUndefined(order.installationAndRisk),
       })
+      tasks.push({
+        section: SECTIONS.riskInformation,
+        name: PAGES.checkAnswersInstallationAndRisk,
+        path: paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS,
+        state: STATES.required,
+        completed: true,
+      })
     }
-
-    tasks.push({
-      section: SECTIONS.riskInformation,
-      name: PAGES.checkAnswersInstallationAndRisk,
-      path: paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS,
-      state: STATES.required,
-      completed: true,
-    })
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,

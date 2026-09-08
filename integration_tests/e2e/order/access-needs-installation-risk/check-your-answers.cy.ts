@@ -436,7 +436,7 @@ context('installation and risk - check your answers', () => {
       cy.task('resetFeatureFlags')
     })
 
-    it('family court dapo clauses', () => {
+    it('does not show Family Court offences or DAPO clauses', () => {
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
         id: mockOrderId,
@@ -467,14 +467,12 @@ context('installation and risk - check your answers', () => {
       const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
       page.installationRiskSection.shouldExist()
-      page.installationRiskSection.shouldHaveItems([
-        { key: 'DAPO order clauses', value: '12345 on 01/02/2025' },
-        { key: 'DAPO order clauses', value: '56789 on 02/03/2025' },
-      ])
+      page.installationRiskSection.shouldNotHaveItem('DAPO order clauses')
+      page.installationRiskSection.shouldNotHaveItem('Offences')
       page.installationRiskSection.shouldNotHaveItem('What type of offence did the device wearer commit?')
     })
 
-    it('Civil court offences', () => {
+    it('shows the fixed Civil Court offence without a date', () => {
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
         id: mockOrderId,
@@ -491,12 +489,8 @@ context('installation and risk - check your answers', () => {
           },
           offences: [
             {
-              offenceType: 'SEXUAL_OFFENCES',
-              offenceDate: new Date(2025, 1, 1),
-            },
-            {
-              offenceType: 'CRIMINAL_DAMAGE_AND_ARSON',
-              offenceDate: new Date(2025, 2, 2),
+              offenceType: 'VIOLENCE_AGAINST_THE_PERSON',
+              offenceDate: null,
             },
           ],
           dataDictionaryVersion: 'DDV6',
@@ -505,10 +499,7 @@ context('installation and risk - check your answers', () => {
       const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
       page.installationRiskSection.shouldExist()
-      page.installationRiskSection.shouldHaveItems([
-        { key: 'Offences', value: 'Sexual offences on 01/02/2025' },
-        { key: 'Offences', value: 'Criminal damage and arson on 02/03/2025' },
-      ])
+      page.installationRiskSection.shouldHaveItems([{ key: 'Offences', value: 'Violence against the person' }])
       page.installationRiskSection.shouldNotHaveItem('What type of offence did the device wearer commit?')
     })
 

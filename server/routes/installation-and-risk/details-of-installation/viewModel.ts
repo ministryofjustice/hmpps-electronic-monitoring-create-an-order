@@ -1,13 +1,16 @@
 import getContent from '../../../i18n'
 import { Order } from '../../../models/Order'
 import { ValidationResult } from '../../../models/Validation'
-import { ViewModel } from '../../../models/view-models/utils'
+import { TextField, ViewModel } from '../../../models/view-models/utils'
+import { getRiskInformationFlow } from '../../../services/riskInformationFlow'
 import I18n from '../../../types/i18n'
 import { createGovukErrorSummary } from '../../../utils/errors'
 import { getError } from '../../../utils/utils'
 import { DetailsOfInstallationInput } from './formModel'
 
-type DetailsOfInstallationModel = ViewModel<Omit<DetailsOfInstallationInput, 'action'>>
+type DetailsOfInstallationModel = ViewModel<Omit<DetailsOfInstallationInput, 'action'>> & {
+  offence?: TextField
+}
 
 const construct = (
   order: Order,
@@ -15,8 +18,10 @@ const construct = (
   errors: ValidationResult,
 ): DetailsOfInstallationModel => {
   const content = getContent('en', order.dataDictionaryVersion)
+  const offencePolicy = getRiskInformationFlow(order.interestedParties?.notifyingOrganisation).offence
 
   return {
+    offence: offencePolicy.mode === 'FIXED' ? { value: offencePolicy.offenceType } : undefined,
     possibleRisk: {
       values: getPossibleRiskValues(formData?.possibleRisk, order.detailsOfInstallation?.riskCategory, content),
       error: getError(errors, 'possibleRisk'),

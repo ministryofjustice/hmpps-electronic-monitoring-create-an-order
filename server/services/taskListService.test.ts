@@ -7,9 +7,36 @@ import {
 import paths from '../constants/paths'
 import TaskListService, { Page, Task } from './taskListService'
 import { Order } from '../models/Order'
+import FeatureFlags from '../utils/featureFlags'
 
 describe('TaskListService', () => {
   const monitoringConditionsPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE
+
+  describe('risk information tasks', () => {
+    afterEach(() => {
+      jest.restoreAllMocks()
+    })
+
+    it.each([
+      ['PRISON', ['OFFENCE', 'OFFENCE_OTHER_INFO', 'DETAILS_OF_INSTALLATION', 'CHECK_ANSWERS_INSTALLATION_AND_RISK']],
+      ['FAMILY_COURT', ['DETAILS_OF_INSTALLATION', 'CHECK_ANSWERS_INSTALLATION_AND_RISK']],
+      ['CIVIL_COUNTY_COURT', ['DETAILS_OF_INSTALLATION', 'CHECK_ANSWERS_INSTALLATION_AND_RISK']],
+      ['HOME_OFFICE', ['DETAILS_OF_INSTALLATION', 'IS_MAPPA', 'MAPPA', 'CHECK_ANSWERS_INSTALLATION_AND_RISK']],
+    ] as const)('uses the %s risk information profile', (notifyingOrganisation, expectedPages) => {
+      jest.spyOn(FeatureFlags.getInstance(), 'get').mockImplementation(flag => flag === 'OFFENCE_FLOW_ENABLED')
+      const order = getMockOrder({
+        interestedParties: {
+          ...getMockOrder().interestedParties!,
+          notifyingOrganisation,
+        },
+      })
+
+      const tasks = new TaskListService().getTasks(order)
+
+      expect(tasks.filter(task => task.section === 'RISK_INFORMATION').map(task => task.name)).toEqual(expectedPages)
+    })
+  })
+
   describe('getNextPage', () => {
     it('should return contact details if current page is device wearer and adultAtTheTimeOfInstallation is true', () => {
       // Given

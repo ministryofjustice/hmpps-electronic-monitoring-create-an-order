@@ -2,11 +2,7 @@
 
 // NB: Instead of importing FeatureFlags at top of file, it is imported with require() in each test so that the module is re-evaluated at the start of each test. This is required for tests checking the behaviour of the module on instantiation.
 
-import path from 'path'
 import fs from 'fs'
-
-const featureFlagFilePath = path.join(process.cwd(), 'data', 'feature-flags.json')
-const defaultFeatureFlagFilePath = path.join(process.cwd(), 'data', 'default-feature-flags.json')
 
 const mockFlags = {
   CREATE_NEW_ORDER_VERSION_ENABLED: false,
@@ -26,6 +22,10 @@ mockFs.writeFileSync.mockImplementation(() => {})
 mockFs.readFileSync.mockImplementation(() => JSON.stringify(mockFlags))
 
 describe('FeatureFlags', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
   test('Should act as a singleton', () => {
     const FeatureFlags = require('./featureFlags').default
     const instance1 = FeatureFlags.getInstance()
@@ -34,16 +34,11 @@ describe('FeatureFlags', () => {
     expect(instance1).toBe(instance2)
   })
 
-  test('Should load flags from process.env and write to JSON files', () => {
+  test('Should keep flags in memory without writing shared files under Jest', () => {
     const FeatureFlags = require('./featureFlags').default
     FeatureFlags.getInstance()
 
-    expect(mockFs.writeFileSync).toHaveBeenCalledWith(featureFlagFilePath, JSON.stringify(mockFlags, null, 2), 'utf-8')
-    expect(mockFs.writeFileSync).toHaveBeenCalledWith(
-      defaultFeatureFlagFilePath,
-      JSON.stringify(mockFlags, null, 2),
-      'utf-8',
-    )
+    expect(mockFs.writeFileSync).not.toHaveBeenCalled()
   })
 
   test('getAll should return all flags', () => {
@@ -51,6 +46,7 @@ describe('FeatureFlags', () => {
     const flags = FeatureFlags.getInstance().getAll()
 
     expect(flags).toEqual(mockFlags)
+    expect(mockFs.readFileSync).not.toHaveBeenCalled()
   })
 
   test('get should return the specified flag', () => {

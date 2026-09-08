@@ -1,5 +1,6 @@
 import FormCheckboxesComponent from '../../../../pages/components/formCheckboxesComponent'
 import FormComponent from '../../../../pages/components/formComponent'
+import FormSelectComponent from '../../../../pages/components/formSelectComponent'
 import FormTextareaComponent from '../../../../pages/components/formTextareaComponent'
 
 type DetailsOfInstallationData = {
@@ -10,6 +11,11 @@ type DetailsOfInstallationData = {
 }
 
 export default class DetailsOfInstallationComponent extends FormComponent {
+  get offenceField(): FormSelectComponent {
+    const label = 'What type of offence did the device wearer commit?'
+    return new FormSelectComponent(this.form, label, ['Violence against the person'])
+  }
+
   get possibleRiskField(): FormCheckboxesComponent {
     const label = "At installation what are the possible risks from the device wearer's behaviour?"
     return new FormCheckboxesComponent(this.form, label, [

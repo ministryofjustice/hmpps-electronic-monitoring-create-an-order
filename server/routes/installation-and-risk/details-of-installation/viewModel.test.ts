@@ -2,6 +2,7 @@ import { Order } from '../../../models/Order'
 import { ValidationResult } from '../../../models/Validation'
 import { DetailsOfInstallationInput } from './formModel'
 import DetailsOfInstallationModel from './viewModel'
+import { getMockOrder } from '../../../../test/mocks/mockOrder'
 
 describe('details of installation view model', () => {
   it('returns empty when no values in order', () => {
@@ -67,5 +68,39 @@ describe('details of installation view model', () => {
       errorList: [{ href: '#possibleRisk', text: 'some error' }],
       titleText: 'There is a problem',
     })
+  })
+
+  it('returns the fixed offence for Civil Court', () => {
+    const order = getMockOrder({
+      interestedParties: {
+        ...getMockOrder().interestedParties!,
+        notifyingOrganisation: 'CIVIL_COUNTY_COURT',
+      },
+    })
+
+    const result = DetailsOfInstallationModel.construct(order, {} as DetailsOfInstallationInput, [])
+
+    expect(result.offence).toEqual({ value: 'VIOLENCE_AGAINST_THE_PERSON' })
+  })
+
+  it('does not return an offence for Family Court', () => {
+    const order = getMockOrder({
+      interestedParties: {
+        ...getMockOrder().interestedParties!,
+        notifyingOrganisation: 'FAMILY_COURT',
+      },
+    })
+
+    const result = DetailsOfInstallationModel.construct(order, {} as DetailsOfInstallationInput, [])
+
+    expect(result.offence).toBeUndefined()
+  })
+
+  it('does not return an offence for non-court organisations', () => {
+    const order = getMockOrder()
+
+    const result = DetailsOfInstallationModel.construct(order, {} as DetailsOfInstallationInput, [])
+
+    expect(result.offence).toBeUndefined()
   })
 })

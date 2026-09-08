@@ -10,11 +10,27 @@ Cypress.Commands.add(
   ): Cypress.Chainable<JQuery> => {
     const log = false
 
-    return cy
-      .wrap(subject, { log })
-      .contains('label', label, { log })
-      .invoke({ log }, 'attr', 'for')
-      .then(id => cy.get(`#${id}`, { log, ...options }))
+    return cy.wrap(subject, { log }).then($subject => {
+      const matchingLabel = $subject
+        .find('label')
+        .toArray()
+        .find(element => {
+          const text = element.textContent?.trim() ?? ''
+
+          if (label instanceof RegExp) {
+            return new RegExp(label.source, label.flags).test(text)
+          }
+
+          return text.includes(label)
+        })
+      const inputId = matchingLabel?.getAttribute('for')
+
+      if (!inputId) {
+        throw new Error(`No input associated with label ${label.toString()}`)
+      }
+
+      return cy.get(`#${CSS.escape(inputId)}`, { log, ...options })
+    })
   },
 )
 

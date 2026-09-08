@@ -4,6 +4,10 @@ const detailsOfInstallationPageContent: DetailsOfInstallationPageContent = {
   helpText: '',
   legend: '',
   questions: {
+    offence: {
+      text: 'What type of offence did the device wearer commit?',
+      hint: '',
+    },
     possibleRisk: {
       text: "At installation what are the possible risks from the device wearer's behaviour?",
       hint: 'Check if there are any alerts for the device wearer. Select all that apply',

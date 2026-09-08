@@ -1,4 +1,4 @@
-import { createAnswer, createDatePreview, createMultipleChoiceAnswer } from '../../utils/checkYourAnswers'
+import { createAnswer, createMultipleChoiceAnswer } from '../../utils/checkYourAnswers'
 
 import { Order } from '../Order'
 import I18n from '../../types/i18n'
@@ -6,7 +6,7 @@ import { formatDateTime, lookup } from '../../utils/utils'
 import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
 import paths from '../../constants/paths'
 import FeatureFlags from '../../utils/featureFlags'
-import { notifyingOrganisationCourts } from '../NotifyingOrganisation'
+import { getRiskInformationFlow } from '../../services/riskInformationFlow'
 
 const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean, uri: string = '') => {
   const { questions } = content.pages.installationAndRisk
@@ -15,6 +15,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
   const answers = []
 
   const isHomeOfficeUser = order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE'
+  const riskInformationFlow = getRiskInformationFlow(order.interestedParties?.notifyingOrganisation)
 
   const isNewOffenceFlow =
     isOrderDataDictionarySameOrAbove('DDV6', order) && FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')
@@ -25,28 +26,16 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
     : paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM.replace(':orderId', order.id)
 
   if (isNewOffenceFlow) {
-    if (order.interestedParties?.notifyingOrganisation === 'FAMILY_COURT') {
-      answers.push(
-        createMultipleChoiceAnswer(
-          'DAPO order clauses',
-          order.dapoClauses.map(clause => `${clause.clause} on ${createDatePreview(clause.date)}`),
-          paths.INSTALLATION_AND_RISK.OFFENCE_LIST.replace(':orderId', order.id),
-        ),
-      )
-    } else if (
-      notifyingOrganisationCourts.find(court => court === order.interestedParties?.notifyingOrganisation) !== undefined
-    ) {
+    if (riskInformationFlow.offence.mode === 'FIXED') {
       answers.push(
         createMultipleChoiceAnswer(
           'Offences',
-          order.offences.map(
-            offence =>
-              `${lookup(content.reference.offences, offence.offenceType)} on ${createDatePreview(offence.offenceDate)}`,
-          ),
-          paths.INSTALLATION_AND_RISK.OFFENCE_LIST.replace(':orderId', order.id),
+          [lookup(content.reference.offences, riskInformationFlow.offence.offenceType)],
+          '',
+          { ...answerOpts, ignoreActions: true },
         ),
       )
-    } else if (!isHomeOfficeUser) {
+    } else if (riskInformationFlow.offence.mode === 'USER_ENTERED') {
       answers.push(
         createMultipleChoiceAnswer(
           questions.offence.text,
@@ -55,9 +44,6 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
           answerOpts,
         ),
       )
-    }
-
-    if (!isHomeOfficeUser) {
       answers.push(
         createAnswer(
           'Any other information to be aware of about the offence committed?',

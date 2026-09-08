@@ -10,4 +10,9 @@ export default class MappaPage extends AppFormPage {
 
     super('Multi-Agency Public Protection Arrangements (MAPPA)', path)
   }
+
+  checkOnPage(): void {
+    super.checkOnPage()
+    cy.location('pathname').should('match', /\/installation-and-risk\/mappa$/)
+  }
 }

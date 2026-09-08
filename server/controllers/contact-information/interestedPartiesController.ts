@@ -5,11 +5,13 @@ import InterestedPartiesService from '../../services/interestedPartiesService'
 import TaskListService from '../../services/taskListService'
 import InterestedPartiesFormDataModel from '../../models/form-data/interestedParties'
 import interestedPartiesViewModel from '../../models/view-models/interestedParties'
+import RiskInformationService from '../../services/riskInformationService'
 
 export default class InterestedPartiesController {
   constructor(
     private readonly interestedPartiesService: InterestedPartiesService,
     private readonly taskListService: TaskListService,
+    private readonly riskInformationService: RiskInformationService,
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
@@ -36,7 +38,16 @@ export default class InterestedPartiesController {
       req.flash('validationErrors', result)
 
       res.redirect(paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', orderId))
-    } else if (action === 'continue') {
+      return
+    }
+
+    await this.riskInformationService.initialise({
+      accessToken: res.locals.user.token,
+      orderId,
+      notifyingOrganisation: result.notifyingOrganisation,
+    })
+
+    if (action === 'continue') {
       res.redirect(
         this.taskListService.getNextPage('INTERESTED_PARTIES', {
           ...req.order!,

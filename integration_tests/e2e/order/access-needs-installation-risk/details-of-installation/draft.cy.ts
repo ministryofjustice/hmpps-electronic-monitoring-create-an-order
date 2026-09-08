@@ -22,6 +22,7 @@ context('details of installation page', () => {
   it('has correct elements', () => {
     const page = Page.visit(DetailsOfInstallationPage, { orderId: mockOrderId })
 
+    cy.get('#offence').should('not.exist')
     page.form.possibleRiskField.shouldNotBeDisabled()
     page.form.possibleRiskField.shouldHaveAllOptions()
 
@@ -32,6 +33,43 @@ context('details of installation page', () => {
 
     page.form.saveAndContinueButton.should('exist')
     page.form.saveAsDraftButton.should('exist')
+  })
+
+  it('shows the fixed offence for Civil Court', () => {
+    cy.task('stubCemoGetOrder', {
+      httpStatus: 200,
+      id: mockOrderId,
+      status: 'IN_PROGRESS',
+      order: {
+        interestedParties: {
+          notifyingOrganisation: 'CIVIL_COUNTY_COURT',
+        },
+        dataDictionaryVersion: 'DDV6',
+      },
+    })
+
+    const page = Page.visit(DetailsOfInstallationPage, { orderId: mockOrderId })
+
+    page.form.offenceField.shouldHaveValue('VIOLENCE_AGAINST_THE_PERSON')
+    page.form.offenceField.shouldBeDisabled()
+  })
+
+  it('does not show an offence for Family Court', () => {
+    cy.task('stubCemoGetOrder', {
+      httpStatus: 200,
+      id: mockOrderId,
+      status: 'IN_PROGRESS',
+      order: {
+        interestedParties: {
+          notifyingOrganisation: 'FAMILY_COURT',
+        },
+        dataDictionaryVersion: 'DDV6',
+      },
+    })
+
+    Page.visit(DetailsOfInstallationPage, { orderId: mockOrderId })
+
+    cy.get('#offence').should('not.exist')
   })
 
   it('shows correctly for order with data', () => {

@@ -50,6 +50,7 @@ import UpdateInterestedPartiesService from '../routes/interested-parties/interes
 import PostcodeService from '../routes/postcode-lookup/postcodeService'
 import SentencingActService from '../routes/sentencing-act-selection/SentencingActService'
 import SectionService from './sectionsService'
+import RiskInformationService from './riskInformationService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient, osDataHubClient } = dataAccess()
@@ -95,6 +96,7 @@ export const services = () => {
   const mappaService = new MappaService(cemoApiClient)
   const detailsOfInstallationService = new DetailsOfInstallationService(cemoApiClient)
   const sentencingActService = new SentencingActService(cemoApiClient)
+  const riskInformationService = new RiskInformationService(cemoApiClient)
 
   const interestedPartiesStoreService = new InterestedPartiesStoreService(
     config.redis.enabled ? new RedisStore(createRedisClient()) : new InMemoryStore(),
@@ -158,6 +160,7 @@ export const services = () => {
     postcodeService,
     sectionService,
     sentencingActService,
+    riskInformationService,
   }
 }
 
@@ -195,4 +198,5 @@ export {
   MappaService,
   SectionService as SectionsService,
   SentencingActService,
+  RiskInformationService,
 }
