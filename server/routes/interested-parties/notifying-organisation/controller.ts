@@ -10,13 +10,13 @@ import UpdateInterestedPartiesService from '../interestedPartiesService'
 import { InterestedParties } from '../model'
 import { filterNullValues } from '../../../utils/utils'
 import isVariationType from '../../../utils/isVariationType'
-import RiskInformationService from '../../../services/riskInformationService'
+import RiskInformationStaticOffenceService from '../../../services/riskInformationStaticOffenceService'
 
 export default class NotifingOrganisationController extends InterestedPartiesBaseController {
   constructor(
     readonly store: InterestedPartiesStoreService,
     readonly service: UpdateInterestedPartiesService,
-    private readonly riskInformationService: RiskInformationService,
+    private readonly riskInformationStaticOffenceService: RiskInformationStaticOffenceService,
   ) {
     super(store, service)
   }
@@ -61,7 +61,7 @@ export default class NotifingOrganisationController extends InterestedPartiesBas
       accessToken: res.locals.user.token,
       orderId: order.id,
     })
-    await this.riskInformationService.initialise({
+    await this.riskInformationStaticOffenceService.initialise({
       accessToken: res.locals.user.token,
       orderId: order.id,
       notifyingOrganisation: validationResult.data.notifyingOrganisation,

@@ -1,6 +1,6 @@
 import { getMockOrder } from '../../../../test/mocks/mockOrder'
 import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
-import RiskInformationService from '../../../services/riskInformationService'
+import RiskInformationStaticOffenceService from '../../../services/riskInformationStaticOffenceService'
 import InterestedPartiesStoreService from '../interestedPartiesStoreService'
 import UpdateInterestedPartiesService from '../interestedPartiesService'
 import NotifingOrganisationController from './controller'
@@ -10,11 +10,15 @@ describe('NotifingOrganisationController', () => {
   const interestedPartiesService = {
     update: jest.fn(),
   } as unknown as jest.Mocked<UpdateInterestedPartiesService>
-  const riskInformationService = {
+  const riskInformationStaticOffenceService = {
     initialise: jest.fn(),
-  } as unknown as jest.Mocked<RiskInformationService>
+  } as unknown as jest.Mocked<RiskInformationStaticOffenceService>
 
-  const controller = new NotifingOrganisationController(store, interestedPartiesService, riskInformationService)
+  const controller = new NotifingOrganisationController(
+    store,
+    interestedPartiesService,
+    riskInformationStaticOffenceService,
+  )
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -36,7 +40,7 @@ describe('NotifingOrganisationController', () => {
     await controller.update(req, res, jest.fn())
 
     expect(interestedPartiesService.update).toHaveBeenCalled()
-    expect(riskInformationService.initialise).toHaveBeenCalledWith({
+    expect(riskInformationStaticOffenceService.initialise).toHaveBeenCalledWith({
       accessToken: 'fakeUserToken',
       orderId: order.id,
       notifyingOrganisation: 'CIVIL_COUNTY_COURT',
@@ -56,6 +60,6 @@ describe('NotifingOrganisationController', () => {
     await controller.update(req, res, jest.fn())
 
     expect(interestedPartiesService.update).not.toHaveBeenCalled()
-    expect(riskInformationService.initialise).not.toHaveBeenCalled()
+    expect(riskInformationStaticOffenceService.initialise).not.toHaveBeenCalled()
   })
 })

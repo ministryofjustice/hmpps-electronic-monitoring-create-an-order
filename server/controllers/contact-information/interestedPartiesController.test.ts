@@ -4,12 +4,12 @@ import InterestedPartiesController from './interestedPartiesController'
 import InterestedPartiesService from '../../services/interestedPartiesService'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 import { getMockOrder } from '../../../test/mocks/mockOrder'
-import RiskInformationService from '../../services/riskInformationService'
+import RiskInformationStaticOffenceService from '../../services/riskInformationStaticOffenceService'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
 jest.mock('../../services/interestedPartiesService')
-jest.mock('../../services/riskInformationService')
+jest.mock('../../services/riskInformationStaticOffenceService')
 jest.mock('../../data/hmppsAuditClient')
 jest.mock('../../data/restClient')
 
@@ -29,7 +29,7 @@ const createMockOrder = getMockOrder({
 describe('InterestedPartiesController', () => {
   let mockRestClient: jest.Mocked<RestClient>
   let mockInterestedPartiesService: jest.Mocked<InterestedPartiesService>
-  let mockRiskInformationService: jest.Mocked<RiskInformationService>
+  let mockRiskInformationStaticOffenceService: jest.Mocked<RiskInformationStaticOffenceService>
   let interestedPartiesController: InterestedPartiesController
   const taskListService = {
     getNextCheckYourAnswersPage: jest.fn(),
@@ -43,11 +43,13 @@ describe('InterestedPartiesController', () => {
       agent: { timeout: 0 },
     }) as jest.Mocked<RestClient>
     mockInterestedPartiesService = new InterestedPartiesService(mockRestClient) as jest.Mocked<InterestedPartiesService>
-    mockRiskInformationService = new RiskInformationService(mockRestClient) as jest.Mocked<RiskInformationService>
+    mockRiskInformationStaticOffenceService = new RiskInformationStaticOffenceService(
+      mockRestClient,
+    ) as jest.Mocked<RiskInformationStaticOffenceService>
     interestedPartiesController = new InterestedPartiesController(
       mockInterestedPartiesService,
       taskListService,
-      mockRiskInformationService,
+      mockRiskInformationStaticOffenceService,
     )
 
     jest.useFakeTimers()
@@ -213,7 +215,7 @@ describe('InterestedPartiesController', () => {
         }),
       )
 
-      expect(mockRiskInformationService.initialise).toHaveBeenCalledWith({
+      expect(mockRiskInformationStaticOffenceService.initialise).toHaveBeenCalledWith({
         accessToken: 'fakeUserToken',
         orderId: order.id,
         notifyingOrganisation: 'YOUTH_COURT',
@@ -246,7 +248,7 @@ describe('InterestedPartiesController', () => {
 
       await interestedPartiesController.update(req, res, jest.fn())
 
-      expect(mockRiskInformationService.initialise).toHaveBeenCalledWith({
+      expect(mockRiskInformationStaticOffenceService.initialise).toHaveBeenCalledWith({
         accessToken: 'fakeUserToken',
         orderId: order.id,
         notifyingOrganisation: 'CIVIL_COUNTY_COURT',

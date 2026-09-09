@@ -8,7 +8,6 @@ import MappaController from './mappa/controller'
 import { Services } from '../../services'
 import DetailsOfInstallationController from './details-of-installation/controller'
 import IsMappaController from './is-mappa/controller'
-import createRiskInformationPageGuard from './riskInformationPageGuard'
 
 const createInstallationAndRiskRouter = (
   services: Pick<
@@ -44,25 +43,20 @@ const createInstallationAndRiskRouter = (
     taskListService,
   )
 
-  const offenceGuard = createRiskInformationPageGuard('OFFENCE')
-  const offenceOtherInfoGuard = createRiskInformationPageGuard('OFFENCE_OTHER_INFO')
-  const offenceListGuard = createRiskInformationPageGuard('OFFENCE_LIST')
-  const dapoGuard = createRiskInformationPageGuard('DAPO')
-
-  router.get('/offence', offenceGuard, offenceController.view)
-  router.get('/offence/:offenceId', offenceGuard, offenceController.view)
-  router.post('/offence', offenceGuard, offenceController.update)
-  router.post('/offence/:offenceId', offenceGuard, offenceController.update)
-  router.get('/offence-other-info', offenceOtherInfoGuard, offenceOtherInfoController.view)
-  router.post('/offence-other-info', offenceOtherInfoGuard, offenceOtherInfoController.update)
-  router.get('/offence-list', offenceListGuard, offenceListController.view)
-  router.post('/offence-list', offenceListGuard, offenceListController.update)
-  router.get('/dapo', dapoGuard, dapoController.view)
-  router.post('/dapo', dapoGuard, dapoController.update)
-  router.get('/dapo/:clauseId', dapoGuard, dapoController.view)
-  router.post('/dapo/:clauseId', dapoGuard, dapoController.update)
-  router.get('/delete/:offenceId', offenceListGuard, deleteController.view)
-  router.post('/delete/:offenceId', offenceListGuard, deleteController.update)
+  router.get('/offence', offenceController.view)
+  router.get('/offence/:offenceId', offenceController.view)
+  router.post('/offence', offenceController.update)
+  router.post('/offence/:offenceId', offenceController.update)
+  router.get('/offence-other-info', offenceOtherInfoController.view)
+  router.post('/offence-other-info', offenceOtherInfoController.update)
+  router.get('/offence-list', offenceListController.view)
+  router.post('/offence-list', offenceListController.update)
+  router.get('/dapo', dapoController.view)
+  router.post('/dapo', dapoController.update)
+  router.get('/dapo/:clauseId', dapoController.view)
+  router.post('/dapo/:clauseId', dapoController.update)
+  router.get('/delete/:offenceId', deleteController.view)
+  router.post('/delete/:offenceId', deleteController.update)
   router.get('/is-mappa', isMappaController.view)
   router.post('/is-mappa', isMappaController.update)
   router.get('/mappa', mappaController.view)

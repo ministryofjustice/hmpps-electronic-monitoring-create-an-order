@@ -88,7 +88,7 @@ export default function routes({
   postcodeService,
   sectionService,
   sentencingActService,
-  riskInformationService,
+  riskInformationStaticOffenceService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -127,7 +127,7 @@ export default function routes({
   const interestedPartiesController = new InterestedPartiesController(
     interestedPartiesService,
     taskListService,
-    riskInformationService,
+    riskInformationStaticOffenceService,
   )
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
   const orderController = new OrderController(orderService, sectionService)
@@ -389,7 +389,7 @@ export default function routes({
       interestedPartiesStoreService,
       updateInterestedPartiesService,
       probationDeliveryUnitService,
-      riskInformationService,
+      riskInformationStaticOffenceService,
     }),
   )
 

@@ -5,13 +5,13 @@ import InterestedPartiesService from '../../services/interestedPartiesService'
 import TaskListService from '../../services/taskListService'
 import InterestedPartiesFormDataModel from '../../models/form-data/interestedParties'
 import interestedPartiesViewModel from '../../models/view-models/interestedParties'
-import RiskInformationService from '../../services/riskInformationService'
+import RiskInformationStaticOffenceService from '../../services/riskInformationStaticOffenceService'
 
 export default class InterestedPartiesController {
   constructor(
     private readonly interestedPartiesService: InterestedPartiesService,
     private readonly taskListService: TaskListService,
-    private readonly riskInformationService: RiskInformationService,
+    private readonly riskInformationStaticOffenceService: RiskInformationStaticOffenceService,
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
@@ -41,7 +41,7 @@ export default class InterestedPartiesController {
       return
     }
 
-    await this.riskInformationService.initialise({
+    await this.riskInformationStaticOffenceService.initialise({
       accessToken: res.locals.user.token,
       orderId,
       notifyingOrganisation: result.notifyingOrganisation,

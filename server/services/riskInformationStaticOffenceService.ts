@@ -9,7 +9,7 @@ type InitialiseRiskInformationInput = {
   notifyingOrganisation: NotifyingOrganisation | null | undefined
 }
 
-export default class RiskInformationService {
+export default class RiskInformationStaticOffenceService {
   constructor(private readonly apiClient: RestClient) {}
 
   async initialise(input: InitialiseRiskInformationInput): Promise<void> {
@@ -22,7 +22,7 @@ export default class RiskInformationService {
     if (offence.mode !== 'FIXED') {
       return
     }
-
+    // ensure setting VIOLENCE_AGAINST_THE_PERSON for civil courts
     await this.apiClient.put({
       path: `/api/orders/${input.orderId}/offence`,
       token: input.accessToken,

@@ -12,7 +12,7 @@ const createInterestedPartiesRouter = (
     | 'interestedPartiesStoreService'
     | 'updateInterestedPartiesService'
     | 'probationDeliveryUnitService'
-    | 'riskInformationService'
+    | 'riskInformationStaticOffenceService'
   >,
 ): Router => {
   const router = Router({ mergeParams: true })
@@ -20,7 +20,7 @@ const createInterestedPartiesRouter = (
   const notifyingOrganisationController = new NotifingOrganisationController(
     services.interestedPartiesStoreService,
     services.updateInterestedPartiesService,
-    services.riskInformationService,
+    services.riskInformationStaticOffenceService,
   )
   const responsibleOfficerController = new ResponsibleOfficerController(services.interestedPartiesStoreService)
   const responsibleOrganisationController = new ResponsibleOrganisationController(

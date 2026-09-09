@@ -1,12 +1,12 @@
 import RestClient from '../data/restClient'
 import FeatureFlags from '../utils/featureFlags'
-import RiskInformationService from './riskInformationService'
+import RiskInformationStaticOffenceService from './riskInformationStaticOffenceService'
 
 jest.mock('../data/restClient')
 
-describe('RiskInformationService', () => {
+describe('RiskInformationStaticOffenceService', () => {
   let apiClient: jest.Mocked<RestClient>
-  let service: RiskInformationService
+  let service: RiskInformationStaticOffenceService
 
   beforeEach(() => {
     apiClient = new RestClient('cemoApi', {
@@ -14,7 +14,7 @@ describe('RiskInformationService', () => {
       timeout: { response: 0, deadline: 0 },
       agent: { timeout: 0 },
     }) as jest.Mocked<RestClient>
-    service = new RiskInformationService(apiClient)
+    service = new RiskInformationStaticOffenceService(apiClient)
     jest.spyOn(FeatureFlags.getInstance(), 'get').mockImplementation(flag => flag === 'OFFENCE_FLOW_ENABLED')
   })
 
