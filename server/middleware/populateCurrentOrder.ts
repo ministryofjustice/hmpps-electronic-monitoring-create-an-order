@@ -28,7 +28,6 @@ const populateOrder =
           order = await orderService.getOrder({ accessToken: token, orderId })
           res.locals.orderSummaryUri = paths.ORDER.SUMMARY.replace(':orderId', order.id)
         }
-
         req.order = order
         res.locals.orderId = order.id
         res.locals.orderStatus = order.status

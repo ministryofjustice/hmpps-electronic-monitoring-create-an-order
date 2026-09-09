@@ -84,12 +84,34 @@ export default class DeviceWearerController {
       req.flash('validationErrors', result)
       res.redirect(paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id))
     } else if (action === 'continue') {
-      res.redirect(
-        this.taskListService.getNextPage('IDENTITY_NUMBERS', {
-          ...order,
-          deviceWearer: result,
-        }),
-      )
+      const numberIfTicked = (idType: 'NOMIS' | 'PNC' | 'DELIUS', value?: string) =>
+        formData.identityNumbers.includes(idType) ? value?.trim() : undefined
+
+      let searchIdentifier
+      if (
+        order.interestedParties?.notifyingOrganisation === 'PRISON' ||
+        order.interestedParties?.notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE'
+      ) {
+        searchIdentifier = numberIfTicked('NOMIS', formData.nomisId) || numberIfTicked('PNC', formData.pncId)
+      } else if (order.interestedParties?.notifyingOrganisation === 'PROBATION') {
+        searchIdentifier = numberIfTicked('DELIUS', formData.deliusId) || numberIfTicked('NOMIS', formData.nomisId)
+      }
+
+      if (searchIdentifier) {
+        res.redirect(
+          paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_SEARCH_RESULTS.replace(':orderId', order.id).replace(
+            ':identifyNumber',
+            encodeURIComponent(searchIdentifier),
+          ),
+        )
+      } else {
+        res.redirect(
+          this.taskListService.getNextPage('IDENTITY_NUMBERS', {
+            ...order,
+            deviceWearer: result,
+          }),
+        )
+      }
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
     }

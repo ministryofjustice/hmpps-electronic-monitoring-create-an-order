@@ -2,13 +2,14 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
-import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
 import { IdentityNumberName } from '../../../pages/components/forms/about-the-device-wearer/identityNumbersForm'
 import { NotifyingOrganisation } from '../../../../server/models/NotifyingOrganisation'
 import { IdentityNumberType } from '../../../../server/models/DeviceWearer'
+import DeviceWearerSearchResultsPage from '../../../pages/order/about-the-device-wearer/device-wearer-search-results'
 
 const mockOrderId = uuidv4()
 const apiPath = '/device-wearer/identity-numbers'
+const searchedIdentifier = 'nomis'
 
 type SubmissionCase = {
   notifyingOrganisation: NotifyingOrganisation
@@ -49,7 +50,6 @@ const submissionCases: SubmissionCase[] = [
     identityNumbers: ['COURT_CASE_REFERENCE_NUMBER'],
   },
 ]
-
 const emptyIdentityNumbers = {
   nomisId: '',
   pncId: '',
@@ -59,7 +59,6 @@ const emptyIdentityNumbers = {
   complianceAndEnforcementPersonReference: '',
   courtCaseReferenceNumber: '',
 }
-
 const stubIdentityNumbersSubmission = () => {
   cy.task('stubCemoSubmitOrder', {
     httpStatus: 200,
@@ -92,7 +91,29 @@ context('About the device wearer', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          isSentencingAct: true,
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+          },
+        },
+      })
       stubIdentityNumbersSubmission()
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: `orders/${mockOrderId}/device-wearer-details\\?organisationSearchId=${searchedIdentifier}`,
+        response: {
+          firstName: 'Ermintrude',
+          lastName: 'Jones',
+          dateOfBirth: '1974-01-19T00:00:00Z',
+          organisationSearchId: searchedIdentifier,
+        },
+      })
       cy.signIn()
     })
 
@@ -133,13 +154,13 @@ context('About the device wearer', () => {
         })
       })
 
-      it('should continue to personal details page', () => {
+      it('should continue to device wearer search results page', () => {
         const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, ['nomisId'])
 
         page.form.fillInWith({ nomisId: 'nomis' })
         page.form.saveAndContinueButton.click()
 
-        Page.verifyOnPage(AboutDeviceWearerPage, 'About the device wearer')
+        Page.verifyOnPage(DeviceWearerSearchResultsPage, { orderId: mockOrderId, identifyNumber: 'nomis' })
       })
 
       it('should return to the summary page', () => {
