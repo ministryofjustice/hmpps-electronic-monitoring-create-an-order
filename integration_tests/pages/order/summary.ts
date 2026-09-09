@@ -3,6 +3,7 @@ import Page, { PageElement } from '../page'
 import paths from '../../../server/constants/paths'
 import Task from '../components/task'
 import AboutDeviceWearerPage from './about-the-device-wearer/device-wearer'
+import DeviceWearerSearchResultsPage from './about-the-device-wearer/device-wearer-search-results'
 import ResponsibleAdultDetailsPage from './about-the-device-wearer/responsible-adult-details'
 import ContactDetailsPage from './contact-information/contact-details'
 import NoFixedAbodePage from './contact-information/no-fixed-abode'
@@ -12,7 +13,9 @@ import AttachmentSummaryPage from './attachments/summary'
 import DeviceWearerCheckYourAnswersPage from './about-the-device-wearer/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from './monitoring-conditions/check-your-answers'
 import ContactInformationCheckYourAnswersPage from './contact-information/check-your-answers'
-import IdentityNumbersPage from './about-the-device-wearer/identity-numbers'
+import IdentityNumbersPage, {
+  identityNumberNamesForNotifyingOrganisation,
+} from './about-the-device-wearer/identity-numbers'
 import UploadPhotoIdPage from './attachments/uploadPhotoId'
 import VariationDetailsPage from './variation/variationDetails'
 import UploadLicencePage from './attachments/uploadLicence'
@@ -190,13 +193,11 @@ export default class OrderTasksPage extends AppPage {
       responsibleOrgPage.form.fillInWith(interestedParties)
       responsibleOrgPage.form.continueButton.click()
 
-      cy.url().then(url => {
-        if (url.includes('interest-parties/national-security-directorate')) {
-          const nationalSecurityDirectoratePage = Page.verifyOnPage(NationalSecurityDirectoratePage)
-          nationalSecurityDirectoratePage.form.fillInWith('No')
-          nationalSecurityDirectoratePage.form.continueButton.click()
-        }
-      })
+      if (interestedParties.responsibleOrganisation.toUpperCase() === 'PROBATION') {
+        const nationalSecurityDirectoratePage = Page.verifyOnPage(NationalSecurityDirectoratePage)
+        nationalSecurityDirectoratePage.form.fillInWith('No')
+        nationalSecurityDirectoratePage.form.continueButton.click()
+      }
 
       if (
         interestedParties.responsibleOrganisation.toUpperCase() === 'PROBATION' &&
@@ -607,9 +608,30 @@ export default class OrderTasksPage extends AppPage {
     newDeviceWearerFlow = false,
   }): void {
     if (!newDeviceWearerFlow) {
-      const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage)
+      const searchedIdentifier =
+        deviceWearerDetails.pncId ||
+        deviceWearerDetails.nomisId ||
+        deviceWearerDetails.prisonNumber ||
+        deviceWearerDetails.deliusId ||
+        deviceWearerDetails.complianceAndEnforcementPersonReference ||
+        deviceWearerDetails.courtCaseReferenceNumber
+
+      const identityNumberNames = identityNumberNamesForNotifyingOrganisation(interestedParties?.notifyingOrganisation)
+      const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage, {}, {}, identityNumberNames)
       identityNumbersPage.form.fillInWith(deviceWearerDetails)
       identityNumbersPage.form.saveAndContinueButton.click()
+
+      if (
+        interestedParties?.notifyingOrganisation === 'Probation service' ||
+        interestedParties?.notifyingOrganisation === 'Prison' ||
+        interestedParties?.notifyingOrganisation === 'Prison Service' ||
+        interestedParties?.notifyingOrganisation === 'Youth Custody Service'
+      ) {
+        const deviceWearerSearchResultsPage = Page.verifyOnPage(DeviceWearerSearchResultsPage, {
+          identifyNumber: searchedIdentifier,
+        })
+        deviceWearerSearchResultsPage.form.enterDetailsManuallyLink.click()
+      }
 
       const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
       aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
@@ -682,6 +704,7 @@ export default class OrderTasksPage extends AppPage {
         primaryAddressDetails,
         secondaryAddressDetails,
         tertiaryAddressDetails,
+        notifyingOrganisation: interestedParties?.notifyingOrganisation,
       })
       const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
       deviceWearerCheckYourAnswersPage.continue()

@@ -1,18 +1,50 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
+import { IdentityNumberName } from '../../../pages/components/forms/about-the-device-wearer/identityNumbersForm'
+import { NotifyingOrganisation } from '../../../../server/models/NotifyingOrganisation'
 
 const mockOrderId = uuidv4()
 
 const expectedValidationErrors = {
   noSelection: 'Select all identity numbers that you have for the device wearer',
-  nomisId: 'Enter NOMIS ID',
-  pncId: 'Enter PNC',
+  nomisId: 'Enter prison number',
+  pncId: 'Enter PNC ID',
   deliusId: 'Enter CRN',
-  prisonNumber: 'Enter Prison Number',
   complianceAndEnforcementPersonReference: 'Enter Compliance and Enforcement Person Reference',
   courtCaseReferenceNumber: 'Enter Court Case Reference Number',
 }
+
+type ValidationCase = {
+  notifyingOrganisation: NotifyingOrganisation
+  fields: IdentityNumberName[]
+  checkboxLabels?: string[]
+}
+
+const validationCases: ValidationCase[] = [
+  {
+    notifyingOrganisation: 'PRISON',
+    fields: ['nomisId'],
+  },
+  {
+    notifyingOrganisation: 'HOME_OFFICE',
+    fields: ['complianceAndEnforcementPersonReference'],
+  },
+  {
+    notifyingOrganisation: 'PROBATION',
+    fields: ['nomisId', 'deliusId'],
+    checkboxLabels: ['Prison number', 'Case Reference Number (CRN)'],
+  },
+  {
+    notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE',
+    fields: ['pncId', 'nomisId'],
+    checkboxLabels: ['Police National Computer (PNC)', 'Prison number'],
+  },
+  {
+    notifyingOrganisation: 'CIVIL_COUNTY_COURT',
+    fields: ['courtCaseReferenceNumber'],
+  },
+]
 
 context('About the device wearer', () => {
   context('Identity numbers', () => {
@@ -20,55 +52,59 @@ context('About the device wearer', () => {
       beforeEach(() => {
         cy.task('reset')
         cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-
-        cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
-
         cy.signIn()
       })
 
-      it('Should display error when no checkbox is selected', () => {
-        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
+      validationCases.forEach(({ notifyingOrganisation, fields, checkboxLabels }) => {
+        it(`should display field errors for the ${notifyingOrganisation} cohort`, () => {
+          cy.task('stubCemoGetOrder', {
+            httpStatus: 200,
+            id: mockOrderId,
+            status: 'IN_PROGRESS',
+            order: { interestedParties: { notifyingOrganisation } },
+          })
 
-        page.form.saveAndContinueButton.click()
+          const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, fields)
 
-        Page.verifyOnPage(IdentityNumbersPage)
-        page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError(expectedValidationErrors.noSelection)
-        page.form.checkboxes.shouldHaveValidationMessage(expectedValidationErrors.noSelection)
-      })
+          if (checkboxLabels) {
+            page.form.checkboxes.set(checkboxLabels)
+          }
 
-      it('Should display error when checkbox is selected but input is empty', () => {
-        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
+          page.form.saveAndContinueButton.click()
 
-        page.form.checkboxes.set([
-          'Police National Computer (PNC)',
-          'National Offender Management Information System (NOMIS)',
-          'Prison Number',
-          'Case Reference Number (CRN)',
-          'Compliance and Enforcement Person Reference (CEPR)',
-          'Court Case Reference Number (CCRN)',
-        ])
+          Page.verifyOnPage(IdentityNumbersPage, undefined, undefined, fields)
+          page.errorSummary.shouldExist()
 
-        page.form.saveAndContinueButton.click()
+          fields.forEach(field => {
+            const expectedError = expectedValidationErrors[field]
+            page.errorSummary.shouldHaveError(expectedError)
 
-        Page.verifyOnPage(IdentityNumbersPage)
+            if (fields.length === 1) {
+              page.form.singleField(field).shouldHaveValidationMessage(expectedError)
+            } else {
+              page.form.field(field).shouldHaveValidationMessage(expectedError)
+            }
+          })
+        })
 
-        page.errorSummary.shouldExist()
-        page.errorSummary.shouldHaveError(expectedValidationErrors.nomisId)
-        page.errorSummary.shouldHaveError(expectedValidationErrors.pncId)
-        page.errorSummary.shouldHaveError(expectedValidationErrors.deliusId)
-        page.errorSummary.shouldHaveError(expectedValidationErrors.prisonNumber)
-        page.errorSummary.shouldHaveError(expectedValidationErrors.complianceAndEnforcementPersonReference)
-        page.errorSummary.shouldHaveError(expectedValidationErrors.courtCaseReferenceNumber)
+        if (checkboxLabels) {
+          it(`should require an identity number selection for the ${notifyingOrganisation} cohort`, () => {
+            cy.task('stubCemoGetOrder', {
+              httpStatus: 200,
+              id: mockOrderId,
+              status: 'IN_PROGRESS',
+              order: { interestedParties: { notifyingOrganisation } },
+            })
 
-        page.form.nomisIdField.shouldHaveValidationMessage(expectedValidationErrors.nomisId)
-        page.form.pncIdField.shouldHaveValidationMessage(expectedValidationErrors.pncId)
-        page.form.deliusIdField.shouldHaveValidationMessage(expectedValidationErrors.deliusId)
-        page.form.prisonNumberField.shouldHaveValidationMessage(expectedValidationErrors.prisonNumber)
-        page.form.complianceField.shouldHaveValidationMessage(
-          expectedValidationErrors.complianceAndEnforcementPersonReference,
-        )
-        page.form.courtCaseField.shouldHaveValidationMessage(expectedValidationErrors.courtCaseReferenceNumber)
+            const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, fields)
+            page.form.saveAndContinueButton.click()
+
+            Page.verifyOnPage(IdentityNumbersPage, undefined, undefined, fields)
+            page.errorSummary.shouldExist()
+            page.errorSummary.shouldHaveError(expectedValidationErrors.noSelection)
+            page.form.checkboxes.shouldHaveValidationMessage(expectedValidationErrors.noSelection)
+          })
+        }
       })
     })
   })

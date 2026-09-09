@@ -106,11 +106,13 @@
                 disabled: continueDisabled
               }) }}
           {% elseif isOrderEditable %}
-            {{ govukButton({
-                text: "Save and continue" if not continueButtonText else continueButtonText,
-                name: "action",
-                value: "continue"
-            }) }}
+            {% if not hideContinueButton %}
+              {{ govukButton({
+                  text: "Save and continue" if not continueButtonText else continueButtonText,
+                  name: "action",
+                  value: "continue"
+              }) }}
+            {% endif %}
             {% if not hideCancelButton %}
             {{ govukButton({
                 text: "Save as draft" if not backButtonText else backButtonText,

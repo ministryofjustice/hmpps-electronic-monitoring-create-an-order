@@ -10,6 +10,7 @@ import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
 context('offences', () => {
   let orderSummaryPage: OrderSummaryPage
   const testFlags = { OFFENCE_FLOW_ENABLED: true }
+  const interestedParties = createFakeInterestedParties('Home Office', 'Home Office', undefined, 'North West')
 
   const deviceWearerDetails = {
     ...createFakeAdultDeviceWearer(),
@@ -36,7 +37,7 @@ context('offences', () => {
     })
 
     createNewOrder({
-      notifyingOrganisation: createFakeInterestedParties('Home Office', 'Home Office', undefined, 'North West'),
+      notifyingOrganisation: interestedParties,
     })
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
@@ -51,6 +52,7 @@ context('offences', () => {
   it('Notifying organisation is Home Office, mappa flow', () => {
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
+      interestedParties,
       newDeviceWearerFlow: true,
     })
 
@@ -86,6 +88,7 @@ context('offences', () => {
   it('Notifying organisation is Home Office, not mappa flow', () => {
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
+      interestedParties,
       newDeviceWearerFlow: true,
     })
 

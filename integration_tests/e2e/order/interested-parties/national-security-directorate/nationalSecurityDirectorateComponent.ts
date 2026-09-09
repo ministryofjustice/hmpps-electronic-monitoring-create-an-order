@@ -9,6 +9,7 @@ export default class NationalSecurityDirectorateComponent extends SingleQuestion
 
   fillInWith(value: string) {
     if (value) {
+      cy.log(`Filling in National Security Directorate field with value: ${value}`)
       this.ndsField.set(value)
     }
   }
