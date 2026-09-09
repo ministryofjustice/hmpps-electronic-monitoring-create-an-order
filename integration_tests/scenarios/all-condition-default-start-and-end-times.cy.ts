@@ -230,6 +230,10 @@ context('The kitchen sink', () => {
           cepr: deviceWearerDetails.complianceAndEnforcementPersonReference,
           interpreter_required: 'false',
           language: '',
+          ethnicity: '',
+          national_insurance_number: '',
+          nationality: '',
+          religion: '',
         },
       }).should('be.true')
 
