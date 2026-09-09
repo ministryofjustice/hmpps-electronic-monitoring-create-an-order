@@ -1,60 +1,36 @@
+import { v4 as uuidv4 } from 'uuid'
+
 import { PageElement } from '../page'
 
 export default class FormRadiosComponent {
+  private elementCacheId: string = uuidv4()
+
   constructor(
-    _parent: PageElement,
+    private readonly parent: PageElement,
     private readonly label: string,
     private readonly options: (string | RegExp)[],
-    _getByLegend: boolean = false,
-  ) {}
-
-  get element(): PageElement {
-    return cy.get('form', { log: false }).then($form => {
-      const fieldset = $form
-        .find('.govuk-fieldset')
-        .toArray()
-        .find(element => element.querySelector('legend')?.textContent?.includes(this.label))
-
-      if (!fieldset) {
-        throw new Error(`No radio group found with legend ${this.label}`)
-      }
-
-      return cy.wrap(fieldset, { log: false })
-    })
+    private readonly getByLegend: boolean = false,
+  ) {
+    const element = getByLegend
+      ? this.parent.getByLegend(this.label, { log: false })
+      : this.parent.get('.govuk-form-group > .govuk-fieldset')
+    element.as(`${this.elementCacheId}-element`)
   }
 
-  private option(value: string | RegExp): PageElement {
-    return cy.get('form', { log: false }).then($form => {
-      const fieldset = $form
-        .find('.govuk-fieldset')
-        .toArray()
-        .find(element => element.querySelector('legend')?.textContent?.includes(this.label))
-      const matchingLabel = Array.from(fieldset?.querySelectorAll('label') ?? []).find(element => {
-        const text = element.textContent?.trim() ?? ''
-
-        return value instanceof RegExp ? new RegExp(value.source, value.flags).test(text) : text.includes(value)
-      })
-      const inputId = matchingLabel?.getAttribute('for')
-
-      if (!inputId) {
-        throw new Error(`No input associated with label ${value.toString()} in radio group ${this.label}`)
-      }
-
-      return cy.get(`#${CSS.escape(inputId)}`, { log: false })
-    })
+  get element(): PageElement {
+    return cy.get(`@${this.elementCacheId}-element`, { log: false })
   }
 
   set(value: string | RegExp) {
-    this.option(value).should('exist').and('not.be.disabled')
-    this.option(value).check()
+    this.element.getByLabel(value).check()
   }
 
   shouldHaveValue(value: string): void {
-    this.option(value).should('be.checked')
+    this.element.getByLabel(value).should('be.checked')
   }
 
   shouldNotHaveValue(): void {
-    this.options.forEach(option => this.option(option).should('not.be.checked'))
+    this.options.forEach(option => this.element.getByLabel(option).should('not.be.checked'))
   }
 
   shouldHaveDivider(value: string | RegExp): void {
@@ -66,15 +42,15 @@ export default class FormRadiosComponent {
   }
 
   shouldHaveOption(value: string | RegExp): void {
-    this.option(value).should('exist')
+    this.element.getByLabel(value).should('exist')
   }
 
   shouldHaveEnabledOption(value: string | RegExp): void {
-    this.option(value).should('exist').should('not.be.disabled')
+    this.element.getByLabel(value).should('exist').should('not.be.disabled')
   }
 
   shouldHaveDescription(label: string | RegExp, description: string | RegExp): void {
-    this.option(label).siblings('.govuk-radios__hint').should('contain.text', description)
+    this.element.getByLabel(label).siblings('.govuk-radios__hint').should('contain.text', description)
   }
 
   shouldNotHaveOption(value: string | RegExp): void {
@@ -82,7 +58,7 @@ export default class FormRadiosComponent {
   }
 
   shouldHaveDisabledOption(value: string | RegExp): void {
-    this.option(value).should('be.disabled')
+    this.element.getByLabel(value).should('be.disabled')
   }
 
   shouldExist(): void {

@@ -571,7 +571,7 @@ context('installation and risk - check your answers', () => {
         id: mockOrderId,
         order: {
           interestedParties: {
-            notifyingOrganisation: 'CIVIL_COUNTY_COURT',
+            notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: '',
             notifyingOrganisationEmail: '',
             responsibleOfficerName: '',
