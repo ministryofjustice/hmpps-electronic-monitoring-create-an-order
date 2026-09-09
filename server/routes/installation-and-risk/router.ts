@@ -27,7 +27,7 @@ const createInstallationAndRiskRouter = (
     | 'taskListService'
   >,
 ): Router => {
-  const { router, get, post, viewUpdate } = createFeatureRouter(paths.ORDER.BASE_URL)
+  const { router, get, post, viewUpdate } = createFeatureRouter(paths.INSTALLATION_AND_RISK.BASE_URL)
 
   const {
     dapoService,
@@ -62,7 +62,6 @@ const createInstallationAndRiskRouter = (
   get(paths.INSTALLATION_AND_RISK.BASE_URL, installationAndRiskController.view)
   post(paths.INSTALLATION_AND_RISK.BASE_URL, installationAndRiskController.update)
   viewUpdate(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS, installationAndRiskCheckAnswersController)
-  viewUpdate(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS_VERSION, installationAndRiskCheckAnswersController)
   get(paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM, offenceController.view)
   get(paths.INSTALLATION_AND_RISK.OFFENCE, offenceController.view)
   post(paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM, offenceController.update)

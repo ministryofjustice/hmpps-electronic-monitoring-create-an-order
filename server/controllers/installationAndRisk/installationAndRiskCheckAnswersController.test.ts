@@ -61,7 +61,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: questions.offence.text.toLowerCase(),
               },
@@ -78,7 +78,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: questions.possibleRisk.text.toLowerCase(),
               },
@@ -95,7 +95,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: questions.riskCategory.text.toLowerCase(),
               },
@@ -112,7 +112,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: questions.riskDetails.text.toLowerCase(),
               },
@@ -158,7 +158,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: questions.offence.text.toLowerCase(),
               },
@@ -175,7 +175,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: questions.possibleRisk.text.toLowerCase(),
               },
@@ -192,7 +192,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: questions.riskCategory.text.toLowerCase(),
               },
@@ -209,7 +209,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: questions.riskDetails.text.toLowerCase(),
               },
@@ -264,7 +264,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: questions.offence.text.toLowerCase(),
               },
@@ -281,7 +281,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: questions.possibleRisk.text.toLowerCase(),
               },
@@ -298,7 +298,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: questions.riskCategory.text.toLowerCase(),
               },
@@ -315,7 +315,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: questions.riskDetails.text.toLowerCase(),
               },
@@ -376,7 +376,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: questions.offence.text.toLowerCase(),
               },
@@ -393,7 +393,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: questions.possibleRisk.text.toLowerCase(),
               },
@@ -410,7 +410,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: questions.riskCategory.text.toLowerCase(),
               },
@@ -427,7 +427,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: questions.riskDetails.text.toLowerCase(),
               },

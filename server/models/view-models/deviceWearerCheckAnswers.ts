@@ -27,7 +27,7 @@ const createOtherDisabilityAnswer = (order: Order, content: I18n, uri: string, a
 }
 
 const createDeviceWearerAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
-  const uri = paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id)
+  const uri = paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id)
   const disabilities = order.deviceWearer.disabilities.map(disability =>
     lookup(content.reference.disabilities, disability),
   )

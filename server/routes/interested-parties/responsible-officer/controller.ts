@@ -33,6 +33,6 @@ export default class ResponsibleOfficerController {
     }
 
     await this.store.UpdateResponsibleOfficer(order, formData)
-    res.redirect(paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION.replace(':orderId', order.id))
+    res.redirect(paths.INTEREST_PARTIES.RESPONSIBLE_ORGANISATION.replace(':orderId', order.id))
   }
 }

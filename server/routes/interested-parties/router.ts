@@ -58,8 +58,8 @@ const createInterestedPartiesRouter = (
   get(paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER, responsibleOfficerController.view)
   post(paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER, responsibleOfficerController.update)
 
-  get(paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION, responsibleOrganisationController.view)
-  post(paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION, responsibleOrganisationController.update)
+  get(paths.INTEREST_PARTIES.RESPONSIBLE_ORGANISATION, responsibleOrganisationController.view)
+  post(paths.INTEREST_PARTIES.RESPONSIBLE_ORGANISATION, responsibleOrganisationController.update)
 
   get(paths.INTEREST_PARTIES.PDU, probationDeliveryUnitController.view)
   post(paths.INTEREST_PARTIES.PDU, probationDeliveryUnitController.update)

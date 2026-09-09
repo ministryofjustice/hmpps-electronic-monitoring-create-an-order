@@ -16,7 +16,7 @@ const createAboutTheDeviceWearerRouter = (
     | 'sectionService'
   >,
 ): Router => {
-  const { router, get, post, viewUpdate } = createFeatureRouter(paths.ORDER.BASE_URL)
+  const { router, get, post, viewUpdate } = createFeatureRouter(paths.ABOUT_THE_DEVICE_WEARER.BASE_URL)
 
   const {
     deviceWearerService,
@@ -37,13 +37,12 @@ const createAboutTheDeviceWearerRouter = (
     sectionService,
   )
 
-  get(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER, deviceWearerController.viewDeviceWearer)
-  post(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER, deviceWearerController.updateDeviceWearer)
+  get(paths.ABOUT_THE_DEVICE_WEARER.BASE_URL, deviceWearerController.viewDeviceWearer)
+  post(paths.ABOUT_THE_DEVICE_WEARER.BASE_URL, deviceWearerController.updateDeviceWearer)
   get(paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS, deviceWearerController.viewIdentityNumbers)
   post(paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS, deviceWearerController.updateIdentityNumbers)
   viewUpdate(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT, responsibleAdultController)
   viewUpdate(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS, deviceWearerCheckAnswersController)
-  viewUpdate(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS_VERSION, deviceWearerCheckAnswersController)
 
   return router
 }

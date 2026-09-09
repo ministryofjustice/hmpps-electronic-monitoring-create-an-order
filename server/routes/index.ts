@@ -62,13 +62,21 @@ export default function routes({
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
   const orderSearchController = new OrderSearchController(auditService, orderSearchService)
-  router.param('orderId', populateOrder(orderService))
+
+  // Express caches `router.param` callbacks per request (see `paramcalled` in Router.handle), so the
+  // first layer to capture `:orderId` decided what the order lookup saw and later layers silently
+  // reused that result. Any feature router mounted on a bare `/order/:orderId` prefix therefore
+  // resolved the order before `:versionId` had been captured, so versioned pages loaded the latest
+  // order instead of the requested version. Mounting the lookup explicitly - ahead of every feature
+  // router and with the versioned prefix listed first - captures both params in a single layer, so
+  // the correct version is resolved regardless of the order the feature routers are mounted in.
+  router.use([paths.ORDER.BASE_URL_VERSION, paths.ORDER.BASE_URL], populateOrder(orderService))
 
   get('/', orderSearchController.list)
   get('/search', orderSearchController.search)
 
   router.use(
-    paths.MONITORING_CONDITIONS.BASE_URL,
+    [paths.MONITORING_CONDITIONS.BASE_URL, paths.MONITORING_CONDITIONS.BASE_URL_VERSION],
     createOrderTypeDescriptionRouter({
       alcoholMonitoringService,
       attendanceMonitoringService,
@@ -97,7 +105,7 @@ export default function routes({
   )
 
   router.use(
-    paths.INTEREST_PARTIES.BASE_PATH,
+    [paths.INTEREST_PARTIES.BASE_URL, paths.INTEREST_PARTIES.BASE_URL_VERSION],
     createInterestedPartiesRouter({
       interestedPartiesStoreService,
       updateInterestedPartiesService,
@@ -109,7 +117,7 @@ export default function routes({
     }),
   )
   router.use(
-    paths.ORDER.BASE_URL,
+    [paths.ABOUT_THE_DEVICE_WEARER.BASE_URL, paths.ABOUT_THE_DEVICE_WEARER.BASE_URL_VERSION],
     createAboutTheDeviceWearerRouter({
       deviceWearerService,
       deviceWearerResponsibleAdultService,
@@ -120,7 +128,7 @@ export default function routes({
   )
 
   router.use(
-    '/',
+    [paths.CONTACT_INFORMATION.BASE_URL, paths.CONTACT_INFORMATION.BASE_URL_VERSION],
     createContactInformationRouter({
       contactDetailsService,
       deviceWearerService,
@@ -132,7 +140,7 @@ export default function routes({
   )
 
   router.use(
-    paths.ORDER.BASE_URL,
+    [paths.INSTALLATION_AND_RISK.BASE_URL, paths.INSTALLATION_AND_RISK.BASE_URL_VERSION],
     createInstallationAndRiskRouter({
       dapoService,
       offenceService,
@@ -146,7 +154,7 @@ export default function routes({
     }),
   )
   router.use(
-    [paths.ATTACHMENT.ATTACHMENTS, paths.ATTACHMENT.ATTACHMENTS_VERSION],
+    [paths.ATTACHMENT.BASE_URL, paths.ATTACHMENT.BASE_URL_VERSION],
     createAttachmentRouter({
       auditService,
       attachmentService,

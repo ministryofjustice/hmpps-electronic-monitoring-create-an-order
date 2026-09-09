@@ -64,7 +64,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id))
     })
 
     it('should go to installation and risk page if current page is device wearer check your answers', () => {
@@ -77,7 +77,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id))
     })
 
     it('should return no fixed abode if current page is contact details', () => {
@@ -679,7 +679,7 @@ describe('TaskListService', () => {
       tasks.push({
         section: 'RISK_INFORMATION',
         name: 'INSTALLATION_AND_RISK',
-        path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK,
+        path: paths.INSTALLATION_AND_RISK.BASE_URL,
         state: 'REQUIRED',
         completed: true,
       })
@@ -696,7 +696,7 @@ describe('TaskListService', () => {
       tasks.push({
         section: 'RISK_INFORMATION',
         name: 'INSTALLATION_AND_RISK',
-        path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK,
+        path: paths.INSTALLATION_AND_RISK.BASE_URL,
         state: 'REQUIRED',
         completed: true,
       })
@@ -705,7 +705,7 @@ describe('TaskListService', () => {
 
       const result = taskListService.getCheckYourAnswersPathForSection(tasks)
 
-      expect(result).toBe(paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK)
+      expect(result).toBe(paths.INSTALLATION_AND_RISK.BASE_URL)
     })
   })
 

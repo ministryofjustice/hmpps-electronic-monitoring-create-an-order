@@ -6,7 +6,7 @@ import ContactInformationCheckAnswersController from '../../controllers/contact-
 import ProbationDeliveryUnitController from '../../controllers/contact-information/probationDeliveryUnitController'
 import { type Services } from '../../services'
 import paths from '../../constants/paths'
-import { registerViewUpdate } from '../routeHelpers'
+import { createFeatureRouter } from '../routeHelpers'
 
 const createContactInformationRouter = (
   services: Pick<
@@ -19,7 +19,7 @@ const createContactInformationRouter = (
     | 'orderChecklistService'
   >,
 ): Router => {
-  const router = Router()
+  const { router, viewUpdate } = createFeatureRouter(paths.CONTACT_INFORMATION.BASE_URL)
   const {
     contactDetailsService,
     deviceWearerService,
@@ -41,16 +41,11 @@ const createContactInformationRouter = (
     orderChecklistService,
   )
 
-  registerViewUpdate(router, paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController)
-  registerViewUpdate(router, paths.CONTACT_INFORMATION.NO_FIXED_ABODE, noFixedAbodeController)
-  registerViewUpdate(router, paths.CONTACT_INFORMATION.INTERESTED_PARTIES, interestedPartiesController)
-  registerViewUpdate(router, paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT, probationDeliveryUnitController)
-  registerViewUpdate(router, paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS, contactInformationCheckAnswersController)
-  registerViewUpdate(
-    router,
-    paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS_VERSION,
-    contactInformationCheckAnswersController,
-  )
+  viewUpdate(paths.CONTACT_INFORMATION.CONTACT_DETAILS, contactDetailsController)
+  viewUpdate(paths.CONTACT_INFORMATION.NO_FIXED_ABODE, noFixedAbodeController)
+  viewUpdate(paths.CONTACT_INFORMATION.INTERESTED_PARTIES, interestedPartiesController)
+  viewUpdate(paths.CONTACT_INFORMATION.PROBATION_DELIVERY_UNIT, probationDeliveryUnitController)
+  viewUpdate(paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS, contactInformationCheckAnswersController)
 
   return router
 }

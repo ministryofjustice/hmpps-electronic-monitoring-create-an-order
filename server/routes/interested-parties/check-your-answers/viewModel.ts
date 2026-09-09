@@ -53,7 +53,7 @@ const getResponsibleOrganisationRegionAnswer = (
 
 const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const resOfficerUri = paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER.replace(':orderId', order.id)
-  const resOrgUri = paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION.replace(':orderId', order.id)
+  const resOrgUri = paths.INTEREST_PARTIES.RESPONSIBLE_ORGANISATION.replace(':orderId', order.id)
 
   const responsibleOfficerQuestions = content.pages.responsibleOfficer.questions
   const responsibleOrganisationQuestions = content.pages.responsibleOrganisation.questions

@@ -228,6 +228,83 @@ describe('authorised user', () => {
   })
 })
 
+describe('versioned order pages', () => {
+  let app: Express
+  const mockVersionId = uuidv4()
+
+  beforeEach(() => {
+    app = appWithAllRoutes({
+      services: {
+        auditService,
+        orderService,
+        deviceWearerService,
+        orderSearchService,
+        taskListService,
+        sectionService,
+        orderChecklistService: mockOrderChecklistService,
+      },
+      userSupplier: () => user,
+    })
+
+    auditService.logPageView.mockResolvedValue()
+    flashProvider.mockReturnValue([])
+    orderService.getOrder.mockResolvedValue(mockSubmittedOrder)
+    orderService.getVersion.mockResolvedValue(mockSubmittedOrder)
+    orderService.getVersionInformations.mockResolvedValue([])
+    mockOrderChecklistService.getChecklist.mockResolvedValue(OrderChecklistModel.parse({}))
+  })
+
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
+  // Each feature router is mounted on both its BASE_URL and BASE_URL_VERSION, so `:versionId` is
+  // captured alongside `:orderId` and the historic version is loaded rather than the latest order.
+  describe.each([
+    'about-the-device-wearer/check-your-answers',
+    'contact-information/check-your-answers',
+    'installation-and-risk/check-your-answers',
+    'monitoring-conditions/check-your-answers',
+    'interest-parties/check-your-answers',
+    'attachments',
+    'summary',
+  ])('GET /order/:orderId/version/:versionId/%s', page => {
+    it('should load the requested version rather than the current order', async () => {
+      await request(app).get(`/order/${mockSubmittedOrder.id}/version/${mockVersionId}/${page}`)
+
+      expect(orderService.getVersion).toHaveBeenCalledWith({
+        accessToken: user.token,
+        orderId: mockSubmittedOrder.id,
+        versionId: mockVersionId,
+      })
+      expect(orderService.getOrder).not.toHaveBeenCalled()
+    })
+  })
+
+  describe.each([
+    'about-the-device-wearer',
+    'about-the-device-wearer/check-your-answers',
+    'contact-information/check-your-answers',
+    'installation-and-risk/check-your-answers',
+    'monitoring-conditions/check-your-answers',
+    'monitoring-conditions/order-type-description/order-type',
+    'interest-parties/check-your-answers',
+    'interest-parties/responsible-organisation',
+    'attachments',
+    'summary',
+  ])('GET /order/:orderId/%s', page => {
+    it('should load the current order', async () => {
+      await request(app).get(`/order/${mockSubmittedOrder.id}/${page}`)
+
+      expect(orderService.getOrder).toHaveBeenCalledWith({
+        accessToken: user.token,
+        orderId: mockSubmittedOrder.id,
+      })
+      expect(orderService.getVersion).not.toHaveBeenCalled()
+    })
+  })
+})
+
 describe('Order Not Found', () => {
   let app: Express
   const mockId = uuidv4()

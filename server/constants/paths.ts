@@ -2,16 +2,23 @@
 // Composing from these bases keeps a single source of truth for each URL segment and
 // lets sub-routers derive their own relative routes from the same constants (see
 // `relativePath` in server/routes/routeHelpers.ts) instead of duplicating literal strings.
+//
+// Every feature exposes a `BASE_URL` and, where its pages can also be viewed for a historic
+// version of the order, a matching `BASE_URL_VERSION`. server/routes/index.ts mounts each
+// feature router on both, so routes only ever need declaring once, relative to `BASE_URL`.
 const ORDER_BASE = '/order/:orderId'
 const ORDER_VERSION_BASE = `${ORDER_BASE}/version/:versionId`
 
 const INTEREST_PARTIES_BASE = `${ORDER_BASE}/interest-parties`
+const INTEREST_PARTIES_VERSION_BASE = `${ORDER_VERSION_BASE}/interest-parties`
 const ABOUT_THE_DEVICE_WEARER_BASE = `${ORDER_BASE}/about-the-device-wearer`
 const ABOUT_THE_DEVICE_WEARER_VERSION_BASE = `${ORDER_VERSION_BASE}/about-the-device-wearer`
 const CONTACT_INFORMATION_BASE = `${ORDER_BASE}/contact-information`
+const CONTACT_INFORMATION_VERSION_BASE = `${ORDER_VERSION_BASE}/contact-information`
 const INSTALLATION_AND_RISK_BASE = `${ORDER_BASE}/installation-and-risk`
 const INSTALLATION_AND_RISK_VERSION_BASE = `${ORDER_VERSION_BASE}/installation-and-risk`
 const MONITORING_CONDITIONS_BASE = `${ORDER_BASE}/monitoring-conditions`
+const MONITORING_CONDITIONS_VERSION_BASE = `${ORDER_VERSION_BASE}/monitoring-conditions`
 const ORDER_TYPE_DESCRIPTION_BASE = `${MONITORING_CONDITIONS_BASE}/order-type-description`
 const ATTACHMENT_BASE = `${ORDER_BASE}/attachments`
 const ATTACHMENT_VERSION_BASE = `${ORDER_VERSION_BASE}/attachments`
@@ -19,6 +26,7 @@ const ATTACHMENT_VERSION_BASE = `${ORDER_VERSION_BASE}/attachments`
 const paths = {
   ORDER: {
     BASE_URL: ORDER_BASE,
+    BASE_URL_VERSION: ORDER_VERSION_BASE,
     CREATE: '/order/create',
     DELETE: `${ORDER_BASE}/delete`,
     DELETE_FAILED: '/order/delete/failed',
@@ -45,35 +53,32 @@ const paths = {
   },
 
   INTEREST_PARTIES: {
-    // Plain (non-regex) base used by the interested-parties router to derive its relative
-    // routes from the constants below via `relativePath`.
     BASE_URL: INTEREST_PARTIES_BASE,
-    // Regex mount used by server/routes/index.ts - matches both the versioned and
-    // non-versioned interest-parties routes with a single `router.use()` call.
-    BASE_PATH: `${ORDER_BASE}/(version/:versionId/)?interest-parties`,
+    BASE_URL_VERSION: INTEREST_PARTIES_VERSION_BASE,
     NOTIFYING_ORGANISATION: `${INTEREST_PARTIES_BASE}/notifying-organisation`,
     SENTENCING_ACT_SELECTION: `${INTEREST_PARTIES_BASE}/sentencing-act-selection`,
     RESPONSIBLE_OFFICER: `${INTEREST_PARTIES_BASE}/responsible-officer`,
-    RESPONSBILE_ORGANISATION: `${INTEREST_PARTIES_BASE}/responsible-organisation`,
+    RESPONSIBLE_ORGANISATION: `${INTEREST_PARTIES_BASE}/responsible-organisation`,
     NSD: `${INTEREST_PARTIES_BASE}/national-security-directorate`,
     PDU: `${INTEREST_PARTIES_BASE}/probation-delivery-unit`,
     CHECK_YOUR_ANSWERS: `${INTEREST_PARTIES_BASE}/check-your-answers`,
-    CHECK_YOUR_ANSWERS_VERSION: `${ORDER_VERSION_BASE}/interest-parties/check-your-answers`,
+    CHECK_YOUR_ANSWERS_VERSION: `${INTEREST_PARTIES_VERSION_BASE}/check-your-answers`,
   },
 
   ABOUT_THE_DEVICE_WEARER: {
     BASE_URL: ABOUT_THE_DEVICE_WEARER_BASE,
+    BASE_URL_VERSION: ABOUT_THE_DEVICE_WEARER_VERSION_BASE,
     CHECK_YOUR_ANSWERS: `${ABOUT_THE_DEVICE_WEARER_BASE}/check-your-answers`,
     CHECK_YOUR_ANSWERS_VERSION: `${ABOUT_THE_DEVICE_WEARER_VERSION_BASE}/check-your-answers`,
-    DEVICE_WEARER: ABOUT_THE_DEVICE_WEARER_BASE,
     RESPONSIBLE_ADULT: `${ABOUT_THE_DEVICE_WEARER_BASE}/responsible-adult`,
     IDENTITY_NUMBERS: `${ABOUT_THE_DEVICE_WEARER_BASE}/identity-numbers`,
   },
 
   CONTACT_INFORMATION: {
     BASE_URL: CONTACT_INFORMATION_BASE,
+    BASE_URL_VERSION: CONTACT_INFORMATION_VERSION_BASE,
     CHECK_YOUR_ANSWERS: `${CONTACT_INFORMATION_BASE}/check-your-answers`,
-    CHECK_YOUR_ANSWERS_VERSION: `${ORDER_VERSION_BASE}/contact-information/check-your-answers`,
+    CHECK_YOUR_ANSWERS_VERSION: `${CONTACT_INFORMATION_VERSION_BASE}/check-your-answers`,
     CONTACT_DETAILS: `${CONTACT_INFORMATION_BASE}/contact-details`,
     NO_FIXED_ABODE: `${CONTACT_INFORMATION_BASE}/no-fixed-abode`,
     INTERESTED_PARTIES: `${CONTACT_INFORMATION_BASE}/interested-parties`,
@@ -81,10 +86,10 @@ const paths = {
   },
 
   INSTALLATION_AND_RISK: {
-    INSTALLATION_AND_RISK: INSTALLATION_AND_RISK_BASE,
+    BASE_URL: INSTALLATION_AND_RISK_BASE,
+    BASE_URL_VERSION: INSTALLATION_AND_RISK_VERSION_BASE,
     CHECK_YOUR_ANSWERS: `${INSTALLATION_AND_RISK_BASE}/check-your-answers`,
     CHECK_YOUR_ANSWERS_VERSION: `${INSTALLATION_AND_RISK_VERSION_BASE}/check-your-answers`,
-    BASE_URL: INSTALLATION_AND_RISK_BASE,
     OFFENCE_NEW_ITEM: `${INSTALLATION_AND_RISK_BASE}/offence`,
     OFFENCE: `${INSTALLATION_AND_RISK_BASE}/offence/:offenceId`,
     OFFENCE_OTHER_INFO: `${INSTALLATION_AND_RISK_BASE}/offence-other-info`,
@@ -106,7 +111,8 @@ const paths = {
   },
 
   MONITORING_CONDITIONS: {
-    BASE_URL: ORDER_BASE,
+    BASE_URL: MONITORING_CONDITIONS_BASE,
+    BASE_URL_VERSION: MONITORING_CONDITIONS_VERSION_BASE,
     INSTALLATION_LOCATION: `${MONITORING_CONDITIONS_BASE}/installation-location`,
     INSTALLATION_APPOINTMENT: `${MONITORING_CONDITIONS_BASE}/installation-appointment`,
     TRAIL: `${MONITORING_CONDITIONS_BASE}/trail`,
@@ -123,10 +129,9 @@ const paths = {
     CURFEW_ADDITIONAL_DETAILS: `${MONITORING_CONDITIONS_BASE}/curfew/additional-details`,
     CURFEW_TIMETABLE: `${MONITORING_CONDITIONS_BASE}/curfew/timetable`,
     CHECK_YOUR_ANSWERS: `${MONITORING_CONDITIONS_BASE}/check-your-answers`,
-    CHECK_YOUR_ANSWERS_VERSION: `${ORDER_VERSION_BASE}/monitoring-conditions/check-your-answers`,
-    REMOVE_MONITORING_TYPE: `${ORDER_BASE}/monitoring-condtions/remove-monitoring-type/:monitoringTypeId`,
+    CHECK_YOUR_ANSWERS_VERSION: `${MONITORING_CONDITIONS_VERSION_BASE}/check-your-answers`,
+    REMOVE_MONITORING_TYPE: `${MONITORING_CONDITIONS_BASE}/remove-monitoring-type/:monitoringTypeId`,
     ORDER_TYPE_DESCRIPTION: {
-      BASE_PATH: ORDER_TYPE_DESCRIPTION_BASE,
       ORDER_TYPE: `${ORDER_TYPE_DESCRIPTION_BASE}/order-type`,
       SENTENCE_TYPE: `${ORDER_TYPE_DESCRIPTION_BASE}/sentence-type`,
       HDC: `${ORDER_TYPE_DESCRIPTION_BASE}/hdc`,
@@ -145,8 +150,8 @@ const paths = {
   },
 
   ATTACHMENT: {
-    ATTACHMENTS: ATTACHMENT_BASE,
-    ATTACHMENTS_VERSION: ATTACHMENT_VERSION_BASE,
+    BASE_URL: ATTACHMENT_BASE,
+    BASE_URL_VERSION: ATTACHMENT_VERSION_BASE,
     FILE_VIEW: `${ATTACHMENT_BASE}/:fileType(photo_Id|licence|court_order)`,
     DOWNLOAD_FILE: `${ATTACHMENT_BASE}/:fileType(photo_Id|licence|court_order)/:filename`,
     DELETE_FILE: `${ATTACHMENT_BASE}/:fileType(photo_Id|licence|court_order)/delete`,

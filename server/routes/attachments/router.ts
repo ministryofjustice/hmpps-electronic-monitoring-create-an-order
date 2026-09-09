@@ -9,7 +9,7 @@ import { createFeatureRouter } from '../routeHelpers'
 const createAttachmentRouter = (
   services: Pick<Services, 'attachmentService' | 'taskListService' | 'auditService' | 'orderChecklistService'>,
 ): Router => {
-  const { router, get, post } = createFeatureRouter(paths.ATTACHMENT.ATTACHMENTS)
+  const { router, get, post } = createFeatureRouter(paths.ATTACHMENT.BASE_URL)
   const { attachmentService, taskListService, auditService, orderChecklistService } = services
   const attachmentsController = new AttachmentsController(
     auditService,
@@ -20,7 +20,7 @@ const createAttachmentRouter = (
   const haveCourtOrderController = new HaveCourtOrderController(attachmentService, taskListService)
   const havePhotoController = new HavePhotoController(attachmentService, taskListService)
 
-  get(paths.ATTACHMENT.ATTACHMENTS, attachmentsController.view)
+  get(paths.ATTACHMENT.BASE_URL, attachmentsController.view)
   get(paths.ATTACHMENT.FILE_VIEW, attachmentsController.uploadFileView)
   post(paths.ATTACHMENT.FILE_VIEW, attachmentsController.uploadFile)
   get(paths.ATTACHMENT.DOWNLOAD_FILE, attachmentsController.downloadFile)
