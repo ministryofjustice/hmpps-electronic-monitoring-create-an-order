@@ -216,10 +216,10 @@ context('New about device wearer flow', () => {
 
     cyaPage.personDetailsSection.shouldExist()
     cyaPage.personDetailsSection.shouldHaveItems([
-      { key: "What is the device wearer's first name?", value: 'URHREEDE' },
-      { key: "What is the device wearer's middle name?", value: 'ANGELLE SHANIR' },
-      { key: "What is the device wearer's last name?", value: 'BOBBIQUA' },
-      { key: "What is the device wearer's preferred name or names? (optional)", value: 'DYFREIICO JODERLY' },
+      { key: "What is the device wearer's first name?", value: 'Urhreede' },
+      { key: "What is the device wearer's middle name?", value: 'Angelle Shanir' },
+      { key: "What is the device wearer's last name?", value: 'Bobbiqua' },
+      { key: "What is the device wearer's preferred name or names? (optional)", value: 'Dyfreiico Joderly' },
       { key: "What is the device wearer's date of birth?", value: '08/05/1974' },
       { key: 'Is a responsible adult required?', value: 'No' },
       { key: 'What is the sex of the device wearer?', value: 'Male' },
@@ -287,10 +287,10 @@ context('New about device wearer flow', () => {
 
     cyaPage.personDetailsSection.shouldExist()
     cyaPage.personDetailsSection.shouldHaveItems([
-      { key: "What is the device wearer's first name?", value: 'URHREEDE' },
-      { key: "What is the device wearer's middle name?", value: 'ANGELLE SHANIR' },
-      { key: "What is the device wearer's last name?", value: 'BOBBIQUA' },
-      { key: "What is the device wearer's preferred name or names? (optional)", value: 'DYFREIICO JODERLY' },
+      { key: "What is the device wearer's first name?", value: 'Urhreede' },
+      { key: "What is the device wearer's middle name?", value: 'Angelle Shanir' },
+      { key: "What is the device wearer's last name?", value: 'Bobbiqua' },
+      { key: "What is the device wearer's preferred name or names? (optional)", value: 'Dyfreiico Joderly' },
       { key: "What is the device wearer's date of birth?", value: '08/05/1974' },
       { key: 'Is a responsible adult required?', value: 'No' },
       { key: 'What is the sex of the device wearer?', value: 'Male' },
