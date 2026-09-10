@@ -42,6 +42,8 @@ const paths = {
     CHECK_YOUR_ANSWERS: '/order/:orderId/about-the-device-wearer/check-your-answers',
     CHECK_YOUR_ANSWERS_VERSION: '/order/:orderId/version/:versionId/about-the-device-wearer/check-your-answers',
     DEVICE_WEARER: '/order/:orderId/about-the-device-wearer',
+    DEVICE_WEARER_SEARCH_RESULTS:
+      '/order/:orderId/about-the-device-wearer/:identifyNumber/device-wearer-search-results',
     RESPONSIBLE_ADULT: '/order/:orderId/about-the-device-wearer/responsible-adult',
     IDENTITY_NUMBERS: '/order/:orderId/about-the-device-wearer/identity-numbers',
   },
