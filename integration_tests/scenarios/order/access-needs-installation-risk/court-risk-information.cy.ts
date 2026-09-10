@@ -59,8 +59,7 @@ context('Court risk information', () => {
     startRiskInformation('Civil and County Court')
 
     const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
-    detailsOfInstallationPage.form.offenceField.shouldHaveValue('VIOLENCE_AGAINST_THE_PERSON')
-    detailsOfInstallationPage.form.offenceField.shouldBeDisabled()
+    cy.get('#offence').should('not.exist')
     detailsOfInstallationPage.form.fillInWith(detailsOfInstallation)
     detailsOfInstallationPage.form.saveAndContinueButton.click()
 
