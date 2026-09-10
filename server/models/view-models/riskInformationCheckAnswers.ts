@@ -26,16 +26,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
     : paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM.replace(':orderId', order.id)
 
   if (isNewOffenceFlow) {
-    if (riskInformationFlow.offence.mode === 'FIXED') {
-      answers.push(
-        createMultipleChoiceAnswer(
-          'Offences',
-          [lookup(content.reference.offences, riskInformationFlow.offence.offenceType)],
-          '',
-          { ...answerOpts, ignoreActions: true },
-        ),
-      )
-    } else if (riskInformationFlow.offence.mode === 'USER_ENTERED') {
+    if (riskInformationFlow.offence.mode === 'USER_ENTERED') {
       answers.push(
         createMultipleChoiceAnswer(
           questions.offence.text,

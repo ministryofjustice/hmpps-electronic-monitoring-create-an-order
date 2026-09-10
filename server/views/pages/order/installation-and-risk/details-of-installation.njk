@@ -62,20 +62,6 @@
   {% endfor %}
 
 {% block formInputs %}
-    {% if offence %}
-      {{ govukSelect({
-        id: "offence",
-        name: "offence",
-        label: {
-          text: content.pages.detailsOfInstallation.questions.offence.text,
-          classes: "govuk-label--s"
-        },
-        items: content.reference.offences | toOptions(false, true),
-        value: offence.value,
-        disabled: true
-      }) }}
-    {% endif %}
-
     {{ govukCheckboxes({
       idPrefix: "possibleRisk",
       name: "possibleRisk[]",

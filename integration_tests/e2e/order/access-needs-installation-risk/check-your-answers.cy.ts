@@ -499,7 +499,6 @@ context('installation and risk - check your answers', () => {
       const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
       page.installationRiskSection.shouldExist()
-      page.installationRiskSection.shouldHaveItems([{ key: 'Offences', value: 'Violence against the person' }])
       page.installationRiskSection.shouldNotHaveItem('What type of offence did the device wearer commit?')
     })
 
