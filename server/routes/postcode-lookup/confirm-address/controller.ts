@@ -5,11 +5,15 @@ import Model from './model'
 import { AddressType, AddressWithoutType } from '../../../models/Address'
 import I18n from '../../../types/i18n'
 import TaskListService from '../../../services/taskListService'
+import AddressService from '../../../services/addressService'
+import DeviceWearerService from '../../../services/deviceWearerService'
 
 export default class ConfirmAddressController {
   constructor(
     private readonly postcodeService: PostcodeService,
     private readonly tasklistService: TaskListService,
+    private readonly addressService: AddressService,
+    private readonly deviceWearerService: DeviceWearerService,
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
@@ -42,6 +46,8 @@ export default class ConfirmAddressController {
       postcode,
       buildingId,
       useDifferentAddressLink,
+      isCorePersonRecordAddress: address.addressSource === 'CORE_PERSON_RECORD',
+      noFixedAddressLink: paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id),
     })
 
     res.render('pages/order/postcode-lookup/confirm-address', model)
@@ -54,6 +60,20 @@ export default class ConfirmAddressController {
     const { action } = req.body
 
     if (action === 'continue') {
+      const address = order.addresses.find(item => item.addressType === addressType)
+      if (address?.addressSource === 'CORE_PERSON_RECORD') {
+        await this.addressService.updateAddress({
+          accessToken: res.locals.user.token,
+          orderId: order.id,
+          data: { ...address, addressType },
+        })
+        await this.deviceWearerService.updateNoFixedAbode({
+          accessToken: res.locals.user.token,
+          orderId: order.id,
+          data: { noFixedAbode: false },
+        })
+      }
+
       if (addressType === 'INSTALLATION') {
         res.redirect(this.tasklistService.getNextPage('INSTALLATION_ADDRESS', order))
         return

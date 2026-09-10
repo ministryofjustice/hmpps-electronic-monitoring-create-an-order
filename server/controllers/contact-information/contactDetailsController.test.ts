@@ -136,11 +136,24 @@ describe('ContactDetailsController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/contact-information/contact-details`)
     })
 
-    it('should save and redirect to the address details page if the user selects continue', async () => {
+    it('should save and redirect to the stored CPR primary address confirmation page', async () => {
       // Given
-      const mockOrder = getMockOrder()
+      const mockOrder = getMockOrder({
+        addresses: [
+          {
+            addressType: 'PRIMARY',
+            addressLine1: '1 Washington Street',
+            addressLine2: '',
+            addressLine3: 'Worcester',
+            addressLine4: '',
+            postcode: 'WR1 1NL',
+            addressSource: 'CORE_PERSON_RECORD',
+          },
+        ],
+      })
       const req = createMockRequest({
         order: mockOrder,
+        params: { orderId: mockOrder.id },
         body: {
           action: 'continue',
           contactNumber: '01234567890',
@@ -153,14 +166,62 @@ describe('ContactDetailsController', () => {
         contactNumber: '01234567890',
         phoneNumberAvailable: true,
       })
-      taskListService.getNextPage = jest
-        .fn()
-        .mockReturnValue(`/order/${mockOrder.id}/contact-information/no-fixed-abode`)
       // When
       await contactDetailsController.update(req, res, next)
 
       // Then
       expect(req.flash).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/confirm-address/PRIMARY`)
+    })
+
+    it('should save and redirect to the fixed address page for a user-entered primary address', async () => {
+      const mockOrder = getMockOrder({
+        addresses: [
+          {
+            addressType: 'PRIMARY',
+            addressLine1: '1 Washington Street',
+            addressLine2: '',
+            addressLine3: 'Worcester',
+            addressLine4: '',
+            postcode: 'WR1 1NL',
+            addressSource: 'CEMO',
+          },
+        ],
+      })
+      const req = createMockRequest({
+        order: mockOrder,
+        params: { orderId: mockOrder.id },
+        body: { action: 'continue', contactNumber: '01234567890' },
+        flash: jest.fn(),
+      })
+      const res = createMockResponse()
+      mockContactDetailsService.updateContactDetails.mockResolvedValue({
+        contactNumber: '01234567890',
+        phoneNumberAvailable: true,
+      })
+      taskListService.getNextPage.mockReturnValue(`/order/${mockOrder.id}/contact-information/no-fixed-abode`)
+
+      await contactDetailsController.update(req, res, jest.fn())
+
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/contact-information/no-fixed-abode`)
+    })
+
+    it('should save and redirect to the fixed address page when no CPR primary address is available', async () => {
+      const mockOrder = getMockOrder({ addresses: [] })
+      const req = createMockRequest({
+        order: mockOrder,
+        body: { action: 'continue', contactNumber: '01234567890' },
+        flash: jest.fn(),
+      })
+      const res = createMockResponse()
+      mockContactDetailsService.updateContactDetails.mockResolvedValue({
+        contactNumber: '01234567890',
+        phoneNumberAvailable: true,
+      })
+      taskListService.getNextPage.mockReturnValue(`/order/${mockOrder.id}/contact-information/no-fixed-abode`)
+
+      await contactDetailsController.update(req, res, jest.fn())
+
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/contact-information/no-fixed-abode`)
     })
 

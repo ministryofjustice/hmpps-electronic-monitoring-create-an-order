@@ -13,6 +13,8 @@ type ConfirmAddressModel = {
   searchAgainLink: string
   manualAddressLink: string
   useDifferentAddressLink: string
+  isCorePersonRecordAddress: boolean
+  noFixedAddressLink: string
 }
 
 const construct = (
@@ -24,6 +26,8 @@ const construct = (
     postcode?: string
     buildingId?: string
     useDifferentAddressLink: string
+    isCorePersonRecordAddress?: boolean
+    noFixedAddressLink?: string
   },
 ): ConfirmAddressModel => {
   const addressType = opts.addressType.toUpperCase() as ConfirmationAddressType
@@ -52,6 +56,8 @@ const construct = (
     searchAgainLink,
     manualAddressLink,
     useDifferentAddressLink: opts.useDifferentAddressLink,
+    isCorePersonRecordAddress: opts.isCorePersonRecordAddress ?? false,
+    noFixedAddressLink: opts.noFixedAddressLink ?? '',
   }
 }
 

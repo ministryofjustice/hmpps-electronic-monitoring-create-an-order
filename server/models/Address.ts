@@ -8,9 +8,11 @@ export const AddressTypeEnum = z.enum([
   'INSTALLATION',
   'RESPONSIBLE_ORGANISATION',
 ])
+export const AddressSourceEnum = z.enum(['CORE_PERSON_RECORD', 'CEMO', 'COMMON_PLATFORM'])
 
 const AddressModel = z.object({
   addressType: AddressTypeEnum,
+  addressSource: AddressSourceEnum.nullable().optional(),
   addressLine1: z.string(),
   addressLine2: z.string(),
   addressLine3: z.string(),
@@ -23,5 +25,6 @@ export type AddressWithoutType = Omit<Address, 'addressType'>
 export type AddressWithUPRN = Address & { uprn: string }
 export type AddressWithoutTypeUPRN = AddressWithoutType & { uprn: string }
 export type AddressType = z.infer<typeof AddressTypeEnum>
+export type AddressSource = z.infer<typeof AddressSourceEnum>
 
 export default AddressModel

@@ -1,7 +1,7 @@
 import { ZodError } from 'zod'
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
-import AddressModel, { Address } from '../models/Address'
+import AddressModel, { Address, AddressSource } from '../models/Address'
 import { AddressFormData, AddressFormDataValidator } from '../models/form-data/address'
 import { ValidationResult } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
@@ -9,7 +9,7 @@ import { convertBackendErrorToValidationError, convertZodErrorToValidationError 
 
 export type UpdateAddressRequest = AuthenticatedRequestInput & {
   orderId: string
-  data: AddressFormData & { addressType: string }
+  data: AddressFormData & { addressType: string; addressSource?: AddressSource | null }
 }
 
 export default class AddressService {
