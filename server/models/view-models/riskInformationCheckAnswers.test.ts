@@ -51,4 +51,26 @@ describe('riskInformationCheckAnswers', () => {
     expect(answerKeys).not.toContain('DAPO order clauses')
     expect(answerKeys).not.toContain('Any other information to be aware of about the offence committed?')
   })
+
+  it('lists risk answers before offence answers', () => {
+    const order = getMockOrder({
+      dataDictionaryVersion: 'DDV6',
+      interestedParties: {
+        ...getMockOrder().interestedParties!,
+        notifyingOrganisation: 'PRISON',
+      },
+      offences: [{ offenceType: 'VIOLENCE_AGAINST_THE_PERSON', offenceDate: null }],
+    })
+
+    const model = createViewModel(order, getContent(Locales.en, 'DDV6'), true)
+    const answerKeys = model.riskInformation.map(answer => answer.key.text)
+
+    const lastRiskIndex = answerKeys.lastIndexOf(
+      getContent(Locales.en, 'DDV6').pages.installationAndRisk.questions.riskDetails.text,
+    )
+    const firstOffenceIndex = answerKeys.findIndex(key => key.includes('offence'))
+
+    expect(lastRiskIndex).toBeGreaterThan(-1)
+    expect(firstOffenceIndex).toBeGreaterThan(lastRiskIndex)
+  })
 })

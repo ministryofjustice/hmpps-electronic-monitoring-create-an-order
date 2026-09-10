@@ -55,6 +55,11 @@ context('offences', () => {
       newDeviceWearerFlow: true,
     })
 
+    // Should go to details of installation page
+    const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
+    cy.get('#offence').should('not.exist')
+    detailsOfInstallationPage.form.fillInWith(detailsOfInstallation)
+    detailsOfInstallationPage.form.saveAndContinueButton.click()
     // Should go to offence page
     const offencePage = Page.verifyOnPage(OffencePage)
     offencePage.form.fillInWith({ offenceType: 'Criminal damage and arson' })
@@ -63,22 +68,9 @@ context('offences', () => {
     const offenceOtherInfoPage = Page.verifyOnPage(OffenceOtherInfoPage)
     offenceOtherInfoPage.form.hasOtherInformationField.set('No')
     offenceOtherInfoPage.form.saveAndContinueButton.click()
-    // Should go to details of installation page
-    const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
-    cy.get('#offence').should('not.exist')
-    detailsOfInstallationPage.form.fillInWith(detailsOfInstallation)
-    detailsOfInstallationPage.form.saveAndContinueButton.click()
     // CYA page
     const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
     cyaPage.installationRiskSection.shouldHaveItems([
-      {
-        key: 'What type of offence did the device wearer commit?',
-        value: 'Criminal damage and arson',
-      },
-      {
-        key: 'Any other information to be aware of about the offence committed?',
-        value: '',
-      },
       {
         key: "At installation what are the possible risks from the device wearer's behaviour?",
         value: 'Violent behaviour or threats of violence',
@@ -90,6 +82,14 @@ context('offences', () => {
       {
         key: 'Any other risks to be aware of? (optional)',
         value: 'some details',
+      },
+      {
+        key: 'What type of offence did the device wearer commit?',
+        value: 'Criminal damage and arson',
+      },
+      {
+        key: 'Any other information to be aware of about the offence committed?',
+        value: '',
       },
     ])
   })

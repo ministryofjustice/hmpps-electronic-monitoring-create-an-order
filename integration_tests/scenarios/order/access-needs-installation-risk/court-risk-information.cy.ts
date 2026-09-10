@@ -87,6 +87,11 @@ context('Court risk information', () => {
   it('shows every standard Risk Information page for Prison', () => {
     startRiskInformation('Prison')
 
+    const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
+    cy.get('#offence').should('not.exist')
+    detailsOfInstallationPage.form.fillInWith(detailsOfInstallation)
+    detailsOfInstallationPage.form.saveAndContinueButton.click()
+
     const offencePage = Page.verifyOnPage(OffencePage)
     offencePage.form.fillInWith({ offenceType: 'Criminal damage and arson' })
     offencePage.form.saveAndContinueButton.click()
@@ -94,11 +99,6 @@ context('Court risk information', () => {
     const offenceOtherInfoPage = Page.verifyOnPage(OffenceOtherInfoPage)
     offenceOtherInfoPage.form.fillInWith({ hasOtherInformation: 'No' })
     offenceOtherInfoPage.form.saveAndContinueButton.click()
-
-    const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
-    cy.get('#offence').should('not.exist')
-    detailsOfInstallationPage.form.fillInWith(detailsOfInstallation)
-    detailsOfInstallationPage.form.saveAndContinueButton.click()
 
     const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
     cyaPage.installationRiskSection.shouldHaveItem(

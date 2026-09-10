@@ -4,9 +4,11 @@ import constructModel from './viewModel'
 import { validationErrors } from '../../../constants/validationErrors'
 import { ValidationResult } from '../../../models/Validation'
 import OffenceListSummaryFormDataModel from './formModel'
+import TaskListService from '../../../services/taskListService'
+import { getNextRiskInformationPath } from '../riskInformationTasks'
 
 export default class OffenceListController {
-  constructor() {}
+  constructor(private readonly taskListService: TaskListService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
@@ -36,16 +38,24 @@ export default class OffenceListController {
       ])
       return res.redirect(paths.INSTALLATION_AND_RISK.OFFENCE_LIST.replace(':orderId', order.id))
     }
-    let nextPagePath: string = paths.ORDER.SUMMARY
+    let nextPagePath: string = paths.ORDER.SUMMARY.replace(':orderId', order.id)
     if (formData.action === 'continue') {
       if (formData.addAnother === 'true') {
-        nextPagePath = isFamilyCourt ? paths.INSTALLATION_AND_RISK.DAPO : paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM
+        nextPagePath = (
+          isFamilyCourt ? paths.INSTALLATION_AND_RISK.DAPO : paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM
+        ).replace(':orderId', order.id)
       } else {
-        nextPagePath = isFamilyCourt
-          ? paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION
-          : paths.INSTALLATION_AND_RISK.OFFENCE_OTHER_INFO
+        // The list page is not itself a task, so continue from the task that owns it.
+        nextPagePath = getNextRiskInformationPath(
+          this.taskListService,
+          order,
+          isFamilyCourt ? 'DAPO' : 'OFFENCE',
+          isFamilyCourt
+            ? paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION
+            : paths.INSTALLATION_AND_RISK.OFFENCE_OTHER_INFO,
+        )
       }
     }
-    return res.redirect(nextPagePath.replace(':orderId', order.id))
+    return res.redirect(nextPagePath)
   }
 }

@@ -23,12 +23,12 @@ export type RiskInformationFlow = {
 }
 
 export const defaultRiskInformationPages: readonly RiskInformationPage[] = [
-  riskInformationPages.offence,
-  riskInformationPages.offenceOtherInfo,
-  riskInformationPages.dapo,
   riskInformationPages.detailsOfInstallation,
   riskInformationPages.isMappa,
   riskInformationPages.mappa,
+  riskInformationPages.offence,
+  riskInformationPages.offenceOtherInfo,
+  riskInformationPages.dapo,
   riskInformationPages.checkAnswers,
 ]
 

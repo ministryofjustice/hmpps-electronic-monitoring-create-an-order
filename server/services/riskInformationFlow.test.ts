@@ -7,21 +7,21 @@ import {
 
 describe('getRiskInformationFlow', () => {
   const standardPages = [
+    'DETAILS_OF_INSTALLATION',
     'OFFENCE',
     'OFFENCE_OTHER_INFO',
-    'DETAILS_OF_INSTALLATION',
     'CHECK_ANSWERS_INSTALLATION_AND_RISK',
   ] as const
   const courtPages = ['DETAILS_OF_INSTALLATION', 'CHECK_ANSWERS_INSTALLATION_AND_RISK'] as const
 
   it('defines every supported Risk Information page, including DAPO', () => {
     expect(defaultRiskInformationPages).toEqual([
-      'OFFENCE',
-      'OFFENCE_OTHER_INFO',
-      'DAPO',
       'DETAILS_OF_INSTALLATION',
       'IS_MAPPA',
       'MAPPA',
+      'OFFENCE',
+      'OFFENCE_OTHER_INFO',
+      'DAPO',
       'CHECK_ANSWERS_INSTALLATION_AND_RISK',
     ])
   })

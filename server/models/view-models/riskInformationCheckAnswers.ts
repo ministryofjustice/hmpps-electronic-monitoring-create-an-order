@@ -12,7 +12,8 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
   const { questions } = content.pages.installationAndRisk
 
   const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' || !order.isOwner }
-  const answers = []
+  const offenceAnswers = []
+  const riskAnswers = []
 
   const isHomeOfficeUser = order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE'
   const riskInformationFlow = getRiskInformationFlow(order.interestedParties?.notifyingOrganisation)
@@ -27,7 +28,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
 
   if (isNewOffenceFlow) {
     if (riskInformationFlow.offence.mode === 'FIXED') {
-      answers.push(
+      offenceAnswers.push(
         createMultipleChoiceAnswer(
           'Offences',
           [lookup(content.reference.offences, riskInformationFlow.offence.offenceType)],
@@ -36,7 +37,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
         ),
       )
     } else if (riskInformationFlow.offence.mode === 'USER_ENTERED') {
-      answers.push(
+      offenceAnswers.push(
         createMultipleChoiceAnswer(
           questions.offence.text,
           order.offences.map(offence => lookup(content.reference.offences, offence.offenceType)),
@@ -44,7 +45,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
           answerOpts,
         ),
       )
-      answers.push(
+      offenceAnswers.push(
         createAnswer(
           'Any other information to be aware of about the offence committed?',
           order.offenceAdditionalDetails?.additionalDetails || '',
@@ -54,7 +55,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
       )
     }
   } else {
-    answers.push(
+    offenceAnswers.push(
       createAnswer(
         questions.offence.text,
         lookup(content.reference.offences, order.installationAndRisk?.offence),
@@ -65,7 +66,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
   }
 
   if (!isNewOffenceFlow && isOrderDataDictionarySameOrAbove('DDV5', order)) {
-    answers.push(
+    offenceAnswers.push(
       createAnswer(
         questions.offenceAdditionalDetails.text,
         order.installationAndRisk?.offenceAdditionalDetails,
@@ -94,7 +95,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
     it => Object.keys(content.reference.possibleRisks).indexOf(it) !== -1,
   )
 
-  answers.push(
+  riskAnswers.push(
     createMultipleChoiceAnswer(
       questions.possibleRisk.text,
       possibleRisks?.map(category => lookup(content.reference.possibleRisks, category)) ?? [],
@@ -104,13 +105,15 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
   )
 
   if (possibleRisks.includes('RISK_TO_GENDER') && genderRiskDetailsFromOrder) {
-    answers.push(createAnswer(questions.genderRiskDetails.text, genderRiskDetailsFromOrder, riskDetailsUri, answerOpts))
+    riskAnswers.push(
+      createAnswer(questions.genderRiskDetails.text, genderRiskDetailsFromOrder, riskDetailsUri, answerOpts),
+    )
   }
 
   const riskCategories = riskCategoriesFromOrder.filter(
     it => Object.keys(content.reference.riskCategories).indexOf(it) !== -1,
   )
-  answers.push(
+  riskAnswers.push(
     createMultipleChoiceAnswer(
       questions.riskCategory.text,
       riskCategories?.map(category => lookup(content.reference.riskCategories, category)) ?? [],
@@ -119,12 +122,12 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
     ),
   )
 
-  answers.push(createAnswer(questions.riskDetails.text, riskDetailsFromOrder, riskDetailsUri, answerOpts))
+  riskAnswers.push(createAnswer(questions.riskDetails.text, riskDetailsFromOrder, riskDetailsUri, answerOpts))
 
   if (isHomeOfficeUser) {
     const isMappaQuestions = content.pages.isMappa.questions
     const mappaQuestions = content.pages.mappa.questions
-    answers.push(
+    riskAnswers.push(
       createAnswer(
         isMappaQuestions.isMappa.text,
         lookup(content.reference.isMappa, order.mappa?.isMappa),
@@ -145,6 +148,9 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
       ),
     )
   }
+
+  const answers = isNewOffenceFlow ? [...riskAnswers, ...offenceAnswers] : [...offenceAnswers, ...riskAnswers]
+
   return {
     riskInformation: answers,
     submittedDate: order.fmsResultDate ? formatDateTime(order.fmsResultDate) : undefined,

@@ -1,6 +1,8 @@
 import paths from '../../constants/paths'
 import { Order } from '../../models/Order'
 import { getRiskInformationFlow, RiskInformationPage, riskInformationPages } from '../../services/riskInformationFlow'
+import type TaskListService from '../../services/taskListService'
+import FeatureFlags from '../../utils/featureFlags'
 
 type RiskInformationTaskState = 'REQUIRED' | 'NOT_REQUIRED'
 
@@ -68,4 +70,19 @@ export const getRiskInformationTasks = (order: Order): RiskInformationTask[] => 
   const flow = getRiskInformationFlow(order.interestedParties?.notifyingOrganisation)
 
   return flow.pages.map(page => riskInformationTaskDefinitions[page](order))
+}
+
+export const getNextRiskInformationPath = (
+  taskListService: TaskListService,
+  order: Order,
+  currentPage: RiskInformationPage,
+  fallbackPath: string,
+): string => {
+  const flow = getRiskInformationFlow(order.interestedParties?.notifyingOrganisation)
+
+  if (!FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED') || !flow.pages.includes(currentPage)) {
+    return fallbackPath.replace(':orderId', order.id)
+  }
+
+  return taskListService.getNextPage(currentPage, order)
 }
