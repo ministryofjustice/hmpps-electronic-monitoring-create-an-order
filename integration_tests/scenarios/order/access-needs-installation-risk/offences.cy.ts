@@ -45,9 +45,8 @@ context('offences', () => {
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PRISON_USER', 'ROLE_PRISON'],
     })
 
-    createNewOrder({
-      notifyingOrganisation: createFakeInterestedParties('Prison', 'Prison', undefined, 'North West'),
-    })
+    const interestedParties = createFakeInterestedParties('Prison', 'Prison', undefined, 'North West')
+    createNewOrder({ notifyingOrganisation: interestedParties })
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
@@ -55,6 +54,7 @@ context('offences', () => {
 
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
+      interestedParties,
       newDeviceWearerFlow: true,
     })
 
@@ -102,9 +102,8 @@ context('offences', () => {
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'COURT'],
     })
 
-    createNewOrder({
-      notifyingOrganisation: createFakeInterestedParties('Civil and County Court', 'Prison', undefined, 'North West'),
-    })
+    const interestedParties = createFakeInterestedParties('Civil and County Court', 'Prison', undefined, 'North West')
+    createNewOrder({ notifyingOrganisation: interestedParties })
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
@@ -112,6 +111,7 @@ context('offences', () => {
 
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
+      interestedParties,
       newDeviceWearerFlow: true,
     })
 
@@ -180,9 +180,8 @@ context('offences', () => {
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'COURT'],
     })
 
-    createNewOrder({
-      notifyingOrganisation: createFakeInterestedParties('Family Court', 'Prison', undefined, 'North West'),
-    })
+    const interestedParties = createFakeInterestedParties('Family Court', 'Prison', undefined, 'North West')
+    createNewOrder({ notifyingOrganisation: interestedParties })
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
@@ -190,6 +189,7 @@ context('offences', () => {
 
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
+      interestedParties,
       newDeviceWearerFlow: true,
     })
 
@@ -247,9 +247,8 @@ context('offences', () => {
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'HOME_OFFICE'],
     })
 
-    createNewOrder({
-      notifyingOrganisation: createFakeInterestedParties('Home Office', 'Prison', undefined, 'North West'),
-    })
+    const interestedParties = createFakeInterestedParties('Home Office', 'Prison', undefined, 'North West')
+    createNewOrder({ notifyingOrganisation: interestedParties })
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
@@ -257,6 +256,7 @@ context('offences', () => {
 
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
+      interestedParties,
       newDeviceWearerFlow: true,
     })
 
@@ -280,9 +280,8 @@ context('offences', () => {
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'COURT'],
     })
 
-    createNewOrder({
-      notifyingOrganisation: createFakeInterestedParties('Family Court', 'Prison', undefined, 'North West'),
-    })
+    const interestedParties = createFakeInterestedParties('Family Court', 'Prison', undefined, 'North West')
+    createNewOrder({ notifyingOrganisation: interestedParties })
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
@@ -290,6 +289,7 @@ context('offences', () => {
 
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
+      interestedParties,
       newDeviceWearerFlow: true,
     })
 
@@ -326,9 +326,8 @@ context('offences', () => {
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'COURT'],
     })
 
-    createNewOrder({
-      notifyingOrganisation: createFakeInterestedParties('Civil and County Court', 'Prison', undefined, 'North West'),
-    })
+    const interestedParties = createFakeInterestedParties('Civil and County Court', 'Prison', undefined, 'North West')
+    createNewOrder({ notifyingOrganisation: interestedParties })
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
@@ -336,6 +335,7 @@ context('offences', () => {
 
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
+      interestedParties,
       newDeviceWearerFlow: true,
     })
 

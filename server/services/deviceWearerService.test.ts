@@ -131,7 +131,7 @@ describe('Device wearer service', () => {
       const result = await service.updateIdentityNumbers(updateIdentityNumbersRequestInput)
 
       expect(result).toEqual([
-        { field: 'nomisId', error: 'Enter NOMIS ID' },
+        { field: 'nomisId', error: 'Enter prison number' },
         { field: 'deliusId', error: 'Enter CRN' },
       ])
       expect(mockRestClient.put).not.toHaveBeenCalled()
