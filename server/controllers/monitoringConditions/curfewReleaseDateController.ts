@@ -4,12 +4,21 @@ import { isValidationResult } from '../../models/Validation'
 import CurfewReleaseDateService from '../../services/curfewReleaseDateService'
 import CurfewReleaseDateFormDataModel from '../../models/form-data/curfewReleaseDate'
 import curfewReleaseDateViewModel from '../../models/view-models/curfewReleaseDate'
+import shouldShowCurfewDayOfRelease from '../../utils/curfewDayOfReleaseEligibility'
+import { serialiseTime } from '../../utils/utils'
 
 export default class CurfewReleaseDateController {
   constructor(private readonly curfewReleaseDateService: CurfewReleaseDateService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { curfewReleaseDateConditions: model, addresses } = req.order!
+    const order = req.order!
+
+    if (!shouldShowCurfewDayOfRelease(order)) {
+      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', order.id))
+      return
+    }
+
+    const { curfewReleaseDateConditions: model, addresses } = order
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
     const viewModel = curfewReleaseDateViewModel.construct(model, addresses, errors as never, formData as never)
@@ -24,7 +33,11 @@ export default class CurfewReleaseDateController {
     const updateResult = await this.curfewReleaseDateService.update({
       accessToken: res.locals.user.token,
       order,
-      data: formData,
+      data: {
+        startTime: serialiseTime(formData.curfewTimesStartHours, formData.curfewTimesStartMinutes),
+        endTime: serialiseTime(formData.curfewTimesEndHours, formData.curfewTimesEndMinutes),
+        curfewAddress: formData.curfewAddress,
+      },
     })
 
     if (isValidationResult(updateResult)) {

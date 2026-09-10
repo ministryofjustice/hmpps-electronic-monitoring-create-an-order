@@ -1,0 +1,38 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set section = content.pages.curfewDayOfRelease.section %}
+{% set heading = content.pages.curfewDayOfRelease.title %}
+{% set questions = content.pages.curfewDayOfRelease.questions %}
+
+{% block formInputs %}
+
+  {{ govukRadios({
+    name: "standardCurfewTimes",
+    classes: "govuk-radios--inline",
+    hint: { text: questions.standardCurfewTimes.hint },
+    fieldset: {
+      legend: {
+        text: questions.standardCurfewTimes.text,
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
+      }
+    },
+    items: [
+      {
+        value: "YES",
+        text: "Yes",
+        disabled: not isOrderEditable
+      },
+      {
+        value: "NO",
+        text: "No",
+        disabled: not isOrderEditable
+      }
+    ],
+    value: standardCurfewTimes.value,
+    errorMessage: standardCurfewTimes.error
+  }) }}
+
+{% endblock %}

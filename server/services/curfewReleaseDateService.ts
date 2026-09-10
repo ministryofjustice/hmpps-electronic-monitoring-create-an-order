@@ -1,16 +1,18 @@
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import { CurfewReleaseDate } from '../models/CurfewReleaseDate'
-import { CurfewReleaseDateFormData } from '../models/form-data/curfewReleaseDate'
 import { Order } from '../models/Order'
 import { ValidationResult } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
 import { convertBackendErrorToValidationError } from '../utils/errors'
-import { serialiseTime } from '../utils/utils'
+
+export type CurfewReleaseDateData = Pick<CurfewReleaseDate, 'startTime' | 'endTime'> & {
+  curfewAddress?: string | null
+}
 
 type CurfewReleaseDateInput = AuthenticatedRequestInput & {
   order: Order
-  data: CurfewReleaseDateFormData
+  data: CurfewReleaseDateData
 }
 
 export default class CurfewReleaseDateService {
@@ -20,7 +22,7 @@ export default class CurfewReleaseDateService {
     try {
       await this.apiClient.put({
         path: `/api/orders/${input.order.id}/monitoring-conditions-curfew-release-date`,
-        data: this.createApiModelFromFormData(input.data, input.order),
+        data: this.createApiModel(input.data, input.order),
         token: input.accessToken,
       })
       return undefined
@@ -34,16 +36,16 @@ export default class CurfewReleaseDateService {
     }
   }
 
-  private createApiModelFromFormData(formData: CurfewReleaseDateFormData, order: Order): CurfewReleaseDate {
+  private createApiModel(data: CurfewReleaseDateData, order: Order): CurfewReleaseDate {
     if (order.curfewConditions?.startDate === null || order.curfewConditions?.startDate === undefined) {
       throw new Error(
         `Start date is undefined for order: ${order.id}. Order must have a curfew start date before setting release date`,
       )
     }
     return {
-      startTime: serialiseTime(formData.curfewTimesStartHours, formData.curfewTimesStartMinutes),
-      endTime: serialiseTime(formData.curfewTimesEndHours, formData.curfewTimesEndMinutes),
-      curfewAddress: formData.curfewAddress ?? null,
+      startTime: data.startTime,
+      endTime: data.endTime,
+      curfewAddress: data.curfewAddress ?? null,
       releaseDate: order.curfewConditions?.startDate,
     }
   }
