@@ -265,7 +265,7 @@ const createCurfewReleaseDateAnswers = (order: Order, content: I18n, answerOpts:
   const releaseDateUri = paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id)
   const { questions } = content.pages.curfewReleaseDate
 
-  if (order.curfewConditions?.startDate === undefined || !shouldShowCurfewDayOfRelease(order)) {
+  if (!order.curfewConditions?.startDate || !shouldShowCurfewDayOfRelease(order)) {
     return []
   }
 

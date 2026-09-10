@@ -233,7 +233,7 @@ describe('MonitoringConditionsCheckAnswersController', () => {
           mandatoryAttendance: true,
           orderType: 'PRE_TRIAL',
           orderTypeDescription: 'GPS_ACQUISITIVE_CRIME_HDC',
-          startDate: '2099-11-11T01:01:00Z',
+          startDate: new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
           trail: true,
           sentenceType: 'EPP',
           issp: 'NO',
