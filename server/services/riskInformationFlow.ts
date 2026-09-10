@@ -12,10 +12,7 @@ export const riskInformationPages = {
 
 export type RiskInformationPage = (typeof riskInformationPages)[keyof typeof riskInformationPages]
 
-export type OffencePolicy =
-  | { mode: 'USER_ENTERED' }
-  | { mode: 'FIXED'; offenceType: 'VIOLENCE_AGAINST_THE_PERSON' }
-  | { mode: 'NONE' }
+export type OffencePolicy = { mode: 'USER_ENTERED' } | { mode: 'NONE' }
 
 export type RiskInformationFlow = {
   pages: readonly RiskInformationPage[]
@@ -60,7 +57,7 @@ const riskInformationProfiles = {
       riskInformationPages.isMappa,
       riskInformationPages.mappa,
     ],
-    offence: { mode: 'FIXED', offenceType: 'VIOLENCE_AGAINST_THE_PERSON' },
+    offence: { mode: 'NONE' },
   },
   homeOffice: {
     excludedPages: [riskInformationPages.offence, riskInformationPages.offenceOtherInfo, riskInformationPages.dapo],

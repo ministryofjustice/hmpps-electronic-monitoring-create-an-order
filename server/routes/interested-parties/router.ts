@@ -9,10 +9,7 @@ import NotifingOrganisationController from './notifying-organisation/controller'
 const createInterestedPartiesRouter = (
   services: Pick<
     Services,
-    | 'interestedPartiesStoreService'
-    | 'updateInterestedPartiesService'
-    | 'probationDeliveryUnitService'
-    | 'riskInformationStaticOffenceService'
+    'interestedPartiesStoreService' | 'updateInterestedPartiesService' | 'probationDeliveryUnitService'
   >,
 ): Router => {
   const router = Router({ mergeParams: true })
@@ -20,7 +17,6 @@ const createInterestedPartiesRouter = (
   const notifyingOrganisationController = new NotifingOrganisationController(
     services.interestedPartiesStoreService,
     services.updateInterestedPartiesService,
-    services.riskInformationStaticOffenceService,
   )
   const responsibleOfficerController = new ResponsibleOfficerController(services.interestedPartiesStoreService)
   const responsibleOrganisationController = new ResponsibleOrganisationController(

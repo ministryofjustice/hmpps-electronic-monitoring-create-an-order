@@ -1,6 +1,5 @@
 import { getMockOrder } from '../../../../test/mocks/mockOrder'
 import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
-import RiskInformationStaticOffenceService from '../../../services/riskInformationStaticOffenceService'
 import InterestedPartiesStoreService from '../interestedPartiesStoreService'
 import UpdateInterestedPartiesService from '../interestedPartiesService'
 import NotifingOrganisationController from './controller'
@@ -10,21 +9,13 @@ describe('NotifingOrganisationController', () => {
   const interestedPartiesService = {
     update: jest.fn(),
   } as unknown as jest.Mocked<UpdateInterestedPartiesService>
-  const riskInformationStaticOffenceService = {
-    initialise: jest.fn(),
-  } as unknown as jest.Mocked<RiskInformationStaticOffenceService>
-
-  const controller = new NotifingOrganisationController(
-    store,
-    interestedPartiesService,
-    riskInformationStaticOffenceService,
-  )
+  const controller = new NotifingOrganisationController(store, interestedPartiesService)
 
   beforeEach(() => {
     jest.clearAllMocks()
   })
 
-  it('initialises risk information after persisting a non-Family court', async () => {
+  it('persists a non-Family court', async () => {
     const order = getMockOrder()
     const req = createMockRequest({
       order,
@@ -40,11 +31,6 @@ describe('NotifingOrganisationController', () => {
     await controller.update(req, res, jest.fn())
 
     expect(interestedPartiesService.update).toHaveBeenCalled()
-    expect(riskInformationStaticOffenceService.initialise).toHaveBeenCalledWith({
-      accessToken: 'fakeUserToken',
-      orderId: order.id,
-      notifyingOrganisation: 'CIVIL_COUNTY_COURT',
-    })
   })
 
   it('does not persist data when notifying organisation validation fails', async () => {
@@ -60,6 +46,5 @@ describe('NotifingOrganisationController', () => {
     await controller.update(req, res, jest.fn())
 
     expect(interestedPartiesService.update).not.toHaveBeenCalled()
-    expect(riskInformationStaticOffenceService.initialise).not.toHaveBeenCalled()
   })
 })

@@ -55,7 +55,7 @@ context('Court risk information', () => {
     cy.task('resetFeatureFlags')
   })
 
-  it('skips offence pages and uses the fixed offence for Civil Court', () => {
+  it('skips offence pages for Civil Court', () => {
     startRiskInformation('Civil and County Court')
 
     const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
