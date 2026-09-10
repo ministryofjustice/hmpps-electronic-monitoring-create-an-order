@@ -50,6 +50,7 @@ import UpdateInterestedPartiesService from '../routes/interested-parties/interes
 import PostcodeService from '../routes/postcode-lookup/postcodeService'
 import SentencingActService from '../routes/sentencing-act-selection/SentencingActService'
 import SectionService from './sectionsService'
+import DeviceWearerSearchResultsService from '../routes/about-the-device-wearer/device-wearer-search-results/service'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient, osDataHubClient } = dataAccess()
@@ -112,6 +113,7 @@ export const services = () => {
   )
 
   const sectionService = new SectionService(taskListService, orderChecklistService)
+  const deviceWearerSearchResultsService = new DeviceWearerSearchResultsService(cemoApiClient)
 
   const fmsRequestService = new FmsRequestService(cemoApiClient)
   return {
@@ -158,6 +160,7 @@ export const services = () => {
     postcodeService,
     sectionService,
     sentencingActService,
+    deviceWearerSearchResultsService,
   }
 }
 

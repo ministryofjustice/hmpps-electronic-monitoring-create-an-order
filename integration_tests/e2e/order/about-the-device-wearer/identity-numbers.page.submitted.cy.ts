@@ -3,7 +3,6 @@ import Page from '../../../pages/page'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
 
 const mockOrderId = uuidv4()
-
 const mockDeviceWearer = {
   nomisId: 'nomis',
   pncId: 'pnc',
@@ -23,7 +22,10 @@ const mockDeviceWearer = {
   noFixedAbode: null,
   interpreterRequired: null,
 }
-
+const mockOrder = {
+  deviceWearer: mockDeviceWearer,
+  interestedParties: { notifyingOrganisation: 'PRISON' },
+}
 context('About the device wearer', () => {
   context('Identity numbers', () => {
     context('Viewing a submitted order', () => {
@@ -35,29 +37,29 @@ context('About the device wearer', () => {
           httpStatus: 200,
           id: mockOrderId,
           status: 'SUBMITTED',
-          order: { deviceWearer: mockDeviceWearer },
+          order: mockOrder,
         })
 
         cy.signIn()
       })
 
       it('Should display the user name visible in header', () => {
-        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
+        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, ['nomisId'])
         page.header.userName().should('contain.text', 'J. Smith')
       })
 
       it('Should display the phase banner in header', () => {
-        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
+        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, ['nomisId'])
         page.header.phaseBanner().should('contain.text', 'dev')
       })
 
       it('Should display the submitted order notification', () => {
-        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
+        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, ['nomisId'])
         page.submittedBanner.should('contain', 'You are viewing a submitted order.')
       })
 
       it('Should not allow the user to update the identity numbers details', () => {
-        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
+        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, ['nomisId'])
 
         page.form.saveAndContinueButton.should('not.exist')
         page.form.saveAsDraftButton.should('not.exist')
@@ -67,21 +69,9 @@ context('About the device wearer', () => {
       })
 
       it('Should display the submitted values in the disabled form', () => {
-        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId })
+        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, ['nomisId'])
 
-        page.form.checkboxes.shouldHaveValue('Police National Computer (PNC)')
-        page.form.checkboxes.shouldHaveValue('National Offender Management Information System (NOMIS)')
-        page.form.checkboxes.shouldHaveValue('Prison Number')
-        page.form.checkboxes.shouldHaveValue('Case Reference Number (CRN)')
-        page.form.checkboxes.shouldHaveValue('Compliance and Enforcement Person Reference (CEPR)')
-        page.form.checkboxes.shouldHaveValue('Court Case Reference Number (CCRN)')
-
-        page.form.nomisIdField.shouldHaveValue('nomis')
-        page.form.pncIdField.shouldHaveValue('pnc')
-        page.form.deliusIdField.shouldHaveValue('delius')
-        page.form.prisonNumberField.shouldHaveValue('prison')
-        page.form.complianceField.shouldHaveValue('cepr')
-        page.form.courtCaseField.shouldHaveValue('ccrn')
+        page.form.singleField('nomisId').shouldHaveValue('nomis')
       })
     })
   })
