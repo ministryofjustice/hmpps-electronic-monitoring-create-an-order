@@ -65,10 +65,8 @@ context('Court risk information', () => {
     detailsOfInstallationPage.form.saveAndContinueButton.click()
 
     const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
-    cyaPage.installationRiskSection.shouldHaveItem('Offences', 'Violence against the person')
-    cyaPage.installationRiskSection.shouldNotHaveItem(
-      'Any other information to be aware of about the offence committed?',
-    )
+    // Do not render fixed offence on cya for court
+    cyaPage.installationRiskSection.shouldNotHaveItem('Offences')
   })
 
   it('skips offence and DAPO clause pages for Family Court', () => {
