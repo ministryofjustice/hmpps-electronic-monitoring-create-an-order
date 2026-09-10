@@ -1355,11 +1355,8 @@ context('Order Summary', () => {
   })
 
   context('Complete order, submitted', () => {
-    const testFlags = { CREATE_NEW_ORDER_VERSION_ENABLED: true }
-
     beforeEach(() => {
       cy.task('reset')
-      cy.task('setFeatureFlags', testFlags)
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
       // Create an order with all fields present (even though they're not valid)
@@ -2167,11 +2164,8 @@ context('Order Summary', () => {
   })
 
   context('Complete order, submitted', () => {
-    const testFlags = { CREATE_NEW_ORDER_VERSION_ENABLED: true }
-
     beforeEach(() => {
       cy.task('reset')
-      cy.task('setFeatureFlags', testFlags)
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
       // Create an order with all fields present (even though they're not valid)
