@@ -4,6 +4,7 @@ import I18n from '../../../types/i18n'
 import { ReferenceCatalogDDv6 } from '../../../types/i18n/reference'
 import { AnswerOptions, createAnswer } from '../../../utils/checkYourAnswers'
 import isOrderDataDictionarySameOrAbove from '../../../utils/dataDictionaryVersionComparer'
+import isVariationType from '../../../utils/isVariationType'
 import { formatDateTime, lookup } from '../../../utils/utils'
 
 const getResponsibleOrganisationRegionAnswer = (
@@ -119,10 +120,12 @@ const createProbationDeliveryUnitAnswer = (order: Order, content: I18n, answerOp
 
   const isStartDateInPast = startDate < new Date()
 
+  const isPastDatedVariation = isVariationType(order.type) && isStartDateInPast
+
   if (
     isOrderDataDictionarySameOrAbove('DDV5', order) &&
     order.interestedParties?.responsibleOrganisation === 'PROBATION' &&
-    !(isStartDateInPast && order.status === 'SUBMITTED')
+    !(order.status === 'SUBMITTED' && isPastDatedVariation)
   ) {
     answers.push(
       createAnswer(
