@@ -9,9 +9,9 @@ export default class AttachmentSummaryPage extends CheckYourAnswersPage {
   constructor(heading: string = 'Check your answers', isOldVersion: boolean = false) {
     let path: string
     if (isOldVersion) {
-      path = paths.ATTACHMENT.ATTACHMENTS_VERSION
+      path = paths.ATTACHMENT.BASE_URL_VERSION
     } else {
-      path = paths.ATTACHMENT.ATTACHMENTS
+      path = paths.ATTACHMENT.BASE_URL
     }
 
     super(heading, path, 'Additional documents')

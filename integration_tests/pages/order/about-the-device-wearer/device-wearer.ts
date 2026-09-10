@@ -8,6 +8,6 @@ export default class AboutDeviceWearerPage extends AppFormPage {
   form = new AboutDeviceWearerFormComponent()
 
   constructor() {
-    super('Personal details', paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER, 'About the device wearer')
+    super('Personal details', paths.ABOUT_THE_DEVICE_WEARER.BASE_URL, 'About the device wearer')
   }
 }

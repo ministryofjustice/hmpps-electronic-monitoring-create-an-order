@@ -20,7 +20,7 @@ const construct = (
       ? content.pages.deviceWearerSearchResults.titleFound
       : content.pages.deviceWearerSearchResults.titleNoResults,
     searchAgainLink: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', orderId),
-    enterDetailsManuallyLink: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', orderId),
+    enterDetailsManuallyLink: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', orderId),
   }
 }
 

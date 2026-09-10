@@ -42,7 +42,7 @@ export default class ResponsibleOrganisationController extends InterestedParties
     if (!validationResult.success) {
       req.flash('formData', formData)
       req.flash('validationErrors', convertZodErrorToValidationError(validationResult.error))
-      res.redirect(paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION.replace(':orderId', order.id))
+      res.redirect(paths.INTEREST_PARTIES.RESPONSIBLE_ORGANISATION.replace(':orderId', order.id))
       return
     }
 

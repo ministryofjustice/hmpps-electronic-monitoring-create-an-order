@@ -42,7 +42,7 @@ export default class DeviceWearerController {
       req.flash('formData', formData)
       req.flash('validationErrors', result)
 
-      res.redirect(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', orderId))
+      res.redirect(paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', orderId))
     } else if (action === 'continue') {
       res.redirect(
         this.taskListService.getNextPage('DEVICE_WEARER', {

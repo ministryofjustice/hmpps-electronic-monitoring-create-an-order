@@ -169,7 +169,7 @@ export default class TaskListService {
       tasks.push({
         section: SECTIONS.interestedParties,
         name: PAGES.responsibleOrganisation,
-        path: paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION,
+        path: paths.INTEREST_PARTIES.RESPONSIBLE_ORGANISATION,
         state: STATES.required,
         completed: isNotNullOrEmptyString(order.interestedParties?.responsibleOrganisation),
       })
@@ -202,7 +202,7 @@ export default class TaskListService {
     tasks.push({
       section: SECTIONS.aboutTheDeviceWearer,
       name: PAGES.deviceWearer,
-      path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER,
+      path: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL,
       state: STATES.required,
       completed: isNotNullOrUndefined(order.deviceWearer.firstName),
     })
@@ -334,7 +334,7 @@ export default class TaskListService {
       tasks.push({
         section: SECTIONS.riskInformation,
         name: PAGES.installationAndRisk,
-        path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK,
+        path: paths.INSTALLATION_AND_RISK.BASE_URL,
         state: STATES.required,
         completed: isNotNullOrUndefined(order.installationAndRisk),
       })
@@ -580,7 +580,7 @@ export default class TaskListService {
     tasks.push({
       section: SECTIONS.additionalDocuments,
       name: PAGES.attachments,
-      path: paths.ATTACHMENT.ATTACHMENTS,
+      path: paths.ATTACHMENT.BASE_URL,
       state: STATES.hidden,
       completed: true,
     })

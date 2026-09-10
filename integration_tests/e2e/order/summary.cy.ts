@@ -2640,7 +2640,7 @@ context('Order Summary', () => {
       page.additionalDocumentsTask.link.should(
         'have.attr',
         'href',
-        convertToExpectedPath(paths.ATTACHMENT.ATTACHMENTS_VERSION),
+        convertToExpectedPath(paths.ATTACHMENT.BASE_URL_VERSION),
       )
     })
 

@@ -19,7 +19,7 @@ export default class CheckAnswersController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const uri = paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id)
+    const uri = paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id)
     const isNavigable = await this.sectionService.checkBlankVariationOrNewOrder(order, 'RISK_INFORMATION')
 
     res.render(
