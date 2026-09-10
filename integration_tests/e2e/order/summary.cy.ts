@@ -189,8 +189,9 @@ context('Order Summary', () => {
         order: {
           dataDictionaryVersion: 'DDV6',
           isValid: true,
+          isSentencingAct: false,
           interestedParties: {
-            notifyingOrganisation: 'CROWN_COURT',
+            notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: '',
             notifyingOrganisationEmail: 'test@test.com',
             responsibleOfficerName: 'John Smith',
