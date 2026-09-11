@@ -8,7 +8,7 @@ export default class ContactDetailsPage extends AppFormPage {
   public form = new ContactDetailsFormComponent()
 
   constructor(section: string = 'About the device wearer') {
-    super('', paths.CONTACT_INFORMATION.CONTACT_DETAILS, section)
+    super('Does the device wearer have a contact telephone number?', paths.CONTACT_INFORMATION.CONTACT_DETAILS, section)
   }
 
   checkOnPage(): void {

@@ -56,13 +56,13 @@ export default class DeviceWearerController {
   }
 
   viewIdentityNumbers: RequestHandler = async (req, res) => {
-    const { deviceWearer } = req.order!
+    const order = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
 
     res.render(
       'pages/order/about-the-device-wearer/identity-numbers',
-      identityNumbersViewModel.construct(deviceWearer, formData[0] as never, errors as never),
+      identityNumbersViewModel.construct(order, res.locals.user.cohort?.cohort, formData[0] as never, errors as never),
     )
   }
 
@@ -73,7 +73,10 @@ export default class DeviceWearerController {
     const result = await this.deviceWearerService.updateIdentityNumbers({
       accessToken: res.locals.user.token,
       orderId: order.id,
-      data: formData,
+      data: {
+        ...formData,
+        homeOfficeReferenceNumber: order.deviceWearer.homeOfficeReferenceNumber ?? '',
+      },
     })
 
     if (isValidationResult(result)) {
@@ -81,12 +84,34 @@ export default class DeviceWearerController {
       req.flash('validationErrors', result)
       res.redirect(paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id))
     } else if (action === 'continue') {
-      res.redirect(
-        this.taskListService.getNextPage('IDENTITY_NUMBERS', {
-          ...order,
-          deviceWearer: result,
-        }),
-      )
+      const numberIfTicked = (idType: 'NOMIS' | 'PNC' | 'DELIUS', value?: string) =>
+        formData.identityNumbers.includes(idType) ? value?.trim() : undefined
+
+      let searchIdentifier
+      if (
+        order.interestedParties?.notifyingOrganisation === 'PRISON' ||
+        order.interestedParties?.notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE'
+      ) {
+        searchIdentifier = numberIfTicked('NOMIS', formData.nomisId) || numberIfTicked('PNC', formData.pncId)
+      } else if (order.interestedParties?.notifyingOrganisation === 'PROBATION') {
+        searchIdentifier = numberIfTicked('DELIUS', formData.deliusId) || numberIfTicked('NOMIS', formData.nomisId)
+      }
+
+      if (searchIdentifier) {
+        res.redirect(
+          paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_SEARCH_RESULTS.replace(':orderId', order.id).replace(
+            ':identifyNumber',
+            encodeURIComponent(searchIdentifier),
+          ),
+        )
+      } else {
+        res.redirect(
+          this.taskListService.getNextPage('IDENTITY_NUMBERS', {
+            ...order,
+            deviceWearer: result,
+          }),
+        )
+      }
     } else {
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
     }
