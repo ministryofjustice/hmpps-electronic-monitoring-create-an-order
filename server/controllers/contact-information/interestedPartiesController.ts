@@ -5,13 +5,11 @@ import InterestedPartiesService from '../../services/interestedPartiesService'
 import TaskListService from '../../services/taskListService'
 import InterestedPartiesFormDataModel from '../../models/form-data/interestedParties'
 import interestedPartiesViewModel from '../../models/view-models/interestedParties'
-import RiskInformationStaticOffenceService from '../../services/riskInformationStaticOffenceService'
 
 export default class InterestedPartiesController {
   constructor(
     private readonly interestedPartiesService: InterestedPartiesService,
     private readonly taskListService: TaskListService,
-    private readonly riskInformationStaticOffenceService: RiskInformationStaticOffenceService,
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
@@ -40,12 +38,6 @@ export default class InterestedPartiesController {
       res.redirect(paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', orderId))
       return
     }
-
-    await this.riskInformationStaticOffenceService.initialise({
-      accessToken: res.locals.user.token,
-      orderId,
-      notifyingOrganisation: result.notifyingOrganisation,
-    })
 
     if (action === 'continue') {
       res.redirect(
