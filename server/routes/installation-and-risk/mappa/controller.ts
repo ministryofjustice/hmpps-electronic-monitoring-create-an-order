@@ -42,6 +42,7 @@ export default class MappaController {
     }
 
     if (data.action === 'continue') {
+      order.mappa = result
       res.redirect(this.taskListService.getNextPage('MAPPA', order))
     } else {
       res.redirect(res.locals.orderSummaryUri)
