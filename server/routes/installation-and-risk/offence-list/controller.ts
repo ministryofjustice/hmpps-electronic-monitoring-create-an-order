@@ -4,12 +4,8 @@ import constructModel from './viewModel'
 import { validationErrors } from '../../../constants/validationErrors'
 import { ValidationResult } from '../../../models/Validation'
 import OffenceListSummaryFormDataModel from './formModel'
-import TaskListService from '../../../services/taskListService'
-import { getNextRiskInformationPath } from '../riskInformationTasks'
 
 export default class OffenceListController {
-  constructor(private readonly taskListService: TaskListService) {}
-
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
     const errors = req.flash('validationErrors') as unknown as ValidationResult
@@ -45,15 +41,9 @@ export default class OffenceListController {
           isFamilyCourt ? paths.INSTALLATION_AND_RISK.DAPO : paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM
         ).replace(':orderId', order.id)
       } else {
-        // The list page is not itself a task, so continue from the task that owns it.
-        nextPagePath = getNextRiskInformationPath(
-          this.taskListService,
-          order,
-          isFamilyCourt ? 'DAPO' : 'OFFENCE',
-          isFamilyCourt
-            ? paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION
-            : paths.INSTALLATION_AND_RISK.OFFENCE_OTHER_INFO,
-        )
+        nextPagePath = isFamilyCourt
+          ? paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id)
+          : paths.INSTALLATION_AND_RISK.OFFENCE_OTHER_INFO.replace(':orderId', order.id)
       }
     }
     return res.redirect(nextPagePath)

@@ -5,8 +5,7 @@ import I18n from '../../types/i18n'
 import { formatDateTime, lookup } from '../../utils/utils'
 import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
 import paths from '../../constants/paths'
-import FeatureFlags from '../../utils/featureFlags'
-import { getRiskInformationFlow } from '../../services/riskInformationFlow'
+import { getRiskInformationFlow, riskInformationPages } from '../../services/riskInformationFlow'
 
 const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean, uri: string = '') => {
   const { questions } = content.pages.installationAndRisk
@@ -18,8 +17,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
   const isHomeOfficeUser = order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE'
   const riskInformationFlow = getRiskInformationFlow(order.interestedParties?.notifyingOrganisation)
 
-  const isNewOffenceFlow =
-    isOrderDataDictionarySameOrAbove('DDV6', order) && FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')
+  const isNewOffenceFlow = isOrderDataDictionarySameOrAbove('DDV6', order)
 
   const firstOffence = order.offences?.[0]
   const offencePath = firstOffence?.id
@@ -27,7 +25,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
     : paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM.replace(':orderId', order.id)
 
   if (isNewOffenceFlow) {
-    if (riskInformationFlow.offence.mode === 'USER_ENTERED') {
+    if (riskInformationFlow.pages.includes(riskInformationPages.offence)) {
       offenceAnswers.push(
         createMultipleChoiceAnswer(
           questions.offence.text,
@@ -71,7 +69,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
   let genderRiskDetailsFromOrder
   let riskDetailsFromOrder
   let riskDetailsUri
-  if (isOrderDataDictionarySameOrAbove('DDV6', order) && FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')) {
+  if (isOrderDataDictionarySameOrAbove('DDV6', order)) {
     riskCategoriesFromOrder = order.detailsOfInstallation?.riskCategory || []
     genderRiskDetailsFromOrder = order.detailsOfInstallation?.genderRiskDetails
     riskDetailsFromOrder = order.detailsOfInstallation?.riskDetails

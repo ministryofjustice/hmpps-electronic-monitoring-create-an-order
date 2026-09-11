@@ -424,9 +424,6 @@ context('installation and risk - check your answers', () => {
     beforeEach(() => {
       cy.task('reset')
 
-      const testFlags = { OFFENCE_FLOW_ENABLED: 'true' }
-      cy.task('setFeatureFlags', testFlags)
-
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
       cy.signIn()

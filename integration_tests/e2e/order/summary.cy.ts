@@ -149,10 +149,7 @@ context('Order Summary', () => {
         .should('not.exist')
     })
 
-    it('Home Officers users go to risk at installation from task list when offence flow is enabled', () => {
-      const testFlags = { OFFENCE_FLOW_ENABLED: true }
-      cy.task('setFeatureFlags', testFlags)
-
+    it('Home Office users go to risk at installation from the task list', () => {
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
         id: mockOrderId,

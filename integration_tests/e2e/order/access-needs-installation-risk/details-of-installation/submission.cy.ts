@@ -11,9 +11,6 @@ context('details of installation page', () => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-    const testFlags = { OFFENCE_FLOW_ENABLED: 'true' }
-    cy.task('setFeatureFlags', testFlags)
-
     cy.task('stubCemoGetOrder', {
       httpStatus: 200,
       id: mockOrderId,

@@ -1,4 +1,4 @@
-import { NotifyingOrganisation } from '../models/NotifyingOrganisation'
+import { OrderCohort, getOrderCohort } from '../models/OrderCohort'
 
 export const riskInformationPages = {
   offence: 'OFFENCE',
@@ -12,11 +12,8 @@ export const riskInformationPages = {
 
 export type RiskInformationPage = (typeof riskInformationPages)[keyof typeof riskInformationPages]
 
-export type OffencePolicy = { mode: 'USER_ENTERED' } | { mode: 'NONE' }
-
 export type RiskInformationFlow = {
   pages: readonly RiskInformationPage[]
-  offence: OffencePolicy
 }
 
 export const defaultRiskInformationPages: readonly RiskInformationPage[] = [
@@ -31,15 +28,13 @@ export const defaultRiskInformationPages: readonly RiskInformationPage[] = [
 
 type RiskInformationProfile = {
   excludedPages: readonly RiskInformationPage[]
-  offence: OffencePolicy
 }
 
-const riskInformationProfiles = {
-  standard: {
+const riskInformationProfiles: Record<OrderCohort, RiskInformationProfile> = {
+  STANDARD: {
     excludedPages: [riskInformationPages.dapo, riskInformationPages.isMappa, riskInformationPages.mappa],
-    offence: { mode: 'USER_ENTERED' },
   },
-  familyCourt: {
+  FAMILY_COURT: {
     excludedPages: [
       riskInformationPages.offence,
       riskInformationPages.offenceOtherInfo,
@@ -47,9 +42,8 @@ const riskInformationProfiles = {
       riskInformationPages.isMappa,
       riskInformationPages.mappa,
     ],
-    offence: { mode: 'NONE' },
   },
-  court: {
+  COURT: {
     excludedPages: [
       riskInformationPages.offence,
       riskInformationPages.offenceOtherInfo,
@@ -57,39 +51,19 @@ const riskInformationProfiles = {
       riskInformationPages.isMappa,
       riskInformationPages.mappa,
     ],
-    offence: { mode: 'NONE' },
   },
-  homeOffice: {
+  HOME_OFFICE: {
     excludedPages: [riskInformationPages.offence, riskInformationPages.offenceOtherInfo, riskInformationPages.dapo],
-    offence: { mode: 'NONE' },
   },
 } as const satisfies Record<string, RiskInformationProfile>
 
-type RiskInformationProfileName = keyof typeof riskInformationProfiles
-
-export const notifyingOrganisationRiskProfiles: Record<NotifyingOrganisation, RiskInformationProfileName> = {
-  HOME_OFFICE: 'homeOffice',
-  PRISON: 'standard',
-  PROBATION: 'standard',
-  YOUTH_CUSTODY_SERVICE: 'standard',
-  CIVIL_COUNTY_COURT: 'court',
-  CROWN_COURT: 'court',
-  FAMILY_COURT: 'familyCourt',
-  MAGISTRATES_COURT: 'court',
-  MILITARY_COURT: 'court',
-  SCOTTISH_COURT: 'court',
-  YOUTH_COURT: 'court',
-}
-
 export const getRiskInformationFlow = (
-  notifyingOrganisation: NotifyingOrganisation | null | undefined,
+  notifyingOrganisation: Parameters<typeof getOrderCohort>[0],
 ): RiskInformationFlow => {
-  const profileName = notifyingOrganisation ? notifyingOrganisationRiskProfiles[notifyingOrganisation] : 'standard'
-  const profile = riskInformationProfiles[profileName]
+  const profile = riskInformationProfiles[getOrderCohort(notifyingOrganisation)]
   const excludedPages = new Set<RiskInformationPage>(profile.excludedPages)
 
   return {
     pages: defaultRiskInformationPages.filter(page => !excludedPages.has(page)),
-    offence: profile.offence,
   }
 }

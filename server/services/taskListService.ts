@@ -6,8 +6,9 @@ import AttachmentType from '../models/AttachmentType'
 import FeatureFlags from '../utils/featureFlags'
 import isVariationType from '../utils/isVariationType'
 import isOrderDataDictionarySameOrAbove from '../utils/dataDictionaryVersionComparer'
-import { notifyingOrganisationCourts } from '../models/NotifyingOrganisation'
+import { getOrderCohort } from '../models/OrderCohort'
 import { getRiskInformationTasks } from '../routes/installation-and-risk/riskInformationTasks'
+import { TaskListCohortDefinition, taskListCohortDefinitions } from './taskListCohorts'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
@@ -137,11 +138,124 @@ const isTagAtSourceAvailable = (order: Order): boolean => {
   )
 }
 
+const getInterestedPartiesTasks = (order: Order, cohortDefinition: TaskListCohortDefinition): Task[] => {
+  const tasks: Task[] = [
+    {
+      section: SECTIONS.interestedParties,
+      name: PAGES.sentencingAct,
+      path: paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION,
+      state:
+        order.interestedParties?.notifyingOrganisation === 'PRISON' && isNullOrUndefined(order.isSentencingAct)
+          ? STATES.required
+          : STATES.disabled,
+      completed: isNotNullOrUndefined(order.isSentencingAct),
+    },
+  ]
+
+  if (cohortDefinition.responsibleParty === 'RESPONSIBLE_ORGANISATION') {
+    tasks.push({
+      section: SECTIONS.interestedParties,
+      name: PAGES.responsibleOrganisation,
+      path: paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION,
+      state: STATES.required,
+      completed: isNotNullOrEmptyString(order.interestedParties?.responsibleOrganisation),
+    })
+  } else {
+    tasks.push({
+      section: SECTIONS.interestedParties,
+      name: PAGES.responsibleOfficer,
+      path: paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER,
+      state: STATES.required,
+      completed: isNotNullOrEmptyString(order.interestedParties?.responsibleOfficerFirstName),
+    })
+  }
+
+  tasks.push({
+    section: SECTIONS.interestedParties,
+    name: PAGES.checkAnswersInterestParties,
+    path: paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS,
+    state: STATES.hidden,
+    completed: true,
+  })
+
+  return tasks
+}
+
+const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCohortDefinition): Task[] => {
+  const tasks: Task[] = []
+
+  if (cohortDefinition.attachment === 'COURT_ORDER') {
+    tasks.push(
+      {
+        section: SECTIONS.additionalDocuments,
+        name: PAGES.haveCourtOrder,
+        path: paths.ATTACHMENT.HAVE_COURT_ORDER,
+        state: STATES.required,
+        completed: isNotNullOrUndefined(order.orderParameters?.haveCourtOrder),
+      },
+      {
+        section: SECTIONS.additionalDocuments,
+        name: PAGES.courtOrderUpload,
+        path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'court_order'),
+        state: convertBooleanToEnum<State>(
+          order.orderParameters?.haveCourtOrder || null,
+          STATES.cantBeStarted,
+          STATES.required,
+          STATES.notRequired,
+        ),
+        completed:
+          doesOrderHaveDocument(order, AttachmentType.COURT_ORDER) || order.orderParameters?.haveCourtOrder === false,
+      },
+    )
+  } else if (cohortDefinition.attachment === 'LICENCE') {
+    tasks.push({
+      section: SECTIONS.additionalDocuments,
+      name: PAGES.licenceUpload,
+      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'licence'),
+      state: STATES.required,
+      completed: doesOrderHaveDocument(order, AttachmentType.LICENCE),
+    })
+  }
+
+  tasks.push(
+    {
+      section: SECTIONS.additionalDocuments,
+      name: PAGES.havePhoto,
+      path: paths.ATTACHMENT.HAVE_PHOTO,
+      state: STATES.required,
+      completed: isNotNullOrUndefined(order.orderParameters?.havePhoto),
+    },
+    {
+      section: SECTIONS.additionalDocuments,
+      name: PAGES.photoUpload,
+      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'photo_Id'),
+      state: convertBooleanToEnum<State>(
+        order.orderParameters?.havePhoto || null,
+        STATES.cantBeStarted,
+        STATES.required,
+        STATES.notRequired,
+      ),
+      completed: doesOrderHaveDocument(order, AttachmentType.PHOTO_ID) || order.orderParameters?.havePhoto === false,
+    },
+    {
+      section: SECTIONS.additionalDocuments,
+      name: PAGES.attachments,
+      path: paths.ATTACHMENT.ATTACHMENTS,
+      state: STATES.hidden,
+      completed: true,
+    },
+  )
+
+  return tasks
+}
+
 export default class TaskListService {
   constructor() {}
 
   getTasks(order: Order): Array<Task> {
     const tasks: Array<Task> = []
+    const cohort = getOrderCohort(order.interestedParties?.notifyingOrganisation)
+    const cohortDefinition = taskListCohortDefinitions[cohort]
 
     tasks.push({
       section: SECTIONS.variationDetails,
@@ -151,46 +265,7 @@ export default class TaskListService {
       completed: isNotNullOrUndefined(order.variationDetails),
     })
 
-    tasks.push({
-      section: SECTIONS.interestedParties,
-      name: PAGES.sentencingAct,
-      path: paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION,
-      state:
-        order.interestedParties?.notifyingOrganisation === 'PRISON' && isNullOrUndefined(order.isSentencingAct)
-          ? STATES.required
-          : STATES.disabled,
-      completed: isNotNullOrUndefined(order.isSentencingAct),
-    })
-
-    if (
-      (notifyingOrganisationCourts as readonly string[]).indexOf(order.interestedParties?.notifyingOrganisation ?? '') >
-        -1 ||
-      order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE'
-    ) {
-      tasks.push({
-        section: SECTIONS.interestedParties,
-        name: PAGES.responsibleOrganisation,
-        path: paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION,
-        state: STATES.required,
-        completed: isNotNullOrEmptyString(order.interestedParties?.responsibleOrganisation),
-      })
-    } else {
-      tasks.push({
-        section: SECTIONS.interestedParties,
-        name: PAGES.responsibleOfficer,
-        path: paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER,
-        state: STATES.required,
-        completed: isNotNullOrEmptyString(order.interestedParties?.responsibleOfficerFirstName),
-      })
-    }
-
-    tasks.push({
-      section: SECTIONS.interestedParties,
-      name: PAGES.checkAnswersInterestParties,
-      path: paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS,
-      state: STATES.hidden,
-      completed: true,
-    })
+    tasks.push(...getInterestedPartiesTasks(order, cohortDefinition))
 
     tasks.push({
       section: SECTIONS.aboutTheDeviceWearer,
@@ -257,24 +332,7 @@ export default class TaskListService {
       completed: true,
     })
 
-    if (FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')) {
-      tasks.push(...getRiskInformationTasks(order))
-    } else {
-      tasks.push({
-        section: SECTIONS.riskInformation,
-        name: PAGES.installationAndRisk,
-        path: paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK,
-        state: STATES.required,
-        completed: isNotNullOrUndefined(order.installationAndRisk),
-      })
-      tasks.push({
-        section: SECTIONS.riskInformation,
-        name: PAGES.checkAnswersInstallationAndRisk,
-        path: paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS,
-        state: STATES.required,
-        completed: true,
-      })
-    }
+    tasks.push(...getRiskInformationTasks(order))
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
@@ -449,69 +507,7 @@ export default class TaskListService {
       completed: true,
     })
 
-    if (
-      isNotNullOrUndefined(order.interestedParties?.notifyingOrganisation) &&
-      (notifyingOrganisationCourts as readonly string[]).includes(order.interestedParties?.notifyingOrganisation)
-    ) {
-      tasks.push({
-        section: SECTIONS.additionalDocuments,
-        name: PAGES.haveCourtOrder,
-        path: paths.ATTACHMENT.HAVE_COURT_ORDER,
-        state: STATES.required,
-        completed: isNotNullOrUndefined(order.orderParameters?.haveCourtOrder),
-      })
-
-      tasks.push({
-        section: SECTIONS.additionalDocuments,
-        name: PAGES.courtOrderUpload,
-        path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'court_order'),
-        state: convertBooleanToEnum<State>(
-          order.orderParameters?.haveCourtOrder || null,
-          STATES.cantBeStarted,
-          STATES.required,
-          STATES.notRequired,
-        ),
-        completed:
-          doesOrderHaveDocument(order, AttachmentType.COURT_ORDER) || order.orderParameters?.haveCourtOrder === false,
-      })
-    } else if (order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE') {
-      tasks.push({
-        section: SECTIONS.additionalDocuments,
-        name: PAGES.licenceUpload,
-        path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'licence'),
-        state: STATES.required,
-        completed: doesOrderHaveDocument(order, AttachmentType.LICENCE),
-      })
-    }
-
-    tasks.push({
-      section: SECTIONS.additionalDocuments,
-      name: PAGES.havePhoto,
-      path: paths.ATTACHMENT.HAVE_PHOTO,
-      state: STATES.required,
-      completed: isNotNullOrUndefined(order.orderParameters?.havePhoto),
-    })
-
-    tasks.push({
-      section: SECTIONS.additionalDocuments,
-      name: PAGES.photoUpload,
-      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'photo_Id'),
-      state: convertBooleanToEnum<State>(
-        order.orderParameters?.havePhoto || null,
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed: doesOrderHaveDocument(order, AttachmentType.PHOTO_ID) || order.orderParameters?.havePhoto === false,
-    })
-
-    tasks.push({
-      section: SECTIONS.additionalDocuments,
-      name: PAGES.attachments,
-      path: paths.ATTACHMENT.ATTACHMENTS,
-      state: STATES.hidden,
-      completed: true,
-    })
+    tasks.push(...getAdditionalDocumentTasks(order, cohortDefinition))
 
     return tasks
   }

@@ -7,23 +7,17 @@ import {
 import paths from '../constants/paths'
 import TaskListService, { Page, Task } from './taskListService'
 import { Order } from '../models/Order'
-import FeatureFlags from '../utils/featureFlags'
 
 describe('TaskListService', () => {
   const monitoringConditionsPath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE
 
   describe('risk information tasks', () => {
-    afterEach(() => {
-      jest.restoreAllMocks()
-    })
-
     it.each([
       ['PRISON', ['DETAILS_OF_INSTALLATION', 'OFFENCE', 'OFFENCE_OTHER_INFO', 'CHECK_ANSWERS_INSTALLATION_AND_RISK']],
       ['FAMILY_COURT', ['DETAILS_OF_INSTALLATION', 'CHECK_ANSWERS_INSTALLATION_AND_RISK']],
       ['CIVIL_COUNTY_COURT', ['DETAILS_OF_INSTALLATION', 'CHECK_ANSWERS_INSTALLATION_AND_RISK']],
       ['HOME_OFFICE', ['DETAILS_OF_INSTALLATION', 'IS_MAPPA', 'MAPPA', 'CHECK_ANSWERS_INSTALLATION_AND_RISK']],
     ] as const)('uses the %s risk information profile', (notifyingOrganisation, expectedPages) => {
-      jest.spyOn(FeatureFlags.getInstance(), 'get').mockImplementation(flag => flag === 'OFFENCE_FLOW_ENABLED')
       const order = getMockOrder({
         interestedParties: {
           ...getMockOrder().interestedParties!,
@@ -94,7 +88,7 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id))
     })
 
-    it('should go to installation and risk page if current page is device wearer check your answers', () => {
+    it('should go to details of installation if current page is device wearer check your answers', () => {
       // Given
       const currentPage = 'CHECK_ANSWERS_DEVICE_WEARER'
       const taskListService = new TaskListService()
@@ -104,7 +98,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.INSTALLATION_AND_RISK.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id))
     })
 
     it('should return no fixed abode if current page is contact details', () => {
@@ -180,9 +174,9 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id))
     })
 
-    it('should return check answers if current page is installation and risk', () => {
+    it('should return offence if current page is details of installation', () => {
       // Given
-      const currentPage = 'INSTALLATION_AND_RISK'
+      const currentPage = 'DETAILS_OF_INSTALLATION'
       const taskListService = new TaskListService()
       const order = getMockOrder()
 
@@ -190,7 +184,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM.replace(':orderId', order.id))
     })
 
     it('should return monitoring conditions if current page is installation and risk check answers', () => {
@@ -608,7 +602,7 @@ describe('TaskListService', () => {
 
     it.each([
       ['DEVICE_WEARER', paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS],
-      ['INSTALLATION_AND_RISK', paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS],
+      ['DETAILS_OF_INSTALLATION', paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS],
       ['MONITORING_CONDITIONS', paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS],
     ])(
       'should return check your answers if all pages have been completed for that section',
@@ -617,6 +611,14 @@ describe('TaskListService', () => {
         const currentPage = page as Page
         const taskListService = new TaskListService()
         const order = getFilledMockOrder({
+          dataDictionaryVersion: 'DDV6',
+          detailsOfInstallation: {
+            riskCategory: [],
+            genderRiskDetails: '',
+            riskDetails: '',
+          },
+          offences: [{ offenceType: 'SEXUAL_OFFENCES' }],
+          offenceAdditionalDetails: { additionalDetails: '' },
           monitoringConditions: createMonitoringConditions({
             isValid: true,
           }),

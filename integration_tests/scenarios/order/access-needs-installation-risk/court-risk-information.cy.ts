@@ -26,7 +26,6 @@ context('Court risk information', () => {
 
   const startRiskInformation = (notifyingOrganisation: 'Civil and County Court' | 'Family Court' | 'Prison') => {
     cy.signIn()
-    cy.task('setFeatureFlags', { OFFENCE_FLOW_ENABLED: true })
     createNewOrder({
       notifyingOrganisation: createFakeInterestedParties(notifyingOrganisation, 'Prison', undefined, 'North West'),
       stubSignin: false,
@@ -38,7 +37,6 @@ context('Court risk information', () => {
       deviceWearerDetails,
     })
     const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
-    cy.task('setFeatureFlags', { OFFENCE_FLOW_ENABLED: true })
     deviceWearerCheckYourAnswersPage.continue()
   }
 

@@ -1,9 +1,5 @@
 import { notifyingOrganisations } from '../models/NotifyingOrganisation'
-import {
-  defaultRiskInformationPages,
-  getRiskInformationFlow,
-  notifyingOrganisationRiskProfiles,
-} from './riskInformationFlow'
+import { defaultRiskInformationPages, getRiskInformationFlow } from './riskInformationFlow'
 
 describe('getRiskInformationFlow', () => {
   const standardPages = [
@@ -26,28 +22,20 @@ describe('getRiskInformationFlow', () => {
     ])
   })
 
-  it('assigns a profile to every notifying organisation', () => {
-    expect(Object.keys(notifyingOrganisationRiskProfiles).sort()).toEqual([...notifyingOrganisations].sort())
-  })
-
   it.each([
-    ['PRISON', standardPages, { mode: 'USER_ENTERED' }],
-    ['PROBATION', standardPages, { mode: 'USER_ENTERED' }],
-    ['YOUTH_CUSTODY_SERVICE', standardPages, { mode: 'USER_ENTERED' }],
-    ['FAMILY_COURT', courtPages, { mode: 'NONE' }],
-    ['CIVIL_COUNTY_COURT', courtPages, { mode: 'NONE' }],
-    ['CROWN_COURT', courtPages, { mode: 'NONE' }],
-    ['MAGISTRATES_COURT', courtPages, { mode: 'NONE' }],
-    ['MILITARY_COURT', courtPages, { mode: 'NONE' }],
-    ['SCOTTISH_COURT', courtPages, { mode: 'NONE' }],
-    ['YOUTH_COURT', courtPages, { mode: 'NONE' }],
-    [
-      'HOME_OFFICE',
-      ['DETAILS_OF_INSTALLATION', 'IS_MAPPA', 'MAPPA', 'CHECK_ANSWERS_INSTALLATION_AND_RISK'],
-      { mode: 'NONE' },
-    ],
-  ] as const)('resolves the existing %s journey', (notifyingOrganisation, pages, offence) => {
-    expect(getRiskInformationFlow(notifyingOrganisation)).toEqual({ pages, offence })
+    ['PRISON', standardPages],
+    ['PROBATION', standardPages],
+    ['YOUTH_CUSTODY_SERVICE', standardPages],
+    ['FAMILY_COURT', courtPages],
+    ['CIVIL_COUNTY_COURT', courtPages],
+    ['CROWN_COURT', courtPages],
+    ['MAGISTRATES_COURT', courtPages],
+    ['MILITARY_COURT', courtPages],
+    ['SCOTTISH_COURT', courtPages],
+    ['YOUTH_COURT', courtPages],
+    ['HOME_OFFICE', ['DETAILS_OF_INSTALLATION', 'IS_MAPPA', 'MAPPA', 'CHECK_ANSWERS_INSTALLATION_AND_RISK']],
+  ] as const)('resolves the existing %s journey', (notifyingOrganisation, pages) => {
+    expect(getRiskInformationFlow(notifyingOrganisation)).toEqual({ pages })
   })
 
   it.each(notifyingOrganisations)('filters DAPO from the current %s profile', notifyingOrganisation => {
@@ -57,7 +45,6 @@ describe('getRiskInformationFlow', () => {
   it('defaults to the standard profile until a notifying organisation is selected', () => {
     expect(getRiskInformationFlow(null)).toEqual({
       pages: standardPages,
-      offence: { mode: 'USER_ENTERED' },
     })
   })
 })

@@ -5,7 +5,6 @@ import MappaService from './service'
 import paths from '../../../constants/paths'
 import { isValidationResult, ValidationResult } from '../../../models/Validation'
 import TaskListService from '../../../services/taskListService'
-import { getNextRiskInformationPath } from '../riskInformationTasks'
 
 export default class MappaController {
   constructor(
@@ -43,14 +42,7 @@ export default class MappaController {
     }
 
     if (data.action === 'continue') {
-      res.redirect(
-        getNextRiskInformationPath(
-          this.taskListService,
-          order,
-          'MAPPA',
-          paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS,
-        ),
-      )
+      res.redirect(this.taskListService.getNextPage('MAPPA', order))
     } else {
       res.redirect(res.locals.orderSummaryUri)
     }

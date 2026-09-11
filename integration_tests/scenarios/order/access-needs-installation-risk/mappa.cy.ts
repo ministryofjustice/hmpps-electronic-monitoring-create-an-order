@@ -9,7 +9,6 @@ import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
 
 context('offences', () => {
   let orderSummaryPage: OrderSummaryPage
-  const testFlags = { OFFENCE_FLOW_ENABLED: true }
 
   const deviceWearerDetails = {
     ...createFakeAdultDeviceWearer(),
@@ -26,7 +25,6 @@ context('offences', () => {
   }
 
   beforeEach(() => {
-    cy.task('setFeatureFlags', testFlags)
     cy.task('resetDB')
     cy.task('reset')
 

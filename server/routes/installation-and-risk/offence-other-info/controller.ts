@@ -5,7 +5,6 @@ import viewModel from './viewModel'
 import { isValidationResult, ValidationResult } from '../../../models/Validation'
 import OffenceOtherInfoService from './service'
 import TaskListService from '../../../services/taskListService'
-import { getNextRiskInformationPath } from '../riskInformationTasks'
 
 export default class OffenceOtherInfoController {
   constructor(
@@ -40,14 +39,7 @@ export default class OffenceOtherInfoController {
       return
     }
     if (formData.action === 'continue') {
-      res.redirect(
-        getNextRiskInformationPath(
-          this.taskListService,
-          order,
-          'OFFENCE_OTHER_INFO',
-          paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION,
-        ),
-      )
+      res.redirect(this.taskListService.getNextPage('OFFENCE_OTHER_INFO', order))
     } else {
       res.redirect(res.locals.orderSummaryUri)
     }
