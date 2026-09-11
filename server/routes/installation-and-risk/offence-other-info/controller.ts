@@ -4,9 +4,13 @@ import OffenceOtherInfoFormModel, { OffenceOtherInfoInput } from './formModel'
 import viewModel from './viewModel'
 import { isValidationResult, ValidationResult } from '../../../models/Validation'
 import OffenceOtherInfoService from './service'
+import TaskListService from '../../../services/taskListService'
 
 export default class OffenceOtherInfoController {
-  constructor(private readonly service: OffenceOtherInfoService) {}
+  constructor(
+    private readonly service: OffenceOtherInfoService,
+    private readonly taskListService: TaskListService,
+  ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
@@ -35,7 +39,7 @@ export default class OffenceOtherInfoController {
       return
     }
     if (formData.action === 'continue') {
-      res.redirect(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id))
+      res.redirect(this.taskListService.getNextPage('OFFENCE_OTHER_INFO', order))
     } else {
       res.redirect(res.locals.orderSummaryUri)
     }

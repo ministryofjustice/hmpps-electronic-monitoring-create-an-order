@@ -14,6 +14,21 @@ context('mappa page', () => {
       httpStatus: 200,
       id: mockOrderId,
       status: 'IN_PROGRESS',
+      order: {
+        interestedParties: {
+          notifyingOrganisation: 'HOME_OFFICE',
+          notifyingOrganisationName: '',
+          notifyingOrganisationEmail: '',
+          responsibleOfficerName: '',
+          responsibleOfficerPhoneNumber: '',
+          responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+          responsibleOrganisationEmail: '',
+          responsibleOrganisationRegion: '',
+        },
+        mappa: {
+          isMappa: 'YES',
+        },
+      },
     })
 
     cy.task('stubCemoSubmitOrder', {

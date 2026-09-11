@@ -14,7 +14,6 @@ const mockFlags = {
   TAG_AT_SOURCE_PILOT_PRISONS: '',
   DAPOL_PILOT_PROBATION_REGIONS: '',
   LICENCE_VARIATION_PROBATION_REGIONS: '',
-  OFFENCE_FLOW_ENABLED: false,
   DOWNLOAD_FMS_REQUEST_JSON_ENABLED: false,
   TECHNOLOGY_PORTAL_PILOT_PRISONS: '',
   SENTENCING_ACT_ENABLED: false,
@@ -56,9 +55,9 @@ describe('FeatureFlags', () => {
   test('get should return the specified flag', () => {
     const FeatureFlags = require('./featureFlags').default
 
-    const offenceFlowEnabledFlag = FeatureFlags.getInstance().get('OFFENCE_FLOW_ENABLED')
+    const createNewOrderVersionEnabledFlag = FeatureFlags.getInstance().get('CREATE_NEW_ORDER_VERSION_ENABLED')
 
-    expect(offenceFlowEnabledFlag).toBe(false)
+    expect(createNewOrderVersionEnabledFlag).toBe(false)
   })
 
   test('get should throw if flag is not defined', () => {

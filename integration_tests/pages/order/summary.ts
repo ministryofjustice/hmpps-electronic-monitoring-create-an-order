@@ -32,9 +32,7 @@ import OffencePage from '../../e2e/order/access-needs-installation-risk/offences
 import OffenceOtherInfoPage from '../../e2e/order/access-needs-installation-risk/offences/offence-other-info/offenceOtherInfoPage'
 import DetailsOfInstallationPage from '../../e2e/order/access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
 import IsMappaPage from '../../e2e/order/access-needs-installation-risk/is-mappa/IsMappaPage'
-import OffenceListPage from '../../e2e/order/access-needs-installation-risk/offences/offence-list/offenceListPage'
 import TypesOfMonitoringNeededPage from '../../e2e/order/monitoring-conditions/order-type-description/types-of-monitoring-needed/TypesOfMonitoringNeededPage'
-import DapoPage from '../../e2e/order/access-needs-installation-risk/offences/dapo/DapoPage'
 import MonitoringTypePage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-type/MonitoringTypesPage'
 import fillInAboutTheDeviceWearer from '../../utils/scenario-flows/about-the-device-wearer-flow.cy'
 import ResponsibleOrganisationPage from '../../e2e/order/interested-parties/responsible-organisation/responsibleOrganisationPage'
@@ -688,37 +686,8 @@ export default class OrderTasksPage extends AppPage {
     }
 
     if (installationAndRisk) {
-      if (interestedParties.notifyingOrganisation !== 'Home Office') {
-        if (interestedParties.notifyingOrganisation === 'Family Court') {
-          const dapoPage = Page.verifyOnPage(DapoPage)
-          dapoPage.form.fillInWith({ dapoClauseNumber: 'dapo clause', dapoDate: new Date(2025, 0, 1) })
-          dapoPage.form.saveAndContinueButton.click()
-
-          const offenceListPage = Page.verifyOnPage(OffenceListPage, undefined, undefined, 'DAPO order clauses')
-          offenceListPage.form.fillInWith({ addDapoClause: 'No' })
-          offenceListPage.form.saveAndContinueButton.click()
-        } else if (interestedParties.notifyingOrganisation === 'Civil and County Court') {
-          const offencePage = Page.verifyOnPage(OffencePage)
-          offencePage.form.fillInWith({ offenceType: installationAndRisk.offence, offenceDate: new Date(2025, 0, 1) })
-          offencePage.form.saveAndContinueButton.click()
-
-          const offenceListPage = Page.verifyOnPage(OffenceListPage)
-          offenceListPage.form.fillInWith({ addOffence: 'No' })
-          offenceListPage.form.saveAndContinueButton.click()
-
-          const offenceDetailsPage = Page.verifyOnPage(OffenceOtherInfoPage)
-          offenceDetailsPage.form.fillInWith({ hasOtherInformation: 'No' })
-          offenceDetailsPage.form.saveAndContinueButton.click()
-        } else {
-          const offencePage = Page.verifyOnPage(OffencePage)
-          offencePage.form.fillInWith({ offenceType: installationAndRisk.offence })
-          offencePage.form.saveAndContinueButton.click()
-
-          const offenceDetailsPage = Page.verifyOnPage(OffenceOtherInfoPage)
-          offenceDetailsPage.form.fillInWith({ hasOtherInformation: 'No' })
-          offenceDetailsPage.form.saveAndContinueButton.click()
-        }
-      }
+      const { notifyingOrganisation } = interestedParties
+      const isCourt = notifyingOrganisation?.includes('Court')
 
       const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
       detailsOfInstallationPage.form.fillInWith({
@@ -732,6 +701,16 @@ export default class OrderTasksPage extends AppPage {
         const mappaPage = Page.verifyOnPage(IsMappaPage)
         mappaPage.form.fillInWith({ isMappa: 'No' })
         mappaPage.form.saveAndContinueButton.click()
+      }
+
+      if (notifyingOrganisation !== 'Home Office' && !isCourt) {
+        const offencePage = Page.verifyOnPage(OffencePage)
+        offencePage.form.fillInWith({ offenceType: installationAndRisk.offence })
+        offencePage.form.saveAndContinueButton.click()
+
+        const offenceDetailsPage = Page.verifyOnPage(OffenceOtherInfoPage)
+        offenceDetailsPage.form.fillInWith({ hasOtherInformation: 'No' })
+        offenceDetailsPage.form.saveAndContinueButton.click()
       }
 
       const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(

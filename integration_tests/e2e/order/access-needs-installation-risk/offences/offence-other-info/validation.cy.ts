@@ -11,7 +11,7 @@ const stubOrder = () => {
     status: 'IN_PROGRESS',
     order: {
       interestedParties: {
-        notifyingOrganisation: 'CROWN_COURT',
+        notifyingOrganisation: 'PROBATION',
         notifyingOrganisationName: '',
         notifyingOrganisationEmail: '',
         responsibleOfficerName: '',

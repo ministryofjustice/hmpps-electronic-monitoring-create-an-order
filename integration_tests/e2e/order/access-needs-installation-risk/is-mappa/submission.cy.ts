@@ -6,13 +6,11 @@ import MappaPage from '../mappa/MappaPage'
 
 const mockOrderId = uuidv4()
 const apiPath = '/mappa/is-mappa'
-const testFlags = { OFFENCE_FLOW_ENABLED: true }
 
 context('is mappa page', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-    cy.task('setFeatureFlags', testFlags)
 
     cy.task('stubCemoGetOrder', {
       httpStatus: 200,

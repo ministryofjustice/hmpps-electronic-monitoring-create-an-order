@@ -4,9 +4,13 @@ import MappaFormModel, { MappaInput } from './formModel'
 import MappaService from './service'
 import paths from '../../../constants/paths'
 import { isValidationResult, ValidationResult } from '../../../models/Validation'
+import TaskListService from '../../../services/taskListService'
 
 export default class MappaController {
-  constructor(private readonly service: MappaService) {}
+  constructor(
+    private readonly service: MappaService,
+    private readonly taskListService: TaskListService,
+  ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
@@ -38,7 +42,8 @@ export default class MappaController {
     }
 
     if (data.action === 'continue') {
-      res.redirect(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+      order.mappa = result
+      res.redirect(this.taskListService.getNextPage('MAPPA', order))
     } else {
       res.redirect(res.locals.orderSummaryUri)
     }
