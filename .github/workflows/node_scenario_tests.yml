@@ -97,7 +97,7 @@ jobs:
           SPLIT_FILE: 'timings.json'
 
       - name: Upload any screenshots due to failure
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: Upload screenshots
