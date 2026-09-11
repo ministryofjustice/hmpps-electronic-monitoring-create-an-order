@@ -64,6 +64,17 @@ context('Court risk information', () => {
     detailsOfInstallationPage.form.saveAndContinueButton.click()
 
     const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
+    cyaPage.installationRiskSection.shouldHaveItems([
+      {
+        key: "At installation what are the possible risks from the device wearer's behaviour?",
+        value: 'Violent behaviour or threats of violence',
+      },
+      {
+        key: 'What are the possible risks at the installation address? (optional)',
+        value: 'Safeguarding child',
+      },
+      { key: 'Any other risks to be aware of? (optional)', value: 'some details' },
+    ])
     // Do not render fixed offence on cya for court
     cyaPage.installationRiskSection.shouldNotHaveItem('Offences')
   })

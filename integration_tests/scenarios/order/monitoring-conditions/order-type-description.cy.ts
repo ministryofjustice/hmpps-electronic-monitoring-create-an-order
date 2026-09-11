@@ -374,7 +374,7 @@ context('Order type descriptions', () => {
     verifyResult({ monitoringOrderTypeDescription })
   })
 
-  it.only('Notification org is home office', () => {
+  it('Notification org is home office', () => {
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'HOME_OFFICE'],

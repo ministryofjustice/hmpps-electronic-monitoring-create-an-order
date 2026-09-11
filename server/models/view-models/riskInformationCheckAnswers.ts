@@ -28,7 +28,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
 
   if (isNewOffenceFlow) {
     if (riskInformationFlow.offence.mode === 'USER_ENTERED') {
-      answers.push(
+      offenceAnswers.push(
         createMultipleChoiceAnswer(
           questions.offence.text,
           order.offences.map(offence => lookup(content.reference.offences, offence.offenceType)),
