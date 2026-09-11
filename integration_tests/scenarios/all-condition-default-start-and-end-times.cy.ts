@@ -231,7 +231,7 @@ context('The kitchen sink', () => {
           interpreter_required: 'false',
           language: '',
           ethnicity: '',
-          national_insurance_number: '',
+          ni_number: '',
           nationality: '',
           religion: '',
         },
