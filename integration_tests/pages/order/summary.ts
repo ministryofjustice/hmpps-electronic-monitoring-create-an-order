@@ -689,16 +689,6 @@ export default class OrderTasksPage extends AppPage {
       const { notifyingOrganisation } = interestedParties
       const isCourt = notifyingOrganisation?.includes('Court')
 
-      if (notifyingOrganisation !== 'Home Office' && !isCourt) {
-        const offencePage = Page.verifyOnPage(OffencePage)
-        offencePage.form.fillInWith({ offenceType: installationAndRisk.offence })
-        offencePage.form.saveAndContinueButton.click()
-
-        const offenceDetailsPage = Page.verifyOnPage(OffenceOtherInfoPage)
-        offenceDetailsPage.form.fillInWith({ hasOtherInformation: 'No' })
-        offenceDetailsPage.form.saveAndContinueButton.click()
-      }
-
       const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
       detailsOfInstallationPage.form.fillInWith({
         possibleRisks: [installationAndRisk.possibleRisk],
@@ -711,6 +701,16 @@ export default class OrderTasksPage extends AppPage {
         const mappaPage = Page.verifyOnPage(IsMappaPage)
         mappaPage.form.fillInWith({ isMappa: 'No' })
         mappaPage.form.saveAndContinueButton.click()
+      }
+
+      if (notifyingOrganisation !== 'Home Office' && !isCourt) {
+        const offencePage = Page.verifyOnPage(OffencePage)
+        offencePage.form.fillInWith({ offenceType: installationAndRisk.offence })
+        offencePage.form.saveAndContinueButton.click()
+
+        const offenceDetailsPage = Page.verifyOnPage(OffenceOtherInfoPage)
+        offenceDetailsPage.form.fillInWith({ hasOtherInformation: 'No' })
+        offenceDetailsPage.form.saveAndContinueButton.click()
       }
 
       const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(

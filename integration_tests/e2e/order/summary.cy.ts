@@ -104,7 +104,11 @@ context('Order Summary', () => {
       )
 
       page.riskInformationTask.shouldHaveStatus('Incomplete')
-      page.riskInformationTask.link.should('have.attr', 'href', `/order/${mockOrderId}/installation-and-risk/offence`)
+      page.riskInformationTask.link.should(
+        'have.attr',
+        'href',
+        `/order/${mockOrderId}/installation-and-risk/details-of-installation`,
+      )
 
       page.electronicMonitoringTask.shouldHaveStatus('Cannot start yet')
       page.electronicMonitoringTask.link.should('not.exist')
@@ -271,7 +275,11 @@ context('Order Summary', () => {
       )
 
       page.riskInformationTask.shouldHaveStatus('Incomplete')
-      page.riskInformationTask.link.should('have.attr', 'href', `/order/${mockOrderId}/installation-and-risk/offence`)
+      page.riskInformationTask.link.should(
+        'have.attr',
+        'href',
+        `/order/${mockOrderId}/installation-and-risk/details-of-installation`,
+      )
 
       page.electronicMonitoringTask.shouldHaveStatus('Cannot start yet')
       page.electronicMonitoringTask.link.should('not.exist')

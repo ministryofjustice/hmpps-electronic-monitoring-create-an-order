@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../pages/page'
 import DetailsOfInstallationPage from './DetailsOfInstallationPage'
-import InstallationAndRiskCheckYourAnswersPage from '../../../../pages/order/installation-and-risk/check-your-answers'
+import OffencePage from '../offences/offence/offencePage'
 
 const mockOrderId = uuidv4()
 const apiPath = '/details-of-installation'
@@ -57,7 +57,7 @@ context('details of installation page', () => {
       },
     }).should('be.true')
 
-    Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers')
+    Page.verifyOnPage(OffencePage)
   })
 
   it('can submit an order when risk to gender', () => {
@@ -94,7 +94,7 @@ context('details of installation page', () => {
       },
     }).should('be.true')
 
-    Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers')
+    Page.verifyOnPage(OffencePage)
 
     cy.task('stubCemoGetOrder', {
       httpStatus: 200,
