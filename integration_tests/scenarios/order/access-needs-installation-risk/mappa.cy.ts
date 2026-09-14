@@ -1,7 +1,7 @@
 import DetailsOfInstallationPage from '../../../e2e/order/access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
 import IsMappaPage from '../../../e2e/order/access-needs-installation-risk/is-mappa/IsMappaPage'
 import MappaPage from '../../../e2e/order/access-needs-installation-risk/mappa/MappaPage'
-import { createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
+import { createFakeAdultDeviceWearer } from '../../../mockApis/faker'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import OrderSummaryPage from '../../../pages/order/summary'
 import Page from '../../../pages/page'
