@@ -5,7 +5,7 @@ import asyncMiddleware from '../middleware/asyncMiddleware'
 import populateOrder from '../middleware/populateCurrentOrder'
 import { type Services } from '../services'
 import paths from '../constants/paths'
-import createOrderTypeDescriptionRouter from './monitoring-conditions/router'
+import createMonitoringConditionsRouter from './monitoring-conditions/router'
 import createPostcodeLookupRouter from './postcode-lookup/router'
 import createInstallationAndRiskRouter from './installation-and-risk/router'
 import createAttachmentRouter from './attachments/router'
@@ -78,7 +78,7 @@ export default function routes({
 
   router.use(
     [paths.MONITORING_CONDITIONS.BASE_URL, paths.MONITORING_CONDITIONS.BASE_URL_VERSION],
-    createOrderTypeDescriptionRouter({
+    createMonitoringConditionsRouter({
       alcoholMonitoringService,
       attendanceMonitoringService,
       attendanceMonitoringAddToListService,

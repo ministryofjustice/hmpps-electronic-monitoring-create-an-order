@@ -26,7 +26,7 @@ const createOrderRouter = (
   const specialOrderController = new SpecialOrderController()
   const isAddressChangeController = new IsAddressChangeController(serviceRequestTypeService)
   const noRefitsController = new NoRefitsController()
-  const noChangeResonsibleOfficer = new NoChangeResponsibleOfficerController()
+  const noChangeResponsibleOfficer = new NoChangeResponsibleOfficerController()
 
   post(paths.ORDER.CREATE, orderController.create)
   get(paths.ORDER.DELETE_SUCCESS, orderController.deleteSuccess)
@@ -50,7 +50,7 @@ const createOrderRouter = (
   viewUpdate(paths.ORDER.SPECIAL_ORDER, specialOrderController)
   viewUpdate(paths.ORDER.IS_ADDRESS_CHANGE, isAddressChangeController)
   get(paths.ORDER.NO_REFITS, noRefitsController.view)
-  get(paths.ORDER.NO_CHANGE_RESPONSIBLE_OFFICER, noChangeResonsibleOfficer.view)
+  get(paths.ORDER.NO_CHANGE_RESPONSIBLE_OFFICER, noChangeResponsibleOfficer.view)
   post(paths.ORDER.UPDATE_ORDER_OWNER, orderController.assignOrderOwner)
 
   return router

@@ -29,7 +29,7 @@ import MonitoringConditionsCheckAnswersController from '../../controllers/monito
 import RemoveMonitoringTypeController from './remove-monitoring-type/controller'
 import paths from '../../constants/paths'
 
-const createOrderTypeDescriptionRouter = (
+const createMonitoringConditionsRouter = (
   services: Pick<
     Services,
     | 'monitoringConditionsStoreService'
@@ -162,4 +162,4 @@ const createOrderTypeDescriptionRouter = (
   return router
 }
 
-export default createOrderTypeDescriptionRouter
+export default createMonitoringConditionsRouter

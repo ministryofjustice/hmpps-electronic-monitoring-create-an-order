@@ -1,11 +1,3 @@
-// Shared path fragments used to compose the route constants below.
-// Composing from these bases keeps a single source of truth for each URL segment and
-// lets sub-routers derive their own relative routes from the same constants (see
-// `relativePath` in server/routes/routeHelpers.ts) instead of duplicating literal strings.
-//
-// Every feature exposes a `BASE_URL` and, where its pages can also be viewed for a historic
-// version of the order, a matching `BASE_URL_VERSION`. server/routes/index.ts mounts each
-// feature router on both, so routes only ever need declaring once, relative to `BASE_URL`.
 const ORDER_BASE = '/order/:orderId'
 const ORDER_VERSION_BASE = `${ORDER_BASE}/version/:versionId`
 
