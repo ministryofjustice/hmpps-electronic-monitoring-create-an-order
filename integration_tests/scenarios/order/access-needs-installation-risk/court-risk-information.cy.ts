@@ -35,6 +35,7 @@ context('Court risk information', () => {
     orderSummaryPage.aboutTheDeviceWearerTask.click()
     fillInAboutTheDeviceWearer({
       deviceWearerDetails,
+      notifyingOrganisation,
     })
     const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
     deviceWearerCheckYourAnswersPage.continue()

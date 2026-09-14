@@ -1,7 +1,7 @@
 import DetailsOfInstallationPage from '../../../e2e/order/access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
 import IsMappaPage from '../../../e2e/order/access-needs-installation-risk/is-mappa/IsMappaPage'
 import MappaPage from '../../../e2e/order/access-needs-installation-risk/mappa/MappaPage'
-import { createFakeAdultDeviceWearer } from '../../../mockApis/faker'
+import { createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import OrderSummaryPage from '../../../pages/order/summary'
 import Page from '../../../pages/page'
@@ -9,6 +9,7 @@ import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
 
 context('offences', () => {
   let orderSummaryPage: OrderSummaryPage
+  const interestedParties = createFakeInterestedParties('Home Office', 'Home Office', undefined, 'North West')
 
   const deviceWearerDetails = {
     ...createFakeAdultDeviceWearer(),
@@ -17,7 +18,6 @@ context('offences', () => {
     language: '',
     hasFixedAddress: 'No',
   }
-
   const detailsOfInstallationInfo = {
     possibleRisks: ['Violent behaviour or threats of violence'],
     riskCategories: ['Safeguarding child'],
