@@ -1,0 +1,37 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% set section = content.pages.deviceWearerSearchResults.section %}
+{% set continueButtonText = content.pages.deviceWearerSearchResults.buttons.useThisDeviceWearer %}
+{% set continueDisabled = not hasMatch %}
+{% set hideContinueButton = not hasMatch %}
+{% set hideCancelButton = not hasMatch %}
+
+{% block formInputs %}
+  <input type="hidden" name="searchedIdentifier" value="{{ searchedIdentifier }}">
+
+  {% if hasMatch %}
+    <p class="govuk-body">
+      {{ content.pages.deviceWearerSearchResults.messages.oneResultFound | replace('{identifier}', searchedIdentifier) | safe }}
+      <a href="{{ searchAgainLink }}" class="govuk-link">{{ content.pages.deviceWearerSearchResults.links.searchAgain }}</a>
+    </p>
+
+    <div class="govuk-inset-text">
+      <p class="govuk-body govuk-!-margin-bottom-1">{{ fullName }}</p>
+      {% if dateOfBirth %}
+        <p class="govuk-body govuk-!-margin-bottom-0">Date of birth - {{ dateOfBirth }}</p>
+      {% endif %}
+    </div>
+  {% else %}
+    <p class="govuk-body">
+      {{ content.pages.deviceWearerSearchResults.messages.noResultsFound | replace('{identifier}', searchedIdentifier) | safe }}
+    </p>
+
+    <p class="govuk-body">
+      <a href="{{ searchAgainLink }}" class="govuk-link">{{ content.pages.deviceWearerSearchResults.links.searchAgain }}</a>
+    </p>
+  {% endif %}
+
+  <p class="govuk-body">
+    <a href="{{ enterDetailsManuallyLink }}" class="govuk-link">{{ content.pages.deviceWearerSearchResults.links.enterDetailsManually }}</a>
+  </p>
+{% endblock %}

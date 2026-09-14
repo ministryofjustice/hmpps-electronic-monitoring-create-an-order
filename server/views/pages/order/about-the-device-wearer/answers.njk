@@ -1,16 +1,15 @@
+  <h2 class="govuk-heading-m">Identity numbers</h2>
+
+  {{ govukSummaryList({
+    classes: "govuk-!-margin-bottom-9",
+    rows: personIdentifiers
+  }) }}
+
   <h2 class="govuk-heading-m">Personal details</h2>
 
   {{ govukSummaryList({
     classes: "govuk-!-margin-bottom-9",
     rows: deviceWearer
-  }) }}
-
-  <h2 class="govuk-heading-m">Identity numbers</h2>
-
-
-  {{ govukSummaryList({
-    classes: "govuk-!-margin-bottom-9",
-    rows: personIdentifiers
   }) }}
 
   {% if responsibleAdult | length > 0 %}

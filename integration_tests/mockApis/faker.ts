@@ -308,9 +308,9 @@ export const createFakeAdult = (firstName?: string): PersonOfInterest => {
 
 export const createFakeAdultDeviceWearer = (firstName?: string): PersonOfInterest => {
   const fakeAdult = createFakeAdult(firstName)
-  const nomisId = faker.helpers.replaceSymbols('?####??')
+  const nomisId = 'A1234BC'
   const pncId = faker.helpers.replaceSymbols('??##/######?')
-  const deliusId = faker.helpers.replaceSymbols('X#####')
+  const deliusId = 'B123435'
   const prisonNumber = faker.helpers.replaceSymbols('?#####')
   const homeOfficeReferenceNumber = fakeAdult.firstName[0] + faker.helpers.replaceSymbols('#######')
   // update when we validate format of cepr, ccrn

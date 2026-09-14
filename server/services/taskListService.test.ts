@@ -1,5 +1,6 @@
 import {
   createDeviceWearer,
+  createInterestedParties,
   createMonitoringConditions,
   getFilledMockOrder,
   getMockOrder,
@@ -261,9 +262,9 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
     })
 
-    it('should return curfew timetable if current page is curfew release date', () => {
+    it('should return curfew timetable if current page is curfew day of release', () => {
       // Given
-      const currentPage = 'CURFEW_RELEASE_DATE'
+      const currentPage = 'CURFEW_DAY_OF_RELEASE'
       const taskListService = new TaskListService()
       const order = getMockOrder({
         monitoringConditions: createMonitoringConditions({
@@ -278,7 +279,7 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id))
     })
 
-    it('should return curfew release date if current page is curfew conitions', () => {
+    it('should return curfew day of release if current page is curfew conitions', () => {
       // Given
       const currentPage = 'CURFEW_CONDITIONS'
       const taskListService = new TaskListService()
@@ -286,13 +287,14 @@ describe('TaskListService', () => {
         monitoringConditions: createMonitoringConditions({
           curfew: true,
         }),
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }),
       })
 
       // When
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE.replace(':orderId', order.id))
     })
 
     // skipped test as currently the additonal details page is disabled
@@ -739,7 +741,7 @@ describe('TaskListService', () => {
   })
 
   describe('get next task path', () => {
-    it('returns the first completable path', () => {
+    it('returns the first incomplete completable path', () => {
       const tasks: Task[] = []
       tasks.push({
         section: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
@@ -761,7 +763,7 @@ describe('TaskListService', () => {
 
       const result = taskListService.getNextTaskPath(tasks, 'mockOrderId')
 
-      expect(result).toBe(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', 'mockOrderId'))
+      expect(result).toBe(paths.INTEREST_PARTIES.RESPONSIBLE_OFFICER.replace(':orderId', 'mockOrderId'))
     })
 
     it('returns the versioned path if version id is provided', () => {
@@ -812,6 +814,32 @@ describe('TaskListService', () => {
       const result = taskListService.getNextTaskPath(tasks, mockOrderId)
 
       expect(result).toBe(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', mockOrderId))
+    })
+  })
+
+  describe('getTasks', () => {
+    it('links the curfew release day task to the curfew day of release question page', () => {
+      const taskListService = new TaskListService()
+      const order = getMockOrder({
+        monitoringConditions: createMonitoringConditions({ curfew: true }),
+      })
+
+      const tasks = taskListService.getTasks(order)
+
+      expect(tasks.map(task => task.path)).toContain(paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE)
+    })
+
+    it('marks the curfew day of release task as not required when the order is not eligible for it', () => {
+      const taskListService = new TaskListService()
+      const order = getMockOrder({
+        monitoringConditions: createMonitoringConditions({ curfew: true }),
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PROBATION' }),
+      })
+
+      const tasks = taskListService.getTasks(order)
+      const curfewDayOfReleaseTask = tasks.find(task => task.path === paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE)
+
+      expect(curfewDayOfReleaseTask?.state).toBe('NOT_REQUIRED')
     })
   })
 })

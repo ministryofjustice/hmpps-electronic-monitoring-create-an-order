@@ -28,8 +28,7 @@ services:
 
       - DOCUMENT_MANAGEMENT_URL=http://cemo-wiremock:8080/hmpps
       - MANAGE_USER_URL=http://cemo-wiremock:8080/manage-user
-      - CORE_PERSON_RECORD_URL=http://cemo-wiremock:8080/core-person-record
-
+      - CORE_PERSON_RECORD_URL=http://cemo-wiremock:8080/cpr      
       - SERCO_AUTH_URL=http://cemo-wiremock:8080/auth/oauth/token
       - SERCO_CLIENT_ID=clientid
       - SERCO_CLIENT_SECRET=clientsecret

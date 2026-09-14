@@ -9,7 +9,6 @@ const featureFlagFilePath = path.join(process.cwd(), 'data', 'feature-flags.json
 const defaultFeatureFlagFilePath = path.join(process.cwd(), 'data', 'default-feature-flags.json')
 
 const mockFlags = {
-  CREATE_NEW_ORDER_VERSION_ENABLED: false,
   SERVICE_REQUEST_TYPE_ENABLED: false,
   TAG_AT_SOURCE_PILOT_PRISONS: '',
   DAPOL_PILOT_PROBATION_REGIONS: '',

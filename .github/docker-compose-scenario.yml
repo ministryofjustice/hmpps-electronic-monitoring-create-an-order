@@ -24,6 +24,7 @@ services:
       - CLIENT_ID=clientid
       - CLIENT_SECRET=clientsecret
       - DOCUMENT_MANAGEMENT_URL=http://cemo-wiremock:8080/hmpps
+      - CORE_PERSON_RECORD_URL=http://cemo-wiremock:8080/cpr
       - MANAGE_USER_URL=http://cemo-wiremock:8080/manage-user
       - SERCO_AUTH_URL=http://cemo-wiremock:8080/auth/oauth/token
       - SERCO_CLIENT_ID=clientid
@@ -36,7 +37,6 @@ services:
       - DDV6_COURT_MAPPINGS=true
       - HMPPS_S3_BUCKETNAME=test_bucket
       - MANAGE_USER_URL=http://cemo-wiremock:8080/manage-user
-      - CORE_PERSON_RECORD_URL=http://cemo-wiremock:8080/core-person-record
   cemo-db:
     container_name: cemo-db
     image: postgres:18

@@ -1,9 +1,10 @@
-import { getMockOrder } from '../../../test/mocks/mockOrder'
+import { createInterestedParties, getMockOrder } from '../../../test/mocks/mockOrder'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 import RestClient from '../../data/restClient'
 import DeviceWearerService from '../../services/deviceWearerService'
 import DeviceWearerController from './deviceWearerController'
 import TaskListService from '../../services/taskListService'
+import { NotifyingOrganisation } from '../../models/NotifyingOrganisation'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
@@ -488,24 +489,78 @@ describe('DeviceWearerController', () => {
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/about-the-device-wearer/identity-numbers',
         expect.objectContaining({
-          nomisId: {
-            value: '',
-          },
-          pncId: {
-            value: '',
-          },
-          deliusId: {
-            value: '',
-          },
-          prisonNumber: {
-            value: '',
-          },
-          homeOfficeReferenceNumber: {
-            value: '',
-          },
+          identityNumbers: { values: [], error: undefined },
+          isSingleIdentityNumber: false,
+          identityNumberFields: expect.arrayContaining([
+            expect.objectContaining({ type: 'NOMIS', name: 'nomisId', value: '', checked: false }),
+            expect.objectContaining({ type: 'PNC', name: 'pncId', value: '', checked: false }),
+            expect.objectContaining({ type: 'DELIUS', name: 'deliusId', value: '', checked: false }),
+          ]),
           errorSummary: null,
         }),
       )
+    })
+
+    it('should render a single input when the notifying organisation has one identity number', async () => {
+      // Given
+      const req = createMockRequest({
+        order: {
+          ...mockOrder,
+          interestedParties: { ...mockOrder.interestedParties!, notifyingOrganisation: 'HOME_OFFICE' },
+        },
+        flash: jest.fn().mockReturnValue([]),
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      // When
+      await deviceWearerController.viewIdentityNumbers(req, res, next)
+
+      // Then
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/order/about-the-device-wearer/identity-numbers',
+        expect.objectContaining({
+          isSingleIdentityNumber: true,
+          identityNumberFields: [
+            expect.objectContaining({
+              type: 'COMPLIANCE_AND_ENFORCEMENT_PERSON_REFERENCE',
+              name: 'complianceAndEnforcementPersonReference',
+              value: '',
+            }),
+          ],
+        }),
+      )
+    })
+
+    it('should render the prison number on its own for a prison, and both options for probation', async () => {
+      // Given
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      const viewFor = async (notifyingOrganisation: NotifyingOrganisation) => {
+        const req = createMockRequest({
+          order: { ...mockOrder, interestedParties: { ...mockOrder.interestedParties!, notifyingOrganisation } },
+          flash: jest.fn().mockReturnValue([]),
+        })
+
+        await deviceWearerController.viewIdentityNumbers(req, res, next)
+
+        return (res.render as jest.Mock).mock.calls.at(-1)![1]
+      }
+
+      // When
+      const prison = await viewFor('PRISON')
+      const probation = await viewFor('PROBATION')
+
+      // Then
+      expect(prison.isSingleIdentityNumber).toBe(true)
+      expect(prison.identityNumberFields.map((field: { name: string }) => field.name)).toEqual(['nomisId'])
+
+      expect(probation.isSingleIdentityNumber).toBe(false)
+      expect(probation.identityNumberFields.map((field: { name: string }) => field.name)).toEqual([
+        'nomisId',
+        'deliusId',
+      ])
     })
   })
 
@@ -577,7 +632,7 @@ describe('DeviceWearerController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/about-the-device-wearer/identity-numbers`)
     })
 
-    it('should save valid data and redirect to the personal information page', async () => {
+    it('should save valid data and redirect to the device wearer search result page', async () => {
       // Given
       const order = getMockOrder()
       const req = createMockRequest({
@@ -587,7 +642,6 @@ describe('DeviceWearerController', () => {
           identityNumbers: [
             'NOMIS',
             'PRISON_NUMBER',
-            'HOME_OFFICE',
             'COMPLIANCE_AND_ENFORCEMENT_PERSON_REFERENCE',
             'COURT_CASE_REFERENCE_NUMBER',
           ],
@@ -613,9 +667,7 @@ describe('DeviceWearerController', () => {
         pncId: null,
       })
 
-      taskListService.getNextPage = jest
-        .fn()
-        .mockReturnValue(`/order/${order.id}/about-the-device-wearer/device-wearer`)
+      taskListService.getNextPage = jest.fn().mockReturnValue(`/order/${order.id}/about-the-device-wearer`)
 
       // When
       await deviceWearerController.updateIdentityNumbers(req, res, next)
@@ -636,7 +688,140 @@ describe('DeviceWearerController', () => {
         }),
       )
 
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/about-the-device-wearer/device-wearer`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/about-the-device-wearer`)
+    })
+
+    it('should save valid data and redirect to the device wearer page for other notifying organisations', async () => {
+      // Given
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'HOME_OFFICE' }),
+      })
+      const req = createMockRequest({
+        order,
+        body: {
+          action: 'continue',
+          identityNumbers: ['NOMIS', 'PRISON_NUMBER', 'DELIUS'],
+          nomisId: 'nomis',
+          deliusId: 'delius',
+          prisonNumber: 'prison',
+        },
+        flash: jest.fn(),
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+      taskListService.getNextPage = jest.fn().mockReturnValue(`/order/${order.id}/about-the-device-wearer`)
+      mockDeviceWearerService.updateIdentityNumbers.mockResolvedValue({
+        ...order.deviceWearer,
+        nomisId: 'nomis',
+        deliusId: 'delius',
+        prisonNumber: 'prison',
+      })
+
+      // When
+      await deviceWearerController.updateIdentityNumbers(req, res, next)
+
+      // Then
+      expect(req.flash).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/about-the-device-wearer`)
+    })
+
+    it('should search on the PNC number when it is the only identity number entered', async () => {
+      // Given
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE' }),
+      })
+      const req = createMockRequest({
+        order,
+        body: {
+          action: 'continue',
+          identityNumbers: ['PNC'],
+          pncId: 'pnc-123',
+          nomisId: '',
+        },
+        flash: jest.fn(),
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      mockDeviceWearerService.updateIdentityNumbers.mockResolvedValue({
+        ...order.deviceWearer,
+        pncId: 'pnc-123',
+        nomisId: null,
+      })
+
+      // When
+      await deviceWearerController.updateIdentityNumbers(req, res, next)
+
+      // Then
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/order/${order.id}/about-the-device-wearer/pnc-123/device-wearer-search-results`,
+      )
+    })
+
+    it('should search on the prison number when a probation user has not entered a CRN', async () => {
+      // Given
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PROBATION' }),
+      })
+      const req = createMockRequest({
+        order,
+        body: {
+          action: 'continue',
+          identityNumbers: ['NOMIS'],
+          nomisId: 'nomis-123',
+          deliusId: '',
+        },
+        flash: jest.fn(),
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      mockDeviceWearerService.updateIdentityNumbers.mockResolvedValue({
+        ...order.deviceWearer,
+        nomisId: 'nomis-123',
+        deliusId: null,
+      })
+
+      // When
+      await deviceWearerController.updateIdentityNumbers(req, res, next)
+
+      // Then
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/order/${order.id}/about-the-device-wearer/nomis-123/device-wearer-search-results`,
+      )
+    })
+
+    it('should escape a slash in the PNC number so the search url still works', async () => {
+      // Given
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE' }),
+      })
+      const req = createMockRequest({
+        order,
+        body: {
+          action: 'continue',
+          identityNumbers: ['PNC'],
+          pncId: '01/234567A',
+          nomisId: '',
+        },
+        flash: jest.fn(),
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      mockDeviceWearerService.updateIdentityNumbers.mockResolvedValue({
+        ...order.deviceWearer,
+        pncId: '01/234567A',
+        nomisId: null,
+      })
+
+      // When
+      await deviceWearerController.updateIdentityNumbers(req, res, next)
+
+      // Then
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/order/${order.id}/about-the-device-wearer/01%2F234567A/device-wearer-search-results`,
+      )
     })
 
     it('should save and redirect to the order summary page if the user chooses back', async () => {

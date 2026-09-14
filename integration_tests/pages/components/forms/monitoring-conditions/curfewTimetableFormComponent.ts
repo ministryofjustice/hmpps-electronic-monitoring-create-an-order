@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from 'uuid'
-
 import { deserialiseTime } from '../../../../../server/utils/utils'
 import { PageElement } from '../../../page'
 import FormComponent from '../../formComponent'
@@ -14,22 +12,11 @@ export type CurfewTimetableFormData = {
 const allDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 export default class CurfewTimetableFormComponent extends FormComponent {
-  checkHasForm(): void {
-    super.checkHasForm()
-
-    this.cacheFormFieldsAfterLoad()
-  }
-
-  cacheFormFieldsAfterLoad(): void {
-    allDays.forEach((dayOfWeek: string) => {
-      this.form.getByLegend(dayOfWeek).as(`${this.elementCacheId}-${dayOfWeek.toLowerCase()}`)
-    })
-  }
-
   // FIELDS
 
   day(day: string): PageElement {
-    return this.form.get(`@${this.elementCacheId}-${day.toLowerCase()}`, { log: true })
+    const titleCasedDay = day.charAt(0).toUpperCase() + day.slice(1).toLowerCase()
+    return this.form.getByLegend(titleCasedDay)
   }
 
   get autoPopulateTimetableButton(): PageElement {
@@ -38,33 +25,32 @@ export default class CurfewTimetableFormComponent extends FormComponent {
 
   autoPopulateTimetable(): void {
     this.autoPopulateTimetableButton.click()
-    this.cacheFormFieldsAfterLoad()
   }
 
   fillInDay(dayOfWeek: string, entries: CurfewTimetableFormData[]): void {
-    entries.forEach((entry: CurfewTimetableFormData, index: number) => {
-      const cacheId = `${dayOfWeek}-${index}-${uuidv4()}`
-
+    cy.wrap(entries).each((entry: CurfewTimetableFormData, index: number) => {
       this.day(dayOfWeek).within(() => {
-        cy.get('.schedule').eq(index).as(cacheId)
+        const schedule = () => cy.get('.schedule').eq(index)
 
         const [startHours, startMinutes] = deserialiseTime(entry.startTime)
-        cy.get(`@${cacheId}`).getByLabel('Start Hour').type(startHours)
-        cy.get(`@${cacheId}`).getByLabel('Start Minutes').type(startMinutes)
+        schedule().getByLabel('Start Hour').type(startHours)
+        schedule().getByLabel('Start Minutes').type(startMinutes)
 
         const [endHours, endMinutes] = deserialiseTime(entry.endTime)
-        cy.get(`@${cacheId}`).getByLabel('End Hour').type(endHours)
-        cy.get(`@${cacheId}`).getByLabel('End Minutes').type(endMinutes)
+        schedule().getByLabel('End Hour').type(endHours)
+        schedule().getByLabel('End Minutes').type(endMinutes)
 
         entry.addresses?.forEach(address => {
-          cy.get(`@${cacheId}`).getByLabel(address).check()
+          schedule().getByLabel(address).check()
         })
-
-        if (index < entries.length - 1) {
-          cy.contains('Add another time').click()
-          this.cacheFormFieldsAfterLoad()
-        }
       })
+
+      if (index < entries.length - 1) {
+        this.day(dayOfWeek).contains('Add another time').click()
+        // Kitchen sink moves too quickly, this was here to avoid breaking existing tests
+        // eslint-disable-next-line cypress/no-unnecessary-waiting
+        cy.wait(500)
+      }
     })
   }
 

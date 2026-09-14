@@ -64,7 +64,6 @@ export default class OrderController {
   summary: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
     const versionId = req.params.versionId as string
-    const createNewOrderVersionEnabled = FeatureFlags.getInstance().get('CREATE_NEW_ORDER_VERSION_ENABLED')
 
     // guarding against forcing SA question on read only
     const isEditable = order.status !== 'SUBMITTED' && order.status !== 'ERROR' && order.isOwner
@@ -98,7 +97,7 @@ export default class OrderController {
       order: req.order,
       sections,
       error: error && error.length > 0 ? error[0] : undefined,
-      createNewOrderVersionEnabled: createNewOrderVersionEnabled && isMostRecentVersion,
+      createNewOrderVersionEnabled: isMostRecentVersion,
       timelineItems: TimelineModel.mapToTimelineItems(
         res.locals.content!,
         completedOrderVersions,

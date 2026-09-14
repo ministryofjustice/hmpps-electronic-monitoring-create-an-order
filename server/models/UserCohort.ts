@@ -8,5 +8,6 @@ const UserCohortModel = z.object({
 })
 
 export type UserCohort = z.infer<typeof UserCohortModel>
+export type Cohort = z.infer<typeof CohortEnum>
 
 export default UserCohortModel

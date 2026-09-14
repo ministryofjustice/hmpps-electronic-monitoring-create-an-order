@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
-import { createMonitoringConditions, getMockOrder } from '../../../test/mocks/mockOrder'
+import { createInterestedParties, createMonitoringConditions, getMockOrder } from '../../../test/mocks/mockOrder'
 import RestClient from '../../data/restClient'
 import CurfewReleaseDateService from '../../services/curfewReleaseDateService'
 import CurfewReleaseDateController from './curfewReleaseDateController'
@@ -39,7 +39,10 @@ describe('CurfewReleaseDateController', () => {
       params: {
         orderId: mockId,
       },
-      order: getMockOrder({ id: mockId }),
+      order: getMockOrder({
+        id: mockId,
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }),
+      }),
       user: {
         username: 'fakeUserName',
         token: 'fakeUserToken',
@@ -139,6 +142,7 @@ describe('CurfewReleaseDateController', () => {
       }
       req.order = getMockOrder({
         id: mockId,
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }),
         curfewReleaseDateConditions: mockReleaseDateCondition,
         addresses: [
           {
@@ -190,6 +194,21 @@ describe('CurfewReleaseDateController', () => {
         tertiaryAddressView: { value: '12 Downing Street' },
         errorSummary: null,
       })
+    })
+
+    it('Should redirect to curfew address boundary page when order is not eligible for curfew day of release', async () => {
+      req.order = getMockOrder({
+        id: mockId,
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PROBATION' }),
+      })
+      req.flash = jest.fn().mockReturnValueOnce([]).mockReturnValueOnce([])
+
+      await controller.view(req, res, next)
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', mockId),
+      )
+      expect(res.render).not.toHaveBeenCalled()
     })
   })
 

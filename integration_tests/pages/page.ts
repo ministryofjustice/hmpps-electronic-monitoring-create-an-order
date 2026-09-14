@@ -92,7 +92,7 @@ export default abstract class Page {
   ) {}
 
   checkOnPage(): void {
-    if (this.title) {
+    if (this.title && this.title !== '' && this.title !== null) {
       cy.get('h1', { log: false }).contains(this.title)
     }
 

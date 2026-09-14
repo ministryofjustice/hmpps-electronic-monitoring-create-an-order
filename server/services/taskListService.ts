@@ -9,6 +9,7 @@ import isOrderDataDictionarySameOrAbove from '../utils/dataDictionaryVersionComp
 import { getOrderCohort } from '../models/OrderCohort'
 import { getRiskInformationTasks } from '../routes/installation-and-risk/riskInformationTasks'
 import { TaskListCohortDefinition, taskListCohortDefinitions } from './taskListCohorts'
+import shouldShowCurfewDayOfRelease from '../utils/curfewDayOfReleaseEligibility'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
@@ -49,7 +50,7 @@ const PAGES = {
   monitoringConditions: 'MONITORING_CONDITIONS',
   installationAddress: 'INSTALLATION_ADDRESS',
   curfewConditions: 'CURFEW_CONDITIONS',
-  curfewReleaseDate: 'CURFEW_RELEASE_DATE',
+  curfewDayOfRelease: 'CURFEW_DAY_OF_RELEASE',
   curfewAdditionalDetails: 'CURFEW_ADDITIONAL_DETAILS',
   curfewTimetable: 'CURFEW_TIMETABLE',
   enforcementZoneMonitoring: 'ENFORCEMENT_ZONE_MONITORING',
@@ -357,10 +358,12 @@ export default class TaskListService {
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.curfewReleaseDate,
-      path: paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE,
+      name: PAGES.curfewDayOfRelease,
+      path: paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE,
       state: convertBooleanToEnum<State>(
-        order.monitoringConditions.curfew && order.curfewReleaseDateConditions?.releaseDate === undefined,
+        order.monitoringConditions.curfew &&
+          shouldShowCurfewDayOfRelease(order) &&
+          order.curfewReleaseDateConditions?.releaseDate === undefined,
         STATES.cantBeStarted,
         STATES.required,
         STATES.notRequired,
@@ -607,14 +610,13 @@ export default class TaskListService {
     if (sectionTasks[0].section === SECTIONS.additionalDocuments) {
       return sectionTasks[sectionTasks.length - 1].path // TODO: refactor path so that additional docs includes string
     }
-
     return (sectionTasks.find(task => task.path.includes('check-your-answers')) || sectionTasks[0]).path
   }
 
   getNextTaskPath(sectionTasks: Task[], orderId: string, versionId?: string) {
     let path: string
 
-    const firstAvailableTask = sectionTasks.find(task => canBeCompleted(task))
+    const firstAvailableTask = sectionTasks.find(task => canBeCompleted(task) && task.completed === false)
 
     path = (firstAvailableTask || sectionTasks[0]).path
 

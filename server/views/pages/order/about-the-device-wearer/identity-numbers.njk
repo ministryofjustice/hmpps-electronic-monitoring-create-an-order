@@ -8,135 +8,73 @@
 
 {% block formInputs %}
 
-  {% set pncHtml %}
-    {{ govukInput({
-      id: "pncId",
-      name: "pncId",
-      label: { text: "Enter PNC" },
-      classes: "govuk-!-width-one-half",
-      value: pncId.value,
-      errorMessage: pncId.error,
-      disabled: not isOrderEditable
-    }) }}
-  {% endset %}
+  {% if isSingleIdentityNumber %}
 
-  {% set nomisHtml %}
-    {{ govukInput({
-      id: "nomisId",
-      name: "nomisId",
-      label: { text: "Enter NOMIS ID" },
-      classes: "govuk-!-width-one-half",
-      value: nomisId.value,
-      errorMessage: nomisId.error,
-      disabled: not isOrderEditable
-    }) }}
-  {% endset %}
+    {% set field = identityNumberFields[0] %}
+    {% set fieldHint = content.pages.identityNumbers.questions[field.name].hint %}
 
-  {% set prisonNumberHtml %}
-    {{ govukInput({
-      id: "prisonNumber",
-      name: "prisonNumber",
-      label: { text: "Enter Prison Number" },
-      classes: "govuk-!-width-one-half",
-      value: prisonNumber.value,
-      errorMessage: prisonNumber.error,
-      disabled: not isOrderEditable
-    }) }}
-  {% endset %}
+    <input type="hidden" name="identityNumbers" value="{{ field.type }}">
 
-  {% set deliusHtml %}
     {{ govukInput({
-      id: "deliusId",
-      name: "deliusId",
-      label: { text: "Enter CRN" },
-      classes: "govuk-!-width-one-half",
-      value: deliusId.value,
-      errorMessage: deliusId.error,
-      disabled: not isOrderEditable
-    }) }}
-  {% endset %}
-
-  {% set complianceHtml %}
-    {{ govukInput({
-      id: "complianceAndEnforcementPersonReference",
-      name: "complianceAndEnforcementPersonReference",
-      label: { text: "Enter Compliance and Enforcement Person Reference" },
-      classes: "govuk-!-width-one-half",
-      value: complianceAndEnforcementPersonReference.value,
-      errorMessage: complianceAndEnforcementPersonReference.error,
-      disabled: not isOrderEditable
-    }) }}
-  {% endset %}
-
-  {% set courtCaseHtml %}
-    {{ govukInput({
-      id: "courtCaseReferenceNumber",
-      name: "courtCaseReferenceNumber",
-      label: { text: "Enter Court Case Reference Number" },
-      classes: "govuk-!-width-one-half",
-      value: courtCaseReferenceNumber.value,
-      errorMessage: courtCaseReferenceNumber.error,
-      disabled: not isOrderEditable
-    }) }}
-  {% endset %}
-
-  {{ govukCheckboxes({
-    name: "identityNumbers",
-    fieldset: {
-      legend: {
-        text: content.pages.identityNumbers.legend,
+      id: field.name,
+      name: field.name,
+      label: {
+        text: content.pages.identityNumbers.singleQuestionTitles[field.name],
         isPageHeading: true,
-        classes: "govuk-fieldset__legend--l"
-      }
-    },
-    hint: {
-      text: content.pages.identityNumbers.helpText
-    },
-    items: [
-      {
-        value: "PNC",
-        text: content.pages.identityNumbers.questions.pncId.text,
-        conditional: { html: pncHtml },
-        checked: identityNumbers.values and "PNC" in identityNumbers.values,
-        disabled: not isOrderEditable
+        classes: "govuk-label--l"
       },
-      {
-        value: "NOMIS",
-        text: content.pages.identityNumbers.questions.nomisId.text,
-        conditional: { html: nomisHtml },
-        checked: identityNumbers.values and "NOMIS" in identityNumbers.values,
+      hint: { text: fieldHint } if fieldHint else none,
+      classes: "govuk-!-width-one-half",
+      value: field.value,
+      errorMessage: field.error,
+      disabled: not isOrderEditable
+    }) }}
+
+  {% else %}
+
+    {% set items = [] %}
+
+    {% for field in identityNumberFields %}
+      {% set fieldHint = content.pages.identityNumbers.questions[field.name].hint %}
+
+      {% set inputHtml %}
+        {{ govukInput({
+          id: field.name,
+          name: field.name,
+          label: { text: content.pages.identityNumbers.inputLabels[field.name] },
+          hint: { text: fieldHint } if fieldHint else none,
+          classes: "govuk-!-width-one-half",
+          value: field.value,
+          errorMessage: field.error,
+          disabled: not isOrderEditable
+        }) }}
+      {% endset %}
+
+      {% set items = (items.push({
+        value: field.type,
+        text: content.pages.identityNumbers.questions[field.name].text,
+        conditional: { html: inputHtml },
+        checked: field.checked,
         disabled: not isOrderEditable
+      }), items) %}
+    {% endfor %}
+
+    {{ govukCheckboxes({
+      name: "identityNumbers",
+      fieldset: {
+        legend: {
+          text: content.pages.identityNumbers.legend,
+          isPageHeading: true,
+          classes: "govuk-fieldset__legend--l"
+        }
       },
-      {
-        value: "PRISON_NUMBER",
-        text: content.pages.identityNumbers.questions.prisonNumber.text,
-        conditional: { html: prisonNumberHtml },
-        checked: identityNumbers.values and "PRISON_NUMBER" in identityNumbers.values,
-        disabled: not isOrderEditable
+      hint: {
+        text: content.pages.identityNumbers.helpText
       },
-      {
-        value: "DELIUS",
-        text: content.pages.identityNumbers.questions.deliusId.text,
-        conditional: { html: deliusHtml },
-        checked: identityNumbers.values and "DELIUS" in identityNumbers.values,
-        disabled: not isOrderEditable
-      },
-      {
-        value: "COMPLIANCE_AND_ENFORCEMENT_PERSON_REFERENCE",
-        text: content.pages.identityNumbers.questions.complianceAndEnforcementPersonReference.text,
-        conditional: { html: complianceHtml },
-        checked: identityNumbers.values and "COMPLIANCE_AND_ENFORCEMENT_PERSON_REFERENCE" in identityNumbers.values,
-        disabled: not isOrderEditable
-      },
-      {
-        value: "COURT_CASE_REFERENCE_NUMBER",
-        text: content.pages.identityNumbers.questions.courtCaseReferenceNumber.text,
-        conditional: { html: courtCaseHtml },
-        checked: identityNumbers.values and "COURT_CASE_REFERENCE_NUMBER" in identityNumbers.values,
-        disabled: not isOrderEditable
-      }
-    ],
-    errorMessage: identityNumbers.error
-  }) }}
+      items: items,
+      errorMessage: identityNumbers.error
+    }) }}
+
+  {% endif %}
 
 {% endblock %}

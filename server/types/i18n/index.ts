@@ -5,9 +5,12 @@ import ConfirmationPageContent from './pages/confirmationPage'
 import ContactDetailsPageContent from './pages/contactDetails'
 import CurfewAdditionalDetailsPageContent from './pages/curfewAdditionalDetails'
 import CurfewConditionsPageContent from './pages/curfewConditions'
+import CurfewDayOfReleasePageContent from './pages/curfewDayOfRelease'
 import CurfewReleaseDatePageContent from './pages/curfewReleaseDate'
 import CurfewTimeTablePageContent from './pages/curfewTimeTable'
+import CurfewTimetableQuestionPageContent from './pages/curfewTimetableQuestion'
 import DeviceWearerPageContent from './pages/deviceWearer'
+import DeviceWearerSearchResultsPageContent from './pages/deviceWearerSearchResults'
 import EnforcementZonePageContent from './pages/enforcementZone'
 import HavePhotoPageContent from './pages/havePhoto'
 import IdentityNumbersPageContent from './pages/identityNumbers'
@@ -51,10 +54,13 @@ type I18n = {
     contactDetails: ContactDetailsPageContent
     curfewConditions: CurfewConditionsPageContent
     curfewAdditionalDetails: CurfewAdditionalDetailsPageContent
+    curfewDayOfRelease: CurfewDayOfReleasePageContent
     curfewReleaseDate: CurfewReleaseDatePageContent
     curfewTimetable: CurfewTimeTablePageContent
+    curfewTimetableQuestion: CurfewTimetableQuestionPageContent
     deleteConfirm: ConfirmationPageContent
     deviceWearer: DeviceWearerPageContent
+    deviceWearerSearchResults: DeviceWearerSearchResultsPageContent
     editConfirm: ConfirmationPageContent
     exclusionZone: EnforcementZonePageContent
     restrictionZone: EnforcementZonePageContent

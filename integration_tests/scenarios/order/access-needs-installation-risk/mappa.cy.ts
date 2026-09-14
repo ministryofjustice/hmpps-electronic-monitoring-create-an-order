@@ -34,7 +34,7 @@ context('offences', () => {
     })
 
     createNewOrder({
-      notifyingOrganisation: createFakeInterestedParties('Home Office', 'Home Office', undefined, 'North West'),
+      notifyingOrganisation: interestedParties,
     })
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
@@ -49,6 +49,7 @@ context('offences', () => {
   it('Notifying organisation is Home Office, mappa flow', () => {
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
+      interestedParties,
       newDeviceWearerFlow: true,
     })
 
@@ -84,6 +85,7 @@ context('offences', () => {
   it('Notifying organisation is Home Office, not mappa flow', () => {
     orderSummaryPage.fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
+      interestedParties,
       newDeviceWearerFlow: true,
     })
 
