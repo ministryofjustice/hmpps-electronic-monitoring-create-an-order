@@ -20,9 +20,11 @@ import TrailMonitoringController from '../../controllers/monitoringConditions/tr
 import AttendanceMonitoringController from '../../controllers/monitoringConditions/attendanceMonitoringController'
 import AttendanceMonitoringAddToListController from './attendance-monitoring/controller'
 import AlcoholMonitoringController from '../../controllers/monitoringConditions/alcoholMonitoringController'
+import CurfewDayOfReleaseController from './curfew-day-of-release/controller'
 import CurfewReleaseDateController from '../../controllers/monitoringConditions/curfewReleaseDateController'
 import CurfewConditionsController from '../../controllers/monitoringConditions/curfewConditionsController'
 import CurfewAdditionalDetailsController from '../../controllers/monitoringConditions/curfewAdditionalDetailsController'
+import CurfewTimetableQuestionController from './curfew-timetable-question/controller'
 import CurfewTimetableController from '../../controllers/monitoringConditions/curfewTimetableController'
 import EnforcementZoneAddToListController from './enforcement-zone/controller'
 import MonitoringConditionsCheckAnswersController from '../../controllers/monitoringConditions/checkAnswersController'
@@ -109,9 +111,11 @@ const createMonitoringConditionsRouter = (
     attendanceMonitoringAddToListService,
   )
   const alcoholMonitoringController = new AlcoholMonitoringController(alcoholMonitoringService)
+  const curfewDayOfReleaseController = new CurfewDayOfReleaseController(curfewReleaseDateService)
   const curfewReleaseDateController = new CurfewReleaseDateController(curfewReleaseDateService)
   const curfewConditionsController = new CurfewConditionsController(curfewConditionsService)
   const curfewAdditionalDetailsController = new CurfewAdditionalDetailsController(curfewAdditionalDetailsService)
+  const curfewTimetableQuestionController = new CurfewTimetableQuestionController(curfewTimetableService)
   const curfewTimetableController = new CurfewTimetableController(curfewTimetableService)
   const zoneControllerAddToList = new EnforcementZoneAddToListController(auditService, zoneAddToListService)
   const monitoringConditionsCheckYourAnswersController = new MonitoringConditionsCheckAnswersController(
@@ -150,9 +154,11 @@ const createMonitoringConditionsRouter = (
   post(paths.MONITORING_CONDITIONS.ATTENDANCE_ADD_TO_LIST, attendanceMonitoringAddToListController.update)
   post(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM_ADD_TO_LIST, attendanceMonitoringAddToListController.update)
   viewUpdate(paths.MONITORING_CONDITIONS.ALCOHOL, alcoholMonitoringController)
+  viewUpdate(paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE, curfewDayOfReleaseController)
   viewUpdate(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE, curfewReleaseDateController)
   viewUpdate(paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS, curfewConditionsController)
   viewUpdate(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS, curfewAdditionalDetailsController)
+  viewUpdate(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE_QUESTION, curfewTimetableQuestionController)
   viewUpdate(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE, curfewTimetableController)
   get(paths.MONITORING_CONDITIONS.ZONE_NEW_ITEM, zoneControllerAddToList.new)
   get(paths.MONITORING_CONDITIONS.ZONE_ADD_TO_LIST, zoneControllerAddToList.view)
