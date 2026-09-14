@@ -355,7 +355,7 @@ context('The kitchen sink', () => {
                 ],
               },
             ],
-            trail_monitoring: 'No',
+            trail_monitoring: 'Yes',
             exclusion_zones: [
               {
                 description: primaryEnforcementZoneDetails.description,
