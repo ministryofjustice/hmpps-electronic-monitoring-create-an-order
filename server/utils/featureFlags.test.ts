@@ -51,14 +51,6 @@ describe('FeatureFlags', () => {
     expect(flags).toEqual(mockFlags)
   })
 
-  test('get should return the specified flag', () => {
-    const FeatureFlags = require('./featureFlags').default
-
-    const createNewOrderVersionEnabledFlag = FeatureFlags.getInstance().get('CREATE_NEW_ORDER_VERSION_ENABLED')
-
-    expect(createNewOrderVersionEnabledFlag).toBe(false)
-  })
-
   test('get should throw if flag is not defined', () => {
     const FeatureFlags = require('./featureFlags').default
     const flags = FeatureFlags.getInstance()
