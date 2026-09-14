@@ -1,30 +1,46 @@
 import MonitoringConditionsCheckYourAnswersPage from '../../pages/order/monitoring-conditions/check-your-answers'
 import CurfewAdditionalDetailsPage from '../../pages/order/monitoring-conditions/curfew-additional-details'
 import CurfewConditionsPage from '../../pages/order/monitoring-conditions/curfew-conditions'
+import CurfewDayOfReleasePage from '../../pages/order/monitoring-conditions/curfew-day-of-release'
 import CurfewReleaseDatePage from '../../pages/order/monitoring-conditions/curfew-release-date'
 import CurfewTimetablePage from '../../pages/order/monitoring-conditions/curfew-timetable'
+import CurfewTimetableQuestionPage from '../../pages/order/monitoring-conditions/curfew-timetable-question'
 import Page from '../../pages/page'
 
 export default function fillInCurfewOrderDetailsWith({
   curfewConditionDetails,
   curfewReleaseDetails,
   curfewTimetable,
+  dayOfReleaseAnswer = 'No',
+  curfewTimetableQuestionAnswer = 'No',
 }): void {
   const curfewConditionsPage = Page.verifyOnPage(CurfewConditionsPage)
   curfewConditionsPage.form.fillInWith(curfewConditionDetails)
   curfewConditionsPage.form.saveAndContinueButton.click()
 
-  const curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
-  curfewReleaseDatePage.form.fillInWith(curfewReleaseDetails)
-  curfewReleaseDatePage.form.saveAndContinueButton.click()
+  const curfewDayOfReleasePage = Page.verifyOnPage(CurfewDayOfReleasePage)
+  curfewDayOfReleasePage.form.standardCurfewTimesField.set(dayOfReleaseAnswer)
+  curfewDayOfReleasePage.form.saveAndContinueButton.click()
+
+  if (dayOfReleaseAnswer === 'No') {
+    const curfewReleaseDatePage = Page.verifyOnPage(CurfewReleaseDatePage)
+    curfewReleaseDatePage.form.fillInWith(curfewReleaseDetails)
+    curfewReleaseDatePage.form.saveAndContinueButton.click()
+  }
 
   const curfewAdditionalDetailsPage = Page.verifyOnPage(CurfewAdditionalDetailsPage)
   curfewAdditionalDetailsPage.form.fillInWith(curfewConditionDetails)
   curfewAdditionalDetailsPage.form.saveAndContinueButton.click()
 
-  const curfewTimetablePage = Page.verifyOnPage(CurfewTimetablePage)
-  curfewTimetablePage.form.fillInWith(curfewTimetable)
-  curfewTimetablePage.form.saveAndContinueButton.click()
+  const curfewTimetableQuestionPage = Page.verifyOnPage(CurfewTimetableQuestionPage)
+  curfewTimetableQuestionPage.form.standardCurfewTimesField.set(curfewTimetableQuestionAnswer)
+  curfewTimetableQuestionPage.form.saveAndContinueButton.click()
+
+  if (curfewTimetableQuestionAnswer === 'No') {
+    const curfewTimetablePage = Page.verifyOnPage(CurfewTimetablePage)
+    curfewTimetablePage.form.fillInWith(curfewTimetable)
+    curfewTimetablePage.form.saveAndContinueButton.click()
+  }
 }
 
 export function verifyCurfewInCheckYourAnswersPage({

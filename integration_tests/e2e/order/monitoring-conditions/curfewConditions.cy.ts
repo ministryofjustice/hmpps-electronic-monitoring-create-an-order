@@ -2,7 +2,8 @@ import { v4 as uuidv4 } from 'uuid'
 import ErrorPage from '../../../pages/error'
 import CurfewConditionsPage from '../../../pages/order/monitoring-conditions/curfew-conditions'
 import Page from '../../../pages/page'
-import CurfewReleaseDatePage from '../../../pages/order/monitoring-conditions/curfew-release-date'
+import CurfewAdditionalDetailsPage from '../../../pages/order/monitoring-conditions/curfew-additional-details'
+import CurfewDayOfReleasePage from '../../../pages/order/monitoring-conditions/curfew-day-of-release'
 import mockApiOrder from '../../../utils/data/ApiOrder'
 
 const mockOrderId = uuidv4()
@@ -185,7 +186,33 @@ context('Curfew conditions', () => {
           endDate: '2026-04-28T22:59:00.000Z',
         })
       })
-      Page.verifyOnPage(CurfewReleaseDatePage)
+      Page.verifyOnPage(CurfewDayOfReleasePage)
+    })
+
+    it('should redirect straight to curfew address boundary when the order is not for a prison or youth custody service', () => {
+      cy.task('stubCemoSubmitOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        subPath: '/monitoring-conditions-curfew-conditions',
+        response: mockEmptyCurfewConditions.curfewConditions,
+      })
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          ...mockEmptyCurfewConditions,
+          interestedParties: {
+            ...mockEmptyCurfewConditions.interestedParties,
+            notifyingOrganisation: 'PROBATION',
+          },
+        },
+      })
+      cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/conditions`)
+      const page = Page.verifyOnPage(CurfewConditionsPage)
+      page.fillInForm()
+      page.form.saveAndContinueButton.click()
+      Page.verifyOnPage(CurfewAdditionalDetailsPage)
     })
   })
 
@@ -277,7 +304,7 @@ context('Curfew conditions', () => {
           startDate: '2025-03-27T00:00:00.000Z',
         })
       })
-      Page.verifyOnPage(CurfewReleaseDatePage)
+      Page.verifyOnPage(CurfewDayOfReleasePage)
     })
   })
 })

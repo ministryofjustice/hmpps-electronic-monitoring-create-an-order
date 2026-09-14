@@ -14,6 +14,8 @@ import AlcoholMonitoringController from '../controllers/monitoringConditions/alc
 import AttendanceMonitoringController from '../controllers/monitoringConditions/attendanceMonitoringController'
 import AttendanceMonitoringAddToListController from './monitoring-conditions/attendance-monitoring/controller'
 import CurfewConditionsController from '../controllers/monitoringConditions/curfewConditionsController'
+import CurfewDayOfReleaseController from './monitoring-conditions/curfew-day-of-release/controller'
+import CurfewTimetableQuestionController from './monitoring-conditions/curfew-timetable-question/controller'
 import CurfewReleaseDateController from '../controllers/monitoringConditions/curfewReleaseDateController'
 import CurfewTimetableController from '../controllers/monitoringConditions/curfewTimetableController'
 import EnforcementZoneAddToListController from './monitoring-conditions/enforcement-zone/controller'
@@ -108,6 +110,8 @@ export default function routes({
   )
   const contactDetailsController = new ContactDetailsController(contactDetailsService, taskListService)
   const curfewReleaseDateController = new CurfewReleaseDateController(curfewReleaseDateService)
+  const curfewDayOfReleaseController = new CurfewDayOfReleaseController(curfewReleaseDateService)
+  const curfewTimetableQuestionController = new CurfewTimetableQuestionController(curfewTimetableService)
   const curfewTimetableController = new CurfewTimetableController(curfewTimetableService)
   const curfewConditionsController = new CurfewConditionsController(curfewConditionsService)
   const curfewAdditionalDetailsController = new CurfewAdditionalDetailsController(curfewAdditionalDetailsService)
@@ -315,6 +319,10 @@ export default function routes({
   post(paths.MONITORING_CONDITIONS.ALCOHOL, alcoholMonitoringController.update)
 
   // Curfew day of release page
+  get(paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE, curfewDayOfReleaseController.view)
+  post(paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE, curfewDayOfReleaseController.update)
+
+  // Curfew on release day page
   get(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE, curfewReleaseDateController.view)
   post(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE, curfewReleaseDateController.update)
 
@@ -325,6 +333,10 @@ export default function routes({
   // Curfew additional details page
   get(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS, curfewAdditionalDetailsController.view)
   post(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS, curfewAdditionalDetailsController.update)
+
+  // Curfew timetable question page
+  get(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE_QUESTION, curfewTimetableQuestionController.view)
+  post(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE_QUESTION, curfewTimetableQuestionController.update)
 
   // Curfew dates page
   get(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE, curfewTimetableController.view)

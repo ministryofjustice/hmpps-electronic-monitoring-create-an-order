@@ -11,7 +11,7 @@ context('Check your answers', () => {
   context('Application in progress', () => {
     const mockOrder = {
       monitoringConditions: {
-        startDate: '2025-01-01T00:00:00Z',
+        startDate: null,
         endDate: '2025-02-01T00:00:00Z',
         orderType: 'CIVIL',
         curfew: true,
