@@ -10,12 +10,12 @@ import populateCurrentOrder from './populateCurrentOrder'
 jest.mock('../data/restClient')
 jest.mock('../services/orderService')
 
-const createMockRequest = (): Request => {
+const createMockRequest = (params: Record<string, string> = {}): Request => {
   return {
     // @ts-expect-error stubbing session
     session: {},
     query: {},
-    params: {},
+    params,
     user: {
       username: '',
       token: '',
@@ -71,13 +71,13 @@ describe('populateCurrentOrder', () => {
 
   it('should throw an error when no order is found', async () => {
     // Given
-    const req = createMockRequest()
+    const req = createMockRequest({ orderId: uuidv4() })
     const res = createMockResponse()
     const next = jest.fn()
     mockOrderService.getOrder.mockRejectedValue(mockNotFoundRequest)
 
     // When
-    await populateCurrentOrder(mockOrderService)(req, res, next, uuidv4(), 'orderId')
+    await populateCurrentOrder(mockOrderService)(req, res, next)
 
     // Then
     expect(next).toHaveBeenCalledWith(mockNotFoundRequest)
@@ -87,13 +87,13 @@ describe('populateCurrentOrder', () => {
 
   it('should hydrate the req/res correctly when the order is submitted', async () => {
     // Given
-    const req = createMockRequest()
+    const req = createMockRequest({ orderId: uuidv4() })
     const res = createMockResponse()
     const next = jest.fn()
     const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED })
     mockOrderService.getOrder.mockResolvedValue(mockOrder)
     // When
-    await populateCurrentOrder(mockOrderService)(req, res, next, uuidv4(), 'orderId')
+    await populateCurrentOrder(mockOrderService)(req, res, next)
 
     // Then
     expect(next).toHaveBeenCalled()
@@ -105,14 +105,14 @@ describe('populateCurrentOrder', () => {
 
   it('should hydrate the req/res correctly when the order is a draft', async () => {
     // Given
-    const req = createMockRequest()
+    const req = createMockRequest({ orderId: uuidv4() })
     const res = createMockResponse()
     const next = jest.fn()
     const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.IN_PROGRESS })
     mockOrderService.getOrder.mockResolvedValue(mockOrder)
 
     // When
-    await populateCurrentOrder(mockOrderService)(req, res, next, uuidv4(), 'orderId')
+    await populateCurrentOrder(mockOrderService)(req, res, next)
 
     // Then
     expect(next).toHaveBeenCalled()
@@ -120,5 +120,30 @@ describe('populateCurrentOrder', () => {
     expect(res.locals.isOrderEditable).toEqual(true)
     expect(res.locals.orderId).toEqual(mockOrder.id)
     expect(res.locals.content).not.toBeUndefined()
+  })
+
+  it('should fetch the requested version when a versionId is present', async () => {
+    // Given
+    const orderId = uuidv4()
+    const versionId = uuidv4()
+    const req = createMockRequest({ orderId, versionId })
+    const res = createMockResponse()
+    const next = jest.fn()
+    const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED })
+    mockOrderService.getVersion.mockResolvedValue(mockOrder)
+
+    // When
+    await populateCurrentOrder(mockOrderService)(req, res, next)
+
+    // Then
+    expect(next).toHaveBeenCalled()
+    expect(mockOrderService.getVersion).toHaveBeenCalledWith({
+      accessToken: 'fakeUserToken',
+      orderId,
+      versionId,
+    })
+    expect(mockOrderService.getOrder).not.toHaveBeenCalled()
+    expect(req.order).toEqual(mockOrder)
+    expect(res.locals.versionId).toEqual(versionId)
   })
 })

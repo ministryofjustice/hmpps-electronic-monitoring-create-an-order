@@ -279,7 +279,7 @@ export default class TaskListService {
     tasks.push({
       section: SECTIONS.aboutTheDeviceWearer,
       name: PAGES.deviceWearer,
-      path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER,
+      path: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL,
       state: STATES.required,
       completed: isNotNullOrUndefined(order.deviceWearer.firstName),
     })

@@ -247,7 +247,7 @@ describe('task list service', () => {
         tasks.push({
           section: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
           name: 'INTERESTED_PARTIES',
-          path: paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION,
+          path: paths.INTEREST_PARTIES.RESPONSIBLE_ORGANISATION,
           state: 'REQUIRED',
           completed: true,
         })

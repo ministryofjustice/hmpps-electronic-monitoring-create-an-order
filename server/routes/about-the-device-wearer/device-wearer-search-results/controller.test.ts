@@ -67,9 +67,7 @@ describe('DeviceWearerSearchResultsController', () => {
       await controller.view(req, res, jest.fn())
 
       expect(res.render).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(
-        paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
-      )
+      expect(res.redirect).toHaveBeenCalledWith(paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id))
     })
 
     it('does not swallow errors that are not server errors', async () => {
@@ -108,9 +106,7 @@ describe('DeviceWearerSearchResultsController', () => {
         orderId: order.id,
         searchedIdentifier: 'A1234BC',
       })
-      expect(res.redirect).toHaveBeenCalledWith(
-        paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id),
-      )
+      expect(res.redirect).toHaveBeenCalledWith(paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id))
     })
 
     it('redirects to summary on save as draft without backend confirm', async () => {
