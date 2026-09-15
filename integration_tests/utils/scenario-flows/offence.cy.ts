@@ -4,6 +4,10 @@ import OffencePage from '../../e2e/order/access-needs-installation-risk/offences
 import Page from '../../pages/page'
 
 export default function fillInOffenceWith({ offenceDetails, offenceOtherInfo, detailsOfInstallationInfo }) {
+  const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
+  detailsOfInstallationPage.form.fillInWith(detailsOfInstallationInfo)
+  detailsOfInstallationPage.form.saveAndContinueButton.click()
+
   const offencePage = Page.verifyOnPage(OffencePage)
   offencePage.form.fillInWith(offenceDetails)
   offencePage.form.saveAndContinueButton.click()
@@ -11,8 +15,4 @@ export default function fillInOffenceWith({ offenceDetails, offenceOtherInfo, de
   const offenceOtherInfoPage = Page.verifyOnPage(OffenceOtherInfoPage)
   offenceOtherInfoPage.form.fillInWith(offenceOtherInfo)
   offenceOtherInfoPage.form.saveAndContinueButton.click()
-
-  const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
-  detailsOfInstallationPage.form.fillInWith(detailsOfInstallationInfo)
-  detailsOfInstallationPage.form.saveAndContinueButton.click()
 }

@@ -104,7 +104,11 @@ context('Order Summary', () => {
       )
 
       page.riskInformationTask.shouldHaveStatus('Incomplete')
-      page.riskInformationTask.link.should('have.attr', 'href', `/order/${mockOrderId}/installation-and-risk/offence`)
+      page.riskInformationTask.link.should(
+        'have.attr',
+        'href',
+        `/order/${mockOrderId}/installation-and-risk/details-of-installation`,
+      )
 
       page.electronicMonitoringTask.shouldHaveStatus('Cannot start yet')
       page.electronicMonitoringTask.link.should('not.exist')
@@ -145,10 +149,7 @@ context('Order Summary', () => {
         .should('not.exist')
     })
 
-    it('Home Officers users go to risk at installation from task list when offence flow is enabled', () => {
-      const testFlags = { OFFENCE_FLOW_ENABLED: true }
-      cy.task('setFeatureFlags', testFlags)
-
+    it('Home Office users go to risk at installation from the task list', () => {
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,
         id: mockOrderId,
@@ -189,8 +190,9 @@ context('Order Summary', () => {
         order: {
           dataDictionaryVersion: 'DDV6',
           isValid: true,
+          isSentencingAct: false,
           interestedParties: {
-            notifyingOrganisation: 'CROWN_COURT',
+            notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: '',
             notifyingOrganisationEmail: 'test@test.com',
             responsibleOfficerName: 'John Smith',
@@ -270,7 +272,11 @@ context('Order Summary', () => {
       )
 
       page.riskInformationTask.shouldHaveStatus('Incomplete')
-      page.riskInformationTask.link.should('have.attr', 'href', `/order/${mockOrderId}/installation-and-risk/offence`)
+      page.riskInformationTask.link.should(
+        'have.attr',
+        'href',
+        `/order/${mockOrderId}/installation-and-risk/details-of-installation`,
+      )
 
       page.electronicMonitoringTask.shouldHaveStatus('Cannot start yet')
       page.electronicMonitoringTask.link.should('not.exist')

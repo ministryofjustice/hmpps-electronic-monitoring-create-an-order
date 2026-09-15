@@ -32,12 +32,12 @@ const createInstallationAndRiskRouter = (
   } = services
 
   const offenceController = new OffenceController(offenceService)
-  const offenceOtherInfoController = new OffenceOtherInfoController(offenceOtherInfoService)
+  const offenceOtherInfoController = new OffenceOtherInfoController(offenceOtherInfoService, taskListService)
   const offenceListController = new OffenceListController()
   const dapoController = new DapoController(dapoService)
   const deleteController = new OffenceListDeleteController(offenceService, dapoService)
   const isMappaController = new IsMappaController(mappaService, taskListService)
-  const mappaController = new MappaController(mappaService)
+  const mappaController = new MappaController(mappaService, taskListService)
   const detailsOfInstallationController = new DetailsOfInstallationController(
     detailsOfInstallationService,
     taskListService,
