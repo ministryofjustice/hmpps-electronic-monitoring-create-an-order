@@ -22,6 +22,7 @@ context('details of installation page', () => {
   it('has correct elements', () => {
     const page = Page.visit(DetailsOfInstallationPage, { orderId: mockOrderId })
 
+    cy.get('#offence').should('not.exist')
     page.form.possibleRiskField.shouldNotBeDisabled()
     page.form.possibleRiskField.shouldHaveAllOptions()
 

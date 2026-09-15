@@ -9,7 +9,6 @@ import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
 
 context('offences', () => {
   let orderSummaryPage: OrderSummaryPage
-  const testFlags = { OFFENCE_FLOW_ENABLED: true }
   const interestedParties = createFakeInterestedParties('Home Office', 'Home Office', undefined, 'North West')
 
   const deviceWearerDetails = {
@@ -19,7 +18,6 @@ context('offences', () => {
     language: '',
     hasFixedAddress: 'No',
   }
-
   const detailsOfInstallationInfo = {
     possibleRisks: ['Violent behaviour or threats of violence'],
     riskCategories: ['Safeguarding child'],
@@ -27,7 +25,6 @@ context('offences', () => {
   }
 
   beforeEach(() => {
-    cy.task('setFeatureFlags', testFlags)
     cy.task('resetDB')
     cy.task('reset')
 

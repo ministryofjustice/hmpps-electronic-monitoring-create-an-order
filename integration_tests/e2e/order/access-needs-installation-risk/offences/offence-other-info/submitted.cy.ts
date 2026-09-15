@@ -17,7 +17,7 @@ context('offence other info page', () => {
         status: 'SUBMITTED',
         order: {
           interestedParties: {
-            notifyingOrganisation: 'CROWN_COURT',
+            notifyingOrganisation: 'PROBATION',
             notifyingOrganisationName: 'TEST',
             notifyingOrganisationEmail: 'test',
             responsibleOfficerName: 'test',

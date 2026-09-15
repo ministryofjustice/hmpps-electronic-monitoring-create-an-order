@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../../pages/page'
 import OffenceOtherInfoPage from './offenceOtherInfoPage'
 import OrderTasksPage from '../../../../../pages/order/summary'
-import DetailsOfInstallationPage from '../../details-of-installation/DetailsOfInstallationPage'
+import InstallationAndRiskCheckYourAnswersPage from '../../../../../pages/order/installation-and-risk/check-your-answers'
 
 const mockOrderId = uuidv4()
 const apiPath = '/offence-additional-details'
@@ -19,7 +19,7 @@ context('Offence Other Info Page', () => {
         status: 'IN_PROGRESS',
         order: {
           interestedParties: {
-            notifyingOrganisation: 'CROWN_COURT',
+            notifyingOrganisation: 'PROBATION',
             notifyingOrganisationName: 'TEST',
             notifyingOrganisationEmail: 'test',
             responsibleOfficerName: 'test',
@@ -73,7 +73,7 @@ context('Offence Other Info Page', () => {
         },
       }).should('be.true')
 
-      Page.verifyOnPage(DetailsOfInstallationPage)
+      Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers')
     })
 
     it('should return to summary page when save as draft', () => {
@@ -105,7 +105,7 @@ context('Offence Other Info Page', () => {
         status: 'IN_PROGRESS',
         order: {
           interestedParties: {
-            notifyingOrganisation: 'CROWN_COURT',
+            notifyingOrganisation: 'PROBATION',
             notifyingOrganisationName: 'Crown Court Name',
             notifyingOrganisationEmail: 'test@example.com',
             responsibleOfficerName: 'Officer Name',

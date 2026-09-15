@@ -36,7 +36,10 @@ export default class InterestedPartiesController {
       req.flash('validationErrors', result)
 
       res.redirect(paths.CONTACT_INFORMATION.INTERESTED_PARTIES.replace(':orderId', orderId))
-    } else if (action === 'continue') {
+      return
+    }
+
+    if (action === 'continue') {
       res.redirect(
         this.taskListService.getNextPage('INTERESTED_PARTIES', {
           ...req.order!,
