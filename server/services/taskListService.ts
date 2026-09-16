@@ -157,7 +157,7 @@ const getInterestedPartiesTasks = (order: Order, cohortDefinition: TaskListCohor
     tasks.push({
       section: SECTIONS.interestedParties,
       name: PAGES.responsibleOrganisation,
-      path: paths.INTEREST_PARTIES.RESPONSBILE_ORGANISATION,
+      path: paths.INTEREST_PARTIES.RESPONSIBLE_ORGANISATION,
       state: STATES.required,
       completed: isNotNullOrEmptyString(order.interestedParties?.responsibleOrganisation),
     })
@@ -241,7 +241,7 @@ const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCoho
     {
       section: SECTIONS.additionalDocuments,
       name: PAGES.attachments,
-      path: paths.ATTACHMENT.ATTACHMENTS,
+      path: paths.ATTACHMENT.BASE_URL,
       state: STATES.hidden,
       completed: true,
     },
