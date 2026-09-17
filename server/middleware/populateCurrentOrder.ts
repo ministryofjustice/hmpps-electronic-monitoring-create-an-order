@@ -1,4 +1,4 @@
-import { NextFunction, Request, RequestParamHandler, Response } from 'express'
+import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { validate } from 'uuid'
 import logger from '../../logger'
 import paths from '../constants/paths'
@@ -8,8 +8,10 @@ import getContent from '../i18n'
 import { Locales } from '../types/i18n/locale'
 
 const populateOrder =
-  (orderService: OrderService): RequestParamHandler =>
-  async (req: Request, res: Response, next: NextFunction, orderId: string) => {
+  (orderService: OrderService): RequestHandler =>
+  async (req: Request, res: Response, next: NextFunction) => {
+    const orderId = req.params.orderId as string
+
     try {
       const { token } = res.locals.user
       const versionId = req.params.versionId as string

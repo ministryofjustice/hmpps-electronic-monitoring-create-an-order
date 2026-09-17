@@ -119,7 +119,7 @@ export default class AttachmentsController {
         req.flash('attachmentDeletionErrors', result.error)
       }
     }
-    res.redirect(paths.ATTACHMENT.ATTACHMENTS.replace(':orderId', order.id))
+    res.redirect(paths.ATTACHMENT.BASE_URL.replace(':orderId', order.id))
   }
 
   view: RequestHandler = async (req: Request, res: Response) => {

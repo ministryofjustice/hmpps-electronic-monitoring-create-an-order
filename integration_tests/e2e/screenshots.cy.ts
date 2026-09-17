@@ -24,7 +24,7 @@ context('Screenshots', () => {
 
     // about
 
-    cy.visit(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', mockOrderId))
+    cy.visit(paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', mockOrderId))
     cy.screenshot('AboutDeviceWearerPage', { overwrite: true })
 
     cy.visit(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', mockOrderId))
