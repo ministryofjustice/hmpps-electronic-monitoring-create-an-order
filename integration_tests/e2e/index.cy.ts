@@ -345,20 +345,31 @@ context('Index', () => {
       page.viewFilter.find('option:selected').should('have.text', 'My failed to submit')
     })
 
-    it('Should show the last updated columns for prison users', () => {
+    it('Should show the start date column', () => {
       signInWithCohort(prisonCohort, '223456784')
 
       const page = Page.visit(IndexPage)
 
-      page.orderListHeaders.should('have.length', 4)
+      page.orderListHeaders.eq(1).should('contain.text', 'Start date')
+      page.orders.eq(0).should('contain.text', '29/9/2026')
+      page.orders.eq(1).should('contain.text', '29/9/2026')
+      page.orders.eq(2).should('contain.text', '30/9/2026')
+    })
+
+    it('Should show the last updated columns for prison users', () => {
+      signInWithCohort(prisonCohort, '223456785')
+
+      const page = Page.visit(IndexPage)
+
+      page.orderListHeaders.should('have.length', 5)
       page.orderListHeaders.eq(0).should('contain.text', 'Name')
-      page.orderListHeaders.eq(1).should('contain.text', 'Last updated')
-      page.orderListHeaders.eq(2).should('contain.text', 'Updated by')
-      page.orderListHeaders.eq(3).should('contain.text', 'Status')
+      page.orderListHeaders.eq(2).should('contain.text', 'Last updated')
+      page.orderListHeaders.eq(3).should('contain.text', 'Updated by')
+      page.orderListHeaders.eq(4).should('contain.text', 'Status')
     })
 
     it('Should not show the last updated columns for probation users', () => {
-      signInWithCohort({ cohort: 'PROBATION' }, '223456785')
+      signInWithCohort({ cohort: 'PROBATION' }, '223456786')
 
       const page = Page.visit(IndexPage)
 
@@ -368,7 +379,7 @@ context('Index', () => {
     })
 
     it('Should ignore a requested view for users who cannot filter', () => {
-      signInWithCohort({ cohort: 'PROBATION' }, '223456786')
+      signInWithCohort({ cohort: 'PROBATION' }, '223456787')
 
       cy.visit('/?view=PRISON_ORDERS')
 

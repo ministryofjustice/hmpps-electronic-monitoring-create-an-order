@@ -11,6 +11,12 @@ const OrderListInformationModel = z.object({
   notifyingOrganisation: z.string().nullable().optional(),
   lastUpdatedBy: z.string().nullable().optional(),
   lastUpdatedDateTime: z.string().datetime({ offset: true }).nullable().optional(),
+  monitoringConditions: z
+    .object({
+      startDate: z.string().datetime().nullable(),
+    })
+    .nullable()
+    .optional(),
 })
 
 export type OrderListInformation = z.infer<typeof OrderListInformationModel>

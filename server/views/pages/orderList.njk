@@ -27,6 +27,9 @@
       html: name
     },
     {
+      text: order.startDate
+    },
+    {
       text: order.lastUpdatedDateTime
     },
     {
@@ -51,6 +54,7 @@
 {% if isPrisonOrYouthUser %}
   {% set tableHead = [
     { text: "Name", classes: "govuk-!-width-one-half" },
+    { text: "Start date" },
     { text: "Last updated" },
     { text: "Updated by" },
     { text: "Status" }
