@@ -33,7 +33,7 @@ export default class DeviceWearerSearchResultsController {
       }
 
       logger.error(error)
-      res.redirect(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id))
+      res.redirect(paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id))
       return
     }
 
@@ -58,6 +58,6 @@ export default class DeviceWearerSearchResultsController {
       searchedIdentifier,
     })
 
-    res.redirect(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER.replace(':orderId', order.id))
+    res.redirect(paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id))
   }
 }
