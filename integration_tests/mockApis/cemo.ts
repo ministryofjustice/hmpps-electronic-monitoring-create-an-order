@@ -23,7 +23,7 @@ const ping = (httpStatus = 200) =>
     },
   })
 
-type ListOrdersStubOptions = {
+export type ListOrdersStubOptions = {
   httpStatus: number
   orders?: object[]
 }

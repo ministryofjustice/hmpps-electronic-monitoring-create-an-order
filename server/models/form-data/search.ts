@@ -9,6 +9,7 @@ type OrderListViewModel = {
     name: string
     href: string
     statusTags: { text: string; type: string }[]
+    startDate?: string
     lastUpdatedBy?: string | null
     lastUpdatedDateTime: string
     index: number

@@ -13,7 +13,7 @@ const OrderListInformationModel = z.object({
   lastUpdatedDateTime: z.string().datetime({ offset: true }).nullable().optional(),
   monitoringConditions: z
     .object({
-      startDate: z.string().datetime().nullable(),
+      startDate: z.string().datetime({ offset: true }).or(z.literal('')).nullable().optional(),
     })
     .nullable()
     .optional(),
