@@ -16,6 +16,7 @@ describe('constructListViewModel', () => {
       {
         name: 'Not supplied',
         href: `/order/${order.id}/summary`,
+        startDate: '',
         lastUpdatedBy: 'CEMO.USER',
         lastUpdatedDateTime: '10/3/2024',
         statusTags: [{ text: 'Draft', type: 'DRAFT' }],
