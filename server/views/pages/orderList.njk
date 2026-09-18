@@ -43,7 +43,11 @@
  {% set row = [
     {
       html: name
-    }, {
+    },
+    {
+      text: order.startDate
+    },
+    {
       html: status
     }
   ] %}
@@ -62,6 +66,7 @@
 {% else %}
   {% set tableHead = [
     { text: "Name", classes: "govuk-!-width-two-thirds" },
+    { text: "Start date" },
     { text: "Status" }
   ] %}
 {% endif %}

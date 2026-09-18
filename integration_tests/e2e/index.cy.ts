@@ -303,6 +303,7 @@ context('Index', () => {
     }
 
     const prisonCohort = { cohort: 'PRISON', activeCaseLoadName: 'HMP ABC' }
+    const crownCourt = { cohort: 'COURT', activeCaseLoadName: 'HMP Court' }
 
     beforeEach(() => {
       cy.task('reset')
@@ -345,8 +346,19 @@ context('Index', () => {
       page.viewFilter.find('option:selected').should('have.text', 'My failed to submit')
     })
 
-    it('Should show the start date column', () => {
+    it('Should show the start date column for prison users', () => {
       signInWithCohort(prisonCohort, '223456784')
+
+      const page = Page.visit(IndexPage)
+
+      page.orderListHeaders.eq(1).should('contain.text', 'Start date')
+      page.orders.eq(0).should('contain.text', '29/9/2026')
+      page.orders.eq(1).should('contain.text', '29/9/2026')
+      page.orders.eq(2).should('contain.text', '30/9/2026')
+    })
+
+    it('Should show the start date column for other users such as court', () => {
+      signInWithCohort(crownCourt, '223456785')
 
       const page = Page.visit(IndexPage)
 
@@ -438,9 +450,10 @@ context('Index', () => {
 
       const page = Page.visit(IndexPage)
 
-      page.orderListHeaders.should('have.length', 2)
+      page.orderListHeaders.should('have.length', 3)
       page.orderListHeaders.eq(0).should('contain.text', 'Name')
-      page.orderListHeaders.eq(1).should('contain.text', 'Status')
+      page.orderListHeaders.eq(1).should('contain.text', 'Start date')
+      page.orderListHeaders.eq(2).should('contain.text', 'Status')
     })
 
     it('Should ignore a requested view for users who cannot filter', () => {
