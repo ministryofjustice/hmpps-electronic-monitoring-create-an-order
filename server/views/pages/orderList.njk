@@ -27,6 +27,9 @@
       html: name
     },
     {
+      text: order.startDate
+    },
+    {
       text: order.lastUpdatedDateTime
     },
     {
@@ -40,7 +43,11 @@
  {% set row = [
     {
       html: name
-    }, {
+    },
+    {
+      text: order.startDate
+    },
+    {
       html: status
     }
   ] %}
@@ -51,6 +58,7 @@
 {% if isPrisonOrYouthUser %}
   {% set tableHead = [
     { text: "Name", classes: "govuk-!-width-one-half" },
+    { text: "Start date" },
     { text: "Last updated" },
     { text: "Updated by" },
     { text: "Status" }
@@ -58,6 +66,7 @@
 {% else %}
   {% set tableHead = [
     { text: "Name", classes: "govuk-!-width-two-thirds" },
+    { text: "Start date" },
     { text: "Status" }
   ] %}
 {% endif %}

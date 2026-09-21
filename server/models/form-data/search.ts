@@ -9,6 +9,7 @@ type OrderListViewModel = {
     name: string
     href: string
     statusTags: { text: string; type: string }[]
+    startDate?: string
     lastUpdatedBy?: string | null
     lastUpdatedDateTime: string
     index: number
@@ -106,12 +107,28 @@ export function constructListViewModel(
   view: OrderListView,
   isPrisonOrYouthUser: boolean,
 ): OrderListViewModel {
+  const ordersWithTime = orders.map(order => {
+    const dateStr = order.monitoringConditions?.startDate
+    return {
+      order,
+      time: dateStr ? Date.parse(dateStr) : null,
+    }
+  })
+
+  ordersWithTime.sort((a, b) => {
+    if (a.time === null && b.time === null) return 0
+    if (a.time === null) return 1
+    if (b.time === null) return -1
+    return a.time - b.time
+  })
+
   return {
-    orders: orders.map((order, index) => ({
+    orders: ordersWithTime.map(({ order }, index) => ({
       name: formatName(order.firstName, order.lastName),
       href: order.notifyingOrganisation
         ? paths.ORDER.SUMMARY.replace(':orderId', order.id)
         : paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', order.id),
+      startDate: order.monitoringConditions?.startDate ? formatDateTime(order.monitoringConditions.startDate) : '',
       lastUpdatedBy: order.lastUpdatedBy,
       lastUpdatedDateTime: order.lastUpdatedDateTime ? formatDateTime(order.lastUpdatedDateTime) : '',
       statusTags: getStatusTags(order),

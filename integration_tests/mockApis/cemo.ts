@@ -23,7 +23,7 @@ const ping = (httpStatus = 200) =>
     },
   })
 
-type ListOrdersStubOptions = {
+export type ListOrdersStubOptions = {
   httpStatus: number
   orders?: object[]
 }
@@ -41,6 +41,9 @@ const defaultListOrdersOptions: ListOrdersStubOptions = {
       notifyingOrganisation: 'PRISON',
       lastUpdatedBy: 'CEMO.USER',
       lastUpdatedDateTime: '2024-03-10T11:30:00.000Z',
+      monitoringConditions: {
+        startDate: '2026-09-30T11:30:00.000Z',
+      },
     },
     {
       id: uuidv4(),
@@ -52,6 +55,9 @@ const defaultListOrdersOptions: ListOrdersStubOptions = {
       notifyingOrganisation: 'PRISON',
       lastUpdatedBy: 'CEMO.USER',
       lastUpdatedDateTime: '2024-03-10T11:30:00.000Z',
+      monitoringConditions: {
+        startDate: '2026-09-29T10:30:00.000Z',
+      },
     },
     {
       id: uuidv4(),
@@ -63,6 +69,9 @@ const defaultListOrdersOptions: ListOrdersStubOptions = {
       notifyingOrganisation: 'PRISON',
       lastUpdatedBy: 'CEMO.USER',
       lastUpdatedDateTime: '2024-03-10T11:30:00.000Z',
+      monitoringConditions: {
+        startDate: '2026-09-29T09:30:00.000Z',
+      },
     },
   ],
 }
