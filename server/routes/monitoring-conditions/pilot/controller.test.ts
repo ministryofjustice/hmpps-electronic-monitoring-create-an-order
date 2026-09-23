@@ -102,6 +102,7 @@ describe('pilot controller', () => {
               value: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW',
             },
             {
+              disabled: false,
               text: 'Licence Variation Project',
               value: 'LICENCE_VARIATION_PROJECT',
               conditional: {
@@ -142,6 +143,7 @@ describe('pilot controller', () => {
               value: 'GPS_ACQUISITIVE_CRIME_PAROLE',
             },
             {
+              disabled: false,
               text: 'Licence Variation Project',
               value: 'LICENCE_VARIATION_PROJECT',
               conditional: {
@@ -161,6 +163,37 @@ describe('pilot controller', () => {
           ],
           dapolMessage:
             'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the DAPOL pathfinder or programme they must be managed by an in-scope region. Any queries around pathfinder or programme eligibility need to be raised with the appropriate COM.',
+        }),
+      )
+    })
+
+    it('disables licence variation option when responsible organisation is not probation', async () => {
+      mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
+        hdc: 'NO',
+      })
+
+      req.order = {
+        ...mockOrder,
+        interestedParties: {
+          ...mockOrder.interestedParties,
+          notifyingOrganisation: 'PROBATION',
+          responsibleOrganisation: 'POLICE',
+          responsibleOrganisationRegion: 'CHESHIRE',
+        },
+      }
+
+      await controller.view(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({
+          items: expect.arrayContaining([
+            expect.objectContaining({
+              disabled: true,
+              text: 'Licence Variation Project',
+              value: 'LICENCE_VARIATION_PROJECT',
+            }),
+          ]),
         }),
       )
     })

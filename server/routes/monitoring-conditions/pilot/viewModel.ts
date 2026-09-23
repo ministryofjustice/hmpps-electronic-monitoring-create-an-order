@@ -27,6 +27,14 @@ interface Divider {
 
 type Item = Option | Divider
 
+const isLicenceVariationEligible = (order: Order): boolean => {
+  if (order.isSentencingAct === true) {
+    return true
+  }
+
+  return order.interestedParties?.responsibleOrganisation === 'PROBATION'
+}
+
 const getDapolPilotProbationRegionStatus = (order: Order): boolean => {
   if (order.isSentencingAct === true) {
     return true
@@ -54,6 +62,7 @@ const getDapolMessage = (order: Order): string => {
 
 const constructModel = (order: Order, data: MonitoringConditions, errors: ValidationResult): PilotModel => {
   const isDapolPilotProbationRegion = getDapolPilotProbationRegionStatus(order)
+  const isLicenceEligible = isLicenceVariationEligible(order)
   const isSentencingAct = order?.isSentencingAct ?? false
   const model: PilotModel = {
     pilot: {
@@ -61,6 +70,7 @@ const constructModel = (order: Order, data: MonitoringConditions, errors: Valida
     },
     items: getItems(
       isDapolPilotProbationRegion,
+      isLicenceEligible,
       data.hdc,
       order.interestedParties?.notifyingOrganisation,
       isSentencingAct,
@@ -77,6 +87,7 @@ const constructModel = (order: Order, data: MonitoringConditions, errors: Valida
 
 const getItems = (
   isDapolPilotProbationRegion: boolean,
+  isLicenceEligible: boolean,
   hdc?: string | null,
   notifyingOrganisation?: string | null,
   isSentencingAct: boolean = false,
@@ -119,6 +130,7 @@ const getItems = (
 
   if (notifyingOrganisation === 'PROBATION' && !isSentencingAct) {
     items.splice(2, 0, {
+      disabled: !isLicenceEligible,
       text: 'Licence Variation Project',
       value: 'LICENCE_VARIATION_PROJECT',
       conditional: {
