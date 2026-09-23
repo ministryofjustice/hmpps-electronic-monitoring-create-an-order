@@ -102,7 +102,7 @@ describe('pilot controller', () => {
               value: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW',
             },
             {
-              disabled: true,
+              disabled: false,
               text: 'Licence Variation Project',
               value: 'LICENCE_VARIATION_PROJECT',
               conditional: {
@@ -119,8 +119,6 @@ describe('pilot controller', () => {
           ],
           dapolMessage:
             'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the DAPOL pathfinder or programme they must be managed by an in-scope region. Any queries around pathfinder or programme eligibility need to be raised with the appropriate COM.',
-          licenceMessage:
-            'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the Licence Variation pathfinder or programme they must be managed by an in-scope region.',
         }),
       )
     })
@@ -145,7 +143,7 @@ describe('pilot controller', () => {
               value: 'GPS_ACQUISITIVE_CRIME_PAROLE',
             },
             {
-              disabled: true,
+              disabled: false,
               text: 'Licence Variation Project',
               value: 'LICENCE_VARIATION_PROJECT',
               conditional: {
@@ -165,8 +163,6 @@ describe('pilot controller', () => {
           ],
           dapolMessage:
             'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the DAPOL pathfinder or programme they must be managed by an in-scope region. Any queries around pathfinder or programme eligibility need to be raised with the appropriate COM.',
-          licenceMessage:
-            'The device wearer is being managed by the Greater Manchester probation region. To be eligible for the Licence Variation pathfinder or programme they must be managed by an in-scope region.',
         }),
       )
     })
