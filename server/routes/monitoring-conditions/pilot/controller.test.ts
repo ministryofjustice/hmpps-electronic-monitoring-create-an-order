@@ -102,7 +102,6 @@ describe('pilot controller', () => {
               value: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW',
             },
             {
-              disabled: false,
               text: 'Licence Variation Project',
               value: 'LICENCE_VARIATION_PROJECT',
               conditional: {
@@ -143,7 +142,6 @@ describe('pilot controller', () => {
               value: 'GPS_ACQUISITIVE_CRIME_PAROLE',
             },
             {
-              disabled: false,
               text: 'Licence Variation Project',
               value: 'LICENCE_VARIATION_PROJECT',
               conditional: {

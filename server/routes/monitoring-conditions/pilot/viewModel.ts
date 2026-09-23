@@ -10,7 +10,6 @@ import probationRegions from '../../../i18n/en/reference/ddv5/probationRegions'
 export type PilotModel = ViewModel<Pick<MonitoringConditions, 'pilot'>> & {
   items: Item[]
   dapolMessage?: string
-  licenceMessage?: string
 }
 
 interface Option {
@@ -125,7 +124,6 @@ const getItems = (
       conditional: {
         html: 'The pathfinder or programme is only for probation practitioners varying a licence in response to an escalation of risk or as an alternative to recall.',
       },
-      disabled: false,
     })
   }
 
