@@ -95,7 +95,7 @@ const constructModel = (order: Order, data: MonitoringConditions, errors: Valida
 }
 
 const getItems = (
-  isDapolPilotProbationRegion: boolean,
+  isDapolEligible: boolean,
   isLicencePilotProbationRegion: boolean,
   hdc?: string | null,
   notifyingOrganisation?: string | null,
@@ -107,7 +107,7 @@ const getItems = (
       {
         text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
         value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
-        disabled: !isDapolPilotProbationRegion,
+        disabled: !isDapolEligible,
       },
       { text: 'GPS acquisitive crime (EMAC)', value: 'GPS_ACQUISITIVE_CRIME_PAROLE' },
       { divider: 'or' },
@@ -126,7 +126,7 @@ const getItems = (
       {
         text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
         value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC',
-        disabled: !isDapolPilotProbationRegion,
+        disabled: !isDapolEligible,
       },
       { text: 'GPS acquisitive crime (EMAC)', value: 'GPS_ACQUISITIVE_CRIME_HOME_DETENTION_CURFEW' },
       { divider: 'or' },
