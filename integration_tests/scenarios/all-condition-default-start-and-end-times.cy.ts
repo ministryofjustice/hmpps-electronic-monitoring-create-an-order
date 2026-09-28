@@ -228,6 +228,7 @@ context('The kitchen sink', () => {
           prison_number: '',
           home_office_case_reference_number: '',
           cepr: '',
+          defendant_id: '',
           interpreter_required: 'false',
           language: '',
           ethnicity: '',
