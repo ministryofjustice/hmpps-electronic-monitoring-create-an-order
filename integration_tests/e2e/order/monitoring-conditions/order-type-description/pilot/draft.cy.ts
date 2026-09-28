@@ -66,7 +66,6 @@ context('pilot', () => {
     cy.signIn()
 
     const testFlags = {
-      DAPOL_PILOT_PROBATION_REGIONS: 'KENT_SURREY_SUSSEX,WALES',
       LICENCE_VARIATION_PROBATION_REGIONS: 'YORKSHIRE_AND_THE_HUMBER,EAST_MIDLANDS',
     }
 
@@ -133,7 +132,7 @@ context('pilot', () => {
     page.form.pilotField.element.contains(noPilotOptionHintText).should('not.exist')
   })
 
-  it('Should disable DAPOL option and display message stating why if probation region not in pathfinder or programme', () => {
+  it('Should enable DAPOL option and not hide warning message for any probation region', () => {
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
     mockDefaultOrder.monitoringConditions.hdc = 'YES'
     stubGetOrder({
@@ -153,10 +152,11 @@ context('pilot', () => {
     Page.visit(PilotPage, { orderId: mockOrderId })
 
     cy.get('input[type="radio"][value="DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC"]').should(
-      'be.disabled',
+      'be.enabled',
     )
 
-    cy.get('.govuk-inset-text').contains(
+    cy.get('body').should(
+      'not.contain',
       'The device wearer is being managed by the Yorkshire and the Humber probation region. To be eligible for the DAPOL pathfinder or programme they must be managed by an in-scope region. Any queries around pathfinder or programme eligibility need to be raised with the appropriate COM.',
     )
   })
