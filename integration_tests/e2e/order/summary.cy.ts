@@ -2958,10 +2958,10 @@ context('Order Summary', () => {
       stubOrderWithSentencingAct(true)
       Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
-      cy.get('.govuk-notification-banner').should(
-        'contain.text',
-        'This order is subject to the Sentencing Act 2026 changes.',
-      )
+      cy.get('.moj-alert')
+        .should('contain.text', 'This order is subject to the Sentencing Act 2026 changes.')
+        .and('not.have.class', 'moj-alert--warning')
+        .and('have.class', 'moj-alert--information')
     })
 
     it('doesnt show the Sentencing Act banner when order is not sentencing act', () => {
