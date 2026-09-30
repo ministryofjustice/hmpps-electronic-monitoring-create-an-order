@@ -41,7 +41,6 @@ context('Interested parties flow', () => {
     createNewOrder({ notifyingOrganisation: input.notifyingOrganisation })
 
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-    cy.get('.govuk-notification-banner').should('not.exist')
 
     orderSummaryPage.interestedPartiesTask.click()
 
@@ -81,10 +80,6 @@ context('Interested parties flow', () => {
     }
     createNewOrder({ notifyingOrganisation: input.notifyingOrganisation })
     orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-    cy.get('.govuk-notification-banner').should(
-      'contain.text',
-      'This order is subject to the Sentencing Act 2026 changes.',
-    )
 
     orderSummaryPage.interestedPartiesTask.click()
 

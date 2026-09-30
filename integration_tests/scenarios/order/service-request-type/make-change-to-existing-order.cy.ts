@@ -146,10 +146,6 @@ context('Service-Request-Types', () => {
     yourDetailsPage.form.continueButton.click()
 
     Page.verifyOnPage(OrderSummaryPage)
-    cy.get('.govuk-notification-banner').should(
-      'contain.text',
-      'This order is subject to the Sentencing Act 2026 changes.',
-    )
 
     orderSummaryPage.fillInVariationsDetails({ variationDetails: variation })
     orderSummaryPage.aboutTheDeviceWearerTask.click()

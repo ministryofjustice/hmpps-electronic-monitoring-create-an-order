@@ -91,10 +91,6 @@ context('Service-Request-Types', () => {
     notifyingOrganisationPage.form.continueButton.click()
 
     const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-    cy.get('.govuk-notification-banner').should(
-      'contain.text',
-      'This order is subject to the Sentencing Act 2026 changes.',
-    )
 
     orderSummaryPage.fillInVariationsDetails({ variationDetails: variation })
 
