@@ -1,0 +1,27 @@
+name: Build and deploy to dev
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  packages: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    name: Build docker image
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@v2 # WORKFLOW_VERSION
+    with:
+      docker_registry: 'ghcr.io'
+      registry_org: 'ministryofjustice'
+      push: true
+      docker_multiplatform: false
+  deploy_dev:
+    name: Deploy to dev
+    needs: build
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
+    secrets: inherit
+    with:
+      environment: 'dev'
+      app_version: '${{ needs.build.outputs.app_version }}'
+      helm_timeout: '5m'
