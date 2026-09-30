@@ -13,21 +13,9 @@ services:
         condition: service_healthy
         restart: true
       cemo-redis:
-        condition: service_started
-      localstack:
-        condition: service_healthy
+        condition: service_started     
     environment:
-      - SERVER_PORT=8080
-      - HMPPS_SQS_PROVIDER=localstack
-      - HMPPS_SQS_LOCALSTACKURL=http://localstack:4566
-      - HMPPS_SQS_USETOKEN=false
-      - HMPPS_SQS_QUEUES_RETURNSEVENTQUEUE_QUEUENAME=returns_events_queue.fifo
-      - HMPPS_SQS_QUEUES_RETURNSEVENTQUEUE_QUEUEARN=arn:aws:sns:eu-west-2:000000000000:returns_events_queue.fifo
-      - HMPPS_SQS_QUEUES_RETURNSEVENTQUEUE_DLQNAME=returns_events_dead_letter_queue.fifo
-      - SPRING_CLOUD_AWS_ENDPOINT=http://localstack:4566
-      - AWS_ACCESS_KEY_ID=test
-      - AWS_SECRET_ACCESS_KEY=test
-      - AWS_REGION=eu-west-2
+      - SERVER_PORT=8080     
       - DB_SERVER=cemo-db
       - DB_NAME=postgres
       - DB_USER=postgres
@@ -49,6 +37,7 @@ services:
       - DDV6_COURT_MAPPINGS=true
       - HMPPS_S3_BUCKETNAME=test_bucket
       - MANAGE_USER_URL=http://cemo-wiremock:8080/manage-user
+      - RETURN_LISTENER_ENABLED=false
   cemo-db:
     container_name: cemo-db
     image: postgres:18
@@ -83,20 +72,6 @@ services:
       - hmpps_integration
     ports:
       - '9091:8080'
-
-  localstack:
-    container_name: localstack
-    image: localstack/localstack:4.14
-    networks:
-      - hmpps_integration
-    environment:
-      - SERVICES=sqs,s3
-      - DEFAULT_REGION=eu-west-2
-    healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:4566/_localstack/health']
-      interval: 10s
-      timeout: 5s
-      retries: 10
 
   gotenberg:
     image: gotenberg/gotenberg:8
