@@ -18,7 +18,6 @@ import ReceiptPage from '../../../pages/order/receipt'
 import IsAddressChangePage from '../../../e2e/order/edit-order/is-address-change/isAddressChangePage'
 import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
 import NotifyingOrganisationPage from '../../../e2e/order/interested-parties/notifying-organisation/notifyingOrganisationPage'
-import SentencingActPage from '../../../e2e/order/interested-parties/sentencing-act/sentencingActPage'
 
 context('Service-Request-Types', () => {
   let orderSummaryPage: OrderSummaryPage
@@ -124,6 +123,7 @@ context('Service-Request-Types', () => {
 
     Page.verifyOnPage(ConfirmVariationPage).confirm()
 
+    cy.task('setFeatureFlags', testFlags)
     Page.verifyOnPage(IsRejectionPage).isNotRejection()
   }
 
@@ -145,9 +145,11 @@ context('Service-Request-Types', () => {
     const yourDetailsPage = Page.verifyOnPage(NotifyingOrganisationPage)
     yourDetailsPage.form.continueButton.click()
 
-    const sentencingActPage = Page.verifyOnPage(SentencingActPage)
-    sentencingActPage.form.fillInWith('No')
-    sentencingActPage.continueButton.click()
+    Page.verifyOnPage(OrderSummaryPage)
+    cy.get('.govuk-notification-banner').should(
+      'contain.text',
+      'This order is subject to the Sentencing Act 2026 changes.',
+    )
 
     orderSummaryPage.fillInVariationsDetails({ variationDetails: variation })
     orderSummaryPage.aboutTheDeviceWearerTask.click()
@@ -167,9 +169,9 @@ context('Service-Request-Types', () => {
     receiptPage.orderStatusSection.shouldHaveItems([{ key: 'Type', value: receiptType }])
   }
   beforeEach(() => {
-    cy.task('setFeatureFlags', testFlags)
     cy.task('resetDB')
     cy.task('reset')
+    cy.task('setFeatureFlags', testFlags)
 
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
@@ -258,6 +260,7 @@ context('Service-Request-Types', () => {
     searchPage.ordersList.contains(deviceWearerDetails.firstName).click()
 
     const summaryPage = Page.verifyOnPage(OrderSummaryPage)
+    cy.task('setFeatureFlags', testFlags)
     summaryPage.makeChangesButton.click()
 
     Page.verifyOnPage(ConfirmVariationPage).confirm()

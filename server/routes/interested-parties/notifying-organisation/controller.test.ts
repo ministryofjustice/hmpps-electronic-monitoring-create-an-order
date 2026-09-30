@@ -63,6 +63,7 @@ describe('NotifingOrganisationController', () => {
       },
       flash: jest.fn(),
     })
+    req.session.newOrderIdsForSentencingAct = [order.id]
     const res = createMockResponse()
     res.locals.user.cohort = { cohort: 'PRISON' } as never
 
@@ -74,6 +75,31 @@ describe('NotifingOrganisationController', () => {
       isSentencingAct: true,
     })
     expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/summary`)
+  })
+
+  it('sets new rules for a newly created service request order', async () => {
+    const order = getMockOrder({ type: 'REINSTALL_DEVICE' })
+    const req = createMockRequest({
+      order,
+      body: {
+        notifyingOrganisation: 'PRISON',
+        prison: 'ALTCOURSE_PRISON',
+        notifyingOrganisationEmail: 'prison@example.com',
+      },
+      flash: jest.fn(),
+    })
+    req.session.newOrderIdsForSentencingAct = [order.id]
+    const res = createMockResponse()
+    res.locals.user.cohort = { cohort: 'PRISON' } as never
+
+    await controller.update(req, res, jest.fn())
+
+    expect(sentencingActService.setSentencingActFlag).toHaveBeenCalledWith({
+      accessToken: 'fakeUserToken',
+      orderId: order.id,
+      isSentencingAct: true,
+    })
+    expect(req.session.newOrderIdsForSentencingAct).not.toContain(order.id)
   })
 
   it.each([true, false, undefined])('does not change a variation rule flag (%s)', async isSentencingAct => {
