@@ -38,10 +38,9 @@ context('Submit notifying organisations', () => {
         orderId: mockOrder.id,
       })
 
-      cy.task('stubCemoSetSentencingAct', { httpStatus: 200, id: mockOrderId })
     })
 
-    it('sets the sentencing act flag and routes to the task list without showing the selection page', () => {
+    it('routes a sentencing-act Prison order to the task list without showing the selection page', () => {
       cy.task('stubSignIn', {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
@@ -75,12 +74,6 @@ context('Submit notifying organisations', () => {
           notifyingOrganisationName: 'ALTCOURSE_PRISON',
           notifyingOrganisationEmail: 'a@b.com',
         },
-      }).should('be.true')
-
-      cy.task('stubCemoVerifyRequestReceived', {
-        uri: `/orders/${mockOrderId}/sentencing-act`,
-        method: 'PUT',
-        body: { isSentencingAct: true },
       }).should('be.true')
 
       Page.verifyOnPage(OrderTasksPage)
