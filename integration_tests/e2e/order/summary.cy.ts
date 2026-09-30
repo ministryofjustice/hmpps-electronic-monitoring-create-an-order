@@ -2968,7 +2968,7 @@ context('Order Summary', () => {
       stubOrderWithSentencingAct(false)
       Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
-      cy.get('.govuk-notification-banner').should('not.exist')
+      cy.get('.moj-alert').should('not.exist')
     })
   })
 })
