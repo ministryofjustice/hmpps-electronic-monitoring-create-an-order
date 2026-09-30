@@ -52,9 +52,6 @@ export default class ServiceRequestTypeController {
       type: formData.serviceRequestType!,
     }
     const result = await this.service.createNewVariation(input, req.order)
-    if (order === undefined) {
-      req.session.newOrderIdsForSentencingAct = [...(req.session.newOrderIdsForSentencingAct ?? []), result.id]
-    }
 
     res.redirect(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', result.id))
   }

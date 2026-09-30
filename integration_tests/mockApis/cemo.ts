@@ -227,6 +227,7 @@ const createOrder = (options: CreateOrderStubOptions = defaultCreateOrderOptions
               ...mockApiOrder(),
               id: options.id,
               status: options.status,
+              isSentencingAct: true,
             }
           : null,
     },

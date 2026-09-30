@@ -9,13 +9,11 @@ import InterestedPartiesBaseController from '../base/interestedPartiesBaseContro
 import UpdateInterestedPartiesService from '../interestedPartiesService'
 import { InterestedParties } from '../model'
 import { filterNullValues } from '../../../utils/utils'
-import SentencingActService from '../../sentencing-act-selection/SentencingActService'
 
 export default class NotifingOrganisationController extends InterestedPartiesBaseController {
   constructor(
     readonly store: InterestedPartiesStoreService,
     readonly service: UpdateInterestedPartiesService,
-    readonly sentencingActService: SentencingActService,
   ) {
     super(store, service)
   }
@@ -60,19 +58,6 @@ export default class NotifingOrganisationController extends InterestedPartiesBas
       accessToken: res.locals.user.token,
       orderId: order.id,
     })
-    const newOrderIds = req.session.newOrderIdsForSentencingAct ?? []
-    const isNewOrder = newOrderIds.includes(order.id)
-    const selectedPrisonService = validationResult.data.notifyingOrganisation === 'PRISON'
-    if (selectedPrisonService && isNewOrder) {
-      await this.sentencingActService.setSentencingActFlag({
-        accessToken: res.locals.user.token,
-        orderId: order.id,
-        isSentencingAct: true,
-      })
-    }
-    if (isNewOrder) {
-      req.session.newOrderIdsForSentencingAct = newOrderIds.filter(orderId => orderId !== order.id)
-    }
 
     res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
   }

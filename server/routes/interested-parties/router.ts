@@ -37,7 +37,6 @@ const createInterestedPartiesRouter = (
   const notifyingOrganisationController = new NotifingOrganisationController(
     interestedPartiesStoreService,
     updateInterestedPartiesService,
-    sentencingActService,
   )
   const responsibleOfficerController = new ResponsibleOfficerController(interestedPartiesStoreService)
   const responsibleOrganisationController = new ResponsibleOrganisationController(

@@ -23,7 +23,6 @@ export default class OrderController {
     }
 
     const order = await this.orderService.createOrder({ accessToken: res.locals.user.token, data: formData })
-    req.session.newOrderIdsForSentencingAct = [...(req.session.newOrderIdsForSentencingAct ?? []), order.id]
     res.redirect(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', order.id))
   }
 

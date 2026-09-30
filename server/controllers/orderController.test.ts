@@ -91,7 +91,6 @@ describe('OrderController', () => {
         data: { type: 'REQUEST' },
       })
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/interest-parties/notifying-organisation`)
-      expect(req.session.newOrderIdsForSentencingAct).toContain(mockOrder.id)
     })
   })
 
