@@ -210,6 +210,9 @@
     "picomatch": "^4.0.4",
     "protobufjs": "^8.6.4",
     "@opentelemetry/core": "^2.8.0",
-    "js-yaml": "^4.3.2"
+    "js-yaml": "^4.3.2",
+    "@ministryofjustice/frontend": {
+      "moment": "^2.31.0"
+    }
   }
 }
