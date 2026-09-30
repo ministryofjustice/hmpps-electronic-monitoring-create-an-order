@@ -10,11 +10,13 @@ import UpdateInterestedPartiesService from '../interestedPartiesService'
 import { InterestedParties } from '../model'
 import { filterNullValues } from '../../../utils/utils'
 import isVariationType from '../../../utils/isVariationType'
+import SentencingActService from '../../sentencing-act-selection/SentencingActService'
 
 export default class NotifingOrganisationController extends InterestedPartiesBaseController {
   constructor(
     readonly store: InterestedPartiesStoreService,
     readonly service: UpdateInterestedPartiesService,
+    readonly sentencingActService: SentencingActService,
   ) {
     super(store, service)
   }
@@ -59,14 +61,13 @@ export default class NotifingOrganisationController extends InterestedPartiesBas
       accessToken: res.locals.user.token,
       orderId: order.id,
     })
-    const isPrisonOrYouthUser = cohort === 'PRISON'
     const selectedPrisonService = validationResult.data.notifyingOrganisation === 'PRISON'
-    const shouldAskSentencingAct =
-      order.isSentencingAct === null || order.isSentencingAct === undefined || isVariationType(order.type)
-
-    if (isPrisonOrYouthUser && selectedPrisonService && shouldAskSentencingAct) {
-      res.redirect(paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION.replace(':orderId', order.id))
-      return
+    if (selectedPrisonService && !isVariationType(order.type)) {
+      await this.sentencingActService.setSentencingActFlag({
+        accessToken: res.locals.user.token,
+        orderId: order.id,
+        isSentencingAct: true,
+      })
     }
 
     res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))

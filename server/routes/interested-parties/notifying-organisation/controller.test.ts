@@ -2,6 +2,7 @@ import { getMockOrder } from '../../../../test/mocks/mockOrder'
 import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
 import InterestedPartiesStoreService from '../interestedPartiesStoreService'
 import UpdateInterestedPartiesService from '../interestedPartiesService'
+import SentencingActService from '../../sentencing-act-selection/SentencingActService'
 import NotifingOrganisationController from './controller'
 
 describe('NotifingOrganisationController', () => {
@@ -9,7 +10,10 @@ describe('NotifingOrganisationController', () => {
   const interestedPartiesService = {
     update: jest.fn(),
   } as unknown as jest.Mocked<UpdateInterestedPartiesService>
-  const controller = new NotifingOrganisationController(store, interestedPartiesService)
+  const sentencingActService = {
+    setSentencingActFlag: jest.fn(),
+  } as unknown as jest.Mocked<SentencingActService>
+  const controller = new NotifingOrganisationController(store, interestedPartiesService, sentencingActService)
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -46,5 +50,52 @@ describe('NotifingOrganisationController', () => {
     await controller.update(req, res, jest.fn())
 
     expect(interestedPartiesService.update).not.toHaveBeenCalled()
+  })
+
+  it('sets the new rules for a new prison order without showing the sentencing act page', async () => {
+    const order = getMockOrder()
+    const req = createMockRequest({
+      order,
+      body: {
+        notifyingOrganisation: 'PRISON',
+        prison: 'ALTCOURSE_PRISON',
+        notifyingOrganisationEmail: 'prison@example.com',
+      },
+      flash: jest.fn(),
+    })
+    const res = createMockResponse()
+    res.locals.user.cohort = { cohort: 'PRISON' } as never
+
+    await controller.update(req, res, jest.fn())
+
+    expect(sentencingActService.setSentencingActFlag).toHaveBeenCalledWith({
+      accessToken: 'fakeUserToken',
+      orderId: order.id,
+      isSentencingAct: true,
+    })
+    expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/summary`)
+  })
+
+  it.each([true, false, undefined])('does not change a variation rule flag (%s)', async isSentencingAct => {
+    const order = getMockOrder({
+      type: 'VARIATION',
+      isSentencingAct,
+    })
+    const req = createMockRequest({
+      order,
+      body: {
+        notifyingOrganisation: 'PRISON',
+        prison: 'ALTCOURSE_PRISON',
+        notifyingOrganisationEmail: 'prison@example.com',
+      },
+      flash: jest.fn(),
+    })
+    const res = createMockResponse()
+    res.locals.user.cohort = { cohort: 'PRISON' } as never
+
+    await controller.update(req, res, jest.fn())
+
+    expect(sentencingActService.setSentencingActFlag).not.toHaveBeenCalled()
+    expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/summary`)
   })
 })

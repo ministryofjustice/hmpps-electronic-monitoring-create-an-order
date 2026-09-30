@@ -3,7 +3,6 @@ import Page from '../../../../pages/page'
 import NotifyingOrganisationPage from './notifyingOrganisationPage'
 import OrderTasksPage from '../../../../pages/order/summary'
 import mockApiOrder from '../../../../utils/data/ApiOrder'
-import SentencingActPage from '../sentencing-act/sentencingActPage'
 
 const mockOrderId = uuidv4()
 context('Submit notifying organisations', () => {
@@ -18,6 +17,7 @@ context('Submit notifying organisations', () => {
         status: 'IN_PROGRESS',
         order: {
           dataDictionaryVersion: 'DDV6',
+          isSentencingAct: true,
         },
       })
 
@@ -41,7 +41,7 @@ context('Submit notifying organisations', () => {
       cy.task('stubCemoSetSentencingAct', { httpStatus: 200, id: mockOrderId })
     })
 
-    it('should routes summary page', () => {
+    it('sets the sentencing act flag and routes to the task list without showing the selection page', () => {
       cy.task('stubSignIn', {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
@@ -68,10 +68,6 @@ context('Submit notifying organisations', () => {
 
       page.form.continueButton.click()
 
-      const sentencingActPage = Page.verifyOnPage(SentencingActPage)
-      sentencingActPage.form.fillInWith('No')
-      sentencingActPage.continueButton.click()
-
       cy.task('stubCemoVerifyRequestReceived', {
         uri: `/orders/${mockOrderId}${submitPath}`,
         body: {
@@ -79,47 +75,19 @@ context('Submit notifying organisations', () => {
           notifyingOrganisationName: 'ALTCOURSE_PRISON',
           notifyingOrganisationEmail: 'a@b.com',
         },
+      }).should('be.true')
+
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOrderId}/sentencing-act`,
+        method: 'PUT',
+        body: { isSentencingAct: true },
       }).should('be.true')
 
       Page.verifyOnPage(OrderTasksPage)
-    })
-
-    it('should route to the sentencing act page if user is prison', () => {
-      cy.task('stubSignIn', {
-        name: 'john smith',
-        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
-        stubCohort: false,
-        userId: '123456780',
-      })
-
-      cy.task('stubCemoRequest', {
-        httpStatus: 200,
-        method: 'GET',
-        subPath: 'user-cohort',
-        response: { cohort: 'PRISON', activeCaseLoadName: 'HMP ABC' },
-      })
-
-      cy.signIn()
-
-      const page = Page.visit(NotifyingOrganisationPage, { orderId: mockOrderId })
-
-      page.form.fillInWith({
-        notifyingOrganisation: 'Prison service',
-        notifyingOrganisationEmailAddress: 'a@b.com',
-        prison: 'Altcourse Prison',
-      })
-
-      page.form.continueButton.click()
-
-      cy.task('stubCemoVerifyRequestReceived', {
-        uri: `/orders/${mockOrderId}${submitPath}`,
-        body: {
-          notifyingOrganisation: 'PRISON',
-          notifyingOrganisationName: 'ALTCOURSE_PRISON',
-          notifyingOrganisationEmail: 'a@b.com',
-        },
-      }).should('be.true')
-      cy.url().should('include', `/order/${mockOrderId}/interest-parties/sentencing-act-selection`)
+      cy.get('.govuk-notification-banner').should(
+        'contain.text',
+        'This order is subject to the Sentencing Act 2026 changes.',
+      )
     })
 
     it('other cohort can submit order', () => {

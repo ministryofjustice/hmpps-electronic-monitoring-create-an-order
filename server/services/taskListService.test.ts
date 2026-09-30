@@ -818,6 +818,17 @@ describe('TaskListService', () => {
   })
 
   describe('getTasks', () => {
+    it('does not require sentencing act selection when a prison order has no legacy flag', () => {
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }),
+      })
+
+      const task = new TaskListService().getTasks(order).find(taskEntry => taskEntry.name === 'SENTENCING_ACT')
+
+      expect(task?.state).toBe('DISABLED')
+      expect(task?.completed).toBe(false)
+    })
+
     it('links the curfew release day task to the curfew day of release question page', () => {
       const taskListService = new TaskListService()
       const order = getMockOrder({

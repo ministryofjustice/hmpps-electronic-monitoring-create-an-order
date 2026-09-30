@@ -6,6 +6,7 @@ import SentencingActService from './SentencingActService'
 import { isValidationResult } from '../../models/Validation'
 import { isNullOrUndefined } from '../../utils/utils'
 import FeatureFlags from '../../utils/featureFlags'
+import isVariationType from '../../utils/isVariationType'
 
 export default class SentencingActSelection extends YesNoQuestionPageController {
   constructor(private readonly sentencingActService: SentencingActService) {
@@ -15,6 +16,9 @@ export default class SentencingActSelection extends YesNoQuestionPageController 
   static isPageEnabled = (): boolean => FeatureFlags.getInstance().get('SENTENCING_ACT_ENABLED')
 
   view: RequestHandler = async (req: Request, res: Response) => {
+    if (isVariationType(req.order!.type)) {
+      return res.redirect(paths.ORDER.SUMMARY.replace(':orderId', req.order!.id))
+    }
     if (!SentencingActSelection.isPageEnabled()) {
       const orderId = req.params.orderId as string
       await this.sentencingActService.setSentencingActFlag({
@@ -48,6 +52,10 @@ export default class SentencingActSelection extends YesNoQuestionPageController 
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const orderId = req.params.orderId as string
+    if (isVariationType(req.order!.type)) {
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+      return
+    }
 
     const formData = super.tryGetValidFormData(
       req,
