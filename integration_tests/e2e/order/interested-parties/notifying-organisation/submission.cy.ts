@@ -37,7 +37,6 @@ context('Submit notifying organisations', () => {
         versions: [],
         orderId: mockOrder.id,
       })
-
     })
 
     it('routes a sentencing-act Prison order to the task list without showing the selection page', () => {
