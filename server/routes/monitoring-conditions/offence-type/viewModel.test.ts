@@ -52,7 +52,7 @@ describe('offence type view model', () => {
         },
         {
           value: 'Theft from a Motor Vehicle (excl. aggravated vehicle taking) - Triable either way (MOT)',
-          text: 'Theft from a Motor Vehicle (excl. aggravated vehicle taking) - Triable either way (MOT)',
+          text: 'Theft of a Motor Vehicle (excl. aggravated vehicle taking) - Triable either way (MOT)',
         },
         {
           value: 'Robbery',

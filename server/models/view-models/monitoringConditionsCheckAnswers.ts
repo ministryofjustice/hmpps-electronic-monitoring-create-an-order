@@ -103,10 +103,14 @@ const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n
 
   if (data.offenceType !== undefined && data.offenceType !== null && data.offenceType !== '') {
     const offenceTypePath = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.OFFENCE_TYPE
+    const offenceTypeText =
+      data.offenceType === 'Theft from a Motor Vehicle (excl. aggravated vehicle taking) - Triable either way (MOT)'
+        ? 'Theft of a Motor Vehicle (excl. aggravated vehicle taking) - Triable either way (MOT)'
+        : data.offenceType
     answers.push(
       createAnswer(
         content.pages.monitoringConditions.questions.offenceType.text,
-        data.offenceType,
+        offenceTypeText,
         offenceTypePath.replace(':orderId', order.id),
         answerOpts,
       ),
