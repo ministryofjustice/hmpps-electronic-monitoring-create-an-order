@@ -47,4 +47,24 @@ describe('NotifingOrganisationController', () => {
 
     expect(interestedPartiesService.update).not.toHaveBeenCalled()
   })
+
+  it('persists a Prison organisation and routes to the summary', async () => {
+    const order = getMockOrder({ isSentencingAct: true })
+    const req = createMockRequest({
+      order,
+      body: {
+        notifyingOrganisation: 'PRISON',
+        prison: 'ALTCOURSE_PRISON',
+        notifyingOrganisationEmail: 'prison@example.com',
+      },
+      flash: jest.fn(),
+    })
+    const res = createMockResponse()
+    res.locals.user.cohort = { cohort: 'PRISON' } as never
+
+    await controller.update(req, res, jest.fn())
+
+    expect(interestedPartiesService.update).toHaveBeenCalled()
+    expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/summary`)
+  })
 })

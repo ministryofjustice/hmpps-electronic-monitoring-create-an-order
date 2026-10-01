@@ -223,6 +223,7 @@ context('The kitchen sink', () => {
           parent_phone_number: null,
           parent_dob: '',
           pnc_id: '',
+          defendant_id: '',
           nomis_id: deviceWearerDetails.nomisId,
           delius_id: '',
           prison_number: '',

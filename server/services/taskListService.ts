@@ -145,10 +145,7 @@ const getInterestedPartiesTasks = (order: Order, cohortDefinition: TaskListCohor
       section: SECTIONS.interestedParties,
       name: PAGES.sentencingAct,
       path: paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION,
-      state:
-        order.interestedParties?.notifyingOrganisation === 'PRISON' && isNullOrUndefined(order.isSentencingAct)
-          ? STATES.required
-          : STATES.disabled,
+      state: STATES.disabled,
       completed: isNotNullOrUndefined(order.isSentencingAct),
     },
   ]
