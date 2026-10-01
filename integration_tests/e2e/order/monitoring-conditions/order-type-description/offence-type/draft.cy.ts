@@ -45,7 +45,7 @@ context('offence type', () => {
     page.form.offenceTypeField.shouldHaveOption('Theft from the Person of Another')
     page.form.offenceTypeField.shouldHaveOption('Theft from a Vehicle')
     page.form.offenceTypeField.shouldHaveOption(
-      'Theft from a Motor Vehicle (excl. aggravated vehicle taking) - Triable either way (MOT)',
+      'Theft of a Motor Vehicle (excl. aggravated vehicle taking) - Triable either way (MOT)',
     )
     page.form.offenceTypeField.shouldHaveOption('Robbery')
     page.form.offenceTypeField.shouldHaveOption('They did not commit one of these offences')
