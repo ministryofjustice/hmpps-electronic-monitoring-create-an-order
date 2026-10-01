@@ -14,9 +14,9 @@ services:
         restart: true
       cemo-redis:
         condition: service_started
+      
     environment:
-      - SERVER_PORT=8080
-
+      - SERVER_PORT=8080  
       - DB_SERVER=cemo-db
       - DB_NAME=postgres
       - DB_USER=postgres
@@ -44,7 +44,7 @@ services:
       - SPRING_JPA_PROPERTIES_HIBERNATE_enable_lazy_load_no_trans=true
       # - SPRING_JPA_HIBERNATE_DDL_AUTO=create
       - SPRING_FLYWAY_ENABLED=true
-
+      - RETURN_LISTENER_ENABLED=false
   cemo-db:
     container_name: cemo-db
     image: postgres:latest

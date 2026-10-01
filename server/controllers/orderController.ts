@@ -8,7 +8,6 @@ import isVariationType from '../utils/isVariationType'
 import TimelineModel from '../models/view-models/timelineModel'
 import { Order } from '../models/Order'
 import SectionService from '../services/sectionsService'
-import { isNullOrUndefined } from '../utils/utils'
 
 export default class OrderController {
   constructor(
@@ -64,18 +63,6 @@ export default class OrderController {
   summary: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
     const versionId = req.params.versionId as string
-
-    // guarding against forcing SA question on read only
-    const isEditable = order.status !== 'SUBMITTED' && order.status !== 'ERROR' && order.isOwner
-    if (
-      !versionId &&
-      isEditable &&
-      order.interestedParties?.notifyingOrganisation === 'PRISON' &&
-      isNullOrUndefined(order.isSentencingAct)
-    ) {
-      res.redirect(paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION.replace(':orderId', order.id))
-      return
-    }
 
     const error = req.flash('submissionError')
 
