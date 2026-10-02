@@ -96,7 +96,12 @@ describe('authorised user', () => {
   describe('GET /', () => {
     it('should render order search page', () => {
       auditService.logPageView.mockResolvedValue()
-      orderSearchService.listOrders.mockResolvedValue([])
+      orderSearchService.listOrders.mockResolvedValue({
+        content: [],
+        page: 0,
+        size: 10,
+        hasNext: false,
+      })
 
       return request(app)
         .get('/')

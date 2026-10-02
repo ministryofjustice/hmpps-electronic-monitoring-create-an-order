@@ -130,6 +130,89 @@ context('Index', () => {
         page.OrderFor(`Draft user${index}`).find('a').should('have.attr', 'href', `/order/${id}/summary`)
       })
     })
+
+    it('returned orders are sorted first within the current page', () => {
+      const rejectedOrders = Array.from({ length: 3 }, (_, index) => ({
+        id: uuidv4(),
+        versionId: uuidv4(),
+        status: 'REJECTED',
+        type: 'REQUEST',
+        firstName: 'rejected',
+        lastName: `user${index}`,
+        notifyingOrganisation: 'PRISON',
+      }))
+      const inProgressOrders = Array.from({ length: 3 }, (_, index) => ({
+        id: uuidv4(),
+        versionId: uuidv4(),
+        status: 'IN_PROGRESS',
+        type: 'REQUEST',
+        firstName: 'Draft',
+        lastName: `user${index}`,
+        notifyingOrganisation: 'PRISON',
+      }))
+      const orders = [...inProgressOrders, ...rejectedOrders]
+
+      cy.task('stubCemoListOrders', {
+        httpStatus: 200,
+        page: 0,
+        size: 10,
+        hasNext: false,
+        orders,
+      })
+
+      const page = Page.visit(IndexPage)
+
+      page.orders.should('have.length', orders.length)
+      page.orders.eq(0).should('contain.text', 'rejected user0').and('contain.text', 'Returned')
+      page.orders.eq(1).should('contain.text', 'rejected user1').and('contain.text', 'Returned')
+      page.orders.eq(2).should('contain.text', 'rejected user2').and('contain.text', 'Returned')
+      page.orders.eq(3).should('contain.text', 'Draft user0').and('contain.text', 'Draft')
+      page.orders.eq(4).should('contain.text', 'Draft user1').and('contain.text', 'Draft')
+      page.orders.eq(5).should('contain.text', 'Draft user2').and('contain.text', 'Draft')
+      cy.get('.moj-pagination').should('not.exist')
+    })
+
+    it('paginates the order list', () => {
+      const orders = Array.from({ length: 25 }, (_, index) => ({
+        id: uuidv4(),
+        versionId: uuidv4(),
+        status: 'IN_PROGRESS',
+        type: 'REQUEST',
+        firstName: 'Draft',
+        lastName: `user${index}`,
+        notifyingOrganisation: 'PRISON',
+      }))
+
+      cy.task('stubCemoListOrders', {
+        httpStatus: 200,
+        page: 0,
+        size: 10,
+        hasNext: true,
+        orders: orders.slice(0, 10),
+      })
+      cy.task('stubCemoListOrders', {
+        httpStatus: 200,
+        page: 1,
+        size: 10,
+        hasNext: true,
+        orders: orders.slice(10, 20),
+      })
+
+      const page = Page.visit(IndexPage)
+
+      page.orders.should('have.length', 10)
+      page.OrderFor('Draft user0').should('exist')
+      page.OrderFor('Draft user10').should('not.exist')
+      cy.get('.moj-pagination__item--prev').should('not.exist')
+      cy.get('.moj-pagination__item--next a').click()
+
+      cy.url().should('include', '/?view=MY_ORDERS&page=1&size=10')
+      page.orders.should('have.length', 10)
+      page.OrderFor('Draft user10').should('exist')
+      page.OrderFor('Draft user0').should('not.exist')
+      cy.get('.moj-pagination__item--prev a').should('have.attr', 'href', '/?view=MY_ORDERS&page=0&size=10')
+      cy.get('.moj-pagination__item--next a').should('exist')
+    })
   })
 
   context('Submitting a create order request', () => {
@@ -316,10 +399,22 @@ context('Index', () => {
       const page = Page.visit(IndexPage)
 
       page.viewFilter.should('exist')
-      page.viewFilter.find('option').should('have.length', 3)
-      page.viewFilter.find('option:selected').should('have.text', 'My drafts')
-      page.viewFilter.find('option').eq(1).should('have.text', 'My failed to submit')
-      page.viewFilter.find('option').eq(2).should('have.text', 'My prison drafts')
+      const options = page.viewFilter.find('option')
+      options.should('have.length', 3)
+      options.then($options => {
+        const optionElements = $options.toArray() as HTMLOptionElement[]
+        expect(optionElements.map(option => option.value)).to.deep.equal([
+          'MY_ORDERS',
+          'FAILED_ORDERS',
+          'PRISON_ORDERS',
+        ])
+        expect(optionElements.map(option => option.textContent?.trim())).to.deep.equal([
+          'My drafts',
+          'My failed to submit',
+          'My prison forms',
+        ])
+      })
+      page.viewFilter.should('have.value', 'MY_ORDERS')
       page.viewFilterButton.should('exist')
       page.checkIsAccessible()
     })
@@ -331,6 +426,29 @@ context('Index', () => {
 
       page.viewFilter.should('not.exist')
       page.viewFilterButton.should('not.exist')
+    })
+
+    it('Should show only Home Office views for Home Office users', () => {
+      signInWithCohort({ cohort: 'HOME_OFFICE' }, '223456786')
+
+      const page = Page.visit(IndexPage)
+
+      const options = page.viewFilter.find('option')
+      options.should('have.length', 2)
+      options.then($options => {
+        const optionElements = $options.toArray() as HTMLOptionElement[]
+        expect(optionElements.map(option => option.value)).to.deep.equal(['MY_ORDERS', 'HOME_OFFICE_ORDERS'])
+        expect(optionElements.map(option => option.textContent?.trim())).to.deep.equal([
+          'My drafts',
+          'Home Office forms',
+        ])
+      })
+
+      page.viewFilter.select('HOME_OFFICE_ORDERS')
+      page.viewFilterButton.click()
+
+      cy.url().should('include', 'view=HOME_OFFICE_ORDERS')
+      page.viewFilter.should('have.value', 'HOME_OFFICE_ORDERS')
     })
 
     it('Should reload the order list with the selected view', () => {
@@ -597,7 +715,7 @@ context('Index', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-      cy.task('stubCemoListOrders', 500)
+      cy.task('stubCemoListOrders', { httpStatus: 500 })
     })
 
     it('Should indicate to the user that there were no results', () => {
