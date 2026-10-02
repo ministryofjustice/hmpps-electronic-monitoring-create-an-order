@@ -4,7 +4,7 @@ import { Page } from '../services/auditService'
 import { AuditService, OrderSearchService } from '../services'
 import { constructSearchViewModel, constructListViewModel, OrderSearchViewModel } from '../models/form-data/search'
 import logger from '../../logger'
-import { ListOrdersQueryParser } from '../models/form-data/OrderListView'
+import { getOrderListViewsForCohort, ListOrdersQueryParser } from '../models/form-data/OrderListView'
 
 const SearchOrderFormDataParser = z.object({
   searchTerm: z.string().nullable().optional(),
@@ -26,17 +26,27 @@ export default class OrderSearchController {
       who: res.locals.user.username,
       correlationId: req.id,
     })
-    const canFilterViews = IsPrisonOrYouthUser(res)
-    const { view: requestedView } = ListOrdersQueryParser.parse(req.query)
-    const view = canFilterViews ? requestedView : 'MY_ORDERS'
+    const cohort = res.locals.user.cohort?.cohort
+    const isPrisonOrYouthUser = IsPrisonOrYouthUser(res)
+    const availableViews = getOrderListViewsForCohort(cohort)
+    const { view: requestedView, page, size } = ListOrdersQueryParser.parse(req.query)
+    const view = availableViews.includes(requestedView) ? requestedView : availableViews[0]
 
     try {
-      const orders = await this.orderSearchService.listOrders({ accessToken: res.locals.user.token }, view)
+      const orders = await this.orderSearchService.listOrders({ accessToken: res.locals.user.token }, view, page, size)
 
-      res.render('pages/index', constructListViewModel(orders, view, canFilterViews))
+      res.render('pages/index', constructListViewModel(orders, view, isPrisonOrYouthUser, availableViews))
     } catch (e) {
       logger.warn(`List orders ${e} `)
-      res.render('pages/index', constructListViewModel([], view, canFilterViews))
+      res.render(
+        'pages/index',
+        constructListViewModel(
+          { content: [], totalElements: 0, totalPages: 0, number: page, size },
+          view,
+          isPrisonOrYouthUser,
+          availableViews,
+        ),
+      )
     }
   }
 

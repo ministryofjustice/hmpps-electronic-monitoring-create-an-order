@@ -23,7 +23,7 @@
   {% set draftActive = true %}
   {% include "./formsNav.njk" %}
 
-{% if isPrisonOrYouthUser %}
+{% if showViewFilter %}
   <form method="get" action="/" novalidate class="govuk-!-margin-bottom-6">
   <div class="moj-action-bar__filter">
     {{ govukSelect({

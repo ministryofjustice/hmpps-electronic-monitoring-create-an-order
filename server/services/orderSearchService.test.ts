@@ -33,7 +33,7 @@ describe('Order Search Service', () => {
   })
 
   describe('listOrders', () => {
-    it('should get orders from the api', async () => {
+    it('should get a page of orders from the api', async () => {
       const mockReturnValue: OrderListInformation = {
         id: mockApiResponse.id,
         versionId: mockApiResponse.versionId,
@@ -43,27 +43,40 @@ describe('Order Search Service', () => {
         lastName: mockApiResponse.deviceWearer.lastName,
         notifyingOrganisation: mockApiResponse.interestedParties?.notifyingOrganisation,
       }
-      mockRestClient.get.mockResolvedValue([mockReturnValue])
+      mockRestClient.get.mockResolvedValue({
+        content: [mockReturnValue],
+        totalElements: 21,
+        totalPages: 3,
+        number: 1,
+        size: 10,
+      })
       const orderService = new OrderSearchService(mockRestClient)
-      const orders = await orderService.listOrders({ accessToken: '' }, 'MY_ORDERS')
+      const orders = await orderService.listOrders({ accessToken: '' }, 'MY_ORDERS', 1, 10)
       expect(mockRestClient.get).toHaveBeenCalledWith({
         path: '/api/orders',
         token: '',
-        query: { view: 'MY_ORDERS' },
+        query: { view: 'MY_ORDERS', page: 1, size: 10 },
       })
       const { id, status, type, versionId } = mockNewOrder
       const { firstName, lastName, notifyingOrganisation } = mockReturnValue
       expect([{ id, status, type, versionId, firstName, lastName, notifyingOrganisation }]).toEqual(
-        expect.objectContaining(orders),
+        expect.objectContaining(orders.content),
       )
+      expect(orders.totalElements).toBe(21)
+      expect(orders.totalPages).toBe(3)
+      expect(orders.number).toBe(1)
+      expect(orders.size).toBe(10)
     })
 
     it('should throw an error if the api returns an invalid object', async () => {
       expect.assertions(1)
 
       mockRestClient.get.mockResolvedValue({
-        ...mockNewOrder,
-        status: 'INVALID_STATUS',
+        content: [{ ...mockNewOrder, status: 'INVALID_STATUS' }],
+        totalElements: 1,
+        totalPages: 1,
+        number: 0,
+        size: 10,
       })
 
       try {

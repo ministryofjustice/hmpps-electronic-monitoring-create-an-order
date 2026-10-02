@@ -1,6 +1,6 @@
 import paths from '../../constants/paths'
 import { AddressTypeEnum } from '../Address'
-import { OrderListInformation } from '../OrderListInformation'
+import { OrderListInformation, OrderListInformationPage } from '../OrderListInformation'
 import { OrderListView, OrderListViewEnum, orderListViewLabels } from './OrderListView'
 import { OrderSearchResult } from '../OrderSearchResult'
 
@@ -15,7 +15,14 @@ type OrderListViewModel = {
     index: number
   }[]
   isPrisonOrYouthUser: boolean
+  showViewFilter: boolean
   viewOptions: { value: OrderListView; text: string; selected: boolean }[]
+  pagination?: {
+    items: { text: string; href: string; selected?: boolean; type?: 'dots' }[]
+    results: { count: number; from: number; to: number; text: string }
+    previous?: { text: string; href: string }
+    next?: { text: string; href: string }
+  }
 }
 
 export type OrderSearchViewModel = {
@@ -103,11 +110,12 @@ export const constructSearchViewModel = (
 }
 
 export function constructListViewModel(
-  orders: OrderListInformation[],
+  ordersPage: OrderListInformationPage,
   view: OrderListView,
   isPrisonOrYouthUser: boolean,
+  availableViews: OrderListView[] = OrderListViewEnum.options,
 ): OrderListViewModel {
-  const ordersWithTime = orders.map(order => {
+  const ordersWithTime = ordersPage.content.map(order => {
     const dateStr = order.monitoringConditions?.startDate
     return {
       order,
@@ -116,11 +124,19 @@ export function constructListViewModel(
   })
 
   ordersWithTime.sort((a, b) => {
+    const aIsReturned = a.order.status === 'REJECTED'
+    const bIsReturned = b.order.status === 'REJECTED'
+    if (aIsReturned !== bIsReturned) return aIsReturned ? -1 : 1
     if (a.time === null && b.time === null) return 0
     if (a.time === null) return 1
     if (b.time === null) return -1
     return a.time - b.time
   })
+
+  const pagination =
+    ordersPage.totalElements > ordersPage.size && ordersPage.totalPages > 1
+      ? constructPagination(ordersPage, view)
+      : undefined
 
   return {
     orders: ordersWithTime.map(({ order }, index) => ({
@@ -132,14 +148,55 @@ export function constructListViewModel(
       lastUpdatedBy: order.lastUpdatedBy,
       lastUpdatedDateTime: order.lastUpdatedDateTime ? formatDateTime(order.lastUpdatedDateTime) : '',
       statusTags: getStatusTags(order),
-      index,
+      index: ordersPage.number * ordersPage.size + index,
     })),
     isPrisonOrYouthUser,
-    viewOptions: OrderListViewEnum.options.map(value => ({
+    showViewFilter: availableViews.length > 1,
+    viewOptions: availableViews.map(value => ({
       value,
       text: orderListViewLabels[value],
       selected: value === view,
     })),
+    pagination,
+  }
+}
+
+function constructPagination(ordersPage: OrderListInformationPage, view: OrderListView) {
+  const currentPage = ordersPage.number
+  const lastPage = ordersPage.totalPages - 1
+  const pageNumbers = new Set([0, lastPage])
+
+  for (let page = Math.max(0, currentPage - 1); page <= Math.min(lastPage, currentPage + 1); page += 1) {
+    pageNumbers.add(page)
+  }
+
+  const visiblePages = [...pageNumbers].sort((a, b) => a - b)
+  const items: { text: string; href: string; selected?: boolean; type?: 'dots' }[] = []
+
+  visiblePages.forEach((page, index) => {
+    if (index > 0 && page - visiblePages[index - 1] > 1) {
+      items.push({ text: '...', href: '', type: 'dots' })
+    }
+    items.push({
+      text: String(page + 1),
+      href: `/?view=${view}&page=${page}&size=${ordersPage.size}`,
+      selected: page === currentPage,
+    })
+  })
+
+  const pageHref = (page: number) => `/?view=${view}&page=${page}&size=${ordersPage.size}`
+  const from = currentPage * ordersPage.size + 1
+
+  return {
+    items,
+    results: {
+      count: ordersPage.totalElements,
+      from: Math.min(from, ordersPage.totalElements),
+      to: Math.min((currentPage + 1) * ordersPage.size, ordersPage.totalElements),
+      text: 'orders',
+    },
+    previous: currentPage > 0 ? { text: 'Previous', href: pageHref(currentPage - 1) } : undefined,
+    next: currentPage < lastPage ? { text: 'Next', href: pageHref(currentPage + 1) } : undefined,
   }
 }
 
@@ -152,6 +209,9 @@ const getStatusTag = (status: OrderListInformation['status']) => {
   }
   if (status === 'SUBMITTED') {
     return [{ text: 'Submitted', type: 'SUBMITTED' }]
+  }
+  if (status === 'REJECTED') {
+    return [{ text: 'Returned', type: 'REJECTED' }]
   }
   return []
 }
