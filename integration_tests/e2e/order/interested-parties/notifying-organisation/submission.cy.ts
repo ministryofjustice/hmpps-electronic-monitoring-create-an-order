@@ -76,10 +76,7 @@ context('Submit notifying organisations', () => {
       }).should('be.true')
 
       Page.verifyOnPage(OrderTasksPage)
-      cy.get('.govuk-notification-banner').should(
-        'contain.text',
-        'This order is subject to the Sentencing Act 2026 changes.',
-      )
+      cy.get('.moj-alert').should('contain.text', 'This order is subject to the Sentencing Act 2026 changes.')
     })
 
     it('other cohort can submit order', () => {
