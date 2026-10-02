@@ -98,10 +98,9 @@ describe('authorised user', () => {
       auditService.logPageView.mockResolvedValue()
       orderSearchService.listOrders.mockResolvedValue({
         content: [],
-        totalElements: 0,
-        totalPages: 0,
-        number: 0,
+        page: 0,
         size: 10,
+        hasNext: false,
       })
 
       return request(app)

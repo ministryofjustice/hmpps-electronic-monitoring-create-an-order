@@ -18,10 +18,9 @@ const mockDate = new Date(2000, 10, 20).toISOString()
 
 const mockOrderPage = (content: OrderListInformation[] = []) => ({
   content,
-  totalElements: content.length,
-  totalPages: content.length > 0 ? 1 : 0,
-  number: 0,
+  page: 0,
   size: 10,
+  hasNext: false,
 })
 
 const mock500Error: SanitisedError = {

@@ -23,9 +23,8 @@ export type OrderListInformation = z.infer<typeof OrderListInformationModel>
 export default OrderListInformationModel
 export const OrderListInformationPageModel = z.object({
   content: z.array(OrderListInformationModel),
-  totalElements: z.number().int().nonnegative(),
-  totalPages: z.number().int().nonnegative(),
-  number: z.number().int().nonnegative(),
+  page: z.number().int().nonnegative(),
   size: z.number().int().positive(),
+  hasNext: z.boolean(),
 })
 export type OrderListInformationPage = z.infer<typeof OrderListInformationPageModel>

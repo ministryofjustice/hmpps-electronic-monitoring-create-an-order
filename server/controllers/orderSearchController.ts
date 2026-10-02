@@ -40,12 +40,7 @@ export default class OrderSearchController {
       logger.warn(`List orders ${e} `)
       res.render(
         'pages/index',
-        constructListViewModel(
-          { content: [], totalElements: 0, totalPages: 0, number: page, size },
-          view,
-          isPrisonOrYouthUser,
-          availableViews,
-        ),
+        constructListViewModel({ content: [], page, size, hasNext: false }, view, isPrisonOrYouthUser, availableViews),
       )
     }
   }

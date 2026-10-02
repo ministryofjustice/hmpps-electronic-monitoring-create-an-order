@@ -18,8 +18,6 @@ type OrderListViewModel = {
   showViewFilter: boolean
   viewOptions: { value: OrderListView; text: string; selected: boolean }[]
   pagination?: {
-    items: { text: string; href: string; selected?: boolean; type?: 'dots' }[]
-    results: { count: number; from: number; to: number; text: string }
     previous?: { text: string; href: string }
     next?: { text: string; href: string }
   }
@@ -133,10 +131,7 @@ export function constructListViewModel(
     return a.time - b.time
   })
 
-  const pagination =
-    ordersPage.totalElements > ordersPage.size && ordersPage.totalPages > 1
-      ? constructPagination(ordersPage, view)
-      : undefined
+  const pagination = ordersPage.page > 0 || ordersPage.hasNext ? constructPagination(ordersPage, view) : undefined
 
   return {
     orders: ordersWithTime.map(({ order }, index) => ({
@@ -148,7 +143,7 @@ export function constructListViewModel(
       lastUpdatedBy: order.lastUpdatedBy,
       lastUpdatedDateTime: order.lastUpdatedDateTime ? formatDateTime(order.lastUpdatedDateTime) : '',
       statusTags: getStatusTags(order),
-      index: ordersPage.number * ordersPage.size + index,
+      index: ordersPage.page * ordersPage.size + index,
     })),
     isPrisonOrYouthUser,
     showViewFilter: availableViews.length > 1,
@@ -162,41 +157,10 @@ export function constructListViewModel(
 }
 
 function constructPagination(ordersPage: OrderListInformationPage, view: OrderListView) {
-  const currentPage = ordersPage.number
-  const lastPage = ordersPage.totalPages - 1
-  const pageNumbers = new Set([0, lastPage])
-
-  for (let page = Math.max(0, currentPage - 1); page <= Math.min(lastPage, currentPage + 1); page += 1) {
-    pageNumbers.add(page)
-  }
-
-  const visiblePages = [...pageNumbers].sort((a, b) => a - b)
-  const items: { text: string; href: string; selected?: boolean; type?: 'dots' }[] = []
-
-  visiblePages.forEach((page, index) => {
-    if (index > 0 && page - visiblePages[index - 1] > 1) {
-      items.push({ text: '...', href: '', type: 'dots' })
-    }
-    items.push({
-      text: String(page + 1),
-      href: `/?view=${view}&page=${page}&size=${ordersPage.size}`,
-      selected: page === currentPage,
-    })
-  })
-
   const pageHref = (page: number) => `/?view=${view}&page=${page}&size=${ordersPage.size}`
-  const from = currentPage * ordersPage.size + 1
-
   return {
-    items,
-    results: {
-      count: ordersPage.totalElements,
-      from: Math.min(from, ordersPage.totalElements),
-      to: Math.min((currentPage + 1) * ordersPage.size, ordersPage.totalElements),
-      text: 'orders',
-    },
-    previous: currentPage > 0 ? { text: 'Previous', href: pageHref(currentPage - 1) } : undefined,
-    next: currentPage < lastPage ? { text: 'Next', href: pageHref(currentPage + 1) } : undefined,
+    previous: ordersPage.page > 0 ? { text: 'Previous', href: pageHref(ordersPage.page - 1) } : undefined,
+    next: ordersPage.hasNext ? { text: 'Next', href: pageHref(ordersPage.page + 1) } : undefined,
   }
 }
 

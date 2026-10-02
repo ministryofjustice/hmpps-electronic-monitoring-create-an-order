@@ -131,7 +131,7 @@ context('Index', () => {
       })
     })
 
-    it('order list statuses are sorted', () => {
+    it('returned orders are sorted first within the current page', () => {
       const rejectedOrders = Array.from({ length: 3 }, (_, index) => ({
         id: uuidv4(),
         versionId: uuidv4(),
@@ -156,8 +156,7 @@ context('Index', () => {
         httpStatus: 200,
         page: 0,
         size: 10,
-        totalElements: orders.length,
-        totalPages: 1,
+        hasNext: false,
         orders,
       })
 
@@ -188,16 +187,14 @@ context('Index', () => {
         httpStatus: 200,
         page: 0,
         size: 10,
-        totalElements: orders.length,
-        totalPages: 3,
+        hasNext: true,
         orders: orders.slice(0, 10),
       })
       cy.task('stubCemoListOrders', {
         httpStatus: 200,
         page: 1,
         size: 10,
-        totalElements: orders.length,
-        totalPages: 3,
+        hasNext: true,
         orders: orders.slice(10, 20),
       })
 
@@ -206,13 +203,15 @@ context('Index', () => {
       page.orders.should('have.length', 10)
       page.OrderFor('Draft user0').should('exist')
       page.OrderFor('Draft user10').should('not.exist')
-      cy.get('.moj-pagination').should('contain.text', '25 orders')
-      cy.get('.moj-pagination').contains('a', '2').click()
+      cy.get('.moj-pagination__item--prev').should('not.exist')
+      cy.get('.moj-pagination__item--next a').click()
 
       cy.url().should('include', '/?view=MY_ORDERS&page=1&size=10')
       page.orders.should('have.length', 10)
       page.OrderFor('Draft user10').should('exist')
       page.OrderFor('Draft user0').should('not.exist')
+      cy.get('.moj-pagination__item--prev a').should('have.attr', 'href', '/?view=MY_ORDERS&page=0&size=10')
+      cy.get('.moj-pagination__item--next a').should('exist')
     })
   })
 

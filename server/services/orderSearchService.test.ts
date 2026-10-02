@@ -45,10 +45,9 @@ describe('Order Search Service', () => {
       }
       mockRestClient.get.mockResolvedValue({
         content: [mockReturnValue],
-        totalElements: 21,
-        totalPages: 3,
-        number: 1,
+        page: 1,
         size: 10,
+        hasNext: true,
       })
       const orderService = new OrderSearchService(mockRestClient)
       const orders = await orderService.listOrders({ accessToken: '' }, 'MY_ORDERS', 1, 10)
@@ -62,10 +61,9 @@ describe('Order Search Service', () => {
       expect([{ id, status, type, versionId, firstName, lastName, notifyingOrganisation }]).toEqual(
         expect.objectContaining(orders.content),
       )
-      expect(orders.totalElements).toBe(21)
-      expect(orders.totalPages).toBe(3)
-      expect(orders.number).toBe(1)
+      expect(orders.page).toBe(1)
       expect(orders.size).toBe(10)
+      expect(orders.hasNext).toBe(true)
     })
 
     it('should throw an error if the api returns an invalid object', async () => {
@@ -73,10 +71,9 @@ describe('Order Search Service', () => {
 
       mockRestClient.get.mockResolvedValue({
         content: [{ ...mockNewOrder, status: 'INVALID_STATUS' }],
-        totalElements: 1,
-        totalPages: 1,
-        number: 0,
+        page: 0,
         size: 10,
+        hasNext: false,
       })
 
       try {

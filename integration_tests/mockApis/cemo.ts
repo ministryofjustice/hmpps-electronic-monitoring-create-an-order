@@ -28,8 +28,7 @@ export type ListOrdersStubOptions = {
   orders?: object[]
   page?: number
   size?: number
-  totalElements?: number
-  totalPages?: number
+  hasNext?: boolean
 }
 
 const defaultListOrdersOptions: ListOrdersStubOptions = {
@@ -84,8 +83,7 @@ const listOrders = (options: ListOrdersStubOptions = defaultListOrdersOptions): 
   const page = options.page ?? 0
   const size = options.size ?? 10
   const orders = options.orders ?? []
-  const totalElements = options.totalElements ?? orders.length
-  const totalPages = options.totalPages ?? Math.ceil(totalElements / size)
+  const hasNext = options.hasNext ?? false
   const request = {
     method: 'GET',
     urlPathPattern: '/cemo/api/orders',
@@ -105,7 +103,7 @@ const listOrders = (options: ListOrdersStubOptions = defaultListOrdersOptions): 
     response: {
       status: options.httpStatus,
       headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-      jsonBody: options.httpStatus === 200 ? { content: orders, totalElements, totalPages, number: page, size } : null,
+      jsonBody: options.httpStatus === 200 ? { content: orders, page, size, hasNext } : null,
     },
   })
 }
