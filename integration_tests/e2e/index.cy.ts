@@ -419,27 +419,23 @@ context('Index', () => {
       page.checkIsAccessible()
     })
 
-    it('Should not show the view filter for probation users', () => {
-      signInWithCohort({ cohort: 'PROBATION' }, '223456782')
-
-      const page = Page.visit(IndexPage)
-
-      page.viewFilter.should('not.exist')
-      page.viewFilterButton.should('not.exist')
-    })
-
     it('Should show only Home Office views for Home Office users', () => {
       signInWithCohort({ cohort: 'HOME_OFFICE' }, '223456786')
 
       const page = Page.visit(IndexPage)
 
       const options = page.viewFilter.find('option')
-      options.should('have.length', 2)
+      options.should('have.length', 3)
       options.then($options => {
         const optionElements = $options.toArray() as HTMLOptionElement[]
-        expect(optionElements.map(option => option.value)).to.deep.equal(['MY_ORDERS', 'HOME_OFFICE_ORDERS'])
+        expect(optionElements.map(option => option.value)).to.deep.equal([
+          'MY_ORDERS',
+          'FAILED_ORDERS',
+          'HOME_OFFICE_ORDERS',
+        ])
         expect(optionElements.map(option => option.textContent?.trim())).to.deep.equal([
           'My drafts',
+          'My failed to submit',
           'Home Office forms',
         ])
       })
@@ -572,16 +568,6 @@ context('Index', () => {
       page.orderListHeaders.eq(0).should('contain.text', 'Name')
       page.orderListHeaders.eq(1).should('contain.text', 'Start date')
       page.orderListHeaders.eq(2).should('contain.text', 'Status')
-    })
-
-    it('Should ignore a requested view for users who cannot filter', () => {
-      signInWithCohort({ cohort: 'PROBATION' }, '223456788')
-
-      cy.visit('/?view=PRISON_ORDERS')
-
-      const page = Page.verifyOnPage(IndexPage)
-      page.viewFilter.should('not.exist')
-      page.ordersList.should('exist')
     })
   })
 
