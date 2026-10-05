@@ -7,7 +7,7 @@ export type OrderListView = z.infer<typeof OrderListViewEnum>
 export const orderListViewLabels: Record<OrderListView, string> = {
   MY_ORDERS: 'My drafts',
   FAILED_ORDERS: 'My failed to submit',
-  PRISON_ORDERS: 'My prison forms', // TODO revise names
+  PRISON_ORDERS: 'My prison forms',
   HOME_OFFICE_ORDERS: 'Home Office forms',
 }
 
@@ -16,9 +16,9 @@ export const getOrderListViewsForCohort = (cohort?: Cohort): OrderListView[] => 
     return ['MY_ORDERS', 'FAILED_ORDERS', 'PRISON_ORDERS']
   }
   if (cohort === 'HOME_OFFICE') {
-    return ['MY_ORDERS', 'HOME_OFFICE_ORDERS']
+    return ['MY_ORDERS', 'FAILED_ORDERS', 'HOME_OFFICE_ORDERS']
   }
-  return ['MY_ORDERS']
+  return ['MY_ORDERS', 'FAILED_ORDERS']
 }
 
 export const ListOrdersQueryParser = z.object({

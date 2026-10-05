@@ -232,6 +232,7 @@ describe('OrderSearchController', () => {
           showViewFilter: true,
           viewOptions: [
             { value: 'MY_ORDERS', text: 'My drafts', selected: true },
+            { value: 'FAILED_ORDERS', text: 'My failed to submit', selected: false },
             { value: 'HOME_OFFICE_ORDERS', text: 'Home Office forms', selected: false },
           ],
         }),
