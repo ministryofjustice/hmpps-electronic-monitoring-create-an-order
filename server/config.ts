@@ -123,7 +123,6 @@ export default {
     audit: auditConfig(),
   },
   tagAtSourcePilotPrions: get('TAG_AT_SOURCE_PILOT_PRISONS', ''),
-  licenceVariationProbationRegions: get('LICENCE_VARIATION_PROBATION_REGIONS', ''),
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
   logLevel: get('LOG_LEVEL', 'debug'),

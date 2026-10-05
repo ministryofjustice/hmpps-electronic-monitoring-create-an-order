@@ -4,12 +4,9 @@ import { createGovukErrorSummary } from '../../../utils/errors'
 import { getError } from '../../../utils/utils'
 import { MonitoringConditions } from '../model'
 import { Order } from '../../../models/Order'
-import FeatureFlags from '../../../utils/featureFlags'
-import probationRegions from '../../../i18n/en/reference/ddv5/probationRegions'
 
 export type PilotModel = ViewModel<Pick<MonitoringConditions, 'pilot'>> & {
   items: Item[]
-  licenceMessage?: string
 }
 
 interface Option {
@@ -27,38 +24,12 @@ interface Divider {
 
 type Item = Option | Divider
 
-const getLicencePilotProbationRegionStatus = (order: Order): boolean => {
+const isLicenceVariationEligible = (order: Order): boolean => {
   if (order.isSentencingAct === true) {
     return true
   }
 
-  if (order.interestedParties?.responsibleOrganisation === 'PROBATION') {
-    if (order.interestedParties?.responsibleOrganisationRegion) {
-      const listOfProbationRegions = FeatureFlags.getInstance()
-        .getValue('LICENCE_VARIATION_PROBATION_REGIONS')
-        .split(',')
-      return listOfProbationRegions?.indexOf(order.interestedParties.responsibleOrganisationRegion) !== -1
-    }
-  }
-  return false
-}
-
-const getLicenceMessage = (order: Order): string => {
-  if (order.isSentencingAct === true) {
-    return ''
-  }
-
-  const isLicencePilotProbationRegion = getLicencePilotProbationRegionStatus(order)
-  if (
-    order.interestedParties?.notifyingOrganisation === 'PROBATION' &&
-    order.interestedParties?.responsibleOrganisation === 'PROBATION'
-  ) {
-    if (isLicencePilotProbationRegion) {
-      return ''
-    }
-    return `The device wearer is being managed by the ${probationRegions[order.interestedParties?.responsibleOrganisationRegion as keyof typeof probationRegions]} probation region. To be eligible for the Licence Variation pathfinder or programme they must be managed by an in-scope region.`
-  }
-  return ''
+  return order.interestedParties?.responsibleOrganisation === 'PROBATION'
 }
 
 const isEligibleForDapol = (order: Order): boolean => {
@@ -71,7 +42,7 @@ const isEligibleForDapol = (order: Order): boolean => {
 
 const constructModel = (order: Order, data: MonitoringConditions, errors: ValidationResult): PilotModel => {
   const isDapolEligible = isEligibleForDapol(order)
-  const isLicenceProbationRegion = getLicencePilotProbationRegionStatus(order)
+  const isLicenceEligible = isLicenceVariationEligible(order)
   const isSentencingAct = order?.isSentencingAct ?? false
   const model: PilotModel = {
     pilot: {
@@ -79,13 +50,12 @@ const constructModel = (order: Order, data: MonitoringConditions, errors: Valida
     },
     items: getItems(
       isDapolEligible,
-      isLicenceProbationRegion,
+      isLicenceEligible,
       data.hdc,
       order.interestedParties?.notifyingOrganisation,
       isSentencingAct,
     ),
     errorSummary: null,
-    licenceMessage: getLicenceMessage(order),
   }
   if (errors && errors.length > 0) {
     model.pilot!.error = getError(errors, 'pilot')
@@ -96,7 +66,7 @@ const constructModel = (order: Order, data: MonitoringConditions, errors: Valida
 
 const getItems = (
   isDapolEligible: boolean,
-  isLicencePilotProbationRegion: boolean,
+  isLicenceEligible: boolean,
   hdc?: string | null,
   notifyingOrganisation?: string | null,
   isSentencingAct: boolean = false,
@@ -139,12 +109,12 @@ const getItems = (
 
   if (notifyingOrganisation === 'PROBATION' && !isSentencingAct) {
     items.splice(2, 0, {
+      disabled: !isLicenceEligible,
       text: 'Licence Variation Project',
       value: 'LICENCE_VARIATION_PROJECT',
       conditional: {
         html: 'The pathfinder or programme is only for probation practitioners varying a licence in response to an escalation of risk or as an alternative to recall.',
       },
-      disabled: !isLicencePilotProbationRegion,
     })
   }
 
