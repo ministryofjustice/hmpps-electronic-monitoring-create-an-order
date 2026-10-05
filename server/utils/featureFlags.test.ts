@@ -11,7 +11,6 @@ const defaultFeatureFlagFilePath = path.join(process.cwd(), 'data', 'default-fea
 const mockFlags = {
   SERVICE_REQUEST_TYPE_ENABLED: false,
   TAG_AT_SOURCE_PILOT_PRISONS: '',
-  DAPOL_PILOT_PROBATION_REGIONS: '',
   DOWNLOAD_FMS_REQUEST_JSON_ENABLED: false,
   TECHNOLOGY_PORTAL_PILOT_PRISONS: '',
   SENTENCING_ACT_ENABLED: false,
