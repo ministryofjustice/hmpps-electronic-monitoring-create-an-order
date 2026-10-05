@@ -1641,6 +1641,82 @@ context('Order Summary', () => {
 
       Page.verifyOnPage(ConfirmVariationPage)
     })
+
+    it('should show the returned form message and link to the return reasons', () => {
+      const returnedAt = '2026-01-03T12:00:00Z'
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'SUBMITTED',
+        order: {
+          statusUpdates: [
+            {
+              id: uuidv4(),
+              versionId: uuidv4(),
+              status: 'REJECTED',
+              datetimeOfStatusChange: returnedAt,
+              statusUpdateReasons: [],
+            },
+          ],
+        },
+      })
+
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      cy.contains(
+        'p',
+        'This form has been returned. You need to review the reason it has been returned, make any necessary changes, and resubmit it.',
+      ).should('be.visible')
+      page.viewReasonForReturnButton.should(
+        'have.attr',
+        'href',
+        paths.ORDER.RETURN_REASONS.replace(':orderId', mockOrderId),
+      )
+    })
+
+    it('should show the latest returned event in the timeline', () => {
+      const versionOne = versionInformation({
+        submittedBy: 'John Smith',
+        fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0).toISOString(),
+        status: 'SUBMITTED',
+        type: 'REQUEST',
+      })
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [versionOne],
+        orderId: mockOrderId,
+      })
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'SUBMITTED',
+        order: {
+          statusUpdates: [
+            {
+              id: uuidv4(),
+              versionId: uuidv4(),
+              status: 'REJECTED',
+              datetimeOfStatusChange: '2026-01-02T12:00:00Z',
+              statusUpdateReasons: [],
+            },
+            {
+              id: uuidv4(),
+              versionId: uuidv4(),
+              status: 'REJECTED',
+              datetimeOfStatusChange: '2026-01-03T12:00:00Z',
+              statusUpdateReasons: [],
+            },
+          ],
+        },
+      })
+
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.timeline.formReturnedComponent.element.should('exist')
+      page.timeline.formReturnedComponent.bylineContains('The Electronic Monitoring Service (EMS)')
+      page.timeline.formReturnedComponent.resultDateIs('3 January 2026 at 12pm')
+      page.timeline.formSubmittedComponent.element.should('exist')
+    })
   })
 
   context('Partial complete order, not submitted', () => {

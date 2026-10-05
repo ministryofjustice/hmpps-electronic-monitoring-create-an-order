@@ -90,9 +90,12 @@ export default class OrderController {
         completedOrderVersions,
         order.id,
         currentVersion,
+        order.statusUpdates,
       ),
       isMostRecentVersion,
       isVariationType: isVariationType(order.type),
+      isOrderRejected: (order.statusUpdates ?? []).some(statusUpdate => statusUpdate.status === 'REJECTED'),
+      returnReasonsUrl: paths.ORDER.RETURN_REASONS.replace(':orderId', order.id),
     })
   }
 

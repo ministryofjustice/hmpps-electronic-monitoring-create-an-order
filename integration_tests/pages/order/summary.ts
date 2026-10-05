@@ -97,6 +97,10 @@ export default class OrderTasksPage extends AppPage {
     return cy.get('#view-and-download-button')
   }
 
+  get viewReasonForReturnButton(): PageElement {
+    return cy.contains('a', 'View reason for return')
+  }
+
   get timeline(): Timeline {
     return new Timeline()
   }

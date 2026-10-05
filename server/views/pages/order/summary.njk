@@ -63,6 +63,10 @@
       <h1 class="govuk-heading-l">
         {{ heading }}
       </h1>
+
+      {% if isOrderRejected %}
+        <p class="govuk-body">This form has been returned. You need to review the reason it has been returned, make any necessary changes, and resubmit it.</p>
+      {% endif %}
       
       {% if not isMostRecentVersion %}
       <p class="govuk-label-s">
@@ -207,6 +211,13 @@
                   href: "/order/" + order.id + "/edit"
                 }) }}
               {% endif %}
+        {% if isOrderRejected %}
+          {{ govukButton({
+            text: "View reason for return",
+            href: returnReasonsUrl,
+            classes: "govuk-button--secondary"
+          }) }}
+        {% endif %}
         {% set receiptUrl = "/order/" + orderId + "/version/" + versionId + "/receipt" 
           if versionId else "/order/" + orderId + "/receipt" %}
         {{ govukButton({

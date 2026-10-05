@@ -3,6 +3,7 @@ import I18n from '../../types/i18n'
 import { ReferenceCatalogDDv6 } from '../../types/i18n/reference'
 import { lookup } from '../../utils/utils'
 import { VariationTypesEnum, OrderType } from '../Order'
+import { StatusUpdate } from '../StatusUpdate'
 import { VersionInformation } from '../VersionInformation'
 
 type TimelineItem = {
@@ -27,17 +28,36 @@ export default class TimelineModel {
     versions: VersionInformation[],
     orderId?: string,
     currentVersionId?: string,
+    statusUpdates?: StatusUpdate[] | null,
   ): TimelineItem[] => {
-    return versions
-      .map(version => this.mapSingleItem(content, version, orderId, currentVersionId))
-      .sort((a, b) => {
-        const aTime = a.datetime.timestamp ? new Date(a.datetime.timestamp).getTime() : 0
+    const versionItems = versions.map(version => this.mapSingleItem(content, version, orderId, currentVersionId))
+    const latestRejectedStatusUpdate = (statusUpdates ?? [])
+      .filter(statusUpdate => statusUpdate.status === 'REJECTED')
+      .sort((a, b) => new Date(b.datetimeOfStatusChange).getTime() - new Date(a.datetimeOfStatusChange).getTime())[0]
+    const statusUpdateItems = latestRejectedStatusUpdate ? [this.mapStatusUpdateItem(latestRejectedStatusUpdate)] : []
 
-        const bTime = b.datetime.timestamp ? new Date(b.datetime.timestamp).getTime() : 0
+    return [...versionItems, ...statusUpdateItems].sort((a, b) => {
+      const aTime = a.datetime.timestamp ? new Date(a.datetime.timestamp).getTime() : 0
 
-        return bTime - aTime
-      })
+      const bTime = b.datetime.timestamp ? new Date(b.datetime.timestamp).getTime() : 0
+
+      return bTime - aTime
+    })
   }
+
+  private static mapStatusUpdateItem = (statusUpdate: StatusUpdate): TimelineItem => ({
+    label: {
+      text: 'Form returned',
+    },
+    datetime: {
+      timestamp: statusUpdate.datetimeOfStatusChange,
+      type: 'datetime',
+    },
+    notifyingOrganisationDetails: '',
+    byline: {
+      text: 'The Electronic Monitoring Service (EMS)',
+    },
+  })
 
   private static getTimelineText = (versionInformation: VersionInformation) => {
     if (versionInformation.status === 'IN_PROGRESS') {
