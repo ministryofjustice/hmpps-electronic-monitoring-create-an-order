@@ -24,6 +24,7 @@ import OffenceModel from './Offence'
 import MappaModel from './MappaModel'
 import DetailsOfInstallationModel from './DetailsOfInstallation'
 import OffenceAdditionalDetailsModel from './OffenceOtherInfo'
+import StatusUpdateModel from './StatusUpdate'
 
 export const OrderStatusEnum = z.enum(['IN_PROGRESS', 'ERROR', 'SUBMITTED'])
 export const VariationTypesEnum = z.enum([
@@ -74,6 +75,7 @@ const OrderModel = z.object({
   lastUpdatedDateTime: z.string().datetime({ offset: true }).nullable().optional(),
   isOwner: z.boolean().default(true),
   isSentencingAct: z.boolean().nullable().optional(),
+  statusUpdates: z.array(StatusUpdateModel).nullable().optional(),
 })
 
 export type Order = z.infer<typeof OrderModel>

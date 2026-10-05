@@ -9,6 +9,7 @@ import SpecialOrderController from '../special-order/controller'
 import IsAddressChangeController from '../variations/is-address-change/controller'
 import NoRefitsController from '../variations/no-refits/controller'
 import NoChangeResponsibleOfficerController from '../variations/no-change-responsible-officer/controller'
+import ReturnReasonsController from '../return-reasons/controller'
 
 const createOrderRouter = (
   services: Pick<
@@ -27,12 +28,14 @@ const createOrderRouter = (
   const isAddressChangeController = new IsAddressChangeController(serviceRequestTypeService)
   const noRefitsController = new NoRefitsController()
   const noChangeResponsibleOfficer = new NoChangeResponsibleOfficerController()
+  const returnReasonsController = new ReturnReasonsController()
 
   post(paths.ORDER.CREATE, orderController.create)
   get(paths.ORDER.DELETE_SUCCESS, orderController.deleteSuccess)
   get(paths.ORDER.DELETE_FAILED, orderController.deleteFailed)
   get(paths.ORDER.SUMMARY, orderController.summary)
   get(paths.ORDER.SUMMARY_VERSION, orderController.summary)
+  viewUpdate(paths.ORDER.RETURN_REASONS, returnReasonsController)
   get(paths.ORDER.EDIT, orderController.confirmEdit)
   viewUpdate(paths.ORDER.IS_REJECTION, isRejectionController)
   post(paths.ORDER.VARIATION, orderController.createVariation)
