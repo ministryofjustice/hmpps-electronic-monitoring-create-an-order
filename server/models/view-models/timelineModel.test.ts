@@ -295,9 +295,38 @@ describe('TimelineModel', () => {
       ]
       const result = TimelineModel.mapToTimelineItems(content, versions)
       expect(result[0]).toEqual({
-        label: { text: 'Order rejected' },
+        label: { text: 'Form submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Bob' },
+        notifyingOrganisationDetails: '',
+      })
+    })
+
+    it('adds the most recent returned status update to the timeline', () => {
+      const versions = [createMockVersion({ lastUpdatedDateTime: '2026-01-01T12:00:00Z' })]
+      const statusUpdates = [
+        {
+          id: 'c4b8f4b9-7c64-4ef0-bc8e-bd0a7a6a8b6a',
+          versionId: 'c4b8f4b9-7c64-4ef0-bc8e-bd0a7a6a8b6b',
+          status: 'REJECTED' as const,
+          datetimeOfStatusChange: '2026-01-02T12:00:00Z',
+          statusUpdateReasons: [],
+        },
+        {
+          id: 'c4b8f4b9-7c64-4ef0-bc8e-bd0a7a6a8b6c',
+          versionId: 'c4b8f4b9-7c64-4ef0-bc8e-bd0a7a6a8b6d',
+          status: 'REJECTED' as const,
+          datetimeOfStatusChange: '2026-01-03T12:00:00Z',
+          statusUpdateReasons: [],
+        },
+      ]
+
+      const result = TimelineModel.mapToTimelineItems(content, versions, undefined, undefined, statusUpdates)
+
+      expect(result[0]).toEqual({
+        label: { text: 'Form returned' },
+        datetime: { timestamp: '2026-01-03T12:00:00Z', type: 'datetime' },
+        byline: { text: 'The Electronic Monitoring Service (EMS)' },
         notifyingOrganisationDetails: '',
       })
     })

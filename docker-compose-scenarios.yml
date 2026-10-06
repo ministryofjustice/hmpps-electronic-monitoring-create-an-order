@@ -45,6 +45,7 @@ services:
       # - SPRING_JPA_HIBERNATE_DDL_AUTO=create
       - SPRING_FLYWAY_ENABLED=true
       - RETURN_LISTENER_ENABLED=false
+      - NOTIFY_API_KEY=mockApiKEy
   cemo-db:
     container_name: cemo-db
     image: postgres:latest
