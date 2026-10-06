@@ -155,7 +155,7 @@ context('Index', () => {
       cy.task('stubCemoListOrders', {
         httpStatus: 200,
         page: 0,
-        size: 10,
+        size: 20,
         hasNext: false,
         orders,
       })
@@ -173,7 +173,7 @@ context('Index', () => {
     })
 
     it('paginates the order list', () => {
-      const orders = Array.from({ length: 25 }, (_, index) => ({
+      const orders = Array.from({ length: 45 }, (_, index) => ({
         id: uuidv4(),
         versionId: uuidv4(),
         status: 'IN_PROGRESS',
@@ -186,31 +186,31 @@ context('Index', () => {
       cy.task('stubCemoListOrders', {
         httpStatus: 200,
         page: 0,
-        size: 10,
+        size: 20,
         hasNext: true,
-        orders: orders.slice(0, 10),
+        orders: orders.slice(0, 20),
       })
       cy.task('stubCemoListOrders', {
         httpStatus: 200,
         page: 1,
-        size: 10,
+        size: 20,
         hasNext: true,
-        orders: orders.slice(10, 20),
+        orders: orders.slice(20, 40),
       })
 
       const page = Page.visit(IndexPage)
 
-      page.orders.should('have.length', 10)
+      page.orders.should('have.length', 20)
       page.OrderFor('Draft user0').should('exist')
-      page.OrderFor('Draft user10').should('not.exist')
+      page.OrderFor('Draft user20').should('not.exist')
       cy.get('.moj-pagination__item--prev').should('not.exist')
       cy.get('.moj-pagination__item--next a').click()
 
-      cy.url().should('include', '/?view=MY_ORDERS&page=1&size=10')
-      page.orders.should('have.length', 10)
-      page.OrderFor('Draft user10').should('exist')
+      cy.url().should('include', '/?view=MY_ORDERS&page=1&size=20')
+      page.orders.should('have.length', 20)
+      page.OrderFor('Draft user20').should('exist')
       page.OrderFor('Draft user0').should('not.exist')
-      cy.get('.moj-pagination__item--prev a').should('have.attr', 'href', '/?view=MY_ORDERS&page=0&size=10')
+      cy.get('.moj-pagination__item--prev a').should('have.attr', 'href', '/?view=MY_ORDERS&page=0&size=20')
       cy.get('.moj-pagination__item--next a').should('exist')
     })
   })
@@ -411,7 +411,7 @@ context('Index', () => {
         expect(optionElements.map(option => option.textContent?.trim())).to.deep.equal([
           'My drafts',
           'My failed to submit',
-          'My prison's forms',
+          `My prison's forms`,
         ])
       })
       page.viewFilter.should('have.value', 'MY_ORDERS')

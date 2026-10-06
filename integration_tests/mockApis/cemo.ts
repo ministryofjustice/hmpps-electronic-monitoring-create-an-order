@@ -81,7 +81,7 @@ const defaultListOrdersOptions: ListOrdersStubOptions = {
 
 const listOrders = (options: ListOrdersStubOptions = defaultListOrdersOptions): SuperAgentRequest => {
   const page = options.page ?? 0
-  const size = options.size ?? 10
+  const size = options.size ?? 20
   const orders = options.orders ?? []
   const hasNext = options.hasNext ?? false
   const request = {

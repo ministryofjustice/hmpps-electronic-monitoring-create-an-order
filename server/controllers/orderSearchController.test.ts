@@ -19,7 +19,7 @@ const mockDate = new Date(2000, 10, 20).toISOString()
 const mockOrderPage = (content: OrderListInformation[] = []) => ({
   content,
   page: 0,
-  size: 10,
+  size: 20,
   hasNext: false,
 })
 
@@ -133,6 +133,12 @@ describe('OrderSearchController', () => {
 
       await orderController.list(req, res, next)
 
+      expect(mockOrderService.listOrders).toHaveBeenCalledWith(
+        { accessToken: res.locals.user.token },
+        'MY_ORDERS',
+        0,
+        20,
+      )
       expect(res.render).toHaveBeenCalledWith(
         'pages/index',
         expect.objectContaining({
@@ -196,7 +202,7 @@ describe('OrderSearchController', () => {
             viewOptions: [
               { value: 'MY_ORDERS', text: 'My drafts', selected: false },
               { value: 'FAILED_ORDERS', text: 'My failed to submit', selected: true },
-              { value: 'PRISON_ORDERS', text: 'My prison's forms', selected: false },
+              { value: 'PRISON_ORDERS', text: `My prison's forms`, selected: false },
             ],
           }),
         )
@@ -210,7 +216,7 @@ describe('OrderSearchController', () => {
 
       await orderController.list(req, res, next)
 
-      expect(mockOrderService.listOrders).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' }, 'MY_ORDERS', 0, 10)
+      expect(mockOrderService.listOrders).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' }, 'MY_ORDERS', 0, 20)
       expect(res.render).toHaveBeenCalledWith(
         'pages/index',
         expect.objectContaining({
@@ -225,7 +231,7 @@ describe('OrderSearchController', () => {
 
       await orderController.list(req, res, next)
 
-      expect(mockOrderService.listOrders).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' }, 'MY_ORDERS', 0, 10)
+      expect(mockOrderService.listOrders).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' }, 'MY_ORDERS', 0, 20)
       expect(res.render).toHaveBeenCalledWith(
         'pages/index',
         expect.objectContaining({
@@ -246,7 +252,7 @@ describe('OrderSearchController', () => {
 
       await orderController.list(req, res, next)
 
-      expect(mockOrderService.listOrders).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' }, 'MY_ORDERS', 0, 10)
+      expect(mockOrderService.listOrders).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' }, 'MY_ORDERS', 0, 20)
     })
   })
   describe('search orders', () => {

@@ -99,7 +99,7 @@ describe('authorised user', () => {
       orderSearchService.listOrders.mockResolvedValue({
         content: [],
         page: 0,
-        size: 10,
+        size: 20,
         hasNext: false,
       })
 

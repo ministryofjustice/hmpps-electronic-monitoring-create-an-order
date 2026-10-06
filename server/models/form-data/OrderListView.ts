@@ -7,9 +7,11 @@ export type OrderListView = z.infer<typeof OrderListViewEnum>
 export const orderListViewLabels: Record<OrderListView, string> = {
   MY_ORDERS: 'My drafts',
   FAILED_ORDERS: 'My failed to submit',
-  PRISON_ORDERS: 'My prison's forms',
+  PRISON_ORDERS: `My prison's forms`,
   HOME_OFFICE_ORDERS: 'Home Office forms',
 }
+
+export const DEFAULT_ORDER_LIST_PAGE_SIZE = 20
 
 export const getOrderListViewsForCohort = (cohort?: Cohort): OrderListView[] => {
   if (cohort === 'PRISON') {
@@ -24,5 +26,5 @@ export const getOrderListViewsForCohort = (cohort?: Cohort): OrderListView[] => 
 export const ListOrdersQueryParser = z.object({
   view: OrderListViewEnum.catch('MY_ORDERS').default('MY_ORDERS'),
   page: z.coerce.number().int().nonnegative().catch(0),
-  size: z.coerce.number().int().positive().catch(10),
+  size: z.coerce.number().int().positive().catch(DEFAULT_ORDER_LIST_PAGE_SIZE),
 })

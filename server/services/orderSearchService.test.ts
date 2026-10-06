@@ -33,6 +33,24 @@ describe('Order Search Service', () => {
   })
 
   describe('listOrders', () => {
+    it('should use a page size of 20 when no size is provided', async () => {
+      mockRestClient.get.mockResolvedValue({
+        content: [],
+        page: 0,
+        size: 20,
+        hasNext: false,
+      })
+      const orderService = new OrderSearchService(mockRestClient)
+
+      await orderService.listOrders({ accessToken: '' }, 'MY_ORDERS')
+
+      expect(mockRestClient.get).toHaveBeenCalledWith({
+        path: '/api/orders',
+        token: '',
+        query: { view: 'MY_ORDERS', page: 0, size: 20 },
+      })
+    })
+
     it('should get a page of orders from the api', async () => {
       const mockReturnValue: OrderListInformation = {
         id: mockApiResponse.id,

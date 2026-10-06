@@ -1,7 +1,7 @@
 import RestClient from '../data/restClient'
 import { AuthenticatedRequestInput } from '../interfaces/request'
 import { OrderListInformationPage, OrderListInformationPageModel } from '../models/OrderListInformation'
-import { OrderListView } from '../models/form-data/OrderListView'
+import { DEFAULT_ORDER_LIST_PAGE_SIZE, OrderListView } from '../models/form-data/OrderListView'
 import { OrderSearchResult, OrderSearchResultsModel } from '../models/OrderSearchResult'
 
 export type OrderSearchInput = AuthenticatedRequestInput & {
@@ -15,7 +15,7 @@ export default class OrderSearchService {
     input: AuthenticatedRequestInput,
     view: OrderListView,
     page = 0,
-    size = 10,
+    size = DEFAULT_ORDER_LIST_PAGE_SIZE,
   ): Promise<OrderListInformationPage> {
     const result = await this.apiClient.get({
       path: '/api/orders',
