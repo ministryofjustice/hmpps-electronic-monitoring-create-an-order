@@ -7,7 +7,7 @@ export type OrderListView = z.infer<typeof OrderListViewEnum>
 export const orderListViewLabels: Record<OrderListView, string> = {
   MY_ORDERS: 'My drafts',
   FAILED_ORDERS: 'My failed to submit',
-  PRISON_ORDERS: 'My prison forms',
+  PRISON_ORDERS: 'My prison's forms',
   HOME_OFFICE_ORDERS: 'Home Office forms',
 }
 
