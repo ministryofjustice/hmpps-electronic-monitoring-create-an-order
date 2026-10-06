@@ -30,12 +30,6 @@ context('pilot', () => {
     stubGetOrder()
 
     cy.signIn()
-
-    const testFlags = {
-      LICENCE_VARIATION_PROBATION_REGIONS: 'KENT_SURREY_SUSSEX,WALES',
-    }
-
-    cy.task('setFeatureFlags', testFlags)
   })
 
   it('Should submit the form', () => {

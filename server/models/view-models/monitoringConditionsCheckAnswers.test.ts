@@ -44,4 +44,40 @@ describe('monitoringConditionsCheckAnswers', () => {
       expect(viewModel.curfewReleaseDate).toHaveLength(2)
     })
   })
+
+  describe('offenceType answers', () => {
+    it('displays the corrected "Theft of a Motor Vehicle" wording when the legacy stored value is selected', () => {
+      const order = getMockOrder({
+        monitoringConditions: createMonitoringConditions({
+          offenceType: 'Theft from a Motor Vehicle (excl. aggravated vehicle taking) - Triable either way (MOT)',
+        }),
+      })
+
+      const viewModel = createViewModel(order, content, false)
+
+      const offenceTypeAnswer = viewModel.monitoringConditions.find(
+        answer => answer.key.text === content.pages.monitoringConditions.questions.offenceType.text,
+      )
+
+      expect(offenceTypeAnswer?.value.text).toEqual(
+        'Theft of a Motor Vehicle (excl. aggravated vehicle taking) - Triable either way (MOT)',
+      )
+    })
+
+    it('displays other offence types unchanged', () => {
+      const order = getMockOrder({
+        monitoringConditions: createMonitoringConditions({
+          offenceType: 'Robbery',
+        }),
+      })
+
+      const viewModel = createViewModel(order, content, false)
+
+      const offenceTypeAnswer = viewModel.monitoringConditions.find(
+        answer => answer.key.text === content.pages.monitoringConditions.questions.offenceType.text,
+      )
+
+      expect(offenceTypeAnswer?.value.text).toEqual('Robbery')
+    })
+  })
 })

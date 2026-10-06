@@ -27,7 +27,7 @@
 
 
 {% set html %}
-  <p class="govuk-notification-banner__heading">
+  <p class="govuk-body govuk-!-margin-bottom-0">
     {% if order.isSentencingAct and order.status == 'SUBMITTED' %}
       This order is subject to the Sentencing Act 2026 changes.
       You are viewing a submitted order.
@@ -40,7 +40,11 @@
 {% endset %}
 
 {% if order.isSentencingAct or order.status == 'SUBMITTED' %}
-{{ govukNotificationBanner({
+{{ mojAlert({
+  variant: "information",
+  title: "Important information about this order",
+  showTitleAsHeading: false,
+  dismissible: false,
   html: html
 }) }}
 {% endif %}
