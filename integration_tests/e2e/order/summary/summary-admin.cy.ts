@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid'
-import OrderTasksPage from '../../pages/order/summary'
-import ErrorPage from '../../pages/error'
-import Page from '../../pages/page'
-import mockApiOrder from '../../utils/data/ApiOrder'
+import OrderTasksPage from '../../../pages/order/summary'
+import ErrorPage from '../../../pages/error'
+import Page from '../../../pages/page'
+import mockApiOrder from '../../../utils/data/ApiOrder'
 
 const mockOrderId = uuidv4()
 

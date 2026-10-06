@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid'
-import OrderTasksPage from '../../pages/order/summary'
-import Page from '../../pages/page'
-import AttachmentType from '../../../server/models/AttachmentType'
-import paths from '../../../server/constants/paths'
+import OrderTasksPage from '../../../pages/order/summary'
+import Page from '../../../pages/page'
+import AttachmentType from '../../../../server/models/AttachmentType'
+import paths from '../../../../server/constants/paths'
 import versionInformation from './summary-helpers'
 
 const mockOrderId = uuidv4()
