@@ -70,6 +70,7 @@ describe('OrderController', () => {
 
     it('should indicate when the order has been rejected', async () => {
       const mockOrder = getMockOrder({
+        status: 'REJECTED',
         statusUpdates: [
           {
             id: randomUUID(),

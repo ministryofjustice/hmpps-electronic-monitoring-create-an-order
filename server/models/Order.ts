@@ -26,7 +26,7 @@ import DetailsOfInstallationModel from './DetailsOfInstallation'
 import OffenceAdditionalDetailsModel from './OffenceOtherInfo'
 import StatusUpdateModel from './StatusUpdate'
 
-export const OrderStatusEnum = z.enum(['IN_PROGRESS', 'ERROR', 'SUBMITTED'])
+export const OrderStatusEnum = z.enum(['IN_PROGRESS', 'ERROR', 'SUBMITTED', 'REJECTED'])
 export const VariationTypesEnum = z.enum([
   'VARIATION',
   'REINSTALL_AT_DIFFERENT_ADDRESS',
