@@ -196,7 +196,7 @@ describe('OrderSearchController', () => {
             viewOptions: [
               { value: 'MY_ORDERS', text: 'My drafts', selected: false },
               { value: 'FAILED_ORDERS', text: 'My failed to submit', selected: true },
-              { value: 'PRISON_ORDERS', text: 'My prison forms', selected: false },
+              { value: 'PRISON_ORDERS', text: 'My prison's forms', selected: false },
             ],
           }),
         )
