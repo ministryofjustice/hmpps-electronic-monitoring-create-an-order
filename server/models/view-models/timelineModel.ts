@@ -63,15 +63,16 @@ export default class TimelineModel {
     if (versionInformation.status === 'IN_PROGRESS') {
       return 'Draft'
     }
+    if (versionInformation.status === 'REJECTED') {
+      return 'Form submitted'
+    }
     if (versionInformation.type === 'REVOCATION') {
       return 'Monitoring ended'
     }
     if (Object.keys(VariationTypesEnum.Values).includes(versionInformation.type)) {
       return 'Changes submitted'
     }
-    if (versionInformation.type === 'REJECTED') {
-      return 'Order rejected'
-    }
+
     return versionInformation.status === 'SUBMITTED' ? 'Form submitted' : 'Failed to submit'
   }
 

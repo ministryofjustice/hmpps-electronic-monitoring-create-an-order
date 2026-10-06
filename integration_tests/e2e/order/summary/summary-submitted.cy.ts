@@ -812,27 +812,6 @@ context('Order Summary', () => {
       page.timeline.formFailedComponent.resultDateIs('1 January 2025 at 10:30am')
     })
 
-    it('order rejected', () => {
-      const versionOne = versionInformation({
-        submittedBy: 'John Smith',
-        fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0).toISOString(),
-        status: 'SUBMITTED',
-        type: 'REJECTED',
-      })
-
-      cy.task('stubCemoGetVersions', {
-        httpStatus: 200,
-        versions: [versionOne],
-        orderId: mockOrderId,
-      })
-      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
-
-      page.timeline.element.should('exist')
-      page.timeline.formRejectedComponent.element.should('exist')
-      page.timeline.formRejectedComponent.bylineContains('John Smith')
-      page.timeline.formRejectedComponent.resultDateIs('1 January 2025 at 10:30am')
-    })
-
     it('Show download form button on failed to submit', () => {
       cy.task('stubCemoGetOrder', {
         httpStatus: 200,

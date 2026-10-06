@@ -295,7 +295,7 @@ describe('TimelineModel', () => {
       ]
       const result = TimelineModel.mapToTimelineItems(content, versions)
       expect(result[0]).toEqual({
-        label: { text: 'Order rejected' },
+        label: { text: 'Form submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Bob' },
         notifyingOrganisationDetails: '',
