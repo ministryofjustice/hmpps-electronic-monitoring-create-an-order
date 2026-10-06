@@ -163,12 +163,12 @@ context('Index', () => {
       const page = Page.visit(IndexPage)
 
       page.orders.should('have.length', orders.length)
-      page.orders.eq(0).should('contain.text', 'rejected user0').and('contain.text', 'Returned')
-      page.orders.eq(1).should('contain.text', 'rejected user1').and('contain.text', 'Returned')
-      page.orders.eq(2).should('contain.text', 'rejected user2').and('contain.text', 'Returned')
-      page.orders.eq(3).should('contain.text', 'Draft user0').and('contain.text', 'Draft')
-      page.orders.eq(4).should('contain.text', 'Draft user1').and('contain.text', 'Draft')
-      page.orders.eq(5).should('contain.text', 'Draft user2').and('contain.text', 'Draft')
+      page.OrderContainsAt(0, 'rejected user0', 'Returned')
+      page.OrderContainsAt(1, 'rejected user1', 'Returned')
+      page.OrderContainsAt(2, 'rejected user2', 'Returned')
+      page.OrderContainsAt(3, 'Draft user0', 'Draft')
+      page.OrderContainsAt(4, 'Draft user1', 'Draft')
+      page.OrderContainsAt(5, 'Draft user2', 'Draft')
       cy.get('.moj-pagination').should('not.exist')
     })
 
