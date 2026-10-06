@@ -67,6 +67,42 @@ describe('OrderController', () => {
       expect(res.redirect).not.toHaveBeenCalled()
       expect(res.render).toHaveBeenCalledWith('pages/order/summary', expect.objectContaining({ order: mockOrder }))
     })
+
+    it('should indicate when the order has been rejected', async () => {
+      const mockOrder = getMockOrder({
+        status: 'REJECTED',
+        statusUpdates: [
+          {
+            id: randomUUID(),
+            versionId: randomUUID(),
+            status: 'REJECTED',
+            datetimeOfStatusChange: '2026-01-01T12:00:00Z',
+            statusUpdateReasons: [],
+          },
+        ],
+      })
+      const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
+      const res = createMockResponse()
+      const next = jest.fn()
+      req.flash = jest.fn().mockReturnValue([])
+
+      await orderController.summary(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/order/summary',
+        expect.objectContaining({
+          isOrderRejected: true,
+          returnReasonsUrl: `/order/${mockOrder.id}/return-reasons`,
+          timelineItems: expect.arrayContaining([
+            expect.objectContaining({
+              label: { text: 'Form returned' },
+              datetime: { timestamp: '2026-01-01T12:00:00Z', type: 'datetime' },
+              byline: { text: 'The Electronic Monitoring Service (EMS)' },
+            }),
+          ]),
+        }),
+      )
+    })
   })
 
   describe('create', () => {

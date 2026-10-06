@@ -79,20 +79,23 @@ export default class OrderController {
     if (versionId && completedOrderVersions.length > 0) {
       isMostRecentVersion = currentVersion === completedOrderVersions[0].versionId
     }
-
     res.render('pages/order/summary', {
       order: req.order,
       sections,
       error: error && error.length > 0 ? error[0] : undefined,
       createNewOrderVersionEnabled: isMostRecentVersion,
+
       timelineItems: TimelineModel.mapToTimelineItems(
         res.locals.content!,
         completedOrderVersions,
         order.id,
         currentVersion,
+        order.statusUpdates,
       ),
       isMostRecentVersion,
       isVariationType: isVariationType(order.type),
+      isOrderRejected: order.status === 'REJECTED',
+      returnReasonsUrl: paths.ORDER.RETURN_REASONS.replace(':orderId', order.id),
     })
   }
 

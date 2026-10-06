@@ -25,6 +25,7 @@ const paths = {
     DELETE_SUCCESS: '/order/delete/success',
     SUMMARY: `${ORDER_BASE}/summary`,
     SUMMARY_VERSION: `${ORDER_VERSION_BASE}/summary`,
+    RETURN_REASONS: `${ORDER_BASE}/return-reasons`,
     SUBMIT: `${ORDER_BASE}/submit`,
     SUBMIT_FAILED: `${ORDER_BASE}/submit/failed`,
     SUBMIT_PARTIAL_SUCCESS: `${ORDER_BASE}/submit/partial-success`,
