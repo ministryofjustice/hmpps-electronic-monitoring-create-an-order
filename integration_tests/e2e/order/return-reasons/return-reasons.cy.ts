@@ -1,9 +1,10 @@
 import { v4 as uuidv4 } from 'uuid'
-import mockApiOrder from '../../utils/data/ApiOrder'
+import mockApiOrder from '../../../utils/data/ApiOrder'
+import Page from '../../../pages/page'
+import ReturnReasonsPage from './returnReasonsPage'
 
 const mockOrder = mockApiOrder('SUBMITTED', 'REJECTED')
 const mockOrderId = mockOrder.id
-const reasonListName = 'Reasons for returning this form'
 const monitoringConditionsSection = 'Incorrect monitoring conditions'
 const monitoringConditionsReasons = [
   'The monitoring conditions do not match the form.',
@@ -42,10 +43,9 @@ const stubRejectedOrder = (additionalReasons = []) => {
   })
 }
 
-const expectReasons = (listIndex: number, reasons: string[]) => {
-  cy.get(`ul[aria-label="${reasonListName}"]`)
-    .eq(listIndex)
-    .find('li')
+const expectReasons = (page: ReturnReasonsPage, listIndex: number, reasons: string[]) => {
+  page
+    .reasonDetails(listIndex)
     .should('have.length', reasons.length)
     .each(($reason, index) => {
       cy.wrap($reason).should('have.text', reasons[index])
@@ -63,11 +63,10 @@ context('Return reasons', () => {
   it('displays grouped rejected reasons and returns to the summary', () => {
     stubRejectedOrder()
 
-    cy.visit(`/order/${mockOrderId}/return-reasons`)
-    cy.get('h1').should('contain.text', 'EMS gave these reasons for returning this form')
-    cy.get('h2').eq(0).should('have.text', monitoringConditionsSection)
-    expectReasons(0, monitoringConditionsReasons)
-    cy.contains('button', 'Back to form').click()
+    const page = Page.visit(ReturnReasonsPage, { orderId: mockOrderId })
+    page.sectionHeadings.eq(0).should('have.text', monitoringConditionsSection)
+    expectReasons(page, 0, monitoringConditionsReasons)
+    page.backToFormButton.click()
     cy.url().should('include', `/order/${mockOrderId}/summary`)
   })
 
@@ -81,10 +80,10 @@ context('Return reasons', () => {
       },
     ])
 
-    cy.visit(`/order/${mockOrderId}/return-reasons`)
-    cy.get('h2').eq(0).should('have.text', monitoringConditionsSection)
-    cy.get('h2').eq(1).should('have.text', deviceWearerSection)
-    expectReasons(0, monitoringConditionsReasons)
-    expectReasons(1, [deviceWearerReason])
+    const page = Page.visit(ReturnReasonsPage, { orderId: mockOrderId })
+    page.sectionHeadings.eq(0).should('have.text', monitoringConditionsSection)
+    page.sectionHeadings.eq(1).should('have.text', deviceWearerSection)
+    expectReasons(page, 0, monitoringConditionsReasons)
+    expectReasons(page, 1, [deviceWearerReason])
   })
 })

@@ -18,7 +18,7 @@
       <h1 class="govuk-heading-xl">{{ pageTitle }}</h1>
 
       {% for section in sections %}
-        <h2 class="govuk-heading-m">{{ section.heading }}</h2>
+        <h2 id="return-reasons-section-heading-{{ loop.index }}" class="govuk-heading-m">{{ section.heading }}</h2>
         <ul class="govuk-list" aria-label="Reasons for returning this form">
           {% for detail in section.details %}
             <li>{{ detail }}</li>
