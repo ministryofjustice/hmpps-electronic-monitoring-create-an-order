@@ -509,15 +509,7 @@ context('Order Summary', () => {
             contactNumber: '',
             phoneNumberAvailable: false,
           },
-          installationAndRisk: {
-            mappaCaseType: null,
-            mappaLevel: null,
-            riskCategory: null,
-            riskDetails: null,
-            genderRiskDetails: null,
-            offence: null,
-            offenceAdditionalDetails: null,
-          },
+
           interestedParties: {
             notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: '',
@@ -568,30 +560,6 @@ context('Order Summary', () => {
           addresses: [
             {
               addressType: 'PRIMARY',
-              addressLine1: '',
-              addressLine2: '',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: '',
-            },
-            {
-              addressType: 'SECONDARY',
-              addressLine1: '',
-              addressLine2: '',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: '',
-            },
-            {
-              addressType: 'TERTIARY',
-              addressLine1: '',
-              addressLine2: '',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: '',
-            },
-            {
-              addressType: 'INSTALLATION',
               addressLine1: '',
               addressLine2: '',
               addressLine3: '',
@@ -815,15 +783,6 @@ context('Order Summary', () => {
             contactNumber: '',
             phoneNumberAvailable: false,
           },
-          installationAndRisk: {
-            mappaCaseType: null,
-            mappaLevel: null,
-            riskCategory: null,
-            riskDetails: null,
-            genderRiskDetails: null,
-            offence: null,
-            offenceAdditionalDetails: null,
-          },
           interestedParties: {
             notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: '',
@@ -874,30 +833,6 @@ context('Order Summary', () => {
           addresses: [
             {
               addressType: 'PRIMARY',
-              addressLine1: '',
-              addressLine2: '',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: '',
-            },
-            {
-              addressType: 'SECONDARY',
-              addressLine1: '',
-              addressLine2: '',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: '',
-            },
-            {
-              addressType: 'TERTIARY',
-              addressLine1: '',
-              addressLine2: '',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: '',
-            },
-            {
-              addressType: 'INSTALLATION',
               addressLine1: '',
               addressLine2: '',
               addressLine3: '',
@@ -1035,15 +970,6 @@ context('Order Summary', () => {
             contactNumber: '',
             phoneNumberAvailable: false,
           },
-          installationAndRisk: {
-            mappaCaseType: null,
-            mappaLevel: null,
-            riskCategory: null,
-            riskDetails: null,
-            genderRiskDetails: null,
-            offence: null,
-            offenceAdditionalDetails: null,
-          },
           interestedParties: {
             notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: '',
@@ -1094,30 +1020,6 @@ context('Order Summary', () => {
           addresses: [
             {
               addressType: 'PRIMARY',
-              addressLine1: '',
-              addressLine2: '',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: '',
-            },
-            {
-              addressType: 'SECONDARY',
-              addressLine1: '',
-              addressLine2: '',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: '',
-            },
-            {
-              addressType: 'TERTIARY',
-              addressLine1: '',
-              addressLine2: '',
-              addressLine3: '',
-              addressLine4: '',
-              postcode: '',
-            },
-            {
-              addressType: 'INSTALLATION',
               addressLine1: '',
               addressLine2: '',
               addressLine3: '',

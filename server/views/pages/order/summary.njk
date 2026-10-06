@@ -201,7 +201,7 @@
         </form>
       {% endif %}
 
-      {% if order.status == "SUBMITTED" %}
+      {% if order.status == "SUBMITTED" or order.status == "REJECTED" %}
         <div class="govuk-!-margin-top-5">
       <div class="govuk-button-group">
               {% if createNewOrderVersionEnabled %}

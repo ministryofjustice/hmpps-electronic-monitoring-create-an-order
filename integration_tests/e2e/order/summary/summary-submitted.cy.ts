@@ -6,6 +6,7 @@ import ConfirmVariationPage from '../../../pages/order/variation/confirmVariatio
 import paths from '../../../../server/constants/paths'
 import mockApiOrder from '../../../utils/data/ApiOrder'
 import versionInformation from './summary-helpers'
+import { StatusUpdate } from '../../../../server/models/StatusUpdate'
 
 const mockOrderId = uuidv4()
 
@@ -51,15 +52,6 @@ context('Order Summary', () => {
             relationship: null,
           },
           contactDetails: { contactNumber: '', phoneNumberAvailable: false },
-          installationAndRisk: {
-            mappaCaseType: null,
-            mappaLevel: null,
-            riskCategory: null,
-            riskDetails: null,
-            genderRiskDetails: null,
-            offence: null,
-            offenceAdditionalDetails: null,
-          },
           interestedParties: {
             notifyingOrganisation: 'HOME_OFFICE',
             notifyingOrganisationName: '',
@@ -294,7 +286,7 @@ context('Order Summary', () => {
 
     context('Rejected order', () => {
       it('shows the returned form message and a link to the return reasons', () => {
-        stubReturnedOrder()
+        stubReturnedOrder([rejectedStatusUpdate('2026-01-03T12:00:00Z')], 'REJECTED')
 
         const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
@@ -434,15 +426,6 @@ context('Order Summary', () => {
             relationship: null,
           },
           contactDetails: { contactNumber: '', phoneNumberAvailable: false },
-          installationAndRisk: {
-            mappaCaseType: null,
-            mappaLevel: null,
-            riskCategory: null,
-            riskDetails: null,
-            genderRiskDetails: null,
-            offence: null,
-            offenceAdditionalDetails: null,
-          },
           interestedParties: {
             notifyingOrganisation: 'HOME_OFFICE',
             notifyingOrganisationName: '',
@@ -715,12 +698,15 @@ context('Order Summary', () => {
     statusUpdateReasons: [],
   })
 
-  const stubReturnedOrder = (statusUpdates = [rejectedStatusUpdate('2026-01-03T12:00:00Z')]) => {
+  const stubReturnedOrder = (statusUpdates: Array<StatusUpdate> = [], status = 'SUBMITTED') => {
     cy.task('stubCemoGetOrder', {
       httpStatus: 200,
       id: mockOrderId,
-      status: 'SUBMITTED',
-      order: { statusUpdates },
+      status,
+      order: {
+        status,
+        statusUpdates,
+      },
     })
   }
   context('Complete order, variation', () => {
@@ -904,15 +890,7 @@ context('Order Summary', () => {
             relationship: null,
           },
           contactDetails: { contactNumber: '', phoneNumberAvailable: false },
-          installationAndRisk: {
-            mappaCaseType: null,
-            mappaLevel: null,
-            riskCategory: null,
-            riskDetails: null,
-            genderRiskDetails: null,
-            offence: null,
-            offenceAdditionalDetails: null,
-          },
+
           interestedParties: {
             notifyingOrganisation: 'PRISON',
             notifyingOrganisationName: '',

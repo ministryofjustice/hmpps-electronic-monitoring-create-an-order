@@ -49,15 +49,7 @@ context('Order Summary', () => {
             relationship: null,
           },
           contactDetails: { contactNumber: '', phoneNumberAvailable: false },
-          installationAndRisk: {
-            mappaCaseType: null,
-            mappaLevel: null,
-            riskCategory: null,
-            riskDetails: null,
-            genderRiskDetails: null,
-            offence: null,
-            offenceAdditionalDetails: null,
-          },
+
           interestedParties: {
             notifyingOrganisation: 'HOME_OFFICE',
             notifyingOrganisationName: '',
