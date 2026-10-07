@@ -171,5 +171,88 @@ context('Index', () => {
         page.OrderFor(`Draft user${index}`).find('a').should('have.attr', 'href', `/order/${id}/summary`)
       })
     })
+
+    it('returned orders are sorted first within the current page', () => {
+      const rejectedOrders = Array.from({ length: 3 }, (_, index) => ({
+        id: uuidv4(),
+        versionId: uuidv4(),
+        status: 'REJECTED',
+        type: 'REQUEST',
+        firstName: 'rejected',
+        lastName: `user${index}`,
+        notifyingOrganisation: 'PRISON',
+      }))
+      const inProgressOrders = Array.from({ length: 3 }, (_, index) => ({
+        id: uuidv4(),
+        versionId: uuidv4(),
+        status: 'IN_PROGRESS',
+        type: 'REQUEST',
+        firstName: 'Draft',
+        lastName: `user${index}`,
+        notifyingOrganisation: 'PRISON',
+      }))
+      const orders = [...inProgressOrders, ...rejectedOrders]
+
+      cy.task('stubCemoListOrders', {
+        httpStatus: 200,
+        page: 0,
+        size: 20,
+        hasNext: false,
+        orders,
+      })
+
+      const page = Page.visit(IndexPage)
+
+      page.orders.should('have.length', orders.length)
+      page.OrderContainsAt(0, 'rejected user0', 'Returned')
+      page.OrderContainsAt(1, 'rejected user1', 'Returned')
+      page.OrderContainsAt(2, 'rejected user2', 'Returned')
+      page.OrderContainsAt(3, 'Draft user0', 'Draft')
+      page.OrderContainsAt(4, 'Draft user1', 'Draft')
+      page.OrderContainsAt(5, 'Draft user2', 'Draft')
+      cy.get('.moj-pagination').should('not.exist')
+    })
+
+    it('paginates the order list', () => {
+      const orders = Array.from({ length: 45 }, (_, index) => ({
+        id: uuidv4(),
+        versionId: uuidv4(),
+        status: 'IN_PROGRESS',
+        type: 'REQUEST',
+        firstName: 'Draft',
+        lastName: `user${index}`,
+        notifyingOrganisation: 'PRISON',
+      }))
+
+      cy.task('stubCemoListOrders', {
+        httpStatus: 200,
+        page: 0,
+        size: 20,
+        hasNext: true,
+        orders: orders.slice(0, 20),
+      })
+      cy.task('stubCemoListOrders', {
+        httpStatus: 200,
+        page: 1,
+        size: 20,
+        hasNext: true,
+        orders: orders.slice(20, 40),
+      })
+
+      const page = Page.visit(IndexPage)
+
+      page.orders.should('have.length', 20)
+      page.OrderFor('Draft user0').should('exist')
+      page.OrderFor('Draft user20').should('not.exist')
+      cy.get('.moj-pagination__item--prev').should('not.exist')
+      cy.get('.moj-pagination__item--next a').click()
+
+      cy.url().should('include', '/?view=MY_ORDERS&page=1&size=20')
+      page.orders.should('have.length', 20)
+      page.OrderFor('Draft user20').should('exist')
+      page.OrderFor('Draft user0').should('not.exist')
+      cy.get('.moj-pagination__item--prev a').should('have.attr', 'href', '/?view=MY_ORDERS&page=0&size=20')
+      cy.get('.moj-pagination__item--next a').should('exist')
+    })
   })
 })

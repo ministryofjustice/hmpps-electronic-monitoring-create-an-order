@@ -135,7 +135,7 @@ context('Index', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-      cy.task('stubCemoListOrders', 500)
+      cy.task('stubCemoListOrders', { httpStatus: 500 })
     })
 
     it('Should indicate to the user that there were no results', () => {
