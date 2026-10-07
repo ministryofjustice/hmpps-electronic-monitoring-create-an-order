@@ -33,7 +33,25 @@ describe('Order Search Service', () => {
   })
 
   describe('listOrders', () => {
-    it('should get orders from the api', async () => {
+    it('should use a page size of 20 when no size is provided', async () => {
+      mockRestClient.get.mockResolvedValue({
+        content: [],
+        page: 0,
+        size: 20,
+        hasNext: false,
+      })
+      const orderService = new OrderSearchService(mockRestClient)
+
+      await orderService.listOrders({ accessToken: '' }, 'MY_ORDERS')
+
+      expect(mockRestClient.get).toHaveBeenCalledWith({
+        path: '/api/orders',
+        token: '',
+        query: { view: 'MY_ORDERS', page: 0, size: 20 },
+      })
+    })
+
+    it('should get a page of orders from the api', async () => {
       const mockReturnValue: OrderListInformation = {
         id: mockApiResponse.id,
         versionId: mockApiResponse.versionId,
@@ -43,27 +61,37 @@ describe('Order Search Service', () => {
         lastName: mockApiResponse.deviceWearer.lastName,
         notifyingOrganisation: mockApiResponse.interestedParties?.notifyingOrganisation,
       }
-      mockRestClient.get.mockResolvedValue([mockReturnValue])
+      mockRestClient.get.mockResolvedValue({
+        content: [mockReturnValue],
+        page: 1,
+        size: 10,
+        hasNext: true,
+      })
       const orderService = new OrderSearchService(mockRestClient)
-      const orders = await orderService.listOrders({ accessToken: '' }, 'MY_ORDERS')
+      const orders = await orderService.listOrders({ accessToken: '' }, 'MY_ORDERS', 1, 10)
       expect(mockRestClient.get).toHaveBeenCalledWith({
         path: '/api/orders',
         token: '',
-        query: { view: 'MY_ORDERS' },
+        query: { view: 'MY_ORDERS', page: 1, size: 10 },
       })
       const { id, status, type, versionId } = mockNewOrder
       const { firstName, lastName, notifyingOrganisation } = mockReturnValue
       expect([{ id, status, type, versionId, firstName, lastName, notifyingOrganisation }]).toEqual(
-        expect.objectContaining(orders),
+        expect.objectContaining(orders.content),
       )
+      expect(orders.page).toBe(1)
+      expect(orders.size).toBe(10)
+      expect(orders.hasNext).toBe(true)
     })
 
     it('should throw an error if the api returns an invalid object', async () => {
       expect.assertions(1)
 
       mockRestClient.get.mockResolvedValue({
-        ...mockNewOrder,
-        status: 'INVALID_STATUS',
+        content: [{ ...mockNewOrder, status: 'INVALID_STATUS' }],
+        page: 0,
+        size: 10,
+        hasNext: false,
       })
 
       try {

@@ -1,6 +1,6 @@
 import paths from '../../constants/paths'
 import { AddressTypeEnum } from '../Address'
-import { OrderListInformation } from '../OrderListInformation'
+import { OrderListInformation, OrderListInformationPage } from '../OrderListInformation'
 import { OrderListView, OrderListViewEnum, orderListViewLabels } from './OrderListView'
 import { OrderSearchResult } from '../OrderSearchResult'
 
@@ -15,7 +15,12 @@ type OrderListViewModel = {
     index: number
   }[]
   isPrisonOrYouthUser: boolean
+  showViewFilter: boolean
   viewOptions: { value: OrderListView; text: string; selected: boolean }[]
+  pagination?: {
+    previous?: { text: string; href: string }
+    next?: { text: string; href: string }
+  }
 }
 
 export type OrderSearchViewModel = {
@@ -103,11 +108,12 @@ export const constructSearchViewModel = (
 }
 
 export function constructListViewModel(
-  orders: OrderListInformation[],
+  ordersPage: OrderListInformationPage,
   view: OrderListView,
   isPrisonOrYouthUser: boolean,
+  availableViews: OrderListView[] = OrderListViewEnum.options,
 ): OrderListViewModel {
-  const ordersWithTime = orders.map(order => {
+  const ordersWithTime = ordersPage.content.map(order => {
     const dateStr = order.monitoringConditions?.startDate
     return {
       order,
@@ -116,11 +122,16 @@ export function constructListViewModel(
   })
 
   ordersWithTime.sort((a, b) => {
+    const aIsReturned = a.order.status === 'REJECTED'
+    const bIsReturned = b.order.status === 'REJECTED'
+    if (aIsReturned !== bIsReturned) return aIsReturned ? -1 : 1
     if (a.time === null && b.time === null) return 0
     if (a.time === null) return 1
     if (b.time === null) return -1
     return a.time - b.time
   })
+
+  const pagination = ordersPage.page > 0 || ordersPage.hasNext ? constructPagination(ordersPage, view) : undefined
 
   return {
     orders: ordersWithTime.map(({ order }, index) => ({
@@ -132,14 +143,24 @@ export function constructListViewModel(
       lastUpdatedBy: order.lastUpdatedBy,
       lastUpdatedDateTime: order.lastUpdatedDateTime ? formatDateTime(order.lastUpdatedDateTime) : '',
       statusTags: getStatusTags(order),
-      index,
+      index: ordersPage.page * ordersPage.size + index,
     })),
     isPrisonOrYouthUser,
-    viewOptions: OrderListViewEnum.options.map(value => ({
+    showViewFilter: availableViews.length > 1,
+    viewOptions: availableViews.map(value => ({
       value,
       text: orderListViewLabels[value],
       selected: value === view,
     })),
+    pagination,
+  }
+}
+
+function constructPagination(ordersPage: OrderListInformationPage, view: OrderListView) {
+  const pageHref = (page: number) => `/?view=${view}&page=${page}&size=${ordersPage.size}`
+  return {
+    previous: ordersPage.page > 0 ? { text: 'Previous', href: pageHref(ordersPage.page - 1) } : undefined,
+    next: ordersPage.hasNext ? { text: 'Next', href: pageHref(ordersPage.page + 1) } : undefined,
   }
 }
 
@@ -152,6 +173,9 @@ const getStatusTag = (status: OrderListInformation['status']) => {
   }
   if (status === 'SUBMITTED') {
     return [{ text: 'Submitted', type: 'SUBMITTED' }]
+  }
+  if (status === 'REJECTED') {
+    return [{ text: 'Returned', type: 'REJECTED' }]
   }
   return []
 }

@@ -119,6 +119,8 @@
               {% set colour = "green" %}          
             {% elif tag.type == 'DRAFT' %}
               {% set colour = "grey" %}
+            {% elif tag.type == 'REJECTED' %}
+              {% set colour = "red" %}
             {% endif %}
             <strong class="govuk-tag govuk-tag--{{ colour }} govuk-!-margin-right-2">{{ tag.text }}</strong>
           {% endfor %}
