@@ -113,6 +113,41 @@ export default class OrderTasksPage extends AppPage {
     return cy.get('button').contains('Assign form to me')
   }
 
+  fillInOrderSectionsWith(
+    {
+      deviceWearerDetails,
+      responsibleAdultDetails,
+      primaryAddressDetails,
+      secondaryAddressDetails,
+      interestedParties,
+      installationAndRisk,
+      monitoringOrderTypeDescription,
+      files,
+      probationDeliveryUnit,
+    },
+    fillInMonitoringConditions: () => void,
+  ): OrderTasksPage {
+    this.aboutTheDeviceWearerTask.click()
+
+    this.fillInGeneralOrderDetailsWith({
+      deviceWearerDetails,
+      responsibleAdultDetails,
+      primaryAddressDetails,
+      secondaryAddressDetails,
+      interestedParties,
+      monitoringOrderTypeDescription,
+      probationDeliveryUnit,
+    })
+
+    fillInMonitoringConditions()
+
+    this.fillInInstallationAndRiskWith({ installationAndRisk, interestedParties })
+
+    this.fillInAttachmentDetailsWith({ files })
+
+    return Page.verifyOnPage(OrderTasksPage)
+  }
+
   fillInNewCurfewOrderWith({
     deviceWearerDetails,
     responsibleAdultDetails,
@@ -127,31 +162,20 @@ export default class OrderTasksPage extends AppPage {
     files,
     probationDeliveryUnit,
   }): OrderTasksPage {
-    this.aboutTheDeviceWearerTask.click()
-
-    this.fillInGeneralOrderDetailsWith({
-      deviceWearerDetails,
-      responsibleAdultDetails,
-      primaryAddressDetails,
-      secondaryAddressDetails,
-      interestedParties,
-      monitoringOrderTypeDescription,
-      probationDeliveryUnit,
-    })
-
-    this.fillInCurfewOrderDetailsWith({
-      curfewConditionDetails,
-      curfewReleaseDetails,
-      curfewTimetable,
-    })
-
-    this.fillInInstallationAndRiskWith({ installationAndRisk, interestedParties })
-
-    this.fillInAttachmentDetailsWith({
-      files,
-    })
-
-    return Page.verifyOnPage(OrderTasksPage)
+    return this.fillInOrderSectionsWith(
+      {
+        deviceWearerDetails,
+        responsibleAdultDetails,
+        primaryAddressDetails,
+        secondaryAddressDetails,
+        interestedParties,
+        installationAndRisk,
+        monitoringOrderTypeDescription,
+        files,
+        probationDeliveryUnit,
+      },
+      () => this.fillInCurfewOrderDetailsWith({ curfewConditionDetails, curfewReleaseDetails, curfewTimetable }),
+    )
   }
 
   fillInNewOrderWith({
@@ -333,11 +357,7 @@ export default class OrderTasksPage extends AppPage {
       fillInTagAtSourceWith(installationLocation, installationAppointment, installationAddressDetails)
     }
 
-    const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
-      MonitoringConditionsCheckYourAnswersPage,
-      'Check your answer',
-    )
-    monitoringConditionsCheckYourAnswersPage.continueButton().click()
+    this.continueFromMonitoringConditionsCya()
 
     this.fillInInstallationAndRiskWith({ installationAndRisk, interestedParties })
 
@@ -365,31 +385,20 @@ export default class OrderTasksPage extends AppPage {
   }): OrderTasksPage {
     this.fillInVariationsDetails({ variationDetails })
 
-    this.aboutTheDeviceWearerTask.click()
-
-    this.fillInGeneralOrderDetailsWith({
-      deviceWearerDetails,
-      responsibleAdultDetails,
-      primaryAddressDetails,
-      secondaryAddressDetails,
-      interestedParties,
-      monitoringOrderTypeDescription,
-      probationDeliveryUnit,
-    })
-
-    this.fillInCurfewOrderDetailsWith({
-      curfewConditionDetails,
-      curfewReleaseDetails,
-      curfewTimetable,
-    })
-
-    this.fillInInstallationAndRiskWith({ installationAndRisk, interestedParties })
-
-    this.fillInAttachmentDetailsWith({
-      files,
-    })
-
-    return Page.verifyOnPage(OrderTasksPage)
+    return this.fillInOrderSectionsWith(
+      {
+        deviceWearerDetails,
+        responsibleAdultDetails,
+        primaryAddressDetails,
+        secondaryAddressDetails,
+        interestedParties,
+        installationAndRisk,
+        monitoringOrderTypeDescription,
+        files,
+        probationDeliveryUnit,
+      },
+      () => this.fillInCurfewOrderDetailsWith({ curfewConditionDetails, curfewReleaseDetails, curfewTimetable }),
+    )
   }
 
   fillInNewEnforcementZoneOrderWith({
@@ -404,32 +413,20 @@ export default class OrderTasksPage extends AppPage {
     files,
     probationDeliveryUnit,
   }): OrderTasksPage {
-    this.aboutTheDeviceWearerTask.click()
-
-    this.fillInGeneralOrderDetailsWith({
-      deviceWearerDetails,
-      responsibleAdultDetails,
-      primaryAddressDetails,
-      secondaryAddressDetails,
-      interestedParties,
-      monitoringOrderTypeDescription,
-      probationDeliveryUnit,
-    })
-
-    this.fillInEnforcementZoneOrderDetailsWith(
+    return this.fillInOrderSectionsWith(
       {
-        enforcementZoneDetails,
+        deviceWearerDetails,
+        responsibleAdultDetails,
+        primaryAddressDetails,
+        secondaryAddressDetails,
+        interestedParties,
+        installationAndRisk,
+        monitoringOrderTypeDescription,
+        files,
+        probationDeliveryUnit,
       },
-      'exclusion',
+      () => this.fillInEnforcementZoneOrderDetailsWith({ enforcementZoneDetails }, 'exclusion'),
     )
-
-    this.fillInInstallationAndRiskWith({ installationAndRisk, interestedParties })
-
-    this.fillInAttachmentDetailsWith({
-      files,
-    })
-
-    return Page.verifyOnPage(OrderTasksPage)
   }
 
   fillInEnforcementZoneVariationWith({
@@ -447,32 +444,20 @@ export default class OrderTasksPage extends AppPage {
   }): OrderTasksPage {
     this.fillInVariationsDetails({ variationDetails })
 
-    this.aboutTheDeviceWearerTask.click()
-
-    this.fillInGeneralOrderDetailsWith({
-      deviceWearerDetails,
-      responsibleAdultDetails,
-      primaryAddressDetails,
-      secondaryAddressDetails,
-      interestedParties,
-      monitoringOrderTypeDescription,
-      probationDeliveryUnit,
-    })
-
-    this.fillInEnforcementZoneOrderDetailsWith(
+    return this.fillInOrderSectionsWith(
       {
-        enforcementZoneDetails,
+        deviceWearerDetails,
+        responsibleAdultDetails,
+        primaryAddressDetails,
+        secondaryAddressDetails,
+        interestedParties,
+        installationAndRisk,
+        monitoringOrderTypeDescription,
+        files,
+        probationDeliveryUnit,
       },
-      'exclusion',
+      () => this.fillInEnforcementZoneOrderDetailsWith({ enforcementZoneDetails }, 'exclusion'),
     )
-
-    this.fillInInstallationAndRiskWith({ installationAndRisk, interestedParties })
-
-    this.fillInAttachmentDetailsWith({
-      files,
-    })
-
-    return Page.verifyOnPage(OrderTasksPage)
   }
 
   fillInNewAlcoholMonitoringOrderWith({
@@ -488,30 +473,20 @@ export default class OrderTasksPage extends AppPage {
     files,
     probationDeliveryUnit,
   }): OrderTasksPage {
-    this.aboutTheDeviceWearerTask.click()
-
-    this.fillInGeneralOrderDetailsWith({
-      deviceWearerDetails,
-      responsibleAdultDetails,
-      primaryAddressDetails,
-      secondaryAddressDetails,
-      interestedParties,
-      monitoringOrderTypeDescription,
-      probationDeliveryUnit,
-    })
-
-    this.fillInAlcoholMonitoringOrderDetailsWith({
-      alcoholMonitoringDetails,
-      installationAddressDetails,
-    })
-
-    this.fillInInstallationAndRiskWith({ installationAndRisk, interestedParties })
-
-    this.fillInAttachmentDetailsWith({
-      files,
-    })
-
-    return Page.verifyOnPage(OrderTasksPage)
+    return this.fillInOrderSectionsWith(
+      {
+        deviceWearerDetails,
+        responsibleAdultDetails,
+        primaryAddressDetails,
+        secondaryAddressDetails,
+        interestedParties,
+        installationAndRisk,
+        monitoringOrderTypeDescription,
+        files,
+        probationDeliveryUnit,
+      },
+      () => this.fillInAlcoholMonitoringOrderDetailsWith({ alcoholMonitoringDetails, installationAddressDetails }),
+    )
   }
 
   fillInAlcoholMonitoringVariationWith({
@@ -530,30 +505,20 @@ export default class OrderTasksPage extends AppPage {
   }): OrderTasksPage {
     this.fillInVariationsDetails({ variationDetails })
 
-    this.aboutTheDeviceWearerTask.click()
-
-    this.fillInGeneralOrderDetailsWith({
-      deviceWearerDetails,
-      responsibleAdultDetails,
-      primaryAddressDetails,
-      secondaryAddressDetails,
-      interestedParties,
-      monitoringOrderTypeDescription,
-      probationDeliveryUnit,
-    })
-
-    this.fillInAlcoholMonitoringOrderDetailsWith({
-      alcoholMonitoringDetails,
-      installationAddressDetails,
-    })
-
-    this.fillInInstallationAndRiskWith({ installationAndRisk, interestedParties })
-
-    this.fillInAttachmentDetailsWith({
-      files,
-    })
-
-    return Page.verifyOnPage(OrderTasksPage)
+    return this.fillInOrderSectionsWith(
+      {
+        deviceWearerDetails,
+        responsibleAdultDetails,
+        primaryAddressDetails,
+        secondaryAddressDetails,
+        interestedParties,
+        installationAndRisk,
+        monitoringOrderTypeDescription,
+        files,
+        probationDeliveryUnit,
+      },
+      () => this.fillInAlcoholMonitoringOrderDetailsWith({ alcoholMonitoringDetails, installationAddressDetails }),
+    )
   }
 
   fillInNewTrailMonitoringOrderWith({
@@ -568,29 +533,20 @@ export default class OrderTasksPage extends AppPage {
     files,
     probationDeliveryUnit,
   }): OrderTasksPage {
-    this.aboutTheDeviceWearerTask.click()
-
-    this.fillInGeneralOrderDetailsWith({
-      deviceWearerDetails,
-      responsibleAdultDetails,
-      primaryAddressDetails,
-      secondaryAddressDetails,
-      interestedParties,
-      monitoringOrderTypeDescription,
-      probationDeliveryUnit,
-    })
-
-    this.fillInTrailMonitoringOrderDetailsWith({
-      trailMonitoringDetails,
-    })
-
-    this.fillInInstallationAndRiskWith({ installationAndRisk, interestedParties })
-
-    this.fillInAttachmentDetailsWith({
-      files,
-    })
-
-    return Page.verifyOnPage(OrderTasksPage)
+    return this.fillInOrderSectionsWith(
+      {
+        deviceWearerDetails,
+        responsibleAdultDetails,
+        primaryAddressDetails,
+        secondaryAddressDetails,
+        interestedParties,
+        installationAndRisk,
+        monitoringOrderTypeDescription,
+        files,
+        probationDeliveryUnit,
+      },
+      () => this.fillInTrailMonitoringOrderDetailsWith({ trailMonitoringDetails }),
+    )
   }
 
   makeChanges(): void {
@@ -812,12 +768,12 @@ export default class OrderTasksPage extends AppPage {
   ): void {
     fillInCurfewOrderDetailsWith({ curfewConditionDetails, curfewReleaseDetails, curfewTimetable, dayOfReleaseAnswer })
     if (checkYourAnswerPage) {
-      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
-        MonitoringConditionsCheckYourAnswersPage,
-        'Check your answer',
-      )
-      monitoringConditionsCheckYourAnswersPage.continueButton().click()
+      this.continueFromMonitoringConditionsCya()
     }
+  }
+
+  continueFromMonitoringConditionsCya(): void {
+    Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answer').continueButton().click()
   }
 
   fillInEnforcementZoneOrderDetailsWith(
@@ -828,11 +784,7 @@ export default class OrderTasksPage extends AppPage {
     fillInEnforcementZoneListItemDetailsWith(enforcementZoneDetails, zoneType)
 
     if (checkYourAnswerPage) {
-      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
-        MonitoringConditionsCheckYourAnswersPage,
-        'Check your answer',
-      )
-      monitoringConditionsCheckYourAnswersPage.continueButton().click()
+      this.continueFromMonitoringConditionsCya()
     }
   }
 
@@ -843,11 +795,7 @@ export default class OrderTasksPage extends AppPage {
     fillInAlcoholMonitoringOrderDetailsWith(alcoholMonitoringDetails)
 
     if (checkYourAnswerPage) {
-      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
-        MonitoringConditionsCheckYourAnswersPage,
-        'Check your answer',
-      )
-      monitoringConditionsCheckYourAnswersPage.continueButton().click()
+      this.continueFromMonitoringConditionsCya()
     }
   }
 
@@ -855,11 +803,7 @@ export default class OrderTasksPage extends AppPage {
     fillInTrailMonitoringOrderDetailsWith(trailMonitoringDetails)
 
     if (checkYourAnswerPage) {
-      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
-        MonitoringConditionsCheckYourAnswersPage,
-        'Check your answer',
-      )
-      monitoringConditionsCheckYourAnswersPage.continueButton().click()
+      this.continueFromMonitoringConditionsCya()
     }
   }
 
@@ -911,11 +855,7 @@ export default class OrderTasksPage extends AppPage {
     fillInAttendanceMonitoringDetailsWith(attendanceMonitoringDetails)
 
     if (checkYourAnswerPage) {
-      const monitoringConditionsCheckYourAnswersPage = Page.verifyOnPage(
-        MonitoringConditionsCheckYourAnswersPage,
-        'Check your answer',
-      )
-      monitoringConditionsCheckYourAnswersPage.continueButton().click()
+      this.continueFromMonitoringConditionsCya()
     }
   }
 }
