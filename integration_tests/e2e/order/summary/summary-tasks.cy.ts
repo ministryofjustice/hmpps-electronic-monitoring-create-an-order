@@ -1223,14 +1223,6 @@ context('Order Summary', () => {
       )
       dwCYApage.saveAndReturnButton.click()
 
-      const riskInformationCyaPage = Page.verifyOnPage(
-        InstallationAndRiskCheckYourAnswersPage,
-        { orderId: mockOrderId },
-        {},
-        'Check your answers',
-      )
-      riskInformationCyaPage.saveAndReturnButton.click()
-
       const monitoringConditionCyaPage = Page.verifyOnPage(
         MonitoringConditionsCheckYourAnswersPage,
         { orderId: mockOrderId },
@@ -1238,6 +1230,14 @@ context('Order Summary', () => {
         'Check your answers',
       )
       monitoringConditionCyaPage.saveAndReturnButton.click()
+
+      const riskInformationCyaPage = Page.verifyOnPage(
+        InstallationAndRiskCheckYourAnswersPage,
+        { orderId: mockOrderId },
+        {},
+        'Check your answers',
+      )
+      riskInformationCyaPage.saveAndReturnButton.click()
 
       const attachmentSummaryPage = Page.verifyOnPage(
         AttachmentSummaryPage,
