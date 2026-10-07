@@ -188,6 +188,7 @@ context('Index', () => {
   context('No orders found', () => {
     beforeEach(() => {
       cy.task('reset')
+      cy.task('stubCemoListOrders', { httpStatus: 200, orders: [] })
     })
 
     it('It should show the empty list message for my orders when no my draft forms exist', () => {
