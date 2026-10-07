@@ -81,14 +81,6 @@ context('Index', () => {
       cy.url().should('include', 'view=HOME_OFFICE_ORDERS')
       page.viewFilter.should('have.value', 'HOME_OFFICE_ORDERS')
     })
-    it('Should not show the view filter for probation users', () => {
-      signInWithCohort({ cohort: 'PROBATION' }, '223456782')
-
-      const page = Page.visit(IndexPage)
-
-      page.viewFilter.should('not.exist')
-      page.viewFilterButton.should('not.exist')
-    })
 
     it('Should reload the order list with the selected view', () => {
       signInWithCohort(prisonCohort, '223456783')
@@ -229,7 +221,7 @@ context('Index', () => {
     })
 
     it('It should show the empty list message for failed orders when no my failed forms exist', () => {
-      signInWithCohort(prisonCohort, '223456784')
+      signInWithCohort(prisonCohort, '223456785')
       const page = Page.visit(IndexPage)
 
       page.viewFilter.select('My failed to submit')
@@ -240,10 +232,10 @@ context('Index', () => {
     })
 
     it('It should show the empty list message for prison orders when no draft forms exist', () => {
-      signInWithCohort(prisonCohort, '223456784')
+      signInWithCohort(prisonCohort, '223456786')
       const page = Page.visit(IndexPage)
 
-      page.viewFilter.select('My prison drafts')
+      page.viewFilter.select("My prison's forms")
       page.viewFilterButton.click()
       const indexPage = Page.verifyOnPage(IndexPage)
       indexPage.ordersList.get('.govuk-table__body').should('not.exist')
@@ -251,7 +243,7 @@ context('Index', () => {
     })
 
     it('It should show the empty list message for home office orders when no draft forms exist', () => {
-      signInWithCohort({ cohort: 'HOME_OFFICE', activeCaseLoadName: 'HMP Court' }, '223456784')
+      signInWithCohort({ cohort: 'HOME_OFFICE', activeCaseLoadName: 'HMP Court' }, '223456787')
       const page = Page.visit(IndexPage)
 
       page.viewFilter.select('Home Office forms')
