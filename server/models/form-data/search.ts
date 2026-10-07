@@ -1,7 +1,7 @@
 import paths from '../../constants/paths'
 import { AddressTypeEnum } from '../Address'
 import { OrderListInformation } from '../OrderListInformation'
-import { OrderListView, OrderListViewEnum, orderListViewLabels } from './OrderListView'
+import { emptyListMessages, OrderListView, OrderListViewEnum, orderListViewLabels } from './OrderListView'
 import { OrderSearchResult } from '../OrderSearchResult'
 
 type OrderListViewModel = {
@@ -14,6 +14,7 @@ type OrderListViewModel = {
     lastUpdatedDateTime: string
     index: number
   }[]
+  emptyListMessage: string
   isPrisonOrYouthUser: boolean
   viewOptions: { value: OrderListView; text: string; selected: boolean }[]
 }
@@ -135,6 +136,7 @@ export function constructListViewModel(
       index,
     })),
     isPrisonOrYouthUser,
+    emptyListMessage: emptyListMessages[view],
     viewOptions: OrderListViewEnum.options.map(value => ({
       value,
       text: orderListViewLabels[value],

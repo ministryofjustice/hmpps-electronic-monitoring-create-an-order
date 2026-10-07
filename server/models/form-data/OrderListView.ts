@@ -9,6 +9,12 @@ export const orderListViewLabels: Record<OrderListView, string> = {
   PRISON_ORDERS: 'My prison drafts',
 }
 
+export const emptyListMessages: Record<OrderListView, string> = {
+  MY_ORDERS: 'You have no draft forms',
+  FAILED_ORDERS: 'You have no failed to submit forms',
+  PRISON_ORDERS: 'Your prison has no draft forms',
+}
+
 export const ListOrdersQueryParser = z.object({
   view: OrderListViewEnum.catch('MY_ORDERS').default('MY_ORDERS'),
 })

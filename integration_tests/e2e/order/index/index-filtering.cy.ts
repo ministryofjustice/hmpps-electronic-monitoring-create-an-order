@@ -5,26 +5,24 @@ import Page from '../../../pages/page'
 const mockOrderId = uuidv4()
 
 context('Index', () => {
+  const signInWithCohort = (cohort: Record<string, string>, userId: string) => {
+    cy.task('stubSignIn', {
+      name: 'john smith',
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+      stubCohort: false,
+      userId,
+    })
+    cy.task('stubCemoRequest', {
+      httpStatus: 200,
+      method: 'GET',
+      subPath: 'user-cohort',
+      response: cohort,
+    })
+    cy.signIn()
+  }
+  const prisonCohort = { cohort: 'PRISON', activeCaseLoadName: 'HMP ABC' }
+  const crownCourt = { cohort: 'COURT', activeCaseLoadName: 'HMP Court' }
   context('Filtering the order list', () => {
-    const signInWithCohort = (cohort: Record<string, string>, userId: string) => {
-      cy.task('stubSignIn', {
-        name: 'john smith',
-        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
-        stubCohort: false,
-        userId,
-      })
-      cy.task('stubCemoRequest', {
-        httpStatus: 200,
-        method: 'GET',
-        subPath: 'user-cohort',
-        response: cohort,
-      })
-      cy.signIn()
-    }
-
-    const prisonCohort = { cohort: 'PRISON', activeCaseLoadName: 'HMP ABC' }
-    const crownCourt = { cohort: 'COURT', activeCaseLoadName: 'HMP Court' }
-
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubCemoListOrders')
@@ -184,6 +182,42 @@ context('Index', () => {
       const page = Page.verifyOnPage(IndexPage)
       page.viewFilter.should('not.exist')
       page.ordersList.should('exist')
+    })
+  })
+
+  context('No orders found', () => {
+    beforeEach(() => {
+      cy.task('reset')
+    })
+
+    it('It should show the empty list message for my orders when no my draft forms exist', () => {
+      signInWithCohort(prisonCohort, '223456784')
+      Page.visit(IndexPage)
+      const indexPage = Page.verifyOnPage(IndexPage)
+      indexPage.ordersList.get('.govuk-table__body').should('not.exist')
+      cy.contains('You have no draft forms').should('exist')
+    })
+
+    it('It should show the empty list message for failed orders when no my failed forms exist', () => {
+      signInWithCohort(prisonCohort, '223456784')
+      const page = Page.visit(IndexPage)
+
+      page.viewFilter.select('My failed to submit')
+      page.viewFilterButton.click()
+      const indexPage = Page.verifyOnPage(IndexPage)
+      indexPage.ordersList.get('.govuk-table__body').should('not.exist')
+      cy.contains('You have no failed to submit forms').should('exist')
+    })
+
+    it('It should show the empty list message for prison orders when no draft forms exist', () => {
+      signInWithCohort(prisonCohort, '223456784')
+      const page = Page.visit(IndexPage)
+
+      page.viewFilter.select('My prison drafts')
+      page.viewFilterButton.click()
+      const indexPage = Page.verifyOnPage(IndexPage)
+      indexPage.ordersList.get('.govuk-table__body').should('not.exist')
+      cy.contains('Your prison has no draft forms').should('exist')
     })
   })
 })
