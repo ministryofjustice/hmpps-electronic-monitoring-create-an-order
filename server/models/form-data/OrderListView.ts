@@ -24,10 +24,10 @@ export const getOrderListViewsForCohort = (cohort?: Cohort): OrderListView[] => 
 }
 
 export const emptyListMessages: Record<OrderListView, string> = {
-  MY_ORDERS: 'You have no draft forms',
+  MY_ORDERS: 'You have no draft or returned forms',
   FAILED_ORDERS: 'You have no failed to submit forms',
-  PRISON_ORDERS: 'Your prison has no draft forms',
-  HOME_OFFICE_ORDERS: 'Your team has no draft forms',
+  PRISON_ORDERS: 'Your prison has no draft or returned forms',
+  HOME_OFFICE_ORDERS: 'Your team has no draft or returned forms',
 }
 
 export const ListOrdersQueryParser = z.object({

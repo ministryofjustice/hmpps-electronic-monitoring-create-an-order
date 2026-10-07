@@ -217,7 +217,7 @@ context('Index', () => {
       Page.visit(IndexPage)
       const indexPage = Page.verifyOnPage(IndexPage)
       indexPage.ordersList.get('.govuk-table__body').should('not.exist')
-      cy.contains('You have no draft forms').should('exist')
+      cy.contains('You have no draf or returned forms').should('exist')
     })
 
     it('It should show the empty list message for failed orders when no my failed forms exist', () => {
@@ -239,7 +239,7 @@ context('Index', () => {
       page.viewFilterButton.click()
       const indexPage = Page.verifyOnPage(IndexPage)
       indexPage.ordersList.get('.govuk-table__body').should('not.exist')
-      cy.contains('Your prison has no draft forms').should('exist')
+      cy.contains('Your prison has no draft or returned forms').should('exist')
     })
 
     it('It should show the empty list message for home office orders when no draft forms exist', () => {
@@ -250,7 +250,7 @@ context('Index', () => {
       page.viewFilterButton.click()
       const indexPage = Page.verifyOnPage(IndexPage)
       indexPage.ordersList.get('.govuk-table__body').should('not.exist')
-      cy.contains('Your team has no draft forms').should('exist')
+      cy.contains('Your team has no draft or returned forms').should('exist')
     })
   })
 })
