@@ -24,12 +24,6 @@ context('Order type descriptions', () => {
     hasAnotherAddress: 'No',
   }
 
-  const installationAndRisk = {
-    offence: 'Sexual offences',
-    possibleRisk: 'Sex offender',
-    riskCategory: 'Children under the age of 18 are living at the property',
-    riskDetails: 'No risk',
-  }
   let orderSummaryPage: OrderSummaryPage
 
   const trailMonitoringOrder = {
@@ -169,7 +163,6 @@ context('Order type descriptions', () => {
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       newDeviceWearerFlow: true,
     })
@@ -203,7 +196,6 @@ context('Order type descriptions', () => {
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       newDeviceWearerFlow: true,
     })
@@ -236,7 +228,6 @@ context('Order type descriptions', () => {
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       newDeviceWearerFlow: true,
     })
@@ -270,7 +261,6 @@ context('Order type descriptions', () => {
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       newDeviceWearerFlow: true,
     })
@@ -326,7 +316,6 @@ context('Order type descriptions', () => {
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       probationDeliveryUnit,
       newDeviceWearerFlow: true,
@@ -348,7 +337,6 @@ context('Order type descriptions', () => {
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,
-      installationAndRisk,
       monitoringOrderTypeDescription,
     })
 
@@ -368,7 +356,6 @@ context('Order type descriptions', () => {
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,
-      installationAndRisk,
       monitoringOrderTypeDescription,
     })
     verifyResult({ monitoringOrderTypeDescription })
@@ -414,7 +401,6 @@ context('Order type descriptions', () => {
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       newDeviceWearerFlow: true,
     })
@@ -458,7 +444,6 @@ context('Order type descriptions', () => {
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       newDeviceWearerFlow: true,
     })

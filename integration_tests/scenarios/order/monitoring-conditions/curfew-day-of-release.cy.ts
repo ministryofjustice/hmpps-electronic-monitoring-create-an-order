@@ -22,13 +22,6 @@ context('Curfew on day of release', () => {
     hasAnotherAddress: 'No',
   }
 
-  const installationAndRisk = {
-    offence: 'Sexual offences',
-    possibleRisk: 'Sex offender',
-    riskCategory: 'Children under the age of 18 are living at the property',
-    riskDetails: 'No risk',
-  }
-
   const installationLocationDetails = {
     location: 'At a prison',
   }
@@ -107,7 +100,6 @@ context('Curfew on day of release', () => {
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       newDeviceWearerFlow: true,
     })

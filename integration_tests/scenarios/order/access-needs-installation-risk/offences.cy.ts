@@ -47,11 +47,7 @@ context('offences', () => {
 
     orderSummaryPage.aboutTheDeviceWearerTask.click()
 
-    orderSummaryPage.fillInGeneralOrderDetailsWith({
-      deviceWearerDetails,
-      interestedParties,
-      newDeviceWearerFlow: true,
-    })
+    orderSummaryPage.startRiskInformationAfterDeviceWearerWith({ deviceWearerDetails, interestedParties })
 
     // Should go to details of installation page
     const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
@@ -105,11 +101,7 @@ context('offences', () => {
 
     orderSummaryPage.aboutTheDeviceWearerTask.click()
 
-    orderSummaryPage.fillInGeneralOrderDetailsWith({
-      deviceWearerDetails,
-      interestedParties,
-      newDeviceWearerFlow: true,
-    })
+    orderSummaryPage.startRiskInformationAfterDeviceWearerWith({ deviceWearerDetails, interestedParties })
 
     const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
     cy.get('#offence').should('not.exist')

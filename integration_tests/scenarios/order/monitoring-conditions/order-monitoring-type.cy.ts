@@ -32,13 +32,6 @@ context('Monitoring type list flow', () => {
     hasAnotherAddress: 'No',
   }
 
-  const installationAndRisk = {
-    offence: 'Sexual offences',
-    possibleRisk: 'Sex offender',
-    riskCategory: 'Children under the age of 18 are living at the property',
-    riskDetails: 'No risk',
-  }
-
   let orderSummaryPage: OrderSummaryPage
 
   const trail = {
@@ -144,7 +137,6 @@ context('Monitoring type list flow', () => {
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       newDeviceWearerFlow: true,
     })

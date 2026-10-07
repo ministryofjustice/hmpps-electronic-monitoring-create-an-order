@@ -47,11 +47,7 @@ context('offences', () => {
   })
 
   it('Notifying organisation is Home Office, mappa flow', () => {
-    orderSummaryPage.fillInGeneralOrderDetailsWith({
-      deviceWearerDetails,
-      interestedParties,
-      newDeviceWearerFlow: true,
-    })
+    orderSummaryPage.startRiskInformationAfterDeviceWearerWith({ deviceWearerDetails, interestedParties })
 
     const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
     detailsOfInstallationPage.form.fillInWith(detailsOfInstallationInfo)
@@ -83,11 +79,7 @@ context('offences', () => {
   })
 
   it('Notifying organisation is Home Office, not mappa flow', () => {
-    orderSummaryPage.fillInGeneralOrderDetailsWith({
-      deviceWearerDetails,
-      interestedParties,
-      newDeviceWearerFlow: true,
-    })
+    orderSummaryPage.startRiskInformationAfterDeviceWearerWith({ deviceWearerDetails, interestedParties })
 
     const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
     detailsOfInstallationPage.form.fillInWith(detailsOfInstallationInfo)

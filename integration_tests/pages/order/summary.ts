@@ -135,7 +135,6 @@ export default class OrderTasksPage extends AppPage {
       primaryAddressDetails,
       secondaryAddressDetails,
       interestedParties,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       probationDeliveryUnit,
     })
@@ -145,6 +144,8 @@ export default class OrderTasksPage extends AppPage {
       curfewReleaseDetails,
       curfewTimetable,
     })
+
+    this.fillInInstallationAndRiskWith({ installationAndRisk, interestedParties })
 
     this.fillInAttachmentDetailsWith({
       files,
@@ -231,7 +232,6 @@ export default class OrderTasksPage extends AppPage {
       primaryAddressDetails,
       secondaryAddressDetails,
       interestedParties,
-      installationAndRisk,
       probationDeliveryUnit,
       tertiaryAddressDetails,
       monitoringOrderTypeDescription,
@@ -339,6 +339,8 @@ export default class OrderTasksPage extends AppPage {
     )
     monitoringConditionsCheckYourAnswersPage.continueButton().click()
 
+    this.fillInInstallationAndRiskWith({ installationAndRisk, interestedParties })
+
     this.fillInAttachmentDetailsWith({
       files,
     })
@@ -371,7 +373,6 @@ export default class OrderTasksPage extends AppPage {
       primaryAddressDetails,
       secondaryAddressDetails,
       interestedParties,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       probationDeliveryUnit,
     })
@@ -381,6 +382,8 @@ export default class OrderTasksPage extends AppPage {
       curfewReleaseDetails,
       curfewTimetable,
     })
+
+    this.fillInInstallationAndRiskWith({ installationAndRisk, interestedParties })
 
     this.fillInAttachmentDetailsWith({
       files,
@@ -409,7 +412,6 @@ export default class OrderTasksPage extends AppPage {
       primaryAddressDetails,
       secondaryAddressDetails,
       interestedParties,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       probationDeliveryUnit,
     })
@@ -420,6 +422,8 @@ export default class OrderTasksPage extends AppPage {
       },
       'exclusion',
     )
+
+    this.fillInInstallationAndRiskWith({ installationAndRisk, interestedParties })
 
     this.fillInAttachmentDetailsWith({
       files,
@@ -451,7 +455,6 @@ export default class OrderTasksPage extends AppPage {
       primaryAddressDetails,
       secondaryAddressDetails,
       interestedParties,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       probationDeliveryUnit,
     })
@@ -462,6 +465,8 @@ export default class OrderTasksPage extends AppPage {
       },
       'exclusion',
     )
+
+    this.fillInInstallationAndRiskWith({ installationAndRisk, interestedParties })
 
     this.fillInAttachmentDetailsWith({
       files,
@@ -491,7 +496,6 @@ export default class OrderTasksPage extends AppPage {
       primaryAddressDetails,
       secondaryAddressDetails,
       interestedParties,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       probationDeliveryUnit,
     })
@@ -500,6 +504,8 @@ export default class OrderTasksPage extends AppPage {
       alcoholMonitoringDetails,
       installationAddressDetails,
     })
+
+    this.fillInInstallationAndRiskWith({ installationAndRisk, interestedParties })
 
     this.fillInAttachmentDetailsWith({
       files,
@@ -532,7 +538,6 @@ export default class OrderTasksPage extends AppPage {
       primaryAddressDetails,
       secondaryAddressDetails,
       interestedParties,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       probationDeliveryUnit,
     })
@@ -541,6 +546,8 @@ export default class OrderTasksPage extends AppPage {
       alcoholMonitoringDetails,
       installationAddressDetails,
     })
+
+    this.fillInInstallationAndRiskWith({ installationAndRisk, interestedParties })
 
     this.fillInAttachmentDetailsWith({
       files,
@@ -569,7 +576,6 @@ export default class OrderTasksPage extends AppPage {
       primaryAddressDetails,
       secondaryAddressDetails,
       interestedParties,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       probationDeliveryUnit,
     })
@@ -577,6 +583,8 @@ export default class OrderTasksPage extends AppPage {
     this.fillInTrailMonitoringOrderDetailsWith({
       trailMonitoringDetails,
     })
+
+    this.fillInInstallationAndRiskWith({ installationAndRisk, interestedParties })
 
     this.fillInAttachmentDetailsWith({
       files,
@@ -603,7 +611,6 @@ export default class OrderTasksPage extends AppPage {
     primaryAddressDetails = undefined,
     secondaryAddressDetails = undefined,
     interestedParties = undefined,
-    installationAndRisk = undefined,
     probationDeliveryUnit = undefined,
     tertiaryAddressDetails = undefined,
     monitoringOrderTypeDescription = undefined,
@@ -712,44 +719,57 @@ export default class OrderTasksPage extends AppPage {
       deviceWearerCheckYourAnswersPage.continue()
     }
 
-    if (installationAndRisk) {
-      const { notifyingOrganisation } = interestedParties
-      const isCourt = notifyingOrganisation?.includes('Court')
-
-      const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
-      detailsOfInstallationPage.form.fillInWith({
-        possibleRisks: [installationAndRisk.possibleRisk],
-        riskCategories: [installationAndRisk.riskCategory],
-        riskDetails: installationAndRisk.riskDetails,
-      })
-      detailsOfInstallationPage.form.saveAndContinueButton.click()
-
-      if (interestedParties.notifyingOrganisation === 'Home Office') {
-        const mappaPage = Page.verifyOnPage(IsMappaPage)
-        mappaPage.form.fillInWith({ isMappa: 'No' })
-        mappaPage.form.saveAndContinueButton.click()
-      }
-
-      if (notifyingOrganisation !== 'Home Office' && !isCourt) {
-        const offencePage = Page.verifyOnPage(OffencePage)
-        offencePage.form.fillInWith({ offenceType: installationAndRisk.offence })
-        offencePage.form.saveAndContinueButton.click()
-
-        const offenceDetailsPage = Page.verifyOnPage(OffenceOtherInfoPage)
-        offenceDetailsPage.form.fillInWith({ hasOtherInformation: 'No' })
-        offenceDetailsPage.form.saveAndContinueButton.click()
-      }
-
-      const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(
-        InstallationAndRiskCheckYourAnswersPage,
-        'Check your answer',
-      )
-      installationAndRiskCheckYourAnswersPage.continueButton().click()
-    }
-
     if (monitoringOrderTypeDescription) {
       fillInOrderTypeDescriptionsWith(monitoringOrderTypeDescription)
     }
+  }
+
+  startRiskInformationAfterDeviceWearerWith({ deviceWearerDetails, interestedParties }): void {
+    fillInAboutTheDeviceWearer({
+      deviceWearerDetails,
+      notifyingOrganisation: interestedParties.notifyingOrganisation,
+    })
+    Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer').return()
+    this.riskInformationTask.click()
+  }
+
+  fillInInstallationAndRiskWith({ installationAndRisk, interestedParties }): void {
+    if (!installationAndRisk) {
+      return
+    }
+
+    const { notifyingOrganisation } = interestedParties
+    const isCourt = notifyingOrganisation?.includes('Court')
+
+    const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
+    detailsOfInstallationPage.form.fillInWith({
+      possibleRisks: [installationAndRisk.possibleRisk],
+      riskCategories: [installationAndRisk.riskCategory],
+      riskDetails: installationAndRisk.riskDetails,
+    })
+    detailsOfInstallationPage.form.saveAndContinueButton.click()
+
+    if (notifyingOrganisation === 'Home Office') {
+      const mappaPage = Page.verifyOnPage(IsMappaPage)
+      mappaPage.form.fillInWith({ isMappa: 'No' })
+      mappaPage.form.saveAndContinueButton.click()
+    }
+
+    if (notifyingOrganisation !== 'Home Office' && !isCourt) {
+      const offencePage = Page.verifyOnPage(OffencePage)
+      offencePage.form.fillInWith({ offenceType: installationAndRisk.offence })
+      offencePage.form.saveAndContinueButton.click()
+
+      const offenceDetailsPage = Page.verifyOnPage(OffenceOtherInfoPage)
+      offenceDetailsPage.form.fillInWith({ hasOtherInformation: 'No' })
+      offenceDetailsPage.form.saveAndContinueButton.click()
+    }
+
+    const installationAndRiskCheckYourAnswersPage = Page.verifyOnPage(
+      InstallationAndRiskCheckYourAnswersPage,
+      'Check your answer',
+    )
+    installationAndRiskCheckYourAnswersPage.continueButton().click()
   }
 
   fillInCurfewOrderDetailsWith(
