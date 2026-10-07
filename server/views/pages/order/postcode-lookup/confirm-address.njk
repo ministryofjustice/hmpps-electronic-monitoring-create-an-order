@@ -15,16 +15,38 @@
 
 {% block formInputs %}
 
+  {% if isCorePersonRecordAddress %}
+    {% set corePersonRecordAddressHtml %}
+      <p class="govuk-body">Check that this is the address where the person wearing the monitoring device will live while they are being electronically monitored.</p>
+      <p class="govuk-body">
+        {% for line in addressLines %}
+          {{ line }}{% if not loop.last %}<br>{% endif %}
+        {% endfor %}
+      </p>
+    {% endset %}
+
+    {{ govukInsetText({
+      classes: "app-inset-text--information",
+      html: corePersonRecordAddressHtml
+    }) }}
+  {% else %}
     {{ govukInsetText({
       html: addressHtml
     }) }}
+  {% endif %}
 
     <p class="govuk-body">
-      <a href="{{ useDifferentAddressLink}}" class="govuk-link">Use a different address</a>
+      <a href="{{ useDifferentAddressLink}}" class="govuk-link">{% if isCorePersonRecordAddress %}Search for a different address{% else %}Use a different address{% endif %}</a>
     </p>
 
     <p class="govuk-body">
       <a href="{{ manualAddressLink }}" class="govuk-link">Enter address manually</a>
     </p>
+
+    {% if isCorePersonRecordAddress %}
+      <p class="govuk-body">
+        <a href="{{ noFixedAddressLink }}" class="govuk-link">The device wearer does not have a fixed address</a>
+      </p>
+    {% endif %}
 
 {% endblock %}
