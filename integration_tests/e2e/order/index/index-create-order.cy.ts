@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
-import IndexPage from '../../pages/index'
-import Page from '../../pages/page'
-import NotifyingOrganisationPage from './interested-parties/notifying-organisation/notifyingOrganisationPage'
+import IndexPage from '../../../pages/index'
+import Page from '../../../pages/page'
+import NotifyingOrganisationPage from '../interested-parties/notifying-organisation/notifyingOrganisationPage'
 
 const mockOrderId = uuidv4()
 
