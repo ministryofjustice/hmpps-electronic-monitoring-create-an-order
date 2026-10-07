@@ -1,5 +1,6 @@
 import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
+import { fillInGeneralOrderDetailsWith } from '../../../utils/scenario-flows/general-order-details'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
 import fillInMonitoringTypeWith from '../../../utils/scenario-flows/monitoringType'
 import { verifyCurfewInCheckYourAnswersPage } from '../../../utils/scenario-flows/curfew.cy'
@@ -96,7 +97,7 @@ context('Curfew on day of release', () => {
       monitoringEndDate: new Date(currentDate.getFullYear() + 2, 0, 1),
     }
 
-    orderSummaryPage.fillInGeneralOrderDetailsWith({
+    fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,

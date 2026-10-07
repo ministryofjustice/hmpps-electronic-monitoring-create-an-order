@@ -5,6 +5,7 @@ import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAdd
 import Page from '../pages/page'
 import IndexPage from '../pages/index'
 import OrderSummaryPage from '../pages/order/summary'
+import fillInNewOrderWith from '../utils/scenario-flows/fill-in-new-order'
 import SubmitSuccessPage from '../pages/order/submit-success'
 import { stubAttachments } from './utils'
 import SearchPage from '../pages/search'
@@ -137,7 +138,7 @@ context('The kitchen sink', () => {
       createNewOrder({ notifyingOrganisation: interestedParties, sentencingActAnswer: 'No' })
 
       const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-      orderSummaryPage.fillInNewOrderWith({
+      fillInNewOrderWith({
         deviceWearerDetails,
         responsibleAdultDetails: undefined,
         primaryAddressDetails,

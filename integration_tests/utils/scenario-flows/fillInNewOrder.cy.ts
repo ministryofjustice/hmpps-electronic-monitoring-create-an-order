@@ -2,6 +2,7 @@ import { createFakeAddress, createFakeAdultDeviceWearer, createFakeInterestedPar
 import IndexPage from '../../pages'
 import SubmitSuccessPage from '../../pages/order/submit-success'
 import OrderSummaryPage from '../../pages/order/summary'
+import fillInNewOrderWith from './fill-in-new-order'
 import Page from '../../pages/page'
 import SearchPage from '../../pages/search'
 import createNewOrder from './create-new-order.cy'
@@ -52,7 +53,7 @@ export default function fillInNewOrder({ startDate = null, files, newDeviceWeare
   })
 
   const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-  orderSummaryPage.fillInNewOrderWith({
+  fillInNewOrderWith({
     deviceWearerDetails,
     responsibleAdultDetails: undefined,
     primaryAddressDetails,

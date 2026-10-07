@@ -1,5 +1,6 @@
 import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
+import { fillInGeneralOrderDetailsWith } from '../../../utils/scenario-flows/general-order-details'
 import {
   createFakeAdultDeviceWearer,
   createFakeInterestedParties,
@@ -133,7 +134,7 @@ context('Monitoring type list flow', () => {
       monitoringEndDate: new Date(currentDate.getFullYear() + 2, 0, 1),
     }
 
-    orderSummaryPage.fillInGeneralOrderDetailsWith({
+    fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,

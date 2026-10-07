@@ -4,6 +4,7 @@ import MappaPage from '../../../e2e/order/access-needs-installation-risk/mappa/M
 import { createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import OrderSummaryPage from '../../../pages/order/summary'
+import { startRiskInformationAfterDeviceWearerWith } from '../../../utils/scenario-flows/risk'
 import Page from '../../../pages/page'
 import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
 
@@ -47,7 +48,7 @@ context('offences', () => {
   })
 
   it('Notifying organisation is Home Office, mappa flow', () => {
-    orderSummaryPage.startRiskInformationAfterDeviceWearerWith({ deviceWearerDetails, interestedParties })
+    startRiskInformationAfterDeviceWearerWith({ deviceWearerDetails, interestedParties })
 
     const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
     detailsOfInstallationPage.form.fillInWith(detailsOfInstallationInfo)
@@ -79,7 +80,7 @@ context('offences', () => {
   })
 
   it('Notifying organisation is Home Office, not mappa flow', () => {
-    orderSummaryPage.startRiskInformationAfterDeviceWearerWith({ deviceWearerDetails, interestedParties })
+    startRiskInformationAfterDeviceWearerWith({ deviceWearerDetails, interestedParties })
 
     const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
     detailsOfInstallationPage.form.fillInWith(detailsOfInstallationInfo)
