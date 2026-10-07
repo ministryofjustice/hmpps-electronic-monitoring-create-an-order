@@ -143,7 +143,7 @@ context('Index', () => {
 
       const indexPage = Page.verifyOnPage(IndexPage)
       indexPage.ordersList.get('.govuk-table__body').should('not.exist')
-      cy.contains('You have no draft forms').should('exist')
+      cy.contains('You have no draft or returned forms').should('exist')
     })
   })
 })
