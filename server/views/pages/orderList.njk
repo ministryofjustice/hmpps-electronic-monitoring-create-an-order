@@ -12,7 +12,7 @@
         {% set colour = "blue" %}
       {% elif tag.type == 'SUBMITTED' %}
         {% set colour = "green" %}
-      {% elif tag.type == 'FAILED' %}
+      {% elif tag.type == 'FAILED' or tag.type == 'RETURNED' %}
         {% set colour = "red" %}
       {% elif tag.type == 'DRAFT' %}
         {% set colour = "grey" %}

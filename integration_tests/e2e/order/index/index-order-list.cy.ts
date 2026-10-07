@@ -94,6 +94,49 @@ context('Index', () => {
       page.checkIsAccessible()
     })
 
+    it('Should only have Returned status when order is a change and returned ', () => {
+      cy.task('stubCemoListOrders', {
+        httpStatus: 200,
+        orders: [
+          {
+            id: mockOrderId,
+            versionId: uuidv4(),
+            status: 'REJECTED',
+            type: 'VARIATION',
+            firstName: 'vari',
+            lastName: 'user3',
+            notifyingOrganisation: 'PRISON',
+            lastUpdatedBy: 'CEMO.USER',
+            lastUpdatedDateTime: '2024-03-10T11:30:00.000Z',
+          },
+        ],
+      })
+      // Visit the home page
+      const page = Page.visit(IndexPage)
+
+      // Header
+      page.header.userName().should('contain.text', 'J. Smith')
+      page.header.phaseBanner().should('contain.text', 'dev')
+
+      // Create buttons
+      page.newOrderFormButton.should('exist')
+
+      // Sub nav
+      page.subNav.should('exist')
+      page.subNav.contains('Draft forms').should('have.attr', 'href', `/`)
+      page.subNav.contains('Draft forms').should('have.attr', 'aria-current', 'page')
+      page.subNav.contains('Search for a form').should('have.attr', 'href', `/search`)
+      page.subNav.contains('Search for a form').should('not.have.attr', 'aria-current', `page`)
+
+      // Order list
+      page.orders.should('exist').should('have.length', 1)
+      page.TableContains('vari user3', 'Returned')
+      page.OrderFor('vari user3').find('a').should('have.attr', 'href', `/order/${mockOrderId}/summary`)
+      page.IsAccesible('vari user3', 0)
+
+      page.checkIsAccessible()
+    })
+
     it('navigates to the index page when we click the draft forms nav link', () => {
       cy.task('stubCemoListOrders')
       const page = Page.visit(IndexPage)

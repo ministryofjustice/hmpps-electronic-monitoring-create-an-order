@@ -144,24 +144,30 @@ export function constructListViewModel(
 }
 
 const getStatusTag = (status: OrderListInformation['status']) => {
-  if (status === 'IN_PROGRESS') {
-    return [{ text: 'Draft', type: 'DRAFT' }]
+  switch (status) {
+    case 'IN_PROGRESS':
+      return [{ text: 'Draft', type: 'DRAFT' }]
+    case 'ERROR':
+      return [{ text: 'Failed to submit', type: 'FAILED' }]
+    case 'SUBMITTED':
+      return [{ text: 'Submitted', type: 'SUBMITTED' }]
+
+    default:
+      return []
   }
-  if (status === 'ERROR') {
-    return [{ text: 'Failed to submit', type: 'FAILED' }]
-  }
-  if (status === 'SUBMITTED') {
-    return [{ text: 'Submitted', type: 'SUBMITTED' }]
-  }
-  return []
 }
 
 const getStatusTags = (order: Pick<OrderListInformation, 'status' | 'type'>) => {
   const statusTags = []
 
-  if (order.type === 'VARIATION') {
-    statusTags.push({ text: 'Change to form', type: 'VARIATION' })
+  if (order.status === 'REJECTED') {
+    statusTags.push({ text: 'Returned', type: 'RETURNED' })
+  } else {
+    if (order.type === 'VARIATION') {
+      statusTags.push({ text: 'Change to form', type: 'VARIATION' })
+    }
+    statusTags.push(...getStatusTag(order.status))
   }
-  statusTags.push(...getStatusTag(order.status))
+
   return statusTags
 }
