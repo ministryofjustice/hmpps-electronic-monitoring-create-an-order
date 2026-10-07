@@ -616,107 +616,24 @@ export default class OrderTasksPage extends AppPage {
     monitoringOrderTypeDescription = undefined,
     newDeviceWearerFlow = false,
   }): void {
-    if (!newDeviceWearerFlow) {
-      const searchedIdentifier =
-        deviceWearerDetails.pncId ||
-        deviceWearerDetails.nomisId ||
-        deviceWearerDetails.prisonNumber ||
-        deviceWearerDetails.deliusId ||
-        deviceWearerDetails.complianceAndEnforcementPersonReference ||
-        deviceWearerDetails.courtCaseReferenceNumber
-
-      const identityNumberNames = identityNumberNamesForNotifyingOrganisation(interestedParties?.notifyingOrganisation)
-      const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage, {}, {}, identityNumberNames)
-      identityNumbersPage.form.fillInWith(deviceWearerDetails)
-      identityNumbersPage.form.saveAndContinueButton.click()
-
-      if (
-        interestedParties?.notifyingOrganisation === 'Probation service' ||
-        interestedParties?.notifyingOrganisation === 'Prison' ||
-        interestedParties?.notifyingOrganisation === 'Prison Service' ||
-        interestedParties?.notifyingOrganisation === 'Youth Custody Service'
-      ) {
-        const deviceWearerSearchResultsPage = Page.verifyOnPage(DeviceWearerSearchResultsPage, {
-          identifyNumber: searchedIdentifier,
-        })
-        deviceWearerSearchResultsPage.form.enterDetailsManuallyLink.click()
-      }
-
-      const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
-      aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
-      aboutDeviceWearerPage.form.saveAndContinueButton.click()
-
-      if (responsibleAdultDetails) {
-        const responsibleAdultDetailsPage = Page.verifyOnPage(ResponsibleAdultDetailsPage)
-        responsibleAdultDetailsPage.form.fillInWith(responsibleAdultDetails)
-        responsibleAdultDetailsPage.form.saveAndContinueButton.click()
-      }
-
-      const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
-      deviceWearerCheckYourAnswersPage.continueButton().click()
-
-      const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
-      contactDetailsPage.form.fillInWith(deviceWearerDetails)
-      contactDetailsPage.form.saveAndContinueButton.click()
-
-      const noFixedAbode = Page.verifyOnPage(NoFixedAbodePage)
-      noFixedAbode.form.fillInWith(deviceWearerDetails)
-      noFixedAbode.form.saveAndContinueButton.click()
-
-      if (primaryAddressDetails) {
-        fillinAddress({
-          findAddress: {},
-          addressResult: {},
-          enterAddress: primaryAddressDetails,
-          addAnother: secondaryAddressDetails === undefined ? 'No' : 'Yes',
-        })
-
-        if (secondaryAddressDetails !== undefined) {
-          fillinAddress({
-            findAddress: {},
-            addressResult: {},
-            enterAddress: secondaryAddressDetails,
-            addAnother: tertiaryAddressDetails === undefined ? 'No' : 'Yes',
-            addressType: 'SECONDARY',
-          })
-        }
-
-        if (tertiaryAddressDetails !== undefined) {
-          fillinAddress({
-            findAddress: {},
-            addressResult: {},
-            enterAddress: tertiaryAddressDetails,
-            addressType: 'TERTIARY',
-          })
-        }
-      }
-      if (interestedParties) {
-        const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
-        interestedPartiesPage.form.fillInWith(interestedParties)
-        interestedPartiesPage.form.saveAndContinueButton.click()
-
-        if (interestedParties.responsibleOrganisation === 'Probation' && probationDeliveryUnit !== undefined) {
-          const probationDeliveryUnitPage = Page.verifyOnPage(ProbationDeliveryUnitPage)
-          probationDeliveryUnitPage.form.fillInWith(probationDeliveryUnit)
-          probationDeliveryUnitPage.form.saveAndContinueButton.click()
-        }
-        const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
-          ContactInformationCheckYourAnswersPage,
-          'Check your answer',
-        )
-        contactInformationCheckYourAnswersPage.continueButton().click()
-      }
-    } else {
-      fillInAboutTheDeviceWearer({
+    if (newDeviceWearerFlow) {
+      this.fillInNewDeviceWearerWith({
         deviceWearerDetails,
         responsibleAdultDetails,
         primaryAddressDetails,
         secondaryAddressDetails,
         tertiaryAddressDetails,
-        notifyingOrganisation: interestedParties?.notifyingOrganisation,
+        interestedParties,
+      }).continue()
+    } else {
+      this.fillInDeviceWearerWith({ deviceWearerDetails, responsibleAdultDetails, interestedParties })
+      this.fillInContactDetailsAndAddressesWith({
+        deviceWearerDetails,
+        primaryAddressDetails,
+        secondaryAddressDetails,
+        tertiaryAddressDetails,
       })
-      const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
-      deviceWearerCheckYourAnswersPage.continue()
+      this.fillInInterestedPartiesWith({ interestedParties, probationDeliveryUnit })
     }
 
     if (monitoringOrderTypeDescription) {
@@ -724,12 +641,129 @@ export default class OrderTasksPage extends AppPage {
     }
   }
 
-  startRiskInformationAfterDeviceWearerWith({ deviceWearerDetails, interestedParties }): void {
+  fillInDeviceWearerWith({ deviceWearerDetails, responsibleAdultDetails, interestedParties }): void {
+    const searchedIdentifier =
+      deviceWearerDetails.pncId ||
+      deviceWearerDetails.nomisId ||
+      deviceWearerDetails.prisonNumber ||
+      deviceWearerDetails.deliusId ||
+      deviceWearerDetails.complianceAndEnforcementPersonReference ||
+      deviceWearerDetails.courtCaseReferenceNumber
+
+    const identityNumberNames = identityNumberNamesForNotifyingOrganisation(interestedParties?.notifyingOrganisation)
+    const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage, {}, {}, identityNumberNames)
+    identityNumbersPage.form.fillInWith(deviceWearerDetails)
+    identityNumbersPage.form.saveAndContinueButton.click()
+
+    if (
+      interestedParties?.notifyingOrganisation === 'Probation service' ||
+      interestedParties?.notifyingOrganisation === 'Prison' ||
+      interestedParties?.notifyingOrganisation === 'Prison Service' ||
+      interestedParties?.notifyingOrganisation === 'Youth Custody Service'
+    ) {
+      const deviceWearerSearchResultsPage = Page.verifyOnPage(DeviceWearerSearchResultsPage, {
+        identifyNumber: searchedIdentifier,
+      })
+      deviceWearerSearchResultsPage.form.enterDetailsManuallyLink.click()
+    }
+
+    const aboutDeviceWearerPage = Page.verifyOnPage(AboutDeviceWearerPage)
+    aboutDeviceWearerPage.form.fillInWith(deviceWearerDetails)
+    aboutDeviceWearerPage.form.saveAndContinueButton.click()
+
+    if (responsibleAdultDetails) {
+      const responsibleAdultDetailsPage = Page.verifyOnPage(ResponsibleAdultDetailsPage)
+      responsibleAdultDetailsPage.form.fillInWith(responsibleAdultDetails)
+      responsibleAdultDetailsPage.form.saveAndContinueButton.click()
+    }
+
+    const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
+    deviceWearerCheckYourAnswersPage.continueButton().click()
+  }
+
+  fillInContactDetailsAndAddressesWith({
+    deviceWearerDetails,
+    primaryAddressDetails,
+    secondaryAddressDetails,
+    tertiaryAddressDetails,
+  }): void {
+    const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage)
+    contactDetailsPage.form.fillInWith(deviceWearerDetails)
+    contactDetailsPage.form.saveAndContinueButton.click()
+
+    const noFixedAbode = Page.verifyOnPage(NoFixedAbodePage)
+    noFixedAbode.form.fillInWith(deviceWearerDetails)
+    noFixedAbode.form.saveAndContinueButton.click()
+
+    if (primaryAddressDetails) {
+      fillinAddress({
+        findAddress: {},
+        addressResult: {},
+        enterAddress: primaryAddressDetails,
+        addAnother: secondaryAddressDetails === undefined ? 'No' : 'Yes',
+      })
+
+      if (secondaryAddressDetails !== undefined) {
+        fillinAddress({
+          findAddress: {},
+          addressResult: {},
+          enterAddress: secondaryAddressDetails,
+          addAnother: tertiaryAddressDetails === undefined ? 'No' : 'Yes',
+          addressType: 'SECONDARY',
+        })
+      }
+
+      if (tertiaryAddressDetails !== undefined) {
+        fillinAddress({
+          findAddress: {},
+          addressResult: {},
+          enterAddress: tertiaryAddressDetails,
+          addressType: 'TERTIARY',
+        })
+      }
+    }
+  }
+
+  fillInInterestedPartiesWith({ interestedParties, probationDeliveryUnit }): void {
+    if (interestedParties) {
+      const interestedPartiesPage = Page.verifyOnPage(InterestedPartiesPage)
+      interestedPartiesPage.form.fillInWith(interestedParties)
+      interestedPartiesPage.form.saveAndContinueButton.click()
+
+      if (interestedParties.responsibleOrganisation === 'Probation' && probationDeliveryUnit !== undefined) {
+        const probationDeliveryUnitPage = Page.verifyOnPage(ProbationDeliveryUnitPage)
+        probationDeliveryUnitPage.form.fillInWith(probationDeliveryUnit)
+        probationDeliveryUnitPage.form.saveAndContinueButton.click()
+      }
+      const contactInformationCheckYourAnswersPage = Page.verifyOnPage(
+        ContactInformationCheckYourAnswersPage,
+        'Check your answer',
+      )
+      contactInformationCheckYourAnswersPage.continueButton().click()
+    }
+  }
+
+  fillInNewDeviceWearerWith({
+    deviceWearerDetails,
+    responsibleAdultDetails = undefined,
+    primaryAddressDetails = undefined,
+    secondaryAddressDetails = undefined,
+    tertiaryAddressDetails = undefined,
+    interestedParties = undefined,
+  }): DeviceWearerCheckYourAnswersPage {
     fillInAboutTheDeviceWearer({
       deviceWearerDetails,
-      notifyingOrganisation: interestedParties.notifyingOrganisation,
+      responsibleAdultDetails,
+      primaryAddressDetails,
+      secondaryAddressDetails,
+      tertiaryAddressDetails,
+      notifyingOrganisation: interestedParties?.notifyingOrganisation,
     })
-    Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer').return()
+    return Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
+  }
+
+  startRiskInformationAfterDeviceWearerWith({ deviceWearerDetails, interestedParties }): void {
+    this.fillInNewDeviceWearerWith({ deviceWearerDetails, interestedParties }).return()
     this.riskInformationTask.click()
   }
 
