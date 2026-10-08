@@ -1,5 +1,5 @@
 import z from 'zod'
-import { validationErrors } from '../../constants/validationErrors'
+import { validationErrors } from '../../../constants/validationErrors'
 
 const ContactDetailsFormDataModel = z.object({
   action: z.string().default('continue'),

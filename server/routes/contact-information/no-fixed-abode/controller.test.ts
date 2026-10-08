@@ -1,15 +1,15 @@
-import RestClient from '../../data/restClient'
-import DeviceWearerService from '../../routes/about-the-device-wearer/device-wearer/service'
-import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
-import { getMockOrder } from '../../../test/mocks/mockOrder'
-import NoFixedAbodeController from './noFixedAbodeController'
-import TaskListService from '../../services/taskListService'
+import RestClient from '../../../data/restClient'
+import DeviceWearerService from '../../about-the-device-wearer/device-wearer/service'
+import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
+import { getMockOrder } from '../../../../test/mocks/mockOrder'
+import NoFixedAbodeController from './controller'
+import TaskListService from '../../../services/taskListService'
 
-jest.mock('../../services/auditService')
-jest.mock('../../services/orderService')
-jest.mock('../../routes/about-the-device-wearer/device-wearer/service')
-jest.mock('../../data/hmppsAuditClient')
-jest.mock('../../data/restClient')
+jest.mock('../../../services/auditService')
+jest.mock('../../../services/orderService')
+jest.mock('../../about-the-device-wearer/device-wearer/service')
+jest.mock('../../../data/hmppsAuditClient')
+jest.mock('../../../data/restClient')
 
 const createMockOrder = (noFixedAbode: boolean | null) =>
   getMockOrder({

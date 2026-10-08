@@ -1,19 +1,19 @@
-import { createAddress, createDeviceWearer, getMockOrder } from '../../../test/mocks/mockOrder'
-import CheckAnswersController from './checkAnswersController'
-import TaskListService from '../../services/taskListService'
-import paths from '../../constants/paths'
-import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
-import getContent from '../../i18n'
-import { Locales } from '../../types/i18n/locale'
-import { DataDictionaryVersions } from '../../types/i18n/dataDictionaryVersion'
-import OrderChecklistModel from '../../models/OrderChecklist'
-import OrderChecklistService from '../../services/orderChecklistService'
+import { createAddress, createDeviceWearer, getMockOrder } from '../../../../test/mocks/mockOrder'
+import CheckAnswersController from './controller'
+import TaskListService from '../../../services/taskListService'
+import paths from '../../../constants/paths'
+import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
+import getContent from '../../../i18n'
+import { Locales } from '../../../types/i18n/locale'
+import { DataDictionaryVersions } from '../../../types/i18n/dataDictionaryVersion'
+import OrderChecklistModel from '../../../models/OrderChecklist'
+import OrderChecklistService from '../../../services/orderChecklistService'
 
-jest.mock('../../services/auditService')
-jest.mock('../../services/orderService')
-jest.mock('../../routes/about-the-device-wearer/device-wearer/service')
-jest.mock('../../data/hmppsAuditClient')
-jest.mock('../../data/restClient')
+jest.mock('../../../services/auditService')
+jest.mock('../../../services/orderService')
+jest.mock('../../about-the-device-wearer/device-wearer/service')
+jest.mock('../../../data/hmppsAuditClient')
+jest.mock('../../../data/restClient')
 
 describe('ContactDetailsCheckAnswersController', () => {
   const taskListService = {

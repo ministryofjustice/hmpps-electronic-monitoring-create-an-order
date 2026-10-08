@@ -1,7 +1,7 @@
 import z from 'zod'
-import { ResponsibleOrganisationEnum } from '../ResponsibleOrganisation'
-import { NotifyingOrganisationEnum } from '../NotifyingOrganisation'
-import { FormDataModel } from './formData'
+import { ResponsibleOrganisationEnum } from '../../../models/ResponsibleOrganisation'
+import { NotifyingOrganisationEnum } from '../../../models/NotifyingOrganisation'
+import { FormDataModel } from '../../../models/form-data/formData'
 
 const InterestedPartiesFormDataModel = FormDataModel.extend({
   notifyingOrganisation: NotifyingOrganisationEnum.nullable().default(null),

@@ -1,9 +1,9 @@
-import { createGovukErrorSummary } from '../../utils/errors'
-import { getError } from '../../utils/utils'
-import { ProbationDeliveryUnit } from '../ProbationDeliveryUnit'
-import { ProbationDeliveryUnitFormData } from '../form-data/probationDeliveryUnit'
-import { ValidationResult } from '../Validation'
-import { ViewModel } from './utils'
+import { createGovukErrorSummary } from '../../../utils/errors'
+import { getError } from '../../../utils/utils'
+import { ProbationDeliveryUnit } from '../../../models/ProbationDeliveryUnit'
+import { ProbationDeliveryUnitFormData } from './formModel'
+import { ValidationResult } from '../../../models/Validation'
+import { ViewModel } from '../../../models/view-models/utils'
 
 type ProbationDeliveryUnitViewModel = ViewModel<NonNullable<ProbationDeliveryUnit>>
 

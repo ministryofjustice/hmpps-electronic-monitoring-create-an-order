@@ -1,10 +1,10 @@
 import { Request, RequestHandler, Response } from 'express'
-import paths from '../../constants/paths'
-import { ContactDetailsService } from '../../services'
-import { isValidationResult } from '../../models/Validation'
-import contactDetailsViewModel from '../../models/view-models/contactDetails'
-import ContactDetailsFormDataModel from '../../models/form-data/contactDetails'
-import TaskListService from '../../services/taskListService'
+import paths from '../../../constants/paths'
+import { ContactDetailsService } from '../../../services'
+import { isValidationResult } from '../../../models/Validation'
+import contactDetailsViewModel from './viewModel'
+import ContactDetailsFormDataModel from './formModel'
+import TaskListService from '../../../services/taskListService'
 
 export default class ContactDetailsController {
   constructor(
