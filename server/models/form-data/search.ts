@@ -1,7 +1,7 @@
 import paths from '../../constants/paths'
 import { AddressTypeEnum } from '../Address'
-import { OrderListInformation } from '../OrderListInformation'
-import { OrderListView, OrderListViewEnum, orderListViewLabels } from './OrderListView'
+import { OrderListInformation, OrderListInformationPage } from '../OrderListInformation'
+import { emptyListMessages, OrderListView, OrderListViewEnum, orderListViewLabels } from './OrderListView'
 import { OrderSearchResult } from '../OrderSearchResult'
 
 type OrderListViewModel = {
@@ -14,8 +14,14 @@ type OrderListViewModel = {
     lastUpdatedDateTime: string
     index: number
   }[]
+  emptyListMessage: string
   isPrisonOrYouthUser: boolean
+  showViewFilter: boolean
   viewOptions: { value: OrderListView; text: string; selected: boolean }[]
+  pagination?: {
+    previous?: { text: string; href: string }
+    next?: { text: string; href: string }
+  }
 }
 
 export type OrderSearchViewModel = {
@@ -103,11 +109,12 @@ export const constructSearchViewModel = (
 }
 
 export function constructListViewModel(
-  orders: OrderListInformation[],
+  ordersPage: OrderListInformationPage,
   view: OrderListView,
   isPrisonOrYouthUser: boolean,
+  availableViews: OrderListView[] = OrderListViewEnum.options,
 ): OrderListViewModel {
-  const ordersWithTime = orders.map(order => {
+  const ordersWithTime = ordersPage.content.map(order => {
     const dateStr = order.monitoringConditions?.startDate
     return {
       order,
@@ -116,11 +123,16 @@ export function constructListViewModel(
   })
 
   ordersWithTime.sort((a, b) => {
+    const aIsReturned = a.order.status === 'REJECTED'
+    const bIsReturned = b.order.status === 'REJECTED'
+    if (aIsReturned !== bIsReturned) return aIsReturned ? -1 : 1
     if (a.time === null && b.time === null) return 0
     if (a.time === null) return 1
     if (b.time === null) return -1
     return a.time - b.time
   })
+
+  const pagination = ordersPage.page > 0 || ordersPage.hasNext ? constructPagination(ordersPage, view) : undefined
 
   return {
     orders: ordersWithTime.map(({ order }, index) => ({
@@ -132,36 +144,53 @@ export function constructListViewModel(
       lastUpdatedBy: order.lastUpdatedBy,
       lastUpdatedDateTime: order.lastUpdatedDateTime ? formatDateTime(order.lastUpdatedDateTime) : '',
       statusTags: getStatusTags(order),
-      index,
+      index: ordersPage.page * ordersPage.size + index,
     })),
     isPrisonOrYouthUser,
-    viewOptions: OrderListViewEnum.options.map(value => ({
+    emptyListMessage: emptyListMessages[view],
+    showViewFilter: availableViews.length > 1,
+    viewOptions: availableViews.map(value => ({
       value,
       text: orderListViewLabels[value],
       selected: value === view,
     })),
+    pagination,
+  }
+}
+
+function constructPagination(ordersPage: OrderListInformationPage, view: OrderListView) {
+  const pageHref = (page: number) => `/?view=${view}&page=${page}&size=${ordersPage.size}`
+  return {
+    previous: ordersPage.page > 0 ? { text: 'Previous', href: pageHref(ordersPage.page - 1) } : undefined,
+    next: ordersPage.hasNext ? { text: 'Next', href: pageHref(ordersPage.page + 1) } : undefined,
   }
 }
 
 const getStatusTag = (status: OrderListInformation['status']) => {
-  if (status === 'IN_PROGRESS') {
-    return [{ text: 'Draft', type: 'DRAFT' }]
+  switch (status) {
+    case 'IN_PROGRESS':
+      return [{ text: 'Draft', type: 'DRAFT' }]
+    case 'ERROR':
+      return [{ text: 'Failed to submit', type: 'FAILED' }]
+    case 'SUBMITTED':
+      return [{ text: 'Submitted', type: 'SUBMITTED' }]
+
+    default:
+      return []
   }
-  if (status === 'ERROR') {
-    return [{ text: 'Failed to submit', type: 'FAILED' }]
-  }
-  if (status === 'SUBMITTED') {
-    return [{ text: 'Submitted', type: 'SUBMITTED' }]
-  }
-  return []
 }
 
 const getStatusTags = (order: Pick<OrderListInformation, 'status' | 'type'>) => {
   const statusTags = []
 
-  if (order.type === 'VARIATION') {
-    statusTags.push({ text: 'Change to form', type: 'VARIATION' })
+  if (order.status === 'REJECTED') {
+    statusTags.push({ text: 'Returned', type: 'RETURNED' })
+  } else {
+    if (order.type === 'VARIATION') {
+      statusTags.push({ text: 'Change to form', type: 'VARIATION' })
+    }
+    statusTags.push(...getStatusTag(order.status))
   }
-  statusTags.push(...getStatusTag(order.status))
+
   return statusTags
 }

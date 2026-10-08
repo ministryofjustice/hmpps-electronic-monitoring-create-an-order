@@ -7,6 +7,7 @@ import fillInTagAtSourceWith from '../../../utils/scenario-flows/tag-at-source.c
 import TypesOfMonitoringNeededPage from '../../../e2e/order/monitoring-conditions/order-type-description/types-of-monitoring-needed/TypesOfMonitoringNeededPage'
 import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
 import fillInInterestedPartiesWith from '../../../utils/scenario-flows/interested-parties.cy'
+import { fillInGeneralOrderDetailsWith } from '../../../utils/scenario-flows/general-order-details'
 
 context('Order type descriptions', () => {
   const currentDate = new Date()
@@ -24,12 +25,6 @@ context('Order type descriptions', () => {
     hasAnotherAddress: 'No',
   }
 
-  const installationAndRisk = {
-    offence: 'Sexual offences',
-    possibleRisk: 'Sex offender',
-    riskCategory: 'Children under the age of 18 are living at the property',
-    riskDetails: 'No risk',
-  }
   let orderSummaryPage: OrderSummaryPage
 
   const trailMonitoringOrder = {
@@ -165,11 +160,10 @@ context('Order type descriptions', () => {
       monitoringCondition: 'Trail monitoring',
     }
 
-    orderSummaryPage.fillInGeneralOrderDetailsWith({
+    fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       newDeviceWearerFlow: true,
     })
@@ -199,11 +193,10 @@ context('Order type descriptions', () => {
       monitoringCondition: 'Trail monitoring',
     }
 
-    orderSummaryPage.fillInGeneralOrderDetailsWith({
+    fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       newDeviceWearerFlow: true,
     })
@@ -232,11 +225,10 @@ context('Order type descriptions', () => {
       monitoringCondition: 'Trail monitoring',
     }
 
-    orderSummaryPage.fillInGeneralOrderDetailsWith({
+    fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       newDeviceWearerFlow: true,
     })
@@ -266,11 +258,10 @@ context('Order type descriptions', () => {
       monitoringCondition: 'Trail monitoring',
     }
 
-    orderSummaryPage.fillInGeneralOrderDetailsWith({
+    fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       newDeviceWearerFlow: true,
     })
@@ -322,11 +313,10 @@ context('Order type descriptions', () => {
       dapolMissedInError: 'Yes',
     }
 
-    orderSummaryPage.fillInGeneralOrderDetailsWith({
+    fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       probationDeliveryUnit,
       newDeviceWearerFlow: true,
@@ -344,11 +334,10 @@ context('Order type descriptions', () => {
       monitoringCondition: 'Trail monitoring',
     }
 
-    orderSummaryPage.fillInGeneralOrderDetailsWith({
+    fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,
-      installationAndRisk,
       monitoringOrderTypeDescription,
     })
 
@@ -364,11 +353,10 @@ context('Order type descriptions', () => {
       monitoringCondition: 'Trail monitoring',
     }
 
-    orderSummaryPage.fillInGeneralOrderDetailsWith({
+    fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,
-      installationAndRisk,
       monitoringOrderTypeDescription,
     })
     verifyResult({ monitoringOrderTypeDescription })
@@ -410,11 +398,10 @@ context('Order type descriptions', () => {
       deviceType: 'A fitted GPS tag',
     }
 
-    orderSummaryPage.fillInGeneralOrderDetailsWith({
+    fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       newDeviceWearerFlow: true,
     })
@@ -454,11 +441,10 @@ context('Order type descriptions', () => {
       monitoringCondition: 'Trail monitoring',
     }
 
-    orderSummaryPage.fillInGeneralOrderDetailsWith({
+    fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       newDeviceWearerFlow: true,
     })

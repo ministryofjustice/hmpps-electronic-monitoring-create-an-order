@@ -43,6 +43,10 @@ export default class IndexPage extends AppPage {
     return this.ordersList.contains<HTMLElement>('td', name)
   }
 
+  OrderContainsAt(index: number, name: string, status: string): void {
+    this.orders.eq(index).should('contain.text', name).and('contain.text', status)
+  }
+
   TableContains(name: string, status: string): PageElement {
     return this.ordersList
       .contains('td', name)

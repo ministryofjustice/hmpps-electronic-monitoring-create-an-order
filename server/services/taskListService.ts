@@ -345,13 +345,6 @@ export default class TaskListService {
       completed: true,
     })
 
-    const riskInformationTasks = getRiskInformationTasks(order)
-    tasks.push(
-      ...(hasOptionalVariationSections(order)
-        ? riskInformationTasks.map(task => ({ ...task, state: STATES.notRequired }))
-        : riskInformationTasks),
-    )
-
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
       name: PAGES.monitoringConditions,
@@ -526,6 +519,13 @@ export default class TaskListService {
       state: STATES.hidden,
       completed: true,
     })
+
+    const riskInformationTasks = getRiskInformationTasks(order)
+    tasks.push(
+      ...(hasOptionalVariationSections(order)
+        ? riskInformationTasks.map(task => ({ ...task, state: STATES.notRequired }))
+        : riskInformationTasks),
+    )
 
     tasks.push(...getAdditionalDocumentTasks(order, cohortDefinition))
 

@@ -3,6 +3,7 @@ import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAdd
 
 import Page from '../pages/page'
 import OrderSummaryPage from '../pages/order/summary'
+import fillInNewOrderWith from '../utils/scenario-flows/fill-in-new-order'
 import { formatAsFmsDateTime, formatAsFmsDate, formatAsFmsPhoneNumber, stubAttachments } from './utils'
 import createNewOrder from '../utils/scenario-flows/create-new-order.cy'
 
@@ -138,7 +139,7 @@ context('The kitchen sink', () => {
 
       const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
       cacheOrderId()
-      orderSummaryPage.fillInNewOrderWith({
+      fillInNewOrderWith({
         deviceWearerDetails,
         responsibleAdultDetails: undefined,
         primaryAddressDetails,

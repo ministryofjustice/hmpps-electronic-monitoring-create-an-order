@@ -129,7 +129,7 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id))
     })
 
-    it('should go to details of installation if current page is device wearer check your answers', () => {
+    it('should go to monitoring conditions if current page is device wearer check your answers', () => {
       // Given
       const currentPage = 'CHECK_ANSWERS_DEVICE_WEARER'
       const taskListService = new TaskListService()
@@ -139,7 +139,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id))
+      expect(nextPage).toBe(monitoringConditionsPath.replace(':orderId', order.id))
     })
 
     it('should return no fixed abode if current page is contact details', () => {
@@ -228,9 +228,9 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM.replace(':orderId', order.id))
     })
 
-    it('should return monitoring conditions if current page is installation and risk check answers', () => {
+    it('should go to details of installation if current page is monitoring conditions check your answers', () => {
       // Given
-      const currentPage = 'CHECK_ANSWERS_INSTALLATION_AND_RISK'
+      const currentPage = 'CHECK_ANSWERS_MONITORING_CONDITIONS'
       const taskListService = new TaskListService()
       const order = getMockOrder()
 
@@ -238,7 +238,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(monitoringConditionsPath.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id))
     })
 
     it('should return installation appointment if current page is installation location and location is PRISON', () => {
@@ -624,9 +624,9 @@ describe('TaskListService', () => {
       expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
     })
 
-    it('should return attachments if current page is check your answers', () => {
+    it('should return attachments if current page is installation and risk check your answers', () => {
       // Given
-      const currentPage = 'CHECK_ANSWERS_MONITORING_CONDITIONS'
+      const currentPage = 'CHECK_ANSWERS_INSTALLATION_AND_RISK'
       const taskListService = new TaskListService()
       const order = getMockOrder()
 
@@ -695,26 +695,26 @@ describe('TaskListService', () => {
       })
     })
 
-    it('returns installation and risk CYA if current page is device wearer CYA', () => {
+    it('returns monitoring conditions CYA if current page is device wearer CYA', () => {
       const taskListService = new TaskListService()
 
       const nextPage = taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_DEVICE_WEARER', order)
 
-      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
     })
 
-    it('returns monitoring conditions CYA if current page is risk information CYA', () => {
+    it('returns risk information CYA if current page is monitoring conditions CYA', () => {
       const taskListService = new TaskListService()
 
-      const nextPage = taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_INSTALLATION_AND_RISK', order)
+      const nextPage = taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_MONITORING_CONDITIONS', order)
 
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
     })
 
     it('returns the summary page if current page is last CYA page', () => {
       const taskListService = new TaskListService()
 
-      const nextPage = taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_MONITORING_CONDITIONS', order)
+      const nextPage = taskListService.getNextCheckYourAnswersPage('CHECK_ANSWERS_INSTALLATION_AND_RISK', order)
 
       expect(nextPage).toBe(paths.ORDER.SUMMARY.replace(':orderId', order.id))
     })

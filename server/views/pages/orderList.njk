@@ -12,10 +12,10 @@
         {% set colour = "blue" %}
       {% elif tag.type == 'SUBMITTED' %}
         {% set colour = "green" %}
-      {% elif tag.type == 'FAILED' %}
+      {% elif tag.type == 'FAILED' or tag.type == 'RETURNED' %}
         {% set colour = "red" %}
       {% elif tag.type == 'DRAFT' %}
-        {% set colour = "grey" %}
+        {% set colour = "grey" %}     
       {% endif %}
       <strong class="govuk-tag govuk-tag--{{ colour }} govuk-!-margin-right-2">{{ tag.text }}</strong>
     {% endfor %}
@@ -57,7 +57,7 @@
 <div id="ordersList">
 {% if isPrisonOrYouthUser %}
   {% set tableHead = [
-    { text: "Name", classes: "govuk-!-width-one-half" },
+    { text: "Name" },
     { text: "Start date" },
     { text: "Last updated" },
     { text: "Updated by" },
@@ -65,7 +65,7 @@
   ] %}
 {% else %}
   {% set tableHead = [
-    { text: "Name", classes: "govuk-!-width-two-thirds" },
+    { text: "Name"},
     { text: "Start date" },
     { text: "Status" }
   ] %}
@@ -79,45 +79,9 @@
       }) }}
   {% endif %}
   {% if orders.length == 0 %}
-    <p class="govuk-body">You have no draft forms</p>
+    <p class="govuk-body">{{emptyListMessage}}</p>
   {% endif %}
-  {% if next != 0 %}
-    {% set nextButton = { text: 'Next', href: ''} %}
+  {% if pagination %}
+    {{ mojPagination(pagination) }}
   {% endif %}
-  {% set pagination %}
-  {{ mojPagination({
-    items: [{
-      text: '1',
-      href: '/page=1',
-      selected: true
-    }, {
-      text: '2',
-      href: '/page=2'
-
-    }, {
-      text: '3',
-      href: '/page=3'
-    }, {
-      type: 'dots'
-    }, {
-      text: '5',
-      href: '/page=5'
-    }],
-    results: {
-      count: 30,
-      from: 10,
-      to: 20,
-      text: 'pages'
-    },
-    previous: {
-      text: 'Previous',
-      href: ''
-    },
-    next: {
-      text: 'Next',
-      href: ''
-    }
-  }) }}
-  {% endset %}
-  {# {{ pagination | safe }} #}
 </div>

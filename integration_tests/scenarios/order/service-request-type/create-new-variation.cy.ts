@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
+import fillInNewOrderWith from '../../../utils/scenario-flows/fill-in-new-order'
 import { createFakeAddress, createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
 import { stubAttachments } from '../../utils'
 import SearchPage from '../../../pages/search'
@@ -94,7 +95,7 @@ context('Service-Request-Types', () => {
 
     orderSummaryPage.fillInVariationsDetails({ variationDetails: variation })
 
-    orderSummaryPage.fillInNewOrderWith({
+    fillInNewOrderWith({
       deviceWearerDetails,
       responsibleAdultDetails: undefined,
       primaryAddressDetails,
