@@ -1,18 +1,18 @@
-import { createDeviceWearer, createResponsibleAdult, getMockOrder } from '../../../test/mocks/mockOrder'
-import DeviceWearerCheckAnswersController from './deviceWearerCheckAnswersController'
-import TaskListService from '../../services/taskListService'
-import paths from '../../constants/paths'
-import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
-import OrderChecklistModel from '../../models/OrderChecklist'
-import OrderChecklistService from '../../services/orderChecklistService'
-import SectionService from '../../services/sectionsService'
+import { createDeviceWearer, createResponsibleAdult, getMockOrder } from '../../../../test/mocks/mockOrder'
+import DeviceWearerCheckAnswersController from './controller'
+import TaskListService from '../../../services/taskListService'
+import paths from '../../../constants/paths'
+import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
+import OrderChecklistModel from '../../../models/OrderChecklist'
+import OrderChecklistService from '../../../services/orderChecklistService'
+import SectionService from '../../../services/sectionsService'
 
-jest.mock('../../services/auditService')
-jest.mock('../../services/orderService')
-jest.mock('../../services/deviceWearerService')
-jest.mock('../../data/hmppsAuditClient')
-jest.mock('../../data/restClient')
-jest.mock('../../services/sectionsService')
+jest.mock('../../../services/auditService')
+jest.mock('../../../services/orderService')
+jest.mock('../device-wearer/service')
+jest.mock('../../../data/hmppsAuditClient')
+jest.mock('../../../data/restClient')
+jest.mock('../../../services/sectionsService')
 
 const adultDeviceWearer = createDeviceWearer({
   nomisId: 'nomis',

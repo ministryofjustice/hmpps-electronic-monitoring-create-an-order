@@ -1,10 +1,10 @@
 import { Request, RequestHandler, Response } from 'express'
-import paths from '../../constants/paths'
-import { isValidationResult } from '../../models/Validation'
-import DeviceWearerResponsibleAdultService from '../../services/deviceWearerResponsibleAdultService'
-import TaskListService from '../../services/taskListService'
-import DeviceWearerResponsibleAdultFormDataModel from '../../models/form-data/responsibleAdult'
-import responsibleAdultViewModel from '../../models/view-models/responsibleAdult'
+import paths from '../../../constants/paths'
+import { isValidationResult } from '../../../models/Validation'
+import DeviceWearerResponsibleAdultService from './service'
+import TaskListService from '../../../services/taskListService'
+import DeviceWearerResponsibleAdultFormDataModel from './formModel'
+import responsibleAdultViewModel from './viewModel'
 
 export default class DeviceWearerResponsibleAdultController {
   constructor(
