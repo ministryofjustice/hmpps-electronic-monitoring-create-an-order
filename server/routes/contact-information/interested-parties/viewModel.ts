@@ -1,12 +1,12 @@
-import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
-import { createSortedGovukErrorSummary } from '../../utils/errors'
-import { getError } from '../../utils/utils'
-import { InterestedPartiesFormData } from '../form-data/interestedParties'
-import { InterestedParties } from '../InterestedParties'
-import { NotifyingOrganisation } from '../NotifyingOrganisation'
-import { Order } from '../Order'
-import { ValidationResult } from '../Validation'
-import { ViewModel } from './utils'
+import isOrderDataDictionarySameOrAbove from '../../../utils/dataDictionaryVersionComparer'
+import { createSortedGovukErrorSummary } from '../../../utils/errors'
+import { getError } from '../../../utils/utils'
+import { InterestedPartiesFormData } from './formModel'
+import { InterestedParties } from '../../../models/InterestedParties'
+import { NotifyingOrganisation } from '../../../models/NotifyingOrganisation'
+import { Order } from '../../../models/Order'
+import { ValidationResult } from '../../../models/Validation'
+import { ViewModel } from '../../../models/view-models/utils'
 
 type InterestedPartiesViewModel = ViewModel<NonNullable<InterestedParties>> & {
   DDv5: boolean

@@ -1,9 +1,9 @@
-import RestClient from '../data/restClient'
-import InterestedPartiesService from './interestedPartiesService'
-import { NotifyingOrganisationEnum } from '../models/NotifyingOrganisation'
-import { ResponsibleOrganisationEnum } from '../models/ResponsibleOrganisation'
+import RestClient from '../../../data/restClient'
+import InterestedPartiesService from './service'
+import { NotifyingOrganisationEnum } from '../../../models/NotifyingOrganisation'
+import { ResponsibleOrganisationEnum } from '../../../models/ResponsibleOrganisation'
 
-jest.mock('../data/restClient')
+jest.mock('../../../data/restClient')
 
 describe('Interested parties service', () => {
   let mockRestClient: jest.Mocked<RestClient>

@@ -1,8 +1,8 @@
 import { Request, RequestHandler, Response } from 'express'
 import { z } from 'zod'
-import TaskListService from '../../services/taskListService'
-import createViewModel from '../../models/view-models/contactInformationCheckAnswers'
-import OrderChecklistService from '../../services/orderChecklistService'
+import TaskListService from '../../../services/taskListService'
+import createViewModel from './viewModel'
+import OrderChecklistService from '../../../services/orderChecklistService'
 
 const CheckYourAnswersFormModel = z.object({
   action: z.string().default('continue'),

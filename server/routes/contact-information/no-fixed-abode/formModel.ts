@@ -1,5 +1,5 @@
 import z from 'zod'
-import { BooleanInputModel } from './formData'
+import { BooleanInputModel } from '../../../models/form-data/formData'
 
 const NoFixedAbodeFormDataModel = z.object({
   action: z.string().default('continue'),

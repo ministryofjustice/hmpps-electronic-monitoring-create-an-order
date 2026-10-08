@@ -1,10 +1,10 @@
 import { Request, RequestHandler, Response } from 'express'
-import paths from '../../constants/paths'
-import DeviceWearerService from '../../routes/about-the-device-wearer/device-wearer/service'
-import { isValidationResult } from '../../models/Validation'
-import TaskListService from '../../services/taskListService'
-import NoFixedAbodeFormDataModel from '../../models/form-data/noFixedAbode'
-import noFixedAbodeViewModel from '../../models/view-models/noFixedAbode'
+import paths from '../../../constants/paths'
+import DeviceWearerService from '../../about-the-device-wearer/device-wearer/service'
+import { isValidationResult } from '../../../models/Validation'
+import TaskListService from '../../../services/taskListService'
+import NoFixedAbodeFormDataModel from './formModel'
+import noFixedAbodeViewModel from './viewModel'
 
 export default class NoFixedAbodeController {
   constructor(
