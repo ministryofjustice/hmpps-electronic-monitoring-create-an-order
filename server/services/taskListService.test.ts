@@ -55,7 +55,7 @@ describe('TaskListService', () => {
         type: 'VARIATION',
         interestedParties: {
           ...getMockOrder().interestedParties!,
-          notifyingOrganisation: 'HOME_OFFICE',
+          notifyingOrganisation: 'CIVIL_COUNTY_COURT',
           notifyingOrganisationName: 'YEOVIL_COUNTY_AND_CIVIL_COURT',
           notifyingOrganisationEmail: 'notifying@organisation',
         },

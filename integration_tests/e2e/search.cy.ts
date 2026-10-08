@@ -214,9 +214,7 @@ context('Search', () => {
           .should('exist')
           .should('contain.text', 'Tell us about a change to a form sent by email')
         page.variationFormButton.click()
-        Page.verifyOnPage(IsAddressChangePage)
-
-        const isAddressChangePage = Page.visit(IsAddressChangePage)
+        const isAddressChangePage = Page.verifyOnPage(IsAddressChangePage)
 
         isAddressChangePage.form.fillInWith('Yes')
         isAddressChangePage.form.saveAndContinueButton.click()
@@ -225,7 +223,7 @@ context('Search', () => {
           httpStatus: 200,
           id: mockHomeOfficeOrderID,
           status: 'IN_PROGRESS',
-          type: 'VARIATION',
+          type: 'REINSTALL_DEVICE',
           order: {
             dataDictionaryVersion: 'DDV7',
             isSentencingAct: true,
@@ -287,9 +285,7 @@ context('Search', () => {
           .should('exist')
           .should('contain.text', 'Tell us about a change to a form sent by email')
         page.variationFormButton.click()
-        Page.verifyOnPage(IsAddressChangePage)
-
-        const isAddressChangePage = Page.visit(IsAddressChangePage)
+        const isAddressChangePage = Page.verifyOnPage(IsAddressChangePage)
 
         isAddressChangePage.form.fillInWith('Yes')
         isAddressChangePage.form.saveAndContinueButton.click()
@@ -300,7 +296,7 @@ context('Search', () => {
           httpStatus: 200,
           id: mockCourtOrderID,
           status: 'IN_PROGRESS',
-          type: 'VARIATION',
+          type: 'REINSTALL_DEVICE',
           order: {
             dataDictionaryVersion: 'DDV7',
             isSentencingAct: true,
