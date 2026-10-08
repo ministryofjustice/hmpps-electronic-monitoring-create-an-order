@@ -1,8 +1,11 @@
 import { PageElement } from '../page'
 
 export default class Task {
-  constructor(private readonly name: string) {
-    this.element.should('exist')
+  constructor(
+    private readonly name: string,
+    shouldExist: boolean = true,
+  ) {
+    if (shouldExist) this.element.should('exist')
   }
 
   get element(): PageElement {
@@ -27,5 +30,9 @@ export default class Task {
 
   shouldNotHaveStatus(): void {
     this.status.find('.govuk-tag').should('have.length', 0)
+  }
+
+  shouldNotExist(): void {
+    cy.get('.govuk-task-list__item').contains('.govuk-task-list__name-and-hint', this.name).should('not.exist')
   }
 }
