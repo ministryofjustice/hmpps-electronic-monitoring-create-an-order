@@ -1,142 +1,73 @@
-# GitHub Copilot Instructions — hmpps-electronic-monitoring-create-an-order
+# Copilot instructions — hmpps-electronic-monitoring-create-an-order
 
-## 1. Before Starting Any Feature
+Node.js/Express TypeScript app (Nunjucks views, GOV.UK/MoJ frontend) for creating electronic monitoring orders. It calls the CEMO API and other HMPPS services.
 
-1. **Ask for the Jira ticket ID** (`ELM-XXX`) if not provided.
-2. **Clarify any ambiguous requirements** before writing code.
-3. **Run the tests** to confirm a clean baseline: `npm test`.
-4. **Run the type checker** to confirm TypeScript compilation: `npm run typecheck`.
-5. **Find the nearest analogous existing feature** and follow the same pattern exactly.
+## Repo layout
 
-## 2. Workflow
+The codebase is migrating from a layered structure to feature folders. **New features must use the feature-folder structure.** Leave existing code where it is unless the task is to migrate it.
 
-- **Start by writing tests.** Write the test first, then implement code to make it pass.
-- **Run tests after every change.** New tests must fail first, then pass after implementation.
-- **Type checking must pass.** Run `npm run typecheck` before committing — all code must have proper TypeScript types.
-- **NEVER install a new dependency without asking.** Stop and recommend a dependency for the user to add to `package.json`.
-- **All code MUST match the architecture.** Keep business logic out of routers and keep concerns separated.
-- **When finished**, run all checks and update documentation.
+### Target structure (new code)
 
-### Checks before completing any task
+`server/[feature]/` contains:
 
-```bash
-npm run lint-fix     # Fix linting issues
-npm run typecheck    # TypeScript compilation
-npm test             # All tests
-```
+- `[feature].controller.ts` — request handlers
+- `[feature].service.ts` — business logic
+- `[feature].routes.ts` — route definitions, registered in the app setup
+- `[feature].types.ts` — types and Zod schemas
+- `[feature].test.ts` — Jest tests, alongside the code
 
-### When editing existing files
+Features depend on shared utilities, not on each other.
 
-- Make surgical changes only. Do not refactor unrelated code.
-- Do not change test assertions without understanding why they were written that way.
-- Fix linting and type errors — do not suppress rules unless unavoidable and justified.
+### Current structure (legacy, being migrated)
 
-If these instructions do not cover a specific case, stop and ask.
+- `server/controllers/` — Express request handlers, grouped by order section (e.g. `about-the-device-wearer`, `monitoringConditions`).
+- `server/routes/` — route definitions and middleware stack.
+- `server/services/` — business logic and API client wrappers.
+- `server/models/` — types and Zod schemas for API/form data (`form-data/` for form validation).
+- `server/middleware/` — auth, session, CSRF, current order/user population.
+- `server/views/` — Nunjucks templates. `server/i18n/` — content text.
+- `server/data/` — API clients. `server/testutils/`, `test/` — Jest helpers, mocks, fixtures.
+- `integration_tests/` — Cypress: `e2e/` specs, `pages/` page objects, `mockApis/` Wiremock stubs, `scenarios/` scenario tests.
 
-## 3. Architecture Rules
+When adding a feature, use the feature-folder structure and follow the nearest analogous existing feature for patterns. Once a feature folder has been migrated, use it as the reference.
 
-This project is a **Node.js/Express TypeScript application** for creating electronic monitoring orders.
+## Architecture
 
-- **`server/`** — Main application code organized by feature.
-- **`server/[feature]/`** — Feature folders containing:
-  - `[feature].controller.ts` — Request handlers (Express middleware)
-  - `[feature].service.ts` — Business logic
-  - `[feature].routes.ts` — Route definitions
-  - `[feature].types.ts` — TypeScript interfaces and types
-  - `[feature].test.ts` — Unit and integration tests
-- **`test/`** — Test utilities, fixtures, and configuration.
-- **`integration_tests/`** — End-to-end tests using Cypress.
-- **`server.ts`** — Express app factory and middleware setup.
+- Controllers handle HTTP only. Business logic belongs in services; API access goes through the data clients.
+- Routes contain no logic.
+- Validate request data with Zod.
+- Avoid circular dependencies. Shared code goes in shared utilities.
 
-### Architecture principles
+## Conventions
 
-- **Controllers** handle HTTP requests/responses only. Never contain business logic.
-- **Services** contain all business logic. Controllers delegate to services.
-- **Types** define interfaces and types. Keep them near the feature they describe.
-- **Routes** define the Express router and middleware stack. No logic here.
-- **Keep concerns separated.** No direct database access in controllers; use services.
-- **No circular dependencies.** Features should depend on shared utilities, not on each other.
+- Strict TypeScript. Avoid `any`.
+- `camelCase` for variables/functions, `PascalCase` for classes/types, `UPPER_SNAKE_CASE` for constants, kebab-case URL paths.
+- Use the Bunyan logger, not `console.log`.
+- Handle errors and return appropriate HTTP status codes.
+- Use `const`/`let`, never `var`.
+- Match the style of surrounding code. Keep changes focused and don't refactor unrelated code.
 
-### Adding a new feature
+## Commands
 
-1. Create a new folder `server/[feature]`.
-2. Define types in `server/[feature]/[feature].types.ts`.
-3. Implement business logic in `server/[feature]/[feature].service.ts`.
-4. Implement request handlers in `server/[feature]/[feature].controller.ts`.
-5. Define routes in `server/[feature]/[feature].routes.ts`.
-6. Register the router in `server.ts` using `app.use()`.
-7. Write tests in `server/[feature]/[feature].test.ts` (unit tests) and `integration_tests/` (E2E tests).
+| Purpose | Command |
+| --- | --- |
+| Lint / autofix | `npm run lint` / `npm run lint-fix` |
+| Typecheck (app and Cypress) | `npm run typecheck` |
+| Unit tests (Jest) | `npm test` |
+| Cypress e2e | `npm run int-test` (UI: `npm run int-test-ui`) |
+| Scenario tests | `npm run int-test-scenarios` |
+| Dev server | `npm run start:dev` |
 
-## 4. Coding Conventions
+CI expects lint, typecheck and tests to pass.
 
-- **TypeScript throughout.** All code must have explicit type annotations. No `any` types unless absolutely unavoidable.
-- **Use `camelCase`** for all identifiers; `PascalCase` for classes and interfaces; `UPPER_SNAKE_CASE` for constants.
-- **No `console.log()` in production code.** Use the logging library (Bunyan) already in the project.
-- **Error handling.** Catch errors and return appropriate HTTP status codes. Do not let unhandled exceptions propagate.
-- **String validation.** Use Zod schemas for request validation (already in the project).
-- **Prefer const/let over var.** Never use `var`.
+## Testing
 
-### Naming
+- Jest tests sit next to the code as `*.test.ts`. Mock external dependencies and cover happy and error paths.
+- Cypress specs are in `integration_tests/e2e/`. Use page objects from `integration_tests/pages/` and stubs from `integration_tests/mockApis/`.
+- Keep fixtures realistic but minimal.
 
-| Thing                 | Convention         | Example                              |
-| --------------------- | ------------------ | ------------------------------------ |
-| Files / folders       | `kebab-case`       | `order-service.ts`, `order-service/` |
-| Classes               | `PascalCase`       | `OrderService`, `OrderController`   |
-| Constants             | `UPPER_SNAKE_CASE` | `MAX_ORDERS`, `DEFAULT_TIMEOUT`     |
-| Functions / variables | `camelCase`        | `createOrder`, `orderId`            |
-| URL paths             | `kebab-case`       | `/electronic-monitoring/orders`     |
-| Test files            | `[name].test.ts`   | `order.test.ts`                     |
-| Interfaces / Types    | `PascalCase`       | `OrderRequest`, `OrderResponse`     |
+## Team rules
 
-## 5. Testing Standards
-
-This project uses **Jest** for unit tests and **Cypress** for E2E tests.
-
-### Jest Unit Tests (`server/[feature]/[feature].test.ts`)
-
-- Test all business logic in services.
-- Mock external dependencies (HTTP calls, database, etc.).
-- Test happy paths and error paths.
-- Use descriptive test names:
-  ```typescript
-  describe('OrderService', () => {
-    it('should create an order with valid input', () => {
-      // test
-    });
-    it('should throw error when order data is invalid', () => {
-      // test
-    });
-  });
-  ```
-
-### Cypress E2E Tests (`integration_tests/e2e/`)
-
-- Test user workflows from the browser.
-- Mirror the feature structure: one folder per feature.
-- Cover happy paths and common error paths.
-- Always clean up test data after tests run.
-- Use page objects for reusable UI selectors:
-  ```typescript
-  // integration_tests/pages/order.page.ts
-  export class OrderPage {
-    visitCreateOrder() { cy.visit('/electronic-monitoring/orders/create'); }
-    fillOrderDetails(details) { /* ... */ }
-  }
-  ```
-
-### Fixtures and Test Data
-
-- Use `test/jest/` for Jest fixtures and mock data.
-- Use `integration_tests/fixtures/` for Cypress test data.
-- Keep test data realistic but minimal.
-
-## 6. Git and Version Control
-
-- **Commit often.** Small, logical commits are easier to review.
-- **Use descriptive commit messages.** Follow the repo's existing commit style.
-- **Create a branch for each feature.** Never commit directly to `main`.
-- **Open a pull request when ready for review.** Do not merge without approval.
-
-## 7. Exploration
-
-Always output exploration and plans as markdown in your session, not in the repo.
+- Do not add dependencies without agreement. Recommend the package and let the user add it to `package.json`.
+- Never commit directly to `main`. Work on a branch and open a PR using `.github/PULL_REQUEST_TEMPLATE.md`, which asks for the Jira ticket (`ELM-XXX`).
+- Never commit secrets.
