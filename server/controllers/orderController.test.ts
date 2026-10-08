@@ -227,18 +227,26 @@ describe('OrderController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/interest-parties/notifying-organisation`)
     })
 
-    it('should not create a new version when the case state is unknown', async () => {
+    it('should create a new version when the case state is unknown', async () => {
       const orderId = randomUUID()
-      const mockOrder = getMockOrder({ id: orderId, status: 'SUBMITTED', caseState: 'UNKNOWN' })
+      const mockOrder = getMockOrder({
+        id: orderId,
+        status: 'SUBMITTED',
+        caseState: 'UNKNOWN',
+        fmsResultId: randomUUID(),
+      })
       const req = createMockRequest({ order: mockOrder, body: { action: 'continue' }, params: { orderId } })
       const res = createMockResponse()
       req.flash = jest.fn()
 
       await orderController.createVariation(req, res, jest.fn())
 
-      expect(mockOrderService.createVariationFromExisting).not.toHaveBeenCalled()
+      expect(mockOrderService.createVariationFromExisting).toHaveBeenCalledWith({
+        orderId,
+        accessToken: 'fakeUserToken',
+      })
       expect(mockOrderService.amendRejectedOrderFromExisting).not.toHaveBeenCalled()
-      expect(req.flash).toHaveBeenCalledWith('submissionError', expect.any(String))
+      expect(req.flash).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/summary`)
     })
 

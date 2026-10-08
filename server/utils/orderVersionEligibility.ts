@@ -6,10 +6,12 @@ export const ORDER_CHANGE_STATUS_CHANGED_MESSAGE =
 export const isAcceptedOrderForChange = (order: Order): boolean =>
   order.status === 'SUBMITTED' && ['CLOSED', 'RESOLVED'].includes(order.caseState)
 
-export const canCreateOrderVersion = (order: Order): boolean =>
+export const canUseServiceRequestTypeFlow = (order: Order): boolean =>
   // allowing SUBMITTED order status with empty fmsResultId - assuming when null despite status due to fms status failure, unsure if we should block this case
-  isAcceptedOrderForChange(order) ||
-  (order.status === 'SUBMITTED' && order.caseState === 'UNKNOWN' && order.fmsResultId === null) ||
+  isAcceptedOrderForChange(order) || (order.status === 'SUBMITTED' && order.caseState === 'UNKNOWN')
+
+export const canCreateOrderVersion = (order: Order): boolean =>
+  canUseServiceRequestTypeFlow(order) ||
   ((order.status === 'SUBMITTED' || order.status === 'REJECTED') && order.caseState === 'CANCELLED')
 
 export const getOrderChangeBlockedMessage = (order: Order): string => {

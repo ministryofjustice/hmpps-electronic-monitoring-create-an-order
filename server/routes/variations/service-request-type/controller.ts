@@ -9,8 +9,8 @@ import getContent from '../../../i18n'
 import { Locales } from '../../../types/i18n/locale'
 import { SanitisedError } from '../../../sanitisedError'
 import {
+  canUseServiceRequestTypeFlow,
   getOrderChangeBlockedMessage,
-  isAcceptedOrderForChange,
   ORDER_CHANGE_STATUS_CHANGED_MESSAGE,
 } from '../../../utils/orderVersionEligibility'
 
@@ -18,7 +18,7 @@ export default class ServiceRequestTypeController {
   constructor(private readonly service: ServiceRequestTypeService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    if (req.order && !isAcceptedOrderForChange(req.order)) {
+    if (req.order && !canUseServiceRequestTypeFlow(req.order)) {
       req.flash('submissionError', getOrderChangeBlockedMessage(req.order))
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', req.order.id))
       return
@@ -33,7 +33,7 @@ export default class ServiceRequestTypeController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const { order } = req
-    if (order && !isAcceptedOrderForChange(order)) {
+    if (order && !canUseServiceRequestTypeFlow(order)) {
       req.flash('submissionError', getOrderChangeBlockedMessage(order))
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
       return

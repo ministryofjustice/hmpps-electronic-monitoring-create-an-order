@@ -2,6 +2,7 @@ import Page from '../../../pages/page'
 import ConfirmVariationPage from '../../../pages/order/variation/confirmVariation'
 import OrderTasksPage from '../../../pages/order/summary'
 import IsAddressChangePage from '../edit-order/is-address-change/isAddressChangePage'
+import ServiceRequestTypePage from './service-request-type/serviceRequestTypePage'
 import NotifyingOrganisationPage from '../interested-parties/notifying-organisation/notifyingOrganisationPage'
 
 const mockOriginalId = '00a00000-79cd-49f9-a498-b1f07c543b8a'
@@ -144,6 +145,20 @@ context('Variation', () => {
         Page.verifyOnPage(ConfirmVariationPage).confirmButton().click()
 
         Page.verifyOnPage(IsAddressChangePage)
+      })
+
+      it('allows an UNKNOWN status case order with an FMS result ID', () => {
+        stubOrder('UNKNOWN', 'SUBMITTED', 'REQUEST', '22a22222-79cd-49f9-a498-b1f07c543b8a')
+        const page = Page.visit(OrderTasksPage, { orderId: mockOriginalId })
+
+        page.makeChangesButton.should('have.attr', 'href', `/order/${mockOriginalId}/edit`).click()
+        Page.verifyOnPage(ConfirmVariationPage).confirmButton().click()
+
+        const addressChangePage = Page.verifyOnPage(IsAddressChangePage)
+        addressChangePage.form.fillInWith('No')
+        addressChangePage.form.saveAndContinueButton.click()
+
+        Page.verifyOnPage(ServiceRequestTypePage)
       })
     })
   })

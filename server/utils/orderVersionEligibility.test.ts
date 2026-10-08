@@ -1,6 +1,10 @@
 import { randomUUID } from 'crypto'
 import { getMockOrder } from '../../test/mocks/mockOrder'
-import { canCreateOrderVersion, isAcceptedOrderForChange } from './orderVersionEligibility'
+import {
+  canCreateOrderVersion,
+  canUseServiceRequestTypeFlow,
+  isAcceptedOrderForChange,
+} from './orderVersionEligibility'
 
 describe('order version eligibility', () => {
   it.each(['CLOSED', 'RESOLVED'] as const)('allows changes to accepted submitted orders in %s state', caseState => {
@@ -21,20 +25,24 @@ describe('order version eligibility', () => {
     const order = getMockOrder({ status: 'SUBMITTED', caseState: 'UNKNOWN', fmsResultId: null })
 
     expect(canCreateOrderVersion(order)).toBe(true)
+    expect(canUseServiceRequestTypeFlow(order)).toBe(true)
     expect(isAcceptedOrderForChange(order)).toBe(false)
   })
 
-  it('blocks a submitted order with unknown case state when an FMS result ID exists', () => {
+  it('allows a submitted order with unknown case state when an FMS result ID exists without treating it as accepted', () => {
     const order = getMockOrder({ status: 'SUBMITTED', caseState: 'UNKNOWN', fmsResultId: randomUUID() })
 
-    expect(canCreateOrderVersion(order)).toBe(false)
+    expect(canCreateOrderVersion(order)).toBe(true)
+    expect(canUseServiceRequestTypeFlow(order)).toBe(true)
     expect(isAcceptedOrderForChange(order)).toBe(false)
   })
 
-  it('blocks a submitted order with unknown case state when the FMS result ID is absent', () => {
+  it('allows a submitted order with unknown case state when the FMS result ID is absent', () => {
     const order = getMockOrder({ status: 'SUBMITTED', caseState: 'UNKNOWN' })
 
-    expect(canCreateOrderVersion(order)).toBe(false)
+    expect(canCreateOrderVersion(order)).toBe(true)
+    expect(canUseServiceRequestTypeFlow(order)).toBe(true)
+    expect(isAcceptedOrderForChange(order)).toBe(false)
   })
 
   it('allows rejected orders only when their case is cancelled', () => {
@@ -42,7 +50,9 @@ describe('order version eligibility', () => {
     const processingOrder = getMockOrder({ status: 'REJECTED', caseState: 'OPEN' })
 
     expect(canCreateOrderVersion(returnedOrder)).toBe(true)
+    expect(canUseServiceRequestTypeFlow(returnedOrder)).toBe(false)
     expect(canCreateOrderVersion(processingOrder)).toBe(false)
+    expect(canUseServiceRequestTypeFlow(processingOrder)).toBe(false)
   })
 
   it('does not allow an existing draft to be copied as another version', () => {
@@ -58,6 +68,7 @@ describe('order version eligibility', () => {
       const order = getMockOrder({ status: 'SUBMITTED', caseState })
 
       expect(canCreateOrderVersion(order)).toBe(false)
+      expect(canUseServiceRequestTypeFlow(order)).toBe(false)
       expect(isAcceptedOrderForChange(order)).toBe(false)
     },
   )
