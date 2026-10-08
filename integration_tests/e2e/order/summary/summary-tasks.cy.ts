@@ -513,7 +513,7 @@ context('Order Summary', () => {
     it('should not have responsible organisation section for new variation', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
-      page.interestedPartiesTask.shouldNotExist()
+      page.interestedPartiesSection(false).shouldNotExist()
       page.submitOrderButton.should('be.disabled')
     })
   })

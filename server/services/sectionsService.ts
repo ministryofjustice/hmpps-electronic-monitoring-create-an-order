@@ -66,7 +66,7 @@ export default class SectionService {
       SECTIONS.additionalDocuments,
     ]
 
-    if (this.shouldShowInterestedParties(order, isNewOrderVariation)) {
+    if (!isNewOrderVariation && this.shouldShowInterestedParties(order)) {
       sections = [SECTIONS.interestedParties, ...sections]
     }
 
@@ -132,14 +132,14 @@ export default class SectionService {
     return true
   }
 
-  private shouldShowInterestedParties(order: Order, isNewOrderVariation?: boolean): boolean {
+  private shouldShowInterestedParties(order: Order): boolean {
     const startDate = order.monitoringConditions?.startDate
       ? new Date(order.monitoringConditions?.startDate)
       : new Date(2040, 0, 0)
     const startDateIsInFuture = startDate >= new Date()
 
     // Return early for disallowed organisation
-    if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE' || isNewOrderVariation) {
+    if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE') {
       return false
     }
 

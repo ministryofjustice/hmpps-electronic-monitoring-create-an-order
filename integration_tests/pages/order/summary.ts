@@ -19,7 +19,11 @@ export default class OrderTasksPage extends AppPage {
   }
 
   get interestedPartiesTask(): Task {
-    return new Task('About the Responsible Organisation', false)
+    return new Task('About the Responsible Organisation')
+  }
+
+  interestedPartiesSection(checkExisting: false): Task {
+    return new Task('About the Responsible Organisation', checkExisting)
   }
 
   get aboutTheDeviceWearerTask(): Task {
