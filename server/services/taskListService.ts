@@ -139,6 +139,21 @@ const isTagAtSourceAvailable = (order: Order): boolean => {
   )
 }
 
+const OPTIONAL_VARIATION_ORGANISATIONS = [
+  'HOME_OFFICE',
+  'CIVIL_COUNTY_COURT',
+  'CROWN_COURT',
+  'FAMILY_COURT',
+  'MAGISTRATES_COURT',
+  'MILITARY_COURT',
+  'SCOTTISH_COURT',
+  'YOUTH_COURT',
+]
+
+const hasOptionalVariationSections = (order: Order): boolean =>
+  isVariationType(order.type) &&
+  OPTIONAL_VARIATION_ORGANISATIONS.includes(order.interestedParties?.notifyingOrganisation ?? '')
+
 const getInterestedPartiesTasks = (order: Order, cohortDefinition: TaskListCohortDefinition): Task[] => {
   const tasks: Task[] = [
     {
@@ -244,7 +259,7 @@ const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCoho
     },
   )
 
-  return tasks
+  return hasOptionalVariationSections(order) ? tasks.map(task => ({ ...task, state: STATES.notRequired })) : tasks
 }
 
 export default class TaskListService {
@@ -330,7 +345,12 @@ export default class TaskListService {
       completed: true,
     })
 
-    tasks.push(...getRiskInformationTasks(order))
+    const riskInformationTasks = getRiskInformationTasks(order)
+    tasks.push(
+      ...(hasOptionalVariationSections(order)
+        ? riskInformationTasks.map(task => ({ ...task, state: STATES.notRequired }))
+        : riskInformationTasks),
+    )
 
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,

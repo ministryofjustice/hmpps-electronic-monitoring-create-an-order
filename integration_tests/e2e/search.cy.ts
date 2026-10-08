@@ -5,6 +5,7 @@ import IndexPage from '../pages'
 import IsAddressChangePage from './order/edit-order/is-address-change/isAddressChangePage'
 import NotifyingOrganisationPage from './order/interested-parties/notifying-organisation/notifyingOrganisationPage'
 import mockApiOrder from '../utils/data/ApiOrder'
+import OrderTasksPage from '../pages/order/summary'
 
 const mockOrderId = uuidv4()
 
@@ -162,6 +163,189 @@ context('Search', () => {
       page.variationFormButton.click()
 
       Page.verifyOnPage(NotifyingOrganisationPage)
+    })
+
+    describe('Some sections are optional depending on notifying org when "Tell us about.." button is clicked', () => {
+      const testFlags = { SERVICE_REQUEST_TYPE_ENABLED: true }
+
+      beforeEach(() => {
+        cy.task('reset')
+        cy.task('setFeatureFlags', testFlags)
+      })
+
+      afterEach(() => {
+        cy.task('resetFeatureFlags')
+      })
+
+      it('risk information and additional documents sections are optional for home office', () => {
+        const mockHomeOfficeOrderID = uuidv4()
+
+        cy.task('stubSignIn', {
+          name: 'john smith',
+          roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+          stubCohort: false,
+          userId: mockHomeOfficeOrderID,
+        })
+
+        cy.task('stubCemoRequest', {
+          httpStatus: 200,
+          method: 'GET',
+          subPath: 'user-cohort',
+          response: { cohort: 'HOME_OFFICE', activeCaseload: 'Home Office Test' },
+        })
+
+        cy.task('stubCemoCreateOrder', {
+          httpStatus: 200,
+          id: mockHomeOfficeOrderID,
+          status: 'IN_PROGRESS',
+          type: 'VARIATION',
+        })
+
+        cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockHomeOfficeOrderID, status: 'IN_PROGRESS' })
+        cy.signIn()
+
+        cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [] })
+        const page = Page.visit(SearchPage)
+
+        page.searchBox.type('Unknown name')
+        page.searchButton.click()
+
+        page.variationFormButton
+          .should('exist')
+          .should('contain.text', 'Tell us about a change to a form sent by email')
+        page.variationFormButton.click()
+        Page.verifyOnPage(IsAddressChangePage)
+
+        const isAddressChangePage = Page.visit(IsAddressChangePage)
+
+        isAddressChangePage.form.fillInWith('Yes')
+        isAddressChangePage.form.saveAndContinueButton.click()
+
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockHomeOfficeOrderID,
+          status: 'IN_PROGRESS',
+          type: 'VARIATION',
+          order: {
+            dataDictionaryVersion: 'DDV7',
+            isSentencingAct: true,
+            interestedParties: {
+              notifyingOrganisation: 'HOME_OFFICE',
+            },
+          },
+        })
+
+        const taskListPage = Page.visit(OrderTasksPage, { orderId: mockHomeOfficeOrderID })
+
+        taskListPage.riskInformationTask.shouldHaveStatus('Optional')
+        taskListPage.additionalDocumentsTask.shouldHaveStatus('Optional')
+      })
+
+      it('risk information and additional documents sections are optional for courts', () => {
+        const mockCourtOrderID = uuidv4()
+
+        cy.task('stubSignIn', {
+          name: 'john smith',
+          roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+          stubCohort: false,
+          userId: mockCourtOrderID,
+        })
+
+        cy.task('stubCemoRequest', {
+          httpStatus: 200,
+          method: 'GET',
+          subPath: 'user-cohort',
+          response: { cohort: 'COURT', activeCaseload: 'Court Test' },
+        })
+
+        cy.task('stubCemoCreateOrder', {
+          httpStatus: 200,
+          id: mockCourtOrderID,
+          status: 'IN_PROGRESS',
+          type: 'VARIATION',
+        })
+
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockCourtOrderID,
+          status: 'IN_PROGRESS',
+          type: 'VARIATION',
+          order: {
+            dataDictionaryVersion: 'DDV7',
+          },
+        })
+
+        cy.signIn()
+
+        cy.task('stubCemoSearchOrders', { httpStatus: 200, orders: [] })
+        const page = Page.visit(SearchPage)
+
+        page.searchBox.type('Unknown name')
+        page.searchButton.click()
+
+        page.variationFormButton
+          .should('exist')
+          .should('contain.text', 'Tell us about a change to a form sent by email')
+        page.variationFormButton.click()
+        Page.verifyOnPage(IsAddressChangePage)
+
+        const isAddressChangePage = Page.visit(IsAddressChangePage)
+
+        isAddressChangePage.form.fillInWith('Yes')
+        isAddressChangePage.form.saveAndContinueButton.click()
+
+        const notifyingOrganisationPage = Page.verifyOnPage(NotifyingOrganisationPage)
+
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockCourtOrderID,
+          status: 'IN_PROGRESS',
+          type: 'VARIATION',
+          order: {
+            dataDictionaryVersion: 'DDV7',
+            isSentencingAct: true,
+            interestedParties: {
+              notifyingOrganisation: 'CIVIL_COUNTY_COURT',
+              notifyingOrganisationName: 'BIRKENHEAD_COUNTY_AND_CIVIL_COURT',
+              notifyingOrganisationEmail: 'court@test.com',
+            },
+          },
+        })
+
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 200,
+          id: mockCourtOrderID,
+          subPath: '/interested-parties',
+          method: 'PUT',
+          response: {
+            notifyingOrganisation: 'CIVIL_COUNTY_COURT',
+            notifyingOrganisationName: 'BIRKENHEAD_COUNTY_AND_CIVIL_COURT',
+            notifyingOrganisationEmail: 'court@test.com',
+          },
+        })
+
+        notifyingOrganisationPage.form.fillInWith({
+          notifyingOrganisation: 'Civil and County Court',
+          civilCountyCourt: 'BIRKENHEAD_COUNTY_AND_CIVIL_COURT',
+          notifyingOrganisationEmailAddress: 'court@test.com',
+        })
+
+        notifyingOrganisationPage.form.organisationField.set('Civil and County Court')
+
+        cy.get('#civilCountyCourt').type('Birkenhead County and Civil Court')
+        cy.get('#civilCountyCourt')
+          .parent()
+          .find('[role="option"]')
+          .contains('Birkenhead County and Civil Court')
+          .click()
+
+        notifyingOrganisationPage.form.continueButton.click()
+
+        const taskListPage = Page.verifyOnPage(OrderTasksPage)
+
+        taskListPage.riskInformationTask.shouldHaveStatus('Optional')
+        taskListPage.additionalDocumentsTask.shouldHaveStatus('Optional')
+      })
     })
 
     describe('when rendering an order', () => {
