@@ -1,11 +1,11 @@
-import RestClient from '../data/restClient'
-import { AuthenticatedRequestInput } from '../interfaces/request'
-import { InterestedPartiesFormData } from '../models/form-data/interestedParties'
-import InterestedPartiesModel, { InterestedParties } from '../models/InterestedParties'
-import { NotifyingOrganisation } from '../models/NotifyingOrganisation'
-import { ValidationResult } from '../models/Validation'
-import { SanitisedError } from '../sanitisedError'
-import { convertBackendErrorToValidationError } from '../utils/errors'
+import RestClient from '../../../data/restClient'
+import { AuthenticatedRequestInput } from '../../../interfaces/request'
+import { InterestedPartiesFormData } from './formModel'
+import InterestedPartiesModel, { InterestedParties } from '../../../models/InterestedParties'
+import { NotifyingOrganisation } from '../../../models/NotifyingOrganisation'
+import { ValidationResult } from '../../../models/Validation'
+import { SanitisedError } from '../../../sanitisedError'
+import { convertBackendErrorToValidationError } from '../../../utils/errors'
 
 type UpdateInterestedPartiesRequest = AuthenticatedRequestInput & {
   orderId: string

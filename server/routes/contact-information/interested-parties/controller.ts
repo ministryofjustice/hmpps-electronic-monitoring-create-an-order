@@ -1,10 +1,10 @@
 import { Request, RequestHandler, Response } from 'express'
-import paths from '../../constants/paths'
-import { isValidationResult } from '../../models/Validation'
-import InterestedPartiesService from '../../services/interestedPartiesService'
-import TaskListService from '../../services/taskListService'
-import InterestedPartiesFormDataModel from '../../models/form-data/interestedParties'
-import interestedPartiesViewModel from '../../models/view-models/interestedParties'
+import paths from '../../../constants/paths'
+import { isValidationResult } from '../../../models/Validation'
+import InterestedPartiesService from './service'
+import TaskListService from '../../../services/taskListService'
+import InterestedPartiesFormDataModel from './formModel'
+import interestedPartiesViewModel from './viewModel'
 
 export default class InterestedPartiesController {
   constructor(

@@ -1,11 +1,11 @@
 import { ZodError } from 'zod'
-import RestClient from '../data/restClient'
-import { AuthenticatedRequestInput } from '../interfaces/request'
-import DeviceWearerContactDetailsModel, { ContactDetails } from '../models/ContactDetails'
-import { ValidationResult } from '../models/Validation'
-import { ContactDetailsFormData, ContactDetailsFormDataValidator } from '../models/form-data/contactDetails'
-import { SanitisedError } from '../sanitisedError'
-import { convertBackendErrorToValidationError, convertZodErrorToValidationError } from '../utils/errors'
+import RestClient from '../../../data/restClient'
+import { AuthenticatedRequestInput } from '../../../interfaces/request'
+import DeviceWearerContactDetailsModel, { ContactDetails } from '../../../models/ContactDetails'
+import { ValidationResult } from '../../../models/Validation'
+import { ContactDetailsFormData, ContactDetailsFormDataValidator } from './formModel'
+import { SanitisedError } from '../../../sanitisedError'
+import { convertBackendErrorToValidationError, convertZodErrorToValidationError } from '../../../utils/errors'
 
 type UpdateContactDetailsRequest = AuthenticatedRequestInput & {
   orderId: string
