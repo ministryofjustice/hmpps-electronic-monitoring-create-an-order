@@ -1,13 +1,17 @@
-import { IdentityNumberFieldName, getIdentityNumbers, identityNumberFieldNames } from '../../constants/identityNumbers'
-import { createGovukErrorSummary } from '../../utils/errors'
-import { ErrorSummary } from '../../utils/govukFrontEndTypes/errorSummary'
-import { getError } from '../../utils/utils'
-import { DeviceWearer, IdentityNumberType } from '../DeviceWearer'
-import { IdentityNumbersFormData } from '../form-data/deviceWearer'
-import { Order } from '../Order'
-import { Cohort } from '../UserCohort'
-import { ValidationResult } from '../Validation'
-import { ErrorMessage } from './utils'
+import {
+  IdentityNumberFieldName,
+  getIdentityNumbers,
+  identityNumberFieldNames,
+} from '../../../constants/identityNumbers'
+import { createGovukErrorSummary } from '../../../utils/errors'
+import { ErrorSummary } from '../../../utils/govukFrontEndTypes/errorSummary'
+import { getError } from '../../../utils/utils'
+import { DeviceWearer, IdentityNumberType } from '../../../models/DeviceWearer'
+import { IdentityNumbersFormData } from './formModel'
+import { Order } from '../../../models/Order'
+import { Cohort } from '../../../models/UserCohort'
+import { ValidationResult } from '../../../models/Validation'
+import { ErrorMessage } from '../../../models/view-models/utils'
 
 export type IdentityNumberField = {
   type: IdentityNumberType

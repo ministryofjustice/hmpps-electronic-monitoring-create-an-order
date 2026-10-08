@@ -12,7 +12,7 @@ import SectionService from '../../services/sectionsService'
 
 jest.mock('../../services/auditService')
 jest.mock('../../services/orderService')
-jest.mock('../../services/deviceWearerService')
+jest.mock('../../routes/about-the-device-wearer/device-wearer/service')
 jest.mock('../../data/hmppsAuditClient')
 jest.mock('../../data/restClient')
 jest.mock('../../services/sectionsService')

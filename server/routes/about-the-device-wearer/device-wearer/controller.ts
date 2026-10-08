@@ -1,11 +1,11 @@
 import { Request, RequestHandler, Response } from 'express'
-import paths from '../../constants/paths'
-import { isValidationResult } from '../../models/Validation'
-import { DeviceWearerFormDataParser, IdentityNumbersFormDataModel } from '../../models/form-data/deviceWearer'
-import deviceWearerViewModel from '../../models/view-models/deviceWearer'
-import identityNumbersViewModel from '../../models/view-models/identityNumbers'
-import DeviceWearerService from '../../services/deviceWearerService'
-import TaskListService from '../../services/taskListService'
+import paths from '../../../constants/paths'
+import { isValidationResult } from '../../../models/Validation'
+import { DeviceWearerFormDataParser, IdentityNumbersFormDataModel } from './formModel'
+import deviceWearerViewModel from './viewModel'
+import identityNumbersViewModel from './identityNumbersViewModel'
+import DeviceWearerService from './service'
+import TaskListService from '../../../services/taskListService'
 
 export default class DeviceWearerController {
   constructor(

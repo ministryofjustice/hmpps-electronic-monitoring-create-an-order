@@ -1,7 +1,12 @@
 import { z } from 'zod'
-import { BooleanInputModel, DateInputModel, FormDataModel, MultipleChoiceInputModel } from './formData'
-import { DisabilityEnum, IdentityNumbersEnum } from '../DeviceWearer'
-import { validationErrors } from '../../constants/validationErrors'
+import {
+  BooleanInputModel,
+  DateInputModel,
+  FormDataModel,
+  MultipleChoiceInputModel,
+} from '../../../models/form-data/formData'
+import { DisabilityEnum, IdentityNumbersEnum } from '../../../models/DeviceWearer'
+import { validationErrors } from '../../../constants/validationErrors'
 
 const DeviceWearerFormDataParser = FormDataModel.extend({
   firstName: z.string(),

@@ -1,5 +1,5 @@
 import z from 'zod'
-import { FormDataModel } from './formData'
+import { FormDataModel } from '../../../models/form-data/formData'
 
 const DeviceWearerResponsibleAdultFormDataModel = FormDataModel.extend({
   relationship: z.string().default(''),

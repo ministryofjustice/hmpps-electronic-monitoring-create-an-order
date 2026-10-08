@@ -1,6 +1,6 @@
-import { getIdentityNumbers, identityNumberFieldNames } from '../../constants/identityNumbers'
-import paths from '../../constants/paths'
-import I18n from '../../types/i18n'
+import { getIdentityNumbers, identityNumberFieldNames } from '../../../constants/identityNumbers'
+import paths from '../../../constants/paths'
+import I18n from '../../../types/i18n'
 import {
   createBooleanAnswer,
   createDateAnswer,
@@ -8,10 +8,10 @@ import {
   createAnswer,
   AnswerOptions,
   createAddressAnswer,
-} from '../../utils/checkYourAnswers'
-import { formatDateTime, lookup } from '../../utils/utils'
-import { IdentityNumbersEnum } from '../DeviceWearer'
-import { Order } from '../Order'
+} from '../../../utils/checkYourAnswers'
+import { formatDateTime, lookup } from '../../../utils/utils'
+import { IdentityNumbersEnum } from '../../../models/DeviceWearer'
+import { Order } from '../../../models/Order'
 
 const createOtherDisabilityAnswer = (order: Order, content: I18n, uri: string, answerOpts: AnswerOptions) => {
   if (order.deviceWearer.disabilities.includes('OTHER')) {
