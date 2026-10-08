@@ -1,7 +1,7 @@
 import { dataAccess } from '../data'
 import AddressService from './addressService'
 import AlcoholMonitoringService from './alcoholMonitoringService'
-import AttachmentService from './attachmentService'
+import AttachmentService from '../routes/attachments/service'
 import AttendanceMonitoringService from './attendanceMonitoringService'
 import AttendanceMonitoringAddToListService from '../routes/monitoring-conditions/attendance-monitoring/service'
 import AuditService from './auditService'

@@ -1,7 +1,7 @@
-import RestClient from '../data/restClient'
-import AttachmentService from './attachmentService'
+import RestClient from '../../data/restClient'
+import AttachmentService from './service'
 
-jest.mock('../data/restClient')
+jest.mock('../../data/restClient')
 
 describe('Attachment service', () => {
   let mockRestClient: jest.Mocked<RestClient>

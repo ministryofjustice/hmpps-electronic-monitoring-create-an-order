@@ -1,24 +1,24 @@
 import type { NextFunction, Request, Response } from 'express'
 import { Readable } from 'stream'
 import { v4 as uuidv4 } from 'uuid'
-import { getMockOrder } from '../../../test/mocks/mockOrder'
-import HmppsAuditClient from '../../data/hmppsAuditClient'
-import RestClient from '../../data/restClient'
-import AttachmentType from '../../models/AttachmentType'
-import { OrderStatusEnum } from '../../models/Order'
-import AttachmentService from '../../services/attachmentService'
-import AuditService from '../../services/auditService'
-import AttachmentController from './attachmentController'
-import { createMockRequest } from '../../../test/mocks/mockExpress'
-import TaskListService from '../../services/taskListService'
-import OrderChecklistService from '../../services/orderChecklistService'
-import OrderChecklistModel from '../../models/OrderChecklist'
+import { getMockOrder } from '../../../../test/mocks/mockOrder'
+import HmppsAuditClient from '../../../data/hmppsAuditClient'
+import RestClient from '../../../data/restClient'
+import AttachmentType from '../../../models/AttachmentType'
+import { OrderStatusEnum } from '../../../models/Order'
+import AttachmentService from '../service'
+import AuditService from '../../../services/auditService'
+import AttachmentController from './controller'
+import { createMockRequest } from '../../../../test/mocks/mockExpress'
+import TaskListService from '../../../services/taskListService'
+import OrderChecklistService from '../../../services/orderChecklistService'
+import OrderChecklistModel from '../../../models/OrderChecklist'
 
-jest.mock('../../services/auditService')
-jest.mock('../../services/orderService')
-jest.mock('../../data/hmppsAuditClient')
-jest.mock('../../services/attachmentService')
-jest.mock('../../data/restClient')
+jest.mock('../../../services/auditService')
+jest.mock('../../../services/orderService')
+jest.mock('../../../data/hmppsAuditClient')
+jest.mock('../service')
+jest.mock('../../../data/restClient')
 
 const mockId = uuidv4()
 
