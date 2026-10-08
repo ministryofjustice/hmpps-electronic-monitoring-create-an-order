@@ -1,5 +1,6 @@
 import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
+import { fillInGeneralOrderDetailsWith } from '../../../utils/scenario-flows/general-order-details'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
 import fillInMonitoringTypeWith from '../../../utils/scenario-flows/monitoringType'
 import { verifyCurfewInCheckYourAnswersPage } from '../../../utils/scenario-flows/curfew.cy'
@@ -20,13 +21,6 @@ context('Curfew on day of release', () => {
   const primaryAddressDetails = {
     ...createFakeAddress(),
     hasAnotherAddress: 'No',
-  }
-
-  const installationAndRisk = {
-    offence: 'Sexual offences',
-    possibleRisk: 'Sex offender',
-    riskCategory: 'Children under the age of 18 are living at the property',
-    riskDetails: 'No risk',
   }
 
   const installationLocationDetails = {
@@ -103,11 +97,10 @@ context('Curfew on day of release', () => {
       monitoringEndDate: new Date(currentDate.getFullYear() + 2, 0, 1),
     }
 
-    orderSummaryPage.fillInGeneralOrderDetailsWith({
+    fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       newDeviceWearerFlow: true,
     })

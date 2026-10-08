@@ -4,6 +4,7 @@ import { stubAttachments } from '../../utils'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
+import fillInNewOrderWith from '../../../utils/scenario-flows/fill-in-new-order'
 import ReceiptPage from '../../../pages/order/receipt'
 import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
 
@@ -89,7 +90,7 @@ context('Service-Request-Types', () => {
 
     const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
 
-    orderSummaryPage.fillInNewOrderWith({
+    fillInNewOrderWith({
       deviceWearerDetails,
       responsibleAdultDetails: undefined,
       primaryAddressDetails,

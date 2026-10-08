@@ -11,6 +11,18 @@ export default class ReceiptPage extends AppPage {
 
   pdfDownloadBanner = (): PageElement => cy.get('#receipt-download-banner')
 
+  sectionHeadings = (): PageElement => cy.get('h2.govuk-heading-l')
+
+  shouldListSectionsInOrder(expectedSections: string[]): void {
+    this.sectionHeadings().then($headings => {
+      const listedSections = $headings
+        .toArray()
+        .map(heading => heading.textContent?.trim() ?? '')
+        .filter(heading => expectedSections.includes(heading))
+      expect(listedSections, 'sections in the order they are displayed').to.deep.equal(expectedSections)
+    })
+  }
+
   pdfDownloadButton = (): PageElement => cy.get('#download-pdf')
 
   fmsDwRequestDownloadButton = (): PageElement => cy.get('#download-fms-device-wearer-requests')

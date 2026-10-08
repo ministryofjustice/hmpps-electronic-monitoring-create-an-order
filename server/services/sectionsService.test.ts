@@ -64,6 +64,22 @@ describe('task list service', () => {
       ])
     })
 
+    it('lists electronic monitoring conditions above risk information', async () => {
+      const order: Order = {
+        interestedParties: { notifyingOrganisation: 'HOME_OFFICE' },
+        monitoringConditions: { startDate: new Date(2040, 0).toISOString() },
+      } as Order
+
+      const sections = await service.getSectionsForOrder(order)
+
+      expect(sections.map(section => section.name)).toEqual([
+        'ABOUT_THE_DEVICE_WEARER',
+        'ELECTRONIC_MONITORING_CONDITIONS',
+        'RISK_INFORMATION',
+        'ADDITIONAL_DOCUMENTS',
+      ])
+    })
+
     it('the notifying organisation is not home office', async () => {
       const order: Order = {
         interestedParties: { notifyingOrganisation: 'PRISON' },

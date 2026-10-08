@@ -1,5 +1,6 @@
 import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
+import { fillInGeneralOrderDetailsWith } from '../../../utils/scenario-flows/general-order-details'
 import {
   createFakeAdultDeviceWearer,
   createFakeInterestedParties,
@@ -30,13 +31,6 @@ context('Monitoring type list flow', () => {
   const primaryAddressDetails = {
     ...createFakeAddress(),
     hasAnotherAddress: 'No',
-  }
-
-  const installationAndRisk = {
-    offence: 'Sexual offences',
-    possibleRisk: 'Sex offender',
-    riskCategory: 'Children under the age of 18 are living at the property',
-    riskDetails: 'No risk',
   }
 
   let orderSummaryPage: OrderSummaryPage
@@ -140,11 +134,10 @@ context('Monitoring type list flow', () => {
       monitoringEndDate: new Date(currentDate.getFullYear() + 2, 0, 1),
     }
 
-    orderSummaryPage.fillInGeneralOrderDetailsWith({
+    fillInGeneralOrderDetailsWith({
       deviceWearerDetails,
       interestedParties,
       primaryAddressDetails,
-      installationAndRisk,
       monitoringOrderTypeDescription,
       newDeviceWearerFlow: true,
     })

@@ -330,8 +330,6 @@ export default class TaskListService {
       completed: true,
     })
 
-    tasks.push(...getRiskInformationTasks(order))
-
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
       name: PAGES.monitoringConditions,
@@ -506,6 +504,8 @@ export default class TaskListService {
       state: STATES.hidden,
       completed: true,
     })
+
+    tasks.push(...getRiskInformationTasks(order))
 
     tasks.push(...getAdditionalDocumentTasks(order, cohortDefinition))
 

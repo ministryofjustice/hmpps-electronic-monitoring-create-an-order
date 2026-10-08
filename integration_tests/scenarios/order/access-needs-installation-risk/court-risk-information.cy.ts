@@ -38,7 +38,9 @@ context('Court risk information', () => {
       notifyingOrganisation,
     })
     const deviceWearerCheckYourAnswersPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
-    deviceWearerCheckYourAnswersPage.continue()
+    deviceWearerCheckYourAnswersPage.return()
+
+    Page.verifyOnPage(OrderSummaryPage).riskInformationTask.click()
   }
 
   beforeEach(() => {
