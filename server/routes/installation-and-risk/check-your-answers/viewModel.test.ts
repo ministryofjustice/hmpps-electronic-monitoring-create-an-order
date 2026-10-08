@@ -1,7 +1,7 @@
-import getContent from '../../i18n'
-import FeatureFlags from '../../utils/featureFlags'
-import { getMockOrder } from '../../../test/mocks/mockOrder'
-import createViewModel from './riskInformationCheckAnswers'
+import getContent from '../../../i18n'
+import FeatureFlags from '../../../utils/featureFlags'
+import { getMockOrder } from '../../../../test/mocks/mockOrder'
+import createViewModel from './viewModel'
 
 describe('risk information check answers view model', () => {
   beforeEach(() => {

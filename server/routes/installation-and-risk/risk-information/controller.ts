@@ -1,10 +1,10 @@
 import { Request, RequestHandler, Response } from 'express'
-import paths from '../../constants/paths'
-import { isValidationResult } from '../../models/Validation'
-import InstallationAndRiskService from '../../services/installationAndRiskService'
-import TaskListService from '../../services/taskListService'
-import InstallationAndRiskFormDataModel from '../../models/form-data/installationAndRisk'
-import installationAndRiskViewModel from '../../models/view-models/installationAndRisk'
+import paths from '../../../constants/paths'
+import { isValidationResult } from '../../../models/Validation'
+import InstallationAndRiskService from './service'
+import TaskListService from '../../../services/taskListService'
+import InstallationAndRiskFormDataModel from './formModel'
+import installationAndRiskViewModel from './viewModel'
 
 export default class InstallationAndRiskController {
   constructor(

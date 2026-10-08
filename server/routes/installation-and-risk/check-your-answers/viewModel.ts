@@ -1,11 +1,11 @@
-import { createAnswer, createMultipleChoiceAnswer } from '../../utils/checkYourAnswers'
+import { createAnswer, createMultipleChoiceAnswer } from '../../../utils/checkYourAnswers'
 
-import { Order } from '../Order'
-import I18n from '../../types/i18n'
-import { formatDateTime, lookup } from '../../utils/utils'
-import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
-import paths from '../../constants/paths'
-import { getRiskInformationFlow, riskInformationPages } from '../../services/riskInformationFlow'
+import { Order } from '../../../models/Order'
+import I18n from '../../../types/i18n'
+import { formatDateTime, lookup } from '../../../utils/utils'
+import isOrderDataDictionarySameOrAbove from '../../../utils/dataDictionaryVersionComparer'
+import paths from '../../../constants/paths'
+import { getRiskInformationFlow, riskInformationPages } from '../../../services/riskInformationFlow'
 
 const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean, uri: string = '') => {
   const { questions } = content.pages.installationAndRisk
