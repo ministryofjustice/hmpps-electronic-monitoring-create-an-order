@@ -23,6 +23,13 @@ export const getOrderListViewsForCohort = (cohort?: Cohort): OrderListView[] => 
   return ['MY_ORDERS', 'FAILED_ORDERS']
 }
 
+export const emptyListMessages: Record<OrderListView, string> = {
+  MY_ORDERS: 'You have no draft or returned forms',
+  FAILED_ORDERS: 'You have no failed to submit forms',
+  PRISON_ORDERS: 'Your prison has no draft or returned forms',
+  HOME_OFFICE_ORDERS: 'Your team has no draft or returned forms',
+}
+
 export const ListOrdersQueryParser = z.object({
   view: OrderListViewEnum.catch('MY_ORDERS').default('MY_ORDERS'),
   page: z.coerce.number().int().nonnegative().catch(0),
