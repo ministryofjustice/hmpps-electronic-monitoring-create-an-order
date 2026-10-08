@@ -64,6 +64,13 @@ export default class OrderService {
     })
   }
 
+  async amendRejectedOrderFromExisting(input: OrderRequestInput): Promise<void> {
+    return this.apiClient.post({
+      path: `/api/orders/${input.orderId}/amend-rejected-order`,
+      token: input.accessToken,
+    })
+  }
+
   async getOrder(input: OrderRequestInput): Promise<Order> {
     const result = await this.apiClient.get({
       path: `/api/orders/${input.orderId}`,

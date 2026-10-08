@@ -1,0 +1,64 @@
+import { randomUUID } from 'crypto'
+import { getMockOrder } from '../../test/mocks/mockOrder'
+import { canCreateOrderVersion, isAcceptedOrderForChange } from './orderVersionEligibility'
+
+describe('order version eligibility', () => {
+  it.each(['CLOSED', 'RESOLVED'] as const)('allows changes to accepted submitted orders in %s state', caseState => {
+    const order = getMockOrder({ status: 'SUBMITTED', caseState })
+
+    expect(canCreateOrderVersion(order)).toBe(true)
+    expect(isAcceptedOrderForChange(order)).toBe(true)
+  })
+
+  it('allows returned submitted orders to use the rejection route only', () => {
+    const order = getMockOrder({ status: 'SUBMITTED', caseState: 'CANCELLED' })
+
+    expect(canCreateOrderVersion(order)).toBe(true)
+    expect(isAcceptedOrderForChange(order)).toBe(false)
+  })
+
+  it('allows a submitted order with unknown case state when no FMS result ID exists', () => {
+    const order = getMockOrder({ status: 'SUBMITTED', caseState: 'UNKNOWN', fmsResultId: null })
+
+    expect(canCreateOrderVersion(order)).toBe(true)
+    expect(isAcceptedOrderForChange(order)).toBe(false)
+  })
+
+  it('blocks a submitted order with unknown case state when an FMS result ID exists', () => {
+    const order = getMockOrder({ status: 'SUBMITTED', caseState: 'UNKNOWN', fmsResultId: randomUUID() })
+
+    expect(canCreateOrderVersion(order)).toBe(false)
+    expect(isAcceptedOrderForChange(order)).toBe(false)
+  })
+
+  it('blocks a submitted order with unknown case state when the FMS result ID is absent', () => {
+    const order = getMockOrder({ status: 'SUBMITTED', caseState: 'UNKNOWN' })
+
+    expect(canCreateOrderVersion(order)).toBe(false)
+  })
+
+  it('allows rejected orders only when their case is cancelled', () => {
+    const returnedOrder = getMockOrder({ status: 'REJECTED', caseState: 'CANCELLED' })
+    const processingOrder = getMockOrder({ status: 'REJECTED', caseState: 'OPEN' })
+
+    expect(canCreateOrderVersion(returnedOrder)).toBe(true)
+    expect(canCreateOrderVersion(processingOrder)).toBe(false)
+  })
+
+  it('does not allow an existing draft to be copied as another version', () => {
+    const order = getMockOrder({ status: 'IN_PROGRESS', caseState: 'CLOSED' })
+
+    expect(canCreateOrderVersion(order)).toBe(false)
+    expect(isAcceptedOrderForChange(order)).toBe(false)
+  })
+
+  it.each(['NEW', 'OPEN', 'AWAITING_INFO', 'AWAITING_VALIDATION', 'AWAITING_APPROVAL'] as const)(
+    'blocks submitted orders while case state is %s',
+    caseState => {
+      const order = getMockOrder({ status: 'SUBMITTED', caseState })
+
+      expect(canCreateOrderVersion(order)).toBe(false)
+      expect(isAcceptedOrderForChange(order)).toBe(false)
+    },
+  )
+})

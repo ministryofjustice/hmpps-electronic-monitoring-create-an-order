@@ -6,9 +6,17 @@ type ApiOrder = Omit<Order, 'deviceWearer'> & {
     disabilities: string
   }
 }
+
+const getCaseState = (status: Order['status']): Order['caseState'] => {
+  if (status === 'SUBMITTED') return 'CLOSED'
+  if (status === 'REJECTED') return 'CANCELLED'
+  return 'UNKNOWN'
+}
+
 const mockApiOrder = (status: Order['status'] = 'IN_PROGRESS', type: Order['type'] = 'REQUEST'): ApiOrder => ({
   id: uuidv4(),
   status,
+  caseState: getCaseState(status),
   type,
   dataDictionaryVersion: 'DDV4',
   deviceWearer: {

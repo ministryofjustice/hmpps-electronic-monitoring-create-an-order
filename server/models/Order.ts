@@ -27,6 +27,17 @@ import OffenceAdditionalDetailsModel from './OffenceOtherInfo'
 import StatusUpdateModel from './StatusUpdate'
 
 export const OrderStatusEnum = z.enum(['IN_PROGRESS', 'ERROR', 'SUBMITTED', 'REJECTED'])
+export const CaseStateEnum = z.enum([
+  'NEW',
+  'CLOSED',
+  'RESOLVED',
+  'CANCELLED',
+  'OPEN',
+  'AWAITING_INFO',
+  'AWAITING_VALIDATION',
+  'AWAITING_APPROVAL',
+  'UNKNOWN',
+])
 export const VariationTypesEnum = z.enum([
   'VARIATION',
   'REINSTALL_AT_DIFFERENT_ADDRESS',
@@ -40,6 +51,8 @@ export const DataDictionaryVersionEnum = z.enum(['DDV4', 'DDV5', 'DDV6', 'DDV7']
 const OrderModel = z.object({
   id: z.string().uuid(),
   status: OrderStatusEnum,
+  caseState: CaseStateEnum.optional().default('UNKNOWN'),
+  fmsResultId: z.string().uuid().nullable().optional(),
   type: OrderTypeEnum,
   deviceWearer: DeviceWearerModel,
   addresses: z.array(AddressModel),

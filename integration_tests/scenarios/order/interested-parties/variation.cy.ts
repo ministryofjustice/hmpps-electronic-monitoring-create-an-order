@@ -4,7 +4,6 @@ import { stubAttachments } from '../../utils'
 import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
 import ConfirmVariationPage from '../../../pages/order/variation/confirmVariation'
-import IsRejectionPage from '../../../e2e/order/edit-order/is-rejection/isRejectionPage'
 import InterestedPartiesCheckYourAnswersPage from '../../../e2e/order/interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
 import NotifyingOrganisationPage from '../../../e2e/order/interested-parties/notifying-organisation/notifyingOrganisationPage'
 import SentencingActPage from '../../../e2e/order/interested-parties/sentencing-act/sentencingActPage'
@@ -63,7 +62,6 @@ context('Interested parties flow', () => {
     })
     Page.verifyOnPage(OrderSummaryPage).makeChanges()
     Page.verifyOnPage(ConfirmVariationPage).confirm()
-    Page.verifyOnPage(IsRejectionPage).isNotRejection()
     const yourDetailsPage = Page.verifyOnPage(NotifyingOrganisationPage)
     yourDetailsPage.form.continueButton.click()
 

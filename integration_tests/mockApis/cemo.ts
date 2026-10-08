@@ -141,6 +141,12 @@ const defaultGetOrderOptions = {
   type: 'REQUEST',
 }
 
+const getCaseStateForOrderStatus = (status: string): string => {
+  if (status === 'SUBMITTED') return 'CLOSED'
+  if (status === 'REJECTED') return 'CANCELLED'
+  return 'UNKNOWN'
+}
+
 const getOrder = (options: GetOrderStubOptions = defaultGetOrderOptions): SuperAgentRequest => {
   const stubOptions = { ...defaultGetOrderOptions, ...options }
 
@@ -158,6 +164,7 @@ const getOrder = (options: GetOrderStubOptions = defaultGetOrderOptions): SuperA
               ...mockApiOrder(),
               id: stubOptions.id,
               status: stubOptions.status,
+              caseState: getCaseStateForOrderStatus(stubOptions.status),
               type: stubOptions.type,
               ...(stubOptions.order ? stubOptions.order : {}),
             }
