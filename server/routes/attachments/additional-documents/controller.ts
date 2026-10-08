@@ -1,11 +1,11 @@
 import { Request, RequestHandler, Response } from 'express'
-import { AttachmentService, AuditService } from '../../services'
-import AttachmentType from '../../models/AttachmentType'
-import paths from '../../constants/paths'
-import TaskListService, { PAGES, Page } from '../../services/taskListService'
-import { formatDateTime } from '../../utils/utils'
-import createViewModel from '../../models/view-models/additionalDocumentsCheckAnswers'
-import OrderChecklistService from '../../services/orderChecklistService'
+import { AttachmentService, AuditService } from '../../../services'
+import AttachmentType from '../../../models/AttachmentType'
+import paths from '../../../constants/paths'
+import TaskListService, { PAGES, Page } from '../../../services/taskListService'
+import { formatDateTime } from '../../../utils/utils'
+import createViewModel from './viewModel'
+import OrderChecklistService from '../../../services/orderChecklistService'
 
 export default class AttachmentsController {
   constructor(

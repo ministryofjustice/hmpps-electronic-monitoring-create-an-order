@@ -1,6 +1,6 @@
 import { Request, RequestHandler, Response } from 'express'
 import { FileRequiredFormData, FileRequiredFormDataModel } from '../fileRequiredFormModel'
-import AttachmentService from '../../../services/attachmentService'
+import AttachmentService from '../service'
 import { ValidationResult, isValidationResult } from '../../../models/Validation'
 import paths from '../../../constants/paths'
 import TaskListService, { PAGES } from '../../../services/taskListService'
