@@ -1,14 +1,11 @@
 import { ZodError } from 'zod'
-import RestClient from '../data/restClient'
-import { AuthenticatedRequestInput } from '../interfaces/request'
-import InstallationAndRiskModel, { InstallationAndRisk } from '../models/InstallationAndRisk'
-import { ValidationResult } from '../models/Validation'
-import {
-  InstallationAndRiskFormData,
-  InstallationAndRiskFormDataValidator,
-} from '../models/form-data/installationAndRisk'
-import { SanitisedError } from '../sanitisedError'
-import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../utils/errors'
+import RestClient from '../../../data/restClient'
+import { AuthenticatedRequestInput } from '../../../interfaces/request'
+import InstallationAndRiskModel, { InstallationAndRisk } from '../../../models/InstallationAndRisk'
+import { ValidationResult } from '../../../models/Validation'
+import { InstallationAndRiskFormData, InstallationAndRiskFormDataValidator } from './formModel'
+import { SanitisedError } from '../../../sanitisedError'
+import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../../../utils/errors'
 
 type UpdateMonitoringConditionsInput = AuthenticatedRequestInput & {
   orderId: string
