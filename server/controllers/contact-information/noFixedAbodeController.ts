@@ -1,6 +1,6 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../constants/paths'
-import DeviceWearerService from '../../services/deviceWearerService'
+import DeviceWearerService from '../../routes/about-the-device-wearer/device-wearer/service'
 import { isValidationResult } from '../../models/Validation'
 import TaskListService from '../../services/taskListService'
 import NoFixedAbodeFormDataModel from '../../models/form-data/noFixedAbode'

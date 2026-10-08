@@ -1,8 +1,8 @@
-import RestClient from '../data/restClient'
-import { Disability } from '../models/DeviceWearer'
-import DeviceWearerService, { UpdateIdentityNumbersRequest } from './deviceWearerService'
+import RestClient from '../../../data/restClient'
+import { Disability } from '../../../models/DeviceWearer'
+import DeviceWearerService, { UpdateIdentityNumbersRequest } from './service'
 
-jest.mock('../data/restClient')
+jest.mock('../../../data/restClient')
 
 const mockApiResponse = {
   nomisId: null,
