@@ -59,6 +59,7 @@ describe('order version eligibility', () => {
     const order = getMockOrder({ status: 'IN_PROGRESS', caseState: 'CLOSED' })
 
     expect(canCreateOrderVersion(order)).toBe(false)
+    expect(canUseServiceRequestTypeFlow(order)).toBe(true)
     expect(isAcceptedOrderForChange(order)).toBe(false)
   })
 
