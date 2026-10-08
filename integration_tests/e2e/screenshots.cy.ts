@@ -79,11 +79,8 @@ context('Screenshots', () => {
     cy.visit(paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', mockOrderId))
     cy.screenshot('AlcoholPage', { overwrite: true })
 
-    cy.visit(paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', mockOrderId))
+    cy.visit(paths.MONITORING_CONDITIONS.ATTENDANCE_ADD_TO_LIST.replace(':orderId', mockOrderId))
     cy.screenshot('AttendancePage', { overwrite: true })
-
-    // cy.visit(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM.replace(':orderId', mockOrderId).replace(':conditionId', '0'))
-    // cy.screenshot('AttendanceItemPage', { overwrite: true })
 
     cy.visit(paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', mockOrderId))
     cy.screenshot('CurfewConditionsPage', { overwrite: true })
@@ -96,9 +93,6 @@ context('Screenshots', () => {
 
     cy.visit(paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', mockOrderId))
     cy.screenshot('TrailPage', { overwrite: true })
-
-    cy.visit(paths.MONITORING_CONDITIONS.ZONE.replace(':orderId', mockOrderId))
-    cy.screenshot('ZonePage', { overwrite: true })
 
     cy.visit(
       paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(':orderId', mockOrderId).replace(':addressType', 'INSTALLATION'),

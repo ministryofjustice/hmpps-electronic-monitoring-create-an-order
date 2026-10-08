@@ -1,10 +1,10 @@
 import { createAddressPreview } from '../../../server/utils/utils'
-import AttendanceMonitoringPage from '../../pages/order/monitoring-conditions/attendance-monitoring'
+import AttendanceMonitoringAddToListPage from '../../e2e/order/monitoring-conditions/add-to-list/attendance-monitoring/AttendanceMonitoringPage'
 import MonitoringConditionsCheckYourAnswersPage from '../../pages/order/monitoring-conditions/check-your-answers'
 import Page from '../../pages/page'
 
 export default function fillInAttendanceMonitoringDetailsWith(attendanceMonitoringDetails): void {
-  const attendanceMonitoringPage = Page.verifyOnPage(AttendanceMonitoringPage)
+  const attendanceMonitoringPage = Page.verifyOnPage(AttendanceMonitoringAddToListPage)
   attendanceMonitoringPage.form.fillInWith(attendanceMonitoringDetails)
   attendanceMonitoringPage.form.saveAndContinueButton.click()
 }

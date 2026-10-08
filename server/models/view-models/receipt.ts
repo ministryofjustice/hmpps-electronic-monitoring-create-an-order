@@ -1,5 +1,5 @@
 import * as DeviceWearerCheckAnswers from '../../routes/about-the-device-wearer/check-your-answers/viewModel'
-import * as MonitoringConditionsCheckAnswers from './monitoringConditionsCheckAnswers'
+import * as MonitoringConditionsCheckAnswers from '../../routes/monitoring-conditions/check-your-answers/viewModel'
 import * as RiskInformationCheckAnswers from '../../routes/installation-and-risk/check-your-answers/viewModel'
 import * as AdditionalDocumentsCheckAnswers from '../../routes/attachments/additional-documents/viewModel'
 import * as VariationDetailsCheckAnswers from './variationDetailsCheckAnswers'
