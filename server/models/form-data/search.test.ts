@@ -120,6 +120,6 @@ describe('constructListViewModel', () => {
     const model = constructListViewModel({ content: orders, page: 0, size: 20, hasNext: false }, 'MY_ORDERS', false)
 
     expect(model.orders.map(order => order.name)).toEqual(['Returned Person', 'Draft Person'])
-    expect(model.orders[0].statusTags).toEqual([{ text: 'Returned', type: 'REJECTED' }])
+    expect(model.orders[0].statusTags).toEqual([{ text: 'Returned', type: 'RETURNED' }])
   })
 })

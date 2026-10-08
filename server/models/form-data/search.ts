@@ -1,7 +1,7 @@
 import paths from '../../constants/paths'
 import { AddressTypeEnum } from '../Address'
 import { OrderListInformation, OrderListInformationPage } from '../OrderListInformation'
-import { OrderListView, OrderListViewEnum, orderListViewLabels } from './OrderListView'
+import { emptyListMessages, OrderListView, OrderListViewEnum, orderListViewLabels } from './OrderListView'
 import { OrderSearchResult } from '../OrderSearchResult'
 
 type OrderListViewModel = {
@@ -14,6 +14,7 @@ type OrderListViewModel = {
     lastUpdatedDateTime: string
     index: number
   }[]
+  emptyListMessage: string
   isPrisonOrYouthUser: boolean
   showViewFilter: boolean
   viewOptions: { value: OrderListView; text: string; selected: boolean }[]
@@ -146,6 +147,7 @@ export function constructListViewModel(
       index: ordersPage.page * ordersPage.size + index,
     })),
     isPrisonOrYouthUser,
+    emptyListMessage: emptyListMessages[view],
     showViewFilter: availableViews.length > 1,
     viewOptions: availableViews.map(value => ({
       value,
@@ -165,27 +167,30 @@ function constructPagination(ordersPage: OrderListInformationPage, view: OrderLi
 }
 
 const getStatusTag = (status: OrderListInformation['status']) => {
-  if (status === 'IN_PROGRESS') {
-    return [{ text: 'Draft', type: 'DRAFT' }]
+  switch (status) {
+    case 'IN_PROGRESS':
+      return [{ text: 'Draft', type: 'DRAFT' }]
+    case 'ERROR':
+      return [{ text: 'Failed to submit', type: 'FAILED' }]
+    case 'SUBMITTED':
+      return [{ text: 'Submitted', type: 'SUBMITTED' }]
+
+    default:
+      return []
   }
-  if (status === 'ERROR') {
-    return [{ text: 'Failed to submit', type: 'FAILED' }]
-  }
-  if (status === 'SUBMITTED') {
-    return [{ text: 'Submitted', type: 'SUBMITTED' }]
-  }
-  if (status === 'REJECTED') {
-    return [{ text: 'Returned', type: 'REJECTED' }]
-  }
-  return []
 }
 
 const getStatusTags = (order: Pick<OrderListInformation, 'status' | 'type'>) => {
   const statusTags = []
 
-  if (order.type === 'VARIATION') {
-    statusTags.push({ text: 'Change to form', type: 'VARIATION' })
+  if (order.status === 'REJECTED') {
+    statusTags.push({ text: 'Returned', type: 'RETURNED' })
+  } else {
+    if (order.type === 'VARIATION') {
+      statusTags.push({ text: 'Change to form', type: 'VARIATION' })
+    }
+    statusTags.push(...getStatusTag(order.status))
   }
-  statusTags.push(...getStatusTag(order.status))
+
   return statusTags
 }
