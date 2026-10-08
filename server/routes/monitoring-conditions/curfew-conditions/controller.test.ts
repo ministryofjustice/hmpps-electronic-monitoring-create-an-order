@@ -1,0 +1,317 @@
+import type { NextFunction, Request, Response } from 'express'
+import { v4 as uuidv4 } from 'uuid'
+import { createInterestedParties, createMonitoringConditions, getMockOrder } from '../../../../test/mocks/mockOrder'
+import RestClient from '../../../data/restClient'
+import CurfewConditionsService from './service'
+import CurfewConditionsController from './controller'
+import paths from '../../../constants/paths'
+
+jest.mock('../../../services/auditService')
+jest.mock('../../../data/hmppsAuditClient')
+jest.mock('../../../data/restClient')
+
+const mockId = uuidv4()
+
+describe('CurfewConditionsController', () => {
+  let mockCurfewReleaseDateService: jest.Mocked<CurfewConditionsService>
+  let controller: CurfewConditionsController
+  let req: Request
+  let res: Response
+  let next: NextFunction
+
+  beforeEach(() => {
+    const mockRestClient = new RestClient('cemoApi', {
+      url: '',
+      timeout: { response: 0, deadline: 0 },
+      agent: { timeout: 0 },
+    }) as jest.Mocked<RestClient>
+    mockCurfewReleaseDateService = new CurfewConditionsService(mockRestClient) as jest.Mocked<CurfewConditionsService>
+    controller = new CurfewConditionsController(mockCurfewReleaseDateService)
+
+    req = {
+      // @ts-expect-error stubbing session
+      session: {},
+      query: {},
+      params: {
+        orderId: mockId,
+      },
+      order: getMockOrder({ id: mockId }),
+      user: {
+        username: 'fakeUserName',
+        token: 'fakeUserToken',
+        authSource: 'auth',
+      },
+      flash: jest.fn(),
+    }
+
+    // @ts-expect-error stubbing res.render
+    res = {
+      locals: {
+        user: {
+          username: 'fakeUserName',
+          token: 'fakeUserToken',
+          authSource: 'nomis',
+          userId: 'fakeId',
+          name: 'fake user',
+          displayName: 'fuser',
+          userRoles: ['fakeRole'],
+          staffId: 123,
+        },
+        editable: false,
+        orderId: mockId,
+      },
+      redirect: jest.fn(),
+      render: jest.fn(),
+    }
+
+    next = jest.fn()
+  })
+
+  describe('View curfew conditions', () => {
+    it('Should render with formdata and validation errors from flash', async () => {
+      const mockValidationError = [{ field: 'startDate', error: 'mock start date Error' }]
+      const mockFormData = {
+        action: 'continue',
+        startDate: {
+          day: '11',
+          month: '09',
+          year: '2024',
+          hours: '00',
+          minutes: '00',
+        },
+        endDate: {
+          day: '11',
+          month: '09',
+          year: '2025',
+          hours: '23',
+          minutes: '59',
+        },
+      }
+      req.flash = jest.fn().mockReturnValueOnce(mockValidationError).mockReturnValueOnce([mockFormData])
+
+      await controller.view(req, res, next)
+      expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/curfew-conditions', {
+        startDate: {
+          value: {
+            year: '2024',
+            month: '09',
+            day: '11',
+            hours: '00',
+            minutes: '00',
+          },
+          error: {
+            text: 'mock start date Error',
+          },
+        },
+        endDate: {
+          value: {
+            year: '2025',
+            month: '09',
+            day: '11',
+            hours: '23',
+            minutes: '59',
+          },
+          error: undefined,
+        },
+        showEndate: true,
+        errorSummary: {
+          errorList: [
+            {
+              href: '#startDate',
+              text: 'mock start date Error',
+            },
+          ],
+          titleText: 'There is a problem',
+        },
+      })
+    })
+
+    it('Should render with order curfewReleaseDateConditions', async () => {
+      const mockReleaseDateCondition = {
+        curfewAddress: 'PRIMARY,SECONDARY',
+        orderId: mockId,
+        startDate: '2025-02-15',
+        endDate: '2026-02-15',
+        curfewAdditionalDetails: null,
+      }
+      req.order = getMockOrder({
+        id: mockId,
+        curfewConditions: mockReleaseDateCondition,
+        addresses: [
+          {
+            addressType: 'PRIMARY',
+            addressLine1: '10 Downing Street',
+            addressLine2: '',
+            addressLine3: '',
+            addressLine4: '',
+            postcode: '',
+          },
+          {
+            addressType: 'SECONDARY',
+            addressLine1: '11 Downing Street',
+            addressLine2: '',
+            addressLine3: '',
+            addressLine4: '',
+            postcode: '',
+          },
+          {
+            addressType: 'TERTIARY',
+            addressLine1: '12 Downing Street',
+            addressLine2: '',
+            addressLine3: '',
+            addressLine4: '',
+            postcode: '',
+          },
+        ],
+      })
+      req.flash = jest.fn().mockReturnValueOnce([]).mockReturnValueOnce([])
+      await controller.view(req, res, next)
+      expect(res.render).toHaveBeenCalledWith('pages/order/monitoring-conditions/curfew-conditions', {
+        startDate: {
+          value: {
+            hours: '00',
+            minutes: '00',
+            year: '2025',
+            month: '02',
+            day: '15',
+          },
+        },
+        endDate: {
+          value: {
+            hours: '00',
+            minutes: '00',
+            year: '2026',
+            month: '02',
+            day: '15',
+          },
+        },
+        showEndate: true,
+        errorSummary: null,
+      })
+    })
+  })
+
+  describe('Update curfew conditions', () => {
+    it('Should redirect to view and save form and validation error flash when service return validation error', async () => {
+      req.body = {
+        action: 'continue',
+        startDate: {
+          day: '11',
+          month: '09',
+          year: '2024',
+          hours: '00',
+          minutes: '00',
+        },
+        endDate: {
+          day: '11',
+          month: '09',
+          year: '2025',
+          hours: '23',
+          minutes: '59',
+        },
+      }
+      const mockValidationError = [{ field: 'startDate', error: 'mock start date Error' }]
+      mockCurfewReleaseDateService.update = jest.fn().mockResolvedValue(mockValidationError)
+
+      await controller.update(req, res, next)
+
+      expect(req.flash).toHaveBeenCalledWith('validationErrors', mockValidationError)
+      expect(req.flash).toHaveBeenCalledWith('formData', req.body)
+      expect(res.redirect).toHaveBeenCalledWith(
+        paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', mockId),
+      )
+    })
+
+    it('Should redirect to curfew day of release page', async () => {
+      req.order = getMockOrder({
+        id: mockId,
+        monitoringConditions: createMonitoringConditions({ curfew: true }),
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }),
+      })
+      req.body = {
+        action: 'continue',
+        address: ['PRIMARY', 'SECONDARY'],
+        startDate: {
+          day: '11',
+          month: '09',
+          year: '2024',
+          hours: '00',
+          minutes: '00',
+        },
+        endDate: {
+          day: '11',
+          month: '09',
+          year: '2025',
+          hours: '23',
+          minutes: '59',
+        },
+      }
+      mockCurfewReleaseDateService.update = jest.fn().mockResolvedValue(undefined)
+
+      await controller.update(req, res, next)
+
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/curfew/day-of-release`)
+    })
+
+    it('Should redirect to curfew address boundary page when order is not eligible for curfew day of release', async () => {
+      req.order = getMockOrder({
+        id: mockId,
+        monitoringConditions: createMonitoringConditions({ curfew: true }),
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PROBATION' }),
+      })
+      req.body = {
+        action: 'continue',
+        address: ['PRIMARY', 'SECONDARY'],
+        startDate: {
+          day: '11',
+          month: '09',
+          year: '2024',
+          hours: '00',
+          minutes: '00',
+        },
+        endDate: {
+          day: '11',
+          month: '09',
+          year: '2025',
+          hours: '23',
+          minutes: '59',
+        },
+      }
+      mockCurfewReleaseDateService.update = jest.fn().mockResolvedValue(undefined)
+
+      await controller.update(req, res, next)
+
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/monitoring-conditions/curfew/additional-details`)
+    })
+
+    it('Should redirect back to summary page', async () => {
+      req.order = getMockOrder({
+        id: mockId,
+        monitoringConditions: createMonitoringConditions({ curfew: true }),
+      })
+      req.body = {
+        action: 'back',
+        address: ['PRIMARY', 'SECONDARY'],
+        startDate: {
+          day: '11',
+          month: '09',
+          year: '2024',
+          hours: '00',
+          minutes: '00',
+        },
+        endDate: {
+          day: '11',
+          month: '09',
+          year: '2025',
+          hours: '23',
+          minutes: '59',
+        },
+      }
+      mockCurfewReleaseDateService.update = jest.fn().mockResolvedValue(undefined)
+
+      await controller.update(req, res, next)
+
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockId}/summary`)
+    })
+  })
+})

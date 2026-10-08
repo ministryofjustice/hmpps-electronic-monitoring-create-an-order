@@ -426,7 +426,7 @@ export default class TaskListService {
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
       name: PAGES.attendanceMonitoring,
-      path: paths.MONITORING_CONDITIONS.ATTENDANCE,
+      path: paths.MONITORING_CONDITIONS.ATTENDANCE_ADD_TO_LIST,
       state: convertBooleanToEnum<State>(
         order.monitoringConditions.mandatoryAttendance && order.mandatoryAttendanceConditions?.length === 0,
         STATES.cantBeStarted,

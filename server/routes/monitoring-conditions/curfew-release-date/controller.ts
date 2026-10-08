@@ -1,0 +1,58 @@
+import { Request, RequestHandler, Response } from 'express'
+import paths from '../../../constants/paths'
+import { isValidationResult } from '../../../models/Validation'
+import CurfewReleaseDateService from './service'
+import CurfewReleaseDateFormDataModel from './formModel'
+import curfewReleaseDateViewModel from './viewModel'
+import shouldShowCurfewDayOfRelease from '../../../utils/curfewDayOfReleaseEligibility'
+import { serialiseTime } from '../../../utils/utils'
+
+export default class CurfewReleaseDateController {
+  constructor(private readonly curfewReleaseDateService: CurfewReleaseDateService) {}
+
+  view: RequestHandler = async (req: Request, res: Response) => {
+    const order = req.order!
+
+    if (!shouldShowCurfewDayOfRelease(order)) {
+      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', order.id))
+      return
+    }
+
+    const { curfewReleaseDateConditions: model, addresses } = order
+    const errors = req.flash('validationErrors')
+    const formData = req.flash('formData')
+    const viewModel = curfewReleaseDateViewModel.construct(model, addresses, errors as never, formData as never)
+
+    res.render(`pages/order/monitoring-conditions/curfew-release-date`, viewModel)
+  }
+
+  update: RequestHandler = async (req: Request, res: Response) => {
+    const order = req.order!
+    const formData = CurfewReleaseDateFormDataModel.parse(req.body)
+
+    const updateResult = await this.curfewReleaseDateService.update({
+      accessToken: res.locals.user.token,
+      order,
+      data: {
+        startTime: serialiseTime(formData.curfewTimesStartHours, formData.curfewTimesStartMinutes),
+        endTime: serialiseTime(formData.curfewTimesEndHours, formData.curfewTimesEndMinutes),
+        curfewAddress: formData.curfewAddress,
+      },
+    })
+
+    if (isValidationResult(updateResult)) {
+      req.flash('formData', [formData])
+      req.flash('validationErrors', updateResult)
+
+      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_RELEASE_DATE.replace(':orderId', order.id))
+      return
+    }
+
+    if (formData.action === 'continue') {
+      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', order.id))
+      return
+    }
+
+    res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
+  }
+}

@@ -1,0 +1,56 @@
+import { Request, RequestHandler, Response } from 'express'
+import paths from '../../../constants/paths'
+import { isValidationResult } from '../../../models/Validation'
+import TrailMonitoringService from './service'
+import trailMonitoringViewModel from './viewModel'
+import { TrailMonitoringFormDataModel } from './formModel'
+
+export default class TrailMonitoringController {
+  constructor(private readonly trailMonitoringService: TrailMonitoringService) {}
+
+  view: RequestHandler = async (req: Request, res: Response) => {
+    const { monitoringConditionsTrail, interestedParties } = req.order!
+    const errors = req.flash('validationErrors')
+    const formData = req.flash('formData')
+    const notifyingOrganisation = interestedParties?.notifyingOrganisation || undefined
+
+    const viewModel = trailMonitoringViewModel.construct(
+      monitoringConditionsTrail ?? {
+        startDate: null,
+        endDate: null,
+      },
+      errors as never,
+      formData as never,
+      notifyingOrganisation,
+    )
+
+    res.render(`pages/order/monitoring-conditions/trail-monitoring`, viewModel)
+  }
+
+  update: RequestHandler = async (req: Request, res: Response) => {
+    const orderId = req.params.orderId as string
+    const formData = TrailMonitoringFormDataModel.parse(req.body)
+    const { interestedParties } = req.order!
+    const notifyingOrganisation = interestedParties?.notifyingOrganisation ?? null
+
+    const updateMonitoringConditionsResult = await this.trailMonitoringService.update({
+      accessToken: res.locals.user.token,
+      orderId,
+      data: formData,
+      notifyingOrganisation,
+    })
+
+    if (isValidationResult(updateMonitoringConditionsResult)) {
+      req.flash('formData', formData)
+      req.flash('validationErrors', updateMonitoringConditionsResult)
+
+      res.redirect(paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', orderId))
+    } else if (formData.action === 'continue') {
+      res.redirect(
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', orderId),
+      )
+    } else {
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+    }
+  }
+}

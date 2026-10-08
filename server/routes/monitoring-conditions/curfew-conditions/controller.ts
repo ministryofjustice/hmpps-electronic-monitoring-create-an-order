@@ -1,0 +1,52 @@
+import { Request, RequestHandler, Response } from 'express'
+import paths from '../../../constants/paths'
+import { isValidationResult } from '../../../models/Validation'
+import CurfewConditionsService from './service'
+import { CurfewConditionsFormDataModel } from './formModel'
+import CurfewConditionsViewModel from './viewModel'
+import shouldShowCurfewDayOfRelease from '../../../utils/curfewDayOfReleaseEligibility'
+
+export default class CurfewConditionsController {
+  constructor(private readonly curfewConditionsService: CurfewConditionsService) {}
+
+  view: RequestHandler = async (req: Request, res: Response) => {
+    const errors = req.flash('validationErrors')
+    const formData = req.flash('formData')
+    const viewModel = CurfewConditionsViewModel.construct(req.order!, errors as never, formData as never)
+
+    res.render(`pages/order/monitoring-conditions/curfew-conditions`, viewModel)
+  }
+
+  update: RequestHandler = async (req: Request, res: Response) => {
+    const orderId = req.params.orderId as string
+    const formData = CurfewConditionsFormDataModel.parse(req.body)
+    const { interestedParties } = req.order!
+
+    const updateResult = await this.curfewConditionsService.update({
+      accessToken: res.locals.user.token,
+      orderId,
+      data: formData,
+      notifyingOrganisation: interestedParties?.notifyingOrganisation ?? null,
+    })
+
+    if (isValidationResult(updateResult)) {
+      req.flash('formData', formData)
+      req.flash('validationErrors', updateResult)
+
+      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS.replace(':orderId', orderId))
+      return
+    }
+
+    if (formData.action === 'continue') {
+      if (shouldShowCurfewDayOfRelease(req.order!)) {
+        res.redirect(paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE.replace(':orderId', orderId))
+        return
+      }
+
+      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', orderId))
+      return
+    }
+
+    res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+  }
+}
