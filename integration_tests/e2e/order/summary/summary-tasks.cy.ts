@@ -466,6 +466,58 @@ context('Order Summary', () => {
     })
   })
 
+  context('New Variation', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          versionId: mockOrderId,
+          type: 'VARIATION',
+          isSentencingAct: false,
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: 'ALTCOURSE_PRISON',
+            notifyingOrganisationEmail: 'notifying@organisation',
+
+            responsibleOfficerFirstName: null,
+            responsibleOfficerLastName: '',
+            responsibleOfficerEmail: '@email',
+
+            responsibleOrganisation: null,
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationRegion: '',
+          },
+        },
+      })
+
+      const versionOne = versionInformation({
+        submittedBy: 'Person One',
+        versionId: mockOrderId,
+        fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0).toISOString(),
+      })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [versionOne],
+        orderId: mockOrderId,
+      })
+
+      cy.signIn()
+    })
+
+    it('should not have responsible organisation section for new variation', () => {
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.interestedPartiesTask.shouldNotExist()
+      page.submitOrderButton.should('be.disabled')
+    })
+  })
+
   context('Complete order, variation, not submitted', () => {
     beforeEach(() => {
       cy.task('reset')

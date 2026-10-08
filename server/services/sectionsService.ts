@@ -50,15 +50,15 @@ export default class SectionService {
     return !nextSectionCompleted && orderStatusValid && isNewOrderOrVariation
   }
 
-  async getSectionsForOrder(order: Order, version?: string): Promise<TaskSection[]> {
-    const sections = this.getRelevantSections(order)
+  async getSectionsForOrder(order: Order, version?: string, isNewOrderVariation?: boolean): Promise<TaskSection[]> {
+    const sections = this.getRelevantSections(order, isNewOrderVariation)
     const tasks = this.taskListService.getTasks(order)
 
     const checkList = await this.checkListService.getChecklist(`${order.id}-${order.versionId}`)
     return sections.map(section => this.getDetailsForSection(section, tasks, order, checkList, version))
   }
 
-  private getRelevantSections(order: Order): SectionName[] {
+  private getRelevantSections(order: Order, isNewOrderVariation?: boolean): SectionName[] {
     let sections: SectionName[] = [
       SECTIONS.aboutTheDeviceWearer,
       SECTIONS.electronicMonitoringCondition,
@@ -66,7 +66,7 @@ export default class SectionService {
       SECTIONS.additionalDocuments,
     ]
 
-    if (this.shouldShowInterestedParties(order)) {
+    if (this.shouldShowInterestedParties(order, isNewOrderVariation)) {
       sections = [SECTIONS.interestedParties, ...sections]
     }
 
@@ -132,14 +132,14 @@ export default class SectionService {
     return true
   }
 
-  private shouldShowInterestedParties(order: Order): boolean {
+  private shouldShowInterestedParties(order: Order, isNewOrderVariation?: boolean): boolean {
     const startDate = order.monitoringConditions?.startDate
       ? new Date(order.monitoringConditions?.startDate)
       : new Date(2040, 0, 0)
     const startDateIsInFuture = startDate >= new Date()
 
     // Return early for disallowed organisation
-    if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE') {
+    if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE' || isNewOrderVariation) {
       return false
     }
 
