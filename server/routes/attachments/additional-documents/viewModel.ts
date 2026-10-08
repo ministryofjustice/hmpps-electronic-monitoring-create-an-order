@@ -1,12 +1,12 @@
-import { createAnswer } from '../../utils/checkYourAnswers'
+import { createAnswer } from '../../../utils/checkYourAnswers'
 
-import { Order } from '../Order'
-import AttachmentType from '../AttachmentType'
-import I18n from '../../types/i18n'
-import paths from '../../constants/paths'
-import { Attachment } from '../Attachment'
-import { isNotNullOrUndefined } from '../../utils/utils'
-import { notifyingOrganisationCourts } from '../NotifyingOrganisation'
+import { Order } from '../../../models/Order'
+import AttachmentType from '../../../models/AttachmentType'
+import I18n from '../../../types/i18n'
+import paths from '../../../constants/paths'
+import { Attachment } from '../../../models/Attachment'
+import { isNotNullOrUndefined } from '../../../utils/utils'
+import { notifyingOrganisationCourts } from '../../../models/NotifyingOrganisation'
 
 const createViewModel = (order: Order, content: I18n | undefined) => {
   const licence = order.additionalDocuments.find(x => x.fileType === AttachmentType.LICENCE)

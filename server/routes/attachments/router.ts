@@ -3,7 +3,7 @@ import HaveCourtOrderController from './court-order/controller'
 import paths from '../../constants/paths'
 import { Services } from '../../services'
 import HavePhotoController from './photo-id/controller'
-import AttachmentsController from '../../controllers/attachments/attachmentController'
+import AttachmentsController from './additional-documents/controller'
 import { createFeatureRouter } from '../routeHelpers'
 
 const createAttachmentRouter = (
