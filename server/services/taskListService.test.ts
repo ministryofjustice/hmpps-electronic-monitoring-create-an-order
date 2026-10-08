@@ -370,7 +370,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ATTENDANCE_ADD_TO_LIST.replace(':orderId', order.id))
     })
 
     it('should return alcohol monitoring if current page is curfew timetable and alcohol is selected', () => {
@@ -441,7 +441,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ATTENDANCE_ADD_TO_LIST.replace(':orderId', order.id))
     })
 
     it('should return alcohol monitoring if current page is exclusion zone and alcohol is selected', () => {
@@ -494,7 +494,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ATTENDANCE_ADD_TO_LIST.replace(':orderId', order.id))
     })
 
     it('should return alcohol monitoring if current page is trail monitoring and alcohol is selected', () => {
