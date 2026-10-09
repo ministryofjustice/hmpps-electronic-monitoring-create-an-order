@@ -1,23 +1,30 @@
 import { randomUUID } from 'crypto'
 import { getMockOrder } from '../../test/mocks/mockOrder'
 import {
+  canAmendReturnedOrder,
   canCreateOrderVersion,
   canUseServiceRequestTypeFlow,
+  getOrderChangeBlockedMessage,
   isAcceptedOrderForChange,
 } from './orderVersionEligibility'
 
 describe('order version eligibility', () => {
-  it.each(['CLOSED', 'RESOLVED'] as const)('allows changes to accepted submitted orders in %s state', caseState => {
-    const order = getMockOrder({ status: 'SUBMITTED', caseState })
+  it.each(['OPEN', 'CLOSED', 'RESOLVED'] as const)(
+    'allows changes to accepted submitted orders in %s state',
+    caseState => {
+      const order = getMockOrder({ status: 'SUBMITTED', caseState })
 
-    expect(canCreateOrderVersion(order)).toBe(true)
-    expect(isAcceptedOrderForChange(order)).toBe(true)
-  })
+      expect(canCreateOrderVersion(order)).toBe(true)
+      expect(canUseServiceRequestTypeFlow(order)).toBe(true)
+      expect(isAcceptedOrderForChange(order)).toBe(true)
+    },
+  )
 
   it('allows returned submitted orders to use the rejection route only', () => {
     const order = getMockOrder({ status: 'SUBMITTED', caseState: 'CANCELLED' })
 
     expect(canCreateOrderVersion(order)).toBe(true)
+    expect(canAmendReturnedOrder(order)).toBe(true)
     expect(isAcceptedOrderForChange(order)).toBe(false)
   })
 
@@ -51,37 +58,60 @@ describe('order version eligibility', () => {
       const order = getMockOrder({ status: 'REJECTED', caseState: 'UNKNOWN', fmsResultId })
 
       expect(canCreateOrderVersion(order)).toBe(true)
+      expect(canAmendReturnedOrder(order)).toBe(false)
       expect(canUseServiceRequestTypeFlow(order)).toBe(true)
       expect(isAcceptedOrderForChange(order)).toBe(false)
     },
   )
 
-  it('allows cancelled rejected orders through the returned-order route and blocks processing rejected orders', () => {
-    const returnedOrder = getMockOrder({ status: 'REJECTED', caseState: 'CANCELLED' })
-    const processingOrder = getMockOrder({ status: 'REJECTED', caseState: 'OPEN' })
+  it.each([
+    'OPEN',
+    'NEW',
+    'CLOSED',
+    'RESOLVED',
+    'CANCELLED',
+    'AWAITING_INFO',
+    'AWAITING_VALIDATION',
+    'AWAITING_APPROVAL',
+  ] as const)('allows a rejected order with %s case state through the returned-order route', caseState => {
+    const order = getMockOrder({ status: 'REJECTED', caseState })
 
-    expect(canCreateOrderVersion(returnedOrder)).toBe(true)
-    expect(canUseServiceRequestTypeFlow(returnedOrder)).toBe(false)
-    expect(canCreateOrderVersion(processingOrder)).toBe(false)
-    expect(canUseServiceRequestTypeFlow(processingOrder)).toBe(false)
-  })
-
-  it('does not allow an existing draft to be copied as another version', () => {
-    const order = getMockOrder({ status: 'IN_PROGRESS', caseState: 'CLOSED' })
-
-    expect(canCreateOrderVersion(order)).toBe(false)
-    expect(canUseServiceRequestTypeFlow(order)).toBe(true)
+    expect(canCreateOrderVersion(order)).toBe(true)
+    expect(canAmendReturnedOrder(order)).toBe(true)
+    expect(canUseServiceRequestTypeFlow(order)).toBe(false)
     expect(isAcceptedOrderForChange(order)).toBe(false)
   })
 
-  it.each(['NEW', 'OPEN', 'AWAITING_INFO', 'AWAITING_VALIDATION', 'AWAITING_APPROVAL'] as const)(
+  it('does not describe an open case as still processing', () => {
+    const order = getMockOrder({ status: 'REJECTED', caseState: 'OPEN' })
+
+    expect(getOrderChangeBlockedMessage(order)).toBe('You cannot make changes to this form at this time.')
+  })
+
+  it.each(['OPEN', 'CLOSED'] as const)(
+    'does not allow an existing draft in %s state to be copied as another version',
+    caseState => {
+      const order = getMockOrder({ status: 'IN_PROGRESS', caseState })
+
+      expect(canCreateOrderVersion(order)).toBe(false)
+      expect(canAmendReturnedOrder(order)).toBe(false)
+      expect(canUseServiceRequestTypeFlow(order)).toBe(true)
+      expect(isAcceptedOrderForChange(order)).toBe(false)
+    },
+  )
+
+  it.each(['NEW', 'AWAITING_INFO', 'AWAITING_VALIDATION', 'AWAITING_APPROVAL'] as const)(
     'blocks submitted orders while case state is %s',
     caseState => {
       const order = getMockOrder({ status: 'SUBMITTED', caseState })
 
       expect(canCreateOrderVersion(order)).toBe(false)
+      expect(canAmendReturnedOrder(order)).toBe(false)
       expect(canUseServiceRequestTypeFlow(order)).toBe(false)
       expect(isAcceptedOrderForChange(order)).toBe(false)
+      expect(getOrderChangeBlockedMessage(order)).toBe(
+        'This form is still being processed. You can make changes once it has been accepted or returned.',
+      )
     },
   )
 })

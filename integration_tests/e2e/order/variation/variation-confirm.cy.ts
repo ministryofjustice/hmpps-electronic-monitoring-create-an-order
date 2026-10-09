@@ -18,8 +18,8 @@ const stubOrder = (caseState: string, status = 'SUBMITTED', type = 'REQUEST', fm
   })
 }
 
-const verifyReturnedOrderAmendmentFlow = (sourceType: string) => {
-  stubOrder('CANCELLED', 'REJECTED', sourceType)
+const verifyReturnedOrderAmendmentFlow = (sourceType: string, caseState = 'CANCELLED') => {
+  stubOrder(caseState, 'REJECTED', sourceType)
   cy.task('stubCemoSubmitOrder', {
     httpStatus: 200,
     method: 'POST',
@@ -27,7 +27,9 @@ const verifyReturnedOrderAmendmentFlow = (sourceType: string) => {
     subPath: '/amend-rejected-order',
     response: {},
   })
-  cy.visit(`/order/${mockOriginalId}/edit`)
+  const page = Page.visit(OrderTasksPage, { orderId: mockOriginalId })
+  cy.contains('This form has been returned.').should('be.visible')
+  page.makeChangesButton.should('have.attr', 'href', `/order/${mockOriginalId}/edit`).click()
   Page.verifyOnPage(ConfirmVariationPage).confirmButton().click()
 
   cy.task('stubCemoVerifyRequestReceived', {
@@ -79,8 +81,14 @@ context('Variation', () => {
       Page.verifyOnPage(OrderTasksPage)
     })
 
-    it('creates a variation for an accepted order without showing the rejection question', () => {
-      cy.visit(`/order/${mockOriginalId}/edit`)
+    it('creates a variation for an open submitted order without showing the rejection question', () => {
+      stubOrder('OPEN')
+      const page = Page.visit(OrderTasksPage, { orderId: mockOriginalId })
+
+      cy.contains(
+        'This form is still being processed. You can make changes once it has been accepted or returned.',
+      ).should('not.exist')
+      page.makeChangesButton.should('have.attr', 'href', `/order/${mockOriginalId}/edit`).click()
       Page.verifyOnPage(ConfirmVariationPage).confirmButton().click()
 
       cy.task('stubCemoVerifyRequestReceived', {
@@ -98,17 +106,18 @@ context('Variation', () => {
       page.makeChangesButton.should('have.attr', 'href', `/order/${mockOriginalId}/edit`).click()
       Page.verifyOnPage(ConfirmVariationPage)
     })
+    ;['OPEN', 'CANCELLED'].forEach(caseState => {
+      it(`skips the rejection question when changing a returned new order with ${caseState} case state`, () => {
+        verifyReturnedOrderAmendmentFlow('REQUEST', caseState)
+      })
 
-    it('skips the rejection question when changing a returned new order', () => {
-      verifyReturnedOrderAmendmentFlow('REQUEST')
-    })
-
-    it('skips the rejection question when changing a returned change order', () => {
-      verifyReturnedOrderAmendmentFlow('VARIATION')
+      it(`skips the rejection question when changing a returned change order with ${caseState} case state`, () => {
+        verifyReturnedOrderAmendmentFlow('VARIATION', caseState)
+      })
     })
 
     it('loads the current status and blocks changes while the case is processing', () => {
-      stubOrder('OPEN')
+      stubOrder('NEW')
       const page = Page.visit(OrderTasksPage, { orderId: mockOriginalId })
 
       cy.task('stubCemoVerifyRequestReceived', {
@@ -140,11 +149,20 @@ context('Variation', () => {
         cy.task('resetFeatureFlags')
       })
 
-      it('keeps the accepted-order service-request journey', () => {
+      it('uses the returned-order route for an open returned order instead of the service-request journey', () => {
+        verifyReturnedOrderAmendmentFlow('VARIATION', 'OPEN')
+      })
+
+      it('allows an open submitted order through the service-request journey', () => {
+        stubOrder('OPEN')
         cy.visit(`/order/${mockOriginalId}/edit`)
         Page.verifyOnPage(ConfirmVariationPage).confirmButton().click()
 
-        Page.verifyOnPage(IsAddressChangePage)
+        const addressChangePage = Page.verifyOnPage(IsAddressChangePage)
+        addressChangePage.form.fillInWith('No')
+        addressChangePage.form.saveAndContinueButton.click()
+
+        Page.verifyOnPage(ServiceRequestTypePage)
       })
 
       it('allows an UNKNOWN status case order with an FMS result ID', () => {

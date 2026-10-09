@@ -9,6 +9,7 @@ import TimelineModel from '../models/view-models/timelineModel'
 import SectionService from '../services/sectionsService'
 import { SanitisedError } from '../sanitisedError'
 import {
+  canAmendReturnedOrder,
   canCreateOrderVersion,
   getOrderChangeBlockedMessage,
   ORDER_CHANGE_STATUS_CHANGED_MESSAGE,
@@ -44,7 +45,7 @@ export default class OrderController {
       }
 
       try {
-        if (order.caseState === 'CANCELLED') {
+        if (canAmendReturnedOrder(order)) {
           await this.orderService.amendRejectedOrderFromExisting({
             orderId,
             accessToken: res.locals.user.token,
