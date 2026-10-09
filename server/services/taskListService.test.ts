@@ -30,6 +30,83 @@ describe('TaskListService', () => {
 
       expect(tasks.filter(task => task.section === 'RISK_INFORMATION').map(task => task.name)).toEqual(expectedPages)
     })
+
+    it('makes risk information and additional documents optional for Home Office variations', () => {
+      const order = getMockOrder({
+        type: 'VARIATION',
+        interestedParties: {
+          ...getMockOrder().interestedParties!,
+          notifyingOrganisation: 'HOME_OFFICE',
+        },
+      })
+
+      const tasks = new TaskListService().getTasks(order)
+
+      const riskInformationTasksExceptCYA = tasks.filter(
+        task => task.section === 'RISK_INFORMATION' && task.name !== 'CHECK_ANSWERS_INSTALLATION_AND_RISK',
+      )
+      expect(riskInformationTasksExceptCYA.every(task => task.state === 'NOT_REQUIRED')).toBe(true)
+      expect(tasks.find(task => task.name === 'CHECK_ANSWERS_INSTALLATION_AND_RISK')?.state).toBe('REQUIRED')
+
+      expect(tasks.find(task => task.name === 'ATTACHMENTS_HAVE_PHOTO')?.state).toBe('NOT_REQUIRED')
+    })
+
+    it('makes risk information and additional documents optional for court variations', () => {
+      const order = getMockOrder({
+        type: 'VARIATION',
+        interestedParties: {
+          ...getMockOrder().interestedParties!,
+          notifyingOrganisation: 'CIVIL_COUNTY_COURT',
+          notifyingOrganisationName: 'YEOVIL_COUNTY_AND_CIVIL_COURT',
+          notifyingOrganisationEmail: 'notifying@organisation',
+        },
+      })
+
+      const tasks = new TaskListService().getTasks(order)
+
+      const riskInformationTasksExceptCYA = tasks.filter(
+        task => task.section === 'RISK_INFORMATION' && task.name !== 'CHECK_ANSWERS_INSTALLATION_AND_RISK',
+      )
+      expect(riskInformationTasksExceptCYA.every(task => task.state === 'NOT_REQUIRED')).toBe(true)
+      expect(tasks.find(task => task.name === 'CHECK_ANSWERS_INSTALLATION_AND_RISK')?.state).toBe('REQUIRED')
+
+      expect(tasks.find(task => task.name === 'ATTACHMENTS_HAVE_COURT_ORDER')?.state).toBe('NOT_REQUIRED')
+    })
+
+    it('still routes to the photo upload page after answering yes to an optional photo question', () => {
+      const order = getMockOrder({
+        type: 'VARIATION',
+        interestedParties: {
+          ...getMockOrder().interestedParties!,
+          notifyingOrganisation: 'HOME_OFFICE',
+        },
+        orderParameters: { havePhoto: true },
+      })
+
+      const nextPage = new TaskListService().getNextPage('ATTACHMENTS_HAVE_PHOTO', order)
+
+      expect(nextPage).toBe(
+        paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'photo_Id').replace(
+          ':orderId',
+          order.id,
+        ),
+      )
+    })
+
+    it('still routes to the risk information check your answers page after completing MAPPA in an optional section', () => {
+      const order = getMockOrder({
+        type: 'VARIATION',
+        interestedParties: {
+          ...getMockOrder().interestedParties!,
+          notifyingOrganisation: 'HOME_OFFICE',
+        },
+        mappa: { isMappa: 'YES', level: 'MAPPA_ONE', category: 'CATEGORY_ONE' },
+      })
+
+      const nextPage = new TaskListService().getNextPage('MAPPA', order)
+
+      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
+    })
   })
 
   describe('getNextPage', () => {

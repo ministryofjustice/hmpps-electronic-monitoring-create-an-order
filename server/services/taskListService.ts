@@ -7,7 +7,10 @@ import FeatureFlags from '../utils/featureFlags'
 import isVariationType from '../utils/isVariationType'
 import isOrderDataDictionarySameOrAbove from '../utils/dataDictionaryVersionComparer'
 import { getOrderCohort } from '../models/OrderCohort'
-import { getRiskInformationTasks } from '../routes/installation-and-risk/riskInformationTasks'
+import {
+  getRiskInformationTasks,
+  hasOptionalVariationSections,
+} from '../routes/installation-and-risk/riskInformationTasks'
 import { TaskListCohortDefinition, taskListCohortDefinitions } from './taskListCohorts'
 import shouldShowCurfewDayOfRelease from '../utils/curfewDayOfReleaseEligibility'
 
@@ -188,7 +191,7 @@ const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCoho
         section: SECTIONS.additionalDocuments,
         name: PAGES.haveCourtOrder,
         path: paths.ATTACHMENT.HAVE_COURT_ORDER,
-        state: STATES.required,
+        state: hasOptionalVariationSections(order),
         completed: isNotNullOrUndefined(order.orderParameters?.haveCourtOrder),
       },
       {
@@ -210,7 +213,7 @@ const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCoho
       section: SECTIONS.additionalDocuments,
       name: PAGES.licenceUpload,
       path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'licence'),
-      state: STATES.required,
+      state: hasOptionalVariationSections(order),
       completed: doesOrderHaveDocument(order, AttachmentType.LICENCE),
     })
   }
@@ -220,7 +223,7 @@ const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCoho
       section: SECTIONS.additionalDocuments,
       name: PAGES.havePhoto,
       path: paths.ATTACHMENT.HAVE_PHOTO,
-      state: STATES.required,
+      state: hasOptionalVariationSections(order),
       completed: isNotNullOrUndefined(order.orderParameters?.havePhoto),
     },
     {
