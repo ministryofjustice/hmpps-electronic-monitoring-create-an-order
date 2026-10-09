@@ -1,20 +1,12 @@
 import paths from '../../constants/paths'
+import { notifyingOrganisationCourts } from '../../models/NotifyingOrganisation'
 import { Order } from '../../models/Order'
 import { getRiskInformationFlow, RiskInformationPage, riskInformationPages } from '../../services/riskInformationFlow'
 import isVariationType from '../../utils/isVariationType'
 
 type RequiredOrNotTaskState = 'REQUIRED' | 'NOT_REQUIRED'
 
-const OPTIONAL_VARIATION_ORGANISATIONS = [
-  'HOME_OFFICE',
-  'CIVIL_COUNTY_COURT',
-  'CROWN_COURT',
-  'FAMILY_COURT',
-  'MAGISTRATES_COURT',
-  'MILITARY_COURT',
-  'SCOTTISH_COURT',
-  'YOUTH_COURT',
-]
+const OPTIONAL_VARIATION_ORGANISATIONS = [...notifyingOrganisationCourts, 'HOME_OFFICE']
 
 export const hasOptionalVariationSections = (order: Order): RequiredOrNotTaskState => {
   if (
