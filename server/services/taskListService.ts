@@ -7,7 +7,10 @@ import FeatureFlags from '../utils/featureFlags'
 import isVariationType from '../utils/isVariationType'
 import isOrderDataDictionarySameOrAbove from '../utils/dataDictionaryVersionComparer'
 import { getOrderCohort } from '../models/OrderCohort'
-import { getRiskInformationTasks } from '../routes/installation-and-risk/riskInformationTasks'
+import {
+  getRiskInformationTasks,
+  hasOptionalVariationSections,
+} from '../routes/installation-and-risk/riskInformationTasks'
 import { TaskListCohortDefinition, taskListCohortDefinitions } from './taskListCohorts'
 import shouldShowCurfewDayOfRelease from '../utils/curfewDayOfReleaseEligibility'
 
@@ -139,21 +142,6 @@ const isTagAtSourceAvailable = (order: Order): boolean => {
   )
 }
 
-const OPTIONAL_VARIATION_ORGANISATIONS = [
-  'HOME_OFFICE',
-  'CIVIL_COUNTY_COURT',
-  'CROWN_COURT',
-  'FAMILY_COURT',
-  'MAGISTRATES_COURT',
-  'MILITARY_COURT',
-  'SCOTTISH_COURT',
-  'YOUTH_COURT',
-]
-
-const hasOptionalVariationSections = (order: Order): boolean =>
-  isVariationType(order.type) &&
-  OPTIONAL_VARIATION_ORGANISATIONS.includes(order.interestedParties?.notifyingOrganisation ?? '')
-
 const getInterestedPartiesTasks = (order: Order, cohortDefinition: TaskListCohortDefinition): Task[] => {
   const tasks: Task[] = [
     {
@@ -203,7 +191,7 @@ const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCoho
         section: SECTIONS.additionalDocuments,
         name: PAGES.haveCourtOrder,
         path: paths.ATTACHMENT.HAVE_COURT_ORDER,
-        state: STATES.required,
+        state: hasOptionalVariationSections(order),
         completed: isNotNullOrUndefined(order.orderParameters?.haveCourtOrder),
       },
       {
@@ -225,7 +213,7 @@ const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCoho
       section: SECTIONS.additionalDocuments,
       name: PAGES.licenceUpload,
       path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'licence'),
-      state: STATES.required,
+      state: hasOptionalVariationSections(order),
       completed: doesOrderHaveDocument(order, AttachmentType.LICENCE),
     })
   }
@@ -235,7 +223,7 @@ const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCoho
       section: SECTIONS.additionalDocuments,
       name: PAGES.havePhoto,
       path: paths.ATTACHMENT.HAVE_PHOTO,
-      state: STATES.required,
+      state: hasOptionalVariationSections(order),
       completed: isNotNullOrUndefined(order.orderParameters?.havePhoto),
     },
     {
@@ -259,7 +247,7 @@ const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCoho
     },
   )
 
-  return hasOptionalVariationSections(order) ? tasks.map(task => ({ ...task, state: STATES.notRequired })) : tasks
+  return tasks
 }
 
 export default class TaskListService {
@@ -520,12 +508,7 @@ export default class TaskListService {
       completed: true,
     })
 
-    const riskInformationTasks = getRiskInformationTasks(order)
-    tasks.push(
-      ...(hasOptionalVariationSections(order)
-        ? riskInformationTasks.map(task => ({ ...task, state: STATES.notRequired }))
-        : riskInformationTasks),
-    )
+    tasks.push(...getRiskInformationTasks(order))
 
     tasks.push(...getAdditionalDocumentTasks(order, cohortDefinition))
 
