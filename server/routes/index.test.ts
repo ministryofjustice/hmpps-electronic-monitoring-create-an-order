@@ -96,7 +96,12 @@ describe('authorised user', () => {
   describe('GET /', () => {
     it('should render order search page', () => {
       auditService.logPageView.mockResolvedValue()
-      orderSearchService.listOrders.mockResolvedValue([])
+      orderSearchService.listOrders.mockResolvedValue({
+        content: [],
+        page: 0,
+        size: 20,
+        hasNext: false,
+      })
 
       return request(app)
         .get('/')
@@ -119,7 +124,7 @@ describe('authorised user', () => {
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Electronic Monitoring Order (EMO) forms')
-          expect(res.text).toContain('You have no draft forms')
+          expect(res.text).toContain('You have no draft or returned forms')
           expect(auditService.logPageView).toHaveBeenCalledWith(Page.ORDER_SEARCH_PAGE, {
             who: user.username,
             correlationId: expect.any(String),

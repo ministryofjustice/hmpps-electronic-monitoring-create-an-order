@@ -10,7 +10,7 @@ describe('constructListViewModel', () => {
       lastUpdatedDateTime: '2024-03-10T11:30:00.000Z',
     })
 
-    const model = constructListViewModel([order], 'MY_ORDERS', true)
+    const model = constructListViewModel({ content: [order], page: 0, size: 20, hasNext: false }, 'MY_ORDERS', true)
 
     expect(model.orders).toEqual([
       {
@@ -30,7 +30,11 @@ describe('constructListViewModel', () => {
     [OrderStatusEnum.Enum.ERROR, [{ text: 'Failed to submit', type: 'FAILED' }]],
     [OrderStatusEnum.Enum.SUBMITTED, [{ text: 'Submitted', type: 'SUBMITTED' }]],
   ])('should create the correct status tags for a %s order', (status, expectedTags) => {
-    const model = constructListViewModel([getMockOrderListInformation({ status })], 'MY_ORDERS', true)
+    const model = constructListViewModel(
+      { content: [getMockOrderListInformation({ status })], page: 0, size: 20, hasNext: false },
+      'MY_ORDERS',
+      true,
+    )
 
     expect(model.orders[0].statusTags).toEqual(expectedTags)
   })
@@ -52,7 +56,7 @@ describe('constructListViewModel', () => {
       }),
     ]
 
-    const model = constructListViewModel(orders, 'MY_ORDERS', true)
+    const model = constructListViewModel({ content: orders, page: 0, size: 20, hasNext: false }, 'MY_ORDERS', true)
 
     expect(model.orders).toHaveLength(3)
     expect(model.orders.map(order => order.name)).toEqual(['Alice One', 'Bob Two', 'Carol Three'])
@@ -70,5 +74,52 @@ describe('constructListViewModel', () => {
         { text: 'Draft', type: 'DRAFT' },
       ],
     ])
+  })
+
+  it('should build previous and next links with the selected view and API page number', () => {
+    const orders = [getMockOrderListInformation()]
+
+    const model = constructListViewModel({ content: orders, page: 2, size: 20, hasNext: true }, 'PRISON_ORDERS', true)
+
+    expect(model.pagination).toEqual({
+      previous: { text: 'Previous', href: '/?view=PRISON_ORDERS&page=1&size=20' },
+      next: { text: 'Next', href: '/?view=PRISON_ORDERS&page=3&size=20' },
+    })
+  })
+
+  it('should show only next navigation when the slice has another page', () => {
+    const model = constructListViewModel({ content: [], page: 0, size: 20, hasNext: true }, 'MY_ORDERS', false)
+
+    expect(model.pagination).toEqual({
+      previous: undefined,
+      next: { text: 'Next', href: '/?view=MY_ORDERS&page=1&size=20' },
+    })
+  })
+
+  it('should show only previous navigation when the current slice is the last page', () => {
+    const model = constructListViewModel({ content: [], page: 1, size: 20, hasNext: false }, 'MY_ORDERS', false)
+
+    expect(model.pagination).toEqual({
+      previous: { text: 'Previous', href: '/?view=MY_ORDERS&page=0&size=20' },
+      next: undefined,
+    })
+  })
+
+  it('should hide pagination on the first and only page', () => {
+    const model = constructListViewModel({ content: [], page: 0, size: 20, hasNext: false }, 'MY_ORDERS', false)
+
+    expect(model.pagination).toBeUndefined()
+  })
+
+  it('should sort returned orders before other statuses', () => {
+    const orders = [
+      getMockOrderListInformation({ firstName: 'Draft', lastName: 'Person', status: OrderStatusEnum.Enum.IN_PROGRESS }),
+      getMockOrderListInformation({ firstName: 'Returned', lastName: 'Person', status: OrderStatusEnum.Enum.REJECTED }),
+    ]
+
+    const model = constructListViewModel({ content: orders, page: 0, size: 20, hasNext: false }, 'MY_ORDERS', false)
+
+    expect(model.orders.map(order => order.name)).toEqual(['Returned Person', 'Draft Person'])
+    expect(model.orders[0].statusTags).toEqual([{ text: 'Returned', type: 'RETURNED' }])
   })
 })

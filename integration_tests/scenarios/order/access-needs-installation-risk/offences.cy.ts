@@ -1,5 +1,6 @@
 import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
+import { startRiskInformationAfterDeviceWearerWith } from '../../../utils/scenario-flows/risk'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
 import OffencePage from '../../../e2e/order/access-needs-installation-risk/offences/offence/offencePage'
 import OffenceOtherInfoPage from '../../../e2e/order/access-needs-installation-risk/offences/offence-other-info/offenceOtherInfoPage'
@@ -47,11 +48,7 @@ context('offences', () => {
 
     orderSummaryPage.aboutTheDeviceWearerTask.click()
 
-    orderSummaryPage.fillInGeneralOrderDetailsWith({
-      deviceWearerDetails,
-      interestedParties,
-      newDeviceWearerFlow: true,
-    })
+    startRiskInformationAfterDeviceWearerWith({ deviceWearerDetails, interestedParties })
 
     // Should go to details of installation page
     const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
@@ -105,11 +102,7 @@ context('offences', () => {
 
     orderSummaryPage.aboutTheDeviceWearerTask.click()
 
-    orderSummaryPage.fillInGeneralOrderDetailsWith({
-      deviceWearerDetails,
-      interestedParties,
-      newDeviceWearerFlow: true,
-    })
+    startRiskInformationAfterDeviceWearerWith({ deviceWearerDetails, interestedParties })
 
     const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
     cy.get('#offence').should('not.exist')

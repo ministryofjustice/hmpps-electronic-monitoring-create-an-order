@@ -61,8 +61,8 @@ export default class SectionService {
   private getRelevantSections(order: Order): SectionName[] {
     let sections: SectionName[] = [
       SECTIONS.aboutTheDeviceWearer,
-      SECTIONS.riskInformation,
       SECTIONS.electronicMonitoringCondition,
+      SECTIONS.riskInformation,
       SECTIONS.additionalDocuments,
     ]
 

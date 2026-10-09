@@ -3,6 +3,7 @@ import { createMonitoringConditions, getMockOrder, getMockOrderListInformation }
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
 import { Order, OrderStatusEnum, OrderTypeEnum } from '../models/Order'
+import { OrderListInformation } from '../models/OrderListInformation'
 import { SanitisedError } from '../sanitisedError'
 import AuditService from '../services/auditService'
 import OrderSearchService from '../services/orderSearchService'
@@ -14,6 +15,13 @@ jest.mock('../services/orderSearchService')
 jest.mock('../data/hmppsAuditClient')
 
 const mockDate = new Date(2000, 10, 20).toISOString()
+
+const mockOrderPage = (content: OrderListInformation[] = []) => ({
+  content,
+  page: 0,
+  size: 20,
+  hasNext: false,
+})
 
 const mock500Error: SanitisedError = {
   message: 'Internal Server Error',
@@ -121,10 +129,16 @@ describe('OrderSearchController', () => {
     it('should render a view containing users orders', async () => {
       const draftWithoutOrg = getMockOrderListInformation()
       const draftWithOrg = getMockOrderListInformation({ notifyingOrganisation: 'PRISON', lastUpdatedBy: 'Bob' })
-      mockOrderService.listOrders.mockResolvedValue([draftWithoutOrg, draftWithOrg])
+      mockOrderService.listOrders.mockResolvedValue(mockOrderPage([draftWithoutOrg, draftWithOrg]))
 
       await orderController.list(req, res, next)
 
+      expect(mockOrderService.listOrders).toHaveBeenCalledWith(
+        { accessToken: res.locals.user.token },
+        'MY_ORDERS',
+        0,
+        20,
+      )
       expect(res.render).toHaveBeenCalledWith(
         'pages/index',
         expect.objectContaining({
@@ -169,13 +183,18 @@ describe('OrderSearchController', () => {
       // Youth??
       'should pass the requested view to the service and show the filter for %s users',
       async cohort => {
-        mockOrderService.listOrders.mockResolvedValue([])
+        mockOrderService.listOrders.mockResolvedValue(mockOrderPage())
         res.locals.user.cohort = { cohort }
-        req.query = { view: 'FAILED_ORDERS' }
+        req.query = { view: 'FAILED_ORDERS', page: '2', size: '15' }
 
         await orderController.list(req, res, next)
 
-        expect(mockOrderService.listOrders).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' }, 'FAILED_ORDERS')
+        expect(mockOrderService.listOrders).toHaveBeenCalledWith(
+          { accessToken: 'fakeUserToken' },
+          'FAILED_ORDERS',
+          2,
+          15,
+        )
         expect(res.render).toHaveBeenCalledWith(
           'pages/index',
           expect.objectContaining({
@@ -183,7 +202,7 @@ describe('OrderSearchController', () => {
             viewOptions: [
               { value: 'MY_ORDERS', text: 'My drafts', selected: false },
               { value: 'FAILED_ORDERS', text: 'My failed to submit', selected: true },
-              { value: 'PRISON_ORDERS', text: 'My prison drafts', selected: false },
+              { value: 'PRISON_ORDERS', text: `My prison's forms`, selected: false },
             ],
           }),
         )
@@ -191,13 +210,13 @@ describe('OrderSearchController', () => {
     )
 
     it('should ignore the requested view and hide the filter for other users', async () => {
-      mockOrderService.listOrders.mockResolvedValue([])
+      mockOrderService.listOrders.mockResolvedValue(mockOrderPage())
       res.locals.user.cohort = { cohort: 'PROBATION' }
       req.query = { view: 'PRISON_ORDERS' }
 
       await orderController.list(req, res, next)
 
-      expect(mockOrderService.listOrders).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' }, 'MY_ORDERS')
+      expect(mockOrderService.listOrders).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' }, 'MY_ORDERS', 0, 20)
       expect(res.render).toHaveBeenCalledWith(
         'pages/index',
         expect.objectContaining({
@@ -206,14 +225,34 @@ describe('OrderSearchController', () => {
       )
     })
 
+    it('should show only Home Office views to Home Office users', async () => {
+      mockOrderService.listOrders.mockResolvedValue(mockOrderPage())
+      res.locals.user.cohort = { cohort: 'HOME_OFFICE' }
+
+      await orderController.list(req, res, next)
+
+      expect(mockOrderService.listOrders).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' }, 'MY_ORDERS', 0, 20)
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/index',
+        expect.objectContaining({
+          showViewFilter: true,
+          viewOptions: [
+            { value: 'MY_ORDERS', text: 'My drafts', selected: true },
+            { value: 'FAILED_ORDERS', text: 'My failed to submit', selected: false },
+            { value: 'HOME_OFFICE_ORDERS', text: 'Home Office forms', selected: false },
+          ],
+        }),
+      )
+    })
+
     it('should fall back to MY_ORDERS when the requested view is not recognised', async () => {
-      mockOrderService.listOrders.mockResolvedValue([])
+      mockOrderService.listOrders.mockResolvedValue(mockOrderPage())
       res.locals.user.cohort = { cohort: 'PRISON' }
       req.query = { view: 'NOT_A_VIEW' }
 
       await orderController.list(req, res, next)
 
-      expect(mockOrderService.listOrders).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' }, 'MY_ORDERS')
+      expect(mockOrderService.listOrders).toHaveBeenCalledWith({ accessToken: 'fakeUserToken' }, 'MY_ORDERS', 0, 20)
     })
   })
   describe('search orders', () => {

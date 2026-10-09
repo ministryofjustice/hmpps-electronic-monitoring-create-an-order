@@ -26,6 +26,9 @@ const ping = (httpStatus = 200) =>
 export type ListOrdersStubOptions = {
   httpStatus: number
   orders?: object[]
+  page?: number
+  size?: number
+  hasNext?: boolean
 }
 
 const defaultListOrdersOptions: ListOrdersStubOptions = {
@@ -76,18 +79,34 @@ const defaultListOrdersOptions: ListOrdersStubOptions = {
   ],
 }
 
-const listOrders = (options: ListOrdersStubOptions = defaultListOrdersOptions): SuperAgentRequest =>
-  stubFor({
-    request: {
-      method: 'GET',
-      urlPathPattern: '/cemo/api/orders',
-    },
+const listOrders = (options: ListOrdersStubOptions = defaultListOrdersOptions): SuperAgentRequest => {
+  const page = options.page ?? 0
+  const size = options.size ?? 20
+  const orders = options.orders ?? []
+  const hasNext = options.hasNext ?? false
+  const request = {
+    method: 'GET',
+    urlPathPattern: '/cemo/api/orders',
+    ...(page > 0
+      ? {
+          queryParameters: {
+            page: { equalTo: String(page) },
+            size: { equalTo: String(size) },
+          },
+        }
+      : {}),
+  }
+
+  return stubFor({
+    priority: page > 0 ? 1 : 2,
+    request,
     response: {
       status: options.httpStatus,
       headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-      jsonBody: options.httpStatus === 200 ? options.orders : null,
+      jsonBody: options.httpStatus === 200 ? { content: orders, page, size, hasNext } : null,
     },
   })
+}
 
 const searchOrders = (options: ListOrdersStubOptions = defaultListOrdersOptions): SuperAgentRequest =>
   stubFor({

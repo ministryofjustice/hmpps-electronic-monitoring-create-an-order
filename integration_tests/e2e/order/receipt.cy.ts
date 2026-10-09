@@ -55,6 +55,12 @@ context('Receipt', () => {
       page.pdfDownloadBanner().should('exist')
     })
 
+    it('Should list electronic monitoring conditions above risk information', () => {
+      cy.visit(`/order/${mockOrderId}/receipt`)
+      const page = Page.verifyOnPage(ReceiptPage)
+      page.shouldListSectionsInOrder(['Monitoring conditions', 'Risk information'])
+    })
+
     it('Should have a button that opens the print window to download page as PDF', () => {
       cy.visit(`/order/${mockOrderId}/receipt`)
       const page = Page.verifyOnPage(ReceiptPage)
