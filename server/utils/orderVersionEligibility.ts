@@ -9,11 +9,11 @@ export const isAcceptedOrderForChange = (order: Order): boolean =>
 export const canUseServiceRequestTypeFlow = (order: Order): boolean =>
   order.status === 'IN_PROGRESS' ||
   isAcceptedOrderForChange(order) ||
-  (order.status === 'SUBMITTED' && order.caseState === 'UNKNOWN')
+  ((order.status === 'SUBMITTED' || order.status === 'REJECTED') && order.caseState === 'UNKNOWN') // uncertain on this, UNKNOWN is not found or service error
 
 export const canCreateOrderVersion = (order: Order): boolean =>
   isAcceptedOrderForChange(order) ||
-  (order.status === 'SUBMITTED' && order.caseState === 'UNKNOWN') ||
+  ((order.status === 'SUBMITTED' || order.status === 'REJECTED') && order.caseState === 'UNKNOWN') ||
   ((order.status === 'SUBMITTED' || order.status === 'REJECTED') && order.caseState === 'CANCELLED')
 
 export const getOrderChangeBlockedMessage = (order: Order): string => {

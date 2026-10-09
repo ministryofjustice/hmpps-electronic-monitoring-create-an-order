@@ -45,7 +45,18 @@ describe('order version eligibility', () => {
     expect(isAcceptedOrderForChange(order)).toBe(false)
   })
 
-  it('allows rejected orders only when their case is cancelled', () => {
+  it.each([null, randomUUID(), undefined])(
+    'allows a rejected order with unknown case state when its FMS result ID is %s',
+    fmsResultId => {
+      const order = getMockOrder({ status: 'REJECTED', caseState: 'UNKNOWN', fmsResultId })
+
+      expect(canCreateOrderVersion(order)).toBe(true)
+      expect(canUseServiceRequestTypeFlow(order)).toBe(true)
+      expect(isAcceptedOrderForChange(order)).toBe(false)
+    },
+  )
+
+  it('allows cancelled rejected orders through the returned-order route and blocks processing rejected orders', () => {
     const returnedOrder = getMockOrder({ status: 'REJECTED', caseState: 'CANCELLED' })
     const processingOrder = getMockOrder({ status: 'REJECTED', caseState: 'OPEN' })
 

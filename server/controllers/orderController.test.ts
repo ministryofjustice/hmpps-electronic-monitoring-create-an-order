@@ -250,6 +250,23 @@ describe('OrderController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/summary`)
     })
 
+    it('should use the normal variation endpoint for a rejected order with unknown case state', async () => {
+      const orderId = randomUUID()
+      const order = getMockOrder({ id: orderId, status: 'REJECTED', caseState: 'UNKNOWN', fmsResultId: randomUUID() })
+      const req = createMockRequest({ order, body: { action: 'continue' }, params: { orderId }, flash: jest.fn() })
+      const res = createMockResponse()
+
+      await orderController.createVariation(req, res, jest.fn())
+
+      expect(mockOrderService.createVariationFromExisting).toHaveBeenCalledWith({
+        orderId,
+        accessToken: 'fakeUserToken',
+      })
+      expect(mockOrderService.amendRejectedOrderFromExisting).not.toHaveBeenCalled()
+      expect(req.flash).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/summary`)
+    })
+
     it('should return to the summary when the backend rejects a stale status', async () => {
       const orderId = randomUUID()
       const mockOrder = getMockOrder({ id: orderId, status: 'SUBMITTED', caseState: 'CLOSED' })
