@@ -7,11 +7,23 @@ import { createGovukErrorSummary } from '../../../utils/errors'
 import ServiceRequestTypeService from '../serviceRequestTypeService'
 import getContent from '../../../i18n'
 import { Locales } from '../../../types/i18n/locale'
+import { SanitisedError } from '../../../sanitisedError'
+import {
+  canUseServiceRequestTypeFlow,
+  getOrderChangeBlockedMessage,
+  ORDER_CHANGE_STATUS_CHANGED_MESSAGE,
+} from '../../../utils/orderVersionEligibility'
 
 export default class ServiceRequestTypeController {
   constructor(private readonly service: ServiceRequestTypeService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
+    if (req.order && !canUseServiceRequestTypeFlow(req.order)) {
+      req.flash('submissionError', getOrderChangeBlockedMessage(req.order))
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', req.order.id))
+      return
+    }
+
     const errors = req.flash('validationErrors') as unknown as ValidationResult
     if (res.locals.content === undefined) res.locals.content = getContent(Locales.en, 'DDV5')
     res.render('pages/order/variation/service-request-type', {
@@ -21,6 +33,12 @@ export default class ServiceRequestTypeController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const { order } = req
+    if (order && !canUseServiceRequestTypeFlow(order)) {
+      req.flash('submissionError', getOrderChangeBlockedMessage(order))
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
+      return
+    }
+
     const formData = ServiceRequestTypeFormDataModel.parse(req.body)
 
     if (formData.serviceRequestType === undefined) {
@@ -51,8 +69,14 @@ export default class ServiceRequestTypeController {
       accessToken: res.locals.user.token,
       type: formData.serviceRequestType!,
     }
-    const result = await this.service.createNewVariation(input, req.order)
-
-    res.redirect(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', result.id))
+    try {
+      const result = await this.service.createNewVariation(input, req.order)
+      res.redirect(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', result.id))
+    } catch (error) {
+      if ((error as SanitisedError).status !== 409) throw error
+      if (!order) throw error
+      req.flash('submissionError', ORDER_CHANGE_STATUS_CHANGED_MESSAGE)
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
+    }
   }
 }

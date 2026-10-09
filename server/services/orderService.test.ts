@@ -171,6 +171,27 @@ describe('Order Service', () => {
       }
     })
   })
+
+  describe('amendRejectedOrderFromExisting', () => {
+    const mockAccessToken = 'ABC'
+    const mockOrderId = '123456'
+
+    it('should post an amend rejected order request to the api', async () => {
+      mockRestClient.post.mockResolvedValue(mockApiResponse)
+
+      const orderService = new OrderService(mockRestClient)
+      await orderService.amendRejectedOrderFromExisting({
+        accessToken: mockAccessToken,
+        orderId: mockOrderId,
+      })
+
+      expect(mockRestClient.post).toHaveBeenCalledWith({
+        path: `/api/orders/${mockOrderId}/amend-rejected-order`,
+        token: mockAccessToken,
+      })
+    })
+  })
+
   describe('get versions', () => {
     const createVersionInformation = (override: Partial<VersionInformation> = {}): VersionInformation => {
       return {

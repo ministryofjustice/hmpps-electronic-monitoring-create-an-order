@@ -193,6 +193,7 @@ export const createAttatchment = (overrideProperties?: Partial<Attachment>): Att
 export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
   id: randomUUID(),
   status: OrderStatusEnum.Enum.IN_PROGRESS,
+  caseState: 'UNKNOWN',
   type: OrderTypeEnum.Enum.REQUEST,
   dataDictionaryVersion: DataDictionaryVersionEnum.Enum.DDV4,
   deviceWearer: createDeviceWearer(),
@@ -223,6 +224,7 @@ export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
 export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order => ({
   id: randomUUID(),
   status: OrderStatusEnum.Enum.IN_PROGRESS,
+  caseState: 'UNKNOWN',
   type: OrderTypeEnum.Enum.REQUEST,
   dataDictionaryVersion: DataDictionaryVersionEnum.Enum.DDV4,
   deviceWearer: {

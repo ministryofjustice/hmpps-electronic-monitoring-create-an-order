@@ -205,11 +205,20 @@
         <div class="govuk-!-margin-top-5">
       <div class="govuk-button-group">
               {% if createNewOrderVersionEnabled %}
+                {% if canCreateOrderVersion %}
                 {{ govukButton({
                   text: "Make changes to this form",
                   id: "make-changes-button",
                   href: "/order/" + order.id + "/edit"
                 }) }}
+                {% else %}
+                {{ govukButton({
+                  text: "Make changes to this form",
+                  id: "make-changes-button",
+                  disabled: true
+                }) }}
+                <p class="govuk-hint">{{ orderChangeBlockedMessage }}</p>
+                {% endif %}
               {% endif %}
         {% if isOrderRejected %}
           {{ govukButton({
