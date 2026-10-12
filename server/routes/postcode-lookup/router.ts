@@ -9,13 +9,25 @@ import paths from '../../constants/paths'
 import { createFeatureRouter } from '../routeHelpers'
 
 const createPostcodeLookupRouter = (
-  services: Pick<Services, 'postcodeService' | 'addressService' | 'taskListService' | 'auditService'>,
+  services: Pick<
+    Services,
+    | 'postcodeService'
+    | 'addressService'
+    | 'taskListService'
+    | 'auditService'
+    | 'deviceWearerService'
+  >,
 ): Router => {
   const { router, get, post } = createFeatureRouter(paths.ORDER.BASE_URL)
 
   const findAddressController = new FindAddressController(services.postcodeService)
   const addressResultController = new AddressResultController(services.postcodeService, services.addressService)
-  const confirmAddressController = new ConfirmAddressController(services.postcodeService, services.taskListService)
+  const confirmAddressController = new ConfirmAddressController(
+    services.postcodeService,
+    services.taskListService,
+    services.addressService,
+    services.deviceWearerService,
+  )
   const addressListController = new AddressListController(services.taskListService)
   const enterAddressController = new EnterAddressController(services.addressService)
   get(paths.POSTCODE_LOOKUP.FIND_ADDRESS, findAddressController.view)

@@ -1,5 +1,6 @@
 import z from 'zod'
 import { validationErrors } from '../../constants/validationErrors'
+import { AddressSourceEnum } from '../Address'
 
 const AddressFormDataModel = z.object({
   action: z.string().default('continue'),
@@ -16,6 +17,7 @@ export type AddressFormData = Omit<z.infer<typeof AddressFormDataModel>, 'action
 const AddressFormDataValidator = z
   .object({
     addressType: z.string().optional(),
+    addressSource: AddressSourceEnum.nullable().optional(),
     addressLine1: z.string().min(1, validationErrors.address.addressLine1Required),
     addressLine2: z.string(),
     addressLine3: z.string().min(1, validationErrors.address.addressLine3Required),
