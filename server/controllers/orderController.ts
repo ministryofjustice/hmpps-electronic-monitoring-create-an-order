@@ -66,19 +66,19 @@ export default class OrderController {
 
     const error = req.flash('submissionError')
 
-    const [sections, completedOrderVersions] = await Promise.all([
-      this.sectionService.getSectionsForOrder(order, versionId),
-      this.orderService.getVersionInformations({
-        orderId: order.id,
-        accessToken: res.locals.user.token,
-      }),
-    ])
-
+    const completedOrderVersions = await this.orderService.getVersionInformations({
+      orderId: order.id,
+      accessToken: res.locals.user.token,
+    })
     const currentVersion = order.versionId
     let isMostRecentVersion: boolean = true
     if (versionId && completedOrderVersions.length > 0) {
       isMostRecentVersion = currentVersion === completedOrderVersions[0].versionId
     }
+    const isNewOrderVariation =
+      isVariationType(order.type) && isMostRecentVersion && completedOrderVersions.length === 1
+
+    const sections = await this.sectionService.getSectionsForOrder(order, versionId, isNewOrderVariation)
     res.render('pages/order/summary', {
       order: req.order,
       sections,

@@ -50,15 +50,15 @@ export default class SectionService {
     return !nextSectionCompleted && orderStatusValid && isNewOrderOrVariation
   }
 
-  async getSectionsForOrder(order: Order, version?: string): Promise<TaskSection[]> {
-    const sections = this.getRelevantSections(order)
+  async getSectionsForOrder(order: Order, version?: string, isNewOrderVariation?: boolean): Promise<TaskSection[]> {
+    const sections = this.getRelevantSections(order, isNewOrderVariation)
     const tasks = this.taskListService.getTasks(order)
 
     const checkList = await this.checkListService.getChecklist(`${order.id}-${order.versionId}`)
     return sections.map(section => this.getDetailsForSection(section, tasks, order, checkList, version))
   }
 
-  private getRelevantSections(order: Order): SectionName[] {
+  private getRelevantSections(order: Order, isNewOrderVariation?: boolean): SectionName[] {
     let sections: SectionName[] = [
       SECTIONS.aboutTheDeviceWearer,
       SECTIONS.electronicMonitoringCondition,
@@ -66,7 +66,7 @@ export default class SectionService {
       SECTIONS.additionalDocuments,
     ]
 
-    if (this.shouldShowInterestedParties(order)) {
+    if (!isNewOrderVariation && this.shouldShowInterestedParties(order)) {
       sections = [SECTIONS.interestedParties, ...sections]
     }
 
