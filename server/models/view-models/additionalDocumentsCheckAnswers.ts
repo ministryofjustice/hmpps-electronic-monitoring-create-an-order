@@ -5,16 +5,15 @@ import AttachmentType from '../AttachmentType'
 import I18n from '../../types/i18n'
 import paths from '../../constants/paths'
 import { Attachment } from '../Attachment'
-import { isNotNullOrUndefined } from '../../utils/utils'
+import { isNotNullOrUndefined, hasOptionalVariationSectionIsHOCourt } from '../../utils/utils'
 import { notifyingOrganisationCourts } from '../NotifyingOrganisation'
-import { hasOptionalVariationSections } from '../../routes/installation-and-risk/riskInformationTasks'
 
 const createViewModel = (order: Order, content: I18n | undefined) => {
   const licence = order.additionalDocuments.find(x => x.fileType === AttachmentType.LICENCE)
   const photo = order.additionalDocuments.find(x => x.fileType === AttachmentType.PHOTO_ID)
   const courtOrder = order.additionalDocuments.find(x => x.fileType === AttachmentType.COURT_ORDER)
   const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' || !order.isOwner }
-  const sectionIsOptional = hasOptionalVariationSections(order) === 'NOT_REQUIRED'
+  const sectionIsOptional = hasOptionalVariationSectionIsHOCourt(order)
   const answers = []
 
   if (

@@ -1,28 +1,15 @@
 import paths from '../../constants/paths'
-import { notifyingOrganisationCourts } from '../../models/NotifyingOrganisation'
 import { Order } from '../../models/Order'
 import { getRiskInformationFlow, RiskInformationPage, riskInformationPages } from '../../services/riskInformationFlow'
-import isVariationType from '../../utils/isVariationType'
+import { hasOptionalVariationSectionIsHOCourt } from '../../utils/utils'
 
-type RequiredOrNotTaskState = 'REQUIRED' | 'NOT_REQUIRED'
-
-const OPTIONAL_VARIATION_ORGANISATIONS = [...notifyingOrganisationCourts, 'HOME_OFFICE']
-
-export const hasOptionalVariationSections = (order: Order): RequiredOrNotTaskState => {
-  if (
-    isVariationType(order.type) &&
-    OPTIONAL_VARIATION_ORGANISATIONS.includes(order.interestedParties?.notifyingOrganisation ?? '')
-  ) {
-    return 'NOT_REQUIRED'
-  }
-  return 'REQUIRED'
-}
+type RiskInformationTaskState = 'REQUIRED' | 'NOT_REQUIRED' | 'OPTIONAL'
 
 export type RiskInformationTask = {
   section: 'RISK_INFORMATION'
   name: RiskInformationPage
   path: string
-  state: RequiredOrNotTaskState
+  state: RiskInformationTaskState
   completed: boolean
 }
 
@@ -34,7 +21,7 @@ const task =
     section: 'RISK_INFORMATION',
     name,
     path,
-    state: hasOptionalVariationSections(order),
+    state: hasOptionalVariationSectionIsHOCourt(order) ? 'OPTIONAL' : 'REQUIRED',
     completed: completed(order),
   })
 
@@ -71,13 +58,11 @@ const riskInformationTaskDefinitions: Record<RiskInformationPage, RiskInformatio
     state: order.mappa?.isMappa === 'YES' ? 'REQUIRED' : 'NOT_REQUIRED',
     completed: order.mappa?.level !== null && order.mappa?.level !== undefined && order.mappa?.category != null,
   }),
-  [riskInformationPages.checkAnswers]: () => ({
-    section: 'RISK_INFORMATION',
-    name: riskInformationPages.checkAnswers,
-    path: paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS,
-    state: 'REQUIRED',
-    completed: true,
-  }),
+  [riskInformationPages.checkAnswers]: task(
+    riskInformationPages.checkAnswers,
+    paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS,
+    () => true,
+  ),
 }
 
 export const getRiskInformationTasks = (order: Order): RiskInformationTask[] => {
