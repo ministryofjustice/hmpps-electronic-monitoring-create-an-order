@@ -518,6 +518,56 @@ context('Order Summary', () => {
     })
   })
 
+  context('Optional sections for variations', () => {
+    const stubVariationsFor = (notifyingOrganisation: string) => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        type: 'REINSTALL_DEVICE',
+        order: {
+          dataDictionaryVersion: 'DDV7',
+          isSentencingAct: true,
+          interestedParties: {
+            notifyingOrganisation,
+          },
+        },
+      })
+    }
+
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+      })
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
+      })
+      cy.signIn()
+    })
+
+    it('risk information and additional documents are optional for home office', () => {
+      stubVariationsFor('HOME_OFFICE')
+
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.riskInformationTask.shouldHaveStatus('Optional')
+      page.additionalDocumentsTask.shouldHaveStatus('Optional')
+    })
+
+    it('risk information and additional documents are optional for court', () => {
+      stubVariationsFor('CIVIL_COUNTY_COURT')
+
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.riskInformationTask.shouldHaveStatus('Optional')
+      page.additionalDocumentsTask.shouldHaveStatus('Optional')
+    })
+  })
+
   context('Complete order, variation, not submitted', () => {
     beforeEach(() => {
       cy.task('reset')
