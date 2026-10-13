@@ -9,24 +9,26 @@ import {
 } from './orderVersionEligibility'
 
 describe('order version eligibility', () => {
-  it.each(['OPEN', 'CLOSED', 'RESOLVED'] as const)(
-    'allows changes to accepted submitted orders in %s state',
+  it('allows changes to an accepted submitted order in AWAITING_VALIDATION state', () => {
+    const order = getMockOrder({ status: 'SUBMITTED', caseState: 'AWAITING_VALIDATION' })
+
+    expect(canCreateOrderVersion(order)).toBe(true)
+    expect(canUseServiceRequestTypeFlow(order)).toBe(true)
+    expect(isAcceptedOrderForChange(order)).toBe(true)
+    expect(canAmendReturnedOrder(order)).toBe(false)
+  })
+
+  it.each(['CANCELLED', 'CLOSED', 'RESOLVED'] as const)(
+    'allows a submitted order in %s state through the returned-order route',
     caseState => {
       const order = getMockOrder({ status: 'SUBMITTED', caseState })
 
       expect(canCreateOrderVersion(order)).toBe(true)
-      expect(canUseServiceRequestTypeFlow(order)).toBe(true)
-      expect(isAcceptedOrderForChange(order)).toBe(true)
+      expect(canAmendReturnedOrder(order)).toBe(true)
+      expect(canUseServiceRequestTypeFlow(order)).toBe(false)
+      expect(isAcceptedOrderForChange(order)).toBe(false)
     },
   )
-
-  it('allows returned submitted orders to use the rejection route only', () => {
-    const order = getMockOrder({ status: 'SUBMITTED', caseState: 'CANCELLED' })
-
-    expect(canCreateOrderVersion(order)).toBe(true)
-    expect(canAmendReturnedOrder(order)).toBe(true)
-    expect(isAcceptedOrderForChange(order)).toBe(false)
-  })
 
   it('allows a submitted order with unknown case state when no FMS result ID exists', () => {
     const order = getMockOrder({ status: 'SUBMITTED', caseState: 'UNKNOWN', fmsResultId: null })
@@ -53,39 +55,35 @@ describe('order version eligibility', () => {
   })
 
   it.each([null, randomUUID(), undefined])(
-    'allows a rejected order with unknown case state when its FMS result ID is %s',
+    'routes a rejected order with unknown case state through the reject flow when its FMS result ID is %s',
     fmsResultId => {
       const order = getMockOrder({ status: 'REJECTED', caseState: 'UNKNOWN', fmsResultId })
 
       expect(canCreateOrderVersion(order)).toBe(true)
-      expect(canAmendReturnedOrder(order)).toBe(false)
-      expect(canUseServiceRequestTypeFlow(order)).toBe(true)
+      expect(canAmendReturnedOrder(order)).toBe(true)
+      expect(canUseServiceRequestTypeFlow(order)).toBe(false)
       expect(isAcceptedOrderForChange(order)).toBe(false)
     },
   )
 
-  it.each([
-    'OPEN',
-    'NEW',
-    'CLOSED',
-    'RESOLVED',
-    'CANCELLED',
-    'AWAITING_INFO',
-    'AWAITING_VALIDATION',
-    'AWAITING_APPROVAL',
-  ] as const)('allows a rejected order with %s case state through the returned-order route', caseState => {
-    const order = getMockOrder({ status: 'REJECTED', caseState })
+  it.each(['OPEN', 'NEW', 'AWAITING_INFO', 'AWAITING_APPROVAL'] as const)(
+    'allows a rejected order with %s case state through the returned-order route',
+    caseState => {
+      const order = getMockOrder({ status: 'REJECTED', caseState })
 
-    expect(canCreateOrderVersion(order)).toBe(true)
-    expect(canAmendReturnedOrder(order)).toBe(true)
-    expect(canUseServiceRequestTypeFlow(order)).toBe(false)
-    expect(isAcceptedOrderForChange(order)).toBe(false)
-  })
+      expect(canCreateOrderVersion(order)).toBe(true)
+      expect(canAmendReturnedOrder(order)).toBe(true)
+      expect(canUseServiceRequestTypeFlow(order)).toBe(false)
+      expect(isAcceptedOrderForChange(order)).toBe(false)
+    },
+  )
 
-  it('does not describe an open case as still processing', () => {
-    const order = getMockOrder({ status: 'REJECTED', caseState: 'OPEN' })
+  it('describes an open submitted case as still processing', () => {
+    const order = getMockOrder({ status: 'SUBMITTED', caseState: 'OPEN' })
 
-    expect(getOrderChangeBlockedMessage(order)).toBe('You cannot make changes to this form at this time.')
+    expect(getOrderChangeBlockedMessage(order)).toBe(
+      'This form is still being processed. You can make changes once it has been accepted or returned.',
+    )
   })
 
   it.each(['OPEN', 'CLOSED'] as const)(
@@ -100,7 +98,7 @@ describe('order version eligibility', () => {
     },
   )
 
-  it.each(['NEW', 'AWAITING_INFO', 'AWAITING_VALIDATION', 'AWAITING_APPROVAL'] as const)(
+  it.each(['NEW', 'OPEN', 'AWAITING_INFO', 'AWAITING_APPROVAL'] as const)(
     'blocks submitted orders while case state is %s',
     caseState => {
       const order = getMockOrder({ status: 'SUBMITTED', caseState })

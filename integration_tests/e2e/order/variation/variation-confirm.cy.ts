@@ -49,7 +49,7 @@ context('Variation', () => {
         name: 'john smith',
         roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
       })
-      stubOrder('CLOSED')
+      stubOrder('AWAITING_VALIDATION')
       cy.task('stubCemoCreateVariation', {
         httpStatus: 200,
         originalId: mockOriginalId,
@@ -81,13 +81,21 @@ context('Variation', () => {
       Page.verifyOnPage(OrderTasksPage)
     })
 
-    it('creates a variation for an open submitted order without showing the rejection question', () => {
+    it('blocks changes to an open submitted order while it is processing', () => {
       stubOrder('OPEN')
       const page = Page.visit(OrderTasksPage, { orderId: mockOriginalId })
 
+      page.makeChangesButton.should('be.disabled')
+      page.makeChangesButton.should('not.have.attr', 'href')
       cy.contains(
         'This form is still being processed. You can make changes once it has been accepted or returned.',
-      ).should('not.exist')
+      ).should('be.visible')
+    })
+
+    it('creates a variation for an accepted submitted order in AWAITING_VALIDATION', () => {
+      stubOrder('AWAITING_VALIDATION')
+      const page = Page.visit(OrderTasksPage, { orderId: mockOriginalId })
+
       page.makeChangesButton.should('have.attr', 'href', `/order/${mockOriginalId}/edit`).click()
       Page.verifyOnPage(ConfirmVariationPage).confirmButton().click()
 
@@ -106,7 +114,7 @@ context('Variation', () => {
       page.makeChangesButton.should('have.attr', 'href', `/order/${mockOriginalId}/edit`).click()
       Page.verifyOnPage(ConfirmVariationPage)
     })
-    ;['OPEN', 'CANCELLED'].forEach(caseState => {
+    ;['OPEN', 'CANCELLED', 'UNKNOWN'].forEach(caseState => {
       it(`skips the rejection question when changing a returned new order with ${caseState} case state`, () => {
         verifyReturnedOrderAmendmentFlow('REQUEST', caseState)
       })
@@ -153,8 +161,8 @@ context('Variation', () => {
         verifyReturnedOrderAmendmentFlow('VARIATION', 'OPEN')
       })
 
-      it('allows an open submitted order through the service-request journey', () => {
-        stubOrder('OPEN')
+      it('allows an accepted submitted order through the service-request journey', () => {
+        stubOrder('AWAITING_VALIDATION')
         cy.visit(`/order/${mockOriginalId}/edit`)
         Page.verifyOnPage(ConfirmVariationPage).confirmButton().click()
 
