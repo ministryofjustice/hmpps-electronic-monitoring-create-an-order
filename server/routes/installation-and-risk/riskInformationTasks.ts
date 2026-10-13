@@ -1,4 +1,5 @@
 import paths from '../../constants/paths'
+import FeatureFlags from '../../utils/featureFlags'
 import { Order } from '../../models/Order'
 import { getRiskInformationFlow, RiskInformationPage, riskInformationPages } from '../../services/riskInformationFlow'
 
@@ -40,11 +41,14 @@ const riskInformationTaskDefinitions: Record<RiskInformationPage, RiskInformatio
     paths.INSTALLATION_AND_RISK.DAPO,
     order => order.dapoClauses.length > 0,
   ),
-  [riskInformationPages.detailsOfInstallation]: requiredTask(
-    riskInformationPages.detailsOfInstallation,
-    paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION,
-    order => order.detailsOfInstallation !== null && order.detailsOfInstallation !== undefined,
-  ),
+  [riskInformationPages.detailsOfInstallation]: order =>
+    requiredTask(
+      riskInformationPages.detailsOfInstallation,
+      FeatureFlags.getInstance().get('RISK_INFORMATION_FLOW_ENABLED')
+        ? paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR
+        : paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION,
+      it => it.detailsOfInstallation !== null && it.detailsOfInstallation !== undefined,
+    )(order),
   [riskInformationPages.isMappa]: requiredTask(
     riskInformationPages.isMappa,
     paths.INSTALLATION_AND_RISK.IS_MAPPA,
