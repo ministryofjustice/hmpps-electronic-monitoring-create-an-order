@@ -6,7 +6,7 @@
 {% from "../../../components/accessible-autocomplete/macro.njk" import accessibleAutocomplete %}
 
 {% set section = content.pages.responsibleOrganisation.section %}
-{% set courtCohort = cohort == 'COURT' %}
+{% set courtCohort = user.cohort.cohort == 'COURT' %}
 {% set heading = content.pages.responsibleOrganisation.title %}
 {% set legend = content.pages.responsibleOrganisation.legend %}
 {% set helpText = content.pages.responsibleOrganisation.helpText if not courtCohort else '' %}

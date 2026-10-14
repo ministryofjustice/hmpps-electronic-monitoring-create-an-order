@@ -17,21 +17,16 @@ const construct = (
   formData: ResponsibleOrganisationInput | undefined,
   errors: ValidationResult,
   order: Order,
-  cohort?: string,
 ): responsibleOrganisationViewModel => {
-  if (formData) return constructFromFormData(formData, errors, order, cohort)
+  if (formData) return constructFromFormData(formData, errors, order)
 
-  return constructFromData(data, order, cohort)
+  return constructFromData(data, order)
 }
 
-const constructFromData = (
-  data: InterestedParties,
-  order: Order,
-  cohort?: string,
-): responsibleOrganisationViewModel => {
+const constructFromData = (data: InterestedParties, order: Order): responsibleOrganisationViewModel => {
   return {
     responsibleOrganisation: {
-      value: cohort === 'COURT' ? 'POLICE' : data.responsibleOrganisation || '',
+      value: data.responsibleOrganisation || '',
     },
     responsibleOrganisationRegion: {
       value: data.responsibleOrganisationRegion || '',
@@ -41,7 +36,6 @@ const constructFromData = (
     },
     errorSummary: null,
     DDv5: isOrderDataDictionarySameOrAbove('DDV5', order),
-    cohort,
   }
 }
 
@@ -49,11 +43,10 @@ const constructFromFormData = (
   formData: ResponsibleOrganisationInput,
   errors: ValidationResult,
   order: Order,
-  cohort?: string,
 ): responsibleOrganisationViewModel => {
   return {
     responsibleOrganisation: {
-      value: cohort === 'COURT' ? 'POLICE' : formData?.responsibleOrganisation || '',
+      value: formData?.responsibleOrganisation || '',
       error: getError(errors, 'responsibleOrganisation'),
     },
     responsibleOrganisationRegion: {
@@ -66,7 +59,6 @@ const constructFromFormData = (
     },
     errorSummary: createGovukErrorSummary(errors),
     DDv5: isOrderDataDictionarySameOrAbove('DDV5', order),
-    cohort,
   }
 }
 
