@@ -6,7 +6,8 @@
 {% from "../../../components/accessible-autocomplete/macro.njk" import accessibleAutocomplete %}
 
 {% set section = content.pages.responsibleOrganisation.section %}
-{% set heading = content.pages.responsibleOrganisation.title %}
+{% set courtCohort = cohort == 'COURT' %}
+{% set heading = content.pages.responsibleOrganisation.title if not courtCohort else 'Responsible Police force' %}
 {% set legend = content.pages.responsibleOrganisation.legend %}
 {% set helpText = content.pages.responsibleOrganisation.helpText %}
 {% set questions = content.pages.responsibleOrganisation.questions %}
@@ -101,6 +102,38 @@
 
 
 {% block formInputs %}
+  {% if courtCohort %}
+    <input type="hidden" name="responsibleOrganisation" value="POLICE">
+
+    {{ govukInput({
+      label: {
+        text: questions.police.text,
+        classes: "govuk-label--s"
+      },
+      classes: "govuk-!-width-two-thirds",
+      id: "policeArea",
+      name: "policeArea",
+      value: responsibleOrganisationRegion.value,
+      errorMessage: responsibleOrganisationRegion.error,
+      disabled: not isOrderEditable
+    }) }}
+
+    {{ govukInput({
+      label: {
+        text: questions.courtPoliceEmail.text,
+        classes: "govuk-label--s"
+      },
+      hint: {
+        text: questions.courtPoliceEmail.hint
+      },
+      classes: "govuk-!-width-one-half",
+      id: "responsibleOrganisationEmail",
+      name: "responsibleOrganisationEmail",
+      value: responsibleOrganisationEmail.value,
+      errorMessage: responsibleOrganisationEmail.error,
+      disabled: not isOrderEditable
+    }) }}
+  {% else %}
     {{ govukRadios({
       name: "responsibleOrganisation",
       fieldset: {
@@ -130,5 +163,6 @@
       errorMessage: responsibleOrganisationEmail.error,
       disabled: not isOrderEditable
     }) }}
+  {% endif %}
 
 {% endblock %}

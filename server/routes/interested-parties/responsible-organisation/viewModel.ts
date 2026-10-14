@@ -10,23 +10,28 @@ import { getResponsibleOrganisationRegion } from './utils'
 
 type responsibleOrganisationViewModel = ViewModel<
   Pick<InterestedParties, 'responsibleOrganisation' | 'responsibleOrganisationRegion' | 'responsibleOrganisationEmail'>
-> & { DDv5: boolean }
+> & { DDv5: boolean; cohort?: string }
 
 const construct = (
   data: InterestedParties,
   formData: ResponsibleOrganisationInput | undefined,
   errors: ValidationResult,
   order: Order,
+  cohort?: string,
 ): responsibleOrganisationViewModel => {
-  if (formData) return constructFromFormData(formData, errors, order)
+  if (formData) return constructFromFormData(formData, errors, order, cohort)
 
-  return constructFromData(data, order)
+  return constructFromData(data, order, cohort)
 }
 
-const constructFromData = (data: InterestedParties, order: Order): responsibleOrganisationViewModel => {
+const constructFromData = (
+  data: InterestedParties,
+  order: Order,
+  cohort?: string,
+): responsibleOrganisationViewModel => {
   return {
     responsibleOrganisation: {
-      value: data.responsibleOrganisation || '',
+      value: cohort === 'COURT' ? 'POLICE' : data.responsibleOrganisation || '',
     },
     responsibleOrganisationRegion: {
       value: data.responsibleOrganisationRegion || '',
@@ -36,6 +41,7 @@ const constructFromData = (data: InterestedParties, order: Order): responsibleOr
     },
     errorSummary: null,
     DDv5: isOrderDataDictionarySameOrAbove('DDV5', order),
+    cohort,
   }
 }
 
@@ -43,10 +49,11 @@ const constructFromFormData = (
   formData: ResponsibleOrganisationInput,
   errors: ValidationResult,
   order: Order,
+  cohort?: string,
 ): responsibleOrganisationViewModel => {
   return {
     responsibleOrganisation: {
-      value: formData?.responsibleOrganisation || '',
+      value: cohort === 'COURT' ? 'POLICE' : formData?.responsibleOrganisation || '',
       error: getError(errors, 'responsibleOrganisation'),
     },
     responsibleOrganisationRegion: {
@@ -59,6 +66,7 @@ const constructFromFormData = (
     },
     errorSummary: createGovukErrorSummary(errors),
     DDv5: isOrderDataDictionarySameOrAbove('DDV5', order),
+    cohort,
   }
 }
 

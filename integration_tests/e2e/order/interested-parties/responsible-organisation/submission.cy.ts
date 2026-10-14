@@ -140,4 +140,57 @@ context('order type', () => {
     page.form.responsibleOrgProbationField.shouldHaveValue('WALES')
     page.form.responsibleOrganisationEmailAddressField.shouldHaveValue('a@b.com')
   })
+
+  context('court cohort', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '123456783',
+      })
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: { cohort: 'COURT' },
+      })
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        order: { dataDictionaryVersion: 'DDV6' },
+      })
+      cy.task('stubCemoSubmitOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        subPath: submitPath,
+        method: 'PUT',
+        response: { notifyingOrganisation: 'PRISON', responsibleOrganisation: 'POLICE' },
+      })
+      cy.signIn()
+    })
+
+    it('shows the police force content and defaults the organisation to police', () => {
+      const page = Page.visit(ResponsibleOrganisationPage, { orderId: mockOrderId })
+
+      cy.contains('h1', 'Responsible Police force').should('be.visible')
+      cy.contains('label', 'What is the name of the Police force area?').should('be.visible')
+      cy.contains('label', 'What is the Police force email address? (optional)').should('be.visible')
+      cy.get('.govuk-radios').should('not.exist')
+
+      cy.get('#policeArea').type('Lancashire')
+      cy.get('#responsibleOrganisationEmail').type('a@b.com')
+      page.form.continueButton.click()
+
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOrderId}${submitPath}`,
+        body: {
+          responsibleOrganisation: 'POLICE',
+          responsibleOrganisationRegion: 'Lancashire',
+          responsibleOrganisationEmail: 'a@b.com',
+        },
+      }).should('be.true')
+    })
+  })
 })

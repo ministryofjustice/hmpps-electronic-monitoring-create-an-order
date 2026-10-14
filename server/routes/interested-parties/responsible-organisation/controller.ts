@@ -25,17 +25,26 @@ export default class ResponsibleOrganisationController extends InterestedParties
 
     const formData = req.flash('formData') as unknown as ResponsibleOrganisationInput[]
     const errors = req.flash('validationErrors') as unknown as ValidationResult
+    const cohort = res.locals.user.cohort?.cohort
 
     res.render(
       'pages/order/interested-parties/responsible-organisation',
-      ViewModel.construct(storedData, formData[0], errors, order),
+      ViewModel.construct(storedData, formData[0], errors, order, cohort),
     )
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
 
-    const formData = ResponsibleOrganisationFormModel.parse(req.body)
+    const cohort = res.locals.user.cohort?.cohort
+    let formData = ResponsibleOrganisationFormModel.parse(req.body)
+
+    if (cohort === 'COURT') {
+      formData = {
+        ...formData,
+        responsibleOrganisation: 'POLICE',
+      }
+    }
 
     const validationResult = ResponsibleOrganisationValidator.safeParse(formData)
 
