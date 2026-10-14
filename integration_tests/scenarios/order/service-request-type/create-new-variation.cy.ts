@@ -117,6 +117,7 @@ context('Service-Request-Types', () => {
       installationAppointment: undefined,
       newDeviceWearerFlow: true,
       restrictionZoneDetails: undefined,
+      fillInResponsibleOrganisationDetails: false,
     })
 
     orderSummaryPage.submitOrderButton.click()
