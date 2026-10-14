@@ -4,6 +4,7 @@ import { ValidationResult } from '../../../models/Validation'
 import { ViewModel } from '../../../models/view-models/utils'
 import I18n from '../../../types/i18n'
 import { createGovukErrorSummary } from '../../../utils/errors'
+import splitRisks from '../../../utils/splitRisks'
 import { getError } from '../../../utils/utils'
 import { DetailsOfInstallationInput } from './formModel'
 
@@ -41,10 +42,8 @@ const getPossibleRiskValues = (
   orderValues: string[] | null | undefined,
   content: I18n,
 ): string[] => {
-  if (formValues && formValues.length) {
-    return formValues.filter(it => Object.keys(content.reference.possibleRisks).indexOf(it) !== -1)
-  }
-  return orderValues?.filter(it => Object.keys(content.reference.possibleRisks).indexOf(it) !== -1) || []
+  const source = formValues && formValues.length ? formValues : orderValues
+  return splitRisks(source, content.reference).possibleRisk
 }
 
 const getRiskCategoryValues = (
@@ -52,10 +51,8 @@ const getRiskCategoryValues = (
   orderValues: string[] | null | undefined,
   content: I18n,
 ): string[] => {
-  if (formValues && formValues.length) {
-    return formValues.filter(it => Object.keys(content.reference.riskCategories).indexOf(it) !== -1)
-  }
-  return orderValues?.filter(it => Object.keys(content.reference.riskCategories).indexOf(it) !== -1) || []
+  const source = formValues && formValues.length ? formValues : orderValues
+  return splitRisks(source, content.reference).riskCategory
 }
 
 export default { construct }

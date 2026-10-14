@@ -4,7 +4,8 @@ import { Order } from '../Order'
 import I18n from '../../types/i18n'
 import { formatDateTime, lookup } from '../../utils/utils'
 import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
-import FeatureFlags from '../../utils/featureFlags'
+import riskBehaviourPath from '../../utils/riskBehaviourPath'
+import splitRisks from '../../utils/splitRisks'
 import paths from '../../constants/paths'
 import { getRiskInformationFlow, riskInformationPages } from '../../services/riskInformationFlow'
 
@@ -81,13 +82,12 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
     riskDetailsUri = uri
   }
 
-  const possibleRisks = riskCategoriesFromOrder.filter(
-    it => Object.keys(content.reference.possibleRisks).indexOf(it) !== -1,
+  const { possibleRisk: possibleRisks, riskCategory: riskCategories } = splitRisks(
+    riskCategoriesFromOrder,
+    content.reference,
   )
 
-  const possibleRiskUri = FeatureFlags.getInstance().get('RISK_INFORMATION_FLOW_ENABLED')
-    ? paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR.replace(':orderId', order.id)
-    : riskDetailsUri
+  const possibleRiskUri = riskBehaviourPath(riskDetailsUri, order.id)
 
   riskAnswers.push(
     createMultipleChoiceAnswer(
@@ -104,9 +104,6 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
     )
   }
 
-  const riskCategories = riskCategoriesFromOrder.filter(
-    it => Object.keys(content.reference.riskCategories).indexOf(it) !== -1,
-  )
   riskAnswers.push(
     createMultipleChoiceAnswer(
       questions.riskCategory.text,

@@ -40,5 +40,4 @@ export const RiskBehaviourFormValidator = z
     }
   })
 
-export type RiskBehaviourInput = z.infer<typeof RiskBehaviourFormModel>
 export default RiskBehaviourFormModel

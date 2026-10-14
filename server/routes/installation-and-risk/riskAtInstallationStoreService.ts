@@ -1,5 +1,6 @@
 import getContent from '../../i18n'
 import { Order } from '../../models/Order'
+import splitRisks from '../../utils/splitRisks'
 import Store from '../store/store'
 import RiskAtInstallationModel, { RiskAtInstallation } from './riskAtInstallationModel'
 
@@ -35,11 +36,11 @@ export default class RiskAtInstallationStoreService {
 
   private fromOrder(order: Order): RiskAtInstallation {
     const { reference } = getContent('en', order.dataDictionaryVersion)
-    const savedRisks = order.detailsOfInstallation?.riskCategory ?? []
+    const { possibleRisk, riskCategory } = splitRisks(order.detailsOfInstallation?.riskCategory, reference)
 
     return {
-      possibleRisk: savedRisks.filter(risk => risk in reference.possibleRisks),
-      riskCategory: savedRisks.filter(risk => risk in reference.riskCategories),
+      possibleRisk,
+      riskCategory,
       riskDetails: order.detailsOfInstallation?.riskDetails ?? '',
       genderRiskDetails: order.detailsOfInstallation?.genderRiskDetails ?? '',
     }
