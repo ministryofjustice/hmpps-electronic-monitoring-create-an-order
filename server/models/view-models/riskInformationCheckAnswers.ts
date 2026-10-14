@@ -4,6 +4,7 @@ import { Order } from '../Order'
 import I18n from '../../types/i18n'
 import { formatDateTime, lookup } from '../../utils/utils'
 import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
+import FeatureFlags from '../../utils/featureFlags'
 import paths from '../../constants/paths'
 import { getRiskInformationFlow, riskInformationPages } from '../../services/riskInformationFlow'
 
@@ -84,11 +85,15 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
     it => Object.keys(content.reference.possibleRisks).indexOf(it) !== -1,
   )
 
+  const possibleRiskUri = FeatureFlags.getInstance().get('RISK_INFORMATION_FLOW_ENABLED')
+    ? paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR.replace(':orderId', order.id)
+    : riskDetailsUri
+
   riskAnswers.push(
     createMultipleChoiceAnswer(
       questions.possibleRisk.text,
       possibleRisks?.map(category => lookup(content.reference.possibleRisks, category)) ?? [],
-      riskDetailsUri,
+      possibleRiskUri,
       answerOpts,
     ),
   )
