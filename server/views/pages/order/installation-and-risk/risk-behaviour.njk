@@ -1,0 +1,26 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+
+{% set section = content.pages.detailsOfInstallation.section %}
+{% set singleQuestionPage = true %}
+{% set questionName = content.pages.detailsOfInstallation.questions.possibleRisk.text %}
+
+{% block formInputs %}
+  {{ govukCheckboxes({
+    idPrefix: "possibleRisk",
+    name: "possibleRisk[]",
+    fieldset: {
+      legend: {
+        text: content.pages.detailsOfInstallation.questions.possibleRisk.text,
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
+      }
+    },
+    hint: {
+      text: content.pages.detailsOfInstallation.questions.possibleRisk.hint
+    },
+    items: content.reference.possibleRisks | toOptions(not isOrderEditable),
+    values: possibleRisk.values
+  }) }}
+{% endblock %}
