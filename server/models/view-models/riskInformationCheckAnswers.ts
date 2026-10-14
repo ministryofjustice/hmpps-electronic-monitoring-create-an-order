@@ -84,7 +84,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
 
   const { possibleRisk: possibleRisks, riskCategory: riskCategories } = splitRisks(
     riskCategoriesFromOrder,
-    content.reference,
+    order.dataDictionaryVersion,
   )
 
   const possibleRiskUri = riskBehaviourPath(riskDetailsUri, order.id)
