@@ -12,4 +12,11 @@ describe('risk behaviour view model', () => {
 
     expect(result.possibleRisk.values).toEqual(['THREATS_OF_VIOLENCE', 'SEXUAL_OFFENCES'])
   })
+
+  it('shows the validation error and an error summary', () => {
+    const result = RiskBehaviourViewModel.construct([], [{ field: 'possibleRisk', error: 'Select something' }])
+
+    expect(result.possibleRisk.error).toEqual({ text: 'Select something' })
+    expect(result.errorSummary?.errorList).toEqual([expect.objectContaining({ text: 'Select something' })])
+  })
 })

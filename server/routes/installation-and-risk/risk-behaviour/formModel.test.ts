@@ -1,4 +1,4 @@
-import RiskBehaviourFormModel from './formModel'
+import RiskBehaviourFormModel, { RiskBehaviourFormValidator } from './formModel'
 
 describe('risk behaviour form model', () => {
   it('wraps a single selection in an array', () => {
@@ -16,7 +16,25 @@ describe('risk behaviour form model', () => {
     expect(result.possibleRisk).toEqual(['SEXUAL_OFFENCES', 'THREATS_OF_VIOLENCE'])
   })
 
-  it('does not assume a selection when nothing is submitted', () => {
-    expect(RiskBehaviourFormModel.safeParse({ action: 'continue' }).success).toBe(false)
+  it('has no selection when nothing is submitted', () => {
+    expect(RiskBehaviourFormModel.parse({ action: 'continue' }).possibleRisk).toEqual([])
+  })
+})
+
+describe('risk behaviour form validator', () => {
+  it('requires at least one selection', () => {
+    const result = RiskBehaviourFormValidator.safeParse({ possibleRisk: [] })
+
+    expect(result.success).toBe(false)
+    expect(result.error?.issues[0]).toEqual(
+      expect.objectContaining({
+        path: ['possibleRisk'],
+        message: "Select all the possible risks from the device wearer's behaviour",
+      }),
+    )
+  })
+
+  it('accepts a selection', () => {
+    expect(RiskBehaviourFormValidator.safeParse({ possibleRisk: ['SEXUAL_OFFENCES'] }).success).toBe(true)
   })
 })

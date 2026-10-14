@@ -16,6 +16,7 @@ describe('RiskBehaviourController', () => {
     store = new RiskAtInstallationStoreService(new InMemoryStore())
     controller = new RiskBehaviourController(store)
     req = createMockRequest()
+    req.flash = jest.fn().mockReturnValue([])
     res = createMockResponse()
   })
 
@@ -39,6 +40,18 @@ describe('RiskBehaviourController', () => {
         expect.objectContaining({ possibleRisk: { values: ['THREATS_OF_VIOLENCE', 'SEXUAL_OFFENCES'] } }),
       )
     })
+
+    it('renders the flashed validation error', async () => {
+      const errors = [{ field: 'possibleRisk', error: 'Select something' }]
+      ;(req.flash as jest.Mock).mockImplementation((key: string) => (key === 'validationErrors' ? errors : []))
+
+      await controller.view(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/order/installation-and-risk/risk-behaviour',
+        expect.objectContaining({ possibleRisk: { values: [], error: { text: 'Select something' } } }),
+      )
+    })
   })
 
   describe('update', () => {
@@ -59,6 +72,20 @@ describe('RiskBehaviourController', () => {
       await controller.update(req, res, next)
 
       expect((await store.getRiskAtInstallation(req.order!)).possibleRisk).toEqual(['SEXUAL_OFFENCES'])
+    })
+
+    it('redirects back with a validation error and saves nothing when nothing is selected', async () => {
+      req.body = { action: 'continue' }
+
+      await controller.update(req, res, next)
+
+      expect(req.flash).toHaveBeenCalledWith('validationErrors', [
+        { field: 'possibleRisk', error: "Select all the possible risks from the device wearer's behaviour" },
+      ])
+      expect(res.redirect).toHaveBeenCalledWith(
+        paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR.replace(':orderId', req.order!.id),
+      )
+      expect((await store.getRiskAtInstallation(req.order!)).possibleRisk).toEqual([])
     })
 
     it('goes to the risk at address page', async () => {

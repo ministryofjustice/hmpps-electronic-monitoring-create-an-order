@@ -20,6 +20,17 @@ context('risk behaviour page', () => {
     page.form.possibleRiskField.shouldNotHaveValue()
   })
 
+  it('shows an error when nothing is selected', () => {
+    const page = Page.visit(RiskBehaviourPage, { orderId: mockOrderId })
+
+    page.form.continueButton.click()
+
+    page.errorSummary.shouldHaveError("Select all the possible risks from the device wearer's behaviour")
+    page.form.possibleRiskField.shouldHaveValidationMessage(
+      "Select all the possible risks from the device wearer's behaviour",
+    )
+  })
+
   it('saves multiple selections, continues to risk at address and pre-checks them on revisit', () => {
     const page = Page.visit(RiskBehaviourPage, { orderId: mockOrderId })
 

@@ -21,6 +21,7 @@
       text: content.pages.detailsOfInstallation.questions.possibleRisk.hint
     },
     items: content.reference.possibleRisks | toOptions(not isOrderEditable),
-    values: possibleRisk.values
+    values: possibleRisk.values,
+    errorMessage: possibleRisk.error
   }) }}
 {% endblock %}
