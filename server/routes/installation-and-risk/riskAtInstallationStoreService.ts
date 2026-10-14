@@ -16,11 +16,8 @@ export default class RiskAtInstallationStoreService {
 
   public async getRiskAtInstallation(order: Order): Promise<RiskAtInstallation> {
     const cached = await this.dataStore.get(this.keyFromOrder(order))
-    const riskAtInstallation = cached ? RiskAtInstallationModel.parse(JSON.parse(cached)) : this.fromOrder(order)
 
-    await this.updateRiskAtInstallation(order, riskAtInstallation)
-
-    return riskAtInstallation
+    return cached ? RiskAtInstallationModel.parse(JSON.parse(cached)) : this.fromOrder(order)
   }
 
   public async updateField<T extends keyof RiskAtInstallation>(order: Order, field: T, data: RiskAtInstallation[T]) {

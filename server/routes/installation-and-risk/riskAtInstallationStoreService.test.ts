@@ -68,6 +68,26 @@ describe('RiskAtInstallationStoreService', () => {
     })
   })
 
+  describe('writes', () => {
+    it('does not write to the store when reading', async () => {
+      const store = new InMemoryStore()
+      const setSpy = jest.spyOn(store, 'set')
+
+      await new RiskAtInstallationStoreService(store).getRiskAtInstallation(order)
+
+      expect(setSpy).not.toHaveBeenCalled()
+    })
+
+    it('writes once when a field is updated', async () => {
+      const store = new InMemoryStore()
+      const setSpy = jest.spyOn(store, 'set')
+
+      await new RiskAtInstallationStoreService(store).updateField(order, 'possibleRisk', ['SEXUAL_OFFENCES'])
+
+      expect(setSpy).toHaveBeenCalledTimes(1)
+    })
+  })
+
   describe('updateField', () => {
     it('keeps the updated answer in the cache over the saved order answers', async () => {
       order.detailsOfInstallation = { riskCategory: ['THREATS_OF_VIOLENCE'], riskDetails: '' }
