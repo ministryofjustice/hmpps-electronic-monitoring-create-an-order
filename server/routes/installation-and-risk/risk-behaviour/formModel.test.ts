@@ -16,6 +16,21 @@ describe('risk behaviour form model', () => {
     expect(result.possibleRisk).toEqual(['SEXUAL_OFFENCES', 'THREATS_OF_VIOLENCE'])
   })
 
+  it('keeps only NO_RISK when submitted with other risks', () => {
+    const result = RiskBehaviourFormModel.parse({
+      action: 'continue',
+      possibleRisk: ['SEXUAL_OFFENCES', 'NO_RISK', 'THREATS_OF_VIOLENCE'],
+    })
+
+    expect(result.possibleRisk).toEqual(['NO_RISK'])
+  })
+
+  it('keeps NO_RISK when submitted on its own', () => {
+    expect(RiskBehaviourFormModel.parse({ action: 'continue', possibleRisk: 'NO_RISK' }).possibleRisk).toEqual([
+      'NO_RISK',
+    ])
+  })
+
   it('has no selection when nothing is submitted', () => {
     expect(RiskBehaviourFormModel.parse({ action: 'continue' }).possibleRisk).toEqual([])
   })

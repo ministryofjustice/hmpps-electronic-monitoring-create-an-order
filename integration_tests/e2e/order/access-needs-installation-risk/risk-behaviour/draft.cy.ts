@@ -31,6 +31,17 @@ context('risk behaviour page', () => {
     )
   })
 
+  it('deselects the other risks when "No risks" is selected', () => {
+    const page = Page.visit(RiskBehaviourPage, { orderId: mockOrderId })
+
+    page.form.fillInWith(['Violent behaviour or threats of violence', 'Sex offender'])
+    page.form.fillInWith('There are no risks that the installer should be aware of')
+
+    page.form.possibleRiskField.shouldHaveValue('There are no risks that the installer should be aware of')
+    page.form.possibleRiskField.shouldNotHaveValueChecked('Violent behaviour or threats of violence')
+    page.form.possibleRiskField.shouldNotHaveValueChecked('Sex offender')
+  })
+
   it('saves multiple selections, continues to risk at address and pre-checks them on revisit', () => {
     const page = Page.visit(RiskBehaviourPage, { orderId: mockOrderId })
 

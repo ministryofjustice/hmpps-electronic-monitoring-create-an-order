@@ -1,6 +1,8 @@
 import z from 'zod'
 import { validationErrors } from '../../../constants/validationErrors'
 
+const NO_RISK = 'NO_RISK'
+
 const RiskBehaviourFormModel = z.object({
   action: z.string(),
   possibleRisk: z
@@ -8,7 +10,8 @@ const RiskBehaviourFormModel = z.object({
     .optional()
     .transform(val => {
       if (val === undefined) return []
-      return Array.isArray(val) ? val : [val]
+      const risks = Array.isArray(val) ? val : [val]
+      return risks.includes(NO_RISK) ? [NO_RISK] : risks
     }),
 })
 
