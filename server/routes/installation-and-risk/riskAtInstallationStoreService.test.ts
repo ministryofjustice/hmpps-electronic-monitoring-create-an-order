@@ -26,6 +26,7 @@ describe('RiskAtInstallationStoreService', () => {
     })
 
     it('splits the saved risk categories into behaviour and address risks', async () => {
+      order.dataDictionaryVersion = 'DDV6'
       order.detailsOfInstallation = {
         riskCategory: ['RISK_TO_GENDER', 'THREATS_OF_VIOLENCE', 'DANGEROUS_ANIMALS'],
         genderRiskDetails: 'Women',
@@ -37,6 +38,32 @@ describe('RiskAtInstallationStoreService', () => {
         riskCategory: ['DANGEROUS_ANIMALS'],
         riskDetails: 'some details',
         genderRiskDetails: 'Women',
+      })
+    })
+  })
+
+  describe('getRiskAtInstallation for pre-DDV6 orders', () => {
+    it('seeds the answers from the legacy installation and risk data', async () => {
+      const legacyOrder = getMockOrder({
+        id: uuidv4(),
+        dataDictionaryVersion: 'DDV5',
+        installationAndRisk: {
+          offence: null,
+          offences: null,
+          offenceAdditionalDetails: null,
+          mappaLevel: null,
+          mappaCaseType: null,
+          riskCategory: ['THREATS_OF_VIOLENCE', 'DANGEROUS_ANIMALS'],
+          riskDetails: 'legacy details',
+        },
+        detailsOfInstallation: null,
+      })
+
+      expect(await service.getRiskAtInstallation(legacyOrder)).toEqual({
+        possibleRisk: ['THREATS_OF_VIOLENCE'],
+        riskCategory: ['DANGEROUS_ANIMALS'],
+        riskDetails: 'legacy details',
+        genderRiskDetails: '',
       })
     })
   })

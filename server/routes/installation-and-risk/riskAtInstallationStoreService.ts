@@ -1,6 +1,7 @@
 import getContent from '../../i18n'
 import { Order } from '../../models/Order'
 import splitRisks from './splitRisks'
+import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
 import Store from '../store/store'
 import RiskAtInstallationModel, { RiskAtInstallation } from './riskAtInstallationModel'
 
@@ -36,12 +37,15 @@ export default class RiskAtInstallationStoreService {
 
   private fromOrder(order: Order): RiskAtInstallation {
     const { reference } = getContent('en', order.dataDictionaryVersion)
-    const { possibleRisk, riskCategory } = splitRisks(order.detailsOfInstallation?.riskCategory, reference)
+    const saved = isOrderDataDictionarySameOrAbove('DDV6', order)
+      ? order.detailsOfInstallation
+      : order.installationAndRisk
+    const { possibleRisk, riskCategory } = splitRisks(saved?.riskCategory, reference)
 
     return {
       possibleRisk,
       riskCategory,
-      riskDetails: order.detailsOfInstallation?.riskDetails ?? '',
+      riskDetails: saved?.riskDetails ?? '',
       genderRiskDetails: order.detailsOfInstallation?.genderRiskDetails ?? '',
     }
   }
