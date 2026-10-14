@@ -1,5 +1,5 @@
 import paths from '../../constants/paths'
-import riskBehaviourPath from '../../utils/riskBehaviourPath'
+import riskBehaviourPath from './riskBehaviourPath'
 import { Order } from '../../models/Order'
 import { getRiskInformationFlow, RiskInformationPage, riskInformationPages } from '../../services/riskInformationFlow'
 

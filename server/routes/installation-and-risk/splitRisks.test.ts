@@ -1,4 +1,4 @@
-import getContent from '../i18n'
+import getContent from '../../i18n'
 import splitRisks from './splitRisks'
 
 describe('splitRisks', () => {

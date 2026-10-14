@@ -1,4 +1,4 @@
-import I18n from '../types/i18n'
+import I18n from '../../types/i18n'
 
 const splitRisks = (codes: readonly string[] | null | undefined, reference: I18n['reference']) => {
   const risks = codes ?? []

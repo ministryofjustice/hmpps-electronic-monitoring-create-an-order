@@ -1,6 +1,6 @@
 import getContent from '../../i18n'
 import { Order } from '../../models/Order'
-import splitRisks from '../../utils/splitRisks'
+import splitRisks from './splitRisks'
 import Store from '../store/store'
 import RiskAtInstallationModel, { RiskAtInstallation } from './riskAtInstallationModel'
 

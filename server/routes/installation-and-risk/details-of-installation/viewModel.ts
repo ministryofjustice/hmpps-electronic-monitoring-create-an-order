@@ -4,7 +4,7 @@ import { ValidationResult } from '../../../models/Validation'
 import { ViewModel } from '../../../models/view-models/utils'
 import I18n from '../../../types/i18n'
 import { createGovukErrorSummary } from '../../../utils/errors'
-import splitRisks from '../../../utils/splitRisks'
+import splitRisks from '../splitRisks'
 import { getError } from '../../../utils/utils'
 import { DetailsOfInstallationInput } from './formModel'
 

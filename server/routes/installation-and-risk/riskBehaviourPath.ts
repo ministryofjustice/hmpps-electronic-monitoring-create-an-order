@@ -1,5 +1,5 @@
-import paths from '../constants/paths'
-import FeatureFlags from './featureFlags'
+import paths from '../../constants/paths'
+import FeatureFlags from '../../utils/featureFlags'
 
 const riskBehaviourPath = (fallbackPath: string, orderId: string = ':orderId'): string =>
   FeatureFlags.getInstance().get('RISK_INFORMATION_FLOW_ENABLED')
