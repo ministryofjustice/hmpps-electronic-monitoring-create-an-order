@@ -34,6 +34,16 @@ describe('risk behaviour form model', () => {
   it('has no selection when nothing is submitted', () => {
     expect(RiskBehaviourFormModel.parse({ action: 'continue' }).possibleRisk).toEqual([])
   })
+
+  it('defaults gender risk details to an empty string', () => {
+    expect(RiskBehaviourFormModel.parse({ action: 'continue' }).genderRiskDetails).toEqual('')
+  })
+
+  it('keeps submitted gender risk details', () => {
+    expect(RiskBehaviourFormModel.parse({ action: 'continue', genderRiskDetails: 'Women' }).genderRiskDetails).toEqual(
+      'Women',
+    )
+  })
 })
 
 describe('risk behaviour form validator', () => {
@@ -50,6 +60,42 @@ describe('risk behaviour form validator', () => {
   })
 
   it('accepts a selection', () => {
-    expect(RiskBehaviourFormValidator.safeParse({ possibleRisk: ['SEXUAL_OFFENCES'] }).success).toBe(true)
+    expect(
+      RiskBehaviourFormValidator.safeParse({ possibleRisk: ['SEXUAL_OFFENCES'], genderRiskDetails: '' }).success,
+    ).toBe(true)
+  })
+
+  it('requires gender risk details when risk to gender is selected', () => {
+    const result = RiskBehaviourFormValidator.safeParse({ possibleRisk: ['RISK_TO_GENDER'], genderRiskDetails: '' })
+
+    expect(result.success).toBe(false)
+    expect(result.error?.issues[0]).toEqual(
+      expect.objectContaining({
+        path: ['genderRiskDetails'],
+        message: 'Enter what sex or gender they are a risk to',
+      }),
+    )
+  })
+
+  it('rejects gender risk details over 100 characters', () => {
+    const result = RiskBehaviourFormValidator.safeParse({
+      possibleRisk: ['RISK_TO_GENDER'],
+      genderRiskDetails: 'a'.repeat(101),
+    })
+
+    expect(result.success).toBe(false)
+    expect(result.error?.issues[0].path).toEqual(['genderRiskDetails'])
+  })
+
+  it('accepts gender risk details when risk to gender is selected', () => {
+    expect(
+      RiskBehaviourFormValidator.safeParse({ possibleRisk: ['RISK_TO_GENDER'], genderRiskDetails: 'Women' }).success,
+    ).toBe(true)
+  })
+
+  it('ignores missing gender risk details when risk to gender is not selected', () => {
+    expect(RiskBehaviourFormValidator.safeParse({ possibleRisk: ['NO_RISK'], genderRiskDetails: '' }).success).toBe(
+      true,
+    )
   })
 })

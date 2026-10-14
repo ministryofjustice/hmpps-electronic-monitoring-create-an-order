@@ -41,6 +41,17 @@ describe('RiskBehaviourController', () => {
       )
     })
 
+    it('renders the cached gender risk details', async () => {
+      await store.updateField(req.order!, 'genderRiskDetails', 'Women')
+
+      await controller.view(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/order/installation-and-risk/risk-behaviour',
+        expect.objectContaining({ genderRiskDetails: { value: 'Women' } }),
+      )
+    })
+
     it('renders the flashed validation error', async () => {
       const errors = [{ field: 'possibleRisk', error: 'Select something' }]
       ;(req.flash as jest.Mock).mockImplementation((key: string) => (key === 'validationErrors' ? errors : []))
@@ -81,6 +92,37 @@ describe('RiskBehaviourController', () => {
 
       expect(req.flash).toHaveBeenCalledWith('validationErrors', [
         { field: 'possibleRisk', error: "Select all the possible risks from the device wearer's behaviour" },
+      ])
+      expect(res.redirect).toHaveBeenCalledWith(
+        paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR.replace(':orderId', req.order!.id),
+      )
+      expect((await store.getRiskAtInstallation(req.order!)).possibleRisk).toEqual([])
+    })
+
+    it('caches the gender risk details when risk to gender is selected', async () => {
+      req.body = { action: 'continue', possibleRisk: ['RISK_TO_GENDER'], genderRiskDetails: 'Women' }
+
+      await controller.update(req, res, next)
+
+      expect((await store.getRiskAtInstallation(req.order!)).genderRiskDetails).toEqual('Women')
+    })
+
+    it('clears the gender risk details when risk to gender is not selected', async () => {
+      await store.updateField(req.order!, 'genderRiskDetails', 'Women')
+      req.body = { action: 'continue', possibleRisk: ['SEXUAL_OFFENCES'], genderRiskDetails: 'Women' }
+
+      await controller.update(req, res, next)
+
+      expect((await store.getRiskAtInstallation(req.order!)).genderRiskDetails).toEqual('')
+    })
+
+    it('redirects back with a validation error when gender risk details are missing', async () => {
+      req.body = { action: 'continue', possibleRisk: ['RISK_TO_GENDER'], genderRiskDetails: '' }
+
+      await controller.update(req, res, next)
+
+      expect(req.flash).toHaveBeenCalledWith('validationErrors', [
+        { field: 'genderRiskDetails', error: 'Enter what sex or gender they are a risk to' },
       ])
       expect(res.redirect).toHaveBeenCalledWith(
         paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR.replace(':orderId', req.order!.id),

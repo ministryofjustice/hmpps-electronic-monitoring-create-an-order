@@ -6,12 +6,14 @@ import Page from '../../pages/page'
 export default function fillInRiskAtInstallationWith({
   possibleRisk,
   riskCategory,
+  genderRiskDetails,
 }: {
   possibleRisk: string
   riskCategory: string
+  genderRiskDetails?: string
 }): void {
   const riskBehaviourPage = Page.verifyOnPage(RiskBehaviourPage)
-  riskBehaviourPage.form.fillInWith(possibleRisk)
+  riskBehaviourPage.form.fillInWith(possibleRisk, genderRiskDetails)
   riskBehaviourPage.form.continueButton.click()
 
   const riskAtAddressPage = Page.verifyOnPage(RiskAtAddressPage)
