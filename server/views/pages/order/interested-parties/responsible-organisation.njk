@@ -9,7 +9,7 @@
 {% set courtCohort = cohort == 'COURT' %}
 {% set heading = content.pages.responsibleOrganisation.title if not courtCohort else 'Responsible Police force' %}
 {% set legend = content.pages.responsibleOrganisation.legend %}
-{% set helpText = content.pages.responsibleOrganisation.helpText %}
+{% set helpText = content.pages.responsibleOrganisation.helpText if not courtCohort else '' %}
 {% set questions = content.pages.responsibleOrganisation.questions %}
 {% set singleQuestionPage = true %}
 
@@ -105,18 +105,7 @@
   {% if courtCohort %}
     <input type="hidden" name="responsibleOrganisation" value="POLICE">
 
-    {{ govukInput({
-      label: {
-        text: questions.police.text,
-        classes: "govuk-label--s"
-      },
-      classes: "govuk-!-width-two-thirds",
-      id: "policeArea",
-      name: "policeArea",
-      value: responsibleOrganisationRegion.value,
-      errorMessage: responsibleOrganisationRegion.error,
-      disabled: not isOrderEditable
-    }) }}
+    {{ policeAreaHtml | safe | trim }}
 
     {{ govukInput({
       label: {

@@ -66,6 +66,11 @@ export default class ResponsibleOrganisationComponent extends FormComponent {
     return new FormInputComponent(this.form, label)
   }
 
+  get policeForceEmailAddressField(): FormInputComponent {
+    const label = 'What is the Police force email address? (optional)'
+    return new FormInputComponent(this.form, label)
+  }
+
   fillInWith(profile: ResponsibleOrganisationFormData) {
     if (profile.responsibleOrganisation) {
       this.responsibleOrganisationField.set(profile.responsibleOrganisation)

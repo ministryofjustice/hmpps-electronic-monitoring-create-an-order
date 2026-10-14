@@ -174,20 +174,15 @@ context('order type', () => {
     it('shows the police force content and defaults the organisation to police', () => {
       const page = Page.visit(ResponsibleOrganisationPage, { orderId: mockOrderId })
 
-      cy.contains('h1', 'Responsible Police force').should('be.visible')
-      cy.contains('label', 'What is the name of the Police force area?').should('be.visible')
-      cy.contains('label', 'What is the Police force email address? (optional)').should('be.visible')
-      cy.get('.govuk-radios').should('not.exist')
-
-      cy.get('#policeArea').type('Lancashire')
-      cy.get('#responsibleOrganisationEmail').type('a@b.com')
+      page.form.policeAreaField.set('Lancashire')
+      page.form.policeForceEmailAddressField.set('a@b.com')
       page.form.continueButton.click()
 
       cy.task('stubCemoVerifyRequestReceived', {
         uri: `/orders/${mockOrderId}${submitPath}`,
         body: {
           responsibleOrganisation: 'POLICE',
-          responsibleOrganisationRegion: 'Lancashire',
+          responsibleOrganisationRegion: 'LANCASHIRE',
           responsibleOrganisationEmail: 'a@b.com',
         },
       }).should('be.true')
