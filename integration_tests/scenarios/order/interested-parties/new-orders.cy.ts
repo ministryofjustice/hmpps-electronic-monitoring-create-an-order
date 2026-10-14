@@ -31,7 +31,7 @@ context('Interested parties flow', () => {
         familyCourt: 'Aberystwyth Family Court',
       },
       responsibleOrganisation: {
-        responsibleOrganisation: 'Probation',
+        responsibleOrganisation: 'Police',
         probationRegion: 'Wales',
         responsibleOrganisationEmailAddress: 'a@b.com',
       },
@@ -50,7 +50,7 @@ context('Interested parties flow', () => {
     })
     const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
     cyaPage.organisationDetailsSection.shouldHaveItems([
-      { key: "What is the Responsible Officer's organisation?", value: 'Probation' },
+      { key: "What is the Responsible Officer's organisation?", value: 'Police' },
       { key: 'Select the Probation region', value: 'Wales' },
       { key: "What is the Responsible Organisation's email address? (optional)", value: 'a@b.com' },
     ])
