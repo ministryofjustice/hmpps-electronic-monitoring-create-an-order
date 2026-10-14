@@ -72,7 +72,7 @@ describe('OrderController', () => {
     it('should indicate when the order has been rejected', async () => {
       const mockOrder = getMockOrder({
         status: 'REJECTED',
-        caseState: 'OPEN',
+        caseState: 'CLOSED',
         statusUpdates: [
           {
             id: randomUUID(),
@@ -311,7 +311,7 @@ describe('OrderController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/summary`)
     })
 
-    it('should use the reject endpoint for a rejected order with unknown case state', async () => {
+    it('should block a rejected order with unknown case state', async () => {
       const orderId = randomUUID()
       const order = getMockOrder({ id: orderId, status: 'REJECTED', caseState: 'UNKNOWN', fmsResultId: randomUUID() })
       const req = createMockRequest({ order, body: { action: 'continue' }, params: { orderId }, flash: jest.fn() })
@@ -319,13 +319,13 @@ describe('OrderController', () => {
 
       await orderController.createVariation(req, res, jest.fn())
 
-      expect(mockOrderService.amendRejectedOrderFromExisting).toHaveBeenCalledWith({
-        orderId,
-        accessToken: 'fakeUserToken',
-      })
+      expect(mockOrderService.amendRejectedOrderFromExisting).not.toHaveBeenCalled()
       expect(mockOrderService.createVariationFromExisting).not.toHaveBeenCalled()
-      expect(req.flash).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/interest-parties/notifying-organisation`)
+      expect(req.flash).toHaveBeenCalledWith(
+        'submissionError',
+        "We can't check the status of this form right now. Try again later.",
+      )
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/summary`)
     })
 
     it('should return to the summary when the backend rejects a stale status', async () => {

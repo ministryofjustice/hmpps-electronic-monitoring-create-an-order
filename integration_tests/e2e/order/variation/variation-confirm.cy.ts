@@ -114,13 +114,22 @@ context('Variation', () => {
       page.makeChangesButton.should('have.attr', 'href', `/order/${mockOriginalId}/edit`).click()
       Page.verifyOnPage(ConfirmVariationPage)
     })
-    ;['OPEN', 'CANCELLED', 'UNKNOWN'].forEach(caseState => {
+    ;['CANCELLED', 'CLOSED', 'RESOLVED'].forEach(caseState => {
       it(`skips the rejection question when changing a returned new order with ${caseState} case state`, () => {
         verifyReturnedOrderAmendmentFlow('REQUEST', caseState)
       })
 
       it(`skips the rejection question when changing a returned change order with ${caseState} case state`, () => {
         verifyReturnedOrderAmendmentFlow('VARIATION', caseState)
+      })
+    })
+    ;['OPEN', 'NEW', 'AWAITING_INFO', 'AWAITING_APPROVAL', 'AWAITING_VALIDATION', 'UNKNOWN'].forEach(caseState => {
+      it(`blocks a rejected order with ${caseState} case state`, () => {
+        stubOrder(caseState, 'REJECTED')
+        const page = Page.visit(OrderTasksPage, { orderId: mockOriginalId })
+
+        page.makeChangesButton.should('be.disabled')
+        page.makeChangesButton.should('not.have.attr', 'href')
       })
     })
 
@@ -157,8 +166,8 @@ context('Variation', () => {
         cy.task('resetFeatureFlags')
       })
 
-      it('uses the returned-order route for an open returned order instead of the service-request journey', () => {
-        verifyReturnedOrderAmendmentFlow('VARIATION', 'OPEN')
+      it('uses the returned-order route for a cancelled returned order instead of the service-request journey', () => {
+        verifyReturnedOrderAmendmentFlow('VARIATION', 'CANCELLED')
       })
 
       it('allows an accepted submitted order through the service-request journey', () => {

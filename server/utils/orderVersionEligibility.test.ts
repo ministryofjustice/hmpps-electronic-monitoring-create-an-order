@@ -54,10 +54,10 @@ describe('order version eligibility', () => {
     expect(isAcceptedOrderForChange(order)).toBe(false)
   })
 
-  it.each([null, randomUUID(), undefined])(
-    'routes a rejected order with unknown case state through the reject flow when its FMS result ID is %s',
-    fmsResultId => {
-      const order = getMockOrder({ status: 'REJECTED', caseState: 'UNKNOWN', fmsResultId })
+  it.each(['CANCELLED', 'CLOSED', 'RESOLVED'] as const)(
+    'allows a rejected order with %s case state through the returned-order route',
+    caseState => {
+      const order = getMockOrder({ status: 'REJECTED', caseState })
 
       expect(canCreateOrderVersion(order)).toBe(true)
       expect(canAmendReturnedOrder(order)).toBe(true)
@@ -66,13 +66,13 @@ describe('order version eligibility', () => {
     },
   )
 
-  it.each(['OPEN', 'NEW', 'AWAITING_INFO', 'AWAITING_APPROVAL'] as const)(
-    'allows a rejected order with %s case state through the returned-order route',
+  it.each(['UNKNOWN', 'OPEN', 'NEW', 'AWAITING_INFO', 'AWAITING_APPROVAL', 'AWAITING_VALIDATION'] as const)(
+    'blocks a rejected order with %s case state',
     caseState => {
-      const order = getMockOrder({ status: 'REJECTED', caseState })
+      const order = getMockOrder({ status: 'REJECTED', caseState, fmsResultId: randomUUID() })
 
-      expect(canCreateOrderVersion(order)).toBe(true)
-      expect(canAmendReturnedOrder(order)).toBe(true)
+      expect(canCreateOrderVersion(order)).toBe(false)
+      expect(canAmendReturnedOrder(order)).toBe(false)
       expect(canUseServiceRequestTypeFlow(order)).toBe(false)
       expect(isAcceptedOrderForChange(order)).toBe(false)
     },

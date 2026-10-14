@@ -161,7 +161,7 @@ const defaultGetOrderOptions = {
 }
 
 const getCaseStateForOrderStatus = (status: string): string => {
-  if (status === 'SUBMITTED') return 'CLOSED'
+  if (status === 'SUBMITTED') return 'AWAITING_VALIDATION'
   if (status === 'REJECTED') return 'CANCELLED'
   return 'UNKNOWN'
 }
@@ -717,20 +717,61 @@ const emptyNextTable = async (client: PostgresqlClient): Promise<boolean> => {
   return true
 }
 
+const databaseConfig = {
+  user: 'postgres',
+  password: 'postgres',
+  host: 'localhost',
+  port: 5432,
+  database: 'postgres',
+}
+
 const resetDB = async () => {
-  const client = new PostgresqlClient({
-    user: 'postgres',
-    password: 'postgres',
-    host: 'localhost',
-    port: 5432,
-    database: 'postgres',
-  })
+  const client = new PostgresqlClient(databaseConfig)
 
   await client.connect()
   await emptyNextTable(client)
   await client.end()
 
   return true
+}
+
+export type ScenarioOrderVersion = {
+  id: string
+  versionId: number
+  status: Order['status']
+  type: Order['type']
+  fmsResultId: string | null
+}
+
+const setScenarioOrderVersion = async (options: { orderId: string; status: Order['status']; type: Order['type'] }) => {
+  const client = new PostgresqlClient(databaseConfig)
+  await client.connect()
+  try {
+    const result = await client.query(
+      `UPDATE order_version SET status = $2, type = $3
+       WHERE order_id = $1 AND version_id = (SELECT MAX(version_id) FROM order_version WHERE order_id = $1)`,
+      [options.orderId, options.status, options.type],
+    )
+    assert.strictEqual(result.rowCount, 1, 'Expected exactly one current order version')
+    return null
+  } finally {
+    await client.end()
+  }
+}
+
+const getScenarioOrderVersions = async (options: { orderId: string }): Promise<ScenarioOrderVersion[]> => {
+  const client = new PostgresqlClient(databaseConfig)
+  await client.connect()
+  try {
+    const result = await client.query<ScenarioOrderVersion>(
+      `SELECT id, version_id AS "versionId", status, type, fms_result_id AS "fmsResultId"
+       FROM order_version WHERE order_id = $1 ORDER BY version_id`,
+      [options.orderId],
+    )
+    return result.rows
+  } finally {
+    await client.end()
+  }
 }
 
 type UpdateOrderOwnerStubOptions = {
@@ -818,5 +859,7 @@ export default {
   stubCemoVerifyRequestReceived,
   stubDeleteOrder: deleteOrder,
   resetDB,
+  setScenarioOrderVersion,
+  getScenarioOrderVersions,
   stubCemoRequest,
 }

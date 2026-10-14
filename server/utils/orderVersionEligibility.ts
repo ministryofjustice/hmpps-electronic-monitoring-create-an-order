@@ -7,7 +7,7 @@ export const isAcceptedOrderForChange = (order: Order): boolean =>
   order.status === 'SUBMITTED' && order.caseState === 'AWAITING_VALIDATION'
 
 export const canAmendReturnedOrder = (order: Order): boolean =>
-  order.status === 'REJECTED' ||
+  (order.status === 'REJECTED' && ['CANCELLED', 'CLOSED', 'RESOLVED'].includes(order.caseState)) ||
   (order.status === 'SUBMITTED' && ['CANCELLED', 'CLOSED', 'RESOLVED'].includes(order.caseState))
 
 export const canUseServiceRequestTypeFlow = (order: Order): boolean =>

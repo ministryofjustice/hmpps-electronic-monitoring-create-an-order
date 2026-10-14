@@ -8,7 +8,7 @@ type ApiOrder = Omit<Order, 'deviceWearer'> & {
 }
 
 const getCaseState = (status: Order['status']): Order['caseState'] => {
-  if (status === 'SUBMITTED') return 'CLOSED'
+  if (status === 'SUBMITTED') return 'AWAITING_VALIDATION'
   if (status === 'REJECTED') return 'CANCELLED'
   return 'UNKNOWN'
 }
