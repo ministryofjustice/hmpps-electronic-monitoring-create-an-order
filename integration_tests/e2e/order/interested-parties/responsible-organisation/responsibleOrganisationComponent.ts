@@ -10,6 +10,7 @@ export type ResponsibleOrganisationFormData = {
   probationRegion?: string
   policeArea?: string
   yjsRegion?: string
+  policeForceEmailAddress?: string
 }
 
 export default class ResponsibleOrganisationComponent extends FormComponent {
@@ -72,9 +73,16 @@ export default class ResponsibleOrganisationComponent extends FormComponent {
   }
 
   fillInWith(profile: ResponsibleOrganisationFormData) {
-    if (profile.responsibleOrganisation) {
-      this.responsibleOrganisationField.set(profile.responsibleOrganisation)
+    if (profile.policeArea) {
+      this.policeAreaField.set(profile.policeArea)
     }
+    if (profile.policeForceEmailAddress) {
+      this.policeForceEmailAddressField.set(profile.policeForceEmailAddress)
+    }
+    if (profile.responsibleOrganisationEmailAddress)
+      if (profile.responsibleOrganisation) {
+        this.responsibleOrganisationField.set(profile.responsibleOrganisation)
+      }
 
     if (profile.responsibleOrganisationEmailAddress) {
       this.responsibleOrganisationEmailAddressField.set(profile.responsibleOrganisationEmailAddress)

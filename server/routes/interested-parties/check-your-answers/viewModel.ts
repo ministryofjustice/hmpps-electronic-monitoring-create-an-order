@@ -97,7 +97,9 @@ const createInterestedPartiesAnswers = (order: Order, content: I18n, answerOpts:
       ),
       ...getResponsibleOrganisationRegionAnswer(order, content, resOrgUri, answerOpts),
       createAnswer(
-        responsibleOrganisationQuestions.responsibleOrganisationEmail.text,
+        order.interestedParties?.responsibleOrganisation === 'POLICE'
+          ? responsibleOrganisationQuestions.courtPoliceEmail.text
+          : responsibleOrganisationQuestions.responsibleOrganisationEmail.text,
         order.interestedParties?.responsibleOrganisationEmail,
         resOrgUri,
         answerOpts,
