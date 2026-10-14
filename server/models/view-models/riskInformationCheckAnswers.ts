@@ -100,7 +100,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
 
   if (possibleRisks.includes('RISK_TO_GENDER') && genderRiskDetailsFromOrder) {
     riskAnswers.push(
-      createAnswer(questions.genderRiskDetails.text, genderRiskDetailsFromOrder, riskDetailsUri, answerOpts),
+      createAnswer(questions.genderRiskDetails.text, genderRiskDetailsFromOrder, possibleRiskUri, answerOpts),
     )
   }
 
