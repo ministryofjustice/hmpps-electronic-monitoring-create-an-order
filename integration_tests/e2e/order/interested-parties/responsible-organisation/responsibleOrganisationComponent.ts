@@ -73,16 +73,9 @@ export default class ResponsibleOrganisationComponent extends FormComponent {
   }
 
   fillInWith(profile: ResponsibleOrganisationFormData) {
-    if (profile.policeArea) {
-      this.policeAreaField.set(profile.policeArea)
+    if (profile.responsibleOrganisation) {
+      this.responsibleOrganisationField.set(profile.responsibleOrganisation)
     }
-    if (profile.policeForceEmailAddress) {
-      this.policeForceEmailAddressField.set(profile.policeForceEmailAddress)
-    }
-    if (profile.responsibleOrganisationEmailAddress)
-      if (profile.responsibleOrganisation) {
-        this.responsibleOrganisationField.set(profile.responsibleOrganisation)
-      }
 
     if (profile.responsibleOrganisationEmailAddress) {
       this.responsibleOrganisationEmailAddressField.set(profile.responsibleOrganisationEmailAddress)
@@ -98,6 +91,12 @@ export default class ResponsibleOrganisationComponent extends FormComponent {
 
     if (profile.yjsRegion) {
       this.yjsRegionField.set(profile.yjsRegion)
+    }
+    if (profile.policeArea) {
+      this.policeAreaField.set(profile.policeArea)
+    }
+    if (profile.policeForceEmailAddress) {
+      this.policeForceEmailAddressField.set(profile.policeForceEmailAddress)
     }
   }
 }
