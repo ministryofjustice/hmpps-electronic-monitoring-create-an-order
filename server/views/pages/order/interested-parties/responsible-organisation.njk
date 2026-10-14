@@ -105,7 +105,16 @@
   {% if courtCohort %}
     <input type="hidden" name="responsibleOrganisation" value="POLICE">
 
-    {{ policeAreaHtml | safe | trim }}
+     {{ accessibleAutocomplete({
+    id: "policeArea",
+    name: "policeArea",
+    label: questions.police.text,
+    labelClasses: "govuk-label--s",
+    options: content.reference.policeAreas | toOptions(false, true),
+    value: responsibleOrganisationRegion.value,
+    errorMessage: responsibleOrganisationRegion.error,
+    nonce: cspNonce
+  }) }}
 
     {{ govukInput({
       label: {
