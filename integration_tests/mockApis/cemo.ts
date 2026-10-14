@@ -741,16 +741,24 @@ export type ScenarioOrderVersion = {
   status: Order['status']
   type: Order['type']
   fmsResultId: string | null
+  caseState: Order['caseState'] | null
 }
 
-const setScenarioOrderVersion = async (options: { orderId: string; status: Order['status']; type: Order['type'] }) => {
+/* doing this to modify orderversion row with new case status fields, order status in order to
+ set an order into eligible return flow sate via lifecycle */
+const setScenarioOrderVersion = async (options: {
+  orderId: string
+  status: Order['status']
+  type: Order['type']
+  caseState?: Order['caseState']
+}) => {
   const client = new PostgresqlClient(databaseConfig)
   await client.connect()
   try {
     const result = await client.query(
-      `UPDATE order_version SET status = $2, type = $3
+      `UPDATE order_version SET status = $2, type = $3, fms_case_state = COALESCE($4, fms_case_state)
        WHERE order_id = $1 AND version_id = (SELECT MAX(version_id) FROM order_version WHERE order_id = $1)`,
-      [options.orderId, options.status, options.type],
+      [options.orderId, options.status, options.type, options.caseState ?? null],
     )
     assert.strictEqual(result.rowCount, 1, 'Expected exactly one current order version')
     return null
@@ -764,7 +772,8 @@ const getScenarioOrderVersions = async (options: { orderId: string }): Promise<S
   await client.connect()
   try {
     const result = await client.query<ScenarioOrderVersion>(
-      `SELECT id, version_id AS "versionId", status, type, fms_result_id AS "fmsResultId"
+      `SELECT id, version_id AS "versionId", status, type, fms_result_id AS "fmsResultId",
+              fms_case_state AS "caseState"
        FROM order_version WHERE order_id = $1 ORDER BY version_id`,
       [options.orderId],
     )

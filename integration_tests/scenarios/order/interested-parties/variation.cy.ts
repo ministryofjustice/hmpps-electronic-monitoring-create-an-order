@@ -2,10 +2,10 @@ import { v4 as uuidv4 } from 'uuid'
 import fillInNewOrder from '../../../utils/scenario-flows/fillInNewOrder.cy'
 import { stubAttachments } from '../../utils'
 import Page from '../../../pages/page'
+import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import ConfirmVariationPage from '../../../pages/order/variation/confirmVariation'
 import InterestedPartiesCheckYourAnswersPage from '../../../e2e/order/interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
-import IndexPage from '../../../pages/index'
 import NotifyingOrganisationPage from '../../../e2e/order/interested-parties/notifying-organisation/notifyingOrganisationPage'
 import type { ScenarioOrderVersion } from '../../../mockApis/cemo'
 
@@ -77,7 +77,7 @@ context('Interested parties flow', () => {
   })
   ;(['REQUEST', 'VARIATION'] as const).forEach(sourceType => {
     ;[false, true].forEach(rejectedMarker => {
-      it(`preserves ${sourceType} for a returned order with ${rejectedMarker ? 'a historical REJECTED marker' : 'UNKNOWN case state'}`, () => {
+      it(`preserves ${sourceType} for a returned order with ${rejectedMarker ? 'a historical REJECTED marker' : 'CANCELLED case state'}`, () => {
         cy.task('setFeatureFlags', { SERVICE_REQUEST_TYPE_ENABLED: false })
         cy.signIn()
         Page.verifyOnPage(IndexPage).newOrderFormButton.click()
@@ -89,6 +89,7 @@ context('Interested parties flow', () => {
             orderId,
             status: rejectedMarker ? 'SUBMITTED' : 'REJECTED',
             type: sourceType,
+            ...(!rejectedMarker ? { caseState: 'CANCELLED' } : {}),
           })
 
           if (rejectedMarker) {
@@ -96,7 +97,12 @@ context('Interested parties flow', () => {
             Page.verifyOnPage(OrderSummaryPage).makeChanges()
             Page.verifyOnPage(ConfirmVariationPage).confirm()
             Page.verifyOnPage(OrderSummaryPage)
-            cy.task('setScenarioOrderVersion', { orderId, status: 'REJECTED', type: 'REJECTED' })
+            cy.task('setScenarioOrderVersion', {
+              orderId,
+              status: 'REJECTED',
+              type: 'REJECTED',
+              caseState: 'CANCELLED',
+            })
           }
 
           cy.task('setFeatureFlags', { SERVICE_REQUEST_TYPE_ENABLED: rejectedMarker })
@@ -104,6 +110,7 @@ context('Interested parties flow', () => {
             const rejectedVersion = versionsBefore[versionsBefore.length - 1]
             expect(rejectedVersion.status).to.equal('REJECTED')
             expect(rejectedVersion.type).to.equal(rejectedMarker ? 'REJECTED' : sourceType)
+            expect(rejectedVersion.caseState).to.equal('CANCELLED')
 
             cy.visit(`/order/${orderId}/summary`)
             Page.verifyOnPage(OrderSummaryPage).makeChanges()
