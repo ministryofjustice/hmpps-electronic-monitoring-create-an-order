@@ -84,7 +84,7 @@ context('order type', () => {
       cy.signIn()
     })
 
-    it('shows the police force content and defaults the organisation to police', () => {
+    it('shows error when police force area is not populated', () => {
       const page = Page.visit(ResponsibleOrganisationPage, { orderId: mockOrderId })
 
       page.form.continueButton.click()

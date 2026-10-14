@@ -55,7 +55,7 @@ context('Responsible organisation page', () => {
       cy.signIn()
     })
 
-    it('shows the police force content and defaults the organisation to police', () => {
+    it('shows the police force content', () => {
       const page = Page.visit(ResponsibleOrganisationPage, { orderId: mockOrderId })
 
       page.form.policeAreaField.shouldHaveAllOptions()

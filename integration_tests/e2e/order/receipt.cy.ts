@@ -348,7 +348,7 @@ context('Receipt', () => {
         { key: "What is the Responsible Officer's email address?", value: 'officer@email' },
         { key: "What is the Responsible Officer's organisation?", value: 'Police' },
         { key: 'What is the name of the Police force area?', value: 'Cheshire' },
-        { key: "What is the Responsible Organisation's email address? (optional)", value: 'responsible@organisation' },
+        { key: 'What is the Police force email address? (optional)', value: 'responsible@organisation' },
       ])
     })
 
