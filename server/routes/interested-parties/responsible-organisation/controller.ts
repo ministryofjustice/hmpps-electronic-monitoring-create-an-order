@@ -46,7 +46,7 @@ export default class ResponsibleOrganisationController extends InterestedParties
       }
     }
 
-    const validationResult = ResponsibleOrganisationValidator.safeParse(formData)
+    const validationResult = ResponsibleOrganisationValidator(cohort).safeParse(formData)
 
     if (!validationResult.success) {
       req.flash('formData', formData)
