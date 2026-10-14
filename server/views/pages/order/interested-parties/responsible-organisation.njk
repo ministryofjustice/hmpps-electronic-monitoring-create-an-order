@@ -7,7 +7,7 @@
 
 {% set section = content.pages.responsibleOrganisation.section %}
 {% set courtCohort = cohort == 'COURT' %}
-{% set heading = content.pages.responsibleOrganisation.title if not courtCohort else 'Responsible Police force' %}
+{% set heading = content.pages.responsibleOrganisation.title %}
 {% set legend = content.pages.responsibleOrganisation.legend %}
 {% set helpText = content.pages.responsibleOrganisation.helpText if not courtCohort else '' %}
 {% set questions = content.pages.responsibleOrganisation.questions %}
