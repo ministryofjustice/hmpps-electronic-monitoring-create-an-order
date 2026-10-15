@@ -160,14 +160,21 @@ const defaultGetOrderOptions = {
   type: 'REQUEST',
 }
 
-const getCaseStateForOrderStatus = (status: string): string => {
-  if (status === 'SUBMITTED') return 'AWAITING_VALIDATION'
-  if (status === 'REJECTED') return 'CANCELLED'
-  return 'UNKNOWN'
-}
-
 const getOrder = (options: GetOrderStubOptions = defaultGetOrderOptions): SuperAgentRequest => {
   const stubOptions = { ...defaultGetOrderOptions, ...options }
+  const order = mockApiOrder()
+  const statusUpdates =
+    stubOptions.status === 'SUBMITTED'
+      ? [
+          {
+            id: uuidv4(),
+            versionId: order.versionId,
+            status: 'ACCEPTED',
+            datetimeOfStatusChange: '2025-01-01T12:00:00.000Z',
+            statusUpdateReasons: [],
+          },
+        ]
+      : []
 
   return stubFor({
     request: {
@@ -180,10 +187,11 @@ const getOrder = (options: GetOrderStubOptions = defaultGetOrderOptions): SuperA
       jsonBody:
         stubOptions.httpStatus === 200
           ? {
-              ...mockApiOrder(),
+              ...order,
               id: stubOptions.id,
               status: stubOptions.status,
-              caseState: getCaseStateForOrderStatus(stubOptions.status),
+              canAmend: stubOptions.status === 'SUBMITTED' || stubOptions.status === 'REJECTED',
+              statusUpdates,
               type: stubOptions.type,
               ...(stubOptions.order ? stubOptions.order : {}),
             }
@@ -380,37 +388,6 @@ const deleteOrder = (options: DeleteOrderStubOptions) =>
         options.httpStatus === 200
           ? {}
           : { status: options.httpStatus, userMessage: options.error, developerMessage: '' },
-    },
-  })
-
-type CreateVariationStubOptions = {
-  httpStatus: number
-  originalId: string
-  variationId: string
-}
-
-const defaultCreateVariationOptions = {
-  httpStatus: 200,
-  originalId: uuidv4(),
-  variationId: uuidv4(),
-}
-const createVariation = (options: CreateVariationStubOptions = defaultCreateVariationOptions): SuperAgentRequest =>
-  stubFor({
-    request: {
-      method: 'POST',
-      urlPattern: `/cemo/api/orders/${options.originalId}/copy-as-variation`,
-    },
-    response: {
-      status: options.httpStatus,
-      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-      jsonBody:
-        options.httpStatus === 200
-          ? {
-              ...mockApiOrder(),
-              type: 'VARIATION',
-              id: options.variationId,
-            }
-          : null,
     },
   })
 
@@ -741,24 +718,16 @@ export type ScenarioOrderVersion = {
   status: Order['status']
   type: Order['type']
   fmsResultId: string | null
-  caseState: Order['caseState'] | null
 }
 
-/* doing this to modify orderversion row with new case status fields, order status in order to
- set an order into eligible return flow sate via lifecycle */
-const setScenarioOrderVersion = async (options: {
-  orderId: string
-  status: Order['status']
-  type: Order['type']
-  caseState?: Order['caseState']
-}) => {
+const setScenarioOrderVersion = async (options: { orderId: string; status: Order['status']; type: Order['type'] }) => {
   const client = new PostgresqlClient(databaseConfig)
   await client.connect()
   try {
     const result = await client.query(
-      `UPDATE order_version SET status = $2, type = $3, fms_case_state = COALESCE($4, fms_case_state)
+      `UPDATE order_version SET status = $2, type = $3
        WHERE order_id = $1 AND version_id = (SELECT MAX(version_id) FROM order_version WHERE order_id = $1)`,
-      [options.orderId, options.status, options.type, options.caseState ?? null],
+      [options.orderId, options.status, options.type],
     )
     assert.strictEqual(result.rowCount, 1, 'Expected exactly one current order version')
     return null
@@ -772,8 +741,7 @@ const getScenarioOrderVersions = async (options: { orderId: string }): Promise<S
   await client.connect()
   try {
     const result = await client.query<ScenarioOrderVersion>(
-      `SELECT id, version_id AS "versionId", status, type, fms_result_id AS "fmsResultId",
-              fms_case_state AS "caseState"
+      `SELECT id, version_id AS "versionId", status, type, fms_result_id AS "fmsResultId"
        FROM order_version WHERE order_id = $1 ORDER BY version_id`,
       [options.orderId],
     )
@@ -846,7 +814,6 @@ const setSentencingAct = (options: SetSentencingActStubOptions = defaultSetSente
 
 export default {
   stubCemoCreateOrder: createOrder,
-  stubCemoCreateVariation: createVariation,
   stubCemoGetOrder: getOrder,
   stubCemoGetVersion: getSpecificVersion,
   stubCemoPing: ping,

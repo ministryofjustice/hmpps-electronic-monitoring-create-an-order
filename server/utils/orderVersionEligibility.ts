@@ -1,33 +1,37 @@
-import { Order } from '../models/Order'
+import { Order, OrderAmendmentAction } from '../models/Order'
+import { StatusUpdate } from '../models/StatusUpdate'
 
 export const ORDER_CHANGE_STATUS_CHANGED_MESSAGE =
   'The status of this form has changed. Check its current status before making changes.'
 
-export const isAcceptedOrderForChange = (order: Order): boolean =>
-  order.status === 'SUBMITTED' && order.caseState === 'AWAITING_VALIDATION'
+const getLatestCurrentVersionStatusUpdate = (order: Order): StatusUpdate | undefined =>
+  order.statusUpdates
+    ?.filter(statusUpdate => statusUpdate.versionId === order.versionId)
+    .reduce<StatusUpdate | undefined>((latest, statusUpdate) => {
+      if (!latest || Date.parse(statusUpdate.datetimeOfStatusChange) > Date.parse(latest.datetimeOfStatusChange)) {
+        return statusUpdate
+      }
+      return latest
+    }, undefined)
 
-export const canAmendReturnedOrder = (order: Order): boolean =>
-  (order.status === 'REJECTED' && ['CANCELLED', 'CLOSED', 'RESOLVED'].includes(order.caseState)) ||
-  (order.status === 'SUBMITTED' && ['CANCELLED', 'CLOSED', 'RESOLVED'].includes(order.caseState))
+export const getOrderAmendmentAction = (order: Order): OrderAmendmentAction | undefined => {
+  if (!order.canAmend) return undefined
+  if (order.status === 'REJECTED') return 'AMEND_REJECTED_ORDER'
+  if (order.status !== 'SUBMITTED') return undefined
+
+  const latestStatus = getLatestCurrentVersionStatusUpdate(order)?.status
+  if (latestStatus === 'ACCEPTED') return 'COPY_AS_VARIATION'
+  if (latestStatus === 'REJECTED') return 'AMEND_REJECTED_ORDER'
+  return undefined
+}
+
+export const isAcceptedOrderForChange = (order: Order): boolean =>
+  getOrderAmendmentAction(order) === 'COPY_AS_VARIATION'
 
 export const canUseServiceRequestTypeFlow = (order: Order): boolean =>
-  order.status === 'IN_PROGRESS' ||
-  isAcceptedOrderForChange(order) ||
-  (order.status === 'SUBMITTED' && order.caseState === 'UNKNOWN')
+  order.status === 'IN_PROGRESS' || isAcceptedOrderForChange(order)
 
-export const canCreateOrderVersion = (order: Order): boolean =>
-  isAcceptedOrderForChange(order) ||
-  canAmendReturnedOrder(order) ||
-  (order.status === 'SUBMITTED' && order.caseState === 'UNKNOWN')
+export const canCreateOrderVersion = (order: Order): boolean => getOrderAmendmentAction(order) !== undefined
 
-export const getOrderChangeBlockedMessage = (order: Order): string => {
-  if (order.caseState === 'UNKNOWN') {
-    return "We can't check the status of this form right now. Try again later."
-  }
-
-  if (['NEW', 'OPEN', 'AWAITING_INFO', 'AWAITING_APPROVAL'].includes(order.caseState)) {
-    return 'This form is still being processed. You can make changes once it has been accepted or returned.'
-  }
-
-  return 'You cannot make changes to this form at this time.'
-}
+export const getOrderChangeBlockedMessage = (): string =>
+  "We can't check the status of this form right now. Try again later."

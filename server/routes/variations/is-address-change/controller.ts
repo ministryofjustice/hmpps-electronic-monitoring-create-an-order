@@ -19,7 +19,7 @@ export default class IsAddressChangeController extends YesNoQuestionPageControll
 
   view: RequestHandler = async (req: Request, res: Response) => {
     if (req.order && !canUseServiceRequestTypeFlow(req.order)) {
-      req.flash('submissionError', getOrderChangeBlockedMessage(req.order))
+      req.flash('submissionError', getOrderChangeBlockedMessage())
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', req.order.id))
       return
     }
@@ -36,7 +36,7 @@ export default class IsAddressChangeController extends YesNoQuestionPageControll
 
   update: RequestHandler = async (req: Request, res: Response) => {
     if (req.order && !canUseServiceRequestTypeFlow(req.order)) {
-      req.flash('submissionError', getOrderChangeBlockedMessage(req.order))
+      req.flash('submissionError', getOrderChangeBlockedMessage())
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', req.order.id))
       return
     }

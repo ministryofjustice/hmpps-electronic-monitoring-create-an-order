@@ -19,7 +19,7 @@ export default class ServiceRequestTypeController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     if (req.order && !canUseServiceRequestTypeFlow(req.order)) {
-      req.flash('submissionError', getOrderChangeBlockedMessage(req.order))
+      req.flash('submissionError', getOrderChangeBlockedMessage())
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', req.order.id))
       return
     }
@@ -34,7 +34,7 @@ export default class ServiceRequestTypeController {
   update: RequestHandler = async (req: Request, res: Response) => {
     const { order } = req
     if (order && !canUseServiceRequestTypeFlow(order)) {
-      req.flash('submissionError', getOrderChangeBlockedMessage(order))
+      req.flash('submissionError', getOrderChangeBlockedMessage())
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
       return
     }

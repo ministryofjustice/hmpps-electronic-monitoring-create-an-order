@@ -9,8 +9,8 @@ import TimelineModel from '../models/view-models/timelineModel'
 import SectionService from '../services/sectionsService'
 import { SanitisedError } from '../sanitisedError'
 import {
-  canAmendReturnedOrder,
   canCreateOrderVersion,
+  getOrderAmendmentAction,
   getOrderChangeBlockedMessage,
   ORDER_CHANGE_STATUS_CHANGED_MESSAGE,
 } from '../utils/orderVersionEligibility'
@@ -36,28 +36,30 @@ export default class OrderController {
     const { action } = req.body
     const orderId = req.params.orderId as string
     const order = req.order!
+    const amendmentAction = getOrderAmendmentAction(order)
 
     if (action === 'continue') {
-      if (!canCreateOrderVersion(order)) {
-        req.flash('submissionError', getOrderChangeBlockedMessage(order))
+      if (!amendmentAction) {
+        req.flash('submissionError', getOrderChangeBlockedMessage())
         res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
         return
       }
 
       try {
-        if (canAmendReturnedOrder(order)) {
-          await this.orderService.amendRejectedOrderFromExisting({
-            orderId,
-            accessToken: res.locals.user.token,
-          })
-          res.redirect(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', orderId))
-        } else if (FeatureFlags.getInstance().get('SERVICE_REQUEST_TYPE_ENABLED')) {
+        if (amendmentAction === 'COPY_AS_VARIATION' && FeatureFlags.getInstance().get('SERVICE_REQUEST_TYPE_ENABLED')) {
           res.redirect(paths.ORDER.IS_ADDRESS_CHANGE.replace(':orderId', orderId))
+          return
+        }
+
+        await this.orderService.amendOrder({
+          orderId,
+          accessToken: res.locals.user.token,
+          action: amendmentAction,
+        })
+
+        if (amendmentAction === 'AMEND_REJECTED_ORDER') {
+          res.redirect(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', orderId))
         } else {
-          await this.orderService.createVariationFromExisting({
-            orderId,
-            accessToken: res.locals.user.token,
-          })
           res.redirect(`/order/${orderId}/summary`)
         }
       } catch (error) {
@@ -105,7 +107,7 @@ export default class OrderController {
       isVariationType: isVariationType(order.type),
       isOrderRejected: order.status === 'REJECTED',
       canCreateOrderVersion: canCreateOrderVersion(order),
-      orderChangeBlockedMessage: getOrderChangeBlockedMessage(order),
+      orderChangeBlockedMessage: getOrderChangeBlockedMessage(),
       returnReasonsUrl: paths.ORDER.RETURN_REASONS.replace(':orderId', order.id),
     })
   }

@@ -1,7 +1,7 @@
 import z from 'zod'
 import StatusUpdateReasonModel from './StatusUpdateReason'
 
-export const StatusUpdateStatusEnum = z.enum(['REJECTED'])
+export const StatusUpdateStatusEnum = z.enum(['ACCEPTED', 'REJECTED'])
 
 const StatusUpdateModel = z.object({
   id: z.string().uuid(),

@@ -2,7 +2,6 @@ import { v4 as uuidv4 } from 'uuid'
 import fillInNewOrder from '../../../utils/scenario-flows/fillInNewOrder.cy'
 import { stubAttachments } from '../../utils'
 import Page from '../../../pages/page'
-import IndexPage from '../../../pages/index'
 import OrderSummaryPage from '../../../pages/order/summary'
 import ConfirmVariationPage from '../../../pages/order/variation/confirmVariation'
 import InterestedPartiesCheckYourAnswersPage from '../../../e2e/order/interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
@@ -48,6 +47,12 @@ context('Interested parties flow', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
+    cy.task('stubFMSGetCaseState', {
+      httpStatus: 200,
+      caseId: fmsCaseId,
+      state: '11',
+    })
+
     stubAttachments(files, fmsCaseId, hmppsDocumentId, true)
   })
 
@@ -75,13 +80,47 @@ context('Interested parties flow', () => {
       { key: "What is the Responsible Officer's organisation?", value: '' },
     ])
   })
+
+  it('amends a submitted request with a rejected FMS outcome', () => {
+    cy.task('stubFMSGetCaseState', {
+      httpStatus: 200,
+      caseId: fmsCaseId,
+      state: '7',
+    })
+    cy.task('setFeatureFlags', { SERVICE_REQUEST_TYPE_ENABLED: true })
+    cy.signIn()
+    fillInNewOrder({ files, newDeviceWearerFlow: true })
+
+    cy.location('pathname').then(pathname => {
+      const orderId = pathname.split('/')[2]
+
+      cy.task<ScenarioOrderVersion[]>('getScenarioOrderVersions', { orderId }).then(versionsBefore => {
+        expect(versionsBefore).to.have.length(1)
+        expect(versionsBefore[0].status).to.equal('SUBMITTED')
+        expect(versionsBefore[0].type).to.equal('REQUEST')
+        expect(versionsBefore[0].fmsResultId).not.to.equal(null)
+
+        cy.visit(`/order/${orderId}/summary`)
+        Page.verifyOnPage(OrderSummaryPage).makeChanges()
+        Page.verifyOnPage(ConfirmVariationPage).confirm()
+        Page.verifyOnPage(NotifyingOrganisationPage)
+
+        cy.task<ScenarioOrderVersion[]>('getScenarioOrderVersions', { orderId }).then(versionsAfter => {
+          expect(versionsAfter).to.have.length(versionsBefore.length + 1)
+          expect(versionsAfter[0]).to.deep.equal(versionsBefore[0])
+          const replacement = versionsAfter[versionsAfter.length - 1]
+          expect(replacement.type).to.equal('AMEND_ORIGINAL_REQUEST')
+          expect(replacement.status).to.equal('IN_PROGRESS')
+        })
+      })
+    })
+  })
   ;(['REQUEST', 'VARIATION'] as const).forEach(sourceType => {
     ;[false, true].forEach(rejectedMarker => {
-      it(`preserves ${sourceType} for a returned order with ${rejectedMarker ? 'a historical REJECTED marker' : 'CANCELLED case state'}`, () => {
+      it(`uses the correct replacement family for a ${sourceType} returned order with ${rejectedMarker ? 'a historical REJECTED marker' : 'REJECTED lifecycle status'}`, () => {
         cy.task('setFeatureFlags', { SERVICE_REQUEST_TYPE_ENABLED: false })
         cy.signIn()
-        Page.verifyOnPage(IndexPage).newOrderFormButton.click()
-        Page.verifyOnPage(NotifyingOrganisationPage)
+        fillInNewOrder({ files, newDeviceWearerFlow: true })
 
         cy.location('pathname').then(pathname => {
           const orderId = pathname.split('/')[2]
@@ -89,7 +128,6 @@ context('Interested parties flow', () => {
             orderId,
             status: rejectedMarker ? 'SUBMITTED' : 'REJECTED',
             type: sourceType,
-            ...(!rejectedMarker ? { caseState: 'CANCELLED' } : {}),
           })
 
           if (rejectedMarker) {
@@ -101,7 +139,6 @@ context('Interested parties flow', () => {
               orderId,
               status: 'REJECTED',
               type: 'REJECTED',
-              caseState: 'CANCELLED',
             })
           }
 
@@ -110,7 +147,7 @@ context('Interested parties flow', () => {
             const rejectedVersion = versionsBefore[versionsBefore.length - 1]
             expect(rejectedVersion.status).to.equal('REJECTED')
             expect(rejectedVersion.type).to.equal(rejectedMarker ? 'REJECTED' : sourceType)
-            expect(rejectedVersion.caseState).to.equal('CANCELLED')
+            expect(versionsBefore[0].fmsResultId).not.to.equal(null)
 
             cy.visit(`/order/${orderId}/summary`)
             Page.verifyOnPage(OrderSummaryPage).makeChanges()
@@ -124,7 +161,8 @@ context('Interested parties flow', () => {
               expect(replacement.id).not.to.equal(rejectedVersion.id)
               expect(replacement.versionId).to.equal(rejectedVersion.versionId + 1)
               expect(replacement.status).to.equal('IN_PROGRESS')
-              expect(replacement.type).to.equal(sourceType)
+              const expectedType = sourceType === 'VARIATION' ? 'VARIATION' : 'AMEND_ORIGINAL_REQUEST'
+              expect(replacement.type).to.equal(expectedType)
               expect(replacement.fmsResultId).to.equal(null)
             })
           })

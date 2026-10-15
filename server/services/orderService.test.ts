@@ -137,58 +137,44 @@ describe('Order Service', () => {
     })
   })
 
-  describe('createVariationFromExisting', () => {
+  describe('amendOrder', () => {
     const mockAccessToken = 'ABC'
     const mockOrderId = '123456'
 
-    it('should post a "create variation from existing order" request to the api', async () => {
-      mockRestClient.post.mockResolvedValue(mockApiResponse)
+    it.each(['AMEND_REJECTED_ORDER', 'COPY_AS_VARIATION'] as const)(
+      'should post the %s action to the merged amendment endpoint',
+      async action => {
+        mockRestClient.post.mockResolvedValue(mockApiResponse)
 
-      const orderService = new OrderService(mockRestClient)
-      await orderService.createVariationFromExisting({
-        accessToken: mockAccessToken,
-        orderId: mockOrderId,
-      })
+        const orderService = new OrderService(mockRestClient)
+        await orderService.amendOrder({
+          accessToken: mockAccessToken,
+          orderId: mockOrderId,
+          action,
+        })
 
-      expect(mockRestClient.post).toHaveBeenCalledWith({
-        path: `/api/orders/${mockOrderId}/copy-as-variation`,
-        token: mockAccessToken,
-      })
-    })
+        expect(mockRestClient.post).toHaveBeenCalledWith({
+          path: `/api/orders/${mockOrderId}/amend`,
+          token: mockAccessToken,
+          data: { action },
+        })
+      },
+    )
 
     it('should propagate errors from the api', async () => {
       mockRestClient.post.mockRejectedValue(mock404Error)
 
       try {
         const orderService = new OrderService(mockRestClient)
-        await orderService.createVariationFromExisting({
+        await orderService.amendOrder({
           accessToken: mockAccessToken,
           orderId: mockOrderId,
+          action: 'COPY_AS_VARIATION',
         })
       } catch (e) {
         expect((e as SanitisedError).status).toEqual(404)
         expect((e as SanitisedError).message).toEqual('Not Found')
       }
-    })
-  })
-
-  describe('amendRejectedOrderFromExisting', () => {
-    const mockAccessToken = 'ABC'
-    const mockOrderId = '123456'
-
-    it('should post an amend rejected order request to the api', async () => {
-      mockRestClient.post.mockResolvedValue(mockApiResponse)
-
-      const orderService = new OrderService(mockRestClient)
-      await orderService.amendRejectedOrderFromExisting({
-        accessToken: mockAccessToken,
-        orderId: mockOrderId,
-      })
-
-      expect(mockRestClient.post).toHaveBeenCalledWith({
-        path: `/api/orders/${mockOrderId}/amend-rejected-order`,
-        token: mockAccessToken,
-      })
     })
   })
 

@@ -27,17 +27,7 @@ import OffenceAdditionalDetailsModel from './OffenceOtherInfo'
 import StatusUpdateModel from './StatusUpdate'
 
 export const OrderStatusEnum = z.enum(['IN_PROGRESS', 'ERROR', 'SUBMITTED', 'REJECTED'])
-export const CaseStateEnum = z.enum([
-  'NEW',
-  'CLOSED',
-  'RESOLVED',
-  'CANCELLED',
-  'OPEN',
-  'AWAITING_INFO',
-  'AWAITING_VALIDATION',
-  'AWAITING_APPROVAL',
-  'UNKNOWN',
-])
+export const OrderAmendmentActionEnum = z.enum(['AMEND_REJECTED_ORDER', 'COPY_AS_VARIATION'])
 export const VariationTypesEnum = z.enum([
   'VARIATION',
   'REINSTALL_AT_DIFFERENT_ADDRESS',
@@ -51,7 +41,7 @@ export const DataDictionaryVersionEnum = z.enum(['DDV4', 'DDV5', 'DDV6', 'DDV7']
 const OrderModel = z.object({
   id: z.string().uuid(),
   status: OrderStatusEnum,
-  caseState: CaseStateEnum.optional().default('UNKNOWN'),
+  canAmend: z.boolean().default(false),
   fmsResultId: z.string().uuid().nullable().optional(),
   type: OrderTypeEnum,
   deviceWearer: DeviceWearerModel,
@@ -93,6 +83,7 @@ const OrderModel = z.object({
 
 export type Order = z.infer<typeof OrderModel>
 export type OrderStatus = z.infer<typeof OrderStatusEnum>
+export type OrderAmendmentAction = z.infer<typeof OrderAmendmentActionEnum>
 export type DataDictionaryVersion = z.infer<typeof DataDictionaryVersionEnum>
 export type OrderType = z.infer<typeof OrderTypeEnum>
 export default OrderModel
