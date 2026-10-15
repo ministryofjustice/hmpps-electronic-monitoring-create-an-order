@@ -1,7 +1,12 @@
 import { Order } from '../models/Order'
 import paths from '../constants/paths'
 import { AddressType } from '../models/Address'
-import { convertBooleanToEnum, isNotNullOrEmptyString, isNotNullOrUndefined } from '../utils/utils'
+import {
+  convertBooleanToEnum,
+  hasOptionalVariationSectionIsHOCourt,
+  isNotNullOrEmptyString,
+  isNotNullOrUndefined,
+} from '../utils/utils'
 import AttachmentType from '../models/AttachmentType'
 import FeatureFlags from '../utils/featureFlags'
 import isVariationType from '../utils/isVariationType'
@@ -186,7 +191,7 @@ const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCoho
         section: SECTIONS.additionalDocuments,
         name: PAGES.haveCourtOrder,
         path: paths.ATTACHMENT.HAVE_COURT_ORDER,
-        state: STATES.required,
+        state: hasOptionalVariationSectionIsHOCourt(order) ? 'OPTIONAL' : 'REQUIRED',
         completed: isNotNullOrUndefined(order.orderParameters?.haveCourtOrder),
       },
       {
@@ -208,7 +213,7 @@ const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCoho
       section: SECTIONS.additionalDocuments,
       name: PAGES.licenceUpload,
       path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'licence'),
-      state: STATES.required,
+      state: hasOptionalVariationSectionIsHOCourt(order) ? 'OPTIONAL' : 'REQUIRED',
       completed: doesOrderHaveDocument(order, AttachmentType.LICENCE),
     })
   }
@@ -218,7 +223,7 @@ const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCoho
       section: SECTIONS.additionalDocuments,
       name: PAGES.havePhoto,
       path: paths.ATTACHMENT.HAVE_PHOTO,
-      state: STATES.required,
+      state: hasOptionalVariationSectionIsHOCourt(order) ? 'OPTIONAL' : 'REQUIRED',
       completed: isNotNullOrUndefined(order.orderParameters?.havePhoto),
     },
     {

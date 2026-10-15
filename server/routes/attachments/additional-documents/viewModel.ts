@@ -1,11 +1,11 @@
-import { createAnswer } from '../../../utils/checkYourAnswers'
+import { createAnswer, createBooleanAnswer } from '../../../utils/checkYourAnswers'
 
 import { Order } from '../../../models/Order'
 import AttachmentType from '../../../models/AttachmentType'
 import I18n from '../../../types/i18n'
 import paths from '../../../constants/paths'
 import { Attachment } from '../../../models/Attachment'
-import { isNotNullOrUndefined } from '../../../utils/utils'
+import { isNotNullOrUndefined, hasOptionalVariationSectionIsHOCourt } from '../../../utils/utils'
 import { notifyingOrganisationCourts } from '../../../models/NotifyingOrganisation'
 
 const createViewModel = (order: Order, content: I18n | undefined) => {
@@ -13,6 +13,7 @@ const createViewModel = (order: Order, content: I18n | undefined) => {
   const photo = order.additionalDocuments.find(x => x.fileType === AttachmentType.PHOTO_ID)
   const courtOrder = order.additionalDocuments.find(x => x.fileType === AttachmentType.COURT_ORDER)
   const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' || !order.isOwner }
+  const sectionIsOptional = hasOptionalVariationSectionIsHOCourt(order)
   const answers = []
 
   if (
@@ -20,12 +21,19 @@ const createViewModel = (order: Order, content: I18n | undefined) => {
     (notifyingOrganisationCourts as readonly string[]).includes(order.interestedParties?.notifyingOrganisation)
   ) {
     answers.push(
-      createAnswer(
-        content?.pages.haveCourtOrder.questions.haveCourtOrder.text || '',
-        order.orderParameters?.haveCourtOrder ? 'Yes' : 'No',
-        paths.ATTACHMENT.HAVE_COURT_ORDER.replace(':orderId', order.id),
-        answerOpts,
-      ),
+      sectionIsOptional
+        ? createBooleanAnswer(
+            content?.pages.haveCourtOrder.questions.haveCourtOrder.text || '',
+            order.orderParameters?.haveCourtOrder,
+            paths.ATTACHMENT.HAVE_COURT_ORDER.replace(':orderId', order.id),
+            answerOpts,
+          )
+        : createAnswer(
+            content?.pages.haveCourtOrder.questions.haveCourtOrder.text || '',
+            order.orderParameters?.haveCourtOrder ? 'Yes' : 'No',
+            paths.ATTACHMENT.HAVE_COURT_ORDER.replace(':orderId', order.id),
+            answerOpts,
+          ),
     )
 
     if (order.orderParameters?.haveCourtOrder) {
@@ -56,12 +64,19 @@ const createViewModel = (order: Order, content: I18n | undefined) => {
   }
 
   answers.push(
-    createAnswer(
-      content?.pages.havePhoto.questions.havePhoto.text || '',
-      order.orderParameters?.havePhoto ? 'Yes' : 'No',
-      paths.ATTACHMENT.HAVE_PHOTO.replace(':orderId', order.id),
-      answerOpts,
-    ),
+    sectionIsOptional
+      ? createBooleanAnswer(
+          content?.pages.havePhoto.questions.havePhoto.text || '',
+          order.orderParameters?.havePhoto,
+          paths.ATTACHMENT.HAVE_PHOTO.replace(':orderId', order.id),
+          answerOpts,
+        )
+      : createAnswer(
+          content?.pages.havePhoto.questions.havePhoto.text || '',
+          order.orderParameters?.havePhoto ? 'Yes' : 'No',
+          paths.ATTACHMENT.HAVE_PHOTO.replace(':orderId', order.id),
+          answerOpts,
+        ),
   )
 
   if (order.orderParameters?.havePhoto) {

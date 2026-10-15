@@ -30,6 +30,40 @@ describe('TaskListService', () => {
 
       expect(tasks.filter(task => task.section === 'RISK_INFORMATION').map(task => task.name)).toEqual(expectedPages)
     })
+
+    it('makes risk information and additional documents optional for Home Office variations', () => {
+      const order = getMockOrder({
+        type: 'VARIATION',
+        interestedParties: {
+          ...getMockOrder().interestedParties!,
+          notifyingOrganisation: 'HOME_OFFICE',
+        },
+      })
+
+      const tasks = new TaskListService().getTasks(order)
+
+      expect(tasks.find(task => task.name === 'DETAILS_OF_INSTALLATION')?.state).toBe('OPTIONAL')
+
+      expect(tasks.find(task => task.name === 'ATTACHMENTS_HAVE_PHOTO')?.state).toBe('OPTIONAL')
+    })
+
+    it('makes risk information and additional documents optional for court variations', () => {
+      const order = getMockOrder({
+        type: 'VARIATION',
+        interestedParties: {
+          ...getMockOrder().interestedParties!,
+          notifyingOrganisation: 'CIVIL_COUNTY_COURT',
+          notifyingOrganisationName: 'YEOVIL_COUNTY_AND_CIVIL_COURT',
+          notifyingOrganisationEmail: 'notifying@organisation',
+        },
+      })
+
+      const tasks = new TaskListService().getTasks(order)
+
+      expect(tasks.find(task => task.name === 'DETAILS_OF_INSTALLATION')?.state).toBe('OPTIONAL')
+
+      expect(tasks.find(task => task.name === 'ATTACHMENTS_HAVE_COURT_ORDER')?.state).toBe('OPTIONAL')
+    })
   })
 
   describe('getNextPage', () => {
