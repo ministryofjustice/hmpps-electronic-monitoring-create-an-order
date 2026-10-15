@@ -1,7 +1,7 @@
 import MonitoringTypesPage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-type/MonitoringTypesPage'
 import Page from '../../pages/page'
 import fillInCurfewOrderDetailsWith from './curfew.cy'
-import fillInEnforcementZoneOrderDetailsWith, { fillInEnforcementZoneListItemDetailsWith } from './enforcement-zone.cy'
+import { fillInEnforcementZoneListItemDetailsWith } from './enforcement-zone.cy'
 import fillInTagAtSourceWith from './tag-at-source.cy'
 import fillInAlcoholMonitoringOrderDetailsWith from './alcohol-monitoring.cy'
 import fillInTrailMonitoringOrderDetailsWith from './trail-monitoring.cy'
@@ -21,7 +21,6 @@ export default function fillInMonitoringTypeWith(
     curfewTimetable = undefined,
     curfewDayOfReleaseAnswer = 'No',
     curfewTimetableQuestionAnswer = 'No',
-    enforcementZoneDetails = undefined,
     enforcementZoneListItemDetails = undefined,
     alcoholMonitoringDetails = undefined,
     trailMonitoringDetails = undefined,
@@ -49,10 +48,6 @@ export default function fillInMonitoringTypeWith(
       dayOfReleaseAnswer: curfewDayOfReleaseAnswer,
       curfewTimetableQuestionAnswer,
     })
-  }
-
-  if (enforcementZoneDetails) {
-    fillInEnforcementZoneOrderDetailsWith(enforcementZoneDetails)
   }
 
   if (enforcementZoneListItemDetails) {

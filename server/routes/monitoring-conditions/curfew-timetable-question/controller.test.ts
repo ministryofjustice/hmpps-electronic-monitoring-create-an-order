@@ -3,11 +3,11 @@ import { createMockRequest, createMockResponse } from '../../../../test/mocks/mo
 import { createInterestedParties, getMockOrder } from '../../../../test/mocks/mockOrder'
 import { validationErrors } from '../../../constants/validationErrors'
 import RestClient from '../../../data/restClient'
-import CurfewTimetableService from '../../../services/curfewTimetableService'
+import CurfewTimetableService from '../curfew-timetable/service'
 import CurfewTimetableQuestionController from './controller'
 
 jest.mock('../../../data/restClient')
-jest.mock('../../../services/curfewTimetableService')
+jest.mock('../curfew-timetable/service')
 
 describe('curfew timetable question controller', () => {
   let mockRestClient: jest.Mocked<RestClient>

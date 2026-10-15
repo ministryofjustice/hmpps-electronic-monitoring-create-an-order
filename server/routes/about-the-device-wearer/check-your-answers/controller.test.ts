@@ -1,0 +1,955 @@
+import { createDeviceWearer, createResponsibleAdult, getMockOrder } from '../../../../test/mocks/mockOrder'
+import DeviceWearerCheckAnswersController from './controller'
+import TaskListService from '../../../services/taskListService'
+import paths from '../../../constants/paths'
+import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
+import OrderChecklistModel from '../../../models/OrderChecklist'
+import OrderChecklistService from '../../../services/orderChecklistService'
+import SectionService from '../../../services/sectionsService'
+
+jest.mock('../../../services/auditService')
+jest.mock('../../../services/orderService')
+jest.mock('../device-wearer/service')
+jest.mock('../../../data/hmppsAuditClient')
+jest.mock('../../../data/restClient')
+jest.mock('../../../services/sectionsService')
+
+const adultDeviceWearer = createDeviceWearer({
+  nomisId: 'nomis',
+  pncId: 'pnc',
+  deliusId: 'delius',
+  prisonNumber: 'prison',
+  homeOfficeReferenceNumber: '',
+  complianceAndEnforcementPersonReference: 'cepr',
+  courtCaseReferenceNumber: 'ccrn',
+  firstName: 'tester',
+  lastName: 'testington',
+  alias: 'test',
+  dateOfBirth: '1980-10-10T00:00:00.000Z',
+  adultAtTimeOfInstallation: true,
+  sex: 'MALE',
+  gender: 'MALE',
+  disabilities: ['VISION', 'MOBILITY'],
+  interpreterRequired: false,
+})
+
+const childDeviceWearer = {
+  ...adultDeviceWearer,
+  adultAtTimeOfInstallation: false,
+}
+
+const responsibleAdult = createResponsibleAdult({
+  relationship: 'parent',
+  fullName: 'Firstname Lastname',
+  contactNumber: '07999999999',
+})
+
+const expectedIdentityNumbers = (orderId: string, values: Record<string, string> = {}) => {
+  const identityNumbers = [
+    ['Prison number', values.nomisId],
+    ['Case Reference Number (CRN)', values.deliusId],
+    ['Police National Computer (PNC)', values.pncId],
+    ['Compliance and Enforcement Person Reference (CEPR)', values.complianceAndEnforcementPersonReference],
+    ['Court Case Reference Number (CCRN)', values.courtCaseReferenceNumber],
+  ]
+
+  if (values.prisonNumber) {
+    identityNumbers.push(['Prison Number', values.prisonNumber])
+  }
+
+  return identityNumbers.map(([key, value]) => ({
+    key: { text: key },
+    value: { text: value ?? '' },
+    actions: {
+      items:
+        key === 'Prison Number'
+          ? []
+          : [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', orderId),
+                text: 'Change',
+                visuallyHiddenText: key!.toLowerCase(),
+              },
+            ],
+    },
+  }))
+}
+
+describe('DeviceWearerCheckAnswersController', () => {
+  const taskListService = {
+    getNextCheckYourAnswersPage: jest.fn(),
+    getNextPage: jest.fn(),
+  } as unknown as jest.Mocked<TaskListService>
+  let controller: DeviceWearerCheckAnswersController
+  let mockedSectionService: jest.Mocked<SectionService>
+  const mockOrderChecklistService = {
+    updateChecklist: jest.fn(),
+    getChecklist: jest.fn().mockResolvedValue(OrderChecklistModel.parse({})),
+  } as unknown as jest.Mocked<OrderChecklistService>
+  beforeEach(() => {
+    mockedSectionService = {
+      checkBlankVariationOrNewOrder: jest.fn().mockReturnValue(true),
+      getSectionsForOrder: jest.fn(),
+    } as unknown as jest.Mocked<SectionService>
+
+    controller = new DeviceWearerCheckAnswersController(
+      taskListService,
+      mockOrderChecklistService,
+      mockedSectionService,
+    )
+  })
+
+  it('should render the check answers page without any answers completed', async () => {
+    // Given
+    const order = getMockOrder()
+    const req = createMockRequest({ order })
+    const res = createMockResponse()
+    const next = jest.fn()
+
+    // When
+    await controller.view(req, res, next)
+
+    // Then
+    expect(res.render).toHaveBeenCalledWith('pages/order/about-the-device-wearer/check-your-answers', {
+      deviceWearer: [
+        {
+          key: {
+            text: "What is the device wearer's first name?",
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's first name?",
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's middle name? (optional)",
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's middle name? (optional)",
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's last name?",
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's last name?",
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's preferred name or names? (optional)",
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's preferred name or names? (optional)",
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's date of birth?",
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's date of birth?",
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: 'Is a responsible adult required?',
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'is a responsible adult required?',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: 'What is the sex of the device wearer?',
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'what is the sex of the device wearer?',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's gender?",
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's gender?",
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: 'Does the device wearer have any of the disabilities or health conditions listed?',
+          },
+          value: {
+            html: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'does the device wearer have any of the disabilities or health conditions listed?',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: 'What language does the interpreter need to use?',
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'what language does the interpreter need to use?',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: 'Is an interpreter needed?',
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'is an interpreter needed?',
+              },
+            ],
+          },
+        },
+      ],
+      goToNextSectionNavigation: true,
+      personIdentifiers: expectedIdentityNumbers(order.id),
+      responsibleAdult: [],
+      contactDetails: [
+        {
+          key: {
+            text: 'Does the device wearer have a contact telephone number?',
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'does the device wearer have a contact telephone number?',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's telephone number?",
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's telephone number?",
+              },
+            ],
+          },
+        },
+      ],
+      addresses: [
+        {
+          key: {
+            text: 'Does the device wearer have a fixed address?',
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'does the device wearer have a fixed address?',
+              },
+            ],
+          },
+        },
+      ],
+    })
+  })
+
+  it('should render the check answers page using saved data for an adult device wearer', async () => {
+    // Given
+    const order = getMockOrder({ deviceWearer: adultDeviceWearer })
+    const req = createMockRequest({ order })
+    const res = createMockResponse()
+    const next = jest.fn()
+
+    // When
+    await controller.view(req, res, next)
+
+    // Then
+    expect(res.render).toHaveBeenCalledWith('pages/order/about-the-device-wearer/check-your-answers', {
+      deviceWearer: [
+        {
+          key: {
+            text: "What is the device wearer's first name?",
+          },
+          value: {
+            text: 'tester',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's first name?",
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's middle name? (optional)",
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's middle name? (optional)",
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's last name?",
+          },
+          value: {
+            text: 'testington',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's last name?",
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's preferred name or names? (optional)",
+          },
+          value: {
+            text: 'test',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's preferred name or names? (optional)",
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's date of birth?",
+          },
+          value: {
+            text: '10/10/1980',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's date of birth?",
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: 'Is a responsible adult required?',
+          },
+          value: {
+            text: 'No',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'is a responsible adult required?',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: 'What is the sex of the device wearer?',
+          },
+          value: {
+            text: 'Male',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'what is the sex of the device wearer?',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's gender?",
+          },
+          value: {
+            text: 'Male',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's gender?",
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: 'Does the device wearer have any of the disabilities or health conditions listed?',
+          },
+          value: {
+            html: 'Visual impairment or blindness not corrected by wearing glasses<br/>Physical disability or mobility issue',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'does the device wearer have any of the disabilities or health conditions listed?',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: 'What language does the interpreter need to use?',
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'what language does the interpreter need to use?',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: 'Is an interpreter needed?',
+          },
+          value: {
+            text: 'No',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'is an interpreter needed?',
+              },
+            ],
+          },
+        },
+      ],
+      goToNextSectionNavigation: true,
+      personIdentifiers: expectedIdentityNumbers(order.id, {
+        nomisId: 'nomis',
+        deliusId: 'delius',
+        pncId: 'pnc',
+        complianceAndEnforcementPersonReference: 'cepr',
+        courtCaseReferenceNumber: 'ccrn',
+        prisonNumber: 'prison',
+      }),
+      responsibleAdult: [],
+      contactDetails: [
+        {
+          key: {
+            text: 'Does the device wearer have a contact telephone number?',
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'does the device wearer have a contact telephone number?',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's telephone number?",
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's telephone number?",
+              },
+            ],
+          },
+        },
+      ],
+      addresses: [
+        {
+          key: {
+            text: 'Does the device wearer have a fixed address?',
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'does the device wearer have a fixed address?',
+              },
+            ],
+          },
+        },
+      ],
+      submittedDate: undefined,
+    })
+  })
+
+  it('should render the check answers page using the saved for a child device wearer', async () => {
+    // Given
+    const order = getMockOrder({ deviceWearer: childDeviceWearer, deviceWearerResponsibleAdult: responsibleAdult })
+    const req = createMockRequest({ order })
+    const res = createMockResponse()
+    const next = jest.fn()
+
+    // When
+    await controller.view(req, res, next)
+
+    // Then
+    expect(res.render).toHaveBeenCalledWith('pages/order/about-the-device-wearer/check-your-answers', {
+      deviceWearer: [
+        {
+          key: {
+            text: "What is the device wearer's first name?",
+          },
+          value: {
+            text: 'tester',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's first name?",
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's middle name? (optional)",
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's middle name? (optional)",
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's last name?",
+          },
+          value: {
+            text: 'testington',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's last name?",
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's preferred name or names? (optional)",
+          },
+          value: {
+            text: 'test',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's preferred name or names? (optional)",
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's date of birth?",
+          },
+          value: {
+            text: '10/10/1980',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's date of birth?",
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: 'Is a responsible adult required?',
+          },
+          value: {
+            text: 'Yes',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'is a responsible adult required?',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: 'What is the sex of the device wearer?',
+          },
+          value: {
+            text: 'Male',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'what is the sex of the device wearer?',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's gender?",
+          },
+          value: {
+            text: 'Male',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's gender?",
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: 'Does the device wearer have any of the disabilities or health conditions listed?',
+          },
+          value: {
+            html: 'Visual impairment or blindness not corrected by wearing glasses<br/>Physical disability or mobility issue',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'does the device wearer have any of the disabilities or health conditions listed?',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: 'What language does the interpreter need to use?',
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'what language does the interpreter need to use?',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: 'Is an interpreter needed?',
+          },
+          value: {
+            text: 'No',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'is an interpreter needed?',
+              },
+            ],
+          },
+        },
+      ],
+      goToNextSectionNavigation: true,
+      personIdentifiers: expectedIdentityNumbers(order.id, {
+        nomisId: 'nomis',
+        deliusId: 'delius',
+        pncId: 'pnc',
+        complianceAndEnforcementPersonReference: 'cepr',
+        courtCaseReferenceNumber: 'ccrn',
+        prisonNumber: 'prison',
+      }),
+      responsibleAdult: [
+        {
+          key: {
+            text: "What is the responsible adult's relationship to the device wearer?",
+          },
+          value: {
+            text: 'Parent',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the responsible adult's relationship to the device wearer?",
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the responsible adult's full name?",
+          },
+          value: {
+            text: 'Firstname Lastname',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the responsible adult's full name?",
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the responsible adult's telephone number? (optional)",
+          },
+          value: {
+            text: '07999999999',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the responsible adult's telephone number? (optional)",
+              },
+            ],
+          },
+        },
+      ],
+      contactDetails: [
+        {
+          key: {
+            text: 'Does the device wearer have a contact telephone number?',
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'does the device wearer have a contact telephone number?',
+              },
+            ],
+          },
+        },
+        {
+          key: {
+            text: "What is the device wearer's telephone number?",
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: "what is the device wearer's telephone number?",
+              },
+            ],
+          },
+        },
+      ],
+      addresses: [
+        {
+          key: {
+            text: 'Does the device wearer have a fixed address?',
+          },
+          value: {
+            text: '',
+          },
+          actions: {
+            items: [
+              {
+                href: paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(':orderId', order.id),
+                text: 'Change',
+                visuallyHiddenText: 'does the device wearer have a fixed address?',
+              },
+            ],
+          },
+        },
+      ],
+      submittedDate: undefined,
+    })
+  })
+})
