@@ -1,4 +1,4 @@
-import * as DeviceWearerCheckAnswers from './deviceWearerCheckAnswers'
+import * as DeviceWearerCheckAnswers from '../../routes/about-the-device-wearer/check-your-answers/viewModel'
 import * as MonitoringConditionsCheckAnswers from './monitoringConditionsCheckAnswers'
 import * as RiskInformationCheckAnswers from './riskInformationCheckAnswers'
 import * as AdditionalDocumentsCheckAnswers from './additionalDocumentsCheckAnswers'

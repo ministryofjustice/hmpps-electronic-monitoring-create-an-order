@@ -1,9 +1,9 @@
-import { createGovukErrorSummary } from '../../utils/errors'
-import { getError } from '../../utils/utils'
-import { DeviceWearerResponsibleAdult } from '../DeviceWearerResponsibleAdult'
-import { DeviceWearerResponsibleAdultFormData } from '../form-data/responsibleAdult'
-import { ValidationResult } from '../Validation'
-import { ViewModel } from './utils'
+import { createGovukErrorSummary } from '../../../utils/errors'
+import { getError } from '../../../utils/utils'
+import { DeviceWearerResponsibleAdult } from '../../../models/DeviceWearerResponsibleAdult'
+import { DeviceWearerResponsibleAdultFormData } from './formModel'
+import { ValidationResult } from '../../../models/Validation'
+import { ViewModel } from '../../../models/view-models/utils'
 
 type ResponsibleAdultViewModel = ViewModel<DeviceWearerResponsibleAdult>
 

@@ -1,16 +1,16 @@
 import { ZodError } from 'zod'
-import RestClient from '../data/restClient'
-import { AuthenticatedRequestInput } from '../interfaces/request'
-import DeviceWearerModel, { DeviceWearer } from '../models/DeviceWearer'
+import RestClient from '../../../data/restClient'
+import { AuthenticatedRequestInput } from '../../../interfaces/request'
+import DeviceWearerModel, { DeviceWearer } from '../../../models/DeviceWearer'
 import {
   DeviceWearerFormDataValidator,
   DeviceWearerFormData,
   IdentityNumbersFormData,
   IdentityNumbersFormDataValidator,
-} from '../models/form-data/deviceWearer'
-import { ValidationResult } from '../models/Validation'
-import { SanitisedError } from '../sanitisedError'
-import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../utils/errors'
+} from './formModel'
+import { ValidationResult } from '../../../models/Validation'
+import { SanitisedError } from '../../../sanitisedError'
+import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../../../utils/errors'
 
 type UpdateDeviceWearerRequestInput = AuthenticatedRequestInput & {
   orderId: string

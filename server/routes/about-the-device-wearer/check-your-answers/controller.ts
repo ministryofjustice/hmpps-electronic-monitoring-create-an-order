@@ -1,9 +1,9 @@
 import { Request, RequestHandler, Response } from 'express'
 import { z } from 'zod'
-import createViewModel from '../../models/view-models/deviceWearerCheckAnswers'
-import TaskListService from '../../services/taskListService'
-import OrderChecklistService from '../../services/orderChecklistService'
-import SectionService from '../../services/sectionsService'
+import createViewModel from './viewModel'
+import TaskListService from '../../../services/taskListService'
+import OrderChecklistService from '../../../services/orderChecklistService'
+import SectionService from '../../../services/sectionsService'
 
 const CheckYourAnswersFormModel = z.object({
   action: z.string().default('continue'),
