@@ -1,6 +1,6 @@
 import * as DeviceWearerCheckAnswers from '../../routes/about-the-device-wearer/check-your-answers/viewModel'
 import * as MonitoringConditionsCheckAnswers from './monitoringConditionsCheckAnswers'
-import * as RiskInformationCheckAnswers from './riskInformationCheckAnswers'
+import * as RiskInformationCheckAnswers from '../../routes/installation-and-risk/check-your-answers/viewModel'
 import * as AdditionalDocumentsCheckAnswers from './additionalDocumentsCheckAnswers'
 import * as VariationDetailsCheckAnswers from './variationDetailsCheckAnswers'
 import InterestedPartiesCheckAnswers from '../../routes/interested-parties/check-your-answers/viewModel'

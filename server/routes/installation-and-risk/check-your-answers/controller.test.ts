@@ -1,21 +1,21 @@
-import { getMockOrder } from '../../../test/mocks/mockOrder'
-import CheckAnswersController from './installationAndRiskCheckAnswersController'
-import TaskListService from '../../services/taskListService'
-import paths from '../../constants/paths'
-import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
-import installationAndRiskPageContent from '../../i18n/en/pages/installationAndRisk'
-import OrderChecklistModel from '../../models/OrderChecklist'
-import OrderChecklistService from '../../services/orderChecklistService'
-import mappaPageContent from '../../i18n/en/pages/mappa'
-import isMappaPageContent from '../../i18n/en/pages/isMappa'
-import SectionService from '../../services/sectionsService'
+import { getMockOrder } from '../../../../test/mocks/mockOrder'
+import CheckAnswersController from './controller'
+import TaskListService from '../../../services/taskListService'
+import paths from '../../../constants/paths'
+import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
+import installationAndRiskPageContent from '../../../i18n/en/pages/installationAndRisk'
+import OrderChecklistModel from '../../../models/OrderChecklist'
+import OrderChecklistService from '../../../services/orderChecklistService'
+import mappaPageContent from '../../../i18n/en/pages/mappa'
+import isMappaPageContent from '../../../i18n/en/pages/isMappa'
+import SectionService from '../../../services/sectionsService'
 
-jest.mock('../../services/auditService')
-jest.mock('../../services/orderService')
-jest.mock('../../routes/about-the-device-wearer/device-wearer/service')
-jest.mock('../../data/hmppsAuditClient')
-jest.mock('../../data/restClient')
-jest.mock('../../services/sectionsService')
+jest.mock('../../../services/auditService')
+jest.mock('../../../services/orderService')
+jest.mock('../../about-the-device-wearer/device-wearer/service')
+jest.mock('../../../data/hmppsAuditClient')
+jest.mock('../../../data/restClient')
+jest.mock('../../../services/sectionsService')
 
 describe('InstallationAndRiskCheckAnswersController', () => {
   const taskListService = {
