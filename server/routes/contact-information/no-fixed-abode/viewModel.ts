@@ -1,9 +1,9 @@
-import { createGovukErrorSummary } from '../../utils/errors'
-import { getError } from '../../utils/utils'
-import { DeviceWearer } from '../DeviceWearer'
-import { NoFixedAbodeFormData } from '../form-data/noFixedAbode'
-import { ValidationResult } from '../Validation'
-import { ViewModel } from './utils'
+import { createGovukErrorSummary } from '../../../utils/errors'
+import { getError } from '../../../utils/utils'
+import { DeviceWearer } from '../../../models/DeviceWearer'
+import { NoFixedAbodeFormData } from './formModel'
+import { ValidationResult } from '../../../models/Validation'
+import { ViewModel } from '../../../models/view-models/utils'
 
 type NoFixedAbodeViewModel = ViewModel<Pick<DeviceWearer, 'noFixedAbode'>>
 

@@ -1,15 +1,15 @@
-import RestClient from '../../data/restClient'
-import ContactDetailsService from '../../services/contactDetailsService'
-import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
-import { getMockOrder } from '../../../test/mocks/mockOrder'
-import ContactDetailsController from './contactDetailsController'
-import TaskListService from '../../services/taskListService'
+import RestClient from '../../../data/restClient'
+import ContactDetailsService from './service'
+import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
+import { getMockOrder } from '../../../../test/mocks/mockOrder'
+import ContactDetailsController from './controller'
+import TaskListService from '../../../services/taskListService'
 
-jest.mock('../../services/auditService')
-jest.mock('../../services/orderService')
-jest.mock('../../services/contactDetailsService')
-jest.mock('../../data/hmppsAuditClient')
-jest.mock('../../data/restClient')
+jest.mock('../../../services/auditService')
+jest.mock('../../../services/orderService')
+jest.mock('./service')
+jest.mock('../../../data/hmppsAuditClient')
+jest.mock('../../../data/restClient')
 
 describe('ContactDetailsController', () => {
   let mockRestClient: jest.Mocked<RestClient>

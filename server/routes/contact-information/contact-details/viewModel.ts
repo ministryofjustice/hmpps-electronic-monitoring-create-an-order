@@ -1,9 +1,9 @@
-import { createGovukErrorSummary } from '../../utils/errors'
-import { convertBooleanToEnum, getError } from '../../utils/utils'
-import { ContactDetails } from '../ContactDetails'
-import { ContactDetailsFormData } from '../form-data/contactDetails'
-import { ValidationResult } from '../Validation'
-import { ViewModel } from './utils'
+import { createGovukErrorSummary } from '../../../utils/errors'
+import { convertBooleanToEnum, getError } from '../../../utils/utils'
+import { ContactDetails } from '../../../models/ContactDetails'
+import { ContactDetailsFormData } from './formModel'
+import { ValidationResult } from '../../../models/Validation'
+import { ViewModel } from '../../../models/view-models/utils'
 
 type ContactDetailsViewModel = ViewModel<NonNullable<ContactDetails>>
 

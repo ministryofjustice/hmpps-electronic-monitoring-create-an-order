@@ -1,13 +1,13 @@
 import { Request, RequestHandler, Response } from 'express'
-import paths from '../../constants/paths'
-import { isValidationResult } from '../../models/Validation'
-import ProbationDeliveryUnitFormDataModel from '../../models/form-data/probationDeliveryUnit'
-import probationDeliveryUnitViewModel from '../../models/view-models/probationDeliveryUnit'
-import TaskListService from '../../services/taskListService'
-import ProbationDeliveryUnitService from '../../services/probationDeliveryUnitService'
-import { ReferenceCatalogDDv5, ReferenceCatalogDDv6 } from '../../types/i18n/reference'
-import ProbationRegionDeliveryUnits from '../../types/i18n/reference/probationRegionDeliveryUnits'
-import ReferenceData from '../../types/i18n/reference/reference'
+import paths from '../../../constants/paths'
+import { isValidationResult } from '../../../models/Validation'
+import ProbationDeliveryUnitFormDataModel from './formModel'
+import probationDeliveryUnitViewModel from './viewModel'
+import TaskListService from '../../../services/taskListService'
+import ProbationDeliveryUnitService from './service'
+import { ReferenceCatalogDDv5, ReferenceCatalogDDv6 } from '../../../types/i18n/reference'
+import ProbationRegionDeliveryUnits from '../../../types/i18n/reference/probationRegionDeliveryUnits'
+import ReferenceData from '../../../types/i18n/reference/reference'
 
 export default class ProbationDeliveryUnitController {
   constructor(

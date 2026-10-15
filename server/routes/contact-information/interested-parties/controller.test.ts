@@ -1,15 +1,15 @@
-import RestClient from '../../data/restClient'
-import TaskListService from '../../services/taskListService'
-import InterestedPartiesController from './interestedPartiesController'
-import InterestedPartiesService from '../../services/interestedPartiesService'
-import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
-import { getMockOrder } from '../../../test/mocks/mockOrder'
+import RestClient from '../../../data/restClient'
+import TaskListService from '../../../services/taskListService'
+import InterestedPartiesController from './controller'
+import InterestedPartiesService from './service'
+import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
+import { getMockOrder } from '../../../../test/mocks/mockOrder'
 
-jest.mock('../../services/auditService')
-jest.mock('../../services/orderService')
-jest.mock('../../services/interestedPartiesService')
-jest.mock('../../data/hmppsAuditClient')
-jest.mock('../../data/restClient')
+jest.mock('../../../services/auditService')
+jest.mock('../../../services/orderService')
+jest.mock('./service')
+jest.mock('../../../data/hmppsAuditClient')
+jest.mock('../../../data/restClient')
 
 const createMockOrder = getMockOrder({
   interestedParties: {
