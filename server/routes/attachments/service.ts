@@ -1,14 +1,13 @@
 import { Readable } from 'stream'
 import { ZodError } from 'zod'
-import RestClient from '../data/restClient'
-import { AuthenticatedRequestInput } from '../interfaces/request'
-import ErrorResponseModel, { ErrorResponse } from '../models/ErrorResponse'
-import { SanitisedError } from '../sanitisedError'
-import Result from '../interfaces/result'
-import { validationErrors } from '../constants/validationErrors'
-import { convertBackendErrorToValidationError, convertZodErrorToValidationError } from '../utils/errors'
-import { HavePhotoFormData } from '../models/view-models/havePhoto'
-import { FileRequiredFormData, FileRequiredFormDataValidator } from '../routes/attachments/fileRequiredFormModel'
+import RestClient from '../../data/restClient'
+import { AuthenticatedRequestInput } from '../../interfaces/request'
+import ErrorResponseModel, { ErrorResponse } from '../../models/ErrorResponse'
+import { SanitisedError } from '../../sanitisedError'
+import Result from '../../interfaces/result'
+import { validationErrors } from '../../constants/validationErrors'
+import { convertBackendErrorToValidationError, convertZodErrorToValidationError } from '../../utils/errors'
+import { FileRequiredFormData, FileRequiredFormDataValidator } from './fileRequiredFormModel'
 
 type AttachmentRequestInput = AuthenticatedRequestInput & {
   orderId: string
@@ -17,11 +16,6 @@ type AttachmentRequestInput = AuthenticatedRequestInput & {
 type UploadAttachmentRequestInput = AttachmentRequestInput & {
   file: Express.Multer.File | undefined
 }
-type AttachmentHavePhotoInput = AuthenticatedRequestInput & {
-  orderId: string
-  data: HavePhotoFormData
-}
-
 type FileRequiredFormInput = AuthenticatedRequestInput & {
   orderId: string
   data: FileRequiredFormData
@@ -85,24 +79,6 @@ export default class AttachmentService {
           ok: false,
           error: apiError.userMessage || '',
         }
-      }
-
-      throw e
-    }
-  }
-
-  async havePhoto(input: AttachmentHavePhotoInput) {
-    try {
-      const result = await this.apiClient.put({
-        path: `/api/orders/${input.orderId}/attachments/have-photo`,
-        data: { havePhoto: input.data.havePhoto },
-        token: input.accessToken,
-      })
-      return result
-    } catch (e) {
-      const sanitisedError = e as SanitisedError
-      if (sanitisedError.status === 400) {
-        return convertBackendErrorToValidationError(sanitisedError)
       }
 
       throw e
