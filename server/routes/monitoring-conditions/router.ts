@@ -14,20 +14,19 @@ import TypesOfMonitoringNeededController from './types-of-monitoring-needed/cont
 import HardStopController from './hard-stop/controller'
 import DapolMissedInErrorController from './dapol-missed-in-error/controller'
 import HdcPauseController from './hdc-pause/controller'
-import InstallationLocationController from '../../controllers/monitoringConditions/installationLocationController'
-import InstallationAppointmentController from '../../controllers/monitoringConditions/installationAppointmentController'
-import TrailMonitoringController from '../../controllers/monitoringConditions/trailMonitoringController'
-import AttendanceMonitoringController from '../../controllers/monitoringConditions/attendanceMonitoringController'
+import InstallationLocationController from './installation-location/controller'
+import InstallationAppointmentController from './installation-appointment/controller'
+import TrailMonitoringController from './trail/controller'
 import AttendanceMonitoringAddToListController from './attendance-monitoring/controller'
-import AlcoholMonitoringController from '../../controllers/monitoringConditions/alcoholMonitoringController'
+import AlcoholMonitoringController from './alcohol/controller'
 import CurfewDayOfReleaseController from './curfew-day-of-release/controller'
-import CurfewReleaseDateController from '../../controllers/monitoringConditions/curfewReleaseDateController'
-import CurfewConditionsController from '../../controllers/monitoringConditions/curfewConditionsController'
-import CurfewAdditionalDetailsController from '../../controllers/monitoringConditions/curfewAdditionalDetailsController'
+import CurfewReleaseDateController from './curfew-release-date/controller'
+import CurfewConditionsController from './curfew-conditions/controller'
+import CurfewAdditionalDetailsController from './curfew-additional-details/controller'
 import CurfewTimetableQuestionController from './curfew-timetable-question/controller'
-import CurfewTimetableController from '../../controllers/monitoringConditions/curfewTimetableController'
+import CurfewTimetableController from './curfew-timetable/controller'
 import EnforcementZoneAddToListController from './enforcement-zone/controller'
-import MonitoringConditionsCheckAnswersController from '../../controllers/monitoringConditions/checkAnswersController'
+import MonitoringConditionsCheckAnswersController from './check-your-answers/controller'
 import RemoveMonitoringTypeController from './remove-monitoring-type/controller'
 import paths from '../../constants/paths'
 
@@ -41,7 +40,6 @@ const createMonitoringConditionsRouter = (
     | 'installationLocationService'
     | 'installationAppointmentService'
     | 'trailMonitoringService'
-    | 'attendanceMonitoringService'
     | 'attendanceMonitoringAddToListService'
     | 'alcoholMonitoringService'
     | 'curfewReleaseDateService'
@@ -64,7 +62,6 @@ const createMonitoringConditionsRouter = (
     installationLocationService,
     installationAppointmentService,
     trailMonitoringService,
-    attendanceMonitoringService,
     attendanceMonitoringAddToListService,
     alcoholMonitoringService,
     curfewReleaseDateService,
@@ -106,7 +103,6 @@ const createMonitoringConditionsRouter = (
     taskListService,
   )
   const trailMonitoringController = new TrailMonitoringController(trailMonitoringService)
-  const attendanceMonitoringController = new AttendanceMonitoringController(attendanceMonitoringService)
   const attendanceMonitoringAddToListController = new AttendanceMonitoringAddToListController(
     attendanceMonitoringAddToListService,
   )
@@ -145,10 +141,6 @@ const createMonitoringConditionsRouter = (
   viewUpdate(paths.MONITORING_CONDITIONS.INSTALLATION_LOCATION, installationLocationController)
   viewUpdate(paths.MONITORING_CONDITIONS.INSTALLATION_APPOINTMENT, installationAppointmentController)
   viewUpdate(paths.MONITORING_CONDITIONS.TRAIL, trailMonitoringController)
-  get(paths.MONITORING_CONDITIONS.ATTENDANCE, attendanceMonitoringController.new)
-  get(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM, attendanceMonitoringController.view)
-  post(paths.MONITORING_CONDITIONS.ATTENDANCE, attendanceMonitoringController.update)
-  post(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM, attendanceMonitoringController.update)
   get(paths.MONITORING_CONDITIONS.ATTENDANCE_ADD_TO_LIST, attendanceMonitoringAddToListController.new)
   get(paths.MONITORING_CONDITIONS.ATTENDANCE_ITEM_ADD_TO_LIST, attendanceMonitoringAddToListController.view)
   post(paths.MONITORING_CONDITIONS.ATTENDANCE_ADD_TO_LIST, attendanceMonitoringAddToListController.update)

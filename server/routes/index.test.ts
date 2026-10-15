@@ -6,7 +6,7 @@ import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
 import { SanitisedError } from '../sanitisedError'
 import AuditService, { Page } from '../services/auditService'
-import DeviceWearerService from '../services/deviceWearerService'
+import DeviceWearerService from './about-the-device-wearer/device-wearer/service'
 import OrderSearchService from '../services/orderSearchService'
 import OrderService from '../services/orderService'
 import { appWithAllRoutes, flashProvider, unauthorisedUser, user } from './testutils/appSetup'
@@ -19,7 +19,7 @@ import DeviceWearerSearchResultsService from './about-the-device-wearer/device-w
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
 jest.mock('../services/orderSearchService')
-jest.mock('../services/deviceWearerService')
+jest.mock('./about-the-device-wearer/device-wearer/service')
 jest.mock('../data/hmppsAuditClient')
 jest.mock('../data/restClient')
 

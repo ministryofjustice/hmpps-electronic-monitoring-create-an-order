@@ -14,7 +14,7 @@ import getEnglishContent from '../../../i18n/en'
 
 jest.mock('../../../services/auditService')
 jest.mock('../../../data/hmppsAuditClient')
-jest.mock('../../../services/attachmentService')
+jest.mock('../../attachments/service')
 jest.mock('../../../data/restClient')
 
 const mockId = uuidv4()

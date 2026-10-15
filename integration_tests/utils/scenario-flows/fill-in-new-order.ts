@@ -74,10 +74,15 @@ export default function fillInNewOrderWith({
   tertiaryAddressDetails = undefined,
   monitoringOrderTypeDescription = undefined,
   newDeviceWearerFlow = false,
+  fillInResponsibleOrganisationDetails = true,
 }): void {
   const orderTasksPage = Page.verifyOnPage(OrderTasksPage)
 
-  if (newDeviceWearerFlow && interestedParties.notifyingOrganisation !== 'Home Office') {
+  if (
+    newDeviceWearerFlow &&
+    interestedParties.notifyingOrganisation !== 'Home Office' &&
+    fillInResponsibleOrganisationDetails
+  ) {
     fillInResponsibleOrganisationFirstWith({ interestedParties, probationDeliveryUnit })
   } else {
     orderTasksPage.aboutTheDeviceWearerTask.click()

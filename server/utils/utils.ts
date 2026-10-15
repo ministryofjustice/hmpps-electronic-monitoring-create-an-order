@@ -2,6 +2,9 @@ import { AddressWithoutType } from '../models/Address'
 import { ValidationResult } from '../models/Validation'
 import { ErrorMessage, ErrorsViewModel } from '../models/view-models/utils'
 import ReferenceData from '../types/i18n/reference/reference'
+import { Order } from '../models/Order'
+import isVariationType from './isVariationType'
+import { notifyingOrganisationCourts } from '../models/NotifyingOrganisation'
 
 const YEAR_IN_MS = 365.25 * 24 * 60 * 60 * 1000
 
@@ -224,6 +227,18 @@ export const createAddressPreview = (address: AddressWithoutType | null | undefi
     addressString += separator + address.addressLine4
   }
   return addressString + separator + address.postcode
+}
+
+const OPTIONAL_VARIATION_ORGANISATIONS = [...notifyingOrganisationCourts, 'HOME_OFFICE']
+
+export const hasOptionalVariationSectionIsHOCourt = (order: Order): boolean => {
+  if (
+    isVariationType(order.type) &&
+    OPTIONAL_VARIATION_ORGANISATIONS.includes(order.interestedParties?.notifyingOrganisation ?? '')
+  ) {
+    return true
+  }
+  return false
 }
 
 export const filterNullValues = (obj: object) => Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== null))
