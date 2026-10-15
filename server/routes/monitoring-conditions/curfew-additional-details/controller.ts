@@ -1,0 +1,45 @@
+import { Request, RequestHandler, Response } from 'express'
+import paths from '../../../constants/paths'
+import { isValidationResult } from '../../../models/Validation'
+import CurfewAdditionalDetailsService from './service'
+import CurfewAdditionalDetailsViewModel from './viewModel'
+import { CurfewAdditionalDetailsFormDataModel } from './formModel'
+
+export default class CurfewAdditionalDetailsController {
+  constructor(private readonly curfewAdditionalDetailsService: CurfewAdditionalDetailsService) {}
+
+  view: RequestHandler = async (req: Request, res: Response) => {
+    const { curfewConditions: model } = req.order!
+    const formData = req.flash('formData')
+    const errors = req.flash('validationErrors')
+    const viewModel = CurfewAdditionalDetailsViewModel.construct(model, formData as never, errors as never)
+
+    res.render(`pages/order/monitoring-conditions/curfew-additional-details`, viewModel)
+  }
+
+  update: RequestHandler = async (req: Request, res: Response) => {
+    const orderId = req.params.orderId as string
+    const formData = CurfewAdditionalDetailsFormDataModel.parse(req.body)
+
+    const updateResult = await this.curfewAdditionalDetailsService.update({
+      accessToken: res.locals.user.token,
+      orderId,
+      data: formData,
+    })
+
+    if (isValidationResult(updateResult)) {
+      req.flash('formData', formData)
+      req.flash('validationErrors', updateResult)
+
+      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS.replace(':orderId', orderId))
+      return
+    }
+
+    if (formData.action === 'continue') {
+      res.redirect(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE_QUESTION.replace(':orderId', orderId))
+      return
+    }
+
+    res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+  }
+}

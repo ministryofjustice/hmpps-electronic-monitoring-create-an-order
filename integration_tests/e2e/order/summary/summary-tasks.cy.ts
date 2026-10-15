@@ -466,6 +466,108 @@ context('Order Summary', () => {
     })
   })
 
+  context('New Variation', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: {
+          versionId: mockOrderId,
+          type: 'VARIATION',
+          isSentencingAct: false,
+          interestedParties: {
+            notifyingOrganisation: 'PRISON',
+            notifyingOrganisationName: 'ALTCOURSE_PRISON',
+            notifyingOrganisationEmail: 'notifying@organisation',
+
+            responsibleOfficerFirstName: null,
+            responsibleOfficerLastName: '',
+            responsibleOfficerEmail: '@email',
+
+            responsibleOrganisation: null,
+            responsibleOrganisationEmail: '',
+            responsibleOrganisationRegion: '',
+          },
+        },
+      })
+
+      const versionOne = versionInformation({
+        submittedBy: 'Person One',
+        versionId: mockOrderId,
+        fmsResultDate: new Date(2025, 0, 1, 10, 30, 0, 0).toISOString(),
+      })
+
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [versionOne],
+        orderId: mockOrderId,
+      })
+
+      cy.signIn()
+    })
+
+    it('should not have responsible organisation section for new variation', () => {
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.interestedPartiesSection(false).shouldNotExist()
+      page.submitOrderButton.should('be.disabled')
+    })
+  })
+
+  context('Optional sections for variations', () => {
+    const stubVariationsFor = (notifyingOrganisation: string) => {
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        type: 'REINSTALL_DEVICE',
+        order: {
+          dataDictionaryVersion: 'DDV7',
+          isSentencingAct: true,
+          interestedParties: {
+            notifyingOrganisation,
+          },
+        },
+      })
+    }
+
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+      })
+      cy.task('stubCemoGetVersions', {
+        httpStatus: 200,
+        versions: [],
+        orderId: mockOrderId,
+      })
+      cy.signIn()
+    })
+
+    it('risk information and additional documents are optional for home office', () => {
+      stubVariationsFor('HOME_OFFICE')
+
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.riskInformationTask.shouldHaveStatus('Optional')
+      page.additionalDocumentsTask.shouldHaveStatus('Optional')
+    })
+
+    it('risk information and additional documents are optional for court', () => {
+      stubVariationsFor('CIVIL_COUNTY_COURT')
+
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.riskInformationTask.shouldHaveStatus('Optional')
+      page.additionalDocumentsTask.shouldHaveStatus('Optional')
+    })
+  })
+
   context('Complete order, variation, not submitted', () => {
     beforeEach(() => {
       cy.task('reset')

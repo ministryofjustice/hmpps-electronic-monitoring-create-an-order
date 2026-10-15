@@ -18,7 +18,6 @@ import createVariationsRouter from './variations/router'
 export default function routes({
   alcoholMonitoringService,
   attachmentService,
-  attendanceMonitoringService,
   attendanceMonitoringAddToListService,
   auditService,
   contactDetailsService,
@@ -81,7 +80,6 @@ export default function routes({
     [paths.MONITORING_CONDITIONS.BASE_URL, paths.MONITORING_CONDITIONS.BASE_URL_VERSION],
     createMonitoringConditionsRouter({
       alcoholMonitoringService,
-      attendanceMonitoringService,
       attendanceMonitoringAddToListService,
       auditService,
       curfewConditionsService,

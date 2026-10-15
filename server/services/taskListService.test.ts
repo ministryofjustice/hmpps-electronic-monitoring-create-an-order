@@ -30,6 +30,40 @@ describe('TaskListService', () => {
 
       expect(tasks.filter(task => task.section === 'RISK_INFORMATION').map(task => task.name)).toEqual(expectedPages)
     })
+
+    it('makes risk information and additional documents optional for Home Office variations', () => {
+      const order = getMockOrder({
+        type: 'VARIATION',
+        interestedParties: {
+          ...getMockOrder().interestedParties!,
+          notifyingOrganisation: 'HOME_OFFICE',
+        },
+      })
+
+      const tasks = new TaskListService().getTasks(order)
+
+      expect(tasks.find(task => task.name === 'DETAILS_OF_INSTALLATION')?.state).toBe('OPTIONAL')
+
+      expect(tasks.find(task => task.name === 'ATTACHMENTS_HAVE_PHOTO')?.state).toBe('OPTIONAL')
+    })
+
+    it('makes risk information and additional documents optional for court variations', () => {
+      const order = getMockOrder({
+        type: 'VARIATION',
+        interestedParties: {
+          ...getMockOrder().interestedParties!,
+          notifyingOrganisation: 'CIVIL_COUNTY_COURT',
+          notifyingOrganisationName: 'YEOVIL_COUNTY_AND_CIVIL_COURT',
+          notifyingOrganisationEmail: 'notifying@organisation',
+        },
+      })
+
+      const tasks = new TaskListService().getTasks(order)
+
+      expect(tasks.find(task => task.name === 'DETAILS_OF_INSTALLATION')?.state).toBe('OPTIONAL')
+
+      expect(tasks.find(task => task.name === 'ATTACHMENTS_HAVE_COURT_ORDER')?.state).toBe('OPTIONAL')
+    })
   })
 
   describe('getNextPage', () => {
@@ -248,328 +282,6 @@ describe('TaskListService', () => {
     it('should return check your answers page if current page is installation address and alcohol was selected', () => {
       // Given
       const currentPage = 'INSTALLATION_ADDRESS'
-      const taskListService = new TaskListService()
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({
-          alcohol: true,
-        }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
-    })
-
-    it('should return curfew timetable if current page is curfew day of release', () => {
-      // Given
-      const currentPage = 'CURFEW_DAY_OF_RELEASE'
-      const taskListService = new TaskListService()
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({
-          curfew: true,
-        }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id))
-    })
-
-    it('should return curfew day of release if current page is curfew conitions', () => {
-      // Given
-      const currentPage = 'CURFEW_CONDITIONS'
-      const taskListService = new TaskListService()
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({
-          curfew: true,
-        }),
-        interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE.replace(':orderId', order.id))
-    })
-
-    // skipped test as currently the additonal details page is disabled
-    it.skip('should return curfew timetable if current page is curfew additional details', () => {
-      // Given
-      const currentPage = 'CURFEW_ADDITIONAL_DETAILS'
-      const taskListService = new TaskListService()
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({
-          curfew: true,
-        }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE.replace(':orderId', order.id))
-    })
-
-    it('should return exclusion zone if current page is curfew timetable and exclusionZone is selected', () => {
-      // Given
-      const currentPage = 'CURFEW_TIMETABLE'
-      const taskListService = new TaskListService()
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({
-          curfew: true,
-          exclusionZone: true,
-        }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(
-        paths.MONITORING_CONDITIONS.ZONE_NEW_ITEM.replace(':zoneId', '0')
-          .replace(':orderId', order.id)
-          .replace(':zoneType', 'exclusion'),
-      )
-    })
-
-    it('should return trail monitoring if current page is curfew timetable and trail is selected', () => {
-      // Given
-      const currentPage = 'CURFEW_TIMETABLE'
-      const taskListService = new TaskListService()
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({
-          curfew: true,
-          trail: true,
-        }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', order.id))
-    })
-
-    it('should return attendance monitoring if current page is curfew timetable and mandatoryAttendance is selected', () => {
-      // Given
-      const currentPage = 'CURFEW_TIMETABLE'
-      const taskListService = new TaskListService()
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({
-          curfew: true,
-          mandatoryAttendance: true,
-        }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', order.id))
-    })
-
-    it('should return alcohol monitoring if current page is curfew timetable and alcohol is selected', () => {
-      // Given
-      const currentPage = 'CURFEW_TIMETABLE'
-      const taskListService = new TaskListService()
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({
-          curfew: true,
-          alcohol: true,
-        }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id))
-    })
-
-    it('should return check your answers if current page is curfew timetable and no other monitoring is selected', () => {
-      // Given
-      const currentPage = 'CURFEW_TIMETABLE'
-      const taskListService = new TaskListService()
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({
-          curfew: true,
-        }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
-    })
-
-    it('should return trail monitoring if current page is exclusion zone and trail is selected', () => {
-      // Given
-      const currentPage = 'ENFORCEMENT_ZONE_MONITORING'
-      const taskListService = new TaskListService()
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({
-          exclusionZone: true,
-          trail: true,
-        }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.TRAIL.replace(':orderId', order.id))
-    })
-
-    it('should return attendance monitoring if current page is exclusion zone and mandatoryAttendance is selected', () => {
-      // Given
-      const currentPage = 'ENFORCEMENT_ZONE_MONITORING'
-      const taskListService = new TaskListService()
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({
-          exclusionZone: true,
-          mandatoryAttendance: true,
-        }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', order.id))
-    })
-
-    it('should return alcohol monitoring if current page is exclusion zone and alcohol is selected', () => {
-      // Given
-      const currentPage = 'ENFORCEMENT_ZONE_MONITORING'
-      const taskListService = new TaskListService()
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({
-          exclusionZone: true,
-          alcohol: true,
-        }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id))
-    })
-
-    it('should return check your answers if current page is exclusion zone and no other monitoring is selected', () => {
-      // Given
-      const currentPage = 'ENFORCEMENT_ZONE_MONITORING'
-      const taskListService = new TaskListService()
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({
-          exclusionZone: true,
-        }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
-    })
-
-    it('should return attendance monitoring if current page is trail monitoring and mandatoryAttendance is selected', () => {
-      // Given
-      const currentPage = 'TRAIL_MONITORING'
-      const taskListService = new TaskListService()
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({
-          trail: true,
-          mandatoryAttendance: true,
-        }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ATTENDANCE.replace(':orderId', order.id))
-    })
-
-    it('should return alcohol monitoring if current page is trail monitoring and alcohol is selected', () => {
-      // Given
-      const currentPage = 'TRAIL_MONITORING'
-      const taskListService = new TaskListService()
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({
-          trail: true,
-          alcohol: true,
-        }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id))
-    })
-
-    it('should return check your answers if current page is trail monitoring and no other monitoring is selected', () => {
-      // Given
-      const currentPage = 'TRAIL_MONITORING'
-      const taskListService = new TaskListService()
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({
-          trail: true,
-        }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
-    })
-
-    it('should return alcohol monitoring if current page is attendance monitoring and alcohol monitoring is selected', () => {
-      // Given
-      const currentPage = 'ATTENDANCE_MONITORING'
-      const taskListService = new TaskListService()
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({
-          mandatoryAttendance: true,
-          alcohol: true,
-        }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.ALCOHOL.replace(':orderId', order.id))
-    })
-
-    it('should return check your answers if current page is attendance monitoring and no other monitoring is selected', () => {
-      // Given
-      const currentPage = 'ATTENDANCE_MONITORING'
-      const taskListService = new TaskListService()
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({
-          mandatoryAttendance: true,
-        }),
-      })
-
-      // When
-      const nextPage = taskListService.getNextPage(currentPage, order)
-
-      // Then
-      expect(nextPage).toBe(paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', order.id))
-    })
-
-    it('should return check your answers if current page is alcohol monitoring and no other monitoring is selected', () => {
-      // Given
-      const currentPage = 'ALCOHOL_MONITORING'
       const taskListService = new TaskListService()
       const order = getMockOrder({
         monitoringConditions: createMonitoringConditions({
@@ -827,30 +539,6 @@ describe('TaskListService', () => {
 
       expect(task?.state).toBe('DISABLED')
       expect(task?.completed).toBe(false)
-    })
-
-    it('links the curfew release day task to the curfew day of release question page', () => {
-      const taskListService = new TaskListService()
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({ curfew: true }),
-      })
-
-      const tasks = taskListService.getTasks(order)
-
-      expect(tasks.map(task => task.path)).toContain(paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE)
-    })
-
-    it('marks the curfew day of release task as not required when the order is not eligible for it', () => {
-      const taskListService = new TaskListService()
-      const order = getMockOrder({
-        monitoringConditions: createMonitoringConditions({ curfew: true }),
-        interestedParties: createInterestedParties({ notifyingOrganisation: 'PROBATION' }),
-      })
-
-      const tasks = taskListService.getTasks(order)
-      const curfewDayOfReleaseTask = tasks.find(task => task.path === paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE)
-
-      expect(curfewDayOfReleaseTask?.state).toBe('NOT_REQUIRED')
     })
   })
 })

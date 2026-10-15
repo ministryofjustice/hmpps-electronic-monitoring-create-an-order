@@ -1,0 +1,119 @@
+import { Request, RequestHandler, Response } from 'express'
+import paths from '../../../constants/paths'
+import { isValidationResult } from '../../../models/Validation'
+import { DeviceWearerFormDataParser, IdentityNumbersFormDataModel } from './formModel'
+import deviceWearerViewModel from './viewModel'
+import identityNumbersViewModel from './identityNumbersViewModel'
+import DeviceWearerService from './service'
+import TaskListService from '../../../services/taskListService'
+
+export default class DeviceWearerController {
+  constructor(
+    private readonly deviceWearerService: DeviceWearerService,
+    private readonly taskListService: TaskListService,
+  ) {}
+
+  viewDeviceWearer: RequestHandler = async (req: Request, res: Response) => {
+    const order = req.order!
+    const errors = req.flash('validationErrors')
+    const formData = req.flash('formData')
+
+    res.render(
+      'pages/order/about-the-device-wearer/device-wearer',
+      deviceWearerViewModel.construct(
+        order.deviceWearer,
+        formData.length > 0 ? (formData[0] as never) : ({} as never),
+        errors as never,
+      ),
+    )
+  }
+
+  updateDeviceWearer: RequestHandler = async (req: Request, res: Response) => {
+    const orderId = req.params.orderId as string
+    const { action, ...formData } = DeviceWearerFormDataParser.parse(req.body)
+
+    const result = await this.deviceWearerService.updateDeviceWearer({
+      accessToken: res.locals.user.token,
+      orderId,
+      data: formData,
+    })
+
+    if (isValidationResult(result)) {
+      req.flash('formData', formData)
+      req.flash('validationErrors', result)
+
+      res.redirect(paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', orderId))
+    } else if (action === 'continue') {
+      res.redirect(
+        this.taskListService.getNextPage('DEVICE_WEARER', {
+          ...req.order!,
+          deviceWearer: result,
+        }),
+      )
+    } else {
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+    }
+  }
+
+  viewIdentityNumbers: RequestHandler = async (req, res) => {
+    const order = req.order!
+    const errors = req.flash('validationErrors')
+    const formData = req.flash('formData')
+
+    res.render(
+      'pages/order/about-the-device-wearer/identity-numbers',
+      identityNumbersViewModel.construct(order, res.locals.user.cohort?.cohort, formData[0] as never, errors as never),
+    )
+  }
+
+  updateIdentityNumbers: RequestHandler = async (req, res) => {
+    const order = req.order!
+    const { action, ...formData } = IdentityNumbersFormDataModel.parse(req.body)
+
+    const result = await this.deviceWearerService.updateIdentityNumbers({
+      accessToken: res.locals.user.token,
+      orderId: order.id,
+      data: {
+        ...formData,
+        homeOfficeReferenceNumber: order.deviceWearer.homeOfficeReferenceNumber ?? '',
+      },
+    })
+
+    if (isValidationResult(result)) {
+      req.flash('formData', formData)
+      req.flash('validationErrors', result)
+      res.redirect(paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS.replace(':orderId', order.id))
+    } else if (action === 'continue') {
+      const numberIfTicked = (idType: 'NOMIS' | 'PNC' | 'DELIUS', value?: string) =>
+        formData.identityNumbers.includes(idType) ? value?.trim() : undefined
+
+      let searchIdentifier
+      if (
+        order.interestedParties?.notifyingOrganisation === 'PRISON' ||
+        order.interestedParties?.notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE'
+      ) {
+        searchIdentifier = numberIfTicked('NOMIS', formData.nomisId) || numberIfTicked('PNC', formData.pncId)
+      } else if (order.interestedParties?.notifyingOrganisation === 'PROBATION') {
+        searchIdentifier = numberIfTicked('DELIUS', formData.deliusId) || numberIfTicked('NOMIS', formData.nomisId)
+      }
+
+      if (searchIdentifier) {
+        res.redirect(
+          paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_SEARCH_RESULTS.replace(':orderId', order.id).replace(
+            ':identifyNumber',
+            encodeURIComponent(searchIdentifier),
+          ),
+        )
+      } else {
+        res.redirect(
+          this.taskListService.getNextPage('IDENTITY_NUMBERS', {
+            ...order,
+            deviceWearer: result,
+          }),
+        )
+      }
+    } else {
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
+    }
+  }
+}

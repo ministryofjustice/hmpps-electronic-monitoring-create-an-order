@@ -1,15 +1,18 @@
 import { Order } from '../models/Order'
 import paths from '../constants/paths'
 import { AddressType } from '../models/Address'
-import { convertBooleanToEnum, isNotNullOrEmptyString, isNotNullOrUndefined, isNullOrUndefined } from '../utils/utils'
+import {
+  convertBooleanToEnum,
+  hasOptionalVariationSectionIsHOCourt,
+  isNotNullOrEmptyString,
+  isNotNullOrUndefined,
+} from '../utils/utils'
 import AttachmentType from '../models/AttachmentType'
 import FeatureFlags from '../utils/featureFlags'
 import isVariationType from '../utils/isVariationType'
-import isOrderDataDictionarySameOrAbove from '../utils/dataDictionaryVersionComparer'
 import { getOrderCohort } from '../models/OrderCohort'
 import { getRiskInformationTasks } from '../routes/installation-and-risk/riskInformationTasks'
 import { TaskListCohortDefinition, taskListCohortDefinitions } from './taskListCohorts'
-import shouldShowCurfewDayOfRelease from '../utils/curfewDayOfReleaseEligibility'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
@@ -188,7 +191,7 @@ const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCoho
         section: SECTIONS.additionalDocuments,
         name: PAGES.haveCourtOrder,
         path: paths.ATTACHMENT.HAVE_COURT_ORDER,
-        state: STATES.required,
+        state: hasOptionalVariationSectionIsHOCourt(order) ? 'OPTIONAL' : 'REQUIRED',
         completed: isNotNullOrUndefined(order.orderParameters?.haveCourtOrder),
       },
       {
@@ -210,7 +213,7 @@ const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCoho
       section: SECTIONS.additionalDocuments,
       name: PAGES.licenceUpload,
       path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'licence'),
-      state: STATES.required,
+      state: hasOptionalVariationSectionIsHOCourt(order) ? 'OPTIONAL' : 'REQUIRED',
       completed: doesOrderHaveDocument(order, AttachmentType.LICENCE),
     })
   }
@@ -220,7 +223,7 @@ const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCoho
       section: SECTIONS.additionalDocuments,
       name: PAGES.havePhoto,
       path: paths.ATTACHMENT.HAVE_PHOTO,
-      state: STATES.required,
+      state: hasOptionalVariationSectionIsHOCourt(order) ? 'OPTIONAL' : 'REQUIRED',
       completed: isNotNullOrUndefined(order.orderParameters?.havePhoto),
     },
     {
@@ -338,117 +341,6 @@ export default class TaskListService {
       completed: order.monitoringConditions.isValid,
     })
 
-    tasks.push({
-      section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.curfewConditions,
-      path: paths.MONITORING_CONDITIONS.CURFEW_CONDITIONS,
-      state: convertBooleanToEnum<State>(
-        order.monitoringConditions.curfew && order.curfewConditions?.startDate === undefined,
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed: isNotNullOrUndefined(order.curfewConditions),
-    })
-
-    tasks.push({
-      section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.curfewDayOfRelease,
-      path: paths.MONITORING_CONDITIONS.CURFEW_DAY_OF_RELEASE,
-      state: convertBooleanToEnum<State>(
-        order.monitoringConditions.curfew &&
-          shouldShowCurfewDayOfRelease(order) &&
-          order.curfewReleaseDateConditions?.releaseDate === undefined,
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed: isNotNullOrUndefined(order.curfewReleaseDateConditions),
-    })
-
-    if (isOrderDataDictionarySameOrAbove('DDV5', order)) {
-      tasks.push({
-        section: SECTIONS.electronicMonitoringCondition,
-        name: PAGES.curfewAdditionalDetails,
-        path: paths.MONITORING_CONDITIONS.CURFEW_ADDITIONAL_DETAILS,
-        state: convertBooleanToEnum<State>(
-          order.monitoringConditions.curfew && isNullOrUndefined(order.curfewConditions?.curfewAdditionalDetails),
-          STATES.cantBeStarted,
-          STATES.required,
-          STATES.notRequired,
-        ),
-        completed:
-          isNotNullOrUndefined(order.curfewConditions) &&
-          isNotNullOrUndefined(order.curfewConditions.curfewAdditionalDetails),
-      })
-    }
-
-    tasks.push({
-      section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.curfewTimetable,
-      path: paths.MONITORING_CONDITIONS.CURFEW_TIMETABLE,
-      state: convertBooleanToEnum<State>(
-        order.monitoringConditions.curfew &&
-          (order.curfewTimeTable?.length === 0 || order.curfewTimeTable === undefined),
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed: isNotNullOrUndefined(order.curfewTimeTable) && order.curfewTimeTable.length > 0,
-    })
-
-    tasks.push({
-      section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.enforcementZoneMonitoring,
-      path: paths.MONITORING_CONDITIONS.ZONE_NEW_ITEM.replace(':zoneType', 'exclusion'),
-      state: convertBooleanToEnum<State>(
-        order.monitoringConditions.exclusionZone && order.enforcementZoneConditions?.length === 0,
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed: order.enforcementZoneConditions.length > 0,
-    })
-
-    tasks.push({
-      section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.trailMonitoring,
-      path: paths.MONITORING_CONDITIONS.TRAIL,
-      state: convertBooleanToEnum<State>(
-        order.monitoringConditions.trail && order.monitoringConditionsTrail?.startDate === undefined,
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed: isNotNullOrUndefined(order.monitoringConditionsTrail),
-    })
-
-    tasks.push({
-      section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.attendanceMonitoring,
-      path: paths.MONITORING_CONDITIONS.ATTENDANCE,
-      state: convertBooleanToEnum<State>(
-        order.monitoringConditions.mandatoryAttendance && order.mandatoryAttendanceConditions?.length === 0,
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed:
-        isNotNullOrUndefined(order.mandatoryAttendanceConditions) && order.mandatoryAttendanceConditions.length > 0,
-    })
-
-    tasks.push({
-      section: SECTIONS.electronicMonitoringCondition,
-      name: PAGES.alcoholMonitoring,
-      path: paths.MONITORING_CONDITIONS.ALCOHOL,
-      state: convertBooleanToEnum<State>(
-        order.monitoringConditions.alcohol && order.monitoringConditionsAlcohol?.startDate === undefined,
-        STATES.cantBeStarted,
-        STATES.required,
-        STATES.notRequired,
-      ),
-      completed: isNotNullOrUndefined(order.monitoringConditionsAlcohol),
-    })
     tasks.push({
       section: SECTIONS.electronicMonitoringCondition,
       name: PAGES.installationLocation,

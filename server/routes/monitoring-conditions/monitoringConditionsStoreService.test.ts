@@ -205,7 +205,8 @@ describe('store service', () => {
         startDate: new Date(2025, 10, 10).toISOString(),
         endDate: new Date(2025, 10, 11).toISOString(),
       })
-      await service.updateMonitoringType(mockOrder, {
+      await service.updateMonitoringConditions(mockOrder, {
+        ...(await service.getMonitoringConditions(mockOrder)),
         curfew: true,
         exclusionZone: true,
         trail: true,

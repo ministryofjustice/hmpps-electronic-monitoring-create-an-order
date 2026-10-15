@@ -1,14 +1,7 @@
 import MonitoringConditionsCheckYourAnswersPage from '../../pages/order/monitoring-conditions/check-your-answers'
-import EnforcementZonePage from '../../pages/order/monitoring-conditions/enforcement-zone'
 import EnforcementZoneAddToListPage from '../../e2e/order/monitoring-conditions/add-to-list/enforcement-zone/EnforcementZonePage'
 import Page from '../../pages/page'
 import { AddToListEnforcementZoneTypes } from '../../../server/routes/monitoring-conditions/model'
-
-export default function fillInEnforcementZoneOrderDetailsWith(enforcementZoneDetails) {
-  const enforcementZonePage = Page.verifyOnPage(EnforcementZonePage)
-  enforcementZonePage.form.fillInWith(enforcementZoneDetails)
-  enforcementZonePage.form.saveAndContinueButton.click()
-}
 
 export function fillInEnforcementZoneListItemDetailsWith(
   enforcementZoneDetails,
