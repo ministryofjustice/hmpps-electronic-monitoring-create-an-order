@@ -1,14 +1,13 @@
 import { dataAccess } from '../data'
 import AddressService from './addressService'
-import AlcoholMonitoringService from './alcoholMonitoringService'
+import AlcoholMonitoringService from '../routes/monitoring-conditions/alcohol/service'
 import AttachmentService from '../routes/attachments/service'
-import AttendanceMonitoringService from './attendanceMonitoringService'
 import AttendanceMonitoringAddToListService from '../routes/monitoring-conditions/attendance-monitoring/service'
 import AuditService from './auditService'
 import ContactDetailsService from '../routes/contact-information/contact-details/service'
-import CurfewConditionsService from './curfewConditionsService'
-import CurfewReleaseDateService from './curfewReleaseDateService'
-import CurfewTimetableService from './curfewTimetableService'
+import CurfewConditionsService from '../routes/monitoring-conditions/curfew-conditions/service'
+import CurfewReleaseDateService from '../routes/monitoring-conditions/curfew-release-date/service'
+import CurfewTimetableService from '../routes/monitoring-conditions/curfew-timetable/service'
 import DeviceWearerResponsibleAdultService from '../routes/about-the-device-wearer/responsible-adult/service'
 import DeviceWearerService from '../routes/about-the-device-wearer/device-wearer/service'
 import EnforcementZoneAddToListService from '../routes/monitoring-conditions/enforcement-zone/service'
@@ -17,12 +16,12 @@ import InterestedPartiesService from '../routes/contact-information/interested-p
 import OrderSearchService from './orderSearchService'
 import OrderService from './orderService'
 import TaskListService from './taskListService'
-import TrailMonitoringService from './trailMonitoringService'
+import TrailMonitoringService from '../routes/monitoring-conditions/trail/service'
 import VariationService from './variationService'
 import ProbationDeliveryUnitService from '../routes/contact-information/probation-delivery-unit/service'
-import CurfewAdditionalDetailsService from './curfewAdditionalDetailsService'
-import InstallationLocationService from './installationLocationService'
-import InstallationAppointmentService from './installationAppointmentService'
+import CurfewAdditionalDetailsService from '../routes/monitoring-conditions/curfew-additional-details/service'
+import InstallationLocationService from '../routes/monitoring-conditions/installation-location/service'
+import InstallationAppointmentService from '../routes/monitoring-conditions/installation-appointment/service'
 import OrderChecklistService from './orderChecklistService'
 import { createRedisClient } from '../data/redisClient'
 import RedisOrderChecklistStore from '../data/orderChecklistStore/redisOrderChecklistStore'
@@ -57,7 +56,6 @@ export const services = () => {
 
   const alcoholMonitoringService = new AlcoholMonitoringService(cemoApiClient)
   const attachmentService = new AttachmentService(cemoApiClient)
-  const attendanceMonitoringService = new AttendanceMonitoringService(cemoApiClient)
   const attendanceMonitoringAddToListService = new AttendanceMonitoringAddToListService(cemoApiClient)
   const auditService = new AuditService(hmppsAuditClient)
   const contactDetailsService = new ContactDetailsService(cemoApiClient)
@@ -120,7 +118,6 @@ export const services = () => {
     alcoholMonitoringService,
     applicationInfo,
     attachmentService,
-    attendanceMonitoringService,
     attendanceMonitoringAddToListService,
     auditService,
     contactDetailsService,
