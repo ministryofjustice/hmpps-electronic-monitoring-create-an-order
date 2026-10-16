@@ -26,6 +26,8 @@ export const RISK_CATEGORY_CODES_DDV5 = [
   'SAFEGUARDING_ADULT',
   'SAFEGUARDING_CHILD',
   'SAFEGUARDING_DOMESTIC_ABUSE',
+  'NO_RISK_AT_ADDRESS',
+  'RISK_AT_ADDRESS_UNKNOWN',
 ] as const
 
 export const getRiskCategoryCodes = (version: DataDictionaryVersion): readonly string[] =>

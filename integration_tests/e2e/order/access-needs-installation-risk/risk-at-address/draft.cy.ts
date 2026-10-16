@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../pages/page'
 import OtherRisksPage from '../other-risks/OtherRisksPage'
 import RiskAtAddressPage from './RiskAtAddressPage'
-import { RISK_AT_ADDRESS_HINT } from './RiskAtAddressComponent'
+import { NO_RISK_OPTION, RISK_AT_ADDRESS_HINT, RISK_UNKNOWN_OPTION } from './RiskAtAddressComponent'
 
 const mockOrderId = uuidv4()
 
@@ -50,5 +50,26 @@ context('risk at address page', () => {
     revisited.form.riskCategoryField.shouldHaveValue('Managed through IOM')
     revisited.form.riskCategoryField.shouldHaveValue('Animals at the property, for example dogs')
     revisited.form.riskCategoryField.shouldNotHaveValueChecked('Other known risks')
+  })
+  ;[NO_RISK_OPTION, RISK_UNKNOWN_OPTION].forEach(exclusiveOption => {
+    it(`selecting "${exclusiveOption}" deselects the other options`, () => {
+      const page = Page.visit(RiskAtAddressPage, { orderId: mockOrderId })
+
+      page.form.fillInWith(['Managed through IOM', 'Other known risks'])
+      page.form.fillInWith(exclusiveOption)
+
+      page.form.riskCategoryField.shouldHaveValue(exclusiveOption)
+      page.form.riskCategoryField.shouldNotHaveValueChecked('Managed through IOM')
+      page.form.riskCategoryField.shouldNotHaveValueChecked('Other known risks')
+    })
+  })
+
+  it('selecting a risk deselects the exclusive options', () => {
+    const page = Page.visit(RiskAtAddressPage, { orderId: mockOrderId })
+
+    page.form.fillInWith(NO_RISK_OPTION)
+    page.form.fillInWith('Managed through IOM')
+
+    page.form.riskCategoryField.shouldNotHaveValueChecked(NO_RISK_OPTION)
   })
 })

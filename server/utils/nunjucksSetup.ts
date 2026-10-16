@@ -10,6 +10,7 @@ import logger from '../../logger'
 import ReferenceData from '../types/i18n/reference/reference'
 import { CheckboxItem } from './govukFrontEndTypes/checkBoxItem'
 import { RadiosItem } from './govukFrontEndTypes/radioItem'
+import exclusiveOptions from './exclusiveOptions'
 
 const toOptions = (
   values: ReferenceData,
@@ -108,6 +109,7 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('toOptions', toOptions)
   njkEnv.addFilter('addDivider', addDivider)
   njkEnv.addFilter('removeOptions', removeOptions)
+  njkEnv.addFilter('exclusiveOptions', exclusiveOptions)
   Object.entries(mojFilters()).forEach(([name, filter]) => {
     // @ts-expect-error/filter is unknown as import does not have typing
     njkEnv.addFilter(name, filter)

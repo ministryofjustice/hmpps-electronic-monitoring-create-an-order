@@ -16,7 +16,12 @@ export const RISK_AT_ADDRESS_OPTIONS = [
   'Children under the age of 18 are living at the property',
   'Animals at the property, for example dogs',
   'Other known risks',
+  'No risk at the address',
+  'Not able to provide this information',
 ]
+
+export const NO_RISK_OPTION = 'No risk at the address'
+export const RISK_UNKNOWN_OPTION = 'Not able to provide this information'
 
 export default class RiskAtAddressComponent extends SingleQuestionFormComponent {
   get riskCategoryField(): FormCheckboxesComponent {

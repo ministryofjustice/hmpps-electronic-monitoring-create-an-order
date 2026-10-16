@@ -20,7 +20,7 @@
     hint: {
       text: content.pages.detailsOfInstallation.questions.riskAtAddress.hint
     },
-    items: content.reference.riskCategories | toOptions(not isOrderEditable) | removeOptions(['DIVERSITY_CONCERNS']),
+    items: content.reference.riskCategories | toOptions(not isOrderEditable) | removeOptions(['DIVERSITY_CONCERNS']) | exclusiveOptions(['NO_RISK_AT_ADDRESS', 'RISK_AT_ADDRESS_UNKNOWN']),
     values: riskCategory.values,
     errorMessage: riskCategory.error
   }) }}
