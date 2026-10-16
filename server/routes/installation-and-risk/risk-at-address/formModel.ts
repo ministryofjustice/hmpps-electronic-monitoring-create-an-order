@@ -1,6 +1,8 @@
 import z from 'zod'
 import { validationErrors } from '../../../constants/validationErrors'
 
+const EXCLUSIVE_OPTIONS = ['NO_RISK_AT_ADDRESS', 'RISK_AT_ADDRESS_UNKNOWN']
+
 const RiskAtAddressFormModel = z.object({
   action: z.string(),
   riskCategory: z
@@ -8,7 +10,9 @@ const RiskAtAddressFormModel = z.object({
     .optional()
     .transform(val => {
       if (val === undefined) return []
-      return Array.isArray(val) ? val : [val]
+      const risks = Array.isArray(val) ? val : [val]
+      const exclusive = risks.find(risk => EXCLUSIVE_OPTIONS.includes(risk))
+      return exclusive ? [exclusive] : risks
     }),
 })
 

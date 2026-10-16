@@ -8,6 +8,8 @@ type RiskCategories = ReferenceData<
   | 'OTHER_OCCUPANTS'
   | 'OTHER_RISKS'
   | 'SAFEGUARDING_ISSUE'
+  | 'NO_RISK_AT_ADDRESS'
+  | 'RISK_AT_ADDRESS_UNKNOWN'
   | 'UNDER_18'
 >
 

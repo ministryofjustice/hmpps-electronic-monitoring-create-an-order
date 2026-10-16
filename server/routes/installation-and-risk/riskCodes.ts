@@ -17,6 +17,8 @@ const COMMON_RISK_CATEGORY_CODES = [
   'UNDER_18',
   'DANGEROUS_ANIMALS',
   'OTHER_RISKS',
+  'NO_RISK_AT_ADDRESS',
+  'RISK_AT_ADDRESS_UNKNOWN',
 ] as const
 
 export const RISK_CATEGORY_CODES_DDV4 = [...COMMON_RISK_CATEGORY_CODES, 'SAFEGUARDING_ISSUE'] as const
@@ -26,8 +28,6 @@ export const RISK_CATEGORY_CODES_DDV5 = [
   'SAFEGUARDING_ADULT',
   'SAFEGUARDING_CHILD',
   'SAFEGUARDING_DOMESTIC_ABUSE',
-  'NO_RISK_AT_ADDRESS',
-  'RISK_AT_ADDRESS_UNKNOWN',
 ] as const
 
 export const getRiskCategoryCodes = (version: DataDictionaryVersion): readonly string[] =>

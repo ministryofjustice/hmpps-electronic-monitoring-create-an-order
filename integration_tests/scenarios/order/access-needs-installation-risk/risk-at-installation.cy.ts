@@ -63,7 +63,7 @@ context('Risk at installation single question pages', () => {
       riskAtInstallation.possibleRisk,
     )
     cyaPage.installationRiskSection.shouldHaveItem(
-      'What are the possible risks at the installation address? (optional)',
+      'At installation what are the possible risks at the address?',
       riskAtInstallation.riskCategory,
     )
   })
@@ -100,7 +100,7 @@ context('Risk at installation single question pages', () => {
     fillInRiskAtInstallationWith(riskAtInstallation)
 
     const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
-    cyaPage.installationRiskSection.changeAnswer('What are the possible risks at the installation address? (optional)')
+    cyaPage.installationRiskSection.changeAnswer('At installation what are the possible risks at the address?')
 
     Page.verifyOnPage(RiskAtAddressPage)
   })

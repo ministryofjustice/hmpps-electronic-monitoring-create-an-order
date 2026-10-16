@@ -8,6 +8,7 @@ import riskBehaviourPath from '../riskBehaviourPath'
 import riskAtAddressPath from '../riskAtAddressPath'
 import splitRisks from '../splitRisks'
 import paths from '../../../constants/paths'
+import FeatureFlags from '../../../utils/featureFlags'
 import { getRiskInformationFlow, riskInformationPages } from '../../../services/riskInformationFlow'
 
 const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean, uri: string = '') => {
@@ -19,6 +20,8 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
 
   const isHomeOfficeUser = order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE'
   const riskInformationFlow = getRiskInformationFlow(order.interestedParties?.notifyingOrganisation)
+
+  const isRiskInformationFlowEnabled = FeatureFlags.getInstance().get('RISK_INFORMATION_FLOW_ENABLED')
 
   const isNewOffenceFlow = isOrderDataDictionarySameOrAbove('DDV6', order)
 
@@ -107,7 +110,9 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
 
   riskAnswers.push(
     createMultipleChoiceAnswer(
-      questions.riskCategory.text,
+      isRiskInformationFlowEnabled
+        ? content.pages.detailsOfInstallation.questions.riskAtAddress.text
+        : questions.riskCategory.text,
       riskCategories?.map(category => lookup(content.reference.riskCategories, category)) ?? [],
       riskAtAddressPath(riskDetailsUri, order.id),
       answerOpts,

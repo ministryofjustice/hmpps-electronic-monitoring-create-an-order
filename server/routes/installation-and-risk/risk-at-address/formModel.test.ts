@@ -11,6 +11,12 @@ describe('risk at address form model', () => {
     expect(result.riskCategory).toEqual(['IOM', 'DANGEROUS_ANIMALS'])
   })
 
+  it.each(['NO_RISK_AT_ADDRESS', 'RISK_AT_ADDRESS_UNKNOWN'])('collapses the selection to %s when chosen', exclusive => {
+    const result = RiskAtAddressFormModel.parse({ action: 'continue', riskCategory: ['IOM', exclusive] })
+
+    expect(result.riskCategory).toEqual([exclusive])
+  })
+
   it('has no selection when nothing is submitted', () => {
     expect(RiskAtAddressFormModel.parse({ action: 'continue' }).riskCategory).toEqual([])
   })

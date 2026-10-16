@@ -28,11 +28,13 @@ describe('splitRisks', () => {
     expect(splitRisks(['SAFEGUARDING_CHILD'], 'DDV7').riskCategory).toEqual(['SAFEGUARDING_CHILD'])
   })
 
-  it('treats the no-risk and unknown address codes as risk categories from DDV5', () => {
-    const codes = ['NO_RISK_AT_ADDRESS', 'RISK_AT_ADDRESS_UNKNOWN']
-    expect(splitRisks(codes, 'DDV4').riskCategory).toEqual([])
-    expect(splitRisks(codes, 'DDV6').riskCategory).toEqual(codes)
-  })
+  it.each(['DDV4', 'DDV5', 'DDV6'] as const)(
+    'treats the no-risk and unknown address codes as risk categories for %s',
+    version => {
+      const codes = ['NO_RISK_AT_ADDRESS', 'RISK_AT_ADDRESS_UNKNOWN']
+      expect(splitRisks(codes, version).riskCategory).toEqual(codes)
+    },
+  )
 
   it.each(['DDV4', 'DDV5', 'DDV6', 'DDV7'] as const)('constants match the i18n reference for %s', version => {
     const { reference } = getContent('en', version)

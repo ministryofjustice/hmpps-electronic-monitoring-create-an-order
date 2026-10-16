@@ -34,7 +34,7 @@ describe('risk information check answers view model', () => {
     expect(viewModel.riskInformation.map(answer => answer.key.text)).toEqual([
       "At installation what are the possible risks from the device wearer's behaviour?",
       'What sex or gender are they a risk to?',
-      'What are the possible risks at the installation address? (optional)',
+      'At installation what are the possible risks at the address?',
       'Any other risks to be aware of? (optional)',
     ])
   })
@@ -60,7 +60,7 @@ describe('risk information check answers view model', () => {
     expect(viewModel.riskInformation.map(answer => answer.key.text)).toEqual([
       "At installation what are the possible risks from the device wearer's behaviour?",
       'What sex or gender are they a risk to?',
-      'What are the possible risks at the installation address? (optional)',
+      'At installation what are the possible risks at the address?',
       'Any other risks to be aware of? (optional)',
       'What type of offence did the device wearer commit?',
       'Any other information to be aware of about the offence committed?',
@@ -94,14 +94,17 @@ describe('risk information check answers view model', () => {
   })
 
   describe('risk at address change link', () => {
-    const question = 'What are the possible risks at the installation address? (optional)'
+    const questions = [
+      'At installation what are the possible risks at the address?',
+      'What are the possible risks at the installation address? (optional)',
+    ]
     const order = getMockOrder({
       dataDictionaryVersion: 'DDV6',
       detailsOfInstallation: { riskCategory: ['DANGEROUS_ANIMALS'], riskDetails: '' },
     })
     const changeHref = () => {
-      const row = createViewModel(order, getContent('en', 'DDV6'), true).riskInformation.find(
-        answer => answer.key.text === question,
+      const row = createViewModel(order, getContent('en', 'DDV6'), true).riskInformation.find(answer =>
+        questions.includes(answer.key.text),
       )
       return row?.actions?.items[0]?.href
     }
@@ -116,6 +119,27 @@ describe('risk information check answers view model', () => {
       jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(false)
 
       expect(changeHref()).toBe(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id))
+    })
+  })
+
+  describe('risk at address label', () => {
+    const order = getMockOrder({
+      dataDictionaryVersion: 'DDV6',
+      detailsOfInstallation: { riskCategory: ['DANGEROUS_ANIMALS'], riskDetails: '' },
+    })
+    const keys = () => createViewModel(order, getContent('en', 'DDV6'), true).riskInformation.map(a => a.key.text)
+
+    it('uses the mandatory question text when the flow is enabled', () => {
+      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(true)
+
+      expect(keys()).toContain('At installation what are the possible risks at the address?')
+      expect(keys()).not.toContain('What are the possible risks at the installation address? (optional)')
+    })
+
+    it('keeps the optional question text when the flag is off', () => {
+      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(false)
+
+      expect(keys()).toContain('What are the possible risks at the installation address? (optional)')
     })
   })
 
