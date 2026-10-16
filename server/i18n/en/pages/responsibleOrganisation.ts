@@ -5,8 +5,12 @@ const responsibleOrganisationPageContent: ResponsibleOrganisationPageContent = {
     'The Responsible Organisation is the service the Responsible Officer is part of. For example, the Responsible Organisation for a probation officer is the Probation Service.',
   legend: '',
   questions: {
+    courtPoliceEmail: {
+      text: 'What is the Police force email address? (optional)',
+      hint: 'Provide a functional mailbox not a personal email.',
+    },
     police: {
-      text: 'Select the Police force area',
+      text: 'What is the name of the Police force area?',
     },
     probationRegion: {
       text: 'Select the Probation region',

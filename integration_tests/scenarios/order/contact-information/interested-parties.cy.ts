@@ -48,7 +48,7 @@ context('Police areas', () => {
         'Check your answer',
       )
       interestedPartiesCheckYourAnswersPage.organisationDetailsSection.shouldHaveItems([
-        { key: 'Select the Police force area', value: 'National Crime Agency' },
+        { key: 'What is the name of the Police force area?', value: 'National Crime Agency' },
       ])
     })
   })

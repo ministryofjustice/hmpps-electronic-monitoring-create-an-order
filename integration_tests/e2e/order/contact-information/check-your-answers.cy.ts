@@ -219,7 +219,7 @@ context('Contact Information - check your answers', () => {
         { key: "What is the Responsible Officer's full name?", value: 'name' },
         { key: "What is the Responsible Officer's telephone number?", value: '01234567891' },
         { key: "What is the Responsible Officer's organisation?", value: 'Police' },
-        { key: 'Select the Police force area', value: 'Cheshire' },
+        { key: 'What is the name of the Police force area?', value: 'Cheshire' },
         { key: "What is the Responsible Organisation's email address? (optional)", value: 'responsible@organisation' },
       ])
       page.deviceWearerAddressesSection.shouldNotHaveItems([
@@ -1127,7 +1127,7 @@ context('Contact Information - check your answers', () => {
       page.organisationDetailsSection.shouldExist()
       page.organisationDetailsSection.shouldHaveItems([
         { key: "What is the Responsible Officer's organisation?", value: 'Police' },
-        { key: 'Select the Police force area', value: 'National Crime Agency' },
+        { key: 'What is the name of the Police force area', value: 'National Crime Agency' },
       ])
       page.deviceWearerAddressesSection.shouldNotHaveItems([
         'Select the name of the Prison',
