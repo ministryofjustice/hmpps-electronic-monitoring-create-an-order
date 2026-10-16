@@ -26,7 +26,10 @@ describe('RiskAtAddressController', () => {
     it('renders the risk at address page with no risks checked by default', async () => {
       await controller.view(req, res, next)
 
-      expect(res.render).toHaveBeenCalledWith(template, expect.objectContaining({ riskCategory: { values: [] } }))
+      expect(res.render).toHaveBeenCalledWith(
+        template,
+        expect.objectContaining({ riskCategory: expect.objectContaining({ values: [] }) }),
+      )
     })
 
     it('checks the cached risks at the installation address', async () => {
@@ -36,7 +39,7 @@ describe('RiskAtAddressController', () => {
 
       expect(res.render).toHaveBeenCalledWith(
         template,
-        expect.objectContaining({ riskCategory: { values: ['DANGEROUS_ANIMALS'] } }),
+        expect.objectContaining({ riskCategory: expect.objectContaining({ values: ['DANGEROUS_ANIMALS'] }) }),
       )
     })
   })
@@ -50,7 +53,9 @@ describe('RiskAtAddressController', () => {
 
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/installation-and-risk/risk-at-address',
-        expect.objectContaining({ riskCategory: { values: [], error: { text: 'Select something' } } }),
+        expect.objectContaining({
+          riskCategory: expect.objectContaining({ values: [], error: { text: 'Select something' } }),
+        }),
       )
     })
   })

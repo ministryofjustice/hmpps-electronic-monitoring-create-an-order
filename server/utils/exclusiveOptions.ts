@@ -3,7 +3,7 @@ import { RadiosItem } from './govukFrontEndTypes/radioItem'
 
 const exclusiveOptions = (
   items: Array<CheckboxItem | RadiosItem>,
-  exclusiveValues: string[],
+  exclusiveValues: readonly string[],
 ): Array<CheckboxItem | RadiosItem> =>
   items.flatMap(item =>
     'value' in item && item.value && exclusiveValues.includes(item.value)

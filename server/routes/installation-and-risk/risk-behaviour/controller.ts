@@ -17,7 +17,13 @@ export default class RiskBehaviourController {
 
     res.render(
       'pages/order/installation-and-risk/risk-behaviour',
-      RiskBehaviourViewModel.construct(possibleRisk, genderRiskDetails, errors),
+      RiskBehaviourViewModel.construct(
+        possibleRisk,
+        genderRiskDetails,
+        res.locals.content!.reference.possibleRisks,
+        !res.locals.isOrderEditable,
+        errors,
+      ),
     )
   }
 

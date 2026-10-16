@@ -26,7 +26,7 @@ describe('RiskBehaviourController', () => {
 
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/installation-and-risk/risk-behaviour',
-        expect.objectContaining({ possibleRisk: { values: [] } }),
+        expect.objectContaining({ possibleRisk: expect.objectContaining({ values: [] }) }),
       )
     })
 
@@ -37,7 +37,9 @@ describe('RiskBehaviourController', () => {
 
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/installation-and-risk/risk-behaviour',
-        expect.objectContaining({ possibleRisk: { values: ['THREATS_OF_VIOLENCE', 'SEXUAL_OFFENCES'] } }),
+        expect.objectContaining({
+          possibleRisk: expect.objectContaining({ values: ['THREATS_OF_VIOLENCE', 'SEXUAL_OFFENCES'] }),
+        }),
       )
     })
 
@@ -60,7 +62,9 @@ describe('RiskBehaviourController', () => {
 
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/installation-and-risk/risk-behaviour',
-        expect.objectContaining({ possibleRisk: { values: [], error: { text: 'Select something' } } }),
+        expect.objectContaining({
+          possibleRisk: expect.objectContaining({ values: [], error: { text: 'Select something' } }),
+        }),
       )
     })
   })

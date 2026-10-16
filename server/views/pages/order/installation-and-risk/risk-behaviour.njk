@@ -25,7 +25,7 @@
 {% endset %}
 
 {% set possibleRiskOptions = [] %}
-{% for risk in content.reference.possibleRisks | toOptions(not isOrderEditable) | exclusiveOptions(['NO_RISK']) %}
+{% for risk in possibleRisk.items %}
   {% if risk.value == 'RISK_TO_GENDER' %}
     {% set risk = {
       value: risk.value,

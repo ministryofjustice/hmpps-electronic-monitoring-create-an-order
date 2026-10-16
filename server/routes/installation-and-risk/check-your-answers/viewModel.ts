@@ -4,8 +4,7 @@ import { Order } from '../../../models/Order'
 import I18n from '../../../types/i18n'
 import { formatDateTime, lookup } from '../../../utils/utils'
 import isOrderDataDictionarySameOrAbove from '../../../utils/dataDictionaryVersionComparer'
-import riskBehaviourPath from '../riskBehaviourPath'
-import riskAtAddressPath from '../riskAtAddressPath'
+import riskFlowPath from '../riskFlowPath'
 import splitRisks from '../splitRisks'
 import paths from '../../../constants/paths'
 import FeatureFlags from '../../../utils/featureFlags'
@@ -91,7 +90,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
     order.dataDictionaryVersion,
   )
 
-  const possibleRiskUri = riskBehaviourPath(riskDetailsUri, order.id)
+  const possibleRiskUri = riskFlowPath(paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR, riskDetailsUri, order.id)
 
   riskAnswers.push(
     createMultipleChoiceAnswer(
@@ -114,7 +113,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
         ? content.pages.detailsOfInstallation.questions.riskAtAddress.text
         : questions.riskCategory.text,
       riskCategories?.map(category => lookup(content.reference.riskCategories, category)) ?? [],
-      riskAtAddressPath(riskDetailsUri, order.id),
+      riskFlowPath(paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS, riskDetailsUri, order.id),
       answerOpts,
     ),
   )

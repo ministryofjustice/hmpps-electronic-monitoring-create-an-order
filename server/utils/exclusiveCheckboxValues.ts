@@ -1,6 +1,6 @@
 import z from 'zod'
 
-const exclusiveCheckboxValues = (exclusiveValues: string[]) =>
+const exclusiveCheckboxValues = (exclusiveValues: readonly string[]) =>
   z
     .union([z.string(), z.array(z.string())])
     .optional()

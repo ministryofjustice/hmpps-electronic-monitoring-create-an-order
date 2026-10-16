@@ -15,7 +15,12 @@ export default class RiskAtAddressController {
 
     res.render(
       'pages/order/installation-and-risk/risk-at-address',
-      RiskAtAddressViewModel.construct(riskCategory, errors),
+      RiskAtAddressViewModel.construct(
+        riskCategory,
+        res.locals.content!.reference.riskCategories,
+        !res.locals.isOrderEditable,
+        errors,
+      ),
     )
   }
 

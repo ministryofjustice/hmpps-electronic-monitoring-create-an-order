@@ -1,12 +1,11 @@
 import z from 'zod'
 import { validationErrors } from '../../../constants/validationErrors'
 import exclusiveCheckboxValues from '../../../utils/exclusiveCheckboxValues'
-
-const EXCLUSIVE_OPTIONS = ['NO_RISK_AT_ADDRESS', 'RISK_AT_ADDRESS_UNKNOWN']
+import { RISK_AT_ADDRESS_EXCLUSIVE_CODES } from '../riskCodes'
 
 const RiskAtAddressFormModel = z.object({
   action: z.string(),
-  riskCategory: exclusiveCheckboxValues(EXCLUSIVE_OPTIONS),
+  riskCategory: exclusiveCheckboxValues(RISK_AT_ADDRESS_EXCLUSIVE_CODES),
 })
 
 export const RiskAtAddressFormValidator = z.object({
