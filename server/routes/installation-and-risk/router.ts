@@ -8,6 +8,9 @@ import MappaController from './mappa/controller'
 import { Services } from '../../services'
 import DetailsOfInstallationController from './details-of-installation/controller'
 import IsMappaController from './is-mappa/controller'
+import RiskBehaviourController from './risk-behaviour/controller'
+import RiskAtAddressController from './risk-at-address/controller'
+import OtherRisksController from './other-risks/controller'
 import InstallationAndRiskController from './risk-information/controller'
 import InstallationAndRiskCheckAnswersController from './check-your-answers/controller'
 import paths from '../../constants/paths'
@@ -21,6 +24,7 @@ const createInstallationAndRiskRouter = (
     | 'mappaService'
     | 'offenceOtherInfoService'
     | 'detailsOfInstallationService'
+    | 'riskAtInstallationStoreService'
     | 'installationAndRiskService'
     | 'orderChecklistService'
     | 'sectionService'
@@ -35,6 +39,7 @@ const createInstallationAndRiskRouter = (
     mappaService,
     taskListService,
     detailsOfInstallationService,
+    riskAtInstallationStoreService,
     offenceOtherInfoService,
     installationAndRiskService,
     orderChecklistService,
@@ -58,7 +63,13 @@ const createInstallationAndRiskRouter = (
     detailsOfInstallationService,
     taskListService,
   )
-
+  const riskBehaviourController = new RiskBehaviourController(riskAtInstallationStoreService)
+  const riskAtAddressController = new RiskAtAddressController(riskAtInstallationStoreService)
+  const otherRisksController = new OtherRisksController(
+    riskAtInstallationStoreService,
+    detailsOfInstallationService,
+    taskListService,
+  )
   get(paths.INSTALLATION_AND_RISK.BASE_URL, installationAndRiskController.view)
   post(paths.INSTALLATION_AND_RISK.BASE_URL, installationAndRiskController.update)
   viewUpdate(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS, installationAndRiskCheckAnswersController)
@@ -82,6 +93,9 @@ const createInstallationAndRiskRouter = (
   post(paths.INSTALLATION_AND_RISK.MAPPA, mappaController.update)
   get(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION, detailsOfInstallationController.view)
   post(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION, detailsOfInstallationController.update)
+  viewUpdate(paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR, riskBehaviourController)
+  viewUpdate(paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS, riskAtAddressController)
+  viewUpdate(paths.INSTALLATION_AND_RISK.OTHER_RISKS, otherRisksController)
 
   return router
 }

@@ -1,4 +1,6 @@
 import { getMockOrder } from '../../../test/mocks/mockOrder'
+import paths from '../../constants/paths'
+import FeatureFlags from '../../utils/featureFlags'
 import { getRiskInformationTasks } from './riskInformationTasks'
 
 describe('getRiskInformationTasks', () => {
@@ -34,5 +36,31 @@ describe('getRiskInformationTasks', () => {
     order.mappa = { isMappa: 'YES', level: null, category: null }
 
     expect(getRiskInformationTasks(order).find(task => task.name === 'MAPPA')?.state).toBe('REQUIRED')
+  })
+
+  describe('details of installation path', () => {
+    const riskInformationFlowEnabled = (enabled: boolean) =>
+      jest
+        .spyOn(FeatureFlags.getInstance(), 'get')
+        .mockImplementation(flag => (flag === 'RISK_INFORMATION_FLOW_ENABLED' ? enabled : false))
+
+    const detailsOfInstallationTask = () =>
+      getRiskInformationTasks(getMockOrder()).find(task => task.name === 'DETAILS_OF_INSTALLATION')
+
+    afterEach(() => {
+      jest.restoreAllMocks()
+    })
+
+    it('starts at the risk behaviour page when the risk information flow is enabled', () => {
+      riskInformationFlowEnabled(true)
+
+      expect(detailsOfInstallationTask()?.path).toBe(paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR)
+    })
+
+    it('starts at the details of installation page when the risk information flow is disabled', () => {
+      riskInformationFlowEnabled(false)
+
+      expect(detailsOfInstallationTask()?.path).toBe(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION)
+    })
   })
 })
