@@ -22,6 +22,7 @@ describe('OrderController', () => {
   let sectionService: jest.Mocked<SectionService>
 
   beforeEach(() => {
+    jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(false)
     mockRestClient = new RestClient('cemoApi', {
       url: '',
       timeout: { response: 0, deadline: 0 },
@@ -33,7 +34,7 @@ describe('OrderController', () => {
       getSectionsForOrder: jest.fn().mockReturnValue(Promise.resolve([])),
     } as unknown as jest.Mocked<SectionService>
     orderController = new OrderController(mockOrderService, sectionService)
-    mockOrderService.amendOrder = jest.fn().mockResolvedValue(undefined)
+    mockOrderService.amendOrder = jest.fn().mockResolvedValue({ order: getMockOrder(), outcome: 'ACCEPTED' })
   })
 
   afterEach(() => {
@@ -226,7 +227,7 @@ describe('OrderController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/summary`)
     })
 
-    it('amends an accepted submitted order with the variation action', async () => {
+    it('submits an accepted order without an action and follows the API outcome', async () => {
       const orderId = randomUUID()
       const order = getMockOrder({ id: orderId, status: 'SUBMITTED', canAmend: true })
       order.statusUpdates = [
@@ -246,7 +247,6 @@ describe('OrderController', () => {
       expect(mockOrderService.amendOrder).toHaveBeenCalledWith({
         orderId,
         accessToken: 'fakeUserToken',
-        action: 'COPY_AS_VARIATION',
       })
       expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/summary`)
     })
@@ -273,7 +273,7 @@ describe('OrderController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/is-address-change`)
     })
 
-    it('amends a submitted order with a rejected observation using the rejected action', async () => {
+    it('uses the API outcome instead of an earlier rejected status observation', async () => {
       const orderId = randomUUID()
       const order = getMockOrder({ id: orderId, status: 'SUBMITTED', canAmend: true })
       order.statusUpdates = [
@@ -287,29 +287,29 @@ describe('OrderController', () => {
       ]
       const req = createMockRequest({ order, body: { action: 'continue' }, params: { orderId } })
       const res = createMockResponse()
+      mockOrderService.amendOrder.mockResolvedValue({ order, outcome: 'ACCEPTED' })
 
       await orderController.createVariation(req, res, jest.fn())
 
       expect(mockOrderService.amendOrder).toHaveBeenCalledWith({
         orderId,
         accessToken: 'fakeUserToken',
-        action: 'AMEND_REJECTED_ORDER',
       })
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/interest-parties/notifying-organisation`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/summary`)
     })
 
-    it('amends a rejected lifecycle order with the rejected action', async () => {
+    it('routes a rejected response to notifying organisation for a rejected order', async () => {
       const orderId = randomUUID()
       const order = getMockOrder({ id: orderId, status: 'REJECTED', canAmend: true })
       const req = createMockRequest({ order, body: { action: 'continue' }, params: { orderId } })
       const res = createMockResponse()
+      mockOrderService.amendOrder.mockResolvedValue({ order, outcome: 'REJECTED' })
 
       await orderController.createVariation(req, res, jest.fn())
 
       expect(mockOrderService.amendOrder).toHaveBeenCalledWith({
         orderId,
         accessToken: 'fakeUserToken',
-        action: 'AMEND_REJECTED_ORDER',
       })
       expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/interest-parties/notifying-organisation`)
     })

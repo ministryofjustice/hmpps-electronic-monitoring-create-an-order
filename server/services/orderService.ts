@@ -4,7 +4,8 @@ import { AuthenticatedRequestInput } from '../interfaces/request'
 import Result from '../interfaces/result'
 import ErrorResponseModel from '../models/ErrorResponse'
 import { CreateOrderFormData } from '../models/form-data/order'
-import OrderModel, { Order, OrderAmendmentAction } from '../models/Order'
+import OrderAmendmentModel, { OrderAmendment } from '../models/OrderAmendment'
+import OrderModel, { Order } from '../models/Order'
 import { VersionInformation, VersionInformationList } from '../models/VersionInformation'
 import { SanitisedError } from '../sanitisedError'
 
@@ -57,12 +58,12 @@ export default class OrderService {
     return OrderModel.parse(result)
   }
 
-  async amendOrder(input: OrderRequestInput & { action: OrderAmendmentAction }): Promise<void> {
-    return this.apiClient.post({
+  async amendOrder(input: OrderRequestInput): Promise<OrderAmendment> {
+    const result = await this.apiClient.post({
       path: `/api/orders/${input.orderId}/amend`,
       token: input.accessToken,
-      data: { action: input.action },
     })
+    return OrderAmendmentModel.parse(result)
   }
 
   async getOrder(input: OrderRequestInput): Promise<Order> {

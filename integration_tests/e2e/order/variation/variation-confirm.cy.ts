@@ -4,6 +4,7 @@ import OrderTasksPage from '../../../pages/order/summary'
 import IsAddressChangePage from '../edit-order/is-address-change/isAddressChangePage'
 import ServiceRequestTypePage from './service-request-type/serviceRequestTypePage'
 import NotifyingOrganisationPage from '../interested-parties/notifying-organisation/notifyingOrganisationPage'
+import mockApiOrder from '../../../utils/data/ApiOrder'
 
 const mockOriginalId = '00a00000-79cd-49f9-a498-b1f07c543b8a'
 const mockVersionId = '22a22222-79cd-49f9-a498-b1f07c543b8a'
@@ -41,7 +42,7 @@ const verifyReturnedOrderAmendmentFlow = (sourceType: string) => {
     method: 'POST',
     id: mockOriginalId,
     subPath: '/amend',
-    response: {},
+    response: { order: mockApiOrder(), outcome: 'REJECTED' },
   })
   const page = Page.visit(OrderTasksPage, { orderId: mockOriginalId })
   cy.contains('This form has been returned.').should('be.visible')
@@ -50,7 +51,7 @@ const verifyReturnedOrderAmendmentFlow = (sourceType: string) => {
 
   cy.task('stubCemoVerifyRequestReceived', {
     uri: `/orders/${mockOriginalId}/amend`,
-    body: { action: 'AMEND_REJECTED_ORDER' },
+    body: {},
   }).should('be.true')
   Page.verifyOnPage(NotifyingOrganisationPage)
   cy.contains('Are you making changes to this form because the original was rejected by email?').should('not.exist')
@@ -71,7 +72,7 @@ context('Variation', () => {
         method: 'POST',
         id: mockOriginalId,
         subPath: '/amend',
-        response: [{}],
+        response: { order: mockApiOrder(), outcome: 'ACCEPTED' },
       })
       cy.signIn()
     })
@@ -110,7 +111,7 @@ context('Variation', () => {
 
       cy.task('stubCemoVerifyRequestReceived', {
         uri: `/orders/${mockOriginalId}/amend`,
-        body: { action: 'COPY_AS_VARIATION' },
+        body: {},
       }).should('be.true')
       Page.verifyOnPage(OrderTasksPage)
     })

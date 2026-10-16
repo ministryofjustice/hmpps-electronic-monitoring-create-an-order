@@ -679,19 +679,18 @@ const tables = [
   'variation_details',
   'device_wearer',
   'address',
+  'status_update_reason',
+  'status_update',
   'order_version',
   'orders',
 ]
 
-const emptyNextTable = async (client: PostgresqlClient): Promise<boolean> => {
-  const table = tables.shift()
-  if (table) {
+const emptyNextTable = async (client: PostgresqlClient, index = 0): Promise<void> => {
+  const table = tables[index]
+  if (table !== undefined) {
     await client.query(`DELETE FROM ${table}`)
-
-    await emptyNextTable(client)
+    await emptyNextTable(client, index + 1)
   }
-
-  return true
 }
 
 const databaseConfig = {

@@ -193,6 +193,12 @@ context('Service-Request-Types', () => {
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
 
+    cy.task('stubFMSGetCaseState', {
+      httpStatus: 200,
+      caseId: fmsCaseId,
+      state: '11',
+    })
+
     stubAttachments(files, fmsCaseId, hmppsDocumentId, true)
 
     fillInNewOrder()

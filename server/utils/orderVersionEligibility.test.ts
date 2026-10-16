@@ -3,7 +3,6 @@ import { getMockOrder } from '../../test/mocks/mockOrder'
 import {
   canCreateOrderVersion,
   canUseServiceRequestTypeFlow,
-  getOrderAmendmentAction,
   getOrderChangeBlockedMessage,
   isAcceptedOrderForChange,
 } from './orderVersionEligibility'
@@ -21,26 +20,23 @@ describe('order version eligibility', () => {
     const order = getMockOrder({ status: 'SUBMITTED', canAmend: true })
     order.statusUpdates = [createStatusUpdate(order.versionId, 'ACCEPTED', '2025-01-01T12:00:00Z')]
 
-    expect(getOrderAmendmentAction(order)).toBe('COPY_AS_VARIATION')
     expect(canCreateOrderVersion(order)).toBe(true)
     expect(canUseServiceRequestTypeFlow(order)).toBe(true)
     expect(isAcceptedOrderForChange(order)).toBe(true)
   })
 
-  it('selects the rejected action for a submitted order with a current rejected observation', () => {
+  it('does not use a rejected observation to enter the accepted-order service-request flow', () => {
     const order = getMockOrder({ status: 'SUBMITTED', canAmend: true })
     order.statusUpdates = [createStatusUpdate(order.versionId, 'REJECTED', '2025-01-01T12:00:00Z')]
 
-    expect(getOrderAmendmentAction(order)).toBe('AMEND_REJECTED_ORDER')
     expect(canCreateOrderVersion(order)).toBe(true)
     expect(canUseServiceRequestTypeFlow(order)).toBe(false)
     expect(isAcceptedOrderForChange(order)).toBe(false)
   })
 
-  it('selects the rejected action directly for an amendable rejected order', () => {
+  it('allows an amendable rejected order to create a version', () => {
     const order = getMockOrder({ status: 'REJECTED', canAmend: true })
 
-    expect(getOrderAmendmentAction(order)).toBe('AMEND_REJECTED_ORDER')
     expect(canCreateOrderVersion(order)).toBe(true)
   })
 
@@ -48,7 +44,6 @@ describe('order version eligibility', () => {
     const order = getMockOrder({ status: 'SUBMITTED', canAmend: false })
     order.statusUpdates = [createStatusUpdate(order.versionId, 'ACCEPTED', '2025-01-01T12:00:00Z')]
 
-    expect(getOrderAmendmentAction(order)).toBeUndefined()
     expect(canCreateOrderVersion(order)).toBe(false)
   })
 
@@ -56,8 +51,7 @@ describe('order version eligibility', () => {
     const order = getMockOrder({ status: 'SUBMITTED', canAmend: true })
     order.statusUpdates = [createStatusUpdate(randomUUID(), 'ACCEPTED', '2025-01-01T12:00:00Z')]
 
-    expect(getOrderAmendmentAction(order)).toBeUndefined()
-    expect(canCreateOrderVersion(order)).toBe(false)
+    expect(canCreateOrderVersion(order)).toBe(true)
   })
 
   it('uses the newest status observation for the current version', () => {
@@ -67,7 +61,7 @@ describe('order version eligibility', () => {
       createStatusUpdate(order.versionId, 'REJECTED', '2025-01-02T12:00:00Z'),
     ]
 
-    expect(getOrderAmendmentAction(order)).toBe('AMEND_REJECTED_ORDER')
+    expect(isAcceptedOrderForChange(order)).toBe(false)
   })
 
   it('allows drafts through the service-request flow without allowing another version', () => {

@@ -1,4 +1,4 @@
-import { Order, OrderAmendmentAction } from '../models/Order'
+import { Order } from '../models/Order'
 import { StatusUpdate } from '../models/StatusUpdate'
 
 export const ORDER_CHANGE_STATUS_CHANGED_MESSAGE =
@@ -14,24 +14,13 @@ const getLatestCurrentVersionStatusUpdate = (order: Order): StatusUpdate | undef
       return latest
     }, undefined)
 
-export const getOrderAmendmentAction = (order: Order): OrderAmendmentAction | undefined => {
-  if (!order.canAmend) return undefined
-  if (order.status === 'REJECTED') return 'AMEND_REJECTED_ORDER'
-  if (order.status !== 'SUBMITTED') return undefined
-
-  const latestStatus = getLatestCurrentVersionStatusUpdate(order)?.status
-  if (latestStatus === 'ACCEPTED') return 'COPY_AS_VARIATION'
-  if (latestStatus === 'REJECTED') return 'AMEND_REJECTED_ORDER'
-  return undefined
-}
-
 export const isAcceptedOrderForChange = (order: Order): boolean =>
-  getOrderAmendmentAction(order) === 'COPY_AS_VARIATION'
+  order.canAmend && order.status === 'SUBMITTED' && getLatestCurrentVersionStatusUpdate(order)?.status === 'ACCEPTED'
 
 export const canUseServiceRequestTypeFlow = (order: Order): boolean =>
   order.status === 'IN_PROGRESS' || isAcceptedOrderForChange(order)
 
-export const canCreateOrderVersion = (order: Order): boolean => getOrderAmendmentAction(order) !== undefined
+export const canCreateOrderVersion = (order: Order): boolean => order.canAmend
 
 export const getOrderChangeBlockedMessage = (): string =>
   "We can't check the status of this form right now. Try again later."

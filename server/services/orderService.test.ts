@@ -141,25 +141,19 @@ describe('Order Service', () => {
     const mockAccessToken = 'ABC'
     const mockOrderId = '123456'
 
-    it.each(['AMEND_REJECTED_ORDER', 'COPY_AS_VARIATION'] as const)(
-      'should post the %s action to the merged amendment endpoint',
-      async action => {
-        mockRestClient.post.mockResolvedValue(mockApiResponse)
+    it('should post without a body and parse the amendment response', async () => {
+      const response = { order: mockApiResponse, outcome: 'ACCEPTED' }
+      mockRestClient.post.mockResolvedValue(response)
 
-        const orderService = new OrderService(mockRestClient)
-        await orderService.amendOrder({
-          accessToken: mockAccessToken,
-          orderId: mockOrderId,
-          action,
-        })
+      const orderService = new OrderService(mockRestClient)
+      const amendment = await orderService.amendOrder({ accessToken: mockAccessToken, orderId: mockOrderId })
 
-        expect(mockRestClient.post).toHaveBeenCalledWith({
-          path: `/api/orders/${mockOrderId}/amend`,
-          token: mockAccessToken,
-          data: { action },
-        })
-      },
-    )
+      expect(mockRestClient.post).toHaveBeenCalledWith({
+        path: `/api/orders/${mockOrderId}/amend`,
+        token: mockAccessToken,
+      })
+      expect(amendment).toEqual({ order: mockNewOrder, outcome: 'ACCEPTED' })
+    })
 
     it('should propagate errors from the api', async () => {
       mockRestClient.post.mockRejectedValue(mock404Error)
@@ -169,7 +163,6 @@ describe('Order Service', () => {
         await orderService.amendOrder({
           accessToken: mockAccessToken,
           orderId: mockOrderId,
-          action: 'COPY_AS_VARIATION',
         })
       } catch (e) {
         expect((e as SanitisedError).status).toEqual(404)
