@@ -1,6 +1,6 @@
 import { Order, OrderStatusEnum, OrderTypeEnum } from '../models/Order'
 import isVariationType from '../utils/isVariationType'
-import { isNotNullOrEmptyString } from '../utils/utils'
+import { hasOptionalVariationSectionIsHOCourt, isNotNullOrEmptyString } from '../utils/utils'
 import OrderChecklistService from './orderChecklistService'
 import TaskListService, { canBeCompleted, Task } from './taskListService'
 
@@ -12,6 +12,8 @@ export const SECTIONS = {
   additionalDocuments: 'ADDITIONAL_DOCUMENTS',
   variationDetails: 'ABOUT_THE_CHANGES_IN_THIS_VERSION_OF_THE_FORM',
 } as const
+
+export const OPTIONAL_VARIATION_SECTIONS: SectionName[] = ['RISK_INFORMATION', 'ADDITIONAL_DOCUMENTS']
 
 export type SectionName = (typeof SECTIONS)[keyof typeof SECTIONS]
 
@@ -86,11 +88,16 @@ export default class SectionService {
   ): TaskSection {
     const sectionTasks = tasks.filter(task => task.section === sectionName)
 
+    const optionalVariationSection = this.isOptionalVariationSection(sectionName, order)
     const completed = this.isSectionComplete(sectionTasks, order, sectionName)
 
     let path: string
 
-    if (completed) {
+    const allTasksCompleted = sectionTasks.every(task => (canBeCompleted(task) ? task.completed : true))
+
+    if (optionalVariationSection && !allTasksCompleted) {
+      path = this.taskListService.getNextTaskPath(sectionTasks.slice(0, 1), order.id, versionId)
+    } else if (completed) {
       path = this.taskListService.getCheckYourAnswersPathForSection(sectionTasks).replace(':orderId', order.id)
       if (versionId) {
         path = path.replace(`order/${order.id}`, `order/${order.id}/version/${versionId}`)
@@ -109,6 +116,10 @@ export default class SectionService {
   }
 
   private isSectionComplete(tasks: Task[], order: Order, section: SectionName): boolean {
+    if (this.isOptionalVariationSection(section, order)) {
+      return true
+    }
+
     const tasksCompleted = tasks.every(task => (canBeCompleted(task) ? task.completed : true))
 
     if (section === SECTIONS.electronicMonitoringCondition) {
@@ -122,6 +133,10 @@ export default class SectionService {
     }
 
     return tasksCompleted
+  }
+
+  private isOptionalVariationSection(section: SectionName, order: Order): boolean {
+    return OPTIONAL_VARIATION_SECTIONS.includes(section) && hasOptionalVariationSectionIsHOCourt(order)
   }
 
   private isSectionReady(section: SectionName, tasks: Task[], order: Order): boolean {

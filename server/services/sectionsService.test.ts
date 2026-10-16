@@ -347,6 +347,246 @@ describe('task list service', () => {
         const emSection = sections.find(sec => sec.name === 'ELECTRONIC_MONITORING_CONDITIONS')!
         expect(emSection.isReady).toBe(false)
       })
+
+      it('cohort home office, mark risk info and additional docs as optional', async () => {
+        order = {
+          type: 'REINSTALL_DEVICE',
+          interestedParties: { notifyingOrganisation: 'HOME_OFFICE' },
+          monitoringConditions: { startDate: new Date(2040, 0).toISOString() },
+        } as Order
+
+        const tasks: Task[] = []
+
+        tasks.push({
+          section: 'RISK_INFORMATION',
+          name: 'DETAILS_OF_INSTALLATION',
+          path: paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION,
+          state: 'OPTIONAL',
+          completed: false,
+        })
+
+        tasks.push({
+          section: 'RISK_INFORMATION',
+          name: 'IS_MAPPA',
+          path: '',
+          state: 'OPTIONAL',
+          completed: false,
+        })
+
+        tasks.push({
+          section: 'RISK_INFORMATION',
+          name: 'MAPPA',
+          path: '',
+          state: 'OPTIONAL',
+          completed: false,
+        })
+
+        tasks.push({
+          section: 'ADDITIONAL_DOCUMENTS',
+          name: 'ATTACHMENTS_HAVE_PHOTO',
+          path: paths.ATTACHMENT.HAVE_PHOTO,
+          state: 'OPTIONAL',
+          completed: false,
+        })
+
+        tasks.push({
+          section: 'ADDITIONAL_DOCUMENTS',
+          name: 'PHOTO_ATTACHMENT',
+          path: paths.ATTACHMENT.HAVE_PHOTO,
+          state: 'OPTIONAL',
+          completed: false,
+        })
+
+        mockTaskListService.getTasks.mockReturnValue(tasks)
+        mockTaskListService.getNextTaskPath.mockImplementation(sectionTasks => sectionTasks[0]?.path ?? '')
+
+        const sections = await service.getSectionsForOrder(order)
+
+        const riskInformationSection = sections.find(section => section.name === 'RISK_INFORMATION')!
+        const additionalDocumentsSection = sections.find(section => section.name === 'ADDITIONAL_DOCUMENTS')!
+
+        expect(riskInformationSection.completed).toBe(true)
+        expect(additionalDocumentsSection.completed).toBe(true)
+        expect(riskInformationSection.path).toBe(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION)
+        expect(additionalDocumentsSection.path).toBe(paths.ATTACHMENT.HAVE_PHOTO)
+      })
+
+      it('cohort court, mark risk info and additional docs as optional', async () => {
+        order = {
+          type: 'REINSTALL_DEVICE',
+          interestedParties: { notifyingOrganisation: 'CIVIL_COUNTY_COURT' },
+          monitoringConditions: { startDate: new Date(2040, 0).toISOString() },
+        } as Order
+
+        const tasks: Task[] = []
+
+        tasks.push({
+          section: 'RISK_INFORMATION',
+          name: 'DETAILS_OF_INSTALLATION',
+          path: paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION,
+          state: 'OPTIONAL',
+          completed: false,
+        })
+
+        tasks.push({
+          section: 'ADDITIONAL_DOCUMENTS',
+          name: 'ATTACHMENTS_HAVE_COURT_ORDER',
+          path: paths.ATTACHMENT.HAVE_COURT_ORDER,
+          state: 'OPTIONAL',
+          completed: false,
+        })
+
+        tasks.push({
+          section: 'ADDITIONAL_DOCUMENTS',
+          name: 'COURT_ORDER_ATTACHMENT',
+          path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'court_order'),
+          state: 'OPTIONAL',
+          completed: false,
+        })
+
+        mockTaskListService.getTasks.mockReturnValue(tasks)
+        mockTaskListService.getNextTaskPath.mockImplementation(sectionTasks => sectionTasks[0]?.path ?? '')
+
+        const sections = await service.getSectionsForOrder(order)
+
+        const riskInformationSection = sections.find(section => section.name === 'RISK_INFORMATION')!
+        const additionalDocumentsSection = sections.find(section => section.name === 'ADDITIONAL_DOCUMENTS')!
+
+        expect(riskInformationSection.completed).toBe(true)
+        expect(additionalDocumentsSection.completed).toBe(true)
+        expect(riskInformationSection.path).toBe(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION)
+        expect(additionalDocumentsSection.path).toBe(paths.ATTACHMENT.HAVE_COURT_ORDER)
+      })
+
+      it('links an empty optional risk information section to its first question, not CYA', async () => {
+        order = {
+          type: 'REINSTALL_DEVICE',
+          interestedParties: { notifyingOrganisation: 'HOME_OFFICE' },
+          monitoringConditions: { startDate: new Date(2040, 0).toISOString() },
+        } as Order
+        const tasks: Task[] = [
+          {
+            section: 'RISK_INFORMATION',
+            name: 'DETAILS_OF_INSTALLATION',
+            path: '',
+            state: 'OPTIONAL',
+            completed: false,
+          },
+          {
+            section: 'RISK_INFORMATION',
+            name: 'IS_MAPPA',
+            path: '',
+            state: 'OPTIONAL',
+            completed: false,
+          },
+          {
+            section: 'RISK_INFORMATION',
+            name: 'MAPPA',
+            path: '',
+            state: 'OPTIONAL',
+            completed: false,
+          },
+        ]
+
+        mockTaskListService.getTasks.mockReturnValue(tasks)
+        mockTaskListService.getNextTaskPath.mockImplementation(sectionTasks =>
+          sectionTasks.some(task => task.section === 'RISK_INFORMATION')
+            ? paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION
+            : '',
+        )
+        mockTaskListService.getCheckYourAnswersPathForSection.mockReturnValue('mockCYAPath')
+
+        const sections = await service.getSectionsForOrder(order)
+
+        const riskInformationSection = sections.find(section => section.name === 'RISK_INFORMATION')!
+
+        expect(riskInformationSection.path).toBe(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION)
+      })
+
+      it('links a fully completed optional risk information section to CYA', async () => {
+        order = {
+          type: 'REINSTALL_DEVICE',
+          interestedParties: { notifyingOrganisation: 'HOME_OFFICE' },
+          monitoringConditions: { startDate: new Date(2040, 0).toISOString() },
+        } as Order
+
+        const tasks: Task[] = [
+          {
+            section: 'RISK_INFORMATION',
+            name: 'DETAILS_OF_INSTALLATION',
+            path: paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION,
+            state: 'OPTIONAL',
+            completed: true,
+          },
+          {
+            section: 'RISK_INFORMATION',
+            name: 'IS_MAPPA',
+            path: 'second-question',
+            state: 'OPTIONAL',
+            completed: true,
+          },
+        ]
+        mockTaskListService.getTasks.mockReturnValue(tasks)
+        mockTaskListService.getNextTaskPath.mockImplementation(sectionTasks => sectionTasks[0]?.path ?? '')
+        mockTaskListService.getCheckYourAnswersPathForSection.mockReturnValue('mockCYAPath')
+
+        const sections = await service.getSectionsForOrder(order)
+
+        const risk = sections.find(sec => sec.name === 'RISK_INFORMATION')!
+        expect(risk.completed).toBe(true)
+        expect(risk.path).toBe('mockCYAPath')
+      })
+
+      it('links an empty optional additional documents section to its first question, not CYA', async () => {
+        order = {
+          type: 'REINSTALL_DEVICE',
+          interestedParties: { notifyingOrganisation: 'HOME_OFFICE' },
+          monitoringConditions: { startDate: new Date(2040, 0).toISOString() },
+        } as Order
+        const tasks: Task[] = [
+          {
+            section: 'ADDITIONAL_DOCUMENTS',
+            name: 'ATTACHMENTS_HAVE_PHOTO',
+            path: paths.ATTACHMENT.HAVE_PHOTO,
+            state: 'REQUIRED',
+            completed: false,
+          },
+        ]
+        mockTaskListService.getTasks.mockReturnValue(tasks)
+        mockTaskListService.getNextTaskPath.mockImplementation(sectionTasks =>
+          sectionTasks.some(task => task.section === 'ADDITIONAL_DOCUMENTS') ? paths.ATTACHMENT.HAVE_PHOTO : '',
+        )
+        mockTaskListService.getCheckYourAnswersPathForSection.mockReturnValue('mockCYAPath')
+
+        const sections = await service.getSectionsForOrder(order)
+
+        const documents = sections.find(sec => sec.name === 'ADDITIONAL_DOCUMENTS')!
+
+        expect(documents.path).toBe(paths.ATTACHMENT.HAVE_PHOTO)
+      })
+
+      it('does not treat risk information as optional when the notifying organisation is not a court or home office', async () => {
+        order = {
+          type: 'REINSTALL_DEVICE',
+          interestedParties: { notifyingOrganisation: 'PROBATION' },
+          monitoringConditions: { startDate: new Date(2040, 0).toISOString() },
+        } as Order
+        const tasks: Task[] = [
+          {
+            section: 'RISK_INFORMATION',
+            name: 'DETAILS_OF_INSTALLATION',
+            path: paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION,
+            state: 'REQUIRED',
+            completed: false,
+          },
+        ]
+        mockTaskListService.getTasks.mockReturnValue(tasks)
+
+        const sections = await service.getSectionsForOrder(order)
+
+        const risk = sections.find(sec => sec.name === 'RISK_INFORMATION')!
+        expect(risk.completed).toBe(false)
+      })
     })
   })
 })
