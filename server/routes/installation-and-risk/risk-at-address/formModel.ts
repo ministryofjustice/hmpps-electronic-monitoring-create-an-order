@@ -1,4 +1,5 @@
 import z from 'zod'
+import { validationErrors } from '../../../constants/validationErrors'
 
 const RiskAtAddressFormModel = z.object({
   action: z.string(),
@@ -9,6 +10,10 @@ const RiskAtAddressFormModel = z.object({
       if (val === undefined) return []
       return Array.isArray(val) ? val : [val]
     }),
+})
+
+export const RiskAtAddressFormValidator = z.object({
+  riskCategory: z.array(z.string()).min(1, validationErrors.installationAndRisk.riskCategoryRequired),
 })
 
 export default RiskAtAddressFormModel

@@ -28,6 +28,16 @@ context('risk at address page', () => {
     page.form.riskCategoryField.shouldNotHaveValue()
   })
 
+  it('shows an error when nothing is selected', () => {
+    const page = Page.visit(RiskAtAddressPage, { orderId: mockOrderId })
+
+    page.form.continueButton.click()
+
+    Page.verifyOnPage(RiskAtAddressPage)
+    page.errorSummary.shouldHaveError('Select all the possible risks at the installation address')
+    page.form.riskCategoryField.shouldHaveValidationMessage('Select all the possible risks at the installation address')
+  })
+
   it('saves multiple selections, continues to other risks and pre-checks them on revisit', () => {
     const page = Page.visit(RiskAtAddressPage, { orderId: mockOrderId })
 

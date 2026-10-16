@@ -16,6 +16,7 @@ describe('RiskAtAddressController', () => {
     store = new RiskAtInstallationStoreService(new InMemoryStore())
     controller = new RiskAtAddressController(store)
     req = createMockRequest()
+    req.flash = jest.fn().mockReturnValue([])
     res = createMockResponse()
   })
 
@@ -40,6 +41,20 @@ describe('RiskAtAddressController', () => {
     })
   })
 
+  describe('view with errors', () => {
+    it('renders the flashed validation error', async () => {
+      const errors = [{ field: 'riskCategory', error: 'Select something' }]
+      ;(req.flash as jest.Mock).mockImplementation((key: string) => (key === 'validationErrors' ? errors : []))
+
+      await controller.view(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/order/installation-and-risk/risk-at-address',
+        expect.objectContaining({ riskCategory: { values: [], error: { text: 'Select something' } } }),
+      )
+    })
+  })
+
   describe('update', () => {
     it('caches the selected risks at the installation address', async () => {
       req.body = { action: 'continue', riskCategory: ['DANGEROUS_ANIMALS', 'IOM'] }
@@ -57,13 +72,29 @@ describe('RiskAtAddressController', () => {
       expect((await store.getRiskAtInstallation(req.order!)).riskCategory).toEqual(['IOM'])
     })
 
-    it('caches nothing when no risks are selected', async () => {
-      await store.updateField(req.order!, 'riskCategory', ['IOM'])
-      req.body = { action: 'continue' }
+    describe('when no risks are selected', () => {
+      beforeEach(async () => {
+        await store.updateField(req.order!, 'riskCategory', ['IOM'])
+        req.body = { action: 'continue' }
 
-      await controller.update(req, res, next)
+        await controller.update(req, res, next)
+      })
 
-      expect((await store.getRiskAtInstallation(req.order!)).riskCategory).toEqual([])
+      it('does not change the cached risks', async () => {
+        expect((await store.getRiskAtInstallation(req.order!)).riskCategory).toEqual(['IOM'])
+      })
+
+      it('flashes a validation error', () => {
+        expect(req.flash).toHaveBeenCalledWith('validationErrors', [
+          { field: 'riskCategory', error: 'Select all the possible risks at the installation address' },
+        ])
+      })
+
+      it('redirects back to the risk at address page', () => {
+        expect(res.redirect).toHaveBeenCalledWith(
+          paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS.replace(':orderId', req.order!.id),
+        )
+      })
     })
 
     it('goes to the other risks page', async () => {
