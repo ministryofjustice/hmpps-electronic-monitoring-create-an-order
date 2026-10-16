@@ -1,19 +1,13 @@
 import z from 'zod'
 import { validationErrors } from '../../../constants/validationErrors'
+import exclusiveCheckboxValues from '../../../utils/exclusiveCheckboxValues'
 
 const NO_RISK = 'NO_RISK'
 const RISK_TO_GENDER = 'RISK_TO_GENDER'
 
 const RiskBehaviourFormModel = z.object({
   action: z.string(),
-  possibleRisk: z
-    .union([z.string(), z.array(z.string())])
-    .optional()
-    .transform(val => {
-      if (val === undefined) return []
-      const risks = Array.isArray(val) ? val : [val]
-      return risks.includes(NO_RISK) ? [NO_RISK] : risks
-    }),
+  possibleRisk: exclusiveCheckboxValues([NO_RISK]),
   genderRiskDetails: z.string().default(''),
 })
 
