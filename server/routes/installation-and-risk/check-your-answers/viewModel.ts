@@ -6,6 +6,7 @@ import { formatDateTime, lookup } from '../../../utils/utils'
 import isOrderDataDictionarySameOrAbove from '../../../utils/dataDictionaryVersionComparer'
 import riskFlowPath from '../riskFlowPath'
 import splitRisks from '../splitRisks'
+import { RISK_TO_GENDER } from '../riskCodes'
 import paths from '../../../constants/paths'
 import FeatureFlags from '../../../utils/featureFlags'
 import { getRiskInformationFlow, riskInformationPages } from '../../../services/riskInformationFlow'
@@ -101,7 +102,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
     ),
   )
 
-  if (possibleRisks.includes('RISK_TO_GENDER') && genderRiskDetailsFromOrder) {
+  if (possibleRisks.includes(RISK_TO_GENDER) && genderRiskDetailsFromOrder) {
     riskAnswers.push(
       createAnswer(questions.genderRiskDetails.text, genderRiskDetailsFromOrder, possibleRiskUri, answerOpts),
     )

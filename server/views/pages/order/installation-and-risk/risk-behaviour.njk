@@ -26,7 +26,7 @@
 
 {% set possibleRiskOptions = [] %}
 {% for risk in possibleRisk.items %}
-  {% if risk.value == 'RISK_TO_GENDER' %}
+  {% if risk.value == genderRiskDetails.revealedBy %}
     {% set risk = {
       value: risk.value,
       text: risk.text,

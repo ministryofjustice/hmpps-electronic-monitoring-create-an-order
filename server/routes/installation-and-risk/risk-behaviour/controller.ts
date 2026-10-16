@@ -3,6 +3,7 @@ import paths from '../../../constants/paths'
 import { ValidationResult } from '../../../models/Validation'
 import { convertZodErrorToValidationError } from '../../../utils/errors'
 import RiskAtInstallationStoreService from '../riskAtInstallationStoreService'
+import { RISK_TO_GENDER } from '../riskCodes'
 import RiskBehaviourFormModel, { RiskBehaviourFormValidator } from './formModel'
 import RiskBehaviourViewModel from './viewModel'
 
@@ -42,7 +43,7 @@ export default class RiskBehaviourController {
     await this.riskAtInstallationStoreService.updateField(
       order,
       'genderRiskDetails',
-      possibleRisk.includes('RISK_TO_GENDER') ? genderRiskDetails : '',
+      possibleRisk.includes(RISK_TO_GENDER) ? genderRiskDetails : '',
     )
 
     res.redirect(paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS.replace(':orderId', order.id))

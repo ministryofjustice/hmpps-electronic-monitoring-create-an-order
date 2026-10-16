@@ -6,6 +6,9 @@ export const RISK_AT_ADDRESS_QUESTION = 'At installation what are the possible r
 export const RISK_AT_ADDRESS_HINT =
   'Answer questions based on what you know now. Risk can be updated when more is known about the address and who lives there.'
 
+export const NO_RISK_OPTION = 'No risk at the address'
+export const RISK_UNKNOWN_OPTION = 'Not able to provide this information'
+
 export const RISK_AT_ADDRESS_OPTIONS = [
   'History of substance abuse',
   'Managed through IOM',
@@ -16,12 +19,9 @@ export const RISK_AT_ADDRESS_OPTIONS = [
   'Children under the age of 18 are living at the property',
   'Animals at the property, for example dogs',
   'Other known risks',
-  'No risk at the address',
-  'Not able to provide this information',
+  NO_RISK_OPTION,
+  RISK_UNKNOWN_OPTION,
 ]
-
-export const NO_RISK_OPTION = 'No risk at the address'
-export const RISK_UNKNOWN_OPTION = 'Not able to provide this information'
 
 export default class RiskAtAddressComponent extends SingleQuestionFormComponent {
   get riskCategoryField(): FormCheckboxesComponent {

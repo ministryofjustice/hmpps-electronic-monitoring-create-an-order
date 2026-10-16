@@ -53,6 +53,12 @@ describe('risk behaviour view model', () => {
     expect(result.genderRiskDetails.value).toEqual('Women')
   })
 
+  it('reveals the gender risk details when the risk to gender option is selected', () => {
+    const result = RiskBehaviourViewModel.construct([], '', possibleRisks, false)
+
+    expect(result.genderRiskDetails.revealedBy).toEqual('RISK_TO_GENDER')
+  })
+
   it('shows the gender risk details validation error', () => {
     const result = RiskBehaviourViewModel.construct(['RISK_TO_GENDER'], '', possibleRisks, false, [
       { field: 'genderRiskDetails', error: 'Enter something' },

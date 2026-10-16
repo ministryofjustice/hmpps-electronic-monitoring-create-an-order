@@ -4,7 +4,7 @@ import { createGovukErrorSummary } from '../../../utils/errors'
 import exclusiveOptions from '../../../utils/exclusiveOptions'
 import toCheckboxItems from '../../../utils/toCheckboxItems'
 import { getError } from '../../../utils/utils'
-import { POSSIBLE_RISK_EXCLUSIVE_CODES } from '../riskCodes'
+import { POSSIBLE_RISK_EXCLUSIVE_CODES, RISK_TO_GENDER } from '../riskCodes'
 
 const construct = (
   possibleRisk: string[],
@@ -18,7 +18,11 @@ const construct = (
     items: exclusiveOptions(toCheckboxItems(possibleRisks, disabled), POSSIBLE_RISK_EXCLUSIVE_CODES),
     error: getError(errors, 'possibleRisk'),
   },
-  genderRiskDetails: { value: genderRiskDetails, error: getError(errors, 'genderRiskDetails') },
+  genderRiskDetails: {
+    value: genderRiskDetails,
+    revealedBy: RISK_TO_GENDER,
+    error: getError(errors, 'genderRiskDetails'),
+  },
   errorSummary: createGovukErrorSummary(errors),
 })
 

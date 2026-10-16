@@ -1,9 +1,7 @@
 import z from 'zod'
 import { validationErrors } from '../../../constants/validationErrors'
 import exclusiveCheckboxValues from '../../../utils/exclusiveCheckboxValues'
-import { POSSIBLE_RISK_EXCLUSIVE_CODES } from '../riskCodes'
-
-const RISK_TO_GENDER = 'RISK_TO_GENDER'
+import { POSSIBLE_RISK_EXCLUSIVE_CODES, RISK_TO_GENDER } from '../riskCodes'
 
 const RiskBehaviourFormModel = z.object({
   action: z.string(),

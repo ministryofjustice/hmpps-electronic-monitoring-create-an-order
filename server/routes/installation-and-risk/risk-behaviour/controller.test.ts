@@ -50,7 +50,7 @@ describe('RiskBehaviourController', () => {
 
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/installation-and-risk/risk-behaviour',
-        expect.objectContaining({ genderRiskDetails: { value: 'Women' } }),
+        expect.objectContaining({ genderRiskDetails: expect.objectContaining({ value: 'Women' }) }),
       )
     })
 
