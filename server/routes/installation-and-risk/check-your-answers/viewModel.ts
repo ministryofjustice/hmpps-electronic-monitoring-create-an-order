@@ -4,9 +4,11 @@ import { Order } from '../../../models/Order'
 import I18n from '../../../types/i18n'
 import { formatDateTime, lookup } from '../../../utils/utils'
 import isOrderDataDictionarySameOrAbove from '../../../utils/dataDictionaryVersionComparer'
-import riskBehaviourPath from '../riskBehaviourPath'
+import riskFlowPath from '../riskFlowPath'
 import splitRisks from '../splitRisks'
+import { RISK_TO_GENDER } from '../riskCodes'
 import paths from '../../../constants/paths'
+import FeatureFlags from '../../../utils/featureFlags'
 import { getRiskInformationFlow, riskInformationPages } from '../../../services/riskInformationFlow'
 
 const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean, uri: string = '') => {
@@ -18,6 +20,8 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
 
   const isHomeOfficeUser = order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE'
   const riskInformationFlow = getRiskInformationFlow(order.interestedParties?.notifyingOrganisation)
+
+  const isRiskInformationFlowEnabled = FeatureFlags.getInstance().get('RISK_INFORMATION_FLOW_ENABLED')
 
   const isNewOffenceFlow = isOrderDataDictionarySameOrAbove('DDV6', order)
 
@@ -87,7 +91,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
     order.dataDictionaryVersion,
   )
 
-  const possibleRiskUri = riskBehaviourPath(riskDetailsUri, order.id)
+  const possibleRiskUri = riskFlowPath(paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR, riskDetailsUri, order.id)
 
   riskAnswers.push(
     createMultipleChoiceAnswer(
@@ -98,7 +102,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
     ),
   )
 
-  if (possibleRisks.includes('RISK_TO_GENDER') && genderRiskDetailsFromOrder) {
+  if (possibleRisks.includes(RISK_TO_GENDER) && genderRiskDetailsFromOrder) {
     riskAnswers.push(
       createAnswer(questions.genderRiskDetails.text, genderRiskDetailsFromOrder, possibleRiskUri, answerOpts),
     )
@@ -106,9 +110,11 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
 
   riskAnswers.push(
     createMultipleChoiceAnswer(
-      questions.riskCategory.text,
+      isRiskInformationFlowEnabled
+        ? content.pages.detailsOfInstallation.questions.riskAtAddress.text
+        : questions.riskCategory.text,
       riskCategories?.map(category => lookup(content.reference.riskCategories, category)) ?? [],
-      riskDetailsUri,
+      riskFlowPath(paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS, riskDetailsUri, order.id),
       answerOpts,
     ),
   )

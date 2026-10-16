@@ -120,6 +120,7 @@ interface ValidationErrors {
   installationAndRisk: {
     offenceRequired: string
     possibleRiskRequired: string
+    riskCategoryRequired: string
     riskDetailsRequired: string
     riskDetailsTooLong: string
     genderRiskDetailsRequired: string
@@ -404,6 +405,7 @@ const validationErrors: ValidationErrors = {
   installationAndRisk: {
     offenceRequired: 'Select the type of offence the device wearer committed',
     possibleRiskRequired: "Select all the possible risks from the device wearer's behaviour",
+    riskCategoryRequired: 'Select all the possible risks at the installation address',
     riskDetailsRequired: 'Enter any other risks to be aware of',
     riskDetailsTooLong: 'Any other risks to be aware of must be 500 characters or less',
     genderRiskDetailsRequired: 'Enter what sex or gender they are a risk to',

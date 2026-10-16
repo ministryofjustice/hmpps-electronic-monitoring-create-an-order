@@ -81,7 +81,7 @@
       hint: {
         text: content.pages.installationAndRisk.questions.riskCategory.hint
       },
-      items: content.reference.riskCategories | toOptions(not isOrderEditable),
+      items: content.reference.riskCategories | toOptions(not isOrderEditable) | removeOptions(['NO_RISK_AT_ADDRESS', 'RISK_AT_ADDRESS_UNKNOWN']),
       errorMessage: riskCategory.error,
       values: riskCategory.values
     }) }}

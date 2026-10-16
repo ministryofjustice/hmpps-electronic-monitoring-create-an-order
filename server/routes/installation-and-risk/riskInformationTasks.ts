@@ -1,5 +1,5 @@
 import paths from '../../constants/paths'
-import riskBehaviourPath from './riskBehaviourPath'
+import riskFlowPath from './riskFlowPath'
 import { Order } from '../../models/Order'
 import { getRiskInformationFlow, RiskInformationPage, riskInformationPages } from '../../services/riskInformationFlow'
 import { hasOptionalVariationSectionIsHOCourt } from '../../utils/utils'
@@ -45,7 +45,7 @@ const riskInformationTaskDefinitions: Record<RiskInformationPage, RiskInformatio
   [riskInformationPages.detailsOfInstallation]: order =>
     task(
       riskInformationPages.detailsOfInstallation,
-      riskBehaviourPath(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION),
+      riskFlowPath(paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR, paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION),
       it => it.detailsOfInstallation !== null && it.detailsOfInstallation !== undefined,
     )(order),
   [riskInformationPages.isMappa]: task(
