@@ -1,209 +1,208 @@
 import Page from '../../../pages/page'
 import ConfirmVariationPage from '../../../pages/order/variation/confirmVariation'
 import OrderTasksPage from '../../../pages/order/summary'
-import IsRejectionPage from '../edit-order/is-rejection/isRejectionPage'
 import IsAddressChangePage from '../edit-order/is-address-change/isAddressChangePage'
+import ServiceRequestTypePage from './service-request-type/serviceRequestTypePage'
+import NotifyingOrganisationPage from '../interested-parties/notifying-organisation/notifyingOrganisationPage'
+import mockApiOrder from '../../../utils/data/ApiOrder'
 
 const mockOriginalId = '00a00000-79cd-49f9-a498-b1f07c543b8a'
-const mockVariationId = '11a11111-79cd-49f9-a498-b1f07c543b8a'
-const variationPath = '/copy-as-variation'
+const mockVersionId = '22a22222-79cd-49f9-a498-b1f07c543b8a'
 
-const stubVariationOrder = (fmsResultDate: Date, startDate: Date, type: string = 'REQUEST') => {
+const stubOrder = (outcome: 'ACCEPTED' | 'REJECTED' | 'PROCESSING', status = 'SUBMITTED', type = 'REQUEST') => {
+  const statusUpdates =
+    status === 'SUBMITTED' && outcome !== 'PROCESSING'
+      ? [
+          {
+            id: '33a33333-79cd-49f9-a498-b1f07c543b8a',
+            versionId: mockVersionId,
+            status: outcome,
+            datetimeOfStatusChange: '2025-01-01T12:00:00.000Z',
+            statusUpdateReasons: [],
+          },
+        ]
+      : []
   cy.task('stubCemoGetOrder', {
     httpStatus: 200,
     id: mockOriginalId,
-    status: 'IN_PROGRESS',
+    status,
     type,
     order: {
-      monitoringConditions: {
-        startDate,
-        endDate: '2025-02-01T00:00:00Z',
-        orderType: 'CIVIL',
-        curfew: true,
-        exclusionZone: true,
-        trail: true,
-        mandatoryAttendance: true,
-        alcohol: true,
-        conditionType: 'BAIL_ORDER',
-        orderTypeDescription: '',
-        sentenceType: 'IPP',
-        issp: 'YES',
-        hdc: 'NO',
-        prarr: 'UNKNOWN',
-        pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE',
-        offenceType: '',
-      },
-      fmsResultDate,
+      versionId: mockVersionId,
+      canAmend: status === 'REJECTED' || outcome !== 'PROCESSING',
+      statusUpdates,
     },
   })
 }
+
+const verifyReturnedOrderAmendmentFlow = (sourceType: string) => {
+  stubOrder('REJECTED', 'REJECTED', sourceType)
+  cy.task('stubCemoSubmitOrder', {
+    httpStatus: 200,
+    method: 'POST',
+    id: mockOriginalId,
+    subPath: '/amend',
+    response: { order: mockApiOrder(), outcome: 'REJECTED' },
+  })
+  const page = Page.visit(OrderTasksPage, { orderId: mockOriginalId })
+  cy.contains('This form has been returned.').should('be.visible')
+  page.makeChangesButton.should('have.attr', 'href', `/order/${mockOriginalId}/edit`).click()
+  Page.verifyOnPage(ConfirmVariationPage).confirmButton().click()
+
+  cy.task('stubCemoVerifyRequestReceived', {
+    uri: `/orders/${mockOriginalId}/amend`,
+    body: {},
+  }).should('be.true')
+  Page.verifyOnPage(NotifyingOrganisationPage)
+  cy.contains('Are you making changes to this form because the original was rejected by email?').should('not.exist')
+}
+
 context('Variation', () => {
-  context('Creating a variation from an existing order', () => {
-    context('Confirm Variation page', () => {
+  context('Creating a version from an existing order', () => {
+    beforeEach(() => {
+      cy.task('resetFeatureFlags')
+      cy.task('reset')
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+      })
+      stubOrder('ACCEPTED')
+      cy.task('stubCemoSubmitOrder', {
+        httpStatus: 200,
+        method: 'POST',
+        id: mockOriginalId,
+        subPath: '/amend',
+        response: { order: mockApiOrder(), outcome: 'ACCEPTED' },
+      })
+      cy.signIn()
+    })
+
+    it('shows the confirmation page for an eligible submitted order', () => {
+      cy.visit(`/order/${mockOriginalId}/edit`)
+
+      const page = Page.verifyOnPage(ConfirmVariationPage)
+      page.header.userName().should('contain.text', 'J. Smith')
+    })
+
+    it('returns to the summary when the user cancels', () => {
+      cy.visit(`/order/${mockOriginalId}/edit`)
+      const page = Page.verifyOnPage(ConfirmVariationPage)
+
+      page.cancelButton().click()
+
+      Page.verifyOnPage(OrderTasksPage)
+    })
+
+    it('blocks changes to an open submitted order while it is processing', () => {
+      stubOrder('PROCESSING')
+      const page = Page.visit(OrderTasksPage, { orderId: mockOriginalId })
+
+      page.makeChangesButton.should('be.disabled')
+      page.makeChangesButton.should('not.have.attr', 'href')
+      cy.contains("We can't check the status of this form right now. Try again later.").should('be.visible')
+    })
+
+    it('creates a variation for an accepted submitted order', () => {
+      stubOrder('ACCEPTED')
+      const page = Page.visit(OrderTasksPage, { orderId: mockOriginalId })
+
+      page.makeChangesButton.should('have.attr', 'href', `/order/${mockOriginalId}/edit`).click()
+      Page.verifyOnPage(ConfirmVariationPage).confirmButton().click()
+
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOriginalId}/amend`,
+        body: {},
+      }).should('be.true')
+      Page.verifyOnPage(OrderTasksPage)
+    })
+
+    it('returns to the summary with a stale-status message when amendment is rejected', () => {
+      stubOrder('ACCEPTED')
+      cy.task('stubCemoSubmitOrder', {
+        httpStatus: 409,
+        method: 'POST',
+        id: mockOriginalId,
+        subPath: '/amend',
+        response: {},
+      })
+
+      const page = Page.visit(OrderTasksPage, { orderId: mockOriginalId })
+      page.makeChangesButton.click()
+      Page.verifyOnPage(ConfirmVariationPage).confirmButton().click()
+
+      Page.verifyOnPage(OrderTasksPage)
+      cy.contains('The status of this form has changed. Check its current status before making changes.').should(
+        'be.visible',
+      )
+    })
+
+    it('blocks a submitted order without an eligible status observation', () => {
+      stubOrder('PROCESSING')
+      const page = Page.visit(OrderTasksPage, { orderId: mockOriginalId })
+
+      cy.contains("We can't check the status of this form right now. Try again later.").should('be.visible')
+      page.makeChangesButton.should('be.disabled')
+      page.makeChangesButton.should('not.have.attr', 'href')
+    })
+    ;(['REQUEST', 'VARIATION'] as const).forEach(sourceType => {
+      it(`amends a returned ${sourceType.toLowerCase()} using the merged endpoint`, () => {
+        verifyReturnedOrderAmendmentFlow(sourceType)
+      })
+    })
+
+    it('loads the current status and blocks changes while the case is processing', () => {
+      stubOrder('PROCESSING')
+      const page = Page.visit(OrderTasksPage, { orderId: mockOriginalId })
+
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOriginalId}`,
+        method: 'GET',
+        body: '',
+      }).should('be.true')
+      page.makeChangesButton.should('be.disabled')
+      page.makeChangesButton.should('not.have.attr', 'href')
+      cy.contains("We can't check the status of this form right now. Try again later.").should('be.visible')
+    })
+
+    it('redirects a direct edit visit to the summary while the case is processing', () => {
+      stubOrder('PROCESSING')
+
+      cy.visit(`/order/${mockOriginalId}/edit`)
+
+      Page.verifyOnPage(OrderTasksPage)
+      cy.get('#make-changes-button').should('be.disabled')
+    })
+
+    context('SERVICE_REQUEST_TYPE_ENABLED enabled', () => {
       beforeEach(() => {
-        cy.task('reset')
-        cy.task('stubSignIn', {
-          name: 'john smith',
-          roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
-        })
-        cy.task('stubCemoGetOrder', {
-          httpStatus: 200,
-          id: mockOriginalId,
-          status: 'SUBMITTED',
-        })
-        cy.task('stubCemoCreateVariation', {
-          httpStatus: 200,
-          originalId: mockOriginalId,
-          variationId: mockVariationId,
-        })
-        cy.task('stubCemoSubmitOrder', {
-          httpStatus: 200,
-          method: 'POST',
-          id: mockOriginalId,
-          subPath: variationPath,
-          response: [{}],
-        })
-        cy.signIn()
+        cy.task('setFeatureFlags', { SERVICE_REQUEST_TYPE_ENABLED: true })
+      })
+      afterEach(() => {
+        cy.task('resetFeatureFlags')
       })
 
-      it('Should display the page', () => {
+      it('uses the returned-order route for a cancelled returned order instead of the service-request journey', () => {
+        verifyReturnedOrderAmendmentFlow('VARIATION')
+      })
+
+      it('allows an accepted submitted order through the service-request journey', () => {
+        stubOrder('ACCEPTED')
         cy.visit(`/order/${mockOriginalId}/edit`)
+        Page.verifyOnPage(ConfirmVariationPage).confirmButton().click()
 
-        const page = Page.verifyOnPage(ConfirmVariationPage)
-        page.header.userName().should('contain.text', 'J. Smith')
+        const addressChangePage = Page.verifyOnPage(IsAddressChangePage)
+        addressChangePage.form.fillInWith('No')
+        addressChangePage.form.saveAndContinueButton.click()
+
+        Page.verifyOnPage(ServiceRequestTypePage)
       })
 
-      it('should have a button to cancel and return to the form task list', () => {
-        cy.visit(`/order/${mockOriginalId}/edit`)
-        const page = Page.verifyOnPage(ConfirmVariationPage)
+      it('blocks an order when the backend cannot confirm an accepted outcome', () => {
+        stubOrder('PROCESSING')
+        const page = Page.visit(OrderTasksPage, { orderId: mockOriginalId })
 
-        page.cancelButton().should('exist')
-
-        page.cancelButton().click()
-
-        Page.verifyOnPage(OrderTasksPage)
-      })
-
-      it('should have a button to confirm and proceed to the is rejection page', () => {
-        cy.visit(`/order/${mockOriginalId}/edit`)
-        const page = Page.verifyOnPage(ConfirmVariationPage)
-        const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 32 days before today
-        const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 33 days before today
-        stubVariationOrder(fmsResultDate, startDate)
-
-        page.confirmButton().should('exist')
-
-        page.confirmButton().click()
-
-        Page.verifyOnPage(IsRejectionPage)
-      })
-
-      it('should proceed to the order tasks page when fms result date after start date and current date is after 30 days of fms result date', () => {
-        cy.visit(`/order/${mockOriginalId}/edit`)
-        const page = Page.verifyOnPage(ConfirmVariationPage)
-
-        const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 32).setHours(0, 0, 0, 0)) // 32 days before today
-        const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 45).setHours(0, 0, 0, 0)) // 45 days before today
-        stubVariationOrder(fmsResultDate, startDate)
-
-        page.confirmButton().should('exist')
-
-        page.confirmButton().click()
-
-        Page.verifyOnPage(OrderTasksPage)
-      })
-
-      it('should proceed to the is rejection page when fms result date after start date and current date is within 30 days of fms result date', () => {
-        cy.visit(`/order/${mockOriginalId}/edit`)
-        const page = Page.verifyOnPage(ConfirmVariationPage)
-
-        const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 14).setHours(0, 0, 0, 0)) // 14 days before today
-        const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 15 days before today
-        stubVariationOrder(fmsResultDate, startDate)
-        page.confirmButton().should('exist')
-
-        page.confirmButton().click()
-
-        Page.verifyOnPage(IsRejectionPage)
-      })
-
-      it('should proceed to the order tasks page when fms result date before start date and current date is after 30 days of fms result date', () => {
-        cy.visit(`/order/${mockOriginalId}/edit`)
-        const page = Page.verifyOnPage(ConfirmVariationPage)
-
-        const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 33).setHours(0, 0, 0, 0)) // 33 days before today
-        const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 32).setHours(0, 0, 0, 0)) // 32 days before today
-        stubVariationOrder(fmsResultDate, startDate)
-        page.confirmButton().should('exist')
-
-        page.confirmButton().click()
-
-        Page.verifyOnPage(OrderTasksPage)
-      })
-
-      it('should proceed to the is rejection page when fms result date after start date and current date is within 30 days of fms result date', () => {
-        cy.visit(`/order/${mockOriginalId}/edit`)
-        const page = Page.verifyOnPage(ConfirmVariationPage)
-        const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 16).setHours(0, 0, 0, 0)) // 16 days before today
-        const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 15 days before today
-        stubVariationOrder(fmsResultDate, startDate)
-        page.confirmButton().should('exist')
-
-        page.confirmButton().click()
-
-        Page.verifyOnPage(IsRejectionPage)
-      })
-
-      context('SERVICE_REQUEST_TYPE_ENABLED enabled', () => {
-        const testFlags = { SERVICE_REQUEST_TYPE_ENABLED: true }
-        beforeEach(() => {
-          cy.task('setFeatureFlags', testFlags)
-        })
-        afterEach(() => {
-          cy.task('resetFeatureFlags')
-        })
-        it('should proceed to the is address changed page when fms result date after start date and current date is after 30 days of fms result date', () => {
-          cy.visit(`/order/${mockOriginalId}/edit`)
-          const page = Page.verifyOnPage(ConfirmVariationPage)
-
-          const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 32).setHours(0, 0, 0, 0)) // 32 days before today
-          const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 45).setHours(0, 0, 0, 0)) // 45 days before today
-          stubVariationOrder(fmsResultDate, startDate)
-
-          page.confirmButton().should('exist')
-
-          page.confirmButton().click()
-
-          Page.verifyOnPage(IsAddressChangePage)
-        })
-
-        it('should proceed to the is address changed page when fms result date before start date and current date is after 30 days of fms result date', () => {
-          cy.visit(`/order/${mockOriginalId}/edit`)
-          const page = Page.verifyOnPage(ConfirmVariationPage)
-
-          const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 33).setHours(0, 0, 0, 0)) // 33 days before today
-          const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 32).setHours(0, 0, 0, 0)) // 32 days before today
-          stubVariationOrder(fmsResultDate, startDate)
-          page.confirmButton().should('exist')
-
-          page.confirmButton().click()
-
-          Page.verifyOnPage(IsAddressChangePage)
-        })
-
-        it('should proceed to the is address changed page when copying from variation', () => {
-          cy.visit(`/order/${mockOriginalId}/edit`)
-          const page = Page.verifyOnPage(ConfirmVariationPage)
-
-          const fmsResultDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 16).setHours(0, 0, 0, 0)) // 16 days before today
-          const startDate = new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)) // 15 days before today
-          stubVariationOrder(fmsResultDate, startDate, 'VARIATION')
-          page.confirmButton().should('exist')
-
-          page.confirmButton().click()
-
-          Page.verifyOnPage(IsAddressChangePage)
-        })
+        page.makeChangesButton.should('be.disabled')
+        page.makeChangesButton.should('not.have.attr', 'href')
       })
     })
   })

@@ -40,7 +40,6 @@ export default function routes({
   installationLocationService,
   installationAppointmentService,
   orderChecklistService,
-  isRejectionService,
   monitoringConditionsStoreService,
   monitoringConditionsUpdateService,
   removeMonitoringTypeService,
@@ -177,7 +176,6 @@ export default function routes({
       orderService,
       sectionService,
       fmsRequestService,
-      isRejectionService,
       serviceRequestTypeService,
     }),
   )

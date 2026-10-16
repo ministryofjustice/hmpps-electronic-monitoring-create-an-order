@@ -4,6 +4,7 @@ import { AuthenticatedRequestInput } from '../interfaces/request'
 import Result from '../interfaces/result'
 import ErrorResponseModel from '../models/ErrorResponse'
 import { CreateOrderFormData } from '../models/form-data/order'
+import OrderAmendmentModel, { OrderAmendment } from '../models/OrderAmendment'
 import OrderModel, { Order } from '../models/Order'
 import { VersionInformation, VersionInformationList } from '../models/VersionInformation'
 import { SanitisedError } from '../sanitisedError'
@@ -57,11 +58,12 @@ export default class OrderService {
     return OrderModel.parse(result)
   }
 
-  async createVariationFromExisting(input: OrderRequestInput): Promise<void> {
-    return this.apiClient.post({
-      path: `/api/orders/${input.orderId}/copy-as-variation`,
+  async amendOrder(input: OrderRequestInput): Promise<OrderAmendment> {
+    const result = await this.apiClient.post({
+      path: `/api/orders/${input.orderId}/amend`,
       token: input.accessToken,
     })
+    return OrderAmendmentModel.parse(result)
   }
 
   async getOrder(input: OrderRequestInput): Promise<Order> {

@@ -27,7 +27,6 @@ import { createRedisClient } from '../data/redisClient'
 import RedisOrderChecklistStore from '../data/orderChecklistStore/redisOrderChecklistStore'
 import config from '../config'
 import InMemoryOrderChecklistStore from '../data/orderChecklistStore/inMemoryOrderChecklistStore'
-import IsRejectionService from '../routes/is-rejection/service'
 import MonitoringConditionsStoreService from '../routes/monitoring-conditions/monitoringConditionsStoreService'
 import InMemoryStore from '../routes/store/inMemoryStore'
 import MonitoringConditionsUpdateService from '../routes/monitoring-conditions/monitoringConditionsService'
@@ -80,7 +79,6 @@ export const services = () => {
   const curfewAdditionalDetailsService = new CurfewAdditionalDetailsService(cemoApiClient)
   const installationLocationService = new InstallationLocationService(cemoApiClient)
   const installationAppointmentService = new InstallationAppointmentService(cemoApiClient)
-  const isRejectionService = new IsRejectionService(cemoApiClient)
   const monitoringConditionsStoreService = new MonitoringConditionsStoreService(
     config.redis.enabled ? new RedisStore(createRedisClient()) : new InMemoryStore(),
   )
@@ -140,7 +138,6 @@ export const services = () => {
     installationLocationService,
     installationAppointmentService,
     orderChecklistService,
-    isRejectionService,
     monitoringConditionsStoreService,
     monitoringConditionsUpdateService,
     removeMonitoringTypeService,
@@ -182,7 +179,6 @@ export {
   ProbationDeliveryUnitService,
   InstallationLocationService,
   OrderChecklistService,
-  IsRejectionService,
   MonitoringConditionsStoreService,
   MonitoringConditionsUpdateService,
   RemoveMonitoringTypeService,

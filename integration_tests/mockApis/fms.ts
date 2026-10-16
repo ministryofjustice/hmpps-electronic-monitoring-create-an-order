@@ -63,6 +63,28 @@ const stubFMSUpdateMonitoringOrder = (options: CreateStubOptions) =>
     },
   })
 
+type GetFmsCaseStateStubOptions = {
+  httpStatus: number
+  caseId: string
+  state: string
+}
+
+const stubFMSGetCaseState = (options: GetFmsCaseStateStubOptions) =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPath: `/fms/now/table/x_serg2_ems_csm_case/${options.caseId}`,
+      queryParameters: {
+        sysparm_fields: { equalTo: 'state' },
+      },
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: { result: { state: options.state } },
+    },
+  })
+
 type FmsAttachmentResponse = {
   status: number
   result: Record<string, string>
@@ -237,6 +259,7 @@ export default {
   stubFMSCreateMonitoringOrder,
   stubFMSUpdateDeviceWearer,
   stubFMSUpdateMonitoringOrder,
+  stubFMSGetCaseState,
   stubFmsUploadAttachment,
   stubFmsUploadVariationAttachment,
   verifyFMSCreateDeviceWearerRequestReceived,

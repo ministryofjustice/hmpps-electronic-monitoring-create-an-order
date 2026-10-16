@@ -137,23 +137,22 @@ describe('Order Service', () => {
     })
   })
 
-  describe('createVariationFromExisting', () => {
+  describe('amendOrder', () => {
     const mockAccessToken = 'ABC'
     const mockOrderId = '123456'
 
-    it('should post a "create variation from existing order" request to the api', async () => {
-      mockRestClient.post.mockResolvedValue(mockApiResponse)
+    it('should post without a body and parse the amendment response', async () => {
+      const response = { order: mockApiResponse, outcome: 'ACCEPTED' }
+      mockRestClient.post.mockResolvedValue(response)
 
       const orderService = new OrderService(mockRestClient)
-      await orderService.createVariationFromExisting({
-        accessToken: mockAccessToken,
-        orderId: mockOrderId,
-      })
+      const amendment = await orderService.amendOrder({ accessToken: mockAccessToken, orderId: mockOrderId })
 
       expect(mockRestClient.post).toHaveBeenCalledWith({
-        path: `/api/orders/${mockOrderId}/copy-as-variation`,
+        path: `/api/orders/${mockOrderId}/amend`,
         token: mockAccessToken,
       })
+      expect(amendment).toEqual({ order: mockNewOrder, outcome: 'ACCEPTED' })
     })
 
     it('should propagate errors from the api', async () => {
@@ -161,7 +160,7 @@ describe('Order Service', () => {
 
       try {
         const orderService = new OrderService(mockRestClient)
-        await orderService.createVariationFromExisting({
+        await orderService.amendOrder({
           accessToken: mockAccessToken,
           orderId: mockOrderId,
         })
@@ -171,6 +170,7 @@ describe('Order Service', () => {
       }
     })
   })
+
   describe('get versions', () => {
     const createVersionInformation = (override: Partial<VersionInformation> = {}): VersionInformation => {
       return {

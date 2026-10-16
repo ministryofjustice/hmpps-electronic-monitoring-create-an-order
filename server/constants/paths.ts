@@ -36,7 +36,6 @@ const paths = {
     DOWNLOAD_FMS_DW_REQUEST: `${ORDER_BASE}/fmsDeviceWearerRequests`,
     DOWNLOAD_FMS_MO_REQUEST: `${ORDER_BASE}/fmsMonitoringOrderRequests`,
     EDIT: `${ORDER_BASE}/edit`,
-    IS_REJECTION: `${ORDER_BASE}/is-rejection`,
     IS_ADDRESS_CHANGE: `${ORDER_BASE}/is-address-change`,
     VARIATION: `${ORDER_BASE}/variation`,
     SPECIAL_ORDER: `${ORDER_BASE}/special-order`,
