@@ -82,9 +82,8 @@ export const services = () => {
   const installationLocationService = new InstallationLocationService(cemoApiClient)
   const installationAppointmentService = new InstallationAppointmentService(cemoApiClient)
   const isRejectionService = new IsRejectionService(cemoApiClient)
-  const monitoringConditionsStoreService = new MonitoringConditionsStoreService(
-    config.redis.enabled ? new RedisStore(createRedisClient()) : new InMemoryStore(),
-  )
+  const store = config.redis.enabled ? new RedisStore(createRedisClient()) : new InMemoryStore()
+  const monitoringConditionsStoreService = new MonitoringConditionsStoreService(store)
   const monitoringConditionsUpdateService = new MonitoringConditionsUpdateService(cemoApiClient)
   const removeMonitoringTypeService = new RemoveMonitoringTypeService(cemoApiClient)
   const serviceRequestTypeService = new ServiceRequestTypeService(cemoApiClient)
@@ -94,14 +93,10 @@ export const services = () => {
 
   const mappaService = new MappaService(cemoApiClient)
   const detailsOfInstallationService = new DetailsOfInstallationService(cemoApiClient)
-  const riskAtInstallationStoreService = new RiskAtInstallationStoreService(
-    config.redis.enabled ? new RedisStore(createRedisClient()) : new InMemoryStore(),
-  )
+  const riskAtInstallationStoreService = new RiskAtInstallationStoreService(store)
   const sentencingActService = new SentencingActService(cemoApiClient)
 
-  const interestedPartiesStoreService = new InterestedPartiesStoreService(
-    config.redis.enabled ? new RedisStore(createRedisClient()) : new InMemoryStore(),
-  )
+  const interestedPartiesStoreService = new InterestedPartiesStoreService(store)
 
   const updateInterestedPartiesService = new UpdateInterestedPartiesService(cemoApiClient)
 

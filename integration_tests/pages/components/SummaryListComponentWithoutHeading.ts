@@ -26,6 +26,14 @@ export default class SummaryListComponentWithoutHeading {
       .should('contain.text', value)
   }
 
+  changeAnswer(key: string) {
+    return this.element
+      .contains('.govuk-summary-list__key', key)
+      .siblings('.govuk-summary-list__actions')
+      .contains('a', 'Change')
+      .click()
+  }
+
   shouldNotHaveItem(key: string) {
     return this.element.contains('.govuk-summary-list__key', key).should('not.exist')
   }
