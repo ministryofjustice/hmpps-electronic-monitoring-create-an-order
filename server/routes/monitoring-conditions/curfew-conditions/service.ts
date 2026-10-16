@@ -1,0 +1,42 @@
+import { ZodError } from 'zod'
+import RestClient from '../../../data/restClient'
+import { AuthenticatedRequestInput } from '../../../interfaces/request'
+import CurfewConditionsModel, { CurfewConditions } from '../../../models/CurfewConditions'
+import { ValidationResult } from '../../../models/Validation'
+import { SanitisedError } from '../../../sanitisedError'
+import { CurfewConditionsFormData, CurfewConditionsFormDataValidator } from './formModel'
+import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../../../utils/errors'
+import { NotifyingOrganisation } from '../../../models/NotifyingOrganisation'
+
+type CurfewConditionsInput = AuthenticatedRequestInput & {
+  orderId: string
+  notifyingOrganisation: NotifyingOrganisation | null
+  data: CurfewConditionsFormData
+}
+
+export default class CurfewConditionsService {
+  constructor(private readonly apiClient: RestClient) {}
+
+  async update(input: CurfewConditionsInput): Promise<CurfewConditions | ValidationResult> {
+    try {
+      const requestBody = CurfewConditionsFormDataValidator(input.notifyingOrganisation).parse(input.data)
+      const result = await this.apiClient.put({
+        path: `/api/orders/${input.orderId}/monitoring-conditions-curfew-conditions`,
+        data: requestBody,
+        token: input.accessToken,
+      })
+      return CurfewConditionsModel.parse(result)
+    } catch (e) {
+      if (e instanceof ZodError) {
+        return convertZodErrorToValidationError(e)
+      }
+
+      const sanitisedError = e as SanitisedError
+      if (sanitisedError.status === 400) {
+        return convertBackendErrorToValidationError(sanitisedError)
+      }
+
+      throw e
+    }
+  }
+}

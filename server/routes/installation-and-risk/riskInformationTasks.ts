@@ -1,8 +1,9 @@
 import paths from '../../constants/paths'
 import { Order } from '../../models/Order'
 import { getRiskInformationFlow, RiskInformationPage, riskInformationPages } from '../../services/riskInformationFlow'
+import { hasOptionalVariationSectionIsHOCourt } from '../../utils/utils'
 
-type RiskInformationTaskState = 'REQUIRED' | 'NOT_REQUIRED'
+type RiskInformationTaskState = 'REQUIRED' | 'NOT_REQUIRED' | 'OPTIONAL'
 
 export type RiskInformationTask = {
   section: 'RISK_INFORMATION'
@@ -14,38 +15,38 @@ export type RiskInformationTask = {
 
 type RiskInformationTaskDefinition = (order: Order) => RiskInformationTask
 
-const requiredTask =
+const task =
   (name: RiskInformationPage, path: string, completed: (order: Order) => boolean): RiskInformationTaskDefinition =>
   order => ({
     section: 'RISK_INFORMATION',
     name,
     path,
-    state: 'REQUIRED',
+    state: hasOptionalVariationSectionIsHOCourt(order) ? 'OPTIONAL' : 'REQUIRED',
     completed: completed(order),
   })
 
 const riskInformationTaskDefinitions: Record<RiskInformationPage, RiskInformationTaskDefinition> = {
-  [riskInformationPages.offence]: requiredTask(
+  [riskInformationPages.offence]: task(
     riskInformationPages.offence,
     paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM,
     order => order.offences.length > 0,
   ),
-  [riskInformationPages.offenceOtherInfo]: requiredTask(
+  [riskInformationPages.offenceOtherInfo]: task(
     riskInformationPages.offenceOtherInfo,
     paths.INSTALLATION_AND_RISK.OFFENCE_OTHER_INFO,
     order => order.offenceAdditionalDetails !== null && order.offenceAdditionalDetails !== undefined,
   ),
-  [riskInformationPages.dapo]: requiredTask(
+  [riskInformationPages.dapo]: task(
     riskInformationPages.dapo,
     paths.INSTALLATION_AND_RISK.DAPO,
     order => order.dapoClauses.length > 0,
   ),
-  [riskInformationPages.detailsOfInstallation]: requiredTask(
+  [riskInformationPages.detailsOfInstallation]: task(
     riskInformationPages.detailsOfInstallation,
     paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION,
     order => order.detailsOfInstallation !== null && order.detailsOfInstallation !== undefined,
   ),
-  [riskInformationPages.isMappa]: requiredTask(
+  [riskInformationPages.isMappa]: task(
     riskInformationPages.isMappa,
     paths.INSTALLATION_AND_RISK.IS_MAPPA,
     order => order.mappa?.isMappa !== null && order.mappa?.isMappa !== undefined,
@@ -57,7 +58,7 @@ const riskInformationTaskDefinitions: Record<RiskInformationPage, RiskInformatio
     state: order.mappa?.isMappa === 'YES' ? 'REQUIRED' : 'NOT_REQUIRED',
     completed: order.mappa?.level !== null && order.mappa?.level !== undefined && order.mappa?.category != null,
   }),
-  [riskInformationPages.checkAnswers]: requiredTask(
+  [riskInformationPages.checkAnswers]: task(
     riskInformationPages.checkAnswers,
     paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS,
     () => true,
