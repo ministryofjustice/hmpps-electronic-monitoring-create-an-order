@@ -5,6 +5,7 @@ import I18n from '../../../types/i18n'
 import { formatDateTime, lookup } from '../../../utils/utils'
 import isOrderDataDictionarySameOrAbove from '../../../utils/dataDictionaryVersionComparer'
 import riskBehaviourPath from '../riskBehaviourPath'
+import riskAtAddressPath from '../riskAtAddressPath'
 import splitRisks from '../splitRisks'
 import paths from '../../../constants/paths'
 import { getRiskInformationFlow, riskInformationPages } from '../../../services/riskInformationFlow'
@@ -108,7 +109,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
     createMultipleChoiceAnswer(
       questions.riskCategory.text,
       riskCategories?.map(category => lookup(content.reference.riskCategories, category)) ?? [],
-      riskDetailsUri,
+      riskAtAddressPath(riskDetailsUri, order.id),
       answerOpts,
     ),
   )

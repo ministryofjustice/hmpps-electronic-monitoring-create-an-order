@@ -20,45 +20,54 @@ describe('RiskAtAddressController', () => {
   })
 
   describe('view', () => {
-    it('offers each possible risk at the installation address', async () => {
+    const template = 'pages/order/installation-and-risk/risk-at-address'
+
+    it('renders the risk at address page with no risks checked by default', async () => {
       await controller.view(req, res, next)
 
-      expect(res.render).toHaveBeenCalledWith(
-        'pages/WIP',
-        expect.objectContaining({
-          pageName: 'Risk at address',
-          items: expect.arrayContaining([
-            { value: 'DANGEROUS_ANIMALS', text: 'Animals at the property, for example dogs', checked: false },
-          ]),
-        }),
-      )
+      expect(res.render).toHaveBeenCalledWith(template, expect.objectContaining({ riskCategory: { values: [] } }))
     })
 
-    it('checks the cached risk at the installation address', async () => {
+    it('checks the cached risks at the installation address', async () => {
       await store.updateField(req.order!, 'riskCategory', ['DANGEROUS_ANIMALS'])
 
       await controller.view(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith(
-        'pages/WIP',
-        expect.objectContaining({
-          items: expect.arrayContaining([expect.objectContaining({ value: 'DANGEROUS_ANIMALS', checked: true })]),
-        }),
+        template,
+        expect.objectContaining({ riskCategory: { values: ['DANGEROUS_ANIMALS'] } }),
       )
     })
   })
 
   describe('update', () => {
-    it('caches the selected risk at the installation address', async () => {
-      req.body = { action: 'continue', branch: 'DANGEROUS_ANIMALS' }
+    it('caches the selected risks at the installation address', async () => {
+      req.body = { action: 'continue', riskCategory: ['DANGEROUS_ANIMALS', 'IOM'] }
 
       await controller.update(req, res, next)
 
-      expect((await store.getRiskAtInstallation(req.order!)).riskCategory).toEqual(['DANGEROUS_ANIMALS'])
+      expect((await store.getRiskAtInstallation(req.order!)).riskCategory).toEqual(['DANGEROUS_ANIMALS', 'IOM'])
+    })
+
+    it('caches a single selection sent as a string', async () => {
+      req.body = { action: 'continue', riskCategory: 'IOM' }
+
+      await controller.update(req, res, next)
+
+      expect((await store.getRiskAtInstallation(req.order!)).riskCategory).toEqual(['IOM'])
+    })
+
+    it('caches nothing when no risks are selected', async () => {
+      await store.updateField(req.order!, 'riskCategory', ['IOM'])
+      req.body = { action: 'continue' }
+
+      await controller.update(req, res, next)
+
+      expect((await store.getRiskAtInstallation(req.order!)).riskCategory).toEqual([])
     })
 
     it('goes to the other risks page', async () => {
-      req.body = { action: 'continue', branch: 'DANGEROUS_ANIMALS' }
+      req.body = { action: 'continue', riskCategory: ['DANGEROUS_ANIMALS'] }
 
       await controller.update(req, res, next)
 

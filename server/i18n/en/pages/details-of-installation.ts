@@ -16,6 +16,10 @@ const detailsOfInstallationPageContent: DetailsOfInstallationPageContent = {
       text: 'What are the possible risks at the installation address? (optional)',
       hint: "Risks relate to the device wearer's behaviour and installation address. Select all that apply",
     },
+    riskAtAddress: {
+      text: 'At installation what are the possible risks at the address?',
+      hint: 'Answer questions based on what you know now. Risk can be updated when more is known about the address and who lives there.',
+    },
     riskDetails: {
       text: 'Any other risks to be aware of? (optional)',
       hint: "Provide additional risk information about the device wearer's behaviour or the installation address.",

@@ -1,5 +1,6 @@
 import OffencePage from '../../../e2e/order/access-needs-installation-risk/offences/offence/offencePage'
 import RiskBehaviourPage from '../../../e2e/order/access-needs-installation-risk/risk-behaviour/RiskBehaviourPage'
+import RiskAtAddressPage from '../../../e2e/order/access-needs-installation-risk/risk-at-address/RiskAtAddressPage'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
@@ -91,6 +92,17 @@ context('Risk at installation single question pages', () => {
     )
 
     Page.verifyOnPage(RiskBehaviourPage)
+  })
+
+  it('opens the risk at address page from the check your answers change link', () => {
+    startRiskInformation('Civil and County Court')
+
+    fillInRiskAtInstallationWith(riskAtInstallation)
+
+    const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
+    cyaPage.installationRiskSection.changeAnswer('What are the possible risks at the installation address? (optional)')
+
+    Page.verifyOnPage(RiskAtAddressPage)
   })
 
   it('saves the risks and goes to the offence page for Prison', () => {
