@@ -4,6 +4,7 @@ import { createGovukErrorSummary } from '../../../utils/errors'
 import { getError } from '../../../utils/utils'
 import { MonitoringConditions } from '../model'
 import { Order } from '../../../models/Order'
+import isVariationType from '../../../utils/isVariationType'
 
 export type PilotModel = ViewModel<Pick<MonitoringConditions, 'pilot'>> & {
   items: Item[]
@@ -40,8 +41,20 @@ const isEligibleForDapol = (order: Order): boolean => {
   return order.interestedParties?.responsibleOrganisation === 'PROBATION'
 }
 
+const isPastDatedProbationVariation = (order: Order): boolean => {
+  const { startDate } = order.monitoringConditions
+  return (
+    order.interestedParties?.notifyingOrganisation === 'PROBATION' &&
+    isVariationType(order.type) &&
+    startDate !== null &&
+    startDate !== undefined &&
+    new Date(startDate) < new Date()
+  )
+}
+
 const constructModel = (order: Order, data: MonitoringConditions, errors: ValidationResult): PilotModel => {
-  const isDapolEligible = isEligibleForDapol(order)
+  const isPastDatedVariation = isPastDatedProbationVariation(order)
+  const isDapolEligible = isPastDatedVariation || isEligibleForDapol(order)
   const isLicenceEligible = isLicenceVariationEligible(order)
   const isSentencingAct = order?.isSentencingAct ?? false
   const model: PilotModel = {
@@ -54,6 +67,7 @@ const constructModel = (order: Order, data: MonitoringConditions, errors: Valida
       data.hdc,
       order.interestedParties?.notifyingOrganisation,
       isSentencingAct,
+      isPastDatedVariation,
     ),
     errorSummary: null,
   }
@@ -70,6 +84,7 @@ const getItems = (
   hdc?: string | null,
   notifyingOrganisation?: string | null,
   isSentencingAct: boolean = false,
+  isPastDatedVariation: boolean = false,
 ): Item[] => {
   let items: Item[]
   if (hdc === 'NO') {
@@ -107,7 +122,7 @@ const getItems = (
     ]
   }
 
-  if (notifyingOrganisation === 'PROBATION' && !isSentencingAct) {
+  if (!isPastDatedVariation && notifyingOrganisation === 'PROBATION' && !isSentencingAct) {
     items.splice(2, 0, {
       disabled: !isLicenceEligible,
       text: 'Licence Variation Project',

@@ -249,6 +249,122 @@ describe('pilot controller', () => {
       )
     })
 
+    it('allows all non-licence pilots for a past-dated probation variation when responsible organisation and region are missing', async () => {
+      mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({ hdc: 'NO' })
+      req.order = {
+        ...mockOrder,
+        type: 'VARIATION',
+        monitoringConditions: {
+          ...mockOrder.monitoringConditions,
+          startDate: '2000-01-01T00:00:00.000Z',
+        },
+        interestedParties: {
+          ...mockOrder.interestedParties,
+          responsibleOrganisation: null,
+          responsibleOrganisationRegion: null,
+        },
+      }
+
+      await controller.view(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({
+          items: expect.arrayContaining([
+            expect.objectContaining({
+              disabled: false,
+              text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
+              value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
+            }),
+            { text: 'GPS acquisitive crime (EMAC)', value: 'GPS_ACQUISITIVE_CRIME_PAROLE' },
+            {
+              text: 'They are not part of any of these pathfinders or programmes',
+              value: 'UNKNOWN',
+              conditional: {
+                html: 'To be eligible for tagging the device wearer must either be part of a pathfinder or programme or have Alcohol Monitoring on Licence (AML) as a licence condition.',
+              },
+            },
+          ]),
+        }),
+      )
+      expect(res.render).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({
+          items: expect.not.arrayContaining([expect.objectContaining({ value: 'LICENCE_VARIATION_PROJECT' })]),
+        }),
+      )
+    })
+
+    it('retains existing pilot restrictions for a future-dated probation variation', async () => {
+      mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({ hdc: 'NO' })
+      req.order = {
+        ...mockOrder,
+        type: 'VARIATION',
+        monitoringConditions: {
+          ...mockOrder.monitoringConditions,
+          startDate: '2999-01-01T00:00:00.000Z',
+        },
+        interestedParties: {
+          ...mockOrder.interestedParties,
+          responsibleOrganisation: 'POLICE',
+          responsibleOrganisationRegion: null,
+        },
+      }
+
+      await controller.view(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({
+          items: expect.arrayContaining([
+            expect.objectContaining({
+              disabled: true,
+              text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
+              value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
+            }),
+            expect.objectContaining({
+              disabled: true,
+              text: 'Licence Variation Project',
+              value: 'LICENCE_VARIATION_PROJECT',
+            }),
+          ]),
+        }),
+      )
+    })
+
+    it('does not apply the past-dated probation exception to another notifying organisation', async () => {
+      mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({ hdc: 'NO' })
+      req.order = {
+        ...mockOrder,
+        type: 'VARIATION',
+        monitoringConditions: {
+          ...mockOrder.monitoringConditions,
+          startDate: '2000-01-01T00:00:00.000Z',
+        },
+        interestedParties: {
+          ...mockOrder.interestedParties,
+          notifyingOrganisation: 'PRISON',
+          responsibleOrganisation: 'POLICE',
+          responsibleOrganisationRegion: null,
+        },
+      }
+
+      await controller.view(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({
+          items: expect.arrayContaining([
+            expect.objectContaining({
+              disabled: true,
+              text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
+              value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
+            }),
+          ]),
+        }),
+      )
+    })
+
     it('validation errors', async () => {
       req.flash = jest.fn().mockReturnValueOnce([
         {

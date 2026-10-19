@@ -48,11 +48,12 @@ const mockDefaultOrder = {
 const noPilotOptionHintText =
   'To be eligible for tagging the device wearer must either be part of a pathfinder or programme or have Alcohol Monitoring on Licence (AML) as a licence condition.'
 
-const stubGetOrder = order => {
+const stubGetOrder = (order, type = 'REQUEST') => {
   cy.task('stubCemoGetOrder', {
     httpStatus: 200,
     id: mockOrderId,
     status: 'IN_PROGRESS',
+    type,
     order,
   })
 }
@@ -101,6 +102,38 @@ context('pilot', () => {
 
     const page = Page.visit(PilotPage, { orderId: mockOrderId })
 
+    page.form.pilotField.shouldNotHaveOption('Licence Variation Project')
+  })
+
+  it('allows all other pilots for a past-dated probation variation without responsible organisation or region', () => {
+    stubGetOrder(
+      {
+        ...mockDefaultOrder,
+        monitoringConditions: {
+          ...mockDefaultOrder.monitoringConditions,
+          hdc: 'NO',
+          startDate: '2000-01-01T00:00:00Z',
+        },
+        interestedParties: {
+          notifyingOrganisation: 'PROBATION',
+          notifyingOrganisationName: '',
+          notifyingOrganisationEmail: 'notifying@organisation',
+          responsibleOrganisation: null,
+          responsibleOrganisationRegion: '',
+          responsibleOrganisationEmail: '',
+          responsibleOfficerName: 'name',
+          responsibleOfficerPhoneNumber: '01234567891',
+        },
+        isSentencingAct: false,
+      },
+      'VARIATION',
+    )
+
+    const page = Page.visit(PilotPage, { orderId: mockOrderId })
+
+    cy.get('input[type="radio"][value="DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL"]').should('be.enabled')
+    cy.get('input[type="radio"][value="GPS_ACQUISITIVE_CRIME_PAROLE"]').should('be.enabled')
+    cy.get('input[type="radio"][value="UNKNOWN"]').should('be.enabled')
     page.form.pilotField.shouldNotHaveOption('Licence Variation Project')
   })
 
