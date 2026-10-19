@@ -4,7 +4,7 @@ import { isValidationResult, ValidationResult } from '../../../models/Validation
 import TaskListService from '../../../services/taskListService'
 import { convertZodErrorToValidationError } from '../../../utils/errors'
 import RiskAtInstallationService from '../riskAtInstallationService'
-import OtherRisksFormModel, { OtherRisksFormValidator } from './formModel'
+import OtherRisksFormModel, { OtherRisksFormInput, OtherRisksFormValidator } from './formModel'
 import OtherRisksViewModel from './viewModel'
 
 export default class OtherRisksController {
@@ -14,7 +14,9 @@ export default class OtherRisksController {
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { hasOtherRisks, riskDetails } = await this.riskAtInstallationService.getRiskAtInstallation(req.order!)
+    const [submitted] = req.flash('formData') as unknown as OtherRisksFormInput[]
+    const { hasOtherRisks, riskDetails } =
+      submitted ?? (await this.riskAtInstallationService.getRiskAtInstallation(req.order!))
     const errors = req.flash('validationErrors') as unknown as ValidationResult
 
     res.render(
@@ -30,6 +32,7 @@ export default class OtherRisksController {
 
     const validation = OtherRisksFormValidator.safeParse(formData)
     if (!validation.success) {
+      req.flash('formData', formData)
       req.flash('validationErrors', convertZodErrorToValidationError(validation.error))
       res.redirect(otherRisksPath)
       return

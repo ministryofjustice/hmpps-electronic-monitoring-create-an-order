@@ -3,7 +3,7 @@ import { createGovukErrorSummary } from '../../../utils/errors'
 import { getError } from '../../../utils/utils'
 
 const construct = (
-  hasOtherRisks: 'YES' | 'NO' | null,
+  hasOtherRisks: string | null | undefined,
   riskDetails: string,
   disabled: boolean,
   errors: ValidationResult = [],

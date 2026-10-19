@@ -12,4 +12,5 @@ export const RiskAtAddressFormValidator = z.object({
   riskCategory: z.array(z.string()).min(1, validationErrors.installationAndRisk.riskCategoryRequired),
 })
 
+export type RiskAtAddressFormInput = z.infer<typeof RiskAtAddressFormModel>
 export default RiskAtAddressFormModel

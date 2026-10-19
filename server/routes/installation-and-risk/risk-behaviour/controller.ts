@@ -3,14 +3,16 @@ import paths from '../../../constants/paths'
 import { ValidationResult } from '../../../models/Validation'
 import { convertZodErrorToValidationError } from '../../../utils/errors'
 import RiskAtInstallationService from '../riskAtInstallationService'
-import RiskBehaviourFormModel, { RiskBehaviourFormValidator } from './formModel'
+import RiskBehaviourFormModel, { RiskBehaviourFormInput, RiskBehaviourFormValidator } from './formModel'
 import RiskBehaviourViewModel from './viewModel'
 
 export default class RiskBehaviourController {
   constructor(private readonly riskAtInstallationService: RiskAtInstallationService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { possibleRisk, genderRiskDetails } = await this.riskAtInstallationService.getRiskAtInstallation(req.order!)
+    const [submitted] = req.flash('formData') as unknown as RiskBehaviourFormInput[]
+    const { possibleRisk, genderRiskDetails } =
+      submitted ?? (await this.riskAtInstallationService.getRiskAtInstallation(req.order!))
     const errors = req.flash('validationErrors') as unknown as ValidationResult
 
     res.render(
@@ -32,6 +34,7 @@ export default class RiskBehaviourController {
 
     const validation = RiskBehaviourFormValidator.safeParse(formData)
     if (!validation.success) {
+      req.flash('formData', formData)
       req.flash('validationErrors', convertZodErrorToValidationError(validation.error))
       res.redirect(riskBehaviourPath)
       return

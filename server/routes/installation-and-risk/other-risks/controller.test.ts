@@ -61,8 +61,28 @@ describe('OtherRisksController', () => {
       )
     })
 
+    it('renders the rejected answers instead of the saved answers', async () => {
+      const rejected = { action: 'continue', hasOtherRisks: 'YES', riskDetails: '' }
+      req.flash = jest.fn().mockImplementation((key: string) => (key === 'formData' ? [rejected] : []))
+
+      await controller.view(req, res, next)
+
+      expect(service.getRiskAtInstallation).not.toHaveBeenCalled()
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/order/installation-and-risk/other-risks',
+        expect.objectContaining({
+          hasOtherRisks: expect.objectContaining({ value: 'YES' }),
+          riskDetails: expect.objectContaining({ value: '' }),
+        }),
+      )
+    })
+
     it('renders the flashed validation errors', async () => {
-      req.flash = jest.fn().mockReturnValue([{ field: 'riskDetails', error: 'Backend says no' }])
+      req.flash = jest
+        .fn()
+        .mockImplementation((key: string) =>
+          key === 'validationErrors' ? [{ field: 'riskDetails', error: 'Backend says no' }] : [],
+        )
 
       await controller.view(req, res, next)
 
@@ -109,6 +129,7 @@ describe('OtherRisksController', () => {
 
       await controller.update(req, res, next)
 
+      expect(req.flash).toHaveBeenCalledWith('formData', { action: 'continue', riskDetails: '' })
       expect(req.flash).toHaveBeenCalledWith('validationErrors', [
         expect.objectContaining({
           error: 'Select yes if there are any other risks to be aware of',

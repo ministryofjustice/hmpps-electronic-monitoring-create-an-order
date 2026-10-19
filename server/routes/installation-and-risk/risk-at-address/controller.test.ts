@@ -47,8 +47,25 @@ describe('RiskAtAddressController', () => {
       )
     })
 
+    it('renders the rejected answers instead of the saved answers', async () => {
+      const rejected = { action: 'continue', riskCategory: [] }
+      req.flash = jest.fn().mockImplementation((key: string) => (key === 'formData' ? [rejected] : []))
+
+      await controller.view(req, res, next)
+
+      expect(service.getRiskAtInstallation).not.toHaveBeenCalled()
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/order/installation-and-risk/risk-at-address',
+        expect.objectContaining({ riskCategory: expect.objectContaining({ values: [] }) }),
+      )
+    })
+
     it('renders the flashed validation errors', async () => {
-      req.flash = jest.fn().mockReturnValue([{ field: 'riskCategory', error: 'Select something' }])
+      req.flash = jest
+        .fn()
+        .mockImplementation((key: string) =>
+          key === 'validationErrors' ? [{ field: 'riskCategory', error: 'Select something' }] : [],
+        )
 
       await controller.view(req, res, next)
 
@@ -78,6 +95,7 @@ describe('RiskAtAddressController', () => {
 
       await controller.update(req, res, next)
 
+      expect(req.flash).toHaveBeenCalledWith('formData', { action: 'continue', riskCategory: [] })
       expect(req.flash).toHaveBeenCalledWith('validationErrors', [
         { field: 'riskCategory', error: 'Select all the possible risks at the installation address' },
       ])

@@ -32,4 +32,5 @@ export const OtherRisksFormValidator = z
     }
   })
 
+export type OtherRisksFormInput = z.infer<typeof OtherRisksFormModel>
 export default OtherRisksFormModel
