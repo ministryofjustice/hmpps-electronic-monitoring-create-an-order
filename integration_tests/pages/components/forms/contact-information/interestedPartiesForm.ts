@@ -143,7 +143,7 @@ export default class InterestedPartiesFormComponent extends FormComponent {
   }
 
   get policeAreaField(): FormAutocompleteComponent {
-    const label = 'Select the Police force area'
+    const label = 'What is the name of the Police force area?'
     return new FormAutocompleteComponent(this.form, label, [])
   }
 

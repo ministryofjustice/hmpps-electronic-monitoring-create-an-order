@@ -40,8 +40,8 @@ context('interested parties check answers page', () => {
         { key: "What is the Responsible Officer's last name?", value: 'name' },
         { key: "What is the Responsible Officer's email address?", value: 'officer@email' },
         { key: "What is the Responsible Officer's organisation?", value: 'Police' },
-        { key: 'Select the Police force area', value: 'Cheshire' },
-        { key: "What is the Responsible Organisation's email address? (optional)", value: 'responsible@organisation' },
+        { key: 'What is the name of the Police force area?', value: 'Cheshire' },
+        { key: 'What is the Police force email address? (optional)', value: 'responsible@organisation' },
       ])
       page.organisationDetailsSection.shouldNotHaveItems([
         'What organisation or related organisation are you part of?',
@@ -86,7 +86,7 @@ context('interested parties check answers page', () => {
       page.organisationDetailsSection.shouldExist()
       page.organisationDetailsSection.shouldNotHaveItems([
         "What is the Responsible Officer's organisation?",
-        'Select the Police force area',
+        'What is the name of the Police force area',
         "What is the Responsible Organisation's email address? (optional)",
       ])
     })
