@@ -99,6 +99,18 @@ describe('OtherRisksController', () => {
   })
 
   describe('update', () => {
+    const completeAnswers: RiskAtInstallation = {
+      possibleRisk: ['SEXUAL_OFFENCES'],
+      riskCategory: ['DANGEROUS_ANIMALS'],
+      riskDetails: '',
+      hasOtherRisks: 'NO',
+      genderRiskDetails: '',
+    }
+
+    beforeEach(() => {
+      service.getRiskAtInstallation.mockResolvedValue(completeAnswers)
+    })
+
     it('saves the answers, submits them and goes to the page after details of installation', async () => {
       req.body = { action: 'continue', hasOtherRisks: 'YES', riskDetails: 'Aggressive neighbour' }
 
@@ -122,6 +134,33 @@ describe('OtherRisksController', () => {
 
       expect(req.flash).toHaveBeenCalledWith('validationErrors', backendErrors)
       expect(res.redirect).toHaveBeenCalledWith(otherRisksPath.replace(':orderId', req.order!.id))
+    })
+
+    it('goes to the first page with missing answers without submitting', async () => {
+      service.getRiskAtInstallation.mockResolvedValue({ ...completeAnswers, riskCategory: [] })
+      req.body = { action: 'continue', hasOtherRisks: 'NO' }
+
+      await controller.update(req, res, next)
+
+      expect(service.saveOtherRisks).toHaveBeenCalled()
+      expect(service.submit).not.toHaveBeenCalled()
+      expect(req.flash).not.toHaveBeenCalledWith('validationErrors', expect.anything())
+      expect(res.redirect).toHaveBeenCalledWith(
+        paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS.replace(':orderId', req.order!.id),
+      )
+    })
+
+    it('goes to the page that asks for the answer the api rejects', async () => {
+      const backendErrors: ValidationResult = [{ error: 'Backend says no', field: 'riskCategory' }]
+      service.submit.mockResolvedValue(backendErrors)
+      req.body = { action: 'continue', hasOtherRisks: 'NO' }
+
+      await controller.update(req, res, next)
+
+      expect(req.flash).toHaveBeenCalledWith('validationErrors', backendErrors)
+      expect(res.redirect).toHaveBeenCalledWith(
+        paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS.replace(':orderId', req.order!.id),
+      )
     })
 
     it('returns to the page with the errors and saves nothing when the answers are invalid', async () => {

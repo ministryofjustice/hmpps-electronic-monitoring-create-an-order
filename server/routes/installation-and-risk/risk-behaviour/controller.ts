@@ -1,13 +1,18 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
 import { ValidationResult } from '../../../models/Validation'
+import TaskListService from '../../../services/taskListService'
 import { convertZodErrorToValidationError } from '../../../utils/errors'
+import continueRiskAtInstallation from '../continueRiskAtInstallation'
 import RiskAtInstallationService from '../riskAtInstallationService'
 import RiskBehaviourFormModel, { RiskBehaviourFormInput, RiskBehaviourFormValidator } from './formModel'
 import RiskBehaviourViewModel from './viewModel'
 
 export default class RiskBehaviourController {
-  constructor(private readonly riskAtInstallationService: RiskAtInstallationService) {}
+  constructor(
+    private readonly riskAtInstallationService: RiskAtInstallationService,
+    private readonly taskListService: TaskListService,
+  ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const [submitted] = req.flash('formData') as unknown as RiskBehaviourFormInput[]
@@ -42,6 +47,6 @@ export default class RiskBehaviourController {
 
     await this.riskAtInstallationService.saveRiskBehaviour(order, validation.data)
 
-    res.redirect(paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS.replace(':orderId', order.id))
+    await continueRiskAtInstallation(req, res, this.riskAtInstallationService, this.taskListService, riskBehaviourPath)
   }
 }

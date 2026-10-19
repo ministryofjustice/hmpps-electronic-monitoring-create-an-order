@@ -1,8 +1,9 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
-import { isValidationResult, ValidationResult } from '../../../models/Validation'
+import { ValidationResult } from '../../../models/Validation'
 import TaskListService from '../../../services/taskListService'
 import { convertZodErrorToValidationError } from '../../../utils/errors'
+import continueRiskAtInstallation from '../continueRiskAtInstallation'
 import RiskAtInstallationService from '../riskAtInstallationService'
 import OtherRisksFormModel, { OtherRisksFormInput, OtherRisksFormValidator } from './formModel'
 import OtherRisksViewModel from './viewModel'
@@ -39,13 +40,7 @@ export default class OtherRisksController {
     }
 
     await this.riskAtInstallationService.saveOtherRisks(order, validation.data)
-    const result = await this.riskAtInstallationService.submit({ accessToken: res.locals.user.token, order })
 
-    if (isValidationResult(result)) {
-      req.flash('validationErrors', result)
-      res.redirect(otherRisksPath)
-    } else {
-      res.redirect(this.taskListService.getNextPage('DETAILS_OF_INSTALLATION', order))
-    }
+    await continueRiskAtInstallation(req, res, this.riskAtInstallationService, this.taskListService, otherRisksPath)
   }
 }

@@ -63,8 +63,8 @@ const createInstallationAndRiskRouter = (
     detailsOfInstallationService,
     taskListService,
   )
-  const riskBehaviourController = new RiskBehaviourController(riskAtInstallationService)
-  const riskAtAddressController = new RiskAtAddressController(riskAtInstallationService)
+  const riskBehaviourController = new RiskBehaviourController(riskAtInstallationService, taskListService)
+  const riskAtAddressController = new RiskAtAddressController(riskAtInstallationService, taskListService)
   const otherRisksController = new OtherRisksController(riskAtInstallationService, taskListService)
   get(paths.INSTALLATION_AND_RISK.BASE_URL, installationAndRiskController.view)
   post(paths.INSTALLATION_AND_RISK.BASE_URL, installationAndRiskController.update)
