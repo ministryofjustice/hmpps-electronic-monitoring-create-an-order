@@ -43,10 +43,10 @@ describe('TimelineModel', () => {
       })
 
       expect(result[1]).toEqual({
-        label: { text: 'Other change' },
+        label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
-        text: 'Change to an order',
+        text: 'Other change',
         notifyingOrganisationDetails: 'From Whitemoor Prison',
       })
     })
@@ -66,10 +66,10 @@ describe('TimelineModel', () => {
       expect(result).toHaveLength(1)
 
       expect(result[0]).toEqual({
-        label: { text: 'Other change' },
+        label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
-        text: 'Change to an order',
+        text: 'Other change',
         notifyingOrganisationDetails: 'From Whitemoor Prison',
       })
     })
@@ -89,10 +89,10 @@ describe('TimelineModel', () => {
       expect(result).toHaveLength(1)
 
       expect(result[0]).toEqual({
-        label: { text: 'Other change' },
+        label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
-        text: 'Change to an order',
+        text: 'Other change',
         notifyingOrganisationDetails: 'From Birkenhead County and Civil Court',
       })
     })
@@ -112,10 +112,10 @@ describe('TimelineModel', () => {
       expect(result).toHaveLength(1)
 
       expect(result[0]).toEqual({
-        label: { text: 'Other change' },
+        label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
-        text: 'Change to an order',
+        text: 'Other change',
         notifyingOrganisationDetails: 'From Bradford Family Court',
       })
     })
@@ -135,10 +135,10 @@ describe('TimelineModel', () => {
       expect(result).toHaveLength(1)
 
       expect(result[0]).toEqual({
-        label: { text: 'Other change' },
+        label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
-        text: 'Change to an order',
+        text: 'Other change',
         notifyingOrganisationDetails: 'From Bulford Military Court Centre',
       })
     })
@@ -158,10 +158,10 @@ describe('TimelineModel', () => {
       expect(result).toHaveLength(1)
 
       expect(result[0]).toEqual({
-        label: { text: 'Other change' },
+        label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
-        text: 'Change to an order',
+        text: 'Other change',
         notifyingOrganisationDetails: 'From Basildon Youth Court',
       })
     })
@@ -181,10 +181,10 @@ describe('TimelineModel', () => {
       expect(result).toHaveLength(1)
 
       expect(result[0]).toEqual({
-        label: { text: 'Other change' },
+        label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
-        text: 'Change to an order',
+        text: 'Other change',
         notifyingOrganisationDetails: 'From Andover Magistrates Court',
       })
     })
@@ -204,10 +204,10 @@ describe('TimelineModel', () => {
       expect(result).toHaveLength(1)
 
       expect(result[0]).toEqual({
-        label: { text: 'Other change' },
+        label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
-        text: 'Change to an order',
+        text: 'Other change',
         notifyingOrganisationDetails: 'From Cardiff Crown Court',
       })
     })
@@ -227,10 +227,10 @@ describe('TimelineModel', () => {
       expect(result).toHaveLength(1)
 
       expect(result[0]).toEqual({
-        label: { text: 'Other change' },
+        label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
-        text: 'Change to an order',
+        text: 'Other change',
         notifyingOrganisationDetails: 'From Youth Custody Service (YCS) - London',
       })
     })
@@ -250,10 +250,10 @@ describe('TimelineModel', () => {
       expect(result).toHaveLength(1)
 
       expect(result[0]).toEqual({
-        label: { text: 'Other change' },
+        label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
-        text: 'Change to an order',
+        text: 'Other change',
         notifyingOrganisationDetails: 'From Probation',
       })
     })
@@ -273,10 +273,10 @@ describe('TimelineModel', () => {
       expect(result).toHaveLength(1)
 
       expect(result[0]).toEqual({
-        label: { text: 'Other change' },
+        label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
-        text: 'Change to an order',
+        text: 'Other change',
         notifyingOrganisationDetails: 'From Home Office',
       })
     })
@@ -337,19 +337,7 @@ describe('TimelineModel', () => {
       ['REINSTALL_DEVICE', 'Changed primary address'],
       ['REVOCATION', 'Ended (Recall)'],
       ['END_MONITORING', 'Ended'],
-    ])('returns correct timeline label if type is $type', (type, label) => {
-      const versions = [createMockVersion({ submittedBy: 'Alice', type })]
-
-      const result = TimelineModel.mapToTimelineItems(content, versions)
-
-      expect(result[0].label.text).toBe(label)
-    })
-
-    it.each<[OrderType, string]>([
-      ['VARIATION', 'Change to an order'],
-      ['REINSTALL_AT_DIFFERENT_ADDRESS', 'Reinstall at different address'],
-      ['REINSTALL_DEVICE', 'Reinstall device'],
-    ])('returns correct variation description if type is $type', (type, text) => {
+    ])('returns correct timeline label if type is $type', (type, text) => {
       const versions = [createMockVersion({ submittedBy: 'Alice', type })]
 
       const result = TimelineModel.mapToTimelineItems(content, versions)

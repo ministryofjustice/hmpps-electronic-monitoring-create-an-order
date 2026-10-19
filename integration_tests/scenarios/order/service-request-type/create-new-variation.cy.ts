@@ -158,23 +158,23 @@ context('Service-Request-Types', () => {
   it('Should able to create new REINSTALL_AT_DIFFERENT_ADDRESS', () => {
     fillInNewOrder(
       'The device wearer needs to remain at a second or third address during curfew hours.',
-      'Reinstall at different address',
+      'Changes submitted',
     )
   })
 
   it('Should able to create new REINSTALL_DEVICE', () => {
-    fillInNewOrder('Address Change', 'Reinstall device')
+    fillInNewOrder('Address Change', 'Changes submitted')
   })
 
   it('Should able to create new END_MONITORING', () => {
     fillInNewOrder(
       "The device wearer's circumstances have changed and all monitoring needs to end.",
-      'End all monitoring',
+      'Monitoring ended',
     )
   })
 
   it('Should able to make REVOCATION change', () => {
-    fillInNewOrder('The device wearer has been recalled to prison.', 'Revocation')
+    fillInNewOrder('The device wearer has been recalled to prison.', 'Monitoring ended')
   })
 
   it('Should able to create new VARIATION', () => {
@@ -183,6 +183,6 @@ context('Service-Request-Types', () => {
       variationDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 20).setHours(0, 0, 0, 0)), // 20 days
       variationDetails: 'Change to address',
     }
-    fillInNewOrder('I need to change something else in the form', 'Change to an order', fullVariationDetails)
+    fillInNewOrder('I need to change something else in the form', 'Changes submitted', fullVariationDetails)
   })
 })

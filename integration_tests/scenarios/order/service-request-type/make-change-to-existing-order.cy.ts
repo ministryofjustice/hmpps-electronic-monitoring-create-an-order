@@ -210,7 +210,7 @@ context('Service-Request-Types', () => {
   it('Should able to make REINSTALL_AT_DIFFERENT_ADDRESS change', () => {
     fillInVariations(
       'The device wearer needs to remain at a second or third address during curfew hours.',
-      'Reinstall at different address',
+      'Changes submitted',
     )
   })
 
@@ -221,12 +221,12 @@ context('Service-Request-Types', () => {
   it('Should able to make END_MONITORING change', () => {
     fillInVariations(
       "The device wearer's circumstances have changed and all monitoring needs to end.",
-      'End all monitoring',
+      'Monitoring ended',
     )
   })
 
   it('Should able to make REVOCATION change', () => {
-    fillInVariations('The device wearer has been recalled to prison.', 'Revocation')
+    fillInVariations('The device wearer has been recalled to prison.', 'Monitoring ended')
   })
 
   it('Should able to make VARIATION change', () => {
@@ -236,7 +236,7 @@ context('Service-Request-Types', () => {
       variationDetails: 'Change to address',
     }
 
-    fillInVariations('I need to change something else in the form', 'Change to an order', true, fullVariationDetails)
+    fillInVariations('I need to change something else in the form', 'Changes submitted', true, fullVariationDetails)
   })
 
   it('Creating a variation from a variation skips is rejection page', () => {
@@ -246,7 +246,7 @@ context('Service-Request-Types', () => {
       variationDetails: 'Change to address',
     }
 
-    fillInVariations('I need to change something else in the form', 'Change to an order', true, fullVariationDetails)
+    fillInVariations('I need to change something else in the form', 'Changes submitted', true, fullVariationDetails)
 
     const indexPage = Page.visit(IndexPage)
     indexPage.searchNav.click()
