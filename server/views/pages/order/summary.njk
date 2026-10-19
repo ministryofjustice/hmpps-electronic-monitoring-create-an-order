@@ -81,19 +81,19 @@
          </div>
         {% elif order.type ==='REVOCATION' %}
          <div id="waste-hint" class="govuk-hint">
-            You are revoking monitoring for the device wearer.
+            You are ending all monitoring because the device wearer has been recalled to prison.
          </div>
          {% elif order.type ==='END_MONITORING' %}
          <div id="waste-hint" class="govuk-hint">
-            You are ending all monitoring for the device wearer.
+            You are ending all monitoring.
          </div>
         {% elif order.type ==='REINSTALL_DEVICE' %}
          <div id="waste-hint" class="govuk-hint">
-            You are requesting monitoring equipment to be reinstalled.
+            You are changing the device wearer's primary address.
          </div>
         {% elif order.type ==='REINSTALL_AT_DIFFERENT_ADDRESS' %}
          <div id="waste-hint" class="govuk-hint">
-           You are requesting monitoring equipment to be installed at an additional address.
+            You are adding a second or third curfew address.
          </div>
         {% endif %}
       {% endif %}
