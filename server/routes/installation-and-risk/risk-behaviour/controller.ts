@@ -30,12 +30,13 @@ export default class RiskBehaviourController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
+    const riskBehaviourPath = paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR.replace(':orderId', order.id)
     const formData = RiskBehaviourFormModel.parse(req.body)
 
     const validation = RiskBehaviourFormValidator.safeParse(formData)
     if (!validation.success) {
       req.flash('validationErrors', convertZodErrorToValidationError(validation.error))
-      res.redirect(paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR.replace(':orderId', order.id))
+      res.redirect(riskBehaviourPath)
       return
     }
 
