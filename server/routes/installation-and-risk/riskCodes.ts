@@ -1,0 +1,32 @@
+import { DataDictionaryVersion } from '../../models/Order'
+
+export const POSSIBLE_RISK_CODES = [
+  'HOMOPHOBIC_VIEWS',
+  'RISK_TO_GENDER',
+  'THREATS_OF_VIOLENCE',
+  'SEXUAL_OFFENCES',
+  'RACIAL_ABUSE_OR_THREATS',
+  'NO_RISK',
+] as const
+
+const COMMON_RISK_CATEGORY_CODES = [
+  'HISTORY_OF_SUBSTANCE_ABUSE',
+  'DIVERSITY_CONCERNS',
+  'IOM',
+  'OTHER_OCCUPANTS',
+  'UNDER_18',
+  'DANGEROUS_ANIMALS',
+  'OTHER_RISKS',
+] as const
+
+export const RISK_CATEGORY_CODES_DDV4 = [...COMMON_RISK_CATEGORY_CODES, 'SAFEGUARDING_ISSUE'] as const
+
+export const RISK_CATEGORY_CODES_DDV5 = [
+  ...COMMON_RISK_CATEGORY_CODES,
+  'SAFEGUARDING_ADULT',
+  'SAFEGUARDING_CHILD',
+  'SAFEGUARDING_DOMESTIC_ABUSE',
+] as const
+
+export const getRiskCategoryCodes = (version: DataDictionaryVersion): readonly string[] =>
+  version === 'DDV4' ? RISK_CATEGORY_CODES_DDV4 : RISK_CATEGORY_CODES_DDV5

@@ -4,6 +4,8 @@ import { Order } from '../../../models/Order'
 import I18n from '../../../types/i18n'
 import { formatDateTime, lookup } from '../../../utils/utils'
 import isOrderDataDictionarySameOrAbove from '../../../utils/dataDictionaryVersionComparer'
+import riskBehaviourPath from '../riskBehaviourPath'
+import splitRisks from '../splitRisks'
 import paths from '../../../constants/paths'
 import { getRiskInformationFlow, riskInformationPages } from '../../../services/riskInformationFlow'
 
@@ -80,28 +82,28 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
     riskDetailsUri = uri
   }
 
-  const possibleRisks = riskCategoriesFromOrder.filter(
-    it => Object.keys(content.reference.possibleRisks).indexOf(it) !== -1,
+  const { possibleRisk: possibleRisks, riskCategory: riskCategories } = splitRisks(
+    riskCategoriesFromOrder,
+    order.dataDictionaryVersion,
   )
+
+  const possibleRiskUri = riskBehaviourPath(riskDetailsUri, order.id)
 
   riskAnswers.push(
     createMultipleChoiceAnswer(
       questions.possibleRisk.text,
       possibleRisks?.map(category => lookup(content.reference.possibleRisks, category)) ?? [],
-      riskDetailsUri,
+      possibleRiskUri,
       answerOpts,
     ),
   )
 
   if (possibleRisks.includes('RISK_TO_GENDER') && genderRiskDetailsFromOrder) {
     riskAnswers.push(
-      createAnswer(questions.genderRiskDetails.text, genderRiskDetailsFromOrder, riskDetailsUri, answerOpts),
+      createAnswer(questions.genderRiskDetails.text, genderRiskDetailsFromOrder, possibleRiskUri, answerOpts),
     )
   }
 
-  const riskCategories = riskCategoriesFromOrder.filter(
-    it => Object.keys(content.reference.riskCategories).indexOf(it) !== -1,
-  )
   riskAnswers.push(
     createMultipleChoiceAnswer(
       questions.riskCategory.text,

@@ -1,9 +1,8 @@
-import getContent from '../../../i18n'
-import { Order } from '../../../models/Order'
+import { DataDictionaryVersion, Order } from '../../../models/Order'
 import { ValidationResult } from '../../../models/Validation'
 import { ViewModel } from '../../../models/view-models/utils'
-import I18n from '../../../types/i18n'
 import { createGovukErrorSummary } from '../../../utils/errors'
+import splitRisks from '../splitRisks'
 import { getError } from '../../../utils/utils'
 import { DetailsOfInstallationInput } from './formModel'
 
@@ -14,15 +13,15 @@ const construct = (
   formData: DetailsOfInstallationInput | undefined,
   errors: ValidationResult,
 ): DetailsOfInstallationModel => {
-  const content = getContent('en', order.dataDictionaryVersion)
+  const version = order.dataDictionaryVersion
 
   return {
     possibleRisk: {
-      values: getPossibleRiskValues(formData?.possibleRisk, order.detailsOfInstallation?.riskCategory, content),
+      values: getPossibleRiskValues(formData?.possibleRisk, order.detailsOfInstallation?.riskCategory, version),
       error: getError(errors, 'possibleRisk'),
     },
     riskCategory: {
-      values: getRiskCategoryValues(formData?.riskCategory, order.detailsOfInstallation?.riskCategory, content),
+      values: getRiskCategoryValues(formData?.riskCategory, order.detailsOfInstallation?.riskCategory, version),
     },
     riskDetails: {
       value: formData?.riskDetails || order.detailsOfInstallation?.riskDetails || '',
@@ -39,23 +38,19 @@ const construct = (
 const getPossibleRiskValues = (
   formValues: string[] | undefined,
   orderValues: string[] | null | undefined,
-  content: I18n,
+  version: DataDictionaryVersion,
 ): string[] => {
-  if (formValues && formValues.length) {
-    return formValues.filter(it => Object.keys(content.reference.possibleRisks).indexOf(it) !== -1)
-  }
-  return orderValues?.filter(it => Object.keys(content.reference.possibleRisks).indexOf(it) !== -1) || []
+  const source = formValues && formValues.length ? formValues : orderValues
+  return splitRisks(source, version).possibleRisk
 }
 
 const getRiskCategoryValues = (
   formValues: string[] | undefined,
   orderValues: string[] | null | undefined,
-  content: I18n,
+  version: DataDictionaryVersion,
 ): string[] => {
-  if (formValues && formValues.length) {
-    return formValues.filter(it => Object.keys(content.reference.riskCategories).indexOf(it) !== -1)
-  }
-  return orderValues?.filter(it => Object.keys(content.reference.riskCategories).indexOf(it) !== -1) || []
+  const source = formValues && formValues.length ? formValues : orderValues
+  return splitRisks(source, version).riskCategory
 }
 
 export default { construct }

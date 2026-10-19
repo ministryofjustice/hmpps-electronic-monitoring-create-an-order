@@ -1,5 +1,6 @@
-import getContent from '../../i18n'
 import { Order } from '../../models/Order'
+import splitRisks from './splitRisks'
+import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
 import Store from '../store/store'
 import RiskAtInstallationModel, { RiskAtInstallation } from './riskAtInstallationModel'
 
@@ -14,11 +15,8 @@ export default class RiskAtInstallationStoreService {
 
   public async getRiskAtInstallation(order: Order): Promise<RiskAtInstallation> {
     const cached = await this.dataStore.get(this.keyFromOrder(order))
-    const riskAtInstallation = cached ? RiskAtInstallationModel.parse(JSON.parse(cached)) : this.fromOrder(order)
 
-    await this.updateRiskAtInstallation(order, riskAtInstallation)
-
-    return riskAtInstallation
+    return cached ? RiskAtInstallationModel.parse(JSON.parse(cached)) : this.fromOrder(order)
   }
 
   public async updateField<T extends keyof RiskAtInstallation>(order: Order, field: T, data: RiskAtInstallation[T]) {
@@ -34,13 +32,15 @@ export default class RiskAtInstallationStoreService {
   }
 
   private fromOrder(order: Order): RiskAtInstallation {
-    const { reference } = getContent('en', order.dataDictionaryVersion)
-    const savedRisks = order.detailsOfInstallation?.riskCategory ?? []
+    const saved = isOrderDataDictionarySameOrAbove('DDV6', order)
+      ? order.detailsOfInstallation
+      : order.installationAndRisk
+    const { possibleRisk, riskCategory } = splitRisks(saved?.riskCategory, order.dataDictionaryVersion)
 
     return {
-      possibleRisk: savedRisks.filter(risk => risk in reference.possibleRisks),
-      riskCategory: savedRisks.filter(risk => risk in reference.riskCategories),
-      riskDetails: order.detailsOfInstallation?.riskDetails ?? '',
+      possibleRisk,
+      riskCategory,
+      riskDetails: saved?.riskDetails ?? '',
       genderRiskDetails: order.detailsOfInstallation?.genderRiskDetails ?? '',
     }
   }

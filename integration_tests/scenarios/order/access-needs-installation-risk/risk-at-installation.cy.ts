@@ -66,6 +66,19 @@ context('Risk at installation single question pages', () => {
     )
   })
 
+  it('saves the sex or gender risk details and shows them on check your answers', () => {
+    startRiskInformation('Civil and County Court')
+
+    fillInRiskAtInstallationWith({
+      possibleRisk: 'Offensive towards someone because of their sex or gender',
+      riskCategory: riskAtInstallation.riskCategory,
+      genderRiskDetails: 'Women',
+    })
+
+    const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
+    cyaPage.installationRiskSection.shouldHaveItem('What sex or gender are they a risk to?', 'Women')
+  })
+
   it('saves the risks and goes to the offence page for Prison', () => {
     startRiskInformation('Prison')
 
