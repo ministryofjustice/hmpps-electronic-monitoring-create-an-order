@@ -20,6 +20,14 @@ describe('other risks form validator', () => {
     ])
   })
 
+  it('requires details when the answer is yes and only whitespace is entered', () => {
+    const result = OtherRisksFormValidator.safeParse({ hasOtherRisks: 'YES', riskDetails: '   \n\t ' })
+
+    expect(result.error?.issues).toEqual([
+      expect.objectContaining({ message: 'Enter what other risks there are', path: ['riskDetails'] }),
+    ])
+  })
+
   it('limits the details to 200 characters', () => {
     const result = OtherRisksFormValidator.safeParse({ hasOtherRisks: 'YES', riskDetails: 'a'.repeat(201) })
 

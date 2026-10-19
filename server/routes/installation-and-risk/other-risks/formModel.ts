@@ -12,7 +12,7 @@ const OtherRisksFormModel = z.object({
 export const OtherRisksFormValidator = z
   .object({
     hasOtherRisks: z.enum(['YES', 'NO'], { message: validationErrors.installationAndRisk.hasOtherRisksRequired }),
-    riskDetails: z.string(),
+    riskDetails: z.string().trim(),
   })
   .superRefine((data, ctx) => {
     if (data.hasOtherRisks !== 'YES') return
