@@ -332,38 +332,49 @@ describe('pilot controller', () => {
       )
     })
 
-    it('does not apply the past-dated probation exception to another notifying organisation', async () => {
-      mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({ hdc: 'NO' })
-      req.order = {
-        ...mockOrder,
-        type: 'VARIATION',
-        monitoringConditions: {
-          ...mockOrder.monitoringConditions,
-          startDate: '2000-01-01T00:00:00.000Z',
-        },
-        interestedParties: {
-          ...mockOrder.interestedParties,
-          notifyingOrganisation: 'PRISON',
-          responsibleOrganisation: 'POLICE',
-          responsibleOrganisationRegion: null,
-        },
-      }
+    it.each(['PRISON', 'HOME_OFFICE', 'YOUTH_COURT'] as const)(
+      'allows all non-licence pilots for a past-dated variation notified by %s',
+      async notifyingOrganisation => {
+        mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({ hdc: 'NO' })
+        req.order = {
+          ...mockOrder,
+          type: 'VARIATION',
+          monitoringConditions: {
+            ...mockOrder.monitoringConditions,
+            startDate: '2000-01-01T00:00:00.000Z',
+          },
+          interestedParties: {
+            ...mockOrder.interestedParties,
+            notifyingOrganisation,
+            responsibleOrganisation: 'POLICE',
+            responsibleOrganisationRegion: null,
+          },
+        }
 
-      await controller.view(req, res, next)
+        await controller.view(req, res, next)
 
-      expect(res.render).toHaveBeenCalledWith(
-        expect.anything(),
-        expect.objectContaining({
-          items: expect.arrayContaining([
-            expect.objectContaining({
-              disabled: true,
-              text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
-              value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
-            }),
-          ]),
-        }),
-      )
-    })
+        expect(res.render).toHaveBeenCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            items: expect.arrayContaining([
+              expect.objectContaining({
+                disabled: false,
+                text: 'Domestic Abuse Perpetrator on Licence (DAPOL)',
+                value: 'DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL',
+              }),
+              { text: 'GPS acquisitive crime (EMAC)', value: 'GPS_ACQUISITIVE_CRIME_PAROLE' },
+              expect.objectContaining({ value: 'UNKNOWN' }),
+            ]),
+          }),
+        )
+        expect(res.render).toHaveBeenCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            items: expect.not.arrayContaining([expect.objectContaining({ value: 'LICENCE_VARIATION_PROJECT' })]),
+          }),
+        )
+      },
+    )
 
     it('validation errors', async () => {
       req.flash = jest.fn().mockReturnValueOnce([

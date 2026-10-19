@@ -41,19 +41,15 @@ const isEligibleForDapol = (order: Order): boolean => {
   return order.interestedParties?.responsibleOrganisation === 'PROBATION'
 }
 
-const isPastDatedProbationVariation = (order: Order): boolean => {
+const isPastDatedVariationOrder = (order: Order): boolean => {
   const { startDate } = order.monitoringConditions
   return (
-    order.interestedParties?.notifyingOrganisation === 'PROBATION' &&
-    isVariationType(order.type) &&
-    startDate !== null &&
-    startDate !== undefined &&
-    new Date(startDate) < new Date()
+    isVariationType(order.type) && startDate !== null && startDate !== undefined && new Date(startDate) < new Date()
   )
 }
 
 const constructModel = (order: Order, data: MonitoringConditions, errors: ValidationResult): PilotModel => {
-  const isPastDatedVariation = isPastDatedProbationVariation(order)
+  const isPastDatedVariation = isPastDatedVariationOrder(order)
   const isDapolEligible = isPastDatedVariation || isEligibleForDapol(order)
   const isLicenceEligible = isLicenceVariationEligible(order)
   const isSentencingAct = order?.isSentencingAct ?? false
