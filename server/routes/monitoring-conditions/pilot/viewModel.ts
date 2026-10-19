@@ -64,6 +64,7 @@ const constructModel = (order: Order, data: MonitoringConditions, errors: Valida
       order.interestedParties?.notifyingOrganisation,
       isSentencingAct,
       isPastDatedVariation,
+      order.addresses.some(address => address.addressType === 'PRIMARY'),
     ),
     errorSummary: null,
   }
@@ -81,6 +82,7 @@ const getItems = (
   notifyingOrganisation?: string | null,
   isSentencingAct: boolean = false,
   isPastDatedVariation: boolean = false,
+  hasFixedAddress: boolean = false,
 ): Item[] => {
   let items: Item[]
   if (hdc === 'NO') {
@@ -96,9 +98,10 @@ const getItems = (
         text: 'They are not part of any of these pathfinders or programmes',
         value: 'UNKNOWN',
         conditional: {
-          html: isSentencingAct
-            ? ''
-            : 'To be eligible for tagging the device wearer must either be part of a pathfinder or programme or have Alcohol Monitoring on Licence (AML) as a licence condition.',
+          html:
+            isSentencingAct || hasFixedAddress
+              ? ''
+              : 'To be eligible for tagging the device wearer must either be part of a pathfinder or programme or have Alcohol Monitoring on Licence (AML) as a licence condition.',
         },
       },
     ]
