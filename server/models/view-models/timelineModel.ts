@@ -66,11 +66,18 @@ export default class TimelineModel {
     if (versionInformation.status === 'REJECTED') {
       return 'Form submitted'
     }
-    if (versionInformation.type === 'REVOCATION') {
-      return 'Monitoring ended'
-    }
-    if (Object.keys(VariationTypesEnum.Values).includes(versionInformation.type)) {
-      return 'Changes submitted'
+    switch (versionInformation.type) {
+      case 'VARIATION':
+        return 'Other change'
+      case 'REINSTALL_AT_DIFFERENT_ADDRESS':
+        return 'Added second or third curfew address'
+      case 'REINSTALL_DEVICE':
+        return 'Changed primary address'
+      case 'REVOCATION':
+        return 'Ended (Recall)'
+      case 'END_MONITORING':
+        return 'Ended'
+      default:
     }
 
     return versionInformation.status === 'SUBMITTED' ? 'Form submitted' : 'Failed to submit'

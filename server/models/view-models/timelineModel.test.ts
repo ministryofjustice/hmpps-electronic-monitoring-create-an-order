@@ -43,7 +43,7 @@ describe('TimelineModel', () => {
       })
 
       expect(result[1]).toEqual({
-        label: { text: 'Changes submitted' },
+        label: { text: 'Other change' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
         text: 'Change to an order',
@@ -66,7 +66,7 @@ describe('TimelineModel', () => {
       expect(result).toHaveLength(1)
 
       expect(result[0]).toEqual({
-        label: { text: 'Changes submitted' },
+        label: { text: 'Other change' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
         text: 'Change to an order',
@@ -89,7 +89,7 @@ describe('TimelineModel', () => {
       expect(result).toHaveLength(1)
 
       expect(result[0]).toEqual({
-        label: { text: 'Changes submitted' },
+        label: { text: 'Other change' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
         text: 'Change to an order',
@@ -112,7 +112,7 @@ describe('TimelineModel', () => {
       expect(result).toHaveLength(1)
 
       expect(result[0]).toEqual({
-        label: { text: 'Changes submitted' },
+        label: { text: 'Other change' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
         text: 'Change to an order',
@@ -135,7 +135,7 @@ describe('TimelineModel', () => {
       expect(result).toHaveLength(1)
 
       expect(result[0]).toEqual({
-        label: { text: 'Changes submitted' },
+        label: { text: 'Other change' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
         text: 'Change to an order',
@@ -158,7 +158,7 @@ describe('TimelineModel', () => {
       expect(result).toHaveLength(1)
 
       expect(result[0]).toEqual({
-        label: { text: 'Changes submitted' },
+        label: { text: 'Other change' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
         text: 'Change to an order',
@@ -181,7 +181,7 @@ describe('TimelineModel', () => {
       expect(result).toHaveLength(1)
 
       expect(result[0]).toEqual({
-        label: { text: 'Changes submitted' },
+        label: { text: 'Other change' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
         text: 'Change to an order',
@@ -204,7 +204,7 @@ describe('TimelineModel', () => {
       expect(result).toHaveLength(1)
 
       expect(result[0]).toEqual({
-        label: { text: 'Changes submitted' },
+        label: { text: 'Other change' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
         text: 'Change to an order',
@@ -227,7 +227,7 @@ describe('TimelineModel', () => {
       expect(result).toHaveLength(1)
 
       expect(result[0]).toEqual({
-        label: { text: 'Changes submitted' },
+        label: { text: 'Other change' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
         text: 'Change to an order',
@@ -250,7 +250,7 @@ describe('TimelineModel', () => {
       expect(result).toHaveLength(1)
 
       expect(result[0]).toEqual({
-        label: { text: 'Changes submitted' },
+        label: { text: 'Other change' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
         text: 'Change to an order',
@@ -273,7 +273,7 @@ describe('TimelineModel', () => {
       expect(result).toHaveLength(1)
 
       expect(result[0]).toEqual({
-        label: { text: 'Changes submitted' },
+        label: { text: 'Other change' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
         text: 'Change to an order',
@@ -332,10 +332,24 @@ describe('TimelineModel', () => {
     })
 
     it.each<[OrderType, string]>([
+      ['VARIATION', 'Other change'],
+      ['REINSTALL_AT_DIFFERENT_ADDRESS', 'Added second or third curfew address'],
+      ['REINSTALL_DEVICE', 'Changed primary address'],
+      ['REVOCATION', 'Ended (Recall)'],
+      ['END_MONITORING', 'Ended'],
+    ])('returns correct timeline label if type is $type', (type, label) => {
+      const versions = [createMockVersion({ submittedBy: 'Alice', type })]
+
+      const result = TimelineModel.mapToTimelineItems(content, versions)
+
+      expect(result[0].label.text).toBe(label)
+    })
+
+    it.each<[OrderType, string]>([
       ['VARIATION', 'Change to an order'],
       ['REINSTALL_AT_DIFFERENT_ADDRESS', 'Reinstall at different address'],
       ['REINSTALL_DEVICE', 'Reinstall device'],
-    ])('returns correct timeline text if type is $type', (type, text) => {
+    ])('returns correct variation description if type is $type', (type, text) => {
       const versions = [createMockVersion({ submittedBy: 'Alice', type })]
 
       const result = TimelineModel.mapToTimelineItems(content, versions)
