@@ -19,16 +19,10 @@ export default class RiskAtInstallationStoreService {
     return cached ? RiskAtInstallationModel.parse(JSON.parse(cached)) : this.fromOrder(order)
   }
 
-  public async updateField<T extends keyof RiskAtInstallation>(order: Order, field: T, data: RiskAtInstallation[T]) {
-    const riskAtInstallation = await this.getRiskAtInstallation(order)
+  public async update(order: Order, changes: Partial<RiskAtInstallation>) {
+    const riskAtInstallation = { ...(await this.getRiskAtInstallation(order)), ...changes }
 
-    riskAtInstallation[field] = data
-
-    await this.updateRiskAtInstallation(order, riskAtInstallation)
-  }
-
-  private async updateRiskAtInstallation(order: Order, data: RiskAtInstallation) {
-    await this.dataStore.set(this.keyFromOrder(order), JSON.stringify(data), CACHE_DURATION_SECONDS)
+    await this.dataStore.set(this.keyFromOrder(order), JSON.stringify(riskAtInstallation), CACHE_DURATION_SECONDS)
   }
 
   private fromOrder(order: Order): RiskAtInstallation {

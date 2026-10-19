@@ -3,20 +3,18 @@ import paths from '../../../constants/paths'
 import { isValidationResult, ValidationResult } from '../../../models/Validation'
 import TaskListService from '../../../services/taskListService'
 import { convertZodErrorToValidationError } from '../../../utils/errors'
-import DetailsOfInstallationService from '../details-of-installation/service'
-import RiskAtInstallationStoreService from '../riskAtInstallationStoreService'
+import RiskAtInstallationService from '../riskAtInstallationService'
 import OtherRisksFormModel, { OtherRisksFormValidator } from './formModel'
 import OtherRisksViewModel from './viewModel'
 
 export default class OtherRisksController {
   constructor(
-    private readonly riskAtInstallationStoreService: RiskAtInstallationStoreService,
-    private readonly detailsOfInstallationService: DetailsOfInstallationService,
+    private readonly riskAtInstallationService: RiskAtInstallationService,
     private readonly taskListService: TaskListService,
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { hasOtherRisks, riskDetails } = await this.riskAtInstallationStoreService.getRiskAtInstallation(req.order!)
+    const { hasOtherRisks, riskDetails } = await this.riskAtInstallationService.getRiskAtInstallation(req.order!)
     const errors = req.flash('validationErrors') as unknown as ValidationResult
 
     res.render(
@@ -37,26 +35,8 @@ export default class OtherRisksController {
       return
     }
 
-    const { hasOtherRisks, riskDetails } = validation.data
-    await this.riskAtInstallationStoreService.updateField(order, 'hasOtherRisks', hasOtherRisks)
-    await this.riskAtInstallationStoreService.updateField(
-      order,
-      'riskDetails',
-      hasOtherRisks === 'YES' ? riskDetails : '',
-    )
-
-    const saved = await this.riskAtInstallationStoreService.getRiskAtInstallation(order)
-
-    const result = await this.detailsOfInstallationService.updateDetailsOfInstallation({
-      accessToken: res.locals.user.token,
-      orderId: order.id,
-      data: {
-        possibleRisk: saved.possibleRisk,
-        riskCategory: saved.riskCategory,
-        riskDetails: saved.riskDetails,
-        genderRiskDetails: saved.genderRiskDetails,
-      },
-    })
+    await this.riskAtInstallationService.saveOtherRisks(order, validation.data)
+    const result = await this.riskAtInstallationService.submit({ accessToken: res.locals.user.token, order })
 
     if (isValidationResult(result)) {
       req.flash('validationErrors', result)

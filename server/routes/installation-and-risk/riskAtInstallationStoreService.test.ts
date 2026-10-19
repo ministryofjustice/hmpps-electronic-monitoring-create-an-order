@@ -95,28 +95,31 @@ describe('RiskAtInstallationStoreService', () => {
       expect(setSpy).not.toHaveBeenCalled()
     })
 
-    it('writes once when a field is updated', async () => {
+    it('writes once when answers are updated', async () => {
       const store = new InMemoryStore()
       const setSpy = jest.spyOn(store, 'set')
 
-      await new RiskAtInstallationStoreService(store).updateField(order, 'possibleRisk', ['SEXUAL_OFFENCES'])
+      await new RiskAtInstallationStoreService(store).update(order, {
+        possibleRisk: ['RISK_TO_GENDER'],
+        genderRiskDetails: 'Women',
+      })
 
       expect(setSpy).toHaveBeenCalledTimes(1)
     })
   })
 
-  describe('updateField', () => {
+  describe('update', () => {
     it('keeps the updated answer in the cache over the saved order answers', async () => {
       order.detailsOfInstallation = { riskCategory: ['THREATS_OF_VIOLENCE'], riskDetails: '' }
 
-      await service.updateField(order, 'possibleRisk', ['SEXUAL_OFFENCES'])
+      await service.update(order, { possibleRisk: ['SEXUAL_OFFENCES'] })
 
       expect((await service.getRiskAtInstallation(order)).possibleRisk).toEqual(['SEXUAL_OFFENCES'])
     })
 
     it('keeps the other cached answers', async () => {
-      await service.updateField(order, 'possibleRisk', ['SEXUAL_OFFENCES'])
-      await service.updateField(order, 'riskCategory', ['DANGEROUS_ANIMALS'])
+      await service.update(order, { possibleRisk: ['SEXUAL_OFFENCES'] })
+      await service.update(order, { riskCategory: ['DANGEROUS_ANIMALS'] })
 
       expect(await service.getRiskAtInstallation(order)).toEqual(
         expect.objectContaining({ possibleRisk: ['SEXUAL_OFFENCES'], riskCategory: ['DANGEROUS_ANIMALS'] }),
@@ -124,7 +127,7 @@ describe('RiskAtInstallationStoreService', () => {
     })
 
     it('caches answers per order version', async () => {
-      await service.updateField(order, 'possibleRisk', ['SEXUAL_OFFENCES'])
+      await service.update(order, { possibleRisk: ['SEXUAL_OFFENCES'] })
 
       const otherVersion = { ...order, versionId: uuidv4(), detailsOfInstallation: null }
 

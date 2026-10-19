@@ -2,18 +2,15 @@ import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
 import { ValidationResult } from '../../../models/Validation'
 import { convertZodErrorToValidationError } from '../../../utils/errors'
-import RiskAtInstallationStoreService from '../riskAtInstallationStoreService'
-import { RISK_TO_GENDER } from '../riskCodes'
+import RiskAtInstallationService from '../riskAtInstallationService'
 import RiskBehaviourFormModel, { RiskBehaviourFormValidator } from './formModel'
 import RiskBehaviourViewModel from './viewModel'
 
 export default class RiskBehaviourController {
-  constructor(private readonly riskAtInstallationStoreService: RiskAtInstallationStoreService) {}
+  constructor(private readonly riskAtInstallationService: RiskAtInstallationService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { possibleRisk, genderRiskDetails } = await this.riskAtInstallationStoreService.getRiskAtInstallation(
-      req.order!,
-    )
+    const { possibleRisk, genderRiskDetails } = await this.riskAtInstallationService.getRiskAtInstallation(req.order!)
     const errors = req.flash('validationErrors') as unknown as ValidationResult
 
     res.render(
@@ -40,13 +37,7 @@ export default class RiskBehaviourController {
       return
     }
 
-    const { possibleRisk, genderRiskDetails } = validation.data
-    await this.riskAtInstallationStoreService.updateField(order, 'possibleRisk', possibleRisk)
-    await this.riskAtInstallationStoreService.updateField(
-      order,
-      'genderRiskDetails',
-      possibleRisk.includes(RISK_TO_GENDER) ? genderRiskDetails : '',
-    )
+    await this.riskAtInstallationService.saveRiskBehaviour(order, validation.data)
 
     res.redirect(paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS.replace(':orderId', order.id))
   }

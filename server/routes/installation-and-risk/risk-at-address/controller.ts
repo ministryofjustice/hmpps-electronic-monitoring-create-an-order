@@ -2,15 +2,15 @@ import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
 import { ValidationResult } from '../../../models/Validation'
 import { convertZodErrorToValidationError } from '../../../utils/errors'
-import RiskAtInstallationStoreService from '../riskAtInstallationStoreService'
+import RiskAtInstallationService from '../riskAtInstallationService'
 import RiskAtAddressFormModel, { RiskAtAddressFormValidator } from './formModel'
 import RiskAtAddressViewModel from './viewModel'
 
 export default class RiskAtAddressController {
-  constructor(private readonly riskAtInstallationStoreService: RiskAtInstallationStoreService) {}
+  constructor(private readonly riskAtInstallationService: RiskAtInstallationService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { riskCategory } = await this.riskAtInstallationStoreService.getRiskAtInstallation(req.order!)
+    const { riskCategory } = await this.riskAtInstallationService.getRiskAtInstallation(req.order!)
     const errors = req.flash('validationErrors') as unknown as ValidationResult
 
     res.render(
@@ -36,8 +36,7 @@ export default class RiskAtAddressController {
       return
     }
 
-    const { riskCategory } = validation.data
-    await this.riskAtInstallationStoreService.updateField(order, 'riskCategory', riskCategory)
+    await this.riskAtInstallationService.saveRiskAtAddress(order, validation.data)
 
     res.redirect(paths.INSTALLATION_AND_RISK.OTHER_RISKS.replace(':orderId', order.id))
   }

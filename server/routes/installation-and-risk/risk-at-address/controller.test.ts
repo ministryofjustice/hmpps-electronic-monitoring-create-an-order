@@ -1,115 +1,90 @@
 import { NextFunction, Request, Response } from 'express'
 import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
 import paths from '../../../constants/paths'
+import RestClient from '../../../data/restClient'
 import InMemoryStore from '../../store/inMemoryStore'
+import { RiskAtInstallation } from '../riskAtInstallationModel'
+import RiskAtInstallationService from '../riskAtInstallationService'
 import RiskAtInstallationStoreService from '../riskAtInstallationStoreService'
 import RiskAtAddressController from './controller'
 
+jest.mock('../riskAtInstallationService')
+
 describe('RiskAtAddressController', () => {
-  let store: RiskAtInstallationStoreService
+  const answers: RiskAtInstallation = {
+    possibleRisk: [],
+    riskCategory: ['DANGEROUS_ANIMALS'],
+    riskDetails: '',
+    hasOtherRisks: null,
+    genderRiskDetails: '',
+  }
+  let service: jest.Mocked<RiskAtInstallationService>
   let controller: RiskAtAddressController
   let req: Request
   let res: Response
   const next: NextFunction = jest.fn()
 
   beforeEach(() => {
-    store = new RiskAtInstallationStoreService(new InMemoryStore())
-    controller = new RiskAtAddressController(store)
+    service = new RiskAtInstallationService(
+      new RiskAtInstallationStoreService(new InMemoryStore()),
+      {} as RestClient,
+    ) as jest.Mocked<RiskAtInstallationService>
+    service.getRiskAtInstallation.mockResolvedValue(answers)
+    controller = new RiskAtAddressController(service)
     req = createMockRequest()
     req.flash = jest.fn().mockReturnValue([])
     res = createMockResponse()
   })
 
   describe('view', () => {
-    const template = 'pages/order/installation-and-risk/risk-at-address'
-
-    it('renders the risk at address page with no risks checked by default', async () => {
+    it('renders the saved answers', async () => {
       await controller.view(req, res, next)
 
+      expect(service.getRiskAtInstallation).toHaveBeenCalledWith(req.order)
       expect(res.render).toHaveBeenCalledWith(
-        template,
-        expect.objectContaining({ riskCategory: expect.objectContaining({ values: [] }) }),
-      )
-    })
-
-    it('checks the cached risks at the installation address', async () => {
-      await store.updateField(req.order!, 'riskCategory', ['DANGEROUS_ANIMALS'])
-
-      await controller.view(req, res, next)
-
-      expect(res.render).toHaveBeenCalledWith(
-        template,
+        'pages/order/installation-and-risk/risk-at-address',
         expect.objectContaining({ riskCategory: expect.objectContaining({ values: ['DANGEROUS_ANIMALS'] }) }),
       )
     })
-  })
 
-  describe('view with errors', () => {
-    it('renders the flashed validation error', async () => {
-      const errors = [{ field: 'riskCategory', error: 'Select something' }]
-      ;(req.flash as jest.Mock).mockImplementation((key: string) => (key === 'validationErrors' ? errors : []))
+    it('renders the flashed validation errors', async () => {
+      req.flash = jest.fn().mockReturnValue([{ field: 'riskCategory', error: 'Select something' }])
 
       await controller.view(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/installation-and-risk/risk-at-address',
         expect.objectContaining({
-          riskCategory: expect.objectContaining({ values: [], error: { text: 'Select something' } }),
+          riskCategory: expect.objectContaining({ error: { text: 'Select something' } }),
         }),
       )
     })
   })
 
   describe('update', () => {
-    it('caches the selected risks at the installation address', async () => {
+    it('saves the answers and goes to the other risks page', async () => {
       req.body = { action: 'continue', riskCategory: ['DANGEROUS_ANIMALS', 'IOM'] }
 
       await controller.update(req, res, next)
 
-      expect((await store.getRiskAtInstallation(req.order!)).riskCategory).toEqual(['DANGEROUS_ANIMALS', 'IOM'])
-    })
-
-    it('caches a single selection sent as a string', async () => {
-      req.body = { action: 'continue', riskCategory: 'IOM' }
-
-      await controller.update(req, res, next)
-
-      expect((await store.getRiskAtInstallation(req.order!)).riskCategory).toEqual(['IOM'])
-    })
-
-    describe('when no risks are selected', () => {
-      beforeEach(async () => {
-        await store.updateField(req.order!, 'riskCategory', ['IOM'])
-        req.body = { action: 'continue' }
-
-        await controller.update(req, res, next)
-      })
-
-      it('does not change the cached risks', async () => {
-        expect((await store.getRiskAtInstallation(req.order!)).riskCategory).toEqual(['IOM'])
-      })
-
-      it('flashes a validation error', () => {
-        expect(req.flash).toHaveBeenCalledWith('validationErrors', [
-          { field: 'riskCategory', error: 'Select all the possible risks at the installation address' },
-        ])
-      })
-
-      it('redirects back to the risk at address page', () => {
-        expect(res.redirect).toHaveBeenCalledWith(
-          paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS.replace(':orderId', req.order!.id),
-        )
-      })
-    })
-
-    it('goes to the other risks page', async () => {
-      req.body = { action: 'continue', riskCategory: ['DANGEROUS_ANIMALS'] }
-
-      await controller.update(req, res, next)
-
+      expect(service.saveRiskAtAddress).toHaveBeenCalledWith(req.order, { riskCategory: ['DANGEROUS_ANIMALS', 'IOM'] })
       expect(res.redirect).toHaveBeenCalledWith(
         paths.INSTALLATION_AND_RISK.OTHER_RISKS.replace(':orderId', req.order!.id),
       )
+    })
+
+    it('returns to the page with the errors and saves nothing when the answers are invalid', async () => {
+      req.body = { action: 'continue' }
+
+      await controller.update(req, res, next)
+
+      expect(req.flash).toHaveBeenCalledWith('validationErrors', [
+        { field: 'riskCategory', error: 'Select all the possible risks at the installation address' },
+      ])
+      expect(res.redirect).toHaveBeenCalledWith(
+        paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS.replace(':orderId', req.order!.id),
+      )
+      expect(service.saveRiskAtAddress).not.toHaveBeenCalled()
     })
   })
 })
