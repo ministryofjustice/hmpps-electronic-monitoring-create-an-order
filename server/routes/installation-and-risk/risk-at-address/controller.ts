@@ -26,15 +26,16 @@ export default class RiskAtAddressController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const { riskCategory } = RiskAtAddressFormModel.parse(req.body)
+    const formData = RiskAtAddressFormModel.parse(req.body)
 
-    const validation = RiskAtAddressFormValidator.safeParse({ riskCategory })
+    const validation = RiskAtAddressFormValidator.safeParse(formData)
     if (!validation.success) {
       req.flash('validationErrors', convertZodErrorToValidationError(validation.error))
       res.redirect(paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS.replace(':orderId', order.id))
       return
     }
 
+    const { riskCategory } = validation.data
     await this.riskAtInstallationStoreService.updateField(order, 'riskCategory', riskCategory)
 
     res.redirect(paths.INSTALLATION_AND_RISK.OTHER_RISKS.replace(':orderId', order.id))
