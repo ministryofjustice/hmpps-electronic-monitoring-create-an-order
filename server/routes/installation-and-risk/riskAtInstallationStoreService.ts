@@ -37,8 +37,13 @@ export default class RiskAtInstallationStoreService {
       possibleRisk,
       riskCategory,
       riskDetails,
-      hasOtherRisks: riskDetails ? 'YES' : null,
+      hasOtherRisks: this.otherRisksAnswer(saved?.riskCategory, riskDetails),
       genderRiskDetails: order.detailsOfInstallation?.genderRiskDetails ?? '',
     }
+  }
+
+  private otherRisksAnswer(savedRiskCategory: string[] | null | undefined, riskDetails: string) {
+    if (riskDetails) return 'YES'
+    return savedRiskCategory != null ? 'NO' : null
   }
 }

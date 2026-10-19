@@ -33,9 +33,16 @@ describe('RiskAtInstallationStoreService', () => {
       expect((await service.getRiskAtInstallation(order)).hasOtherRisks).toBe('YES')
     })
 
-    it('leaves other risks unanswered when saved details are empty', async () => {
+    it('answers no to other risks when saved details are empty', async () => {
       order.dataDictionaryVersion = 'DDV6'
       order.detailsOfInstallation = { riskCategory: [], riskDetails: '' }
+
+      expect((await service.getRiskAtInstallation(order)).hasOtherRisks).toBe('NO')
+    })
+
+    it('leaves other risks unanswered when no risks were saved', async () => {
+      order.dataDictionaryVersion = 'DDV6'
+      order.detailsOfInstallation = { riskCategory: null, riskDetails: null }
 
       expect((await service.getRiskAtInstallation(order)).hasOtherRisks).toBeNull()
     })

@@ -25,7 +25,7 @@ describe('other risks form validator', () => {
 
     expect(result.error?.issues).toEqual([
       expect.objectContaining({
-        message: 'Any other risks to be aware of must be 500 characters or less',
+        message: 'Any other risks to be aware of must be 200 characters or less',
         path: ['riskDetails'],
       }),
     ])

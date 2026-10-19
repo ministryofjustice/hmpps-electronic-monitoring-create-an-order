@@ -26,7 +26,7 @@ export const OtherRisksFormValidator = z
     } else if (data.riskDetails.length > OTHER_RISKS_DETAILS_MAX_LENGTH) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: validationErrors.installationAndRisk.riskDetailsTooLong,
+        message: validationErrors.installationAndRisk.otherRisksDetailsTooLong,
         path: ['riskDetails'],
       })
     }
