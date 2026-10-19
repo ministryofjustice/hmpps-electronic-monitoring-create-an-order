@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties, createFakeAddress } from '../../../mockApis/faker'
-import { stubAttachments } from '../../utils'
 import SubmitSuccessPage from '../../../pages/order/submit-success'
 import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
@@ -10,14 +9,6 @@ import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
 
 context('Service-Request-Types', () => {
   const fmsCaseId: string = uuidv4()
-  const hmppsDocumentId: string = uuidv4()
-
-  const files = {
-    licence: {
-      contents: 'cypress/fixtures/test.pdf',
-      fileName: 'test.pdf',
-    },
-  }
 
   beforeEach(() => {
     cy.task('resetDB')
@@ -37,11 +28,9 @@ context('Service-Request-Types', () => {
       httpStatus: 200,
       response: { result: [{ id: uuidv4(), message: '' }] },
     })
-
-    stubAttachments(files, fmsCaseId, hmppsDocumentId, true)
   })
 
-  it('Notifying org is court, should able to upload court order and submit', () => {
+  it('Notifying org is court, should be able to submit, does not show court upload question', () => {
     const currentDate = new Date()
     const deviceWearerDetails = {
       ...createFakeAdultDeviceWearer(),
@@ -78,10 +67,6 @@ context('Service-Request-Types', () => {
       riskDetails: 'No risk',
     }
 
-    const attachmentFiles = {
-      courtOrder: { fileName: files.licence.fileName, contents: files.licence.contents, fileRequired: 'Yes' },
-    }
-
     const interestedParties = createFakeInterestedParties('Family Court', 'Probation', null, 'North West')
     createNewOrder({
       notifyingOrganisation: interestedParties,
@@ -106,7 +91,7 @@ context('Service-Request-Types', () => {
       alcoholMonitoringDetails: undefined,
       trailMonitoringDetails: trailMonitoringOrder,
       attendanceMonitoringDetails: undefined,
-      files: attachmentFiles,
+      files: {},
       probationDeliveryUnit,
       installationLocation: undefined,
       installationAppointment: undefined,
@@ -117,10 +102,6 @@ context('Service-Request-Types', () => {
     const submitSuccessPage = Page.verifyOnPage(SubmitSuccessPage)
     submitSuccessPage.receiptButton().click()
     const receiptPage = Page.verifyOnPage(ReceiptPage)
-    receiptPage.additionalDocumentsSection.shouldHaveItems([
-      { key: 'Do you have a court order document to upload?', value: 'Yes' },
-      { key: 'Upload a copy of the licence or court order document', value: 'test.pdf' },
-      { key: 'Do you have a photo to upload?', value: 'No' },
-    ])
+    receiptPage.additionalDocumentsSection.shouldHaveItems([{ key: 'Do you have a photo to upload?', value: 'No' }])
   })
 })

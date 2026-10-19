@@ -185,30 +185,7 @@ const getInterestedPartiesTasks = (order: Order, cohortDefinition: TaskListCohor
 const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCohortDefinition): Task[] => {
   const tasks: Task[] = []
 
-  if (cohortDefinition.attachment === 'COURT_ORDER') {
-    tasks.push(
-      {
-        section: SECTIONS.additionalDocuments,
-        name: PAGES.haveCourtOrder,
-        path: paths.ATTACHMENT.HAVE_COURT_ORDER,
-        state: hasOptionalVariationSectionIsHOCourt(order) ? 'OPTIONAL' : 'REQUIRED',
-        completed: isNotNullOrUndefined(order.orderParameters?.haveCourtOrder),
-      },
-      {
-        section: SECTIONS.additionalDocuments,
-        name: PAGES.courtOrderUpload,
-        path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'court_order'),
-        state: convertBooleanToEnum<State>(
-          order.orderParameters?.haveCourtOrder || null,
-          STATES.cantBeStarted,
-          STATES.required,
-          STATES.notRequired,
-        ),
-        completed:
-          doesOrderHaveDocument(order, AttachmentType.COURT_ORDER) || order.orderParameters?.haveCourtOrder === false,
-      },
-    )
-  } else if (cohortDefinition.attachment === 'LICENCE') {
+  if (cohortDefinition.attachment === 'LICENCE') {
     tasks.push({
       section: SECTIONS.additionalDocuments,
       name: PAGES.licenceUpload,

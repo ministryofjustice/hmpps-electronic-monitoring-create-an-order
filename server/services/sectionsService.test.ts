@@ -392,8 +392,8 @@ describe('task list service', () => {
         tasks.push({
           section: 'ADDITIONAL_DOCUMENTS',
           name: 'PHOTO_ATTACHMENT',
-          path: paths.ATTACHMENT.HAVE_PHOTO,
-          state: 'OPTIONAL',
+          path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'photo_Id'),
+          state: 'CANT_BE_STARTED',
           completed: false,
         })
 
@@ -411,7 +411,7 @@ describe('task list service', () => {
         expect(additionalDocumentsSection.path).toBe(paths.ATTACHMENT.HAVE_PHOTO)
       })
 
-      it('cohort court, mark risk info and additional docs as optional', async () => {
+      it('court cohort links optional additional documents to the photo question', async () => {
         order = {
           type: 'REINSTALL_DEVICE',
           interestedParties: { notifyingOrganisation: 'CIVIL_COUNTY_COURT' },
@@ -430,17 +430,17 @@ describe('task list service', () => {
 
         tasks.push({
           section: 'ADDITIONAL_DOCUMENTS',
-          name: 'ATTACHMENTS_HAVE_COURT_ORDER',
-          path: paths.ATTACHMENT.HAVE_COURT_ORDER,
+          name: 'ATTACHMENTS_HAVE_PHOTO',
+          path: paths.ATTACHMENT.HAVE_PHOTO,
           state: 'OPTIONAL',
           completed: false,
         })
 
         tasks.push({
           section: 'ADDITIONAL_DOCUMENTS',
-          name: 'COURT_ORDER_ATTACHMENT',
-          path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'court_order'),
-          state: 'OPTIONAL',
+          name: 'PHOTO_ATTACHMENT',
+          path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'photo_Id'),
+          state: 'CANT_BE_STARTED',
           completed: false,
         })
 
@@ -455,7 +455,7 @@ describe('task list service', () => {
         expect(riskInformationSection.completed).toBe(true)
         expect(additionalDocumentsSection.completed).toBe(true)
         expect(riskInformationSection.path).toBe(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION)
-        expect(additionalDocumentsSection.path).toBe(paths.ATTACHMENT.HAVE_COURT_ORDER)
+        expect(additionalDocumentsSection.path).toBe(paths.ATTACHMENT.HAVE_PHOTO)
       })
 
       it('links an empty optional risk information section to its first question, not CYA', async () => {
