@@ -35,7 +35,7 @@ describe('risk information check answers view model', () => {
       "At installation what are the possible risks from the device wearer's behaviour?",
       'What sex or gender are they a risk to?',
       'At installation what are the possible risks at the address?',
-      'Any other risks to be aware of? (optional)',
+      'Are there other risks to be aware of?',
     ])
   })
 
@@ -61,7 +61,7 @@ describe('risk information check answers view model', () => {
       "At installation what are the possible risks from the device wearer's behaviour?",
       'What sex or gender are they a risk to?',
       'At installation what are the possible risks at the address?',
-      'Any other risks to be aware of? (optional)',
+      'Are there other risks to be aware of?',
       'What type of offence did the device wearer commit?',
       'Any other information to be aware of about the offence committed?',
     ])
@@ -140,6 +140,51 @@ describe('risk information check answers view model', () => {
       jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(false)
 
       expect(keys()).toContain('What are the possible risks at the installation address? (optional)')
+    })
+  })
+
+  describe('other risks row', () => {
+    const optionalQuestion = 'Any other risks to be aware of? (optional)'
+    const question = 'Are there other risks to be aware of?'
+    const buildOrder = (riskDetails: string) =>
+      getMockOrder({
+        dataDictionaryVersion: 'DDV6',
+        detailsOfInstallation: { riskCategory: ['DANGEROUS_ANIMALS'], riskDetails },
+      })
+    const rows = (order: ReturnType<typeof buildOrder>) =>
+      createViewModel(order, getContent('en', 'DDV6'), true).riskInformation
+
+    describe('when the risk information flow is enabled', () => {
+      beforeEach(() => {
+        jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(true)
+      })
+
+      it('shows the entered risk details with a link to the other risks page', () => {
+        const order = buildOrder('some risk details')
+        const row = rows(order).find(answer => answer.key.text === question)
+
+        expect(row?.value.text).toBe('some risk details')
+        expect(row?.actions?.items[0]?.href).toBe(paths.INSTALLATION_AND_RISK.OTHER_RISKS.replace(':orderId', order.id))
+        expect(rows(order).map(answer => answer.key.text)).not.toContain(optionalQuestion)
+      })
+
+      it('shows No when there are no risk details', () => {
+        const row = rows(buildOrder('')).find(answer => answer.key.text === question)
+
+        expect(row?.value.text).toBe('No')
+      })
+    })
+
+    it('keeps the optional row linking to details of installation when the flag is off', () => {
+      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(false)
+      const order = buildOrder('some risk details')
+      const row = rows(order).find(answer => answer.key.text === optionalQuestion)
+
+      expect(row?.value.text).toBe('some risk details')
+      expect(row?.actions?.items[0]?.href).toBe(
+        paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id),
+      )
+      expect(rows(order).map(answer => answer.key.text)).not.toContain(question)
     })
   })
 

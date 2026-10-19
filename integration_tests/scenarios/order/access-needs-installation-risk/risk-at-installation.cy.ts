@@ -1,4 +1,6 @@
 import OffencePage from '../../../e2e/order/access-needs-installation-risk/offences/offence/offencePage'
+import { OTHER_RISKS_QUESTION } from '../../../e2e/order/access-needs-installation-risk/other-risks/OtherRisksComponent'
+import OtherRisksPage from '../../../e2e/order/access-needs-installation-risk/other-risks/OtherRisksPage'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
@@ -18,8 +20,10 @@ context('Risk at installation single question pages', () => {
   }
 
   const riskAtInstallation = {
-    possibleRisk: 'Violent behaviour or threats of violence',
+    possibleRisk: 'Offensive towards someone because of their sex or gender',
+    genderRiskDetails: 'Women',
     riskCategory: 'Safeguarding child',
+    otherRisks: 'Some other risk details',
   }
 
   const startRiskInformation = (notifyingOrganisation: 'Civil and County Court' | 'Prison') => {
@@ -50,7 +54,7 @@ context('Risk at installation single question pages', () => {
     cy.task('resetFeatureFlags')
   })
 
-  it('saves the risks and goes to check your answers for Civil Court', () => {
+  it('saves all the risk answers and shows them on check your answers for Civil Court', () => {
     startRiskInformation('Civil and County Court')
 
     fillInRiskAtInstallationWith(riskAtInstallation)
@@ -61,22 +65,17 @@ context('Risk at installation single question pages', () => {
       riskAtInstallation.possibleRisk,
     )
     cyaPage.installationRiskSection.shouldHaveItem(
+      'What sex or gender are they a risk to?',
+      riskAtInstallation.genderRiskDetails,
+    )
+    cyaPage.installationRiskSection.shouldHaveItem(
       'At installation what are the possible risks at the address?',
       riskAtInstallation.riskCategory,
     )
-  })
+    cyaPage.installationRiskSection.shouldHaveItem(OTHER_RISKS_QUESTION, riskAtInstallation.otherRisks)
 
-  it('saves the sex or gender risk details and shows them on check your answers', () => {
-    startRiskInformation('Civil and County Court')
-
-    fillInRiskAtInstallationWith({
-      possibleRisk: 'Offensive towards someone because of their sex or gender',
-      riskCategory: riskAtInstallation.riskCategory,
-      genderRiskDetails: 'Women',
-    })
-
-    const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
-    cyaPage.installationRiskSection.shouldHaveItem('What sex or gender are they a risk to?', 'Women')
+    cyaPage.installationRiskSection.changeAnswer(OTHER_RISKS_QUESTION)
+    Page.verifyOnPage(OtherRisksPage)
   })
 
   it('saves the risks and goes to the offence page for Prison', () => {
