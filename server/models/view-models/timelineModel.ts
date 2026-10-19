@@ -2,7 +2,7 @@ import paths from '../../constants/paths'
 import I18n from '../../types/i18n'
 import { ReferenceCatalogDDv6 } from '../../types/i18n/reference'
 import { lookup } from '../../utils/utils'
-import { VariationTypesEnum, OrderType } from '../Order'
+import { OrderType } from '../Order'
 import { StatusUpdate } from '../StatusUpdate'
 import { VersionInformation } from '../VersionInformation'
 
