@@ -215,7 +215,7 @@ context('Service-Request-Types', () => {
   })
 
   it('Should able to make REINSTALL_DEVICE change', () => {
-    fillInVariations('Address Change', 'Reinstall device')
+    fillInVariations('Address Change', 'Changes submitted')
   })
 
   it('Should able to make END_MONITORING change', () => {
