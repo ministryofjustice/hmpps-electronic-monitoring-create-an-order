@@ -61,7 +61,7 @@ context('Risk at installation single question pages', () => {
       riskAtInstallation.possibleRisk,
     )
     cyaPage.installationRiskSection.shouldHaveItem(
-      'What are the possible risks at the installation address? (optional)',
+      'At installation what are the possible risks at the address?',
       riskAtInstallation.riskCategory,
     )
   })

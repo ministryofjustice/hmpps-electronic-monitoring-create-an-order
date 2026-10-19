@@ -16,49 +16,94 @@ describe('RiskAtAddressController', () => {
     store = new RiskAtInstallationStoreService(new InMemoryStore())
     controller = new RiskAtAddressController(store)
     req = createMockRequest()
+    req.flash = jest.fn().mockReturnValue([])
     res = createMockResponse()
   })
 
   describe('view', () => {
-    it('offers each possible risk at the installation address', async () => {
+    const template = 'pages/order/installation-and-risk/risk-at-address'
+
+    it('renders the risk at address page with no risks checked by default', async () => {
       await controller.view(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith(
-        'pages/WIP',
-        expect.objectContaining({
-          pageName: 'Risk at address',
-          items: expect.arrayContaining([
-            { value: 'DANGEROUS_ANIMALS', text: 'Animals at the property, for example dogs', checked: false },
-          ]),
-        }),
+        template,
+        expect.objectContaining({ riskCategory: expect.objectContaining({ values: [] }) }),
       )
     })
 
-    it('checks the cached risk at the installation address', async () => {
+    it('checks the cached risks at the installation address', async () => {
       await store.updateField(req.order!, 'riskCategory', ['DANGEROUS_ANIMALS'])
 
       await controller.view(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith(
-        'pages/WIP',
+        template,
+        expect.objectContaining({ riskCategory: expect.objectContaining({ values: ['DANGEROUS_ANIMALS'] }) }),
+      )
+    })
+  })
+
+  describe('view with errors', () => {
+    it('renders the flashed validation error', async () => {
+      const errors = [{ field: 'riskCategory', error: 'Select something' }]
+      ;(req.flash as jest.Mock).mockImplementation((key: string) => (key === 'validationErrors' ? errors : []))
+
+      await controller.view(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/order/installation-and-risk/risk-at-address',
         expect.objectContaining({
-          items: expect.arrayContaining([expect.objectContaining({ value: 'DANGEROUS_ANIMALS', checked: true })]),
+          riskCategory: expect.objectContaining({ values: [], error: { text: 'Select something' } }),
         }),
       )
     })
   })
 
   describe('update', () => {
-    it('caches the selected risk at the installation address', async () => {
-      req.body = { action: 'continue', branch: 'DANGEROUS_ANIMALS' }
+    it('caches the selected risks at the installation address', async () => {
+      req.body = { action: 'continue', riskCategory: ['DANGEROUS_ANIMALS', 'IOM'] }
 
       await controller.update(req, res, next)
 
-      expect((await store.getRiskAtInstallation(req.order!)).riskCategory).toEqual(['DANGEROUS_ANIMALS'])
+      expect((await store.getRiskAtInstallation(req.order!)).riskCategory).toEqual(['DANGEROUS_ANIMALS', 'IOM'])
+    })
+
+    it('caches a single selection sent as a string', async () => {
+      req.body = { action: 'continue', riskCategory: 'IOM' }
+
+      await controller.update(req, res, next)
+
+      expect((await store.getRiskAtInstallation(req.order!)).riskCategory).toEqual(['IOM'])
+    })
+
+    describe('when no risks are selected', () => {
+      beforeEach(async () => {
+        await store.updateField(req.order!, 'riskCategory', ['IOM'])
+        req.body = { action: 'continue' }
+
+        await controller.update(req, res, next)
+      })
+
+      it('does not change the cached risks', async () => {
+        expect((await store.getRiskAtInstallation(req.order!)).riskCategory).toEqual(['IOM'])
+      })
+
+      it('flashes a validation error', () => {
+        expect(req.flash).toHaveBeenCalledWith('validationErrors', [
+          { field: 'riskCategory', error: 'Select all the possible risks at the installation address' },
+        ])
+      })
+
+      it('redirects back to the risk at address page', () => {
+        expect(res.redirect).toHaveBeenCalledWith(
+          paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS.replace(':orderId', req.order!.id),
+        )
+      })
     })
 
     it('goes to the other risks page', async () => {
-      req.body = { action: 'continue', branch: 'DANGEROUS_ANIMALS' }
+      req.body = { action: 'continue', riskCategory: ['DANGEROUS_ANIMALS'] }
 
       await controller.update(req, res, next)
 

@@ -10,6 +10,7 @@ import logger from '../../logger'
 import ReferenceData from '../types/i18n/reference/reference'
 import { CheckboxItem } from './govukFrontEndTypes/checkBoxItem'
 import { RadiosItem } from './govukFrontEndTypes/radioItem'
+import exclusiveOptions from './exclusiveOptions'
 
 const toOptions = (
   values: ReferenceData,
@@ -66,8 +67,6 @@ const removeOptions = (items: Array<CheckboxItem>, itemsToRemove: string[]): Arr
   return items.filter(item => !itemsToRemove.includes(item.value))
 }
 
-type Option = { value?: string; [key: string]: unknown }
-
 export default function nunjucksSetup(app: express.Express): void {
   app.set('view engine', 'njk')
 
@@ -108,12 +107,9 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('toOptions', toOptions)
   njkEnv.addFilter('addDivider', addDivider)
   njkEnv.addFilter('removeOptions', removeOptions)
+  njkEnv.addFilter('exclusiveOptions', exclusiveOptions)
   Object.entries(mojFilters()).forEach(([name, filter]) => {
     // @ts-expect-error/filter is unknown as import does not have typing
     njkEnv.addFilter(name, filter)
   })
-  // Deselect for checkboxes
-  njkEnv.addFilter('addExclusive', (options: Option[], value: string) =>
-    options.map(o => (o.value === value ? { ...o, behaviour: 'exclusive' } : o)),
-  )
 }

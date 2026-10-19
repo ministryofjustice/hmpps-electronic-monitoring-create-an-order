@@ -1,35 +1,41 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
-import getContent from '../../../i18n'
+import { ValidationResult } from '../../../models/Validation'
+import { convertZodErrorToValidationError } from '../../../utils/errors'
 import RiskAtInstallationStoreService from '../riskAtInstallationStoreService'
+import RiskAtAddressFormModel, { RiskAtAddressFormValidator } from './formModel'
+import RiskAtAddressViewModel from './viewModel'
 
 export default class RiskAtAddressController {
   constructor(private readonly riskAtInstallationStoreService: RiskAtInstallationStoreService) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const order = req.order!
-    const { riskCategory } = await this.riskAtInstallationStoreService.getRiskAtInstallation(order)
-    const { reference } = getContent('en', order.dataDictionaryVersion)
+    const { riskCategory } = await this.riskAtInstallationStoreService.getRiskAtInstallation(req.order!)
+    const errors = req.flash('validationErrors') as unknown as ValidationResult
 
-    res.render('pages/WIP', {
-      pageName: 'Risk at address',
-      items: Object.entries(reference.riskCategories).map(([value, text]) => ({
-        value,
-        text,
-        checked: riskCategory.includes(value),
-      })),
-      errorSummary: null,
-    })
+    res.render(
+      'pages/order/installation-and-risk/risk-at-address',
+      RiskAtAddressViewModel.construct(
+        riskCategory,
+        res.locals.content!.reference.riskCategories,
+        !res.locals.isOrderEditable,
+        errors,
+      ),
+    )
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
+    const { riskCategory } = RiskAtAddressFormModel.parse(req.body)
 
-    await this.riskAtInstallationStoreService.updateField(
-      order,
-      'riskCategory',
-      req.body.branch ? [req.body.branch] : [],
-    )
+    const validation = RiskAtAddressFormValidator.safeParse({ riskCategory })
+    if (!validation.success) {
+      req.flash('validationErrors', convertZodErrorToValidationError(validation.error))
+      res.redirect(paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS.replace(':orderId', order.id))
+      return
+    }
+
+    await this.riskAtInstallationStoreService.updateField(order, 'riskCategory', riskCategory)
 
     res.redirect(paths.INSTALLATION_AND_RISK.OTHER_RISKS.replace(':orderId', order.id))
   }
