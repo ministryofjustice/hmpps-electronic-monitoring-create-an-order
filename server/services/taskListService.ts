@@ -64,8 +64,6 @@ const PAGES = {
   licenceUpload: 'LICENCE_ATTACHMENT',
   photoUpload: 'PHOTO_ATTACHMENT',
   havePhoto: 'ATTACHMENTS_HAVE_PHOTO',
-  courtOrderUpload: 'COURT_ORDER_ATTACHMENT',
-  haveCourtOrder: 'ATTACHMENTS_HAVE_COURT_ORDER',
   attachments: 'CHECK_ANSWERS_ATTACHMENTS',
   variationDetails: 'VARIATION_DETAILS',
   installationLocation: 'INSTALLATION_LOCATION',
@@ -189,7 +187,7 @@ const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCoho
     tasks.push({
       section: SECTIONS.additionalDocuments,
       name: PAGES.licenceUpload,
-      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'licence'),
+      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'licence'),
       state: hasOptionalVariationSectionIsHOCourt(order) ? 'OPTIONAL' : 'REQUIRED',
       completed: doesOrderHaveDocument(order, AttachmentType.LICENCE),
     })
@@ -206,7 +204,7 @@ const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCoho
     {
       section: SECTIONS.additionalDocuments,
       name: PAGES.photoUpload,
-      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'photo_Id'),
+      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'photo_Id'),
       state: convertBooleanToEnum<State>(
         order.orderParameters?.havePhoto || null,
         STATES.cantBeStarted,

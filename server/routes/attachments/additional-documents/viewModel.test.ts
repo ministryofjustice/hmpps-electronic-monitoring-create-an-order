@@ -6,7 +6,7 @@ describe('additional documents check answers', () => {
   it('does not show the court order upload question for a court order', () => {
     const order = getMockOrder({
       interestedParties: { ...getMockOrder().interestedParties!, notifyingOrganisation: 'FAMILY_COURT' },
-      orderParameters: { haveCourtOrder: true, havePhoto: false },
+      orderParameters: { havePhoto: false },
     })
 
     const answers = createViewModel(order, getContent('en', 'DDV7'))
@@ -19,7 +19,7 @@ describe('additional documents check answers', () => {
     const order = getMockOrder({
       type: 'VARIATION',
       interestedParties: { ...getMockOrder().interestedParties!, notifyingOrganisation: 'CIVIL_COUNTY_COURT' },
-      orderParameters: { haveCourtOrder: true, havePhoto: undefined },
+      orderParameters: { havePhoto: undefined },
     })
 
     const answers = createViewModel(order, getContent('en', 'DDV7'))
@@ -32,7 +32,7 @@ describe('additional documents check answers', () => {
     const order = getMockOrder({
       type: 'VARIATION',
       interestedParties: { ...getMockOrder().interestedParties!, notifyingOrganisation: 'CIVIL_COUNTY_COURT' },
-      orderParameters: { haveCourtOrder: false, havePhoto: false },
+      orderParameters: { havePhoto: false },
     })
 
     const answers = createViewModel(order, getContent('en', 'DDV7'))

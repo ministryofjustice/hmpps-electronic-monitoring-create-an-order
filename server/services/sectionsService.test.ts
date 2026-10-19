@@ -392,7 +392,7 @@ describe('task list service', () => {
         tasks.push({
           section: 'ADDITIONAL_DOCUMENTS',
           name: 'PHOTO_ATTACHMENT',
-          path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'photo_Id'),
+          path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'photo_Id'),
           state: 'CANT_BE_STARTED',
           completed: false,
         })
@@ -439,7 +439,7 @@ describe('task list service', () => {
         tasks.push({
           section: 'ADDITIONAL_DOCUMENTS',
           name: 'PHOTO_ATTACHMENT',
-          path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'photo_Id'),
+          path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'photo_Id'),
           state: 'CANT_BE_STARTED',
           completed: false,
         })
