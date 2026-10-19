@@ -21,8 +21,23 @@ describe('RiskAtInstallationStoreService', () => {
         possibleRisk: [],
         riskCategory: [],
         riskDetails: '',
+        hasOtherRisks: null,
         genderRiskDetails: '',
       })
+    })
+
+    it('answers yes to other risks when details were saved', async () => {
+      order.dataDictionaryVersion = 'DDV6'
+      order.detailsOfInstallation = { riskCategory: [], riskDetails: 'some details' }
+
+      expect((await service.getRiskAtInstallation(order)).hasOtherRisks).toBe('YES')
+    })
+
+    it('leaves other risks unanswered when saved details are empty', async () => {
+      order.dataDictionaryVersion = 'DDV6'
+      order.detailsOfInstallation = { riskCategory: [], riskDetails: '' }
+
+      expect((await service.getRiskAtInstallation(order)).hasOtherRisks).toBeNull()
     })
 
     it('splits the saved risk categories into behaviour and address risks', async () => {
@@ -37,6 +52,7 @@ describe('RiskAtInstallationStoreService', () => {
         possibleRisk: ['RISK_TO_GENDER', 'THREATS_OF_VIOLENCE'],
         riskCategory: ['DANGEROUS_ANIMALS'],
         riskDetails: 'some details',
+        hasOtherRisks: 'YES',
         genderRiskDetails: 'Women',
       })
     })
@@ -63,6 +79,7 @@ describe('RiskAtInstallationStoreService', () => {
         possibleRisk: ['THREATS_OF_VIOLENCE'],
         riskCategory: ['DANGEROUS_ANIMALS'],
         riskDetails: 'legacy details',
+        hasOtherRisks: 'YES',
         genderRiskDetails: '',
       })
     })

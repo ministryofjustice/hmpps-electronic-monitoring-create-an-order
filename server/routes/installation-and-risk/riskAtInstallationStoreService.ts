@@ -37,10 +37,13 @@ export default class RiskAtInstallationStoreService {
       : order.installationAndRisk
     const { possibleRisk, riskCategory } = splitRisks(saved?.riskCategory, order.dataDictionaryVersion)
 
+    const riskDetails = saved?.riskDetails ?? ''
+
     return {
       possibleRisk,
       riskCategory,
-      riskDetails: saved?.riskDetails ?? '',
+      riskDetails,
+      hasOtherRisks: riskDetails ? 'YES' : null,
       genderRiskDetails: order.detailsOfInstallation?.genderRiskDetails ?? '',
     }
   }

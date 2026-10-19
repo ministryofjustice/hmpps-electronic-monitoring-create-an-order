@@ -28,6 +28,14 @@ const detailsOfInstallationPageContent: DetailsOfInstallationPageContent = {
       text: 'What sex or gender are they a risk to?',
       hint: 'For example, Women',
     },
+    otherRisks: {
+      text: 'Are there other risks to be aware of?',
+      hint: '',
+    },
+    otherRisksDetails: {
+      text: 'What other risks are there to be aware of?',
+      hint: 'Information subject to sensitive processing must only be shared with the offenders consent or where strictly necessary for the purpose of the EMS managing risk.',
+    },
   },
   section: 'Risk information',
   title: 'Risk at installation',

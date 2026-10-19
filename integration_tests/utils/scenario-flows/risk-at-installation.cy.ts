@@ -21,5 +21,6 @@ export default function fillInRiskAtInstallationWith({
   riskAtAddressPage.form.continueButton.click()
 
   const otherRisksPage = Page.verifyOnPage(OtherRisksPage)
+  otherRisksPage.form.fillInWith('No')
   otherRisksPage.form.continueButton.click()
 }

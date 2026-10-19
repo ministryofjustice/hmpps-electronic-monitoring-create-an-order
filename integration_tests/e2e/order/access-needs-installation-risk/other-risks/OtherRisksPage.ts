@@ -1,11 +1,11 @@
 import paths from '../../../../../server/constants/paths'
 import AppFormPage from '../../../../pages/appFormPage'
-import OtherRisksComponent from './OtherRisksComponent'
+import OtherRisksComponent, { OTHER_RISKS_QUESTION } from './OtherRisksComponent'
 
 export default class OtherRisksPage extends AppFormPage {
   public form = new OtherRisksComponent()
 
   constructor() {
-    super('WIP Other risks', paths.INSTALLATION_AND_RISK.OTHER_RISKS)
+    super(OTHER_RISKS_QUESTION, paths.INSTALLATION_AND_RISK.OTHER_RISKS)
   }
 }
