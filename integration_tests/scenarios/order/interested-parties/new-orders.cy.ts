@@ -31,11 +31,9 @@ context('Interested parties flow', () => {
         familyCourt: 'Aberystwyth Family Court',
       },
       responsibleOrganisation: {
-        responsibleOrganisation: 'Probation',
-        probationRegion: 'Wales',
-        responsibleOrganisationEmailAddress: 'a@b.com',
+        policeArea: 'North Wales',
+        policeForceEmailAddress: 'a@b.com',
       },
-      pdu: 'Dyfed Powys',
     }
 
     createNewOrder({ notifyingOrganisation: input.notifyingOrganisation })
@@ -50,9 +48,9 @@ context('Interested parties flow', () => {
     })
     const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
     cyaPage.organisationDetailsSection.shouldHaveItems([
-      { key: "What is the Responsible Officer's organisation?", value: 'Probation' },
-      { key: 'Select the Probation region', value: 'Wales' },
-      { key: "What is the Responsible Organisation's email address? (optional)", value: 'a@b.com' },
+      { key: "What is the Responsible Officer's organisation?", value: 'Police' },
+      { key: 'What is the name of the Police force area?', value: 'North Wales' },
+      { key: 'What is the Police force email address? (optional)', value: 'a@b.com' },
     ])
   })
 
