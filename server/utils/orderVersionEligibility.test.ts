@@ -5,6 +5,7 @@ import {
   canUseServiceRequestTypeFlow,
   getOrderChangeBlockedMessage,
   isAcceptedOrderForChange,
+  shouldShowServiceRequestTypeQuestions,
 } from './orderVersionEligibility'
 
 const createStatusUpdate = (versionId: string, status: 'ACCEPTED' | 'REJECTED', datetimeOfStatusChange: string) => ({
@@ -16,8 +17,17 @@ const createStatusUpdate = (versionId: string, status: 'ACCEPTED' | 'REJECTED', 
 })
 
 describe('order version eligibility', () => {
+  beforeEach(() => {
+    jest.useFakeTimers().setSystemTime(new Date('2026-10-20T12:00:00Z'))
+  })
+
+  afterEach(() => {
+    jest.useRealTimers()
+  })
+
   it('allows an amendable submitted order with a current accepted observation as a variation', () => {
     const order = getMockOrder({ status: 'SUBMITTED', canAmend: true })
+    order.monitoringConditions.startDate = '2026-10-19T12:00:00Z'
     order.statusUpdates = [createStatusUpdate(order.versionId, 'ACCEPTED', '2025-01-01T12:00:00Z')]
 
     expect(canCreateOrderVersion(order)).toBe(true)
@@ -25,8 +35,26 @@ describe('order version eligibility', () => {
     expect(isAcceptedOrderForChange(order)).toBe(true)
   })
 
+  it.each<[string | null, boolean]>([
+    ['2026-10-20T11:59:59Z', true],
+    ['2026-10-20T12:00:00Z', true],
+    ['2026-10-20T12:00:01Z', false],
+    [null, false],
+    ['invalid', false],
+  ])('shows the questions for an accepted order starting at %s: %s', (startDate, expected) => {
+    const order = getMockOrder({ status: 'SUBMITTED', canAmend: true })
+    order.monitoringConditions.startDate = startDate
+    order.statusUpdates = [createStatusUpdate(order.versionId, 'ACCEPTED', '2026-10-19T12:00:00Z')]
+
+    expect(isAcceptedOrderForChange(order)).toBe(true)
+    expect(canCreateOrderVersion(order)).toBe(true)
+    expect(shouldShowServiceRequestTypeQuestions(order)).toBe(expected)
+    expect(canUseServiceRequestTypeFlow(order)).toBe(expected)
+  })
+
   it('does not use a rejected observation to enter the accepted-order service-request flow', () => {
     const order = getMockOrder({ status: 'SUBMITTED', canAmend: true })
+    order.monitoringConditions.startDate = '2026-10-19T12:00:00Z'
     order.statusUpdates = [createStatusUpdate(order.versionId, 'REJECTED', '2025-01-01T12:00:00Z')]
 
     expect(canCreateOrderVersion(order)).toBe(true)
@@ -42,9 +70,12 @@ describe('order version eligibility', () => {
 
   it('does not allow amendment when the API marks the order as not amendable', () => {
     const order = getMockOrder({ status: 'SUBMITTED', canAmend: false })
+    order.monitoringConditions.startDate = '2026-10-19T12:00:00Z'
     order.statusUpdates = [createStatusUpdate(order.versionId, 'ACCEPTED', '2025-01-01T12:00:00Z')]
 
     expect(canCreateOrderVersion(order)).toBe(false)
+    expect(shouldShowServiceRequestTypeQuestions(order)).toBe(false)
+    expect(canUseServiceRequestTypeFlow(order)).toBe(false)
   })
 
   it('ignores status observations from earlier versions', () => {

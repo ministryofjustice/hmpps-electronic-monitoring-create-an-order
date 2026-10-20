@@ -5,11 +5,17 @@ import IsAddressChangePage from '../edit-order/is-address-change/isAddressChange
 import ServiceRequestTypePage from './service-request-type/serviceRequestTypePage'
 import NotifyingOrganisationPage from '../interested-parties/notifying-organisation/notifyingOrganisationPage'
 import mockApiOrder from '../../../utils/data/ApiOrder'
+import paths from '../../../../server/constants/paths'
 
 const mockOriginalId = '00a00000-79cd-49f9-a498-b1f07c543b8a'
 const mockVersionId = '22a22222-79cd-49f9-a498-b1f07c543b8a'
 
-const stubOrder = (outcome: 'ACCEPTED' | 'REJECTED' | 'PROCESSING', status = 'SUBMITTED', type = 'REQUEST') => {
+const stubOrder = (
+  outcome: 'ACCEPTED' | 'REJECTED' | 'PROCESSING',
+  status = 'SUBMITTED',
+  type = 'REQUEST',
+  startDate = '2000-01-01T00:00:00.000Z',
+) => {
   const statusUpdates =
     status === 'SUBMITTED' && outcome !== 'PROCESSING'
       ? [
@@ -31,6 +37,7 @@ const stubOrder = (outcome: 'ACCEPTED' | 'REJECTED' | 'PROCESSING', status = 'SU
       versionId: mockVersionId,
       canAmend: status === 'REJECTED' || outcome !== 'PROCESSING',
       statusUpdates,
+      monitoringConditions: { ...mockApiOrder().monitoringConditions, startDate },
     },
   })
 }
@@ -220,7 +227,7 @@ context('Variation', () => {
         verifyReturnedOrderAmendmentFlow('VARIATION')
       })
 
-      it('allows an accepted submitted order through the service-request journey', () => {
+      it('allows a past-dated accepted submitted order through the service-request journey', () => {
         stubOrder('ACCEPTED')
         cy.visit(`/order/${mockOriginalId}/edit`)
         Page.verifyOnPage(ConfirmVariationPage).confirmButton().click()
@@ -230,6 +237,29 @@ context('Variation', () => {
         addressChangePage.form.saveAndContinueButton.click()
 
         Page.verifyOnPage(ServiceRequestTypePage)
+      })
+
+      it('amends a future-dated accepted order without showing the service-request questions', () => {
+        stubOrder('ACCEPTED', 'SUBMITTED', 'REQUEST', '2999-01-01T00:00:00.000Z')
+        const page = Page.visit(OrderTasksPage, { orderId: mockOriginalId })
+
+        page.makeChangesButton.click()
+        Page.verifyOnPage(ConfirmVariationPage).confirmButton().click()
+
+        Page.verifyOnPage(OrderTasksPage)
+        cy.task('stubCemoVerifyRequestReceived', {
+          uri: `/orders/${mockOriginalId}/amend`,
+          body: {},
+        }).should('be.true')
+      })
+      ;[paths.ORDER.IS_ADDRESS_CHANGE, paths.VARIATION.SERVICE_REQUEST_TYPE].forEach(path => {
+        it(`redirects a future-dated accepted order away from ${path}`, () => {
+          stubOrder('ACCEPTED', 'SUBMITTED', 'REQUEST', '2999-01-01T00:00:00.000Z')
+
+          cy.visit(path.replace(':orderId', mockOriginalId))
+
+          Page.verifyOnPage(OrderTasksPage)
+        })
       })
 
       it('blocks an order when the backend cannot confirm an accepted outcome', () => {

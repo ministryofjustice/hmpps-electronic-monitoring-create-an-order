@@ -60,7 +60,8 @@ context('Interested parties flow', () => {
     cy.task('resetFeatureFlags')
   })
 
-  it('Order start date is in the future', () => {
+  it('amends a future-dated order without service-request questions when the flow is enabled', () => {
+    cy.task('setFeatureFlags', { SERVICE_REQUEST_TYPE_ENABLED: true })
     fillInNewOrder({
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)),
       files,

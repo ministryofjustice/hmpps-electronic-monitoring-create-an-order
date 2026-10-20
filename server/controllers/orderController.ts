@@ -11,7 +11,7 @@ import { SanitisedError } from '../sanitisedError'
 import {
   canCreateOrderVersion,
   getOrderChangeBlockedMessage,
-  isAcceptedOrderForChange,
+  shouldShowServiceRequestTypeQuestions,
   ORDER_CHANGE_STATUS_CHANGED_MESSAGE,
 } from '../utils/orderVersionEligibility'
 
@@ -45,7 +45,10 @@ export default class OrderController {
       }
 
       try {
-        if (isAcceptedOrderForChange(order) && FeatureFlags.getInstance().get('SERVICE_REQUEST_TYPE_ENABLED')) {
+        if (
+          shouldShowServiceRequestTypeQuestions(order) &&
+          FeatureFlags.getInstance().get('SERVICE_REQUEST_TYPE_ENABLED')
+        ) {
           res.redirect(paths.ORDER.IS_ADDRESS_CHANGE.replace(':orderId', orderId))
           return
         }

@@ -231,6 +231,7 @@ describe('OrderController', () => {
     it('submits an accepted order without an action and follows the API outcome', async () => {
       const orderId = randomUUID()
       const order = getMockOrder({ id: orderId, status: 'SUBMITTED', canAmend: true })
+      order.monitoringConditions.startDate = '2000-01-01T00:00:00Z'
       order.statusUpdates = [
         {
           id: randomUUID(),
@@ -252,10 +253,11 @@ describe('OrderController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/summary`)
     })
 
-    it('routes accepted submitted orders into the service-request flow when enabled', async () => {
+    it('routes accepted submitted orders whose monitoring has started into the service-request flow when enabled', async () => {
       jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(true)
       const orderId = randomUUID()
       const order = getMockOrder({ id: orderId, status: 'SUBMITTED', canAmend: true })
+      order.monitoringConditions.startDate = '2000-01-01T00:00:00Z'
       order.statusUpdates = [
         {
           id: randomUUID(),
@@ -272,6 +274,29 @@ describe('OrderController', () => {
 
       expect(mockOrderService.amendOrder).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/is-address-change`)
+    })
+
+    it('amends future-dated accepted orders directly even when the service-request flow is enabled', async () => {
+      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(true)
+      const orderId = randomUUID()
+      const order = getMockOrder({ id: orderId, status: 'SUBMITTED', canAmend: true })
+      order.monitoringConditions.startDate = '2999-01-01T00:00:00Z'
+      order.statusUpdates = [
+        {
+          id: randomUUID(),
+          versionId: order.versionId,
+          status: 'ACCEPTED',
+          datetimeOfStatusChange: '2026-01-01T12:00:00Z',
+          statusUpdateReasons: [],
+        },
+      ]
+      const req = createMockRequest({ order, body: { action: 'continue' }, params: { orderId } })
+      const res = createMockResponse()
+
+      await orderController.createVariation(req, res, jest.fn())
+
+      expect(mockOrderService.amendOrder).toHaveBeenCalledWith({ orderId, accessToken: 'fakeUserToken' })
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/summary`)
     })
 
     it('uses the API outcome instead of an earlier rejected status observation', async () => {
@@ -299,21 +324,26 @@ describe('OrderController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/summary`)
     })
 
-    it('routes a rejected response to notifying organisation for a rejected order', async () => {
-      const orderId = randomUUID()
-      const order = getMockOrder({ id: orderId, status: 'REJECTED', canAmend: true })
-      const req = createMockRequest({ order, body: { action: 'continue' }, params: { orderId } })
-      const res = createMockResponse()
-      mockOrderService.amendOrder.mockResolvedValue({ order, outcome: 'REJECTED' })
+    it.each(['2000-01-01T00:00:00Z', '2999-01-01T00:00:00Z'])(
+      'routes a rejected order starting at %s to notifying organisation',
+      async startDate => {
+        jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(true)
+        const orderId = randomUUID()
+        const order = getMockOrder({ id: orderId, status: 'REJECTED', canAmend: true })
+        order.monitoringConditions.startDate = startDate
+        const req = createMockRequest({ order, body: { action: 'continue' }, params: { orderId } })
+        const res = createMockResponse()
+        mockOrderService.amendOrder.mockResolvedValue({ order, outcome: 'REJECTED' })
 
-      await orderController.createVariation(req, res, jest.fn())
+        await orderController.createVariation(req, res, jest.fn())
 
-      expect(mockOrderService.amendOrder).toHaveBeenCalledWith({
-        orderId,
-        accessToken: 'fakeUserToken',
-      })
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/interest-parties/notifying-organisation`)
-    })
+        expect(mockOrderService.amendOrder).toHaveBeenCalledWith({
+          orderId,
+          accessToken: 'fakeUserToken',
+        })
+        expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/interest-parties/notifying-organisation`)
+      },
+    )
 
     it('returns to the summary when the backend rejects a stale status', async () => {
       const orderId = randomUUID()

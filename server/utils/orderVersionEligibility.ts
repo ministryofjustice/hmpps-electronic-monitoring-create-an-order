@@ -17,8 +17,13 @@ const getLatestCurrentVersionStatusUpdate = (order: Order): StatusUpdate | undef
 export const isAcceptedOrderForChange = (order: Order): boolean =>
   order.canAmend && order.status === 'SUBMITTED' && getLatestCurrentVersionStatusUpdate(order)?.status === 'ACCEPTED'
 
+export const shouldShowServiceRequestTypeQuestions = (order: Order): boolean => {
+  const { startDate } = order.monitoringConditions
+  return isAcceptedOrderForChange(order) && Boolean(startDate && Date.parse(startDate) <= Date.now())
+}
+
 export const canUseServiceRequestTypeFlow = (order: Order): boolean =>
-  order.status === 'IN_PROGRESS' || isAcceptedOrderForChange(order)
+  order.status === 'IN_PROGRESS' || shouldShowServiceRequestTypeQuestions(order)
 
 export const canCreateOrderVersion = (order: Order): boolean => order.canAmend
 
