@@ -6,6 +6,7 @@ import OffenceOtherInfoPage from '../../e2e/order/access-needs-installation-risk
 import DetailsOfInstallationPage from '../../e2e/order/access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
 import IsMappaPage from '../../e2e/order/access-needs-installation-risk/is-mappa/IsMappaPage'
 import { fillInNewDeviceWearerWith } from './general-order-details'
+import fillInRiskAtInstallationWith from './risk-at-installation.cy'
 
 export function fillInInstallationAndRiskWith({ installationAndRisk, interestedParties }): void {
   if (!installationAndRisk) {
@@ -15,13 +16,7 @@ export function fillInInstallationAndRiskWith({ installationAndRisk, interestedP
   const { notifyingOrganisation } = interestedParties
   const isCourt = notifyingOrganisation?.includes('Court')
 
-  const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
-  detailsOfInstallationPage.form.fillInWith({
-    possibleRisks: [installationAndRisk.possibleRisk],
-    riskCategories: [installationAndRisk.riskCategory],
-    riskDetails: installationAndRisk.riskDetails,
-  })
-  detailsOfInstallationPage.form.saveAndContinueButton.click()
+  fillInRiskAtInstallationWith(installationAndRisk)
 
   if (notifyingOrganisation === 'Home Office') {
     const mappaPage = Page.verifyOnPage(IsMappaPage)

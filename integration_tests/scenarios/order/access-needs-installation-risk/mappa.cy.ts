@@ -7,6 +7,7 @@ import OrderSummaryPage from '../../../pages/order/summary'
 import { startRiskInformationAfterDeviceWearerWith } from '../../../utils/scenario-flows/risk'
 import Page from '../../../pages/page'
 import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
+import fillInRiskAtInstallationWith from '../../../utils/scenario-flows/risk-at-installation.cy'
 
 context('offences', () => {
   let orderSummaryPage: OrderSummaryPage
@@ -20,8 +21,8 @@ context('offences', () => {
     hasFixedAddress: 'No',
   }
   const detailsOfInstallationInfo = {
-    possibleRisks: ['Violent behaviour or threats of violence'],
-    riskCategories: ['Safeguarding child'],
+    possibleRisk: 'Violent behaviour or threats of violence',
+    riskCategory: 'Safeguarding child',
     riskDetails: 'some details',
   }
 
@@ -50,9 +51,7 @@ context('offences', () => {
   it('Notifying organisation is Home Office, mappa flow', () => {
     startRiskInformationAfterDeviceWearerWith({ deviceWearerDetails, interestedParties })
 
-    const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
-    detailsOfInstallationPage.form.fillInWith(detailsOfInstallationInfo)
-    detailsOfInstallationPage.form.saveAndContinueButton.click()
+    fillInRiskAtInstallationWith(detailsOfInstallationInfo)
 
     const isMappaPage = Page.verifyOnPage(IsMappaPage)
     isMappaPage.form.fillInWith({ isMappa: 'Yes' })
@@ -82,9 +81,7 @@ context('offences', () => {
   it('Notifying organisation is Home Office, not mappa flow', () => {
     startRiskInformationAfterDeviceWearerWith({ deviceWearerDetails, interestedParties })
 
-    const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
-    detailsOfInstallationPage.form.fillInWith(detailsOfInstallationInfo)
-    detailsOfInstallationPage.form.saveAndContinueButton.click()
+    fillInRiskAtInstallationWith(detailsOfInstallationInfo)
 
     const isMappaPage = Page.verifyOnPage(IsMappaPage)
     isMappaPage.form.fillInWith({ isMappa: 'No' })

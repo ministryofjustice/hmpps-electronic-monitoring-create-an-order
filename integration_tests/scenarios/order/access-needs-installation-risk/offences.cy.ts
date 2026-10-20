@@ -8,6 +8,7 @@ import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/instal
 import DetailsOfInstallationPage from '../../../e2e/order/access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
 import IsMappaPage from '../../../e2e/order/access-needs-installation-risk/is-mappa/IsMappaPage'
 import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
+import fillInRiskAtInstallationWith from '../../../utils/scenario-flows/risk-at-installation.cy'
 
 context('offences', () => {
   let orderSummaryPage: OrderSummaryPage
@@ -21,8 +22,8 @@ context('offences', () => {
   }
 
   const detailsOfInstallation = {
-    possibleRisks: ['Violent behaviour or threats of violence'],
-    riskCategories: ['Safeguarding child'],
+    possibleRisk: 'Violent behaviour or threats of violence',
+    riskCategory: 'Safeguarding child',
     riskDetails: 'some details',
   }
 
@@ -51,10 +52,8 @@ context('offences', () => {
     startRiskInformationAfterDeviceWearerWith({ deviceWearerDetails, interestedParties })
 
     // Should go to details of installation page
-    const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
-    cy.get('#offence').should('not.exist')
-    detailsOfInstallationPage.form.fillInWith(detailsOfInstallation)
-    detailsOfInstallationPage.form.saveAndContinueButton.click()
+    fillInRiskAtInstallationWith(detailsOfInstallation)
+
     // Should go to offence page
     const offencePage = Page.verifyOnPage(OffencePage)
     offencePage.form.fillInWith({ offenceType: 'Criminal damage and arson' })
@@ -71,11 +70,11 @@ context('offences', () => {
         value: 'Violent behaviour or threats of violence',
       },
       {
-        key: 'What are the possible risks at the installation address? (optional)',
+        key: 'At installation what are the possible risks at the address?',
         value: 'Safeguarding child',
       },
       {
-        key: 'Any other risks to be aware of? (optional)',
+        key: 'Are there other risks to be aware of?',
         value: 'some details',
       },
       {
@@ -104,10 +103,8 @@ context('offences', () => {
 
     startRiskInformationAfterDeviceWearerWith({ deviceWearerDetails, interestedParties })
 
-    const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
-    cy.get('#offence').should('not.exist')
-    detailsOfInstallationPage.form.fillInWith(detailsOfInstallation)
-    detailsOfInstallationPage.form.saveAndContinueButton.click()
+    fillInRiskAtInstallationWith(detailsOfInstallation)
+
     const isMappaPage = Page.verifyOnPage(IsMappaPage)
     isMappaPage.form.fillInWith({ isMappa: 'No' })
     isMappaPage.form.saveAndContinueButton.click()
