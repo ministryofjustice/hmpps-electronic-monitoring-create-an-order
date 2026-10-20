@@ -20,8 +20,8 @@ context('offences', () => {
     hasFixedAddress: 'No',
   }
   const detailsOfInstallationInfo = {
-    possibleRisk: 'Violent behaviour or threats of violence',
-    riskCategory: 'Safeguarding child',
+    possibleRisk: ['Violent behaviour or threats of violence'],
+    riskCategory: ['Safeguarding child'],
     riskDetails: 'some details',
   }
 
