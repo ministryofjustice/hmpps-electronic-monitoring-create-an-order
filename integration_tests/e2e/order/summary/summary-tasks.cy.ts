@@ -341,7 +341,9 @@ context('Order Summary', () => {
 
       Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
-      cy.get('.govuk-hint').contains('You are revoking monitoring for the device wearer.').should('exist')
+      cy.get('.govuk-hint')
+        .contains('You are ending all monitoring because the device wearer has been recalled to prison.')
+        .should('exist')
     })
 
     it('should have hint text for END_MONITORING', () => {
@@ -370,7 +372,7 @@ context('Order Summary', () => {
 
       Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
-      cy.get('.govuk-hint').contains('You are ending all monitoring for the device wearer.').should('exist')
+      cy.get('.govuk-hint').contains('You are ending all monitoring.').should('exist')
     })
 
     it('should have hint text for REINSTALL_DEVICE', () => {
@@ -399,7 +401,7 @@ context('Order Summary', () => {
 
       Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
-      cy.get('.govuk-hint').contains('You are requesting monitoring equipment to be reinstalled.').should('exist')
+      cy.get('.govuk-hint').contains("You are changing the device wearer's primary address.").should('exist')
     })
 
     it('should have hint text for REINSTALL_AT_DIFFERENT_ADDRESS', () => {
@@ -428,9 +430,7 @@ context('Order Summary', () => {
 
       Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
-      cy.get('.govuk-hint')
-        .contains('You are requesting monitoring equipment to be installed at an additional address.')
-        .should('exist')
+      cy.get('.govuk-hint').contains('You are adding a second or third curfew address.').should('exist')
     })
 
     it('in progress order and can not see timeline', () => {

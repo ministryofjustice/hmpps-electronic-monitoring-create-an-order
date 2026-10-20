@@ -46,7 +46,7 @@ describe('TimelineModel', () => {
         label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
-        text: 'Change to an order',
+        text: 'Other change',
         notifyingOrganisationDetails: 'From Whitemoor Prison',
       })
     })
@@ -69,7 +69,7 @@ describe('TimelineModel', () => {
         label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
-        text: 'Change to an order',
+        text: 'Other change',
         notifyingOrganisationDetails: 'From Whitemoor Prison',
       })
     })
@@ -92,7 +92,7 @@ describe('TimelineModel', () => {
         label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
-        text: 'Change to an order',
+        text: 'Other change',
         notifyingOrganisationDetails: 'From Birkenhead County and Civil Court',
       })
     })
@@ -115,7 +115,7 @@ describe('TimelineModel', () => {
         label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
-        text: 'Change to an order',
+        text: 'Other change',
         notifyingOrganisationDetails: 'From Bradford Family Court',
       })
     })
@@ -138,7 +138,7 @@ describe('TimelineModel', () => {
         label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
-        text: 'Change to an order',
+        text: 'Other change',
         notifyingOrganisationDetails: 'From Bulford Military Court Centre',
       })
     })
@@ -161,7 +161,7 @@ describe('TimelineModel', () => {
         label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
-        text: 'Change to an order',
+        text: 'Other change',
         notifyingOrganisationDetails: 'From Basildon Youth Court',
       })
     })
@@ -184,7 +184,7 @@ describe('TimelineModel', () => {
         label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
-        text: 'Change to an order',
+        text: 'Other change',
         notifyingOrganisationDetails: 'From Andover Magistrates Court',
       })
     })
@@ -207,7 +207,7 @@ describe('TimelineModel', () => {
         label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
-        text: 'Change to an order',
+        text: 'Other change',
         notifyingOrganisationDetails: 'From Cardiff Crown Court',
       })
     })
@@ -230,7 +230,7 @@ describe('TimelineModel', () => {
         label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
-        text: 'Change to an order',
+        text: 'Other change',
         notifyingOrganisationDetails: 'From Youth Custody Service (YCS) - London',
       })
     })
@@ -253,7 +253,7 @@ describe('TimelineModel', () => {
         label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
-        text: 'Change to an order',
+        text: 'Other change',
         notifyingOrganisationDetails: 'From Probation',
       })
     })
@@ -276,7 +276,7 @@ describe('TimelineModel', () => {
         label: { text: 'Changes submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
         byline: { text: 'Alice' },
-        text: 'Change to an order',
+        text: 'Other change',
         notifyingOrganisationDetails: 'From Home Office',
       })
     })
@@ -332,10 +332,12 @@ describe('TimelineModel', () => {
     })
 
     it.each<[OrderType, string]>([
-      ['VARIATION', 'Change to an order'],
-      ['REINSTALL_AT_DIFFERENT_ADDRESS', 'Reinstall at different address'],
-      ['REINSTALL_DEVICE', 'Reinstall device'],
-    ])('returns correct timeline text if type is $type', (type, text) => {
+      ['VARIATION', 'Other change'],
+      ['REINSTALL_AT_DIFFERENT_ADDRESS', 'Added second or third curfew address'],
+      ['REINSTALL_DEVICE', 'Changed primary address'],
+      ['REVOCATION', 'Ended (Recall)'],
+      ['END_MONITORING', 'Ended'],
+    ])('returns correct timeline label if type is $type', (type, text) => {
       const versions = [createMockVersion({ submittedBy: 'Alice', type })]
 
       const result = TimelineModel.mapToTimelineItems(content, versions)
