@@ -5,7 +5,6 @@ import { createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../
 import OffencePage from '../../../e2e/order/access-needs-installation-risk/offences/offence/offencePage'
 import OffenceOtherInfoPage from '../../../e2e/order/access-needs-installation-risk/offences/offence-other-info/offenceOtherInfoPage'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
-import DetailsOfInstallationPage from '../../../e2e/order/access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
 import IsMappaPage from '../../../e2e/order/access-needs-installation-risk/is-mappa/IsMappaPage'
 import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
 import fillInRiskAtInstallationWith from '../../../utils/scenario-flows/risk-at-installation.cy'

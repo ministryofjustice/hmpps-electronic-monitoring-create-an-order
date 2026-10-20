@@ -1,8 +1,6 @@
 import OffencePage from '../../../e2e/order/access-needs-installation-risk/offences/offence/offencePage'
 import { OTHER_RISKS_QUESTION } from '../../../e2e/order/access-needs-installation-risk/other-risks/OtherRisksComponent'
 import OtherRisksPage from '../../../e2e/order/access-needs-installation-risk/other-risks/OtherRisksPage'
-import { OTHER_RISKS_QUESTION } from '../../../e2e/order/access-needs-installation-risk/other-risks/OtherRisksComponent'
-import OtherRisksPage from '../../../e2e/order/access-needs-installation-risk/other-risks/OtherRisksPage'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
