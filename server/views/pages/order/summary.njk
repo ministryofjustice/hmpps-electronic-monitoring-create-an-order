@@ -64,7 +64,7 @@
         {{ heading }}
       </h1>
 
-      {% if createNewOrderVersionEnabled and not canCreateOrderVersion %}
+      {% if (order.status == 'SUBMITTED' or order.status == 'REJECTED') and createNewOrderVersionEnabled and not canCreateOrderVersion %}
         <p class="govuk-body">{{ orderChangeBlockedMessage }}</p>
       {% endif %}
 

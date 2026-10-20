@@ -109,6 +109,29 @@ context('Variation', () => {
           "You can't make changes to this form because it is being processed by EMS. Try again later.",
         )
     })
+    ;(['REQUEST', 'AMEND_ORIGINAL_REQUEST', 'VARIATION'] as const).forEach(type => {
+      it(`does not show a processing lock for an editable ${type.toLowerCase()} draft`, () => {
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOriginalId,
+          status: 'IN_PROGRESS',
+          type,
+          order: {
+            versionId: mockVersionId,
+            canAmend: false,
+            statusUpdates: [],
+          },
+        })
+
+        const page = Page.visit(OrderTasksPage, { orderId: mockOriginalId })
+
+        cy.contains('button', 'Submit form').should('be.visible')
+        page.makeChangesButton.should('not.exist')
+        cy.contains(
+          "You can't make changes to this form because it is being processed by EMS. Try again later.",
+        ).should('not.exist')
+      })
+    })
 
     it('creates a variation for an accepted submitted order', () => {
       stubOrder('ACCEPTED')
