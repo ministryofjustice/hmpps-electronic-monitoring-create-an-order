@@ -1,6 +1,8 @@
 import OffencePage from '../../../e2e/order/access-needs-installation-risk/offences/offence/offencePage'
 import { OTHER_RISKS_QUESTION } from '../../../e2e/order/access-needs-installation-risk/other-risks/OtherRisksComponent'
 import OtherRisksPage from '../../../e2e/order/access-needs-installation-risk/other-risks/OtherRisksPage'
+import { OTHER_RISKS_QUESTION } from '../../../e2e/order/access-needs-installation-risk/other-risks/OtherRisksComponent'
+import OtherRisksPage from '../../../e2e/order/access-needs-installation-risk/other-risks/OtherRisksPage'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
@@ -20,6 +22,8 @@ context('Risk at installation single question pages', () => {
   }
 
   const riskAtInstallation = {
+    possibleRisk: 'Offensive towards someone because of their sex or gender',
+    genderRiskDetails: 'Women',
     possibleRisk: 'Offensive towards someone because of their sex or gender',
     genderRiskDetails: 'Women',
     riskCategory: 'Safeguarding child',
@@ -58,6 +62,10 @@ context('Risk at installation single question pages', () => {
     cyaPage.installationRiskSection.shouldHaveItem(
       "At installation what are the possible risks from the device wearer's behaviour?",
       riskAtInstallation.possibleRisk,
+    )
+    cyaPage.installationRiskSection.shouldHaveItem(
+      'What sex or gender are they a risk to?',
+      riskAtInstallation.genderRiskDetails,
     )
     cyaPage.installationRiskSection.shouldHaveItem(
       'What sex or gender are they a risk to?',
