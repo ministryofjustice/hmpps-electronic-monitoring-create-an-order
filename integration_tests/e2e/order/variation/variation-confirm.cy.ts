@@ -99,7 +99,15 @@ context('Variation', () => {
 
       page.makeChangesButton.should('be.disabled')
       page.makeChangesButton.should('not.have.attr', 'href')
-      cy.contains("We can't check the status of this form right now. Try again later.").should('be.visible')
+      cy.contains("You can't make changes to this form because it is being processed by EMS. Try again later.").should(
+        'be.visible',
+      )
+      cy.get('h1')
+        .next()
+        .should(
+          'contain.text',
+          "You can't make changes to this form because it is being processed by EMS. Try again later.",
+        )
     })
 
     it('creates a variation for an accepted submitted order', () => {
@@ -140,7 +148,9 @@ context('Variation', () => {
       stubOrder('PROCESSING')
       const page = Page.visit(OrderTasksPage, { orderId: mockOriginalId })
 
-      cy.contains("We can't check the status of this form right now. Try again later.").should('be.visible')
+      cy.contains("You can't make changes to this form because it is being processed by EMS. Try again later.").should(
+        'be.visible',
+      )
       page.makeChangesButton.should('be.disabled')
       page.makeChangesButton.should('not.have.attr', 'href')
     })
@@ -161,7 +171,9 @@ context('Variation', () => {
       }).should('be.true')
       page.makeChangesButton.should('be.disabled')
       page.makeChangesButton.should('not.have.attr', 'href')
-      cy.contains("We can't check the status of this form right now. Try again later.").should('be.visible')
+      cy.contains("You can't make changes to this form because it is being processed by EMS. Try again later.").should(
+        'be.visible',
+      )
     })
 
     it('redirects a direct edit visit to the summary while the case is processing', () => {

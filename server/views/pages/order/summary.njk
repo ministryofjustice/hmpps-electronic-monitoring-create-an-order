@@ -64,6 +64,10 @@
         {{ heading }}
       </h1>
 
+      {% if createNewOrderVersionEnabled and not canCreateOrderVersion %}
+        <p class="govuk-body">{{ orderChangeBlockedMessage }}</p>
+      {% endif %}
+
       {% if isOrderRejected %}
         <p class="govuk-body">This form has been returned. You need to review the reason it has been returned, make any necessary changes, and resubmit it.</p>
       {% endif %}
@@ -217,7 +221,6 @@
                   id: "make-changes-button",
                   disabled: true
                 }) }}
-                <p class="govuk-hint">{{ orderChangeBlockedMessage }}</p>
                 {% endif %}
               {% endif %}
         {% if isOrderRejected %}

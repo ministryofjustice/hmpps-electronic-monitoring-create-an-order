@@ -138,7 +138,8 @@ describe('OrderController', () => {
         'pages/order/summary',
         expect.objectContaining({
           canCreateOrderVersion: false,
-          orderChangeBlockedMessage: "We can't check the status of this form right now. Try again later.",
+          orderChangeBlockedMessage:
+            "You can't make changes to this form because it is being processed by EMS. Try again later.",
         }),
       )
     })

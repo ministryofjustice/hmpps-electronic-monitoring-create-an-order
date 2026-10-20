@@ -23,4 +23,4 @@ export const canUseServiceRequestTypeFlow = (order: Order): boolean =>
 export const canCreateOrderVersion = (order: Order): boolean => order.canAmend
 
 export const getOrderChangeBlockedMessage = (): string =>
-  "We can't check the status of this form right now. Try again later."
+  "You can't make changes to this form because it is being processed by EMS. Try again later."

@@ -72,6 +72,8 @@ describe('order version eligibility', () => {
   })
 
   it('blocks submitted orders without API amendment eligibility', () => {
-    expect(getOrderChangeBlockedMessage()).toBe("We can't check the status of this form right now. Try again later.")
+    expect(getOrderChangeBlockedMessage()).toBe(
+      "You can't make changes to this form because it is being processed by EMS. Try again later.",
+    )
   })
 })
