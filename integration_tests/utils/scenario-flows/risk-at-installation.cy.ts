@@ -9,8 +9,8 @@ export default function fillInRiskAtInstallationWith({
   genderRiskDetails,
   riskDetails,
 }: {
-  possibleRisk: string
-  riskCategory: string
+  possibleRisk: string[]
+  riskCategory: string[]
   genderRiskDetails?: string
   riskDetails?: string
 }): void {

@@ -19,8 +19,8 @@ context('Court risk information', () => {
   }
 
   const detailsOfInstallation = {
-    possibleRisk: 'Violent behaviour or threats of violence',
-    riskCategory: 'Safeguarding child',
+    possibleRisk: ['Violent behaviour or threats of violence'],
+    riskCategory: ['Safeguarding child'],
     riskDetails: 'some details',
   }
 
