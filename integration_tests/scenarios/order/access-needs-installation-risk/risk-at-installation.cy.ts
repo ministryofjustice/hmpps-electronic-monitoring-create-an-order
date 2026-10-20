@@ -22,8 +22,6 @@ context('Risk at installation single question pages', () => {
   const riskAtInstallation = {
     possibleRisk: 'Offensive towards someone because of their sex or gender',
     genderRiskDetails: 'Women',
-    possibleRisk: 'Offensive towards someone because of their sex or gender',
-    genderRiskDetails: 'Women',
     riskCategory: 'Safeguarding child',
     riskDetails: 'Some other risk details',
   }
