@@ -30,4 +30,36 @@ context('Responsible organisation page', () => {
 
     page.form.continueButton.should('exist')
   })
+
+  context('court cohort', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', {
+        name: 'john smith',
+        roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        stubCohort: false,
+        userId: '123456783',
+      })
+      cy.task('stubCemoRequest', {
+        httpStatus: 200,
+        method: 'GET',
+        subPath: 'user-cohort',
+        response: { cohort: 'COURT' },
+      })
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        order: { dataDictionaryVersion: 'DDV6' },
+      })
+
+      cy.signIn()
+    })
+
+    it('shows the police force content', () => {
+      const page = Page.visit(ResponsibleOrganisationPage, { orderId: mockOrderId })
+
+      page.form.policeAreaField.shouldHaveAllOptions()
+      page.form.policeForceEmailAddressField.shouldExist()
+    })
+  })
 })

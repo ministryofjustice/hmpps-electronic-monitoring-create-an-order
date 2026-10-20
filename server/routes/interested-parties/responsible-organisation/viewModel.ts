@@ -10,7 +10,7 @@ import { getResponsibleOrganisationRegion } from './utils'
 
 type responsibleOrganisationViewModel = ViewModel<
   Pick<InterestedParties, 'responsibleOrganisation' | 'responsibleOrganisationRegion' | 'responsibleOrganisationEmail'>
-> & { DDv5: boolean }
+> & { DDv5: boolean; cohort?: string }
 
 const construct = (
   data: InterestedParties,

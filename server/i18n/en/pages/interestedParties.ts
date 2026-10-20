@@ -27,7 +27,7 @@ const interestedPartiesPageContent: InterestedPartiesPageContent = {
       hint: 'Provide the email address for a mailbox that members of your team can access. Do not provide a personal email address.',
     },
     police: {
-      text: 'Select the Police force area',
+      text: 'What is the name of the Police force area?',
     },
     prison: {
       text: 'Select the name of the Prison',

@@ -10,6 +10,7 @@ export type ResponsibleOrganisationFormData = {
   probationRegion?: string
   policeArea?: string
   yjsRegion?: string
+  policeForceEmailAddress?: string
 }
 
 export default class ResponsibleOrganisationComponent extends FormComponent {
@@ -43,7 +44,7 @@ export default class ResponsibleOrganisationComponent extends FormComponent {
   }
 
   get policeAreaField(): FormAutocompleteComponent {
-    const label = 'Select the Police force area'
+    const label = 'What is the name of the Police force area?'
     return new FormAutocompleteComponent(this.form, label, [])
   }
 
@@ -66,6 +67,11 @@ export default class ResponsibleOrganisationComponent extends FormComponent {
     return new FormInputComponent(this.form, label)
   }
 
+  get policeForceEmailAddressField(): FormInputComponent {
+    const label = 'What is the Police force email address? (optional)'
+    return new FormInputComponent(this.form, label)
+  }
+
   fillInWith(profile: ResponsibleOrganisationFormData) {
     if (profile.responsibleOrganisation) {
       this.responsibleOrganisationField.set(profile.responsibleOrganisation)
@@ -85,6 +91,12 @@ export default class ResponsibleOrganisationComponent extends FormComponent {
 
     if (profile.yjsRegion) {
       this.yjsRegionField.set(profile.yjsRegion)
+    }
+    if (profile.policeArea) {
+      this.policeAreaField.set(profile.policeArea)
+    }
+    if (profile.policeForceEmailAddress) {
+      this.policeForceEmailAddressField.set(profile.policeForceEmailAddress)
     }
   }
 }
