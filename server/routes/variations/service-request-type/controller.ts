@@ -10,7 +10,7 @@ import { Locales } from '../../../types/i18n/locale'
 import { SanitisedError } from '../../../sanitisedError'
 import {
   canUseServiceRequestTypeFlow,
-  getOrderChangeBlockedMessage,
+  getServiceRequestTypeFlowBlockedMessage,
   ORDER_CHANGE_STATUS_CHANGED_MESSAGE,
 } from '../../../utils/orderVersionEligibility'
 
@@ -19,7 +19,7 @@ export default class ServiceRequestTypeController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     if (req.order && !canUseServiceRequestTypeFlow(req.order)) {
-      req.flash('submissionError', getOrderChangeBlockedMessage())
+      req.flash('submissionError', getServiceRequestTypeFlowBlockedMessage(req.order))
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', req.order.id))
       return
     }
@@ -34,7 +34,7 @@ export default class ServiceRequestTypeController {
   update: RequestHandler = async (req: Request, res: Response) => {
     const { order } = req
     if (order && !canUseServiceRequestTypeFlow(order)) {
-      req.flash('submissionError', getOrderChangeBlockedMessage())
+      req.flash('submissionError', getServiceRequestTypeFlowBlockedMessage(order))
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
       return
     }

@@ -29,3 +29,6 @@ export const canCreateOrderVersion = (order: Order): boolean => order.canAmend
 
 export const getOrderChangeBlockedMessage = (): string =>
   "You can't make changes to this form because it is being processed by EMS. Try again later."
+
+export const getServiceRequestTypeFlowBlockedMessage = (order: Order): string =>
+  order.canAmend ? ORDER_CHANGE_STATUS_CHANGED_MESSAGE : getOrderChangeBlockedMessage()

@@ -4,7 +4,9 @@ import {
   canCreateOrderVersion,
   canUseServiceRequestTypeFlow,
   getOrderChangeBlockedMessage,
+  getServiceRequestTypeFlowBlockedMessage,
   isAcceptedOrderForChange,
+  ORDER_CHANGE_STATUS_CHANGED_MESSAGE,
   shouldShowServiceRequestTypeQuestions,
 } from './orderVersionEligibility'
 
@@ -60,12 +62,15 @@ describe('order version eligibility', () => {
     expect(canCreateOrderVersion(order)).toBe(true)
     expect(canUseServiceRequestTypeFlow(order)).toBe(false)
     expect(isAcceptedOrderForChange(order)).toBe(false)
+    expect(getServiceRequestTypeFlowBlockedMessage(order)).toBe(ORDER_CHANGE_STATUS_CHANGED_MESSAGE)
   })
 
   it('allows an amendable rejected order to create a version', () => {
     const order = getMockOrder({ status: 'REJECTED', canAmend: true })
 
     expect(canCreateOrderVersion(order)).toBe(true)
+    expect(canUseServiceRequestTypeFlow(order)).toBe(false)
+    expect(getServiceRequestTypeFlowBlockedMessage(order)).toBe(ORDER_CHANGE_STATUS_CHANGED_MESSAGE)
   })
 
   it('does not allow amendment when the API marks the order as not amendable', () => {
@@ -76,6 +81,7 @@ describe('order version eligibility', () => {
     expect(canCreateOrderVersion(order)).toBe(false)
     expect(shouldShowServiceRequestTypeQuestions(order)).toBe(false)
     expect(canUseServiceRequestTypeFlow(order)).toBe(false)
+    expect(getServiceRequestTypeFlowBlockedMessage(order)).toBe(getOrderChangeBlockedMessage())
   })
 
   it('ignores status observations from earlier versions', () => {

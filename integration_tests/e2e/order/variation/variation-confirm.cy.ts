@@ -227,7 +227,7 @@ context('Variation', () => {
         verifyReturnedOrderAmendmentFlow('VARIATION')
       })
 
-      it('allows a past-dated accepted submitted order through the service-request journey', () => {
+      it('returns to the summary if an accepted order becomes rejected during the service-request journey', () => {
         stubOrder('ACCEPTED')
         cy.visit(`/order/${mockOriginalId}/edit`)
         Page.verifyOnPage(ConfirmVariationPage).confirmButton().click()
@@ -237,6 +237,16 @@ context('Variation', () => {
         addressChangePage.form.saveAndContinueButton.click()
 
         Page.verifyOnPage(ServiceRequestTypePage)
+        stubOrder('REJECTED', 'REJECTED')
+        cy.get('form').submit()
+
+        Page.verifyOnPage(OrderTasksPage)
+        cy.contains('The status of this form has changed. Check its current status before making changes.').should(
+          'be.visible',
+        )
+        cy.contains(
+          "You can't make changes to this form because it is being processed by EMS. Try again later.",
+        ).should('not.exist')
       })
 
       it('amends a future-dated accepted order without showing the service-request questions', () => {
@@ -259,6 +269,9 @@ context('Variation', () => {
           cy.visit(path.replace(':orderId', mockOriginalId))
 
           Page.verifyOnPage(OrderTasksPage)
+          cy.contains('The status of this form has changed. Check its current status before making changes.').should(
+            'be.visible',
+          )
         })
       })
 

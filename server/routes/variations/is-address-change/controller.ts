@@ -8,7 +8,7 @@ import { Locales } from '../../../types/i18n/locale'
 import { SanitisedError } from '../../../sanitisedError'
 import {
   canUseServiceRequestTypeFlow,
-  getOrderChangeBlockedMessage,
+  getServiceRequestTypeFlowBlockedMessage,
   ORDER_CHANGE_STATUS_CHANGED_MESSAGE,
 } from '../../../utils/orderVersionEligibility'
 
@@ -19,7 +19,7 @@ export default class IsAddressChangeController extends YesNoQuestionPageControll
 
   view: RequestHandler = async (req: Request, res: Response) => {
     if (req.order && !canUseServiceRequestTypeFlow(req.order)) {
-      req.flash('submissionError', getOrderChangeBlockedMessage())
+      req.flash('submissionError', getServiceRequestTypeFlowBlockedMessage(req.order))
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', req.order.id))
       return
     }
@@ -36,7 +36,7 @@ export default class IsAddressChangeController extends YesNoQuestionPageControll
 
   update: RequestHandler = async (req: Request, res: Response) => {
     if (req.order && !canUseServiceRequestTypeFlow(req.order)) {
-      req.flash('submissionError', getOrderChangeBlockedMessage())
+      req.flash('submissionError', getServiceRequestTypeFlowBlockedMessage(req.order))
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', req.order.id))
       return
     }
