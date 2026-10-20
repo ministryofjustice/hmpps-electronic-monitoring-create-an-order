@@ -4,6 +4,7 @@ import { createGovukErrorSummary } from '../../../utils/errors'
 import { getError } from '../../../utils/utils'
 import { MonitoringConditions } from '../model'
 import { Order } from '../../../models/Order'
+import isVariationType from '../../../utils/isVariationType'
 
 export type PilotModel = ViewModel<Pick<MonitoringConditions, 'pilot'>> & {
   items: Item[]
@@ -40,8 +41,14 @@ const isEligibleForDapol = (order: Order): boolean => {
   return order.interestedParties?.responsibleOrganisation === 'PROBATION'
 }
 
+const isPastDatedVariation = (order: Order): boolean => {
+  const startDate = order.monitoringConditions?.startDate
+  return isVariationType(order.type) && Boolean(startDate && new Date(startDate) < new Date())
+}
+
 const constructModel = (order: Order, data: MonitoringConditions, errors: ValidationResult): PilotModel => {
-  const isDapolEligible = isEligibleForDapol(order)
+  const pastDatedVariation = isPastDatedVariation(order)
+  const isDapolEligible = isEligibleForDapol(order) || pastDatedVariation
   const isLicenceEligible = isLicenceVariationEligible(order)
   const isSentencingAct = order?.isSentencingAct ?? false
   const model: PilotModel = {
@@ -54,6 +61,7 @@ const constructModel = (order: Order, data: MonitoringConditions, errors: Valida
       data.hdc,
       order.interestedParties?.notifyingOrganisation,
       isSentencingAct,
+      pastDatedVariation,
     ),
     errorSummary: null,
   }
@@ -70,6 +78,7 @@ const getItems = (
   hdc?: string | null,
   notifyingOrganisation?: string | null,
   isSentencingAct: boolean = false,
+  pastDatedVariation: boolean = false,
 ): Item[] => {
   let items: Item[]
   if (hdc === 'NO') {
@@ -107,7 +116,7 @@ const getItems = (
     ]
   }
 
-  if (notifyingOrganisation === 'PROBATION' && !isSentencingAct) {
+  if (notifyingOrganisation === 'PROBATION' && !isSentencingAct && !pastDatedVariation) {
     items.splice(2, 0, {
       disabled: !isLicenceEligible,
       text: 'Licence Variation Project',
