@@ -12,7 +12,7 @@ const RiskBehaviourFormModel = z.object({
 export const RiskBehaviourFormValidator = z
   .object({
     possibleRisk: z.array(z.string()).min(1, validationErrors.installationAndRisk.possibleRiskRequired),
-    genderRiskDetails: z.string().optional(),
+    genderRiskDetails: z.string().default(''),
   })
   .superRefine((data, ctx) => {
     if (!data.possibleRisk.includes(RISK_TO_GENDER)) return
@@ -32,4 +32,5 @@ export const RiskBehaviourFormValidator = z
     }
   })
 
+export type RiskBehaviourFormInput = z.infer<typeof RiskBehaviourFormModel>
 export default RiskBehaviourFormModel

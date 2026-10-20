@@ -44,6 +44,7 @@ import InMemorCacheService from './cache/inMemoryCacheService'
 import MappaService from '../routes/installation-and-risk/mappa/service'
 import DetailsOfInstallationService from '../routes/installation-and-risk/details-of-installation/service'
 import RiskAtInstallationStoreService from '../routes/installation-and-risk/riskAtInstallationStoreService'
+import RiskAtInstallationService from '../routes/installation-and-risk/riskAtInstallationService'
 import OffenceOtherInfoService from '../routes/installation-and-risk/offence-other-info/service'
 import InterestedPartiesStoreService from '../routes/interested-parties/interestedPartiesStoreService'
 import UpdateInterestedPartiesService from '../routes/interested-parties/interestedPartiesService'
@@ -93,7 +94,10 @@ export const services = () => {
 
   const mappaService = new MappaService(cemoApiClient)
   const detailsOfInstallationService = new DetailsOfInstallationService(cemoApiClient)
-  const riskAtInstallationStoreService = new RiskAtInstallationStoreService(store)
+  const riskAtInstallationService = new RiskAtInstallationService(
+    new RiskAtInstallationStoreService(store),
+    cemoApiClient,
+  )
   const sentencingActService = new SentencingActService(cemoApiClient)
 
   const interestedPartiesStoreService = new InterestedPartiesStoreService(store)
@@ -151,7 +155,7 @@ export const services = () => {
     userCohortService,
     mappaService,
     detailsOfInstallationService,
-    riskAtInstallationStoreService,
+    riskAtInstallationService,
     interestedPartiesStoreService,
     updateInterestedPartiesService,
     postcodeService,

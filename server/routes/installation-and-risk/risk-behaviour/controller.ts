@@ -1,19 +1,23 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
 import { ValidationResult } from '../../../models/Validation'
+import TaskListService from '../../../services/taskListService'
 import { convertZodErrorToValidationError } from '../../../utils/errors'
-import RiskAtInstallationStoreService from '../riskAtInstallationStoreService'
-import { RISK_TO_GENDER } from '../riskCodes'
-import RiskBehaviourFormModel, { RiskBehaviourFormValidator } from './formModel'
+import continueRiskAtInstallation from '../continueRiskAtInstallation'
+import RiskAtInstallationService from '../riskAtInstallationService'
+import RiskBehaviourFormModel, { RiskBehaviourFormInput, RiskBehaviourFormValidator } from './formModel'
 import RiskBehaviourViewModel from './viewModel'
 
 export default class RiskBehaviourController {
-  constructor(private readonly riskAtInstallationStoreService: RiskAtInstallationStoreService) {}
+  constructor(
+    private readonly riskAtInstallationService: RiskAtInstallationService,
+    private readonly taskListService: TaskListService,
+  ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { possibleRisk, genderRiskDetails } = await this.riskAtInstallationStoreService.getRiskAtInstallation(
-      req.order!,
-    )
+    const [submitted] = req.flash('formData') as unknown as RiskBehaviourFormInput[]
+    const { possibleRisk, genderRiskDetails } =
+      submitted ?? (await this.riskAtInstallationService.getRiskAtInstallation(req.order!))
     const errors = req.flash('validationErrors') as unknown as ValidationResult
 
     res.render(
@@ -30,22 +34,19 @@ export default class RiskBehaviourController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const { possibleRisk, genderRiskDetails } = RiskBehaviourFormModel.parse(req.body)
+    const riskBehaviourPath = paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR.replace(':orderId', order.id)
+    const formData = RiskBehaviourFormModel.parse(req.body)
 
-    const validation = RiskBehaviourFormValidator.safeParse({ possibleRisk, genderRiskDetails })
+    const validation = RiskBehaviourFormValidator.safeParse(formData)
     if (!validation.success) {
+      req.flash('formData', formData)
       req.flash('validationErrors', convertZodErrorToValidationError(validation.error))
-      res.redirect(paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR.replace(':orderId', order.id))
+      res.redirect(riskBehaviourPath)
       return
     }
 
-    await this.riskAtInstallationStoreService.updateField(order, 'possibleRisk', possibleRisk)
-    await this.riskAtInstallationStoreService.updateField(
-      order,
-      'genderRiskDetails',
-      possibleRisk.includes(RISK_TO_GENDER) ? genderRiskDetails : '',
-    )
+    await this.riskAtInstallationService.saveRiskBehaviour(order, validation.data)
 
-    res.redirect(paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS.replace(':orderId', order.id))
+    await continueRiskAtInstallation(req, res, this.riskAtInstallationService, this.taskListService, riskBehaviourPath)
   }
 }

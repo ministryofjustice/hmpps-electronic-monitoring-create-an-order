@@ -119,7 +119,18 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
     ),
   )
 
-  riskAnswers.push(createAnswer(questions.riskDetails.text, riskDetailsFromOrder, riskDetailsUri, answerOpts))
+  if (isRiskInformationFlowEnabled) {
+    riskAnswers.push(
+      createAnswer(
+        content.pages.detailsOfInstallation.questions.otherRisks.text,
+        riskDetailsFromOrder || 'No',
+        paths.INSTALLATION_AND_RISK.OTHER_RISKS.replace(':orderId', order.id),
+        answerOpts,
+      ),
+    )
+  } else {
+    riskAnswers.push(createAnswer(questions.riskDetails.text, riskDetailsFromOrder, riskDetailsUri, answerOpts))
+  }
 
   if (isHomeOfficeUser) {
     const isMappaQuestions = content.pages.isMappa.questions

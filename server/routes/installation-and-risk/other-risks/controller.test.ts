@@ -5,22 +5,26 @@ import RestClient from '../../../data/restClient'
 import { ValidationResult } from '../../../models/Validation'
 import TaskListService from '../../../services/taskListService'
 import InMemoryStore from '../../store/inMemoryStore'
-import DetailsOfInstallationService from '../details-of-installation/service'
+import { RiskAtInstallation } from '../riskAtInstallationModel'
+import RiskAtInstallationService from '../riskAtInstallationService'
 import RiskAtInstallationStoreService from '../riskAtInstallationStoreService'
 import OtherRisksController from './controller'
 
-jest.mock('../../../data/restClient')
+jest.mock('../riskAtInstallationService')
 jest.mock('../../../services/taskListService')
-jest.mock('../details-of-installation/service')
 
 describe('OtherRisksController', () => {
   const nextPage = '/next-page'
-  const validationErrors: ValidationResult = [
-    { error: 'Select the possible risks', field: 'possibleRisk', focusTarget: 'possibleRisk' },
-  ]
+  const otherRisksPath = paths.INSTALLATION_AND_RISK.OTHER_RISKS
+  const answers: RiskAtInstallation = {
+    possibleRisk: [],
+    riskCategory: [],
+    riskDetails: 'Aggressive neighbour',
+    hasOtherRisks: 'YES',
+    genderRiskDetails: '',
+  }
 
-  let store: RiskAtInstallationStoreService
-  let detailsOfInstallationService: jest.Mocked<DetailsOfInstallationService>
+  let service: jest.Mocked<RiskAtInstallationService>
   let taskListService: jest.Mocked<TaskListService>
   let controller: OtherRisksController
   let req: Request
@@ -28,16 +32,15 @@ describe('OtherRisksController', () => {
   const next: NextFunction = jest.fn()
 
   beforeEach(() => {
-    jest.clearAllMocks()
-
-    store = new RiskAtInstallationStoreService(new InMemoryStore())
-    detailsOfInstallationService = new DetailsOfInstallationService(
-      new RestClient('cemoApi', { url: '', timeout: { response: 0, deadline: 0 }, agent: { timeout: 0 } }),
-    ) as jest.Mocked<DetailsOfInstallationService>
-    detailsOfInstallationService.updateDetailsOfInstallation.mockResolvedValue({ riskCategory: [], riskDetails: '' })
+    service = new RiskAtInstallationService(
+      new RiskAtInstallationStoreService(new InMemoryStore()),
+      {} as RestClient,
+    ) as jest.Mocked<RiskAtInstallationService>
+    service.getRiskAtInstallation.mockResolvedValue(answers)
+    service.submit.mockResolvedValue({ riskCategory: [], riskDetails: '' })
     taskListService = new TaskListService() as jest.Mocked<TaskListService>
     taskListService.getNextPage.mockReturnValue(nextPage)
-    controller = new OtherRisksController(store, detailsOfInstallationService, taskListService)
+    controller = new OtherRisksController(service, taskListService)
 
     req = createMockRequest()
     req.flash = jest.fn().mockReturnValue([])
@@ -45,23 +48,50 @@ describe('OtherRisksController', () => {
   })
 
   describe('view', () => {
-    it('renders the other risks page', async () => {
+    it('renders the saved answers', async () => {
       await controller.view(req, res, next)
 
-      expect(res.render).toHaveBeenCalledWith('pages/WIP', { pageName: 'Other risks', errorSummary: null })
+      expect(service.getRiskAtInstallation).toHaveBeenCalledWith(req.order)
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/order/installation-and-risk/other-risks',
+        expect.objectContaining({
+          hasOtherRisks: expect.objectContaining({ value: 'YES' }),
+          riskDetails: expect.objectContaining({ value: 'Aggressive neighbour' }),
+        }),
+      )
     })
 
-    it('shows the errors from submitting the risks', async () => {
-      req.flash = jest.fn().mockReturnValue(validationErrors)
+    it('renders the rejected answers instead of the saved answers', async () => {
+      const rejected = { action: 'continue', hasOtherRisks: 'YES', riskDetails: '' }
+      req.flash = jest.fn().mockImplementation((key: string) => (key === 'formData' ? [rejected] : []))
+
+      await controller.view(req, res, next)
+
+      expect(service.getRiskAtInstallation).not.toHaveBeenCalled()
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/order/installation-and-risk/other-risks',
+        expect.objectContaining({
+          hasOtherRisks: expect.objectContaining({ value: 'YES' }),
+          riskDetails: expect.objectContaining({ value: '' }),
+        }),
+      )
+    })
+
+    it('renders the flashed validation errors', async () => {
+      req.flash = jest
+        .fn()
+        .mockImplementation((key: string) =>
+          key === 'validationErrors' ? [{ field: 'riskDetails', error: 'Backend says no' }] : [],
+        )
 
       await controller.view(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith(
-        'pages/WIP',
+        'pages/order/installation-and-risk/other-risks',
         expect.objectContaining({
           errorSummary: {
             titleText: 'There is a problem',
-            errorList: [{ href: '#possibleRisk', text: 'Select the possible risks' }],
+            errorList: [{ href: '#riskDetails', text: 'Backend says no' }],
           },
         }),
       )
@@ -69,44 +99,85 @@ describe('OtherRisksController', () => {
   })
 
   describe('update', () => {
+    const completeAnswers: RiskAtInstallation = {
+      possibleRisk: ['SEXUAL_OFFENCES'],
+      riskCategory: ['DANGEROUS_ANIMALS'],
+      riskDetails: '',
+      hasOtherRisks: 'NO',
+      genderRiskDetails: '',
+    }
+
     beforeEach(() => {
-      req.body = { action: 'continue' }
+      service.getRiskAtInstallation.mockResolvedValue(completeAnswers)
     })
 
-    it('submits the cached risks for the order', async () => {
-      await store.updateField(req.order!, 'possibleRisk', ['THREATS_OF_VIOLENCE'])
-      await store.updateField(req.order!, 'riskCategory', ['DANGEROUS_ANIMALS'])
+    it('saves the answers, submits them and goes to the page after details of installation', async () => {
+      req.body = { action: 'continue', hasOtherRisks: 'YES', riskDetails: 'Aggressive neighbour' }
 
       await controller.update(req, res, next)
 
-      expect(detailsOfInstallationService.updateDetailsOfInstallation).toHaveBeenCalledWith({
-        accessToken: 'fakeUserToken',
-        orderId: req.order!.id,
-        data: {
-          possibleRisk: ['THREATS_OF_VIOLENCE'],
-          riskCategory: ['DANGEROUS_ANIMALS'],
-          riskDetails: '',
-          genderRiskDetails: '',
-        },
+      expect(service.saveOtherRisks).toHaveBeenCalledWith(req.order, {
+        hasOtherRisks: 'YES',
+        riskDetails: 'Aggressive neighbour',
       })
-    })
-
-    it('goes to the page after details of installation', async () => {
-      await controller.update(req, res, next)
-
+      expect(service.submit).toHaveBeenCalledWith({ accessToken: 'fakeUserToken', order: req.order })
       expect(taskListService.getNextPage).toHaveBeenCalledWith('DETAILS_OF_INSTALLATION', req.order)
       expect(res.redirect).toHaveBeenCalledWith(nextPage)
     })
 
-    it('returns to the other risks page with the errors when the risks are invalid', async () => {
-      detailsOfInstallationService.updateDetailsOfInstallation.mockResolvedValue(validationErrors)
+    it('returns to the page with the errors when the submission is rejected', async () => {
+      const backendErrors: ValidationResult = [{ error: 'Backend says no', field: 'riskDetails' }]
+      service.submit.mockResolvedValue(backendErrors)
+      req.body = { action: 'continue', hasOtherRisks: 'NO' }
 
       await controller.update(req, res, next)
 
-      expect(req.flash).toHaveBeenCalledWith('validationErrors', validationErrors)
+      expect(req.flash).toHaveBeenCalledWith('validationErrors', backendErrors)
+      expect(res.redirect).toHaveBeenCalledWith(otherRisksPath.replace(':orderId', req.order!.id))
+    })
+
+    it('goes to the first page with missing answers without submitting', async () => {
+      service.getRiskAtInstallation.mockResolvedValue({ ...completeAnswers, riskCategory: [] })
+      req.body = { action: 'continue', hasOtherRisks: 'NO' }
+
+      await controller.update(req, res, next)
+
+      expect(service.saveOtherRisks).toHaveBeenCalled()
+      expect(service.submit).not.toHaveBeenCalled()
+      expect(req.flash).not.toHaveBeenCalledWith('validationErrors', expect.anything())
       expect(res.redirect).toHaveBeenCalledWith(
-        paths.INSTALLATION_AND_RISK.OTHER_RISKS.replace(':orderId', req.order!.id),
+        paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS.replace(':orderId', req.order!.id),
       )
+    })
+
+    it('goes to the page that asks for the answer the api rejects', async () => {
+      const backendErrors: ValidationResult = [{ error: 'Backend says no', field: 'riskCategory' }]
+      service.submit.mockResolvedValue(backendErrors)
+      req.body = { action: 'continue', hasOtherRisks: 'NO' }
+
+      await controller.update(req, res, next)
+
+      expect(req.flash).toHaveBeenCalledWith('validationErrors', backendErrors)
+      expect(res.redirect).toHaveBeenCalledWith(
+        paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS.replace(':orderId', req.order!.id),
+      )
+    })
+
+    it('returns to the page with the errors and saves nothing when the answers are invalid', async () => {
+      req.body = { action: 'continue' }
+
+      await controller.update(req, res, next)
+
+      expect(req.flash).toHaveBeenCalledWith('formData', { action: 'continue', riskDetails: '' })
+      expect(req.flash).toHaveBeenCalledWith('validationErrors', [
+        expect.objectContaining({
+          error: 'Select yes if there are any other risks to be aware of',
+          field: 'hasOtherRisks',
+        }),
+      ])
+      expect(res.redirect).toHaveBeenCalledWith(otherRisksPath.replace(':orderId', req.order!.id))
+      expect(service.saveOtherRisks).not.toHaveBeenCalled()
+      expect(service.submit).not.toHaveBeenCalled()
     })
   })
 })

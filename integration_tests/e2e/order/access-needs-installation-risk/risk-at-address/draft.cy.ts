@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../../pages/page'
-import OtherRisksPage from '../other-risks/OtherRisksPage'
+import RiskBehaviourPage from '../risk-behaviour/RiskBehaviourPage'
 import RiskAtAddressPage from './RiskAtAddressPage'
 import { NO_RISK_OPTION, RISK_AT_ADDRESS_HINT, RISK_UNKNOWN_OPTION } from './RiskAtAddressComponent'
 
@@ -38,13 +38,13 @@ context('risk at address page', () => {
     page.form.riskCategoryField.shouldHaveValidationMessage('Select all the possible risks at the installation address')
   })
 
-  it('saves multiple selections, continues to other risks and pre-checks them on revisit', () => {
+  it('saves multiple selections, continues to the first unanswered question and pre-checks them on revisit', () => {
     const page = Page.visit(RiskAtAddressPage, { orderId: mockOrderId })
 
     page.form.fillInWith(['Managed through IOM', 'Animals at the property, for example dogs'])
     page.form.continueButton.click()
 
-    Page.verifyOnPage(OtherRisksPage)
+    Page.verifyOnPage(RiskBehaviourPage)
 
     const revisited = Page.visit(RiskAtAddressPage, { orderId: mockOrderId })
     revisited.form.riskCategoryField.shouldHaveValue('Managed through IOM')

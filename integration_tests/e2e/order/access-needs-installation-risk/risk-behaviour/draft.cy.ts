@@ -42,6 +42,18 @@ context('risk behaviour page', () => {
     page.form.possibleRiskField.shouldNotHaveValueChecked('Sex offender')
   })
 
+  it('keeps the entered answers when they are rejected', () => {
+    const page = Page.visit(RiskBehaviourPage, { orderId: mockOrderId })
+    const tooLong = 'a'.repeat(101)
+
+    page.form.fillInWith('Offensive towards someone because of their sex or gender', tooLong)
+    page.form.continueButton.click()
+
+    page.errorSummary.shouldHaveError('Gender risk details to be aware of must be 100 characters or less')
+    page.form.possibleRiskField.shouldHaveValue('Offensive towards someone because of their sex or gender')
+    page.form.genderRiskDetailsField.shouldHaveValue(tooLong)
+  })
+
   it('saves multiple selections, continues to risk at address and pre-checks them on revisit', () => {
     const page = Page.visit(RiskBehaviourPage, { orderId: mockOrderId })
 

@@ -19,16 +19,10 @@ export default class RiskAtInstallationStoreService {
     return cached ? RiskAtInstallationModel.parse(JSON.parse(cached)) : this.fromOrder(order)
   }
 
-  public async updateField<T extends keyof RiskAtInstallation>(order: Order, field: T, data: RiskAtInstallation[T]) {
-    const riskAtInstallation = await this.getRiskAtInstallation(order)
+  public async update(order: Order, changes: Partial<RiskAtInstallation>) {
+    const riskAtInstallation = { ...(await this.getRiskAtInstallation(order)), ...changes }
 
-    riskAtInstallation[field] = data
-
-    await this.updateRiskAtInstallation(order, riskAtInstallation)
-  }
-
-  private async updateRiskAtInstallation(order: Order, data: RiskAtInstallation) {
-    await this.dataStore.set(this.keyFromOrder(order), JSON.stringify(data), CACHE_DURATION_SECONDS)
+    await this.dataStore.set(this.keyFromOrder(order), JSON.stringify(riskAtInstallation), CACHE_DURATION_SECONDS)
   }
 
   private fromOrder(order: Order): RiskAtInstallation {
@@ -37,11 +31,19 @@ export default class RiskAtInstallationStoreService {
       : order.installationAndRisk
     const { possibleRisk, riskCategory } = splitRisks(saved?.riskCategory, order.dataDictionaryVersion)
 
+    const riskDetails = saved?.riskDetails ?? ''
+
     return {
       possibleRisk,
       riskCategory,
-      riskDetails: saved?.riskDetails ?? '',
+      riskDetails,
+      hasOtherRisks: this.otherRisksAnswer(saved?.riskCategory, riskDetails),
       genderRiskDetails: order.detailsOfInstallation?.genderRiskDetails ?? '',
     }
+  }
+
+  private otherRisksAnswer(savedRiskCategory: string[] | null | undefined, riskDetails: string) {
+    if (riskDetails) return 'YES'
+    return savedRiskCategory != null ? 'NO' : null
   }
 }

@@ -1,16 +1,22 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
 import { ValidationResult } from '../../../models/Validation'
+import TaskListService from '../../../services/taskListService'
 import { convertZodErrorToValidationError } from '../../../utils/errors'
-import RiskAtInstallationStoreService from '../riskAtInstallationStoreService'
-import RiskAtAddressFormModel, { RiskAtAddressFormValidator } from './formModel'
+import continueRiskAtInstallation from '../continueRiskAtInstallation'
+import RiskAtInstallationService from '../riskAtInstallationService'
+import RiskAtAddressFormModel, { RiskAtAddressFormInput, RiskAtAddressFormValidator } from './formModel'
 import RiskAtAddressViewModel from './viewModel'
 
 export default class RiskAtAddressController {
-  constructor(private readonly riskAtInstallationStoreService: RiskAtInstallationStoreService) {}
+  constructor(
+    private readonly riskAtInstallationService: RiskAtInstallationService,
+    private readonly taskListService: TaskListService,
+  ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
-    const { riskCategory } = await this.riskAtInstallationStoreService.getRiskAtInstallation(req.order!)
+    const [submitted] = req.flash('formData') as unknown as RiskAtAddressFormInput[]
+    const { riskCategory } = submitted ?? (await this.riskAtInstallationService.getRiskAtInstallation(req.order!))
     const errors = req.flash('validationErrors') as unknown as ValidationResult
 
     res.render(
@@ -26,17 +32,19 @@ export default class RiskAtAddressController {
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const { riskCategory } = RiskAtAddressFormModel.parse(req.body)
+    const riskAtAddressPath = paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS.replace(':orderId', order.id)
+    const formData = RiskAtAddressFormModel.parse(req.body)
 
-    const validation = RiskAtAddressFormValidator.safeParse({ riskCategory })
+    const validation = RiskAtAddressFormValidator.safeParse(formData)
     if (!validation.success) {
+      req.flash('formData', formData)
       req.flash('validationErrors', convertZodErrorToValidationError(validation.error))
-      res.redirect(paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS.replace(':orderId', order.id))
+      res.redirect(riskAtAddressPath)
       return
     }
 
-    await this.riskAtInstallationStoreService.updateField(order, 'riskCategory', riskCategory)
+    await this.riskAtInstallationService.saveRiskAtAddress(order, validation.data)
 
-    res.redirect(paths.INSTALLATION_AND_RISK.OTHER_RISKS.replace(':orderId', order.id))
+    await continueRiskAtInstallation(req, res, this.riskAtInstallationService, this.taskListService, riskAtAddressPath)
   }
 }
