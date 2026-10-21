@@ -64,6 +64,10 @@
         {{ heading }}
       </h1>
 
+      {% if (order.status == 'SUBMITTED' or order.status == 'REJECTED') and createNewOrderVersionEnabled and not canCreateOrderVersion %}
+        <p class="govuk-body">{{ orderChangeBlockedMessage }}</p>
+      {% endif %}
+
       {% if isOrderRejected %}
         <p class="govuk-body">This form has been returned. You need to review the reason it has been returned, make any necessary changes, and resubmit it.</p>
       {% endif %}
@@ -205,11 +209,19 @@
         <div class="govuk-!-margin-top-5">
       <div class="govuk-button-group">
               {% if createNewOrderVersionEnabled %}
+                {% if canCreateOrderVersion %}
                 {{ govukButton({
                   text: "Make changes to this form",
                   id: "make-changes-button",
                   href: "/order/" + order.id + "/edit"
                 }) }}
+                {% else %}
+                {{ govukButton({
+                  text: "Make changes to this form",
+                  id: "make-changes-button",
+                  disabled: true
+                }) }}
+                {% endif %}
               {% endif %}
         {% if isOrderRejected %}
           {{ govukButton({

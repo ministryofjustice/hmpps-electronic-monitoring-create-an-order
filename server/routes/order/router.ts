@@ -4,7 +4,6 @@ import paths from '../../constants/paths'
 import { createFeatureRouter } from '../routeHelpers'
 import OrderController from '../../controllers/orderController'
 import ReceiptController from '../../controllers/receiptController'
-import IsRejectionController from '../is-rejection/controller'
 import SpecialOrderController from '../special-order/controller'
 import IsAddressChangeController from '../variations/is-address-change/controller'
 import NoRefitsController from '../variations/no-refits/controller'
@@ -12,18 +11,14 @@ import NoChangeResponsibleOfficerController from '../variations/no-change-respon
 import ReturnReasonsController from '../return-reasons/controller'
 
 const createOrderRouter = (
-  services: Pick<
-    Services,
-    'orderService' | 'sectionService' | 'fmsRequestService' | 'isRejectionService' | 'serviceRequestTypeService'
-  >,
+  services: Pick<Services, 'orderService' | 'sectionService' | 'fmsRequestService' | 'serviceRequestTypeService'>,
 ): Router => {
   const { router, get, post, viewUpdate } = createFeatureRouter()
 
-  const { orderService, sectionService, fmsRequestService, isRejectionService, serviceRequestTypeService } = services
+  const { orderService, sectionService, fmsRequestService, serviceRequestTypeService } = services
 
   const orderController = new OrderController(orderService, sectionService)
   const receiptController = new ReceiptController(fmsRequestService)
-  const isRejectionController = new IsRejectionController(isRejectionService)
   const specialOrderController = new SpecialOrderController()
   const isAddressChangeController = new IsAddressChangeController(serviceRequestTypeService)
   const noRefitsController = new NoRefitsController()
@@ -37,7 +32,6 @@ const createOrderRouter = (
   get(paths.ORDER.SUMMARY_VERSION, orderController.summary)
   viewUpdate(paths.ORDER.RETURN_REASONS, returnReasonsController)
   get(paths.ORDER.EDIT, orderController.confirmEdit)
-  viewUpdate(paths.ORDER.IS_REJECTION, isRejectionController)
   post(paths.ORDER.VARIATION, orderController.createVariation)
   get(paths.ORDER.DELETE, orderController.confirmDelete)
   post(paths.ORDER.DELETE, orderController.delete)

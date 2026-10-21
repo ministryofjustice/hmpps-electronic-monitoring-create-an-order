@@ -2,11 +2,14 @@ import { randomUUID } from 'crypto'
 import { createInterestedParties, getMockOrder } from '../../test/mocks/mockOrder'
 import { createMockRequest, createMockResponse } from '../../test/mocks/mockExpress'
 import RestClient from '../data/restClient'
-import { OrderStatusEnum } from '../models/Order'
+import { Order, OrderStatusEnum } from '../models/Order'
 import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
 import OrderService from '../services/orderService'
 import OrderController from './orderController'
 import SectionService from '../services/sectionsService'
+import { SanitisedError } from '../sanitisedError'
+import FeatureFlags from '../utils/featureFlags'
+import { getOrderChangeBlockedMessage, ORDER_CHANGE_STATUS_CHANGED_MESSAGE } from '../utils/orderVersionEligibility'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -20,6 +23,7 @@ describe('OrderController', () => {
   let sectionService: jest.Mocked<SectionService>
 
   beforeEach(() => {
+    jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(false)
     mockRestClient = new RestClient('cemoApi', {
       url: '',
       timeout: { response: 0, deadline: 0 },
@@ -31,6 +35,11 @@ describe('OrderController', () => {
       getSectionsForOrder: jest.fn().mockReturnValue(Promise.resolve([])),
     } as unknown as jest.Mocked<SectionService>
     orderController = new OrderController(mockOrderService, sectionService)
+    mockOrderService.amendOrder = jest.fn().mockResolvedValue({ order: getMockOrder(), outcome: 'ACCEPTED' })
+  })
+
+  afterEach(() => {
+    jest.restoreAllMocks()
   })
 
   describe('summary', () => {
@@ -69,18 +78,16 @@ describe('OrderController', () => {
     })
 
     it('should indicate when the order has been rejected', async () => {
-      const mockOrder = getMockOrder({
-        status: 'REJECTED',
-        statusUpdates: [
-          {
-            id: randomUUID(),
-            versionId: randomUUID(),
-            status: 'REJECTED',
-            datetimeOfStatusChange: '2026-01-01T12:00:00Z',
-            statusUpdateReasons: [],
-          },
-        ],
-      })
+      const mockOrder = getMockOrder({ status: 'REJECTED', canAmend: true })
+      mockOrder.statusUpdates = [
+        {
+          id: randomUUID(),
+          versionId: mockOrder.versionId,
+          status: 'REJECTED',
+          datetimeOfStatusChange: '2026-01-01T12:00:00Z',
+          statusUpdateReasons: [],
+        },
+      ]
       const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
       const res = createMockResponse()
       const next = jest.fn()
@@ -92,6 +99,7 @@ describe('OrderController', () => {
         'pages/order/summary',
         expect.objectContaining({
           isOrderRejected: true,
+          canCreateOrderVersion: true,
           returnReasonsUrl: `/order/${mockOrder.id}/return-reasons`,
           timelineItems: expect.arrayContaining([
             expect.objectContaining({
@@ -103,6 +111,48 @@ describe('OrderController', () => {
         }),
       )
     })
+
+    it('should block changes while the case is processing', async () => {
+      const mockOrder = getMockOrder({ status: 'SUBMITTED' })
+      const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
+      const res = createMockResponse()
+      req.flash = jest.fn().mockReturnValue([])
+
+      await orderController.summary(req, res, jest.fn())
+
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/order/summary',
+        expect.objectContaining({
+          canCreateOrderVersion: false,
+        }),
+      )
+    })
+
+    it.each<[Order['status'], boolean, string]>([
+      ['SUBMITTED', false, getOrderChangeBlockedMessage()],
+      ['REJECTED', false, getOrderChangeBlockedMessage()],
+      ['SUBMITTED', true, ORDER_CHANGE_STATUS_CHANGED_MESSAGE],
+      ['REJECTED', true, ORDER_CHANGE_STATUS_CHANGED_MESSAGE],
+      ['IN_PROGRESS', false, ORDER_CHANGE_STATUS_CHANGED_MESSAGE],
+    ])(
+      'reconciles a flashed processing lock with current status %s and canAmend %s',
+      async (status, canAmend, error) => {
+        const order = getMockOrder({ status, canAmend })
+        const req = createMockRequest({ order, flash: jest.fn().mockReturnValue([getOrderChangeBlockedMessage()]) })
+        const res = createMockResponse()
+
+        await orderController.summary(req, res, jest.fn())
+
+        expect(res.render).toHaveBeenCalledWith(
+          'pages/order/summary',
+          expect.objectContaining({
+            canCreateOrderVersion: canAmend,
+            orderChangeBlockedMessage: getOrderChangeBlockedMessage(),
+            error,
+          }),
+        )
+      },
+    )
   })
 
   describe('create', () => {
@@ -151,28 +201,188 @@ describe('OrderController', () => {
         }),
       )
     })
+
+    it('should redirect a submitted order with an open case to its summary', async () => {
+      const order = getMockOrder({ status: 'SUBMITTED' })
+      const req = createMockRequest({ order })
+      const res = createMockResponse()
+
+      await orderController.confirmEdit(req, res, jest.fn())
+
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/summary`)
+      expect(res.render).not.toHaveBeenCalled()
+    })
+
+    it('should redirect to summary when the case is still processing', async () => {
+      const mockOrder = getMockOrder({ status: 'SUBMITTED' })
+      const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
+      const res = createMockResponse()
+
+      await orderController.confirmEdit(req, res, jest.fn())
+
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/summary`)
+      expect(res.render).not.toHaveBeenCalled()
+    })
   })
 
   describe('createVariation', () => {
-    it('should create a variation order and redirect to its summary page', async () => {
+    it('blocks a submitted order when the API says it cannot be amended', async () => {
       const orderId = randomUUID()
-
-      // Given
-      const req = createMockRequest({
-        body: {
-          action: 'continue',
-        },
-        params: {
-          orderId,
-        },
-      })
+      const order = getMockOrder({ id: orderId, status: 'SUBMITTED', canAmend: false })
+      const req = createMockRequest({ order, body: { action: 'continue' }, params: { orderId }, flash: jest.fn() })
       const res = createMockResponse()
-      const next = jest.fn()
 
-      // When
-      await orderController.createVariation(req, res, next)
+      await orderController.createVariation(req, res, jest.fn())
 
-      // Then
+      expect(mockOrderService.amendOrder).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/summary`)
+    })
+
+    it('submits an accepted order without an action and follows the API outcome', async () => {
+      const orderId = randomUUID()
+      const order = getMockOrder({ id: orderId, status: 'SUBMITTED', canAmend: true })
+      order.monitoringConditions.startDate = '2000-01-01T00:00:00Z'
+      order.statusUpdates = [
+        {
+          id: randomUUID(),
+          versionId: order.versionId,
+          status: 'ACCEPTED',
+          datetimeOfStatusChange: '2026-01-01T12:00:00Z',
+          statusUpdateReasons: [],
+        },
+      ]
+      const req = createMockRequest({ order, body: { action: 'continue' }, params: { orderId } })
+      const res = createMockResponse()
+
+      await orderController.createVariation(req, res, jest.fn())
+
+      expect(mockOrderService.amendOrder).toHaveBeenCalledWith({
+        orderId,
+        accessToken: 'fakeUserToken',
+      })
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/summary`)
+    })
+
+    it.each([
+      ['SUBMITTED', 'REQUEST', 'ACCEPTED'],
+      ['REJECTED', 'VARIATION', 'REJECTED'],
+      ['SUBMITTED', 'VARIATION', 'REJECTED'],
+    ] as const)('routes a past-dated %s %s with outcome %s into the SR flow', async (status, type, outcome) => {
+      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(true)
+      const orderId = randomUUID()
+      const order = getMockOrder({ id: orderId, status, type, canAmend: true })
+      order.monitoringConditions.startDate = '2000-01-01T00:00:00Z'
+      order.statusUpdates = [
+        {
+          id: randomUUID(),
+          versionId: order.versionId,
+          status: outcome,
+          datetimeOfStatusChange: '2026-01-01T12:00:00Z',
+          statusUpdateReasons: [],
+        },
+      ]
+      const req = createMockRequest({ order, body: { action: 'continue' }, params: { orderId } })
+      const res = createMockResponse()
+
+      await orderController.createVariation(req, res, jest.fn())
+
+      expect(mockOrderService.amendOrder).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/is-address-change`)
+    })
+
+    it('amends future-dated accepted orders directly even when the service-request flow is enabled', async () => {
+      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(true)
+      const orderId = randomUUID()
+      const order = getMockOrder({ id: orderId, status: 'SUBMITTED', canAmend: true })
+      order.monitoringConditions.startDate = '2999-01-01T00:00:00Z'
+      order.statusUpdates = [
+        {
+          id: randomUUID(),
+          versionId: order.versionId,
+          status: 'ACCEPTED',
+          datetimeOfStatusChange: '2026-01-01T12:00:00Z',
+          statusUpdateReasons: [],
+        },
+      ]
+      const req = createMockRequest({ order, body: { action: 'continue' }, params: { orderId } })
+      const res = createMockResponse()
+
+      await orderController.createVariation(req, res, jest.fn())
+
+      expect(mockOrderService.amendOrder).toHaveBeenCalledWith({ orderId, accessToken: 'fakeUserToken' })
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/summary`)
+    })
+
+    it('uses the API outcome instead of an earlier rejected status observation', async () => {
+      const orderId = randomUUID()
+      const order = getMockOrder({ id: orderId, status: 'SUBMITTED', canAmend: true })
+      order.statusUpdates = [
+        {
+          id: randomUUID(),
+          versionId: order.versionId,
+          status: 'REJECTED',
+          datetimeOfStatusChange: '2026-01-01T12:00:00Z',
+          statusUpdateReasons: [],
+        },
+      ]
+      const req = createMockRequest({ order, body: { action: 'continue' }, params: { orderId } })
+      const res = createMockResponse()
+      mockOrderService.amendOrder.mockResolvedValue({ order, outcome: 'ACCEPTED' })
+
+      await orderController.createVariation(req, res, jest.fn())
+
+      expect(mockOrderService.amendOrder).toHaveBeenCalledWith({
+        orderId,
+        accessToken: 'fakeUserToken',
+      })
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/summary`)
+    })
+
+    it.each([
+      ['REQUEST', '2000-01-01T00:00:00Z'],
+      ['REQUEST', '2999-01-01T00:00:00Z'],
+      ['AMEND_ORIGINAL_REQUEST', '2000-01-01T00:00:00Z'],
+      ['VARIATION', '2999-01-01T00:00:00Z'],
+    ] as const)('routes a rejected %s starting at %s to notifying organisation', async (type, startDate) => {
+      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(true)
+      const orderId = randomUUID()
+      const order = getMockOrder({ id: orderId, status: 'REJECTED', type, canAmend: true })
+      order.monitoringConditions.startDate = startDate
+      const req = createMockRequest({ order, body: { action: 'continue' }, params: { orderId } })
+      const res = createMockResponse()
+      mockOrderService.amendOrder.mockResolvedValue({ order, outcome: 'REJECTED' })
+
+      await orderController.createVariation(req, res, jest.fn())
+
+      expect(mockOrderService.amendOrder).toHaveBeenCalledWith({
+        orderId,
+        accessToken: 'fakeUserToken',
+      })
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/interest-parties/notifying-organisation`)
+    })
+
+    it('returns to the summary when the backend rejects a stale status', async () => {
+      const orderId = randomUUID()
+      const order = getMockOrder({ id: orderId, status: 'SUBMITTED', canAmend: true })
+      order.statusUpdates = [
+        {
+          id: randomUUID(),
+          versionId: order.versionId,
+          status: 'ACCEPTED',
+          datetimeOfStatusChange: '2026-01-01T12:00:00Z',
+          statusUpdateReasons: [],
+        },
+      ]
+      const req = createMockRequest({ order, body: { action: 'continue' }, params: { orderId }, flash: jest.fn() })
+      const res = createMockResponse()
+      mockOrderService.amendOrder.mockRejectedValue({ status: 409 } as SanitisedError)
+
+      await orderController.createVariation(req, res, jest.fn())
+
+      expect(req.flash).toHaveBeenCalledWith(
+        'submissionError',
+        'The status of this form has changed. Check its current status before making changes.',
+      )
       expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/summary`)
     })
   })

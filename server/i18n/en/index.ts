@@ -34,7 +34,6 @@ import installationLocationPageContent from './pages/installationLocation'
 import installationAppointmentPageContent from './pages/installationAppointment'
 import getReferenceData from './reference'
 import havePhotoPageContent from './pages/havePhoto'
-import isRejectionPageContent from './pages/isRejection'
 import serviceRequestTypePageContent from './pages/serviceRequestType'
 import haveCourtOrderPageContent from './pages/haveCourtOrder'
 import uploadCourtOrderPageContent from './pages/uploadCourtOrder'
@@ -111,7 +110,6 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       pdu: pduPageContent,
       installationLocation: installationLocationPageContent,
       installationAppointment: installationAppointmentPageContent,
-      isRejection: isRejectionPageContent,
       setSentencingAct: setSentencingActSelectionPageContent,
       serviceRequestType: serviceRequestTypePageContent,
       dapo: dapoContent,

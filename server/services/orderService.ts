@@ -4,6 +4,7 @@ import { AuthenticatedRequestInput } from '../interfaces/request'
 import Result from '../interfaces/result'
 import ErrorResponseModel from '../models/ErrorResponse'
 import { CreateOrderFormData } from '../models/form-data/order'
+import OrderAmendmentModel, { OrderAmendment } from '../models/OrderAmendment'
 import OrderModel, { Order } from '../models/Order'
 import { VersionInformation, VersionInformationList } from '../models/VersionInformation'
 import { SanitisedError } from '../sanitisedError'
@@ -57,11 +58,12 @@ export default class OrderService {
     return OrderModel.parse(result)
   }
 
-  async createVariationFromExisting(input: OrderRequestInput): Promise<void> {
-    return this.apiClient.post({
-      path: `/api/orders/${input.orderId}/copy-as-variation`,
+  async amendOrder(input: OrderRequestInput): Promise<OrderAmendment> {
+    const result = await this.apiClient.post({
+      path: `/api/orders/${input.orderId}/amend`,
       token: input.accessToken,
     })
+    return OrderAmendmentModel.parse(result)
   }
 
   async getOrder(input: OrderRequestInput): Promise<Order> {
@@ -69,7 +71,20 @@ export default class OrderService {
       path: `/api/orders/${input.orderId}`,
       token: input.accessToken,
     })
-    return OrderModel.parse(result)
+    const order = OrderModel.parse(result)
+    if (order.type !== 'REJECTED' || !order.canAmend) return order
+
+    const versions = await this.getVersionInformations(input)
+    const currentVersion = versions.find(version => version.versionId === order.versionId)
+    const sourceVersion = currentVersion
+      ? versions
+          .filter(version => version.versionNumber < currentVersion.versionNumber && version.type !== 'REJECTED')
+          .sort((first, second) => second.versionNumber - first.versionNumber)[0]
+      : undefined
+
+    if (!sourceVersion) throw new Error(`Unable to resolve amendment source type for order ${order.id}`)
+
+    return { ...order, amendmentSourceType: sourceVersion.type }
   }
 
   async getVersion(input: OrderRequestInput & { versionId: string }): Promise<Order> {

@@ -133,9 +133,6 @@ interface ValidationErrors {
     levelRequired: string
     categoryRequired: string
   }
-  isRejection: {
-    isRejectionRequired: string
-  }
   serviceRequestType: {
     serviceRequestTypeRequired: string
   }
@@ -417,9 +414,6 @@ const validationErrors: ValidationErrors = {
   mappa: {
     levelRequired: 'Select the level of MAPPA that applies to the device wearer',
     categoryRequired: 'Select the category of MAPPA that applies to the device wearer',
-  },
-  isRejection: {
-    isRejectionRequired: "Select 'Yes' if you are making changes because the original was rejected",
   },
   serviceRequestType: {
     serviceRequestTypeRequired: 'Select why you are making changes to the form',

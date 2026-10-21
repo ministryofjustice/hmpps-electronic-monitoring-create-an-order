@@ -105,7 +105,53 @@ describe('Order Service', () => {
         path: '/api/orders/123456789',
         token: 'token',
       })
+      expect(mockRestClient.get).toHaveBeenCalledTimes(1)
       expect(order).toEqual(mockNewOrder)
+    })
+
+    it.each(['REQUEST', 'AMEND_ORIGINAL_REQUEST', 'VARIATION', 'REINSTALL_DEVICE'] as const)(
+      'should resolve a legacy rejection from the nearest preceding %s version',
+      async sourceType => {
+        const legacyOrder = { ...mockApiResponse, type: 'REJECTED', status: 'REJECTED', canAmend: true }
+        const version = (versionNumber: number, type: VersionInformation['type']): VersionInformation => ({
+          orderId: mockId,
+          versionId: versionNumber === 3 ? mockId : uuidv4(),
+          versionNumber,
+          type,
+          status: 'SUBMITTED',
+        })
+        mockRestClient.get
+          .mockResolvedValueOnce(legacyOrder)
+          .mockResolvedValueOnce([
+            version(0, 'REQUEST'),
+            version(4, 'REQUEST'),
+            version(2, 'REJECTED'),
+            version(3, 'REJECTED'),
+            version(1, sourceType),
+          ])
+
+        const orderService = new OrderService(mockRestClient)
+        const order = await orderService.getOrder({ accessToken: 'token', orderId: mockId })
+
+        expect(order.type).toBe('REJECTED')
+        expect(order.amendmentSourceType).toBe(sourceType)
+        expect(mockRestClient.get).toHaveBeenLastCalledWith({
+          path: `/api/orders/${mockId}/versions`,
+          token: 'token',
+        })
+      },
+    )
+
+    it('should not guess the source type when legacy history is unavailable', async () => {
+      mockRestClient.get
+        .mockResolvedValueOnce({ ...mockApiResponse, type: 'REJECTED', canAmend: true })
+        .mockRejectedValueOnce(mock404Error)
+
+      const orderService = new OrderService(mockRestClient)
+
+      await expect(orderService.getOrder({ accessToken: 'token', orderId: mockId })).rejects.toThrow(
+        'Unable to resolve amendment source type',
+      )
     })
 
     it('should throw an error if the api returns an invalid object', async () => {
@@ -137,23 +183,22 @@ describe('Order Service', () => {
     })
   })
 
-  describe('createVariationFromExisting', () => {
+  describe('amendOrder', () => {
     const mockAccessToken = 'ABC'
     const mockOrderId = '123456'
 
-    it('should post a "create variation from existing order" request to the api', async () => {
-      mockRestClient.post.mockResolvedValue(mockApiResponse)
+    it('should post without a body and parse the amendment response', async () => {
+      const response = { order: mockApiResponse, outcome: 'ACCEPTED' }
+      mockRestClient.post.mockResolvedValue(response)
 
       const orderService = new OrderService(mockRestClient)
-      await orderService.createVariationFromExisting({
-        accessToken: mockAccessToken,
-        orderId: mockOrderId,
-      })
+      const amendment = await orderService.amendOrder({ accessToken: mockAccessToken, orderId: mockOrderId })
 
       expect(mockRestClient.post).toHaveBeenCalledWith({
-        path: `/api/orders/${mockOrderId}/copy-as-variation`,
+        path: `/api/orders/${mockOrderId}/amend`,
         token: mockAccessToken,
       })
+      expect(amendment).toEqual({ order: mockNewOrder, outcome: 'ACCEPTED' })
     })
 
     it('should propagate errors from the api', async () => {
@@ -161,7 +206,7 @@ describe('Order Service', () => {
 
       try {
         const orderService = new OrderService(mockRestClient)
-        await orderService.createVariationFromExisting({
+        await orderService.amendOrder({
           accessToken: mockAccessToken,
           orderId: mockOrderId,
         })
@@ -171,6 +216,7 @@ describe('Order Service', () => {
       }
     })
   })
+
   describe('get versions', () => {
     const createVersionInformation = (override: Partial<VersionInformation> = {}): VersionInformation => {
       return {
