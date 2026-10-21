@@ -4,10 +4,10 @@ import nunjucks from 'nunjucks'
 import express from 'express'
 import fs from 'fs'
 import mojFilters from '@ministryofjustice/frontend/moj/filters/all'
-import { camelCaseToSentenceCase, checkType, initialiseName, isEmpty } from './utils'
-import config from '../config'
-import logger from '../../logger'
-import ReferenceData from '../types/i18n/reference/reference'
+import { camelCaseToSentenceCase, checkType, initialiseName, isEmpty } from '../utils'
+import config from '../../config'
+import logger from '../../../logger'
+import ReferenceData from '../../types/i18n/reference/reference'
 import { CheckboxItem } from './govukFrontEndTypes/checkBoxItem'
 import { RadiosItem } from './govukFrontEndTypes/radioItem'
 
@@ -78,7 +78,7 @@ export default function nunjucksSetup(app: express.Express): void {
   let assetManifest: Record<string, string> = {}
 
   try {
-    const assetMetadataPath = path.resolve(__dirname, '../../assets/manifest.json')
+    const assetMetadataPath = path.resolve(__dirname, '../../../assets/manifest.json')
     assetManifest = JSON.parse(fs.readFileSync(assetMetadataPath, 'utf8'))
   } catch (e) {
     logger.warn(`Error setup nunjucks ${e} `)
@@ -89,7 +89,7 @@ export default function nunjucksSetup(app: express.Express): void {
 
   const njkEnv = nunjucks.configure(
     [
-      path.join(__dirname, '../../server/views'),
+      path.join(__dirname, '../../../server/views'),
       'node_modules/govuk-frontend/dist/',
       'node_modules/@ministryofjustice/frontend/',
     ],

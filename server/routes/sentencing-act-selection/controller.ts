@@ -6,7 +6,7 @@ import SentencingActService from './SentencingActService'
 import { isValidationResult } from '../../models/Validation'
 import { isNullOrUndefined } from '../../utils/utils'
 import FeatureFlags from '../../utils/featureFlags'
-import isVariationType from '../../utils/isVariationType'
+import isVariationType from '../../utils/order/isVariationType'
 
 export default class SentencingActSelection extends YesNoQuestionPageController {
   constructor(private readonly sentencingActService: SentencingActService) {

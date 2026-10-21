@@ -4,7 +4,7 @@ import { isValidationResult } from '../../../models/Validation'
 import CurfewReleaseDateService from './service'
 import CurfewReleaseDateFormDataModel from './formModel'
 import curfewReleaseDateViewModel from './viewModel'
-import shouldShowCurfewDayOfRelease from '../../../utils/curfewDayOfReleaseEligibility'
+import shouldShowCurfewDayOfRelease from '../../../utils/order/curfewDayOfReleaseEligibility'
 import { serialiseTime } from '../../../utils/utils'
 
 export default class CurfewReleaseDateController {

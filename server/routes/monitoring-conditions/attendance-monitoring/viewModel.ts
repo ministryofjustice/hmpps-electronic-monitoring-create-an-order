@@ -1,9 +1,10 @@
-import { createGovukErrorSummary } from '../../../utils/errors'
-import { deserialiseDateTime, deserialiseTime, getError } from '../../../utils/utils'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
+import { deserialiseDateTime, deserialiseTime } from '../../../utils/utils'
 import { AttendanceMonitoring } from '../../../models/AttendanceMonitoring'
 import { AttendanceMonitoringAddToListFormData } from './formModel'
 import { ValidationResult } from '../../../models/Validation'
 import { DateTimeField, TextField, TimeField, ViewModel } from '../../../models/view-models/utils'
+import { getError } from '../../../utils/validation/errorMessages'
 
 type AttendanceMonitoringAddToListViewModel = ViewModel<Pick<AttendanceMonitoring, 'appointmentDay' | 'purpose'>> & {
   addressLine1: TextField

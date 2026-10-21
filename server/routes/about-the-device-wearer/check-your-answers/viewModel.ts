@@ -8,7 +8,7 @@ import {
   createAnswer,
   AnswerOptions,
   createAddressAnswer,
-} from '../../../utils/checkYourAnswers'
+} from '../../../utils/views/checkYourAnswers'
 import { formatDateTime, lookup } from '../../../utils/utils'
 import { IdentityNumbersEnum } from '../../../models/DeviceWearer'
 import { Order } from '../../../models/Order'

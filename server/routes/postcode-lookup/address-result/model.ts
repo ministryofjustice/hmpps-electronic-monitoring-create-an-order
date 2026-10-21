@@ -4,9 +4,10 @@ import { ValidationResult } from '../../../models/Validation'
 import { ErrorMessage } from '../../../models/view-models/utils'
 import I18n from '../../../types/i18n'
 import { AddressResultPageContent } from '../../../types/i18n/pages/postcodeLookup'
-import { createGovukErrorSummary } from '../../../utils/errors'
-import { ErrorSummary } from '../../../utils/govukFrontEndTypes/errorSummary'
-import { createAddressPreview, getError } from '../../../utils/utils'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
+import { ErrorSummary } from '../../../utils/views/govukFrontEndTypes/errorSummary'
+import { createAddressPreview } from '../../../utils/utils'
+import { getError } from '../../../utils/validation/errorMessages'
 
 type AddressResultViewModel = {
   items: { value: string; text: string }[]

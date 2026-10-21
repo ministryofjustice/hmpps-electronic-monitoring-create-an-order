@@ -1,10 +1,15 @@
 import paths from '../../../constants/paths'
-import { createAddressAnswer, createBooleanAnswer, createAnswer, AnswerOptions } from '../../../utils/checkYourAnswers'
+import {
+  createAddressAnswer,
+  createBooleanAnswer,
+  createAnswer,
+  AnswerOptions,
+} from '../../../utils/views/checkYourAnswers'
 import { formatDateTime, lookup } from '../../../utils/utils'
 import { Order } from '../../../models/Order'
 import I18n from '../../../types/i18n'
 import { ReferenceCatalogDDv5 } from '../../../types/i18n/reference'
-import isOrderDataDictionarySameOrAbove from '../../../utils/dataDictionaryVersionComparer'
+import isOrderDataDictionarySameOrAbove from '../../../utils/order/dataDictionaryVersionComparer'
 
 const createContactDetailsAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id)

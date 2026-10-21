@@ -1,9 +1,10 @@
 import { Order, OrderStatusEnum, OrderTypeEnum } from '../models/Order'
-import isVariationType from '../utils/isVariationType'
-import { isStartDateInPast } from '../utils/orderStartDate'
-import { hasOptionalVariationSectionIsHOCourt, isNotNullOrEmptyString } from '../utils/utils'
+import isVariationType from '../utils/order/isVariationType'
+import { isStartDateInPast } from '../utils/order/orderStartDate'
+import { isNotNullOrEmptyString } from '../utils/utils'
 import OrderChecklistService from './orderChecklistService'
 import TaskListService, { canBeCompleted, Task } from './taskListService'
+import hasOptionalVariationSectionIsHOCourt from '../utils/order/optionalVariationSections'
 
 export const SECTIONS = {
   interestedParties: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',

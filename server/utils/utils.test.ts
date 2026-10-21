@@ -1,5 +1,4 @@
 import { Address, AddressTypeEnum } from '../models/Address'
-import { ValidationError } from '../models/Validation'
 import {
   calculateAge,
   camelCaseToSentenceCase,
@@ -9,7 +8,6 @@ import {
   createAddressPreview,
   deserialiseDateTime,
   deserialiseTime,
-  getError,
   initialiseName,
   isEmpty,
   isNotNullOrUndefined,
@@ -111,20 +109,6 @@ describe('calculateAge', () => {
     ['Valid date', '1980-01-01T00:00:00.000Z', 40],
   ])('%s calculateAge(%s, %s)', (_: string, input: string, expected: number) => {
     expect(calculateAge(input)).toEqual(expected)
-  })
-})
-
-describe('getError', () => {
-  it.each([
-    { errors: [] as ValidationError[], field: 'field1', expected: undefined },
-    { errors: [{ field: 'field2', error: 'Field 2 is required' }], field: 'field1', expected: undefined },
-    {
-      errors: [{ field: 'field1', error: 'Field 1 is required' }],
-      field: 'field1',
-      expected: { text: 'Field 1 is required' },
-    },
-  ])('getError($errors, $field)', ({ errors, field, expected }) => {
-    expect(getError(errors, field)).toEqual(expected)
   })
 })
 

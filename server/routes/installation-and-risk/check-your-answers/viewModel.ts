@@ -1,9 +1,9 @@
-import { createAnswer, createMultipleChoiceAnswer } from '../../../utils/checkYourAnswers'
+import { createAnswer, createMultipleChoiceAnswer } from '../../../utils/views/checkYourAnswers'
 
 import { Order } from '../../../models/Order'
 import I18n from '../../../types/i18n'
 import { formatDateTime, lookup } from '../../../utils/utils'
-import isOrderDataDictionarySameOrAbove from '../../../utils/dataDictionaryVersionComparer'
+import isOrderDataDictionarySameOrAbove from '../../../utils/order/dataDictionaryVersionComparer'
 import paths from '../../../constants/paths'
 import { getRiskInformationFlow, riskInformationPages } from '../../../services/riskInformationFlow'
 

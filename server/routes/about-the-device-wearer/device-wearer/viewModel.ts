@@ -1,9 +1,10 @@
-import { createGovukErrorSummary } from '../../../utils/errors'
-import { convertBooleanToEnum, deserialiseDateTime, getError } from '../../../utils/utils'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
+import { convertBooleanToEnum, deserialiseDateTime } from '../../../utils/utils'
 import { DeviceWearer } from '../../../models/DeviceWearer'
 import { DeviceWearerFormData } from './formModel'
 import { ValidationResult } from '../../../models/Validation'
 import { DateField, ViewModel } from '../../../models/view-models/utils'
+import { getError } from '../../../utils/validation/errorMessages'
 
 type DeviceWearerViewModel = ViewModel<
   Required<

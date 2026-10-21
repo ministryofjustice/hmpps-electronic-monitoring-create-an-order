@@ -5,7 +5,10 @@ import AlcoholMonitoringModel, { AlcoholMonitoring } from '../../../models/Alcoh
 import { AlcoholMonitoringFormData, AlcoholMonitoringFormDataValidator } from './formModel'
 import { ValidationResult } from '../../../models/Validation'
 import { SanitisedError } from '../../../sanitisedError'
-import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../../../utils/errors'
+import {
+  convertZodErrorToValidationError,
+  convertBackendErrorToValidationError,
+} from '../../../utils/validation/errors'
 import { NotifyingOrganisation, notifyingOrganisationCourts } from '../../../models/NotifyingOrganisation'
 import { isNullOrUndefined } from '../../../utils/utils'
 

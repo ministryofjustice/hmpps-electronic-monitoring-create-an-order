@@ -6,7 +6,7 @@ import ErrorResponseModel, { ErrorResponse } from '../../models/ErrorResponse'
 import { SanitisedError } from '../../sanitisedError'
 import Result from '../../interfaces/result'
 import { validationErrors } from '../../constants/validationErrors'
-import { convertBackendErrorToValidationError, convertZodErrorToValidationError } from '../../utils/errors'
+import { convertBackendErrorToValidationError, convertZodErrorToValidationError } from '../../utils/validation/errors'
 import { FileRequiredFormData, FileRequiredFormDataValidator } from './fileRequiredFormModel'
 
 type AttachmentRequestInput = AuthenticatedRequestInput & {

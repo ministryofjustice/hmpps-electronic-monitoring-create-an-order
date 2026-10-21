@@ -1,18 +1,14 @@
 import { Order } from '../models/Order'
 import paths from '../constants/paths'
 import { AddressType } from '../models/Address'
-import {
-  convertBooleanToEnum,
-  hasOptionalVariationSectionIsHOCourt,
-  isNotNullOrEmptyString,
-  isNotNullOrUndefined,
-} from '../utils/utils'
+import { convertBooleanToEnum, isNotNullOrEmptyString, isNotNullOrUndefined } from '../utils/utils'
 import AttachmentType from '../models/AttachmentType'
 import FeatureFlags from '../utils/featureFlags'
-import isVariationType from '../utils/isVariationType'
+import isVariationType from '../utils/order/isVariationType'
 import { getOrderCohort } from '../models/OrderCohort'
 import { getRiskInformationTasks } from '../routes/installation-and-risk/riskInformationTasks'
 import { TaskListCohortDefinition, taskListCohortDefinitions } from './taskListCohorts'
+import hasOptionalVariationSectionIsHOCourt from '../utils/order/optionalVariationSections'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
 

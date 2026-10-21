@@ -3,9 +3,9 @@ import { Order } from '../../../models/Order'
 import { ValidationResult } from '../../../models/Validation'
 import { ViewModel } from '../../../models/view-models/utils'
 import I18n from '../../../types/i18n'
-import { createGovukErrorSummary } from '../../../utils/errors'
-import { getError } from '../../../utils/utils'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import { DetailsOfInstallationInput } from './formModel'
+import { getError } from '../../../utils/validation/errorMessages'
 
 type DetailsOfInstallationModel = ViewModel<Omit<DetailsOfInstallationInput, 'action'>>
 

@@ -2,9 +2,10 @@ import { Offence } from '../../../models/Offence'
 import { Order } from '../../../models/Order'
 import { ValidationResult } from '../../../models/Validation'
 import { DateField } from '../../../models/view-models/utils'
-import { createGovukErrorSummary } from '../../../utils/errors'
-import { deserialiseDateTime, getError } from '../../../utils/utils'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
+import { deserialiseDateTime } from '../../../utils/utils'
 import { OffenceInput } from './formModel'
+import { getError } from '../../../utils/validation/errorMessages'
 
 type OffenceItemViewModel = {
   offenceType: { value: string; error?: ReturnType<typeof getError> }

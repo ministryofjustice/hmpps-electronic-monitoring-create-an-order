@@ -1,10 +1,11 @@
-import { deserialiseDateTime, getError } from '../../utils/utils'
+import { deserialiseDateTime } from '../../utils/utils'
 import { VariationDetails } from '../VariationDetails'
 import { VariationDetailsFormData } from '../form-data/variationDetails'
 import { ValidationResult } from '../Validation'
 import { DateField, TextField, ViewModel } from './utils'
-import { createGovukErrorSummary } from '../../utils/errors'
+import { createGovukErrorSummary } from '../../utils/validation/errors'
 import { Order } from '../Order'
+import { getError } from '../../utils/validation/errorMessages'
 
 type VariationDetailsViewModel = ViewModel<Omit<VariationDetails, 'variationDate'>> & {
   variationDate: DateField

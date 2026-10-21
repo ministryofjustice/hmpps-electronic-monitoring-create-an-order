@@ -1,4 +1,4 @@
-import { ErrorSummary } from '../../utils/govukFrontEndTypes/errorSummary'
+import { ErrorSummary } from '../../utils/views/govukFrontEndTypes/errorSummary'
 import { Address, AddressTypeEnum } from '../Address'
 
 export type AddressType = {

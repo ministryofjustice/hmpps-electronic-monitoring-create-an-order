@@ -1,7 +1,7 @@
 import { DapoClause } from '../../../models/DapoClause'
 import { Offence } from '../../../models/Offence'
 import { Order } from '../../../models/Order'
-import { createDatePreview } from '../../../utils/checkYourAnswers'
+import { createDatePreview } from '../../../utils/views/checkYourAnswers'
 import I18n from '../../../types/i18n'
 import { lookup } from '../../../utils/utils'
 

@@ -1,10 +1,5 @@
 import { AddressWithoutType } from '../models/Address'
-import { ValidationResult } from '../models/Validation'
-import { ErrorMessage, ErrorsViewModel } from '../models/view-models/utils'
 import ReferenceData from '../types/i18n/reference/reference'
-import { Order } from '../models/Order'
-import isVariationType from './isVariationType'
-import { notifyingOrganisationCourts } from '../models/NotifyingOrganisation'
 
 const YEAR_IN_MS = 365.25 * 24 * 60 * 60 * 1000
 
@@ -98,39 +93,6 @@ export const trimSeconds = (timeString?: string | null): string => {
   }
   return timeString.split(':').slice(0, 2).join(':')
 }
-
-export const getError = (validationErrors: ValidationResult, field: string): ErrorMessage | undefined => {
-  const matchedError = validationErrors.find(e => e.field === field)
-
-  if (matchedError) {
-    return {
-      text: matchedError.error,
-    }
-  }
-
-  return undefined
-}
-
-export const getErrors = (validationErrors: ValidationResult, fields: string[]): ErrorMessage | undefined => {
-  const matchedErrors = validationErrors.filter(e => fields.includes(e.field))
-
-  if (matchedErrors.length > 0) {
-    return {
-      text: matchedErrors.map(e => e.error).join(', '),
-    }
-  }
-
-  return undefined
-}
-
-export const getErrorsViewModel = (validationErrors: ValidationResult): ErrorsViewModel => {
-  const viewModel: ErrorsViewModel = {}
-  validationErrors.forEach(error => {
-    viewModel[error.field] = { text: error.error }
-  })
-  return viewModel
-}
-
 export const camelCaseToSentenceCase = (input: string): string => {
   if (typeof input !== 'string') return input
 
@@ -228,17 +190,4 @@ export const createAddressPreview = (address: AddressWithoutType | null | undefi
   }
   return addressString + separator + address.postcode
 }
-
-const OPTIONAL_VARIATION_ORGANISATIONS = [...notifyingOrganisationCourts, 'HOME_OFFICE']
-
-export const hasOptionalVariationSectionIsHOCourt = (order: Order): boolean => {
-  if (
-    isVariationType(order.type) &&
-    OPTIONAL_VARIATION_ORGANISATIONS.includes(order.interestedParties?.notifyingOrganisation ?? '')
-  ) {
-    return true
-  }
-  return false
-}
-
 export const filterNullValues = (obj: object) => Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== null))

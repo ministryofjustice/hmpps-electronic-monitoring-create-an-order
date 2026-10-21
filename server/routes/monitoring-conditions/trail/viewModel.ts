@@ -1,10 +1,11 @@
 import { DateTimeField, TextField, ViewModel } from '../../../models/view-models/utils'
 import { ValidationResult } from '../../../models/Validation'
 import { TrailMonitoring } from '../../../models/TrailMonitoring'
-import { deserialiseDateTime, getError } from '../../../utils/utils'
+import { deserialiseDateTime } from '../../../utils/utils'
 import { TrailMonitoringFormData } from './formModel'
-import { createGovukErrorSummary } from '../../../utils/errors'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import { NotifyingOrganisation } from '../../../models/NotifyingOrganisation'
+import { getError } from '../../../utils/validation/errorMessages'
 
 type TrailMonitoringViewModel = ViewModel<unknown> & {
   startDate: DateTimeField

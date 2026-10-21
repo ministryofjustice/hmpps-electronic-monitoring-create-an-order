@@ -3,15 +3,15 @@ import {
   getIdentityNumbers,
   identityNumberFieldNames,
 } from '../../../constants/identityNumbers'
-import { createGovukErrorSummary } from '../../../utils/errors'
-import { ErrorSummary } from '../../../utils/govukFrontEndTypes/errorSummary'
-import { getError } from '../../../utils/utils'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
+import { ErrorSummary } from '../../../utils/views/govukFrontEndTypes/errorSummary'
 import { DeviceWearer, IdentityNumberType } from '../../../models/DeviceWearer'
 import { IdentityNumbersFormData } from './formModel'
 import { Order } from '../../../models/Order'
 import { Cohort } from '../../../models/UserCohort'
 import { ValidationResult } from '../../../models/Validation'
 import { ErrorMessage } from '../../../models/view-models/utils'
+import { getError } from '../../../utils/validation/errorMessages'
 
 export type IdentityNumberField = {
   type: IdentityNumberType
