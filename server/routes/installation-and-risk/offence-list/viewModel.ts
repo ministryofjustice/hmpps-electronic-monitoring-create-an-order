@@ -9,8 +9,8 @@ import DapoClauseListPageConent from '../../../types/i18n/pages/dapoClauseListPa
 import OffenceListPageContent from '../../../types/i18n/pages/offenceListPage'
 import { Answer, createAnswer, createDatePreview } from '../../../utils/views/checkYourAnswers'
 import { createGovukErrorSummary } from '../../../utils/validation/errors'
-import { lookup } from '../../../utils/utils'
 import { getError } from '../../../utils/validation/errorMessages'
+import { lookup } from '../../../utils/views/displayHelpers'
 
 type OffenceListSummaryItem = Answer
 

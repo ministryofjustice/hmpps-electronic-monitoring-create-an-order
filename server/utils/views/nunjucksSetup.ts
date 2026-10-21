@@ -4,12 +4,13 @@ import nunjucks from 'nunjucks'
 import express from 'express'
 import fs from 'fs'
 import mojFilters from '@ministryofjustice/frontend/moj/filters/all'
-import { camelCaseToSentenceCase, checkType, initialiseName, isEmpty } from '../utils'
 import config from '../../config'
 import logger from '../../../logger'
 import ReferenceData from '../../types/i18n/reference/reference'
 import { CheckboxItem } from './govukFrontEndTypes/checkBoxItem'
 import { RadiosItem } from './govukFrontEndTypes/radioItem'
+import { camelCaseToSentenceCase, initialiseName } from '../strings'
+import { checkType, isEmpty } from '../values'
 
 const toOptions = (
   values: ReferenceData,

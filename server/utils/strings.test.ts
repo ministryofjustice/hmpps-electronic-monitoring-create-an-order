@@ -1,0 +1,39 @@
+import { camelCaseToSentenceCase, convertToTitleCase, initialiseName } from './strings'
+
+describe('convert to title case', () => {
+  it.each([
+    ['empty string', '', ''],
+    ['Lower case', 'robert', 'Robert'],
+    ['Upper case', 'ROBERT', 'Robert'],
+    ['Mixed case', 'RoBErT', 'Robert'],
+    ['Multiple words', 'RobeRT SMiTH', 'Robert Smith'],
+    ['Leading spaces', '  RobeRT', '  Robert'],
+    ['Trailing spaces', 'RobeRT  ', 'Robert  '],
+    ['Hyphenated', 'Robert-John SmiTH-jONes-WILSON', 'Robert-John Smith-Jones-Wilson'],
+  ])('%s convertToTitleCase(%s, %s)', (_: string, a: string, expected: string) => {
+    expect(convertToTitleCase(a)).toEqual(expected)
+  })
+})
+
+describe('initialise name', () => {
+  it.each([
+    [undefined, undefined, undefined],
+    ['Empty string', '', undefined],
+    ['One word', 'robert', 'r. robert'],
+    ['Two words', 'Robert James', 'R. James'],
+    ['Three words', 'Robert James Smith', 'R. Smith'],
+    ['Double barrelled', 'Robert-John Smith-Jones-Wilson', 'R. Smith-Jones-Wilson'],
+  ])('%s initialiseName(%s, %s)', (_: string | undefined, a: string | undefined, expected: string | undefined) => {
+    expect(initialiseName(a)).toEqual(expected)
+  })
+})
+
+describe('camelCaseToSentenceCase', () => {
+  it.each([
+    ['empty string', '', ''],
+    ['Single word', 'start', 'Start'],
+    ['Multiple words', 'startDate', 'Start date'],
+  ])('%s camelCaseToSentenceCase(%s, %s)', (_: string, a: string, expected: string) => {
+    expect(camelCaseToSentenceCase(a)).toEqual(expected)
+  })
+})

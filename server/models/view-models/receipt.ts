@@ -9,7 +9,7 @@ import { createAnswer, createDateTimeAnswer } from '../../utils/views/checkYourA
 import { Order } from '../Order'
 import I18n from '../../types/i18n'
 import FeatureFlags from '../../utils/featureFlags'
-import { isNotNullOrEmptyString } from '../../utils/utils'
+import { isNotNullOrEmptyString } from '../../utils/values'
 
 const createOrderStatusAnswers = (order: Order) => {
   const answerOpts = { ignoreActions: true }

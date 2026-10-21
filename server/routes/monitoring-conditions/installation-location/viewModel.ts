@@ -6,8 +6,8 @@ import { InstallationLocationFormData } from './formModel'
 import { ValidationResult } from '../../../models/Validation'
 import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import FeatureFlags from '../../../utils/featureFlags'
-import { createAddressPreview } from '../../../utils/utils'
 import { getError } from '../../../utils/validation/errorMessages'
+import { createAddressPreview } from '../../../utils/views/displayHelpers'
 
 type InstallationLocationViewModel = ViewModel<InstallationLocation> & {
   primaryAddressView: TextField

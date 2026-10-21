@@ -1,5 +1,7 @@
-import { isNullOrUndefined, convertBooleanToEnum, createAddressPreview, trimSeconds } from '../utils'
 import { AddressWithoutType } from '../../models/Address'
+import { isNullOrUndefined, convertBooleanToEnum } from '../values'
+import { createAddressPreview } from './displayHelpers'
+import { trimSeconds } from '../dateTime'
 
 type Optional<T> = T | null | undefined
 

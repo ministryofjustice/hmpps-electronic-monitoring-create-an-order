@@ -6,8 +6,8 @@ import I18n from '../../../types/i18n'
 import { AddressResultPageContent } from '../../../types/i18n/pages/postcodeLookup'
 import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import { ErrorSummary } from '../../../utils/views/govukFrontEndTypes/errorSummary'
-import { createAddressPreview } from '../../../utils/utils'
 import { getError } from '../../../utils/validation/errorMessages'
+import { createAddressPreview } from '../../../utils/views/displayHelpers'
 
 type AddressResultViewModel = {
   items: { value: string; text: string }[]

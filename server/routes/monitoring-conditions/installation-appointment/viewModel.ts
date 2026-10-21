@@ -1,4 +1,3 @@
-import { deserialiseDateTime } from '../../../utils/utils'
 import { InstallationAppointment } from '../../../models/InstallationAppointment'
 import { ValidationResult } from '../../../models/Validation'
 import { InstallationAppointmentFormData } from './formModel'
@@ -6,6 +5,7 @@ import { DateTimeField, ViewModel } from '../../../models/view-models/utils'
 import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import { Question } from '../../../types/i18n/pages/questionPage'
 import { getError } from '../../../utils/validation/errorMessages'
+import { deserialiseDateTime } from '../../../utils/dateTime'
 
 type InstallationAppointmentViewModel = ViewModel<
   Pick<InstallationAppointment, 'placeName' | 'appointmentTimeDetails'>

@@ -2,10 +2,11 @@ import { createAnswer, createMultipleChoiceAnswer } from '../../../utils/views/c
 
 import { Order } from '../../../models/Order'
 import I18n from '../../../types/i18n'
-import { formatDateTime, lookup } from '../../../utils/utils'
 import isOrderDataDictionarySameOrAbove from '../../../utils/order/dataDictionaryVersionComparer'
 import paths from '../../../constants/paths'
 import { getRiskInformationFlow, riskInformationPages } from '../../../services/riskInformationFlow'
+import { formatDateTime } from '../../../utils/dateTime'
+import { lookup } from '../../../utils/views/displayHelpers'
 
 const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean, uri: string = '') => {
   const { questions } = content.pages.installationAndRisk

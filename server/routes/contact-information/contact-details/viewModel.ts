@@ -1,10 +1,10 @@
 import { createGovukErrorSummary } from '../../../utils/validation/errors'
-import { convertBooleanToEnum } from '../../../utils/utils'
 import { ContactDetails } from '../../../models/ContactDetails'
 import { ContactDetailsFormData } from './formModel'
 import { ValidationResult } from '../../../models/Validation'
 import { ViewModel } from '../../../models/view-models/utils'
 import { getError } from '../../../utils/validation/errorMessages'
+import { convertBooleanToEnum } from '../../../utils/values'
 
 type ContactDetailsViewModel = ViewModel<NonNullable<ContactDetails>>
 

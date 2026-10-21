@@ -10,7 +10,7 @@ import {
   convertBackendErrorToValidationError,
 } from '../../../utils/validation/errors'
 import { NotifyingOrganisation, notifyingOrganisationCourts } from '../../../models/NotifyingOrganisation'
-import { isNullOrUndefined } from '../../../utils/utils'
+import { isNullOrUndefined } from '../../../utils/values'
 
 type AlcoholMonitoringInput = AuthenticatedRequestInput & {
   orderId: string

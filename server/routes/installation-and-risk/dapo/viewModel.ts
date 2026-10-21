@@ -2,9 +2,9 @@ import { Order } from '../../../models/Order'
 import { ValidationResult } from '../../../models/Validation'
 import { ViewModel } from '../../../models/view-models/utils'
 import { createGovukErrorSummary } from '../../../utils/validation/errors'
-import { deserialiseDateTime } from '../../../utils/utils'
 import { DapoInput } from './formModel'
 import { getError } from '../../../utils/validation/errorMessages'
+import { deserialiseDateTime } from '../../../utils/dateTime'
 
 type DapoModel = ViewModel<Omit<DapoInput, 'action'>>
 

@@ -3,7 +3,7 @@ import { Offence } from '../../../models/Offence'
 import { Order } from '../../../models/Order'
 import { createDatePreview } from '../../../utils/views/checkYourAnswers'
 import I18n from '../../../types/i18n'
-import { lookup } from '../../../utils/utils'
+import { lookup } from '../../../utils/views/displayHelpers'
 
 const construct = (order: Order, id: string, content: I18n) => {
   const matchingOffence = findOffence(order.offences, id)

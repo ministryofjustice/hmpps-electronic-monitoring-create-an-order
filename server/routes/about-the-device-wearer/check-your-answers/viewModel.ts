@@ -9,9 +9,10 @@ import {
   AnswerOptions,
   createAddressAnswer,
 } from '../../../utils/views/checkYourAnswers'
-import { formatDateTime, lookup } from '../../../utils/utils'
 import { IdentityNumbersEnum } from '../../../models/DeviceWearer'
 import { Order } from '../../../models/Order'
+import { formatDateTime } from '../../../utils/dateTime'
+import { lookup } from '../../../utils/views/displayHelpers'
 
 const createOtherDisabilityAnswer = (order: Order, content: I18n, uri: string, answerOpts: AnswerOptions) => {
   if (order.deviceWearer.disabilities.includes('OTHER')) {

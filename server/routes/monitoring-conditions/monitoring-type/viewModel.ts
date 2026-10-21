@@ -3,10 +3,10 @@ import { ValidationResult } from '../../../models/Validation'
 import { ErrorMessage } from '../../../models/view-models/utils'
 import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import { ErrorSummary } from '../../../utils/views/govukFrontEndTypes/errorSummary'
-import { isNotNullOrUndefined } from '../../../utils/utils'
 import { MonitoringConditions } from '../model'
 import { getMonitoringEligibilityService } from './monitoringTypeEligibilityService'
 import { getError } from '../../../utils/validation/errorMessages'
+import { isNotNullOrUndefined } from '../../../utils/values'
 
 type MonitoringTypes = Pick<
   MonitoringConditions,

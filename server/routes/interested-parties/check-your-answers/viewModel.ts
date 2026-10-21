@@ -5,7 +5,8 @@ import { ReferenceCatalogDDv6 } from '../../../types/i18n/reference'
 import { AnswerOptions, createAnswer } from '../../../utils/views/checkYourAnswers'
 import isOrderDataDictionarySameOrAbove from '../../../utils/order/dataDictionaryVersionComparer'
 import { isPastDatedVariation } from '../../../utils/order/orderStartDate'
-import { formatDateTime, lookup } from '../../../utils/utils'
+import { formatDateTime } from '../../../utils/dateTime'
+import { lookup } from '../../../utils/views/displayHelpers'
 
 const getResponsibleOrganisationRegionAnswer = (
   order: Order,

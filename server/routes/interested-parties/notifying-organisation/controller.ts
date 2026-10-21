@@ -8,7 +8,7 @@ import { convertZodErrorToValidationError } from '../../../utils/validation/erro
 import InterestedPartiesBaseController from '../base/interestedPartiesBaseController'
 import UpdateInterestedPartiesService from '../interestedPartiesService'
 import { InterestedParties } from '../model'
-import { filterNullValues } from '../../../utils/utils'
+import { filterNullValues } from '../../../utils/values'
 
 export default class NotifingOrganisationController extends InterestedPartiesBaseController {
   constructor(
