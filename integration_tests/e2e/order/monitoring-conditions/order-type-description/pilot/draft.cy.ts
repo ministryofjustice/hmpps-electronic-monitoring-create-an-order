@@ -131,9 +131,9 @@ context('pilot', () => {
 
     const page = Page.visit(PilotPage, { orderId: mockOrderId })
 
-    cy.get('input[type="radio"][value="DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_DAPOL"]').should('be.enabled')
-    cy.get('input[type="radio"][value="GPS_ACQUISITIVE_CRIME_PAROLE"]').should('be.enabled')
-    cy.get('input[type="radio"][value="UNKNOWN"]').should('be.enabled')
+    page.form.pilotField.shouldHaveEnabledOption('Domestic Abuse Perpetrator on Licence (DAPOL)')
+    page.form.pilotField.shouldHaveEnabledOption('GPS Acquisitive Crime')
+    page.form.pilotField.shouldHaveEnabledOption('They are not part of any of these pathfinders or programmes')
     page.form.pilotField.shouldNotHaveOption('Licence Variation Project')
   })
 
@@ -176,10 +176,10 @@ context('pilot', () => {
       },
     })
 
-    Page.visit(PilotPage, { orderId: mockOrderId })
+    const page = Page.visit(PilotPage, { orderId: mockOrderId })
 
-    cy.get('input[type="radio"][value="DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC"]').should(
-      'be.enabled',
+    page.form.pilotField.shouldHaveEnabledOption(
+      'Domestic Abuse Perpetrator on Licence Home Detention Curfew (DAPOL HDC)',
     )
 
     cy.get('body').should(
@@ -206,10 +206,9 @@ context('pilot', () => {
       isSentencingAct: true,
     })
 
-    Page.visit(PilotPage, { orderId: mockOrderId })
-
-    cy.get('input[type="radio"][value="DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC"]').should(
-      'be.enabled',
+    const page = Page.visit(PilotPage, { orderId: mockOrderId })
+    page.form.pilotField.shouldHaveEnabledOption(
+      'Domestic Abuse Perpetrator on Licence Home Detention Curfew (DAPOL HDC)',
     )
   })
 
@@ -273,9 +272,9 @@ context('pilot', () => {
       },
     })
 
-    Page.visit(PilotPage, { orderId: mockOrderId })
+    const page = Page.visit(PilotPage, { orderId: mockOrderId })
 
-    cy.get('input[type="radio"][value="LICENCE_VARIATION_PROJECT"]').should('be.enabled')
+    page.form.pilotField.shouldNotHaveOption('Licence Variation Project')
 
     cy.contains(
       '.govuk-inset-text',
