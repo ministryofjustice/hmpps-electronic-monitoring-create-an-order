@@ -7,12 +7,12 @@ export default function fillInRiskAtInstallationWith({
   possibleRisk,
   riskCategory,
   genderRiskDetails,
-  otherRisks,
+  riskDetails,
 }: {
-  possibleRisk: string
-  riskCategory: string
+  possibleRisk: string[]
+  riskCategory: string[]
   genderRiskDetails?: string
-  otherRisks?: string
+  riskDetails?: string
 }): void {
   const riskBehaviourPage = Page.verifyOnPage(RiskBehaviourPage)
   riskBehaviourPage.form.fillInWith(possibleRisk, genderRiskDetails)
@@ -23,6 +23,6 @@ export default function fillInRiskAtInstallationWith({
   riskAtAddressPage.form.continueButton.click()
 
   const otherRisksPage = Page.verifyOnPage(OtherRisksPage)
-  otherRisksPage.form.fillInWith(otherRisks ? 'Yes' : 'No', otherRisks)
+  otherRisksPage.form.fillInWith(riskDetails ? 'Yes' : 'No', riskDetails)
   otherRisksPage.form.continueButton.click()
 }

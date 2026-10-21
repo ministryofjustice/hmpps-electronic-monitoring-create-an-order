@@ -20,10 +20,10 @@ context('Risk at installation single question pages', () => {
   }
 
   const riskAtInstallation = {
-    possibleRisk: 'Offensive towards someone because of their sex or gender',
+    possibleRisk: ['Offensive towards someone because of their sex or gender'],
     genderRiskDetails: 'Women',
-    riskCategory: 'Safeguarding child',
-    otherRisks: 'Some other risk details',
+    riskCategory: ['Safeguarding child'],
+    riskDetails: 'Some other risk details',
   }
 
   const startRiskInformation = (notifyingOrganisation: 'Civil and County Court' | 'Prison') => {
@@ -41,17 +41,12 @@ context('Risk at installation single question pages', () => {
   }
 
   beforeEach(() => {
-    cy.task('setFeatureFlags', { RISK_INFORMATION_FLOW_ENABLED: true })
     cy.task('resetDB')
     cy.task('reset')
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'COURT'],
     })
-  })
-
-  afterEach(() => {
-    cy.task('resetFeatureFlags')
   })
 
   it('saves all the risk answers and shows them on check your answers for Civil Court', () => {
@@ -69,10 +64,14 @@ context('Risk at installation single question pages', () => {
       riskAtInstallation.genderRiskDetails,
     )
     cyaPage.installationRiskSection.shouldHaveItem(
+      'What sex or gender are they a risk to?',
+      riskAtInstallation.genderRiskDetails,
+    )
+    cyaPage.installationRiskSection.shouldHaveItem(
       'At installation what are the possible risks at the address?',
       riskAtInstallation.riskCategory,
     )
-    cyaPage.installationRiskSection.shouldHaveItem(OTHER_RISKS_QUESTION, riskAtInstallation.otherRisks)
+    cyaPage.installationRiskSection.shouldHaveItem(OTHER_RISKS_QUESTION, riskAtInstallation.riskDetails)
 
     cyaPage.installationRiskSection.changeAnswer(OTHER_RISKS_QUESTION)
     Page.verifyOnPage(OtherRisksPage)
