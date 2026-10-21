@@ -15,6 +15,7 @@ const stubOrder = (
   status = 'SUBMITTED',
   type = 'REQUEST',
   startDate = '2000-01-01T00:00:00.000Z',
+  canAmend = status === 'REJECTED' || outcome !== 'PROCESSING',
 ) => {
   const statusUpdates =
     status === 'SUBMITTED' && outcome !== 'PROCESSING'
@@ -35,15 +36,15 @@ const stubOrder = (
     type,
     order: {
       versionId: mockVersionId,
-      canAmend: status === 'REJECTED' || outcome !== 'PROCESSING',
+      canAmend,
       statusUpdates,
       monitoringConditions: { ...mockApiOrder().monitoringConditions, startDate },
     },
   })
 }
 
-const verifyReturnedOrderAmendmentFlow = (sourceType: string) => {
-  stubOrder('REJECTED', 'REJECTED', sourceType)
+const verifyReturnedOrderAmendmentFlow = (sourceType: string, startDate = '2000-01-01T00:00:00.000Z') => {
+  stubOrder('REJECTED', 'REJECTED', sourceType, startDate)
   cy.task('stubCemoSubmitOrder', {
     httpStatus: 200,
     method: 'POST',
@@ -174,15 +175,35 @@ context('Variation', () => {
       )
     })
 
-    it('blocks a submitted order without an eligible status observation', () => {
-      stubOrder('PROCESSING')
+    it('does not lock an amendable submitted order without status observations', () => {
+      stubOrder('PROCESSING', 'SUBMITTED', 'REQUEST', '2000-01-01T00:00:00.000Z', true)
       const page = Page.visit(OrderTasksPage, { orderId: mockOriginalId })
 
       cy.contains("You can't make changes to this form because it is being processed by EMS. Try again later.").should(
-        'be.visible',
+        'not.exist',
       )
+      page.makeChangesButton.should('have.attr', 'href', `/order/${mockOriginalId}/edit`).click()
+      Page.verifyOnPage(ConfirmVariationPage).confirmButton().click()
+
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOriginalId}/amend`,
+        body: {},
+      }).should('be.true')
+      Page.verifyOnPage(OrderTasksPage)
+    })
+
+    it('keeps a rejected order locked when the API marks it as not amendable', () => {
+      stubOrder('REJECTED', 'REJECTED', 'REQUEST', '2000-01-01T00:00:00.000Z', false)
+      const page = Page.visit(OrderTasksPage, { orderId: mockOriginalId })
+
       page.makeChangesButton.should('be.disabled')
       page.makeChangesButton.should('not.have.attr', 'href')
+      cy.contains("You can't make changes to this form because it is being processed by EMS. Try again later.").should(
+        'be.visible',
+      )
+
+      cy.visit(`/order/${mockOriginalId}/edit`)
+      Page.verifyOnPage(OrderTasksPage)
     })
     ;(['REQUEST', 'VARIATION'] as const).forEach(sourceType => {
       it(`amends a returned ${sourceType.toLowerCase()} using the merged endpoint`, () => {
@@ -205,6 +226,43 @@ context('Variation', () => {
         'be.visible',
       )
     })
+    ;(['ACCEPTED', 'REJECTED'] as const).forEach(outcome => {
+      it(`unlocks on the first summary visit after a processing order becomes ${outcome.toLowerCase()}`, () => {
+        stubOrder('PROCESSING')
+        Page.visit(OrderTasksPage, { orderId: mockOriginalId }).makeChangesButton.should('be.disabled')
+
+        stubOrder('ACCEPTED')
+        cy.visit(`/order/${mockOriginalId}/edit`)
+        Page.verifyOnPage(ConfirmVariationPage)
+        stubOrder('PROCESSING')
+        cy.get('input[name="_csrf"]')
+          .invoke('val')
+          .then(csrfToken => {
+            cy.request({
+              method: 'POST',
+              url: paths.ORDER.VARIATION.replace(':orderId', mockOriginalId),
+              form: true,
+              body: { action: 'continue', _csrf: csrfToken },
+              followRedirect: false,
+            }).then(response => {
+              expect(response.status).to.eq(302)
+              expect(response.headers.location).to.eq(`/order/${mockOriginalId}/summary`)
+            })
+          })
+
+        stubOrder(outcome, outcome === 'REJECTED' ? 'REJECTED' : 'SUBMITTED')
+        const page = Page.visit(OrderTasksPage, { orderId: mockOriginalId })
+
+        cy.contains('The status of this form has changed. Check its current status before making changes.').should(
+          'be.visible',
+        )
+        cy.contains(
+          "You can't make changes to this form because it is being processed by EMS. Try again later.",
+        ).should('not.exist')
+        page.makeChangesButton.should('have.attr', 'href', `/order/${mockOriginalId}/edit`).click()
+        Page.verifyOnPage(ConfirmVariationPage)
+      })
+    })
 
     it('redirects a direct edit visit to the summary while the case is processing', () => {
       stubOrder('PROCESSING')
@@ -223,11 +281,63 @@ context('Variation', () => {
         cy.task('resetFeatureFlags')
       })
 
-      it('uses the returned-order route for a cancelled returned order instead of the service-request journey', () => {
-        verifyReturnedOrderAmendmentFlow('VARIATION')
+      it('uses the correction route for a rejected original request instead of the SR journey', () => {
+        verifyReturnedOrderAmendmentFlow('REQUEST')
+      })
+      ;(['VARIATION', 'REJECTED'] as const).forEach(type => {
+        it(`shows both SR screens and submits the selected type for a past-dated rejected variation (${type})`, () => {
+          stubOrder('REJECTED', 'REJECTED', type)
+          cy.task('stubCemoGetVersions', {
+            httpStatus: 200,
+            orderId: mockOriginalId,
+            versions: [
+              {
+                orderId: mockOriginalId,
+                versionId: mockOriginalId,
+                versionNumber: 1,
+                type: 'VARIATION',
+                status: 'REJECTED',
+              },
+              {
+                orderId: mockOriginalId,
+                versionId: mockVersionId,
+                versionNumber: 2,
+                type,
+                status: 'REJECTED',
+              },
+            ],
+          })
+          cy.task('stubCemoSubmitOrder', {
+            httpStatus: 200,
+            method: 'POST',
+            id: mockOriginalId,
+            subPath: '/amend-order',
+            response: {},
+          })
+          cy.visit(`/order/${mockOriginalId}/edit`)
+          Page.verifyOnPage(ConfirmVariationPage).confirmButton().click()
+
+          const addressChangePage = Page.verifyOnPage(IsAddressChangePage)
+          addressChangePage.form.fillInWith('No')
+          addressChangePage.form.saveAndContinueButton.click()
+
+          const reasonPage = Page.verifyOnPage(ServiceRequestTypePage)
+          reasonPage.form.fillInWith('I need to change something else in the form')
+          reasonPage.form.continueButton.click()
+
+          Page.verifyOnPage(NotifyingOrganisationPage)
+          cy.task('stubCemoVerifyRequestReceived', {
+            uri: `/orders/${mockOriginalId}/amend-order`,
+            body: { type: 'VARIATION' },
+          }).should('be.true')
+        })
       })
 
-      it('returns to the summary if an accepted order becomes rejected during the service-request journey', () => {
+      it('bypasses SR questions for a future-dated rejected variation', () => {
+        verifyReturnedOrderAmendmentFlow('VARIATION', '2999-01-01T00:00:00.000Z')
+      })
+
+      it('returns to the summary if an accepted original request becomes rejected during the SR journey', () => {
         stubOrder('ACCEPTED')
         cy.visit(`/order/${mockOriginalId}/edit`)
         Page.verifyOnPage(ConfirmVariationPage).confirmButton().click()

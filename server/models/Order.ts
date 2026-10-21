@@ -43,6 +43,7 @@ const OrderModel = z.object({
   canAmend: z.boolean().default(false),
   fmsResultId: z.string().uuid().nullable().optional(),
   type: OrderTypeEnum,
+  amendmentSourceType: OrderTypeEnum.optional(),
   deviceWearer: DeviceWearerModel,
   addresses: z.array(AddressModel),
   deviceWearerResponsibleAdult: DeviceWearerResponsibleAdultModel.nullable(),

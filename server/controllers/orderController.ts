@@ -76,7 +76,10 @@ export default class OrderController {
     const order = req.order!
     const versionId = req.params.versionId as string
 
-    const error = req.flash('submissionError')
+    const errors = req.flash('submissionError')
+    const error = errors && errors.length > 0 ? errors[0] : undefined
+    const isStaleProcessingError =
+      error === getOrderChangeBlockedMessage() && (order.canAmend || order.status === 'IN_PROGRESS')
 
     const completedOrderVersions = await this.orderService.getVersionInformations({
       orderId: order.id,
@@ -94,7 +97,7 @@ export default class OrderController {
     res.render('pages/order/summary', {
       order: req.order,
       sections,
-      error: error && error.length > 0 ? error[0] : undefined,
+      error: isStaleProcessingError ? ORDER_CHANGE_STATUS_CHANGED_MESSAGE : error,
       createNewOrderVersionEnabled: isMostRecentVersion,
 
       timelineItems: TimelineModel.mapToTimelineItems(

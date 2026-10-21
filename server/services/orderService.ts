@@ -71,7 +71,20 @@ export default class OrderService {
       path: `/api/orders/${input.orderId}`,
       token: input.accessToken,
     })
-    return OrderModel.parse(result)
+    const order = OrderModel.parse(result)
+    if (order.type !== 'REJECTED' || !order.canAmend) return order
+
+    const versions = await this.getVersionInformations(input)
+    const currentVersion = versions.find(version => version.versionId === order.versionId)
+    const sourceVersion = currentVersion
+      ? versions
+          .filter(version => version.versionNumber < currentVersion.versionNumber && version.type !== 'REJECTED')
+          .sort((first, second) => second.versionNumber - first.versionNumber)[0]
+      : undefined
+
+    if (!sourceVersion) throw new Error(`Unable to resolve amendment source type for order ${order.id}`)
+
+    return { ...order, amendmentSourceType: sourceVersion.type }
   }
 
   async getVersion(input: OrderRequestInput & { versionId: string }): Promise<Order> {

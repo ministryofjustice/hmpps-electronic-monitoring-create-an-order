@@ -1,5 +1,6 @@
 import { Order } from '../models/Order'
 import { StatusUpdate } from '../models/StatusUpdate'
+import isVariationType from './isVariationType'
 
 export const ORDER_CHANGE_STATUS_CHANGED_MESSAGE =
   'The status of this form has changed. Check its current status before making changes.'
@@ -19,7 +20,16 @@ export const isAcceptedOrderForChange = (order: Order): boolean =>
 
 export const shouldShowServiceRequestTypeQuestions = (order: Order): boolean => {
   const { startDate } = order.monitoringConditions
-  return isAcceptedOrderForChange(order) && Boolean(startDate && Date.parse(startDate) <= Date.now())
+  const isRejectedVariation =
+    isVariationType(order.amendmentSourceType ?? order.type) &&
+    (order.status === 'REJECTED' ||
+      (order.status === 'SUBMITTED' && getLatestCurrentVersionStatusUpdate(order)?.status === 'REJECTED'))
+
+  return (
+    order.canAmend &&
+    (isAcceptedOrderForChange(order) || isRejectedVariation) &&
+    Boolean(startDate && Date.parse(startDate) <= Date.now())
+  )
 }
 
 export const canUseServiceRequestTypeFlow = (order: Order): boolean =>

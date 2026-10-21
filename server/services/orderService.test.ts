@@ -105,7 +105,53 @@ describe('Order Service', () => {
         path: '/api/orders/123456789',
         token: 'token',
       })
+      expect(mockRestClient.get).toHaveBeenCalledTimes(1)
       expect(order).toEqual(mockNewOrder)
+    })
+
+    it.each(['REQUEST', 'AMEND_ORIGINAL_REQUEST', 'VARIATION', 'REINSTALL_DEVICE'] as const)(
+      'should resolve a legacy rejection from the nearest preceding %s version',
+      async sourceType => {
+        const legacyOrder = { ...mockApiResponse, type: 'REJECTED', status: 'REJECTED', canAmend: true }
+        const version = (versionNumber: number, type: VersionInformation['type']): VersionInformation => ({
+          orderId: mockId,
+          versionId: versionNumber === 3 ? mockId : uuidv4(),
+          versionNumber,
+          type,
+          status: 'SUBMITTED',
+        })
+        mockRestClient.get
+          .mockResolvedValueOnce(legacyOrder)
+          .mockResolvedValueOnce([
+            version(0, 'REQUEST'),
+            version(4, 'REQUEST'),
+            version(2, 'REJECTED'),
+            version(3, 'REJECTED'),
+            version(1, sourceType),
+          ])
+
+        const orderService = new OrderService(mockRestClient)
+        const order = await orderService.getOrder({ accessToken: 'token', orderId: mockId })
+
+        expect(order.type).toBe('REJECTED')
+        expect(order.amendmentSourceType).toBe(sourceType)
+        expect(mockRestClient.get).toHaveBeenLastCalledWith({
+          path: `/api/orders/${mockId}/versions`,
+          token: 'token',
+        })
+      },
+    )
+
+    it('should not guess the source type when legacy history is unavailable', async () => {
+      mockRestClient.get
+        .mockResolvedValueOnce({ ...mockApiResponse, type: 'REJECTED', canAmend: true })
+        .mockRejectedValueOnce(mock404Error)
+
+      const orderService = new OrderService(mockRestClient)
+
+      await expect(orderService.getOrder({ accessToken: 'token', orderId: mockId })).rejects.toThrow(
+        'Unable to resolve amendment source type',
+      )
     })
 
     it('should throw an error if the api returns an invalid object', async () => {
