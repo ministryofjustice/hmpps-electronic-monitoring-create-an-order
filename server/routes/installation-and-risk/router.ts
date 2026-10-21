@@ -6,7 +6,6 @@ import DapoController from './dapo/controller'
 import OffenceListDeleteController from './delete/controller'
 import MappaController from './mappa/controller'
 import { Services } from '../../services'
-import DetailsOfInstallationController from './details-of-installation/controller'
 import IsMappaController from './is-mappa/controller'
 import RiskBehaviourController from './risk-behaviour/controller'
 import RiskAtAddressController from './risk-at-address/controller'
@@ -23,7 +22,6 @@ const createInstallationAndRiskRouter = (
     | 'offenceService'
     | 'mappaService'
     | 'offenceOtherInfoService'
-    | 'detailsOfInstallationService'
     | 'riskAtInstallationService'
     | 'installationAndRiskService'
     | 'orderChecklistService'
@@ -38,7 +36,6 @@ const createInstallationAndRiskRouter = (
     offenceService,
     mappaService,
     taskListService,
-    detailsOfInstallationService,
     riskAtInstallationService,
     offenceOtherInfoService,
     installationAndRiskService,
@@ -59,10 +56,6 @@ const createInstallationAndRiskRouter = (
   const deleteController = new OffenceListDeleteController(offenceService, dapoService)
   const isMappaController = new IsMappaController(mappaService, taskListService)
   const mappaController = new MappaController(mappaService, taskListService)
-  const detailsOfInstallationController = new DetailsOfInstallationController(
-    detailsOfInstallationService,
-    taskListService,
-  )
   const riskBehaviourController = new RiskBehaviourController(riskAtInstallationService, taskListService)
   const riskAtAddressController = new RiskAtAddressController(riskAtInstallationService, taskListService)
   const otherRisksController = new OtherRisksController(riskAtInstallationService, taskListService)
@@ -87,8 +80,6 @@ const createInstallationAndRiskRouter = (
   post(paths.INSTALLATION_AND_RISK.IS_MAPPA, isMappaController.update)
   get(paths.INSTALLATION_AND_RISK.MAPPA, mappaController.view)
   post(paths.INSTALLATION_AND_RISK.MAPPA, mappaController.update)
-  get(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION, detailsOfInstallationController.view)
-  post(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION, detailsOfInstallationController.update)
   viewUpdate(paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR, riskBehaviourController)
   viewUpdate(paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS, riskAtAddressController)
   viewUpdate(paths.INSTALLATION_AND_RISK.OTHER_RISKS, otherRisksController)

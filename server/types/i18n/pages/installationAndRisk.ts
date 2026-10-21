@@ -5,10 +5,6 @@ type InstallationAndRiskPageContent = QuestionPageContent<
   | 'mappaCaseType'
   | 'offence'
   | 'offenceAdditionalDetails'
-  | 'riskCategory'
-  | 'genderRiskDetails'
-  | 'riskDetails'
-  | 'possibleRisk'
 >
 
 export default InstallationAndRiskPageContent

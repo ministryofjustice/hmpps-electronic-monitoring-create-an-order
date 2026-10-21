@@ -42,7 +42,6 @@ import RedisCacheService from './cache/redisCacheService'
 import { UserCohort } from '../models/UserCohort'
 import InMemorCacheService from './cache/inMemoryCacheService'
 import MappaService from '../routes/installation-and-risk/mappa/service'
-import DetailsOfInstallationService from '../routes/installation-and-risk/details-of-installation/service'
 import RiskAtInstallationStoreService from '../routes/installation-and-risk/riskAtInstallationStoreService'
 import RiskAtInstallationService from '../routes/installation-and-risk/riskAtInstallationService'
 import OffenceOtherInfoService from '../routes/installation-and-risk/offence-other-info/service'
@@ -93,7 +92,6 @@ export const services = () => {
   const offenceOtherInfoService = new OffenceOtherInfoService(cemoApiClient)
 
   const mappaService = new MappaService(cemoApiClient)
-  const detailsOfInstallationService = new DetailsOfInstallationService(cemoApiClient)
   const riskAtInstallationService = new RiskAtInstallationService(
     new RiskAtInstallationStoreService(store),
     cemoApiClient,
@@ -154,7 +152,6 @@ export const services = () => {
     offenceOtherInfoService,
     userCohortService,
     mappaService,
-    detailsOfInstallationService,
     riskAtInstallationService,
     interestedPartiesStoreService,
     updateInterestedPartiesService,

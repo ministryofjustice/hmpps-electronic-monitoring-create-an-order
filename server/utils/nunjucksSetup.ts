@@ -17,7 +17,6 @@ const toOptions = (
   disabled: boolean = false,
   includeEmptyOption: boolean = false,
   type: string = '',
-  lastItemExclusive: boolean = false,
   keyAsValue: boolean = true,
 ): Array<CheckboxItem | RadiosItem> => {
   const options = Object.keys(values).map(key => {
@@ -42,10 +41,6 @@ const toOptions = (
   if (includeEmptyOption) {
     if (type === 'Radio') options.push({ value: '', text: 'Not able to provide this information', disabled })
     else options.unshift({ value: '', text: 'Select', disabled })
-  }
-
-  if (lastItemExclusive) {
-    ;(options[options.length - 1] as CheckboxItem).behaviour = 'exclusive'
   }
 
   return options
