@@ -17,7 +17,7 @@ const installationAndRiskPageContent: InstallationAndRiskPageContent = {
     offenceAdditionalDetails: {
       text: 'Any other information to be aware of about the offence committed? (optional)',
       hint: "Provide additional risk information about the device wearer's offence.",
-    }
+    },
   },
   section: 'Risk information',
   title: 'Details for installation',
