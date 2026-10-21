@@ -5,6 +5,7 @@ import IsRejectionService from './service'
 import FeatureFlags from '../../utils/featureFlags'
 import YesNoQuestionPageController from '../baseControllers/yes-no-question-page/controller'
 import { Order } from '../../models/Order'
+import { isStartDateInPast } from '../../utils/orderStartDate'
 
 export default class IsRejectionController extends YesNoQuestionPageController {
   constructor(private readonly service: IsRejectionService) {
@@ -54,12 +55,6 @@ export default class IsRejectionController extends YesNoQuestionPageController {
     }
   }
 
-  private shouldShowIsAddressChangePage = (order: Order): boolean => {
-    const startDate = order.monitoringConditions.startDate
-      ? new Date(order.monitoringConditions.startDate)
-      : new Date(1900, 0, 0)
-    const today = new Date()
-
-    return startDate <= today
-  }
+  private shouldShowIsAddressChangePage = (order: Order): boolean =>
+    isStartDateInPast(order, { treatMissingAsPast: true })
 }
