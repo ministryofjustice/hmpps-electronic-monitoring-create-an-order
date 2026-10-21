@@ -1,18 +1,4 @@
-import { serialiseDate, deserialiseDateTime, serialiseTime, deserialiseTime, calculateAge } from './dateTime'
-
-describe('serialiseDate', () => {
-  it.each([
-    ['Empty year', ['', '01', '01'], null],
-    ['Empty month', ['1970', '', '01'], null],
-    ['Empty day', ['1970', '01', ''], null],
-    ['Valid past date', ['2000', '02', '01'], '2000-02-01T00:00:00.000Z'],
-    ['Valid future date', ['2050', '02', '01'], '2050-02-01T00:00:00.000Z'],
-    ['Valid short year format', ['22', '02', '01'], '1922-02-01T00:00:00.000Z'],
-    ['Valid BST date', ['2024', '06', '01'], '2024-06-01T00:00:00.000Z'],
-  ])('%s serialiseDate(%s, %s)', (_: string, [year, month, day]: Array<string>, expected: string | null) => {
-    expect(serialiseDate(year, month, day)).toEqual(expected)
-  })
-})
+import { deserialiseDateTime, deserialiseTime, serialiseTime } from './dateTime'
 
 describe('deserialiseDateTime', () => {
   it.each([
@@ -50,19 +36,5 @@ describe('deserialiseTime', () => {
     ['Valid date', '10:22:35', ['10', '22']],
   ])('%s deserialiseTime(%s, %s)', (_: string, input: string | undefined | null, expected: Array<string>) => {
     expect(deserialiseTime(input)).toEqual(expected)
-  })
-})
-
-describe('calculateAge', () => {
-  beforeEach(() => {
-    jest.useFakeTimers()
-    jest.setSystemTime(new Date('2020-01-01'))
-  })
-
-  it.each([
-    ['Empty date', '', NaN],
-    ['Valid date', '1980-01-01T00:00:00.000Z', 40],
-  ])('%s calculateAge(%s, %s)', (_: string, input: string, expected: number) => {
-    expect(calculateAge(input)).toEqual(expected)
   })
 })

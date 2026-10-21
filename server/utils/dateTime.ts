@@ -1,18 +1,5 @@
 import { isBlank } from './strings'
 
-const YEAR_IN_MS = 365.25 * 24 * 60 * 60 * 1000
-
-export const calculateAge = (birthDate: string) =>
-  Math.floor((new Date().getTime() - new Date(birthDate).getTime()) / YEAR_IN_MS)
-
-export const serialiseDate = (year: string, month: string, day: string) => {
-  if (isBlank(year) || isBlank(month) || isBlank(day)) {
-    return null
-  }
-
-  return new Date(Date.UTC(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10))).toISOString()
-}
-
 export const deserialiseDateTime = (dateString: string | null | undefined) => {
   if (dateString === null || dateString === undefined || dateString === '') {
     return {
