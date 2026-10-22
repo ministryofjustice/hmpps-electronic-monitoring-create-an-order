@@ -80,16 +80,8 @@ describe('risk information check answers view model', () => {
       return row?.actions?.items[0]?.href
     }
 
-    it('links to the risk behaviour page when the risk information flow is enabled', () => {
-      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(true)
-
+    it('links to the risk behaviour page', () => {
       expect(changeHref()).toBe(paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR.replace(':orderId', order.id))
-    })
-
-    it('links to details of installation when the flag is off', () => {
-      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(false)
-
-      expect(changeHref()).toBe(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id))
     })
   })
 
@@ -109,16 +101,8 @@ describe('risk information check answers view model', () => {
       return row?.actions?.items[0]?.href
     }
 
-    it('links to the risk at address page when the risk information flow is enabled', () => {
-      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(true)
-
+    it('links to the risk at address page', () => {
       expect(changeHref()).toBe(paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS.replace(':orderId', order.id))
-    })
-
-    it('links to details of installation when the flag is off', () => {
-      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(false)
-
-      expect(changeHref()).toBe(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id))
     })
   })
 
@@ -130,16 +114,8 @@ describe('risk information check answers view model', () => {
     const keys = () => createViewModel(order, getContent('en', 'DDV6'), true).riskInformation.map(a => a.key.text)
 
     it('uses the mandatory question text when the flow is enabled', () => {
-      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(true)
-
       expect(keys()).toContain('At installation what are the possible risks at the address?')
       expect(keys()).not.toContain('What are the possible risks at the installation address? (optional)')
-    })
-
-    it('keeps the optional question text when the flag is off', () => {
-      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(false)
-
-      expect(keys()).toContain('What are the possible risks at the installation address? (optional)')
     })
   })
 
@@ -155,10 +131,6 @@ describe('risk information check answers view model', () => {
       createViewModel(order, getContent('en', 'DDV6'), true).riskInformation
 
     describe('when the risk information flow is enabled', () => {
-      beforeEach(() => {
-        jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(true)
-      })
-
       it('shows the entered risk details with a link to the other risks page', () => {
         const order = buildOrder('some risk details')
         const row = rows(order).find(answer => answer.key.text === question)
@@ -173,18 +145,6 @@ describe('risk information check answers view model', () => {
 
         expect(row?.value.text).toBe('No')
       })
-    })
-
-    it('keeps the optional row linking to details of installation when the flag is off', () => {
-      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(false)
-      const order = buildOrder('some risk details')
-      const row = rows(order).find(answer => answer.key.text === optionalQuestion)
-
-      expect(row?.value.text).toBe('some risk details')
-      expect(row?.actions?.items[0]?.href).toBe(
-        paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id),
-      )
-      expect(rows(order).map(answer => answer.key.text)).not.toContain(question)
     })
   })
 
@@ -201,16 +161,8 @@ describe('risk information check answers view model', () => {
       return row?.actions?.items[0]?.href
     }
 
-    it('links to the risk behaviour page when the risk information flow is enabled', () => {
-      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(true)
-
+    it('links to the risk behaviour page', () => {
       expect(changeHref()).toBe(paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR.replace(':orderId', order.id))
-    })
-
-    it('links to details of installation when the flag is off', () => {
-      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(false)
-
-      expect(changeHref()).toBe(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id))
     })
   })
 })

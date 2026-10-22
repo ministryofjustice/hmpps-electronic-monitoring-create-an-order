@@ -11,7 +11,6 @@ import CurfewTimetableService from '../routes/monitoring-conditions/curfew-timet
 import DeviceWearerResponsibleAdultService from '../routes/about-the-device-wearer/responsible-adult/service'
 import DeviceWearerService from '../routes/about-the-device-wearer/device-wearer/service'
 import EnforcementZoneAddToListService from '../routes/monitoring-conditions/enforcement-zone/service'
-import InstallationAndRiskService from '../routes/installation-and-risk/risk-information/service'
 import InterestedPartiesService from '../routes/contact-information/interested-parties/service'
 import OrderSearchService from './orderSearchService'
 import OrderService from './orderService'
@@ -42,7 +41,6 @@ import RedisCacheService from './cache/redisCacheService'
 import { UserCohort } from '../models/UserCohort'
 import InMemorCacheService from './cache/inMemoryCacheService'
 import MappaService from '../routes/installation-and-risk/mappa/service'
-import DetailsOfInstallationService from '../routes/installation-and-risk/details-of-installation/service'
 import RiskAtInstallationStoreService from '../routes/installation-and-risk/riskAtInstallationStoreService'
 import RiskAtInstallationService from '../routes/installation-and-risk/riskAtInstallationService'
 import OffenceOtherInfoService from '../routes/installation-and-risk/offence-other-info/service'
@@ -67,7 +65,6 @@ export const services = () => {
   const addressService = new AddressService(cemoApiClient)
   const deviceWearerResponsibleAdultService = new DeviceWearerResponsibleAdultService(cemoApiClient)
   const deviceWearerService = new DeviceWearerService(cemoApiClient)
-  const installationAndRiskService = new InstallationAndRiskService(cemoApiClient)
   const interestedPartiesService = new InterestedPartiesService(cemoApiClient)
   const zoneAddToListService = new EnforcementZoneAddToListService(cemoApiClient)
   const orderSearchService = new OrderSearchService(cemoApiClient)
@@ -93,7 +90,6 @@ export const services = () => {
   const offenceOtherInfoService = new OffenceOtherInfoService(cemoApiClient)
 
   const mappaService = new MappaService(cemoApiClient)
-  const detailsOfInstallationService = new DetailsOfInstallationService(cemoApiClient)
   const riskAtInstallationService = new RiskAtInstallationService(
     new RiskAtInstallationStoreService(store),
     cemoApiClient,
@@ -131,7 +127,6 @@ export const services = () => {
     addressService,
     deviceWearerResponsibleAdultService,
     deviceWearerService,
-    installationAndRiskService,
     interestedPartiesService,
     orderSearchService,
     orderService,
@@ -154,7 +149,6 @@ export const services = () => {
     offenceOtherInfoService,
     userCohortService,
     mappaService,
-    detailsOfInstallationService,
     riskAtInstallationService,
     interestedPartiesStoreService,
     updateInterestedPartiesService,
@@ -179,7 +173,6 @@ export {
   DeviceWearerResponsibleAdultService,
   DeviceWearerService,
   EnforcementZoneAddToListService,
-  InstallationAndRiskService,
   OrderSearchService,
   OrderService,
   TrailMonitoringService,
