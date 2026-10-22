@@ -55,6 +55,7 @@ context('Risk at installation single question pages', () => {
     fillInRiskAtInstallationWith(riskAtInstallation)
 
     const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
+
     cyaPage.installationRiskSection.shouldHaveItem(
       "At installation what are the possible risks from the device wearer's behaviour?",
       riskAtInstallation.possibleRisk,

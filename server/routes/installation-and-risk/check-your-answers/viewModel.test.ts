@@ -85,12 +85,6 @@ describe('risk information check answers view model', () => {
 
       expect(changeHref()).toBe(paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR.replace(':orderId', order.id))
     })
-
-    it('links to details of installation when the flag is off', () => {
-      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(false)
-
-      expect(changeHref()).toBe(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id))
-    })
   })
 
   describe('risk at address change link', () => {
@@ -110,15 +104,7 @@ describe('risk information check answers view model', () => {
     }
 
     it('links to the risk at address page when the risk information flow is enabled', () => {
-      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(true)
-
       expect(changeHref()).toBe(paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS.replace(':orderId', order.id))
-    })
-
-    it('links to details of installation when the flag is off', () => {
-      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(false)
-
-      expect(changeHref()).toBe(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id))
     })
   })
 
@@ -130,16 +116,8 @@ describe('risk information check answers view model', () => {
     const keys = () => createViewModel(order, getContent('en', 'DDV6'), true).riskInformation.map(a => a.key.text)
 
     it('uses the mandatory question text when the flow is enabled', () => {
-      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(true)
-
       expect(keys()).toContain('At installation what are the possible risks at the address?')
       expect(keys()).not.toContain('What are the possible risks at the installation address? (optional)')
-    })
-
-    it('keeps the optional question text when the flag is off', () => {
-      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(false)
-
-      expect(keys()).toContain('What are the possible risks at the installation address? (optional)')
     })
   })
 
@@ -174,18 +152,6 @@ describe('risk information check answers view model', () => {
         expect(row?.value.text).toBe('No')
       })
     })
-
-    it('keeps the optional row linking to details of installation when the flag is off', () => {
-      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(false)
-      const order = buildOrder('some risk details')
-      const row = rows(order).find(answer => answer.key.text === optionalQuestion)
-
-      expect(row?.value.text).toBe('some risk details')
-      expect(row?.actions?.items[0]?.href).toBe(
-        paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id),
-      )
-      expect(rows(order).map(answer => answer.key.text)).not.toContain(question)
-    })
   })
 
   describe('gender risk details change link', () => {
@@ -205,12 +171,6 @@ describe('risk information check answers view model', () => {
       jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(true)
 
       expect(changeHref()).toBe(paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR.replace(':orderId', order.id))
-    })
-
-    it('links to details of installation when the flag is off', () => {
-      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(false)
-
-      expect(changeHref()).toBe(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id))
     })
   })
 })

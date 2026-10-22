@@ -232,7 +232,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR.replace(':orderId', order.id))
     })
 
     it('should return installation appointment if current page is installation location and location is PRISON', () => {
