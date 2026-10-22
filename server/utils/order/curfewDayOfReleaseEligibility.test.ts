@@ -1,4 +1,4 @@
-import { createInterestedParties, createMonitoringConditions, getMockOrder } from '../../test/mocks/mockOrder'
+import { createInterestedParties, createMonitoringConditions, getMockOrder } from '../../../test/mocks/mockOrder'
 import shouldShowCurfewDayOfRelease from './curfewDayOfReleaseEligibility'
 
 describe('shouldShowCurfewDayOfRelease', () => {

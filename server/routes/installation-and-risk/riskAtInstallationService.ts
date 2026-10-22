@@ -4,7 +4,7 @@ import DetailsOfInstallationModel, { DetailsOfInstallation } from '../../models/
 import { Order } from '../../models/Order'
 import { ValidationResult } from '../../models/Validation'
 import { SanitisedError } from '../../sanitisedError'
-import { convertBackendErrorToValidationError } from '../../utils/errors'
+import { convertBackendErrorToValidationError } from '../../utils/validation/errors'
 import { RiskAtInstallation } from './riskAtInstallationModel'
 import RiskAtInstallationStoreService from './riskAtInstallationStoreService'
 import { RISK_TO_GENDER } from './riskCodes'

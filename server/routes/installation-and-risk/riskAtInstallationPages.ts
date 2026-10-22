@@ -1,6 +1,6 @@
 import paths from '../../constants/paths'
 import { ValidationResult } from '../../models/Validation'
-import { convertZodErrorToValidationError } from '../../utils/errors'
+import { convertZodErrorToValidationError } from '../../utils/validation/errors'
 import { OtherRisksFormValidator } from './other-risks/formModel'
 import { RiskAtAddressFormValidator } from './risk-at-address/formModel'
 import { RiskBehaviourFormValidator } from './risk-behaviour/formModel'

@@ -1,4 +1,3 @@
-import { deserialiseTime, getErrors, getError } from '../../../utils/utils'
 import {
   MultipleChoiceField,
   TimeSpanField,
@@ -11,8 +10,10 @@ import { CurfewTimetable } from '../../../models/CurfewTimetable'
 import { CurfewTimetableFormData, curfewTimetableFormDataItem } from './formModel'
 
 import { ValidationResult, ValidationError } from '../../../models/Validation'
-import { createGovukErrorSummary } from '../../../utils/errors'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import { Address } from '../../../models/Address'
+import { getErrors, getError } from '../../../utils/validation/errorMessages'
+import { deserialiseTime } from '../../../utils/dateTime'
 
 export type Timetable = {
   timeSpan: TimeSpanField

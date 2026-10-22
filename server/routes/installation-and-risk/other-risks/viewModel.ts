@@ -1,6 +1,6 @@
 import { ValidationResult } from '../../../models/Validation'
-import { createGovukErrorSummary } from '../../../utils/errors'
-import { getError } from '../../../utils/utils'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
+import { getError } from '../../../utils/validation/errorMessages'
 
 const construct = (
   hasOtherRisks: string | null | undefined,

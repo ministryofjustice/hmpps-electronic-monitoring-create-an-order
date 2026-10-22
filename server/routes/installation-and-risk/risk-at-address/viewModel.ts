@@ -1,9 +1,9 @@
 import { ValidationResult } from '../../../models/Validation'
 import ReferenceData from '../../../types/i18n/reference/reference'
-import { createGovukErrorSummary } from '../../../utils/errors'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import exclusiveOptions from '../../../utils/exclusiveOptions'
 import toCheckboxItems from '../../../utils/toCheckboxItems'
-import { getError } from '../../../utils/utils'
+import { getError } from '../../../utils/validation/errorMessages'
 import { RISK_AT_ADDRESS_EXCLUSIVE_CODES, RISK_AT_ADDRESS_HIDDEN_CODES } from '../riskCodes'
 
 const construct = (

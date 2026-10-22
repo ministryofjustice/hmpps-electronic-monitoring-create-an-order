@@ -2,10 +2,10 @@ import { Response } from 'express'
 import { Order } from '../../../models/Order'
 import { ValidationResult } from '../../../models/Validation'
 import { ErrorMessage } from '../../../models/view-models/utils'
-import { createGovukErrorSummary } from '../../../utils/errors'
-import { ErrorSummary } from '../../../utils/govukFrontEndTypes/errorSummary'
-import { getError } from '../../../utils/utils'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
+import { ErrorSummary } from '../../../utils/views/govukFrontEndTypes/errorSummary'
 import { FileRequiredFormData } from '../fileRequiredFormModel'
+import { getError } from '../../../utils/validation/errorMessages'
 
 export type FileRequiredViewModel = {
   title?: string

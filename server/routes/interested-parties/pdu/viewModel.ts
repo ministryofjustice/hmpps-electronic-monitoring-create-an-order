@@ -1,9 +1,9 @@
 import { ValidationResult } from '../../../models/Validation'
 import { ViewModel } from '../../../models/view-models/utils'
-import { getError } from '../../../utils/utils'
-import { createGovukErrorSummary } from '../../../utils/errors'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import { ProbationDeliveryUnitInput } from './formModel'
 import { ProbationDeliveryUnit } from '../../../models/ProbationDeliveryUnit'
+import { getError } from '../../../utils/validation/errorMessages'
 
 type ProbationDeliveryUnitViewModel = ViewModel<ProbationDeliveryUnitInput>
 

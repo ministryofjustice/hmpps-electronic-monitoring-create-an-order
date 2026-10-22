@@ -1,6 +1,6 @@
 import { Order } from '../../models/Order'
 import splitRisks from './splitRisks'
-import isOrderDataDictionarySameOrAbove from '../../utils/dataDictionaryVersionComparer'
+import isOrderDataDictionarySameOrAbove from '../../utils/order/dataDictionaryVersionComparer'
 import Store from '../store/store'
 import RiskAtInstallationModel, { RiskAtInstallation } from './riskAtInstallationModel'
 

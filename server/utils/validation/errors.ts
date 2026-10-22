@@ -1,7 +1,7 @@
 import { ZodError, ZodIssue } from 'zod'
-import { ValidationError, ValidationResult, ValidationResultModel } from '../models/Validation'
-import { ErrorSummary } from './govukFrontEndTypes/errorSummary'
-import { SanitisedError } from '../sanitisedError'
+import { ValidationError, ValidationResult, ValidationResultModel } from '../../models/Validation'
+import { ErrorSummary } from '../views/govukFrontEndTypes/errorSummary'
+import { SanitisedError } from '../../sanitisedError'
 
 export const convertZodErrorToValidationError = (error: ZodError): ValidationResult => {
   type ZodIssueWithParams = ZodIssue & {

@@ -1,6 +1,5 @@
 import { Request, RequestHandler, Response } from 'express'
 import { AuditService } from '../../../services'
-import { getErrorsViewModel } from '../../../utils/utils'
 import paths from '../../../constants/paths'
 import { ErrorsViewModel } from '../../../models/view-models/utils'
 import { EnforcementZoneAddToListFormDataModel } from './formModel'
@@ -8,6 +7,7 @@ import enforcementZoneAddToListViewModel from './viewModel'
 import { ValidationResult } from '../../../models/Validation'
 import EnforcementZoneAddToListService from './service'
 import { AddToListEnforcementZoneTypes } from '../model'
+import { getErrorsViewModel } from '../../../utils/validation/errorMessages'
 
 export default class EnforcementZoneAddToListController {
   constructor(

@@ -1,5 +1,5 @@
 import ReferenceData from '../types/i18n/reference/reference'
-import { CheckboxItem } from './govukFrontEndTypes/checkBoxItem'
+import { CheckboxItem } from './views/govukFrontEndTypes/checkBoxItem'
 
 const toCheckboxItems = (
   reference: ReferenceData,

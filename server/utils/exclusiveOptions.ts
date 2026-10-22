@@ -1,5 +1,5 @@
-import { CheckboxItem } from './govukFrontEndTypes/checkBoxItem'
-import { RadiosItem } from './govukFrontEndTypes/radioItem'
+import { CheckboxItem } from './views/govukFrontEndTypes/checkBoxItem'
+import { RadiosItem } from './views/govukFrontEndTypes/radioItem'
 
 const exclusiveOptions = (
   items: Array<CheckboxItem | RadiosItem>,

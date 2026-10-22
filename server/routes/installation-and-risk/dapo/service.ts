@@ -1,7 +1,10 @@
 import { ZodError } from 'zod'
 import RestClient from '../../../data/restClient'
 import { DapoFormValidator, DapoInput } from './formModel'
-import { convertBackendErrorToValidationError, convertZodErrorToValidationError } from '../../../utils/errors'
+import {
+  convertBackendErrorToValidationError,
+  convertZodErrorToValidationError,
+} from '../../../utils/validation/errors'
 import { SanitisedError } from '../../../sanitisedError'
 
 type Input = {

@@ -4,7 +4,7 @@ import { CurfewReleaseDate } from '../../../models/CurfewReleaseDate'
 import { Order } from '../../../models/Order'
 import { ValidationResult } from '../../../models/Validation'
 import { SanitisedError } from '../../../sanitisedError'
-import { convertBackendErrorToValidationError } from '../../../utils/errors'
+import { convertBackendErrorToValidationError } from '../../../utils/validation/errors'
 
 export type CurfewReleaseDateData = Pick<CurfewReleaseDate, 'startTime' | 'endTime'> & {
   curfewAddress?: string | null

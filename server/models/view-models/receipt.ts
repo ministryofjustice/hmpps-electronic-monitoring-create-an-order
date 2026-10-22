@@ -4,12 +4,12 @@ import * as RiskInformationCheckAnswers from '../../routes/installation-and-risk
 import * as AdditionalDocumentsCheckAnswers from '../../routes/attachments/additional-documents/viewModel'
 import * as VariationDetailsCheckAnswers from './variationDetailsCheckAnswers'
 import InterestedPartiesCheckAnswers from '../../routes/interested-parties/check-your-answers/viewModel'
-import { createAnswer, createDateTimeAnswer } from '../../utils/checkYourAnswers'
+import { createAnswer, createDateTimeAnswer } from '../../utils/views/checkYourAnswers'
 
 import { Order } from '../Order'
 import I18n from '../../types/i18n'
 import FeatureFlags from '../../utils/featureFlags'
-import { isNotNullOrEmptyString } from '../../utils/utils'
+import { isNotNullOrEmptyString } from '../../utils/values'
 
 const createOrderStatusAnswers = (order: Order) => {
   const answerOpts = { ignoreActions: true }
