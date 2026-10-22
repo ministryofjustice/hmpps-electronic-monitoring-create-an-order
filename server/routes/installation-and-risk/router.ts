@@ -10,7 +10,6 @@ import IsMappaController from './is-mappa/controller'
 import RiskBehaviourController from './risk-behaviour/controller'
 import RiskAtAddressController from './risk-at-address/controller'
 import OtherRisksController from './other-risks/controller'
-import InstallationAndRiskController from './risk-information/controller'
 import InstallationAndRiskCheckAnswersController from './check-your-answers/controller'
 import paths from '../../constants/paths'
 import { createFeatureRouter } from '../routeHelpers'
@@ -23,7 +22,6 @@ const createInstallationAndRiskRouter = (
     | 'mappaService'
     | 'offenceOtherInfoService'
     | 'riskAtInstallationService'
-    | 'installationAndRiskService'
     | 'orderChecklistService'
     | 'sectionService'
     | 'taskListService'
@@ -38,12 +36,10 @@ const createInstallationAndRiskRouter = (
     taskListService,
     riskAtInstallationService,
     offenceOtherInfoService,
-    installationAndRiskService,
     orderChecklistService,
     sectionService,
   } = services
 
-  const installationAndRiskController = new InstallationAndRiskController(installationAndRiskService, taskListService)
   const installationAndRiskCheckAnswersController = new InstallationAndRiskCheckAnswersController(
     taskListService,
     orderChecklistService,
@@ -59,8 +55,6 @@ const createInstallationAndRiskRouter = (
   const riskBehaviourController = new RiskBehaviourController(riskAtInstallationService, taskListService)
   const riskAtAddressController = new RiskAtAddressController(riskAtInstallationService, taskListService)
   const otherRisksController = new OtherRisksController(riskAtInstallationService, taskListService)
-  get(paths.INSTALLATION_AND_RISK.BASE_URL, installationAndRiskController.view)
-  post(paths.INSTALLATION_AND_RISK.BASE_URL, installationAndRiskController.update)
   viewUpdate(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS, installationAndRiskCheckAnswersController)
   get(paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM, offenceController.view)
   get(paths.INSTALLATION_AND_RISK.OFFENCE, offenceController.view)

@@ -80,9 +80,7 @@ describe('risk information check answers view model', () => {
       return row?.actions?.items[0]?.href
     }
 
-    it('links to the risk behaviour page when the risk information flow is enabled', () => {
-      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(true)
-
+    it('links to the risk behaviour page', () => {
       expect(changeHref()).toBe(paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR.replace(':orderId', order.id))
     })
   })
@@ -103,7 +101,7 @@ describe('risk information check answers view model', () => {
       return row?.actions?.items[0]?.href
     }
 
-    it('links to the risk at address page when the risk information flow is enabled', () => {
+    it('links to the risk at address page', () => {
       expect(changeHref()).toBe(paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS.replace(':orderId', order.id))
     })
   })
@@ -133,10 +131,6 @@ describe('risk information check answers view model', () => {
       createViewModel(order, getContent('en', 'DDV6'), true).riskInformation
 
     describe('when the risk information flow is enabled', () => {
-      beforeEach(() => {
-        jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(true)
-      })
-
       it('shows the entered risk details with a link to the other risks page', () => {
         const order = buildOrder('some risk details')
         const row = rows(order).find(answer => answer.key.text === question)
@@ -167,9 +161,7 @@ describe('risk information check answers view model', () => {
       return row?.actions?.items[0]?.href
     }
 
-    it('links to the risk behaviour page when the risk information flow is enabled', () => {
-      jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(true)
-
+    it('links to the risk behaviour page', () => {
       expect(changeHref()).toBe(paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR.replace(':orderId', order.id))
     })
   })

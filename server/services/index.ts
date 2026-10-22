@@ -11,7 +11,6 @@ import CurfewTimetableService from '../routes/monitoring-conditions/curfew-timet
 import DeviceWearerResponsibleAdultService from '../routes/about-the-device-wearer/responsible-adult/service'
 import DeviceWearerService from '../routes/about-the-device-wearer/device-wearer/service'
 import EnforcementZoneAddToListService from '../routes/monitoring-conditions/enforcement-zone/service'
-import InstallationAndRiskService from '../routes/installation-and-risk/risk-information/service'
 import InterestedPartiesService from '../routes/contact-information/interested-parties/service'
 import OrderSearchService from './orderSearchService'
 import OrderService from './orderService'
@@ -66,7 +65,6 @@ export const services = () => {
   const addressService = new AddressService(cemoApiClient)
   const deviceWearerResponsibleAdultService = new DeviceWearerResponsibleAdultService(cemoApiClient)
   const deviceWearerService = new DeviceWearerService(cemoApiClient)
-  const installationAndRiskService = new InstallationAndRiskService(cemoApiClient)
   const interestedPartiesService = new InterestedPartiesService(cemoApiClient)
   const zoneAddToListService = new EnforcementZoneAddToListService(cemoApiClient)
   const orderSearchService = new OrderSearchService(cemoApiClient)
@@ -129,7 +127,6 @@ export const services = () => {
     addressService,
     deviceWearerResponsibleAdultService,
     deviceWearerService,
-    installationAndRiskService,
     interestedPartiesService,
     orderSearchService,
     orderService,
@@ -176,7 +173,6 @@ export {
   DeviceWearerResponsibleAdultService,
   DeviceWearerService,
   EnforcementZoneAddToListService,
-  InstallationAndRiskService,
   OrderSearchService,
   OrderService,
   TrailMonitoringService,
