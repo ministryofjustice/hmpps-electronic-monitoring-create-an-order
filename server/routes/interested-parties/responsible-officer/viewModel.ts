@@ -1,9 +1,9 @@
 import { InterestedParties } from '../model'
 import { ValidationResult } from '../../../models/Validation'
 import { ViewModel } from '../../../models/view-models/utils'
-import { getError } from '../../../utils/utils'
-import { createGovukErrorSummary } from '../../../utils/errors'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import { ResponsibleOfficer } from './formModel'
+import { getError } from '../../../utils/validation/errorMessages'
 
 type ResponsibleOfficerViewModel = ViewModel<
   Pick<InterestedParties, 'responsibleOfficerFirstName' | 'responsibleOfficerLastName' | 'responsibleOfficerEmail'>

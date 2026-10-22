@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 
 import { PageElement } from '../page'
-import { deserialiseTime } from '../../../server/utils/utils'
+import { deserialiseTime } from '../../../server/utils/dateTime'
 
 export default class FormTimespanComponent {
   private elementCacheId: string = uuidv4()

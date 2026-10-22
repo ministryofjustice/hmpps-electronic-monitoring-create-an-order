@@ -3,7 +3,7 @@ import paths from '../../../constants/paths'
 import { Order } from '../../../models/Order'
 import MonitoringConditionsUpdateService from '../monitoringConditionsService'
 import MonitoringConditionsStoreService from '../monitoringConditionsStoreService'
-import anyConditionCompleted from '../../../utils/anyConditionCompleted'
+import anyConditionCompleted from '../../../utils/order/anyConditionCompleted'
 
 export default abstract class MonitoringConditionsBaseController {
   constructor(

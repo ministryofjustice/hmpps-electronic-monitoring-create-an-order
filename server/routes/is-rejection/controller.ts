@@ -5,7 +5,7 @@ import IsRejectionService from './service'
 import FeatureFlags from '../../utils/featureFlags'
 import YesNoQuestionPageController from '../baseControllers/yes-no-question-page/controller'
 import { Order } from '../../models/Order'
-import { isStartDateInPast } from '../../utils/orderStartDate'
+import { isStartDateInPast } from '../../utils/order/orderStartDate'
 
 export default class IsRejectionController extends YesNoQuestionPageController {
   constructor(private readonly service: IsRejectionService) {

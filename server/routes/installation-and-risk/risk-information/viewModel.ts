@@ -1,5 +1,4 @@
-import { createGovukErrorSummary } from '../../../utils/errors'
-import { getError } from '../../../utils/utils'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import { InstallationAndRiskFormData } from './formModel'
 import { InstallationAndRisk } from '../../../models/InstallationAndRisk'
 import { ValidationResult } from '../../../models/Validation'
@@ -8,7 +7,8 @@ import possibleRisks from '../../../i18n/en/reference/possibleRisks'
 import riskCategories from '../../../i18n/en/reference/riskCategories'
 import Offences from '../../../i18n/en/reference/offences'
 import { Order } from '../../../models/Order'
-import isOrderDataDictionarySameOrAbove from '../../../utils/dataDictionaryVersionComparer'
+import isOrderDataDictionarySameOrAbove from '../../../utils/order/dataDictionaryVersionComparer'
+import { getError } from '../../../utils/validation/errorMessages'
 
 type InstallationAndRiskViewModel = ViewModel<
   Omit<InstallationAndRisk, 'riskCategory' | 'possibleRisk' | 'offences'>

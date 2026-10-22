@@ -1,6 +1,6 @@
-import { CurfewReleaseDate } from '../models/CurfewReleaseDate'
-import { CurfewSchedule } from '../models/CurfewTimetable'
-import { serialiseTime } from './utils'
+import { CurfewReleaseDate } from '../../models/CurfewReleaseDate'
+import { CurfewSchedule } from '../../models/CurfewTimetable'
+import { serialiseTime } from '../dateTime'
 
 const startHours = '19'
 const startMinutes = '00'

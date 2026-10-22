@@ -1,4 +1,4 @@
-import { createMonitoringConditions, getMockOrder } from '../../test/mocks/mockOrder'
+import { createMonitoringConditions, getMockOrder } from '../../../test/mocks/mockOrder'
 import { isPastDatedVariation, isStartDateInPast } from './orderStartDate'
 
 const now = new Date('2026-06-15T12:00:00.000Z')

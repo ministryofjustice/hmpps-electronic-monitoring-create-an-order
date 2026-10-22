@@ -5,7 +5,10 @@ import InstallationAndRiskModel, { InstallationAndRisk } from '../../../models/I
 import { ValidationResult } from '../../../models/Validation'
 import { InstallationAndRiskFormData, InstallationAndRiskFormDataValidator } from './formModel'
 import { SanitisedError } from '../../../sanitisedError'
-import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../../../utils/errors'
+import {
+  convertZodErrorToValidationError,
+  convertBackendErrorToValidationError,
+} from '../../../utils/validation/errors'
 
 type UpdateMonitoringConditionsInput = AuthenticatedRequestInput & {
   orderId: string

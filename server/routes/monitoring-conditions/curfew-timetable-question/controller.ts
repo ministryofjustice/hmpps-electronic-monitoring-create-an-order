@@ -3,7 +3,7 @@ import paths from '../../../constants/paths'
 import { validationErrors } from '../../../constants/validationErrors'
 import { isValidationListResult, ValidationResult } from '../../../models/Validation'
 import CurfewTimetableService from '../curfew-timetable/service'
-import { createStandardCurfewSchedule, STANDARD_CURFEW_ADDRESS } from '../../../utils/standardCurfewTimes'
+import { createStandardCurfewSchedule, STANDARD_CURFEW_ADDRESS } from '../../../utils/order/standardCurfewTimes'
 import { CurfewTimetableQuestionFormDataModel } from './formModel'
 import constructModel from './viewModel'
 

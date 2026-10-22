@@ -8,10 +8,11 @@ import {
   createAnswer,
   AnswerOptions,
   createAddressAnswer,
-} from '../../../utils/checkYourAnswers'
-import { formatDateTime, lookup } from '../../../utils/utils'
+} from '../../../utils/views/checkYourAnswers'
 import { IdentityNumbersEnum } from '../../../models/DeviceWearer'
 import { Order } from '../../../models/Order'
+import { formatDateTime } from '../../../utils/dateTime'
+import { lookup } from '../../../utils/views/displayHelpers'
 
 const createOtherDisabilityAnswer = (order: Order, content: I18n, uri: string, answerOpts: AnswerOptions) => {
   if (order.deviceWearer.disabilities.includes('OTHER')) {

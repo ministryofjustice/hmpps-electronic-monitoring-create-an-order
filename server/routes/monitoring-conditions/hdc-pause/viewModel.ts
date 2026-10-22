@@ -1,7 +1,7 @@
 import { ValidationResult } from '../../../models/Validation'
 import { TextField, ViewModelBase } from '../../../models/view-models/utils'
-import { createGovukErrorSummary } from '../../../utils/errors'
-import { getError } from '../../../utils/utils'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
+import { getError } from '../../../utils/validation/errorMessages'
 
 export type HdcPauseModel = ViewModelBase & {
   hdcPause: TextField

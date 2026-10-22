@@ -1,9 +1,9 @@
 import { ValidationResult } from '../../../models/Validation'
 import { ViewModel } from '../../../models/view-models/utils'
 import I18n from '../../../types/i18n'
-import { createGovukErrorSummary } from '../../../utils/errors'
-import { getError } from '../../../utils/utils'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import { MonitoringConditions } from '../model'
+import { getError } from '../../../utils/validation/errorMessages'
 
 export type PoliceAreaViewModel = ViewModel<Pick<MonitoringConditions, 'policeArea'>> & {
   items: (Option | Divider)[]
