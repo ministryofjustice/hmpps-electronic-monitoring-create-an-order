@@ -1,4 +1,3 @@
-import { createAddressPreview, trimSeconds } from '../../../server/utils/utils'
 import MonitoringConditionsCheckYourAnswersPage from '../../pages/order/monitoring-conditions/check-your-answers'
 import InstallationAppointmentPage from '../../pages/order/monitoring-conditions/installation-appointment'
 import InstallationLocationPage from '../../pages/order/monitoring-conditions/installation-location'
@@ -6,6 +5,8 @@ import Page from '../../pages/page'
 import FindAddressPage from '../../e2e/order/postcode-lookup/find-address/findAddressPage'
 import ConfirmAddressPage from '../../e2e/order/postcode-lookup/confirm-address/confirmAddressPage'
 import EnterAddressPage from '../../e2e/order/postcode-lookup/enter-address/enterAddressPage'
+import { createAddressPreview } from '../../../server/utils/views/displayHelpers'
+import { trimSeconds } from '../../../server/utils/dateTime'
 
 export default function fillInTagAtSourceWith(
   installationLocation,

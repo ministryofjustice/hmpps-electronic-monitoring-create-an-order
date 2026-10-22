@@ -1,10 +1,10 @@
 import { ValidationResult } from '../../../models/Validation'
 import { ViewModel } from '../../../models/view-models/utils'
-import { createGovukErrorSummary } from '../../../utils/errors'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import { Order } from '../../../models/Order'
-import { getError } from '../../../utils/utils'
-import { createAnswer, createDatePreview, Answer } from '../../../utils/checkYourAnswers'
+import { createAnswer, createDatePreview, Answer } from '../../../utils/views/checkYourAnswers'
 import paths from '../../../constants/paths'
+import { getError } from '../../../utils/validation/errorMessages'
 
 type MonitoringTypeSummaryItem = Answer
 

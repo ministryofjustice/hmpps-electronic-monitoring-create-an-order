@@ -4,7 +4,10 @@ import { AuthenticatedRequestInput } from '../../../interfaces/request'
 import MappaModel, { Mappa } from '../../../models/MappaModel'
 import { ValidationResult } from '../../../models/Validation'
 import { SanitisedError } from '../../../sanitisedError'
-import { convertBackendErrorToValidationError, convertZodErrorToValidationError } from '../../../utils/errors'
+import {
+  convertBackendErrorToValidationError,
+  convertZodErrorToValidationError,
+} from '../../../utils/validation/errors'
 import { IsMappaFormValidator, IsMappaInput } from '../is-mappa/formModel'
 import { MappaFormValidator, MappaInput } from './formModel'
 

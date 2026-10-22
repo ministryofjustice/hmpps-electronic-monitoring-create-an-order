@@ -4,7 +4,10 @@ import { AuthenticatedRequestInput } from '../../../interfaces/request'
 import DetailsOfInstallationModel, { DetailsOfInstallation } from '../../../models/DetailsOfInstallation'
 import { ValidationResult } from '../../../models/Validation'
 import { SanitisedError } from '../../../sanitisedError'
-import { convertBackendErrorToValidationError, convertZodErrorToValidationError } from '../../../utils/errors'
+import {
+  convertBackendErrorToValidationError,
+  convertZodErrorToValidationError,
+} from '../../../utils/validation/errors'
 import { DetailsOfInstallationInput, DetailsOfInstallationValidator } from './formModel'
 
 type UpdateDetailsOfInstallationInput = AuthenticatedRequestInput & {

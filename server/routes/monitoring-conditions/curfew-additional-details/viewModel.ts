@@ -1,9 +1,9 @@
-import { createGovukErrorSummary } from '../../../utils/errors'
-import { getError } from '../../../utils/utils'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import { CurfewConditions } from '../../../models/CurfewConditions'
 import { CurfewAdditionalDetailsFormData } from './formModel'
 import { ValidationResult } from '../../../models/Validation'
 import { ErrorMessage, ViewModel } from '../../../models/view-models/utils'
+import { getError } from '../../../utils/validation/errorMessages'
 
 type CurfewAdditionalDetailsModel = {
   curfewAdditionalDetails: { value: string; error?: ErrorMessage }

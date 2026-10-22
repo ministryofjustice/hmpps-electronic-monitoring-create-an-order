@@ -1,12 +1,12 @@
-import { createAnswer, createBooleanAnswer } from '../../../utils/checkYourAnswers'
+import { createAnswer, createBooleanAnswer } from '../../../utils/views/checkYourAnswers'
 
 import { Order } from '../../../models/Order'
 import AttachmentType from '../../../models/AttachmentType'
 import I18n from '../../../types/i18n'
 import paths from '../../../constants/paths'
 import { Attachment } from '../../../models/Attachment'
-import { hasOptionalVariationSectionIsHOCourt } from '../../../utils/utils'
 import { notifyingOrganisationCourts } from '../../../models/NotifyingOrganisation'
+import hasOptionalVariationSectionIsHOCourt from '../../../utils/order/optionalVariationSections'
 
 const createViewModel = (order: Order, content: I18n | undefined) => {
   const licence = order.additionalDocuments.find(x => x.fileType === AttachmentType.LICENCE)

@@ -2,9 +2,9 @@ import paths from '../../../constants/paths'
 import { Address } from '../../../models/Address'
 import { Order } from '../../../models/Order'
 import { ValidationResult } from '../../../models/Validation'
-import { createAddressAnswer } from '../../../utils/checkYourAnswers'
-import { createGovukErrorSummary } from '../../../utils/errors'
-import { getError } from '../../../utils/utils'
+import { createAddressAnswer } from '../../../utils/views/checkYourAnswers'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
+import { getError } from '../../../utils/validation/errorMessages'
 
 const CURFEW_ADDRESS_TYPES = ['PRIMARY', 'SECONDARY', 'TERTIARY'] as const
 type CurfewAddressTypes = (typeof CURFEW_ADDRESS_TYPES)[number]

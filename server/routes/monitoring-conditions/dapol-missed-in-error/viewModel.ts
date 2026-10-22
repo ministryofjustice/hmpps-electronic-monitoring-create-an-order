@@ -1,8 +1,8 @@
 import { ValidationResult } from '../../../models/Validation'
 import { ViewModel } from '../../../models/view-models/utils'
-import { createGovukErrorSummary } from '../../../utils/errors'
-import { getError } from '../../../utils/utils'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import { MonitoringConditions } from '../model'
+import { getError } from '../../../utils/validation/errorMessages'
 
 export type DapolMissedInErrorModel = ViewModel<Pick<MonitoringConditions, 'dapolMissedInError'>>
 

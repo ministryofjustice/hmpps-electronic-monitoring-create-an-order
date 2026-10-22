@@ -1,7 +1,7 @@
 import paths from '../../constants/paths'
 import { Order } from '../../models/Order'
 import { getRiskInformationFlow, RiskInformationPage, riskInformationPages } from '../../services/riskInformationFlow'
-import { hasOptionalVariationSectionIsHOCourt } from '../../utils/utils'
+import hasOptionalVariationSectionIsHOCourt from '../../utils/order/optionalVariationSections'
 
 type RiskInformationTaskState = 'REQUIRED' | 'NOT_REQUIRED' | 'OPTIONAL'
 

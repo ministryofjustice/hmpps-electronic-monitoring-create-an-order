@@ -1,4 +1,4 @@
-import { Order } from '../models/Order'
+import { Order } from '../../models/Order'
 import { isStartDateInPast } from './orderStartDate'
 
 const isPrisonOrYouthOrder = (order: Order): boolean => {
