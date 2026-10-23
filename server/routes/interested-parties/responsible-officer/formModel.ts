@@ -3,9 +3,9 @@ import { validationErrors } from '../../../constants/validationErrors'
 
 const ResponsibleOfficerFormModel = z.object({
   action: z.string(),
-  responsibleOfficerFirstName: z.string(),
-  responsibleOfficerLastName: z.string(),
-  responsibleOfficerEmail: z.string(),
+  responsibleOfficerFirstName: z.string().trim(),
+  responsibleOfficerLastName: z.string().trim(),
+  responsibleOfficerEmail: z.string().trim(),
 })
 
 export const ResponsibleOfficerFormValidator = z.object({
