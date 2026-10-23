@@ -9,7 +9,7 @@
   {% if not hideBack %}
     {{ govukBackLink({
       text: "Back",
-      href: "/order/" + order.id + "/edit"
+      href: "/order/" + orderId + "/edit" if orderId else "/"
     }) }}
   {% endif %}
 {% endblock %}

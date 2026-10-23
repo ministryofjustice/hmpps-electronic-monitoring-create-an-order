@@ -361,6 +361,25 @@ describe('OrderController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/interest-parties/notifying-organisation`)
     })
 
+    it.each(['SUBMITTED', 'REJECTED'] as const)(
+      'keeps a %s legacy order on the summary without amending when its source type is unresolved',
+      async status => {
+        const orderId = randomUUID()
+        const order = getMockOrder({ id: orderId, status, type: 'REJECTED', canAmend: true })
+        const req = createMockRequest({ order, body: { action: 'continue' }, params: { orderId }, flash: jest.fn() })
+        const res = createMockResponse()
+
+        await orderController.createVariation(req, res, jest.fn())
+
+        expect(mockOrderService.amendOrder).not.toHaveBeenCalled()
+        expect(req.flash).toHaveBeenCalledWith(
+          'submissionError',
+          'We could not load the history for this form. Try again later.',
+        )
+        expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/summary`)
+      },
+    )
+
     it('returns to the summary when the backend rejects a stale status', async () => {
       const orderId = randomUUID()
       const order = getMockOrder({ id: orderId, status: 'SUBMITTED', canAmend: true })

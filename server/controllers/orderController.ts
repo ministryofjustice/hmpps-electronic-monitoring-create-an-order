@@ -11,6 +11,7 @@ import { SanitisedError } from '../sanitisedError'
 import {
   canCreateOrderVersion,
   getOrderChangeBlockedMessage,
+  getServiceRequestTypeFlowBlockedMessage,
   shouldShowServiceRequestTypeQuestions,
   ORDER_CHANGE_STATUS_CHANGED_MESSAGE,
 } from '../utils/orderVersionEligibility'
@@ -40,6 +41,12 @@ export default class OrderController {
     if (action === 'continue') {
       if (!order.canAmend) {
         req.flash('submissionError', getOrderChangeBlockedMessage())
+        res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+        return
+      }
+
+      if (order.type === 'REJECTED' && !order.amendmentSourceType) {
+        req.flash('submissionError', getServiceRequestTypeFlowBlockedMessage(order))
         res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
         return
       }

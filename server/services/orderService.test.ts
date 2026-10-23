@@ -142,17 +142,22 @@ describe('Order Service', () => {
       },
     )
 
-    it('should not guess the source type when legacy history is unavailable', async () => {
-      mockRestClient.get
-        .mockResolvedValueOnce({ ...mockApiResponse, type: 'REJECTED', canAmend: true })
-        .mockRejectedValueOnce(mock404Error)
+    it.each(['unavailable', 'empty'] as const)(
+      'should keep the order viewable without guessing the source type when legacy history is %s',
+      async history => {
+        const legacyOrder = { ...mockApiResponse, type: 'REJECTED', status: 'REJECTED', canAmend: true }
+        mockRestClient.get.mockResolvedValueOnce(legacyOrder)
+        if (history === 'unavailable') mockRestClient.get.mockRejectedValueOnce(mock404Error)
+        else mockRestClient.get.mockResolvedValueOnce([])
 
-      const orderService = new OrderService(mockRestClient)
+        const orderService = new OrderService(mockRestClient)
 
-      await expect(orderService.getOrder({ accessToken: 'token', orderId: mockId })).rejects.toThrow(
-        'Unable to resolve amendment source type',
-      )
-    })
+        const order = await orderService.getOrder({ accessToken: 'token', orderId: mockId })
+
+        expect(order).toEqual(expect.objectContaining({ id: mockId, type: 'REJECTED', canAmend: true }))
+        expect(order.amendmentSourceType).toBeUndefined()
+      },
+    )
 
     it('should throw an error if the api returns an invalid object', async () => {
       expect.assertions(1)

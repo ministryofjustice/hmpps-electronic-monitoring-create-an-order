@@ -82,7 +82,20 @@ export default class OrderService {
           .sort((first, second) => second.versionNumber - first.versionNumber)[0]
       : undefined
 
-    if (!sourceVersion) throw new Error(`Unable to resolve amendment source type for order ${order.id}`)
+    if (!sourceVersion) {
+      logger.warn(
+        {
+          event: 'order_amendment_source_unresolved',
+          orderId: order.id,
+          versionId: order.versionId,
+          status: order.status,
+          versionCount: versions.length,
+          reason: currentVersion ? 'source_version_missing' : 'current_version_missing',
+        },
+        'Unable to resolve amendment source type',
+      )
+      return order
+    }
 
     return { ...order, amendmentSourceType: sourceVersion.type }
   }

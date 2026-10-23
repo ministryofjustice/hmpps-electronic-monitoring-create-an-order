@@ -40,5 +40,10 @@ export const canCreateOrderVersion = (order: Order): boolean => order.canAmend
 export const getOrderChangeBlockedMessage = (): string =>
   "You can't make changes to this form because it is being processed by EMS. Try again later."
 
-export const getServiceRequestTypeFlowBlockedMessage = (order: Order): string =>
-  order.canAmend ? ORDER_CHANGE_STATUS_CHANGED_MESSAGE : getOrderChangeBlockedMessage()
+export const getServiceRequestTypeFlowBlockedMessage = (order: Order): string => {
+  if (!order.canAmend) return getOrderChangeBlockedMessage()
+  if (order.type === 'REJECTED' && !order.amendmentSourceType) {
+    return 'We could not load the history for this form. Try again later.'
+  }
+  return ORDER_CHANGE_STATUS_CHANGED_MESSAGE
+}

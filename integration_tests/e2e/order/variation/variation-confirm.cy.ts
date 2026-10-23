@@ -264,6 +264,23 @@ context('Variation', () => {
       })
     })
 
+    it('keeps a newly amendable legacy rejection viewable when its source history is missing', () => {
+      cy.task('stubCemoGetVersions', { httpStatus: 200, orderId: mockOriginalId, versions: [] })
+      stubOrder('PROCESSING', 'SUBMITTED', 'REJECTED')
+      Page.visit(OrderTasksPage, { orderId: mockOriginalId }).makeChangesButton.should('be.disabled')
+
+      stubOrder('REJECTED', 'REJECTED', 'REJECTED')
+      cy.reload()
+
+      const page = Page.verifyOnPage(OrderTasksPage)
+      cy.contains('This form has been returned.').should('be.visible')
+      page.makeChangesButton.click()
+      Page.verifyOnPage(ConfirmVariationPage).confirmButton().click()
+
+      Page.verifyOnPage(OrderTasksPage)
+      cy.contains('We could not load the history for this form. Try again later.').should('be.visible')
+    })
+
     it('redirects a direct edit visit to the summary while the case is processing', () => {
       stubOrder('PROCESSING')
 
@@ -315,6 +332,10 @@ context('Variation', () => {
             response: {},
           })
           cy.visit(`/order/${mockOriginalId}/edit`)
+          Page.verifyOnPage(ConfirmVariationPage).confirmButton().click()
+
+          Page.verifyOnPage(IsAddressChangePage)
+          cy.get('.govuk-back-link').should('have.attr', 'href', `/order/${mockOriginalId}/edit`).click()
           Page.verifyOnPage(ConfirmVariationPage).confirmButton().click()
 
           const addressChangePage = Page.verifyOnPage(IsAddressChangePage)
