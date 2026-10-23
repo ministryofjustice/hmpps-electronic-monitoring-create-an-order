@@ -45,7 +45,7 @@ context('Responsible officer page', () => {
     })
     page.form.continueButton.click()
     page.errorSummary.shouldExist()
-        page.errorSummary.verifyErrorSummary([
+    page.errorSummary.verifyErrorSummary([
       "Enter the Responsible Officer's first name",
       "Enter the Responsible Officer's last name",
       "Enter the Responsible Officer's email address",
