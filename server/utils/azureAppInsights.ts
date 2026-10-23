@@ -1,5 +1,6 @@
 import { defaultClient, getCorrelationContext, setup, TelemetryClient } from 'applicationinsights'
 import type { HttpInstrumentationConfig } from '@opentelemetry/instrumentation-http'
+import { resourceFromAttributes } from '@opentelemetry/resources'
 import { Request, RequestHandler } from 'express'
 import type { ApplicationInfo } from '../applicationInfo'
 
@@ -40,8 +41,16 @@ export function buildAppInsightsClient(
   overrideName?: string,
 ): TelemetryClient | null {
   if (process.env.APPLICATIONINSIGHTS_CONNECTION_STRING) {
-    defaultClient.context.tags['ai.cloud.role'] = overrideName || applicationName
-    defaultClient.context.tags['ai.application.ver'] = buildNumber
+    const telemetryOptions = defaultClient.config.azureMonitorOpenTelemetryOptions
+    const identity = resourceFromAttributes({
+      'service.name': overrideName || applicationName,
+      'service.version': buildNumber,
+    })
+
+    defaultClient.config.azureMonitorOpenTelemetryOptions = {
+      ...telemetryOptions,
+      resource: telemetryOptions?.resource?.merge(identity) ?? identity,
+    }
 
     return defaultClient
   }

@@ -50,8 +50,9 @@ describe('Application Insights', () => {
 
   it('sets the role and build before starting log and request collection', () => {
     jest.mocked(configuration.start).mockImplementationOnce(() => {
-      expect(defaultClient.context.tags['ai.cloud.role']).toBe('test-app')
-      expect(defaultClient.context.tags['ai.application.ver']).toBe('123')
+      const { resource } = defaultClient.config.azureMonitorOpenTelemetryOptions
+      expect(resource?.attributes['service.name']).toBe('test-app')
+      expect(resource?.attributes['service.version']).toBe('123')
       return configuration
     })
 
@@ -252,6 +253,7 @@ it('correlates real request, Bunyan, exception and dependency telemetry in a sep
         env: {
           ...process.env,
           NODE_ENV: 'test',
+          BUILD_NUMBER: 'telemetry-test-build',
           NODE_OPTIONS: '',
           NODE_EXTRA_CA_CERTS: certificate,
           SMOKE_BUILD: buildDirectory,
@@ -288,6 +290,8 @@ it('correlates real request, Bunyan, exception and dependency telemetry in a sep
     for (const item of [request, log, exception, dependency]) {
       expect(item).toBeDefined()
       expect(item?.tags['ai.operation.id']).toBe(traceId)
+      expect(item?.tags['ai.cloud.role']).toBe('hmpps-electronic-monitoring-create-an-order')
+      expect(item?.tags['ai.application.ver']).toBe('telemetry-test-build')
     }
     expect(request?.data.baseData.name).toBe('GET /telemetry-smoke/:section')
     expect(request?.tags['ai.operation.name']).toBe('GET /telemetry-smoke/:section')
