@@ -5,7 +5,7 @@ import superagent from 'superagent'
 
 import logger from '../../logger'
 import type { ApiConfig } from '../config'
-import type { UnsanitisedError } from '../sanitisedError'
+import type { SanitisedError, UnsanitisedError } from '../sanitisedError'
 import sanitiseError from '../sanitisedError'
 
 interface Request {
@@ -54,6 +54,23 @@ export default class RestClient {
     return this.config.timeout
   }
 
+  private logError(error: UnsanitisedError, path: string | undefined, method: string): SanitisedError {
+    const sanitisedError = sanitiseError(error)
+    logger.warn(
+      {
+        err: sanitisedError,
+        api: this.name,
+        method,
+        path: path ? new URL(path, this.apiUrl()).pathname : undefined,
+        status: sanitisedError.status,
+        code: 'code' in error ? error.code : undefined,
+        errorCode: sanitisedError.data?.errorCode,
+      },
+      `Error calling ${this.name}`,
+    )
+    return sanitisedError
+  }
+
   async get<Response = unknown>({
     path,
     query = {},
@@ -79,9 +96,7 @@ export default class RestClient {
 
       return raw ? (result as Response) : result.body
     } catch (error) {
-      const sanitisedError = sanitiseError(error as UnsanitisedError)
-      logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'GET'`)
-      throw sanitisedError
+      throw this.logError(error as UnsanitisedError, path, 'GET')
     }
   }
 
@@ -124,9 +139,7 @@ export default class RestClient {
 
       return raw ? (result as Response) : result.body
     } catch (error) {
-      const sanitisedError = sanitiseError(error as UnsanitisedError)
-      logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'GET'`)
-      throw sanitisedError
+      throw this.logError(error as UnsanitisedError, path, 'GET')
     }
   }
 
@@ -147,9 +160,7 @@ export default class RestClient {
         .timeout(this.timeoutConfig())
       return result.text
     } catch (error) {
-      const sanitisedError = sanitiseError(error as UnsanitisedError)
-      logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'GET'`)
-      throw sanitisedError
+      throw this.logError(error as UnsanitisedError, path, 'GET')
     }
   }
 
@@ -186,9 +197,7 @@ export default class RestClient {
 
       return raw ? (result as Response) : result.body
     } catch (error) {
-      const sanitisedError = sanitiseError(error as UnsanitisedError)
-      logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: '${method.toUpperCase()}'`)
-      throw sanitisedError
+      throw this.logError(error as UnsanitisedError, path, method.toUpperCase())
     }
   }
 
@@ -230,9 +239,7 @@ export default class RestClient {
       const result = await request
       return raw ? (result as Response) : result.body
     } catch (error) {
-      const sanitisedError = sanitiseError(error as UnsanitisedError)
-      logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'POST'`)
-      throw sanitisedError
+      throw this.logError(error as UnsanitisedError, path, 'POST')
     }
   }
 
@@ -273,9 +280,7 @@ export default class RestClient {
 
       return raw ? (result as Response) : result.body
     } catch (error) {
-      const sanitisedError = sanitiseError(error as UnsanitisedError)
-      logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'DELETE'`)
-      throw sanitisedError
+      throw this.logError(error as UnsanitisedError, path, 'DELETE')
     }
   }
 
@@ -295,7 +300,7 @@ export default class RestClient {
         .set(headers)
         .end((error, response) => {
           if (error) {
-            logger.warn(sanitiseError(error), `Error calling ${this.name}`)
+            this.logError(error, path, 'GET')
             reject(error)
           } else if (response) {
             const s = new Readable()
