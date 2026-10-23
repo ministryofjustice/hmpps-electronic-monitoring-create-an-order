@@ -10,7 +10,7 @@ const detailsOfInstallationPageContent: DetailsOfInstallationPageContent = {
     },
     possibleRisk: {
       text: "At installation what are the possible risks from the device wearer's behaviour?",
-      hint: 'Check if there are any alerts for the device wearer. Select all that apply',
+      hint: "Check if there are any alerts for the device wearer and answer questions based on what you know about the device wearer's behaviour. Select all that apply",
     },
     riskCategory: {
       text: 'What are the possible risks at the installation address? (optional)',
