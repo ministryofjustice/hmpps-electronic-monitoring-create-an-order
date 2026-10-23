@@ -1,5 +1,5 @@
-import { createMonitoringConditions, getMockOrder } from '../../../test/mocks/mockOrder'
-import { isPastDatedVariation, isStartDateInPast } from './orderStartDate'
+import { createInterestedParties, createMonitoringConditions, getMockOrder } from '../../../test/mocks/mockOrder'
+import { isPastDatedProbationVariation, isPastDatedVariation, isStartDateInPast } from './orderStartDate'
 
 const now = new Date('2026-06-15T12:00:00.000Z')
 
@@ -46,5 +46,30 @@ describe('isPastDatedVariation', () => {
 
     expect(isPastDatedVariation(order, { now })).toBe(false)
     expect(isPastDatedVariation(order, { now, treatMissingAsPast: true })).toBe(true)
+  })
+})
+
+describe('isPastDatedProbationVariation', () => {
+  const probation = { interestedParties: createInterestedParties({ notifyingOrganisation: 'PROBATION' }) }
+
+  it('returns true for a probation variation with a start date in the past', () => {
+    const order = orderStarting('2026-01-01T00:00:00.000Z', { type: 'VARIATION', ...probation })
+
+    expect(isPastDatedProbationVariation(order, { now })).toBe(true)
+  })
+
+  it('returns false for a probation variation with a start date in the future', () => {
+    const order = orderStarting('2027-01-01T00:00:00.000Z', { type: 'VARIATION', ...probation })
+
+    expect(isPastDatedProbationVariation(order, { now })).toBe(false)
+  })
+
+  it('returns false for a past-dated variation from another notifying organisation', () => {
+    const order = orderStarting('2026-01-01T00:00:00.000Z', {
+      type: 'VARIATION',
+      interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }),
+    })
+
+    expect(isPastDatedProbationVariation(order, { now })).toBe(false)
   })
 })

@@ -29,6 +29,7 @@ import ReferenceData from './reference'
 import IsRejectionPageContent from './pages/isRejection'
 import ServiceRequestTypePageContent from './pages/serviceRequestType'
 import HaveCourtOrderPageContent from './pages/haveCourtOrder'
+import NewDocumentPageContent from './pages/newDocument'
 import DapoContent from './pages/dapo'
 import OffenceContent from './pages/offence'
 import MappaPageContent from './pages/mappa'
@@ -66,6 +67,7 @@ type I18n = {
     restrictionZone: EnforcementZonePageContent
     havePhoto: HavePhotoPageContent
     haveCourtOrder: HaveCourtOrderPageContent
+    newDocument: NewDocumentPageContent
     identityNumbers: IdentityNumbersPageContent
     installationAddress: AddressPageContent
     installationAndRisk: InstallationAndRiskPageContent
