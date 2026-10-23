@@ -5,6 +5,7 @@ import { appWithAllRoutes } from './routes/testutils/appSetup'
 import { OrderService } from './services'
 import { SanitisedError } from './sanitisedError'
 import logger from '../logger'
+import * as appInsights from './utils/azureAppInsights'
 
 let spy: jest.SpyInstance
 beforeEach(() => {
@@ -16,6 +17,36 @@ afterEach(() => {
 })
 
 let app: Express
+
+describe('GET 500', () => {
+  it('logs the error and request context without query parameters', async () => {
+    const exceptionSpy = jest.spyOn(appInsights, 'reportException').mockImplementation(() => {})
+    const orderId = UUIDv4()
+    const error = new Error('CemoAPI request failed')
+    const orderService = { getOrder: jest.fn().mockRejectedValue(error) } as unknown as OrderService
+    app = appWithAllRoutes({ services: { orderService } })
+
+    await request(app).get(`/order/${orderId}/summary?searchTerm=private-search`).expect(500)
+
+    expect(spy).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        err: error,
+        method: 'GET',
+        path: `/order/${orderId}/summary`,
+        orderId,
+        status: 500,
+      }),
+      'Error handling request',
+    )
+    expect(JSON.stringify(spy.mock.calls)).not.toContain('private-search')
+    expect(exceptionSpy).toHaveBeenCalledWith(
+      error,
+      expect.objectContaining({ method: 'GET', path: `/order/${orderId}/summary`, orderId, status: 500 }),
+    )
+    exceptionSpy.mockRestore()
+  })
+})
+
 describe('GET 404', () => {
   beforeEach(() => {
     app = appWithAllRoutes({})
