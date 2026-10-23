@@ -1,5 +1,6 @@
 import { defaultClient, getCorrelationContext, setup, TelemetryClient } from 'applicationinsights'
-import { RequestHandler } from 'express'
+import type { HttpInstrumentationConfig } from '@opentelemetry/instrumentation-http'
+import { Request, RequestHandler } from 'express'
 import type { ApplicationInfo } from '../applicationInfo'
 
 export function initialiseAppInsights(applicationInfo?: ApplicationInfo): void {
@@ -8,6 +9,27 @@ export function initialiseAppInsights(applicationInfo?: ApplicationInfo): void {
     console.log('Enabling azure application insights')
 
     const configuration = setup().setAutoCollectConsole(true, false).setInternalLogging(false, true)
+    const options = defaultClient.config.azureMonitorOpenTelemetryOptions
+    const httpOptions: HttpInstrumentationConfig = options?.instrumentationOptions?.http || {}
+    const httpInstrumentation: HttpInstrumentationConfig = {
+      enabled: true,
+      ...httpOptions,
+      applyCustomAttributesOnSpan(span, request, response) {
+        httpOptions.applyCustomAttributesOnSpan?.(span, request, response)
+        const route = (request as Request).route?.path
+        if (typeof route === 'string') {
+          span.setAttribute('http.route', route)
+          span.updateName(`${request.method} ${route}`)
+        }
+      },
+    }
+    defaultClient.config.azureMonitorOpenTelemetryOptions = {
+      ...options,
+      instrumentationOptions: {
+        ...options?.instrumentationOptions,
+        http: httpInstrumentation,
+      },
+    }
     if (applicationInfo) buildAppInsightsClient(applicationInfo)
     configuration.start()
   }

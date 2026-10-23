@@ -8,11 +8,12 @@ import { promisify } from 'node:util'
 import { gunzipSync } from 'node:zlib'
 import { buildSync } from 'esbuild'
 import { defaultClient, getCorrelationContext, setup } from 'applicationinsights'
+import type { HttpInstrumentationConfig } from '@opentelemetry/instrumentation-http'
 import { ApplicationInfo } from '../applicationInfo'
 import { appInsightsMiddleware, initialiseAppInsights, reportException } from './azureAppInsights'
 
 jest.mock('applicationinsights', () => ({
-  defaultClient: { context: { tags: {} }, trackException: jest.fn() },
+  defaultClient: { context: { tags: {} }, config: {}, trackException: jest.fn() },
   getCorrelationContext: jest.fn(),
   setup: jest.fn().mockReturnValue({
     setAutoCollectConsole: jest.fn().mockReturnThis(),
@@ -38,6 +39,7 @@ describe('Application Insights', () => {
     jest.spyOn(console, 'log').mockImplementation(() => {})
     process.env.APPLICATIONINSIGHTS_CONNECTION_STRING = 'test-connection-string'
     defaultClient.context.tags = {}
+    defaultClient.config.azureMonitorOpenTelemetryOptions = {}
   })
 
   afterEach(() => {
@@ -67,6 +69,28 @@ describe('Application Insights', () => {
 
     expect(setup).not.toHaveBeenCalled()
     expect(configuration.start).not.toHaveBeenCalled()
+  })
+
+  it.each([undefined, /^\/order\//])('preserves existing HTTP hooks and SDK naming for route %s', route => {
+    const previousHook = jest.fn()
+    const httpOptions: HttpInstrumentationConfig = { enabled: true, applyCustomAttributesOnSpan: previousHook }
+    defaultClient.config.azureMonitorOpenTelemetryOptions = {
+      instrumentationOptions: { http: httpOptions },
+    }
+    initialiseAppInsights(applicationInfo)
+    const httpInstrumentation = defaultClient.config.azureMonitorOpenTelemetryOptions.instrumentationOptions
+      ?.http as HttpInstrumentationConfig
+    const hook = httpInstrumentation.applyCustomAttributesOnSpan
+    if (!hook) throw new Error('HTTP span hook not configured')
+    const span = { setAttribute: jest.fn(), updateName: jest.fn() }
+    const req = { method: 'GET', route: { path: route } } as Request
+    const res = {} as Response
+
+    hook(span as unknown as Parameters<typeof hook>[0], req, res)
+
+    expect(previousHook).toHaveBeenCalledWith(span, req, res)
+    expect(span.setAttribute).not.toHaveBeenCalled()
+    expect(span.updateName).not.toHaveBeenCalled()
   })
 
   it('makes the operation ID available to logs and the browser response', () => {
@@ -102,6 +126,7 @@ it('correlates real request, Bunyan, exception and dependency telemetry in a sep
       baseType: string
       baseData: {
         id?: string
+        name?: string
         url?: string
         data?: string
         message?: string
@@ -194,7 +219,9 @@ it('correlates real request, Bunyan, exception and dependency telemetry in a sep
       const run = async () => {
         const app = express()
         app.use(appInsightsMiddleware())
-        app.get('/telemetry-smoke', (req, res, next) => {
+        const router = express.Router()
+        app.use('/order/:orderId', router)
+        router.get('/telemetry-smoke/:section', (req, res, next) => {
           get(process.env.SMOKE_ENDPOINT + '/dependency').then(() => {
             logger.warn({ operationId: res.locals.operationId }, 'telemetry-smoke-log')
             reportException(new Error('telemetry-smoke-exception'), { path: req.path })
@@ -207,7 +234,7 @@ it('correlates real request, Bunyan, exception and dependency telemetry in a sep
           traceId: '${traceId}', spanId: '1234567890abcdef', traceFlags: 1, isRemote: true,
         })
         const headers = await context.with(parent, () =>
-          get('http://127.0.0.1:' + server.address().port + '/telemetry-smoke'))
+          get('http://127.0.0.1:' + server.address().port + '/order/test-order/telemetry-smoke/summary'))
         if (headers['x-operation-id'] !== '${traceId}') throw new Error('Missing request operation ID')
         await new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()))
         await defaultClient.flush()
@@ -244,7 +271,7 @@ it('correlates real request, Bunyan, exception and dependency telemetry in a sep
     )
 
     const request = telemetry.find(
-      item => item.data.baseType === 'RequestData' && item.data.baseData.url?.endsWith('/telemetry-smoke'),
+      item => item.data.baseType === 'RequestData' && item.data.baseData.url?.endsWith('/telemetry-smoke/summary'),
     )
     const log = telemetry.find(
       item => item.data.baseType === 'MessageData' && item.data.baseData.message?.includes('telemetry-smoke-log'),
@@ -262,6 +289,8 @@ it('correlates real request, Bunyan, exception and dependency telemetry in a sep
       expect(item).toBeDefined()
       expect(item?.tags['ai.operation.id']).toBe(traceId)
     }
+    expect(request?.data.baseData.name).toBe('GET /telemetry-smoke/:section')
+    expect(request?.tags['ai.operation.name']).toBe('GET /telemetry-smoke/:section')
     expect(log?.tags['ai.operation.parentId']).toBe(request?.data.baseData.id)
     expect(exception?.tags['ai.operation.parentId']).toBe(request?.data.baseData.id)
     expect(dependency?.tags['ai.operation.parentId']).toBe(request?.data.baseData.id)
