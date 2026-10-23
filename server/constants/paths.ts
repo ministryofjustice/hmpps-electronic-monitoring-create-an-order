@@ -150,6 +150,7 @@ const paths = {
     DELETE_FILE: `${ATTACHMENT_BASE}/:fileType(photo_Id|licence|court_order)/delete`,
     HAVE_PHOTO: `${ATTACHMENT_BASE}/have-photo`,
     HAVE_COURT_ORDER: `${ATTACHMENT_BASE}/have-court-order`,
+    NEW_DOCUMENT: `${ATTACHMENT_BASE}/new-document`,
   },
 
   VARIATION: {
