@@ -1,6 +1,7 @@
 import { Response } from 'express'
 import { Order } from '../../../models/Order'
 import { ValidationResult } from '../../../models/Validation'
+import { Question } from '../../../types/i18n/pages/questionPage'
 import { ErrorMessage } from '../../../models/view-models/utils'
 import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import { ErrorSummary } from '../../../utils/views/govukFrontEndTypes/errorSummary'
@@ -9,10 +10,7 @@ import { getError } from '../../../utils/validation/errorMessages'
 
 export type FileRequiredViewModel = {
   title?: string
-  question: {
-    text?: string
-    hint?: string
-  }
+  question: Partial<Question>
   fileRequired: {
     value?: string | undefined | null
     error?: ErrorMessage

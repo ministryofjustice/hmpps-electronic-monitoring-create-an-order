@@ -27,6 +27,7 @@ import tertiaryAddressPageContent from './pages/tertiaryAddress'
 import trailMonitoringPageContent from './pages/trailMonitoring'
 import uploadLicencePageContent from './pages/uploadLicence'
 import uploadPhotoIdPageContent from './pages/uploadPhotoId'
+import uploadRevocationPaperworkPageContent from './pages/uploadRevocationPaperwork'
 import variationDetailsPageContent from './pages/variationDetails'
 import probationDeliveryUnitPageContent from './pages/probationDeliveryUnit'
 import pduPageContent from './pages/probationDeliveryUnitPage'
@@ -103,6 +104,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       tertiaryAddress: tertiaryAddressPageContent,
       trailMonitoring: trailMonitoringPageContent,
       uploadLicense: uploadLicencePageContent,
+      uploadRevocationPaperwork: uploadRevocationPaperworkPageContent,
       uploadPhotoId: uploadPhotoIdPageContent,
       uploadCourtOrder: uploadCourtOrderPageContent,
       havePhoto: havePhotoPageContent,

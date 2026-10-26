@@ -48,7 +48,12 @@ describe('NewDocumentController', () => {
         'pages/order/attachments/file-required',
         expect.objectContaining({
           title: 'Check if you need to upload a new document',
-          question: { text: 'Do you need to upload a new document?' },
+          question: expect.objectContaining({
+            text: 'Do you need to upload a new document?',
+            guidance: expect.objectContaining({
+              items: expect.arrayContaining([expect.stringContaining('Recall paperwork')]),
+            }),
+          }),
           fileRequired: { value: 'no' },
           errorSummary: null,
         }),

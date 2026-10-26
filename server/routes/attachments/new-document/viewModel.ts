@@ -19,7 +19,7 @@ const construct = (
   res: Response,
 ): FileRequiredViewModel => {
   const content = res.locals.content?.pages.newDocument
-  const question = { text: content?.questions.newDocument.text }
+  const question = content?.questions.newDocument ?? {}
 
   if (errors.length > 0) {
     return {

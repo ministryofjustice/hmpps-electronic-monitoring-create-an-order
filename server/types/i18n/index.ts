@@ -84,6 +84,7 @@ type I18n = {
     tertiaryAddress: AddressPageContent
     trailMonitoring: TrailMonitoringPageContent
     uploadLicense: UploadDocumentPageContent
+    uploadRevocationPaperwork: UploadDocumentPageContent
     uploadPhotoId: UploadDocumentPageContent
     uploadCourtOrder: UploadDocumentPageContent
     variationDetails: VariationDetailsPageContent
