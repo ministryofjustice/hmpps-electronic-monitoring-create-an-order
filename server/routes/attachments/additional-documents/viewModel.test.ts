@@ -3,29 +3,41 @@ import createViewModel from './viewModel'
 import getContent from '../../../i18n'
 
 describe('additional documents check answers', () => {
-  it('shows blank answers when questions are not answered on a court variation', () => {
+  it('does not show the court order upload question for a court order', () => {
     const order = getMockOrder({
-      type: 'VARIATION',
-      interestedParties: { ...getMockOrder().interestedParties!, notifyingOrganisation: 'CIVIL_COUNTY_COURT' },
-      orderParameters: { haveCourtOrder: undefined, havePhoto: undefined },
+      interestedParties: { ...getMockOrder().interestedParties!, notifyingOrganisation: 'FAMILY_COURT' },
+      orderParameters: { havePhoto: false },
     })
 
-    const [courtOrderAnswer, photoAnswer] = createViewModel(order, getContent('en', 'DDV7'))
+    const answers = createViewModel(order, getContent('en', 'DDV7'))
 
-    expect(courtOrderAnswer.value.text).toBe('')
-    expect(photoAnswer.value.text).toBe('')
+    expect(answers.map(answer => answer.key.text)).toEqual(['Do you have a photo to upload?'])
+    expect(answers[0].value.text).toBe('No')
   })
 
-  it('shows No when questions are answered false on a court variation', () => {
+  it('does not show a court order question on a court variation', () => {
     const order = getMockOrder({
       type: 'VARIATION',
       interestedParties: { ...getMockOrder().interestedParties!, notifyingOrganisation: 'CIVIL_COUNTY_COURT' },
-      orderParameters: { haveCourtOrder: false, havePhoto: false },
+      orderParameters: { havePhoto: undefined },
     })
 
-    const [courtOrderAnswer, photoAnswer] = createViewModel(order, getContent('en', 'DDV7'))
+    const answers = createViewModel(order, getContent('en', 'DDV7'))
 
-    expect(courtOrderAnswer.value.text).toBe('No')
-    expect(photoAnswer.value.text).toBe('No')
+    expect(answers.map(answer => answer.key.text)).toEqual(['Do you have a photo to upload?'])
+    expect(answers[0].value.text).toBe('')
+  })
+
+  it('shows the photo answer on a court variation', () => {
+    const order = getMockOrder({
+      type: 'VARIATION',
+      interestedParties: { ...getMockOrder().interestedParties!, notifyingOrganisation: 'CIVIL_COUNTY_COURT' },
+      orderParameters: { havePhoto: false },
+    })
+
+    const answers = createViewModel(order, getContent('en', 'DDV7'))
+
+    expect(answers.map(answer => answer.key.text)).toEqual(['Do you have a photo to upload?'])
+    expect(answers[0].value.text).toBe('No')
   })
 })
