@@ -25,7 +25,7 @@ interface Divider {
 
 type Item = Option | Divider
 
-const isLicenceVariationEligible = (order: Order): boolean => {
+const isEligibleForDapol = (order: Order): boolean => {
   if (order.isSentencingAct === true) {
     return true
   }
@@ -33,12 +33,8 @@ const isLicenceVariationEligible = (order: Order): boolean => {
   return order.interestedParties?.responsibleOrganisation === 'PROBATION'
 }
 
-const isEligibleForDapol = (order: Order): boolean => {
-  if (order.isSentencingAct === true) {
-    return true
-  }
-
-  return order.interestedParties?.responsibleOrganisation === 'PROBATION'
+const isLicenceVariationEligible = (order: Order): boolean => {
+  return order.isSentencingAct === true || order.interestedParties?.responsibleOrganisation === 'PROBATION'
 }
 
 const isPastDatedVariationOrder = (order: Order): boolean => {

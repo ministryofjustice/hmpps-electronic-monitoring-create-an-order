@@ -163,7 +163,7 @@ describe('pilot controller', () => {
       )
     })
 
-    it('disables licence variation option when responsible organisation is not probation', async () => {
+    it('disables licence variation when responsible organisation is not probation', async () => {
       mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue({
         hdc: 'NO',
       })
