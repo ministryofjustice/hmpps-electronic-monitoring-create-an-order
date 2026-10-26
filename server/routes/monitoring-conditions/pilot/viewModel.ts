@@ -3,7 +3,7 @@ import { ViewModel } from '../../../models/view-models/utils'
 import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import { MonitoringConditions } from '../model'
 import { Order } from '../../../models/Order'
-import isVariationType from '../../../utils/isVariationType'
+import isVariationType from '../../../utils/order/isVariationType'
 import { getError } from '../../../utils/validation/errorMessages'
 
 export type PilotModel = ViewModel<Pick<MonitoringConditions, 'pilot'>> & {
