@@ -34,4 +34,25 @@ context('Responsible officer page', () => {
     page.form.lastNameField.shouldHaveValidationMessage("Enter the Responsible Officer's last name")
     page.form.emailField.shouldHaveValidationMessage("Enter the Responsible Officer's email address")
   })
+
+  it('Should show errors when first name, last name and email are just spaces', () => {
+    const page = Page.visit(ResponsibleOfficerPage, { orderId: mockOrderId })
+
+    page.form.fillInWith({
+      firstName: ' ',
+      lastName: ' ',
+      email: ' ',
+    })
+    page.form.continueButton.click()
+    page.errorSummary.shouldExist()
+    page.errorSummary.verifyErrorSummary([
+      "Enter the Responsible Officer's first name",
+      "Enter the Responsible Officer's last name",
+      "Enter the Responsible Officer's email address",
+    ])
+
+    page.form.firstNameField.shouldHaveValidationMessage("Enter the Responsible Officer's first name")
+    page.form.lastNameField.shouldHaveValidationMessage("Enter the Responsible Officer's last name")
+    page.form.emailField.shouldHaveValidationMessage("Enter the Responsible Officer's email address")
+  })
 })
