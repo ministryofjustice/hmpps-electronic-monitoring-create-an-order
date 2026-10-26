@@ -1,4 +1,4 @@
-import { Order } from '../models/Order'
+import { Order } from '../../models/Order'
 
 export default function anyConditionCompleted(order: Order): boolean {
   return (

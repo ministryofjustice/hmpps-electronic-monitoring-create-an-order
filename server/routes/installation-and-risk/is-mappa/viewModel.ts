@@ -1,9 +1,9 @@
 import { Order } from '../../../models/Order'
 import { ValidationResult } from '../../../models/Validation'
 import { ViewModel } from '../../../models/view-models/utils'
-import { createGovukErrorSummary } from '../../../utils/errors'
-import { getError } from '../../../utils/utils'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import { IsMappaInput } from './formModel'
+import { getError } from '../../../utils/validation/errorMessages'
 
 type IsMappaViewModel = ViewModel<Omit<IsMappaInput, 'action'>>
 

@@ -59,15 +59,13 @@ jobs:
     name: Build docker image from hmpps-github-actions    
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@v2 # WORKFLOW_VERSION
     needs:
-      - node_integration_tests
-      - node_unit_tests
-      - node_scenario_tests
+      - node_unit_tests      
     with:
       docker_registry: 'ghcr.io'
       registry_org: 'ministryofjustice'
       additional_docker_tag: ${{ inputs.additional_docker_tag }}
       push: ${{ inputs.push || inputs.push == null }}
-      docker_multiplatform: false
+      docker_multiplatform: true
   deploy_dev:
     name: Deploy to the dev environment
     if: github.ref != 'refs/heads/main'
@@ -86,6 +84,8 @@ jobs:
     needs:
     - build
     - helm_lint
+    - node_integration_tests
+    - node_scenario_tests
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
     secrets: inherit
     with:
@@ -98,6 +98,7 @@ jobs:
     needs:
     - build
     - helm_lint
+    - deploy_preprod
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
     secrets: inherit
     with:

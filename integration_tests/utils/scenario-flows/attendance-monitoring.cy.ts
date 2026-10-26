@@ -1,7 +1,7 @@
-import { createAddressPreview } from '../../../server/utils/utils'
 import AttendanceMonitoringAddToListPage from '../../e2e/order/monitoring-conditions/add-to-list/attendance-monitoring/AttendanceMonitoringPage'
 import MonitoringConditionsCheckYourAnswersPage from '../../pages/order/monitoring-conditions/check-your-answers'
 import Page from '../../pages/page'
+import { createAddressPreview } from '../../../server/utils/views/displayHelpers'
 
 export default function fillInAttendanceMonitoringDetailsWith(attendanceMonitoringDetails): void {
   const attendanceMonitoringPage = Page.verifyOnPage(AttendanceMonitoringAddToListPage)

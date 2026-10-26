@@ -4,7 +4,10 @@ import { AuthenticatedRequestInput } from '../../../interfaces/request'
 import InstallationAppointmentModel, { InstallationAppointment } from '../../../models/InstallationAppointment'
 import { ValidationResult } from '../../../models/Validation'
 import { SanitisedError } from '../../../sanitisedError'
-import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../../../utils/errors'
+import {
+  convertZodErrorToValidationError,
+  convertBackendErrorToValidationError,
+} from '../../../utils/validation/errors'
 import { InstallationAppointmentFormData, InstallationAppointmentFormDataValidator } from './formModel'
 
 type UpdateInstallationAppointmentInput = AuthenticatedRequestInput & {

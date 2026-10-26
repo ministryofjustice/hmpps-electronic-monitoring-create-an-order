@@ -1,8 +1,10 @@
 import { Order, OrderStatusEnum, OrderTypeEnum } from '../models/Order'
-import isVariationType from '../utils/isVariationType'
-import { hasOptionalVariationSectionIsHOCourt, isNotNullOrEmptyString } from '../utils/utils'
+import isVariationType from '../utils/order/isVariationType'
+import { isStartDateInPast } from '../utils/order/orderStartDate'
 import OrderChecklistService from './orderChecklistService'
 import TaskListService, { canBeCompleted, Task } from './taskListService'
+import hasOptionalVariationSectionIsHOCourt from '../utils/order/optionalVariationSections'
+import { isNotNullOrEmptyString } from '../utils/values'
 
 export const SECTIONS = {
   interestedParties: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
@@ -148,11 +150,6 @@ export default class SectionService {
   }
 
   private shouldShowInterestedParties(order: Order): boolean {
-    const startDate = order.monitoringConditions?.startDate
-      ? new Date(order.monitoringConditions?.startDate)
-      : new Date(2040, 0, 0)
-    const startDateIsInFuture = startDate >= new Date()
-
     // Return early for disallowed organisation
     if (order.interestedParties?.notifyingOrganisation === 'HOME_OFFICE') {
       return false
@@ -174,7 +171,7 @@ export default class SectionService {
     }
 
     // Past start date blocks the flow
-    if (startDateIsInFuture) {
+    if (!isStartDateInPast(order)) {
       return true
     }
 

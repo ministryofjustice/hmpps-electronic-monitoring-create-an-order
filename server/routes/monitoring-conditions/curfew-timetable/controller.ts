@@ -6,7 +6,7 @@ import { CurfewTimetableService } from '../../../services'
 import { CurfewTimetable } from '../../../models/CurfewTimetable'
 import CurfewTimetableFormDataModel, { CurfewTimetableDataModel } from './formModel'
 import curfewTimetableViewModel from './viewModel'
-import { serialiseTime } from '../../../utils/utils'
+import { serialiseTime } from '../../../utils/dateTime'
 
 const createApiModelFromFormData = (curfewTimetable: CurfewTimetableDataModel, orderId: string): CurfewTimetable => {
   return Object.entries(curfewTimetable).flatMap(([day, timetables]) =>

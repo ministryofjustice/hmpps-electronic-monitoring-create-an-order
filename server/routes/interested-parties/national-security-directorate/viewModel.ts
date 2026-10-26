@@ -1,9 +1,9 @@
 import { ValidationResult } from '../../../models/Validation'
 import { ViewModel } from '../../../models/view-models/utils'
-import { getError } from '../../../utils/utils'
-import { createGovukErrorSummary } from '../../../utils/errors'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
 
 import { NationalSecurityDirectorateModel } from './formModel'
+import { getError } from '../../../utils/validation/errorMessages'
 
 type NationalSecurityDirectorateViewModel = ViewModel<NationalSecurityDirectorateModel>
 

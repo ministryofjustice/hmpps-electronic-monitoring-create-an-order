@@ -5,7 +5,10 @@ import DeviceWearerContactDetailsModel, { ContactDetails } from '../../../models
 import { ValidationResult } from '../../../models/Validation'
 import { ContactDetailsFormData, ContactDetailsFormDataValidator } from './formModel'
 import { SanitisedError } from '../../../sanitisedError'
-import { convertBackendErrorToValidationError, convertZodErrorToValidationError } from '../../../utils/errors'
+import {
+  convertBackendErrorToValidationError,
+  convertZodErrorToValidationError,
+} from '../../../utils/validation/errors'
 
 type UpdateContactDetailsRequest = AuthenticatedRequestInput & {
   orderId: string
