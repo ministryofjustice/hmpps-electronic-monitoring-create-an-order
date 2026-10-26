@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
 import OrderTasksPage from '../../../pages/order/summary'
+import { FUTURE_START_DATE, probationChangeOrderStub } from '../../../utils/data/probationChangeOrder'
 
 const mockOrderId = uuidv4()
 const mockOrderIdWithAttachments = uuidv4()
@@ -87,6 +88,82 @@ context('Attachments', () => {
       it('Should be accessible', () => {
         const page = Page.visit(AttachmentSummaryPage, { orderId: mockOrderId }, {}, 'Check your answers')
         page.checkIsAccessible()
+      })
+    })
+
+    context('Viewing a probation change to an order that has already started', () => {
+      beforeEach(() => {
+        cy.task('reset')
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+        cy.task('stubCemoGetVersions', { httpStatus: 200, versions: [], orderId: mockOrderId })
+      })
+
+      it('shows that no new document is needed', () => {
+        cy.task('stubCemoGetOrder', probationChangeOrderStub({ id: mockOrderId, haveLicence: false }))
+        cy.signIn()
+
+        const page = Page.visit(AttachmentSummaryPage, { orderId: mockOrderId })
+
+        page.attachmentsSection.shouldHaveItems([
+          { key: 'Do you need to upload a new document?', value: 'No' },
+          { key: 'Do you have a photo to upload?', value: 'No' },
+        ])
+        page.attachmentsSection.shouldNotHaveItem('Upload a copy of the licence or court order document')
+        page.attachmentsSection.element
+          .contains('.govuk-summary-list__row', 'Do you need to upload a new document?')
+          .find('a')
+          .should('have.attr', 'href', `/order/${mockOrderId}/attachments/new-document`)
+      })
+
+      it('shows the uploaded licence when a new document is needed', () => {
+        cy.task(
+          'stubCemoGetOrder',
+          probationChangeOrderStub({ id: mockOrderId, haveLicence: true, licenceFileName: 'new-licence.pdf' }),
+        )
+        cy.signIn()
+
+        const page = Page.visit(AttachmentSummaryPage, { orderId: mockOrderId })
+
+        page.attachmentsSection.shouldHaveItems([
+          { key: 'Do you need to upload a new document?', value: 'Yes' },
+          { key: 'Upload a copy of the licence or court order document', value: 'new-licence.pdf' },
+          { key: 'Do you have a photo to upload?', value: 'No' },
+        ])
+      })
+
+      it('shows the uploaded recall document for a revocation', () => {
+        cy.task(
+          'stubCemoGetOrder',
+          probationChangeOrderStub({
+            id: mockOrderId,
+            type: 'REVOCATION',
+            haveLicence: true,
+            licenceFileName: 'recall.pdf',
+          }),
+        )
+        cy.signIn()
+
+        const page = Page.visit(AttachmentSummaryPage, { orderId: mockOrderId })
+
+        page.attachmentsSection.shouldHaveItems([
+          { key: 'Do you need to upload a new document?', value: 'Yes' },
+          { key: 'Upload a copy of the recall document', value: 'recall.pdf' },
+        ])
+      })
+
+      it('shows only the licence when the order has not started yet', () => {
+        cy.task(
+          'stubCemoGetOrder',
+          probationChangeOrderStub({ id: mockOrderId, startDate: FUTURE_START_DATE, licenceFileName: 'licence.pdf' }),
+        )
+        cy.signIn()
+
+        const page = Page.visit(AttachmentSummaryPage, { orderId: mockOrderId })
+
+        page.attachmentsSection.shouldHaveItems([
+          { key: 'Upload a copy of the licence or court order document', value: 'licence.pdf' },
+        ])
+        page.attachmentsSection.shouldNotHaveItem('Do you need to upload a new document?')
       })
     })
 

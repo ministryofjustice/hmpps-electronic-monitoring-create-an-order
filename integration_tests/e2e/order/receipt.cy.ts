@@ -3,6 +3,7 @@ import path from 'path'
 import Page from '../../pages/page'
 import ReceiptPage from '../../pages/order/receipt'
 import AttachmentType from '../../../server/models/AttachmentType'
+import { probationChangeOrderStub } from '../../utils/data/probationChangeOrder'
 
 const mockOrderId = uuidv4()
 const mockOrder = {
@@ -479,6 +480,25 @@ context('Receipt', () => {
 
       page.orderStatusSection.shouldExist()
       page.orderStatusSection.shouldHaveItems([{ key: 'Type', value: 'Change to an order' }])
+    })
+
+    it('Should show the new document answer and recall document for a past-dated probation revocation', () => {
+      const stub = probationChangeOrderStub({
+        id: mockOrderId,
+        status: 'SUBMITTED',
+        type: 'REVOCATION',
+        haveLicence: true,
+        licenceFileName: 'recall.pdf',
+      })
+      cy.task('stubCemoGetOrder', { ...stub, order: { ...mockOrder, ...stub.order } })
+      cy.visit(`/order/${mockOrderId}/receipt`)
+      const page = Page.verifyOnPage(ReceiptPage)
+
+      page.additionalDocumentsSection.shouldHaveItems([
+        { key: 'Do you need to upload a new document?', value: 'Yes' },
+        { key: 'Upload a copy of the recall document', value: 'recall.pdf' },
+        { key: 'Do you have a photo to upload?', value: 'No' },
+      ])
     })
 
     it('Should type as Change to an order when order type is REJECTED', () => {
