@@ -145,11 +145,10 @@ const paths = {
   ATTACHMENT: {
     BASE_URL: ATTACHMENT_BASE,
     BASE_URL_VERSION: ATTACHMENT_VERSION_BASE,
-    FILE_VIEW: `${ATTACHMENT_BASE}/:fileType(photo_Id|licence|court_order)`,
-    DOWNLOAD_FILE: `${ATTACHMENT_BASE}/:fileType(photo_Id|licence|court_order)/:filename`,
-    DELETE_FILE: `${ATTACHMENT_BASE}/:fileType(photo_Id|licence|court_order)/delete`,
+    FILE_VIEW: `${ATTACHMENT_BASE}/:fileType(photo_Id|licence)`,
+    DOWNLOAD_FILE: `${ATTACHMENT_BASE}/:fileType(photo_Id|licence)/:filename`,
+    DELETE_FILE: `${ATTACHMENT_BASE}/:fileType(photo_Id|licence)/delete`,
     HAVE_PHOTO: `${ATTACHMENT_BASE}/have-photo`,
-    HAVE_COURT_ORDER: `${ATTACHMENT_BASE}/have-court-order`,
   },
 
   VARIATION: {
