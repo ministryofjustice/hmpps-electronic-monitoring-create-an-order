@@ -15,7 +15,6 @@ import ServiceRequestTypePage from '../../../e2e/order/variation/service-request
 import NotifyingOrganisationPage from '../../../e2e/order/interested-parties/notifying-organisation/notifyingOrganisationPage'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
-import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import NewDocumentPage from '../../../pages/order/attachments/newDocument'
 import UploadLicencePage from '../../../pages/order/attachments/uploadLicence'
 import HavePhotoPage from '../../../pages/order/attachments/havePhoto'
@@ -171,10 +170,6 @@ context('Attachments', () => {
     Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').saveAndReturnButton.click()
     orderSummaryPage.riskInformationTask.click()
     Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers').saveAndReturnButton.click()
-    orderSummaryPage.electronicMonitoringTask.click()
-    Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answers').saveAndReturnButton.click()
-
-    orderSummaryPage.additionalDocumentsTask.click()
 
     const newDocumentPage = Page.verifyOnPage(NewDocumentPage)
     newDocumentPage.form.needNewDocumentField.set('Yes')
