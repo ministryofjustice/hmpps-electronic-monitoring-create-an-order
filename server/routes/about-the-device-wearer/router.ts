@@ -17,6 +17,7 @@ const createAboutTheDeviceWearerRouter = (
     | 'deviceWearerService'
     | 'deviceWearerResponsibleAdultService'
     | 'deviceWearerSearchResultsService'
+    | 'deviceWearerAnswersService'
     | 'taskListService'
     | 'orderChecklistService'
     | 'sectionService'
@@ -28,6 +29,7 @@ const createAboutTheDeviceWearerRouter = (
     deviceWearerService,
     deviceWearerResponsibleAdultService,
     deviceWearerSearchResultsService,
+    deviceWearerAnswersService,
     taskListService,
     orderChecklistService,
     sectionService,
@@ -52,10 +54,22 @@ const createAboutTheDeviceWearerRouter = (
   get(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_SEARCH_RESULTS, deviceWearerSearchResultsController.view)
   post(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_SEARCH_RESULTS, deviceWearerSearchResultsController.update)
   viewUpdate(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT, responsibleAdultController)
-  viewUpdate(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS, new DeviceWearerDetailsController())
-  viewUpdate(paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES, new DisabilitiesController())
-  viewUpdate(paths.ABOUT_THE_DEVICE_WEARER.LANGUAGE, new LanguageController())
-  viewUpdate(paths.ABOUT_THE_DEVICE_WEARER.ADULT_AT_INSTALLATION, new AdultAtInstallationController())
+  viewUpdate(
+    paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS,
+    new DeviceWearerDetailsController(deviceWearerAnswersService, taskListService),
+  )
+  viewUpdate(
+    paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES,
+    new DisabilitiesController(deviceWearerAnswersService, taskListService),
+  )
+  viewUpdate(
+    paths.ABOUT_THE_DEVICE_WEARER.LANGUAGE,
+    new LanguageController(deviceWearerAnswersService, taskListService),
+  )
+  viewUpdate(
+    paths.ABOUT_THE_DEVICE_WEARER.ADULT_AT_INSTALLATION,
+    new AdultAtInstallationController(deviceWearerAnswersService, taskListService),
+  )
   viewUpdate(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS, deviceWearerCheckAnswersController)
 
   return router
