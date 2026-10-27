@@ -199,6 +199,8 @@ context('Index', () => {
 
       const page = Page.visit(IndexPage)
 
+      page.subNav.contains('Draft forms').click()
+
       page.orderListHeaders.should('have.length', 3)
       page.orderListHeaders.eq(0).should('contain.text', 'Name')
       page.orderListHeaders.eq(1).should('contain.text', 'Start date')

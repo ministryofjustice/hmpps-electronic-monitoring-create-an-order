@@ -72,7 +72,8 @@ export default function routes({
   // the correct version is resolved regardless of the order the feature routers are mounted in.
   router.use([paths.ORDER.BASE_URL_VERSION, paths.ORDER.BASE_URL], populateOrder(orderService))
 
-  get('/', orderSearchController.list)
+  get('/', orderSearchController.home)
+  get('/drafts', orderSearchController.list)
   get('/search', orderSearchController.search)
 
   router.use(
