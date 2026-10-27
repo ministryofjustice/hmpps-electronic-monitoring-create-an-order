@@ -3,7 +3,7 @@ import express from 'express'
 import createError from 'http-errors'
 
 import multer from 'multer'
-import nunjucksSetup from './utils/nunjucksSetup'
+import nunjucksSetup from './utils/views/nunjucksSetup'
 import errorHandler from './errorHandler'
 import { appInsightsMiddleware } from './utils/azureAppInsights'
 import authorisationMiddleware, { cemoAuthorisedRoles } from './middleware/authorisationMiddleware'

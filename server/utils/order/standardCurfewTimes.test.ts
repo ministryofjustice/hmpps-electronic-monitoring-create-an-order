@@ -1,5 +1,5 @@
-import { CurfewReleaseDate } from '../models/CurfewReleaseDate'
-import { CurfewSchedule } from '../models/CurfewTimetable'
+import { CurfewReleaseDate } from '../../models/CurfewReleaseDate'
+import { CurfewSchedule } from '../../models/CurfewTimetable'
 import {
   STANDARD_CURFEW_TIMES,
   isStandardCurfewTimes,

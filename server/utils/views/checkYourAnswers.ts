@@ -1,5 +1,7 @@
-import { isNullOrUndefined, convertBooleanToEnum, createAddressPreview, trimSeconds } from './utils'
-import { AddressWithoutType } from '../models/Address'
+import { AddressWithoutType } from '../../models/Address'
+import { isNullOrUndefined, convertBooleanToEnum } from '../values'
+import { createAddressPreview } from './displayHelpers'
+import { trimSeconds } from '../dateTime'
 
 type Optional<T> = T | null | undefined
 
@@ -100,19 +102,6 @@ export const createMultipleChoiceAnswer = (
 ): Answer => {
   return createAnswer(key, values.join('<br/>'), uri, { ...opts, valueType: 'html' })
 }
-
-const createTimeRangePreview = (from: Optional<string>, to: Optional<string>) =>
-  isNullOrUndefined(from) && isNullOrUndefined(to)
-    ? ''
-    : `${isNullOrUndefined(from) ? '' : from} - ${isNullOrUndefined(to) ? '' : to}`
-
-export const createTimeRangeAnswer = (
-  key: string,
-  from: Optional<string>,
-  to: Optional<string>,
-  uri: string,
-  opts: AnswerOptions = {},
-): Answer => createAnswer(key, createTimeRangePreview(from, to), uri, opts)
 
 export const createMultipleAddressAnswer = (
   key: string,

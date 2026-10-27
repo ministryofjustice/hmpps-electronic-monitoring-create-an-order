@@ -1,9 +1,9 @@
 import { RequestHandler } from 'express'
 import { jwtDecode } from 'jwt-decode'
 import logger from '../../logger'
-import { convertToTitleCase } from '../utils/utils'
 import UserCohortService from '../services/userCohortService'
 import FeatureFlags from '../utils/featureFlags'
+import { convertToTitleCase } from '../utils/strings'
 
 export default function populateCurrentUser(userCohortService: UserCohortService): RequestHandler {
   return async (req, res, next) => {

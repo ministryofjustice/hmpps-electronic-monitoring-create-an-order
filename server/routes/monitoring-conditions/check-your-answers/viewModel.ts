@@ -1,17 +1,8 @@
 import paths from '../../../constants/paths'
-import {
-  convertToTitleCase,
-  createAddressPreview,
-  formatDateTime,
-  isNotNullOrUndefined,
-  isNullOrUndefined,
-  lookup,
-  trimSeconds,
-} from '../../../utils/utils'
 import { AddressType, AddressTypeEnum } from '../../../models/Address'
 import { CurfewSchedule, CurfewTimetable } from '../../../models/CurfewTimetable'
 import { Order } from '../../../models/Order'
-import shouldShowCurfewDayOfRelease from '../../../utils/curfewDayOfReleaseEligibility'
+import shouldShowCurfewDayOfRelease from '../../../utils/order/curfewDayOfReleaseEligibility'
 import {
   createAddressAnswer,
   createDateAnswer,
@@ -19,10 +10,14 @@ import {
   createMultipleChoiceAnswer,
   createAnswer,
   AnswerOptions,
-} from '../../../utils/checkYourAnswers'
+} from '../../../utils/views/checkYourAnswers'
 import I18n from '../../../types/i18n'
-import isOrderDataDictionarySameOrAbove from '../../../utils/dataDictionaryVersionComparer'
+import isOrderDataDictionarySameOrAbove from '../../../utils/order/dataDictionaryVersionComparer'
 import { notifyingOrganisationCourts } from '../../../models/NotifyingOrganisation'
+import { convertToTitleCase } from '../../../utils/strings'
+import { createAddressPreview, lookup } from '../../../utils/views/displayHelpers'
+import { formatDateTime, trimSeconds } from '../../../utils/dateTime'
+import { isNotNullOrUndefined, isNullOrUndefined } from '../../../utils/values'
 
 const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const answers = []

@@ -5,7 +5,7 @@ import InterestedPartiesModel, { InterestedParties } from '../../../models/Inter
 import { NotifyingOrganisation } from '../../../models/NotifyingOrganisation'
 import { ValidationResult } from '../../../models/Validation'
 import { SanitisedError } from '../../../sanitisedError'
-import { convertBackendErrorToValidationError } from '../../../utils/errors'
+import { convertBackendErrorToValidationError } from '../../../utils/validation/errors'
 
 type UpdateInterestedPartiesRequest = AuthenticatedRequestInput & {
   orderId: string

@@ -5,7 +5,10 @@ import { validateUpdateProbationDevliveryUnitInput } from './formModel'
 import ProbationDeliveryUnitModel, { ProbationDeliveryUnit } from '../../../models/ProbationDeliveryUnit'
 import { ValidationResult } from '../../../models/Validation'
 import { SanitisedError } from '../../../sanitisedError'
-import { convertBackendErrorToValidationError, convertZodErrorToValidationError } from '../../../utils/errors'
+import {
+  convertBackendErrorToValidationError,
+  convertZodErrorToValidationError,
+} from '../../../utils/validation/errors'
 
 type UpdateProbationDeliveryUnitInput = AuthenticatedRequestInput & {
   orderId: string

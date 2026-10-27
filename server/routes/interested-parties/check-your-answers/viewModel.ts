@@ -2,10 +2,11 @@ import paths from '../../../constants/paths'
 import { Order } from '../../../models/Order'
 import I18n from '../../../types/i18n'
 import { ReferenceCatalogDDv6 } from '../../../types/i18n/reference'
-import { AnswerOptions, createAnswer } from '../../../utils/checkYourAnswers'
-import isOrderDataDictionarySameOrAbove from '../../../utils/dataDictionaryVersionComparer'
-import isVariationType from '../../../utils/isVariationType'
-import { formatDateTime, lookup } from '../../../utils/utils'
+import { AnswerOptions, createAnswer } from '../../../utils/views/checkYourAnswers'
+import isOrderDataDictionarySameOrAbove from '../../../utils/order/dataDictionaryVersionComparer'
+import { isPastDatedVariation } from '../../../utils/order/orderStartDate'
+import { formatDateTime } from '../../../utils/dateTime'
+import { lookup } from '../../../utils/views/displayHelpers'
 
 const getResponsibleOrganisationRegionAnswer = (
   order: Order,
@@ -116,18 +117,10 @@ const createProbationDeliveryUnitAnswer = (order: Order, content: I18n, answerOp
   const { questions } = content.pages.probationDeliveryUnit
   const answers = []
 
-  const startDate = order.monitoringConditions.startDate
-    ? new Date(order.monitoringConditions.startDate)
-    : new Date(1900, 0, 0)
-
-  const isStartDateInPast = startDate < new Date()
-
-  const isPastDatedVariation = isVariationType(order.type) && isStartDateInPast
-
   if (
     isOrderDataDictionarySameOrAbove('DDV5', order) &&
     order.interestedParties?.responsibleOrganisation === 'PROBATION' &&
-    !(order.status === 'SUBMITTED' && isPastDatedVariation)
+    !(order.status === 'SUBMITTED' && isPastDatedVariation(order, { treatMissingAsPast: true }))
   ) {
     answers.push(
       createAnswer(

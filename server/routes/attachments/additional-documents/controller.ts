@@ -3,9 +3,9 @@ import { AttachmentService, AuditService } from '../../../services'
 import AttachmentType from '../../../models/AttachmentType'
 import paths from '../../../constants/paths'
 import TaskListService, { PAGES, Page } from '../../../services/taskListService'
-import { formatDateTime } from '../../../utils/utils'
 import createViewModel from './viewModel'
 import OrderChecklistService from '../../../services/orderChecklistService'
+import { formatDateTime } from '../../../utils/dateTime'
 
 export default class AttachmentsController {
   constructor(
@@ -46,8 +46,6 @@ export default class AttachmentsController {
 
   getCurrentPage = (attachmentType: AttachmentType): Page => {
     switch (attachmentType) {
-      case AttachmentType.COURT_ORDER:
-        return PAGES.courtOrderUpload
       case AttachmentType.LICENCE:
         return PAGES.licenceUpload
       case AttachmentType.PHOTO_ID:

@@ -6,9 +6,9 @@ import { ViewModel } from '../../../models/view-models/utils'
 import I18n from '../../../types/i18n'
 import PostcodeLookupPageContent from '../../../types/i18n/pages/postcodeLookup'
 import QuestionPageContent from '../../../types/i18n/pages/questionPage'
-import { createGovukErrorSummary } from '../../../utils/errors'
-import { getError } from '../../../utils/utils'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import { FindAddress, FindAddressForm } from './formModel'
+import { getError } from '../../../utils/validation/errorMessages'
 
 type FindAddressViewModel = ViewModel<FindAddress> & {
   content: QuestionPageContent<'postcode' | 'buildingId'>

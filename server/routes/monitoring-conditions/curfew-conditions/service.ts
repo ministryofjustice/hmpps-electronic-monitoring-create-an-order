@@ -5,7 +5,10 @@ import CurfewConditionsModel, { CurfewConditions } from '../../../models/CurfewC
 import { ValidationResult } from '../../../models/Validation'
 import { SanitisedError } from '../../../sanitisedError'
 import { CurfewConditionsFormData, CurfewConditionsFormDataValidator } from './formModel'
-import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../../../utils/errors'
+import {
+  convertZodErrorToValidationError,
+  convertBackendErrorToValidationError,
+} from '../../../utils/validation/errors'
 import { NotifyingOrganisation } from '../../../models/NotifyingOrganisation'
 
 type CurfewConditionsInput = AuthenticatedRequestInput & {

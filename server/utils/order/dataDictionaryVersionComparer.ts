@@ -1,4 +1,4 @@
-import { DataDictionaryVersionEnum, DataDictionaryVersion, Order } from '../models/Order'
+import { DataDictionaryVersionEnum, DataDictionaryVersion, Order } from '../../models/Order'
 
 export default function isOrderDataDictionarySameOrAbove(ddVersion: DataDictionaryVersion, order: Order): boolean {
   const entries = Object.keys(DataDictionaryVersionEnum.Values)
