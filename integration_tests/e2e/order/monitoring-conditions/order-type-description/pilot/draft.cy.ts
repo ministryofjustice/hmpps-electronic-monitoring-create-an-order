@@ -305,7 +305,7 @@ context('pilot', () => {
 
     const page = Page.visit(PilotPage, { orderId: mockOrderId })
 
-       page.form.pilotField.shouldNotHaveOption('Licence Variation Project')
+    page.form.pilotField.shouldNotHaveOption('Licence Variation Project')
 
     cy.contains(
       '.govuk-inset-text',
