@@ -50,6 +50,7 @@ import PostcodeService from '../routes/postcode-lookup/postcodeService'
 import SentencingActService from '../routes/sentencing-act-selection/SentencingActService'
 import SectionService from './sectionsService'
 import DeviceWearerSearchResultsService from '../routes/about-the-device-wearer/device-wearer-search-results/service'
+import DeviceWearerStoreService from '../routes/about-the-device-wearer/store/deviceWearerStoreService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient, osDataHubClient } = dataAccess()
@@ -100,6 +101,10 @@ export const services = () => {
   )
 
   const updateInterestedPartiesService = new UpdateInterestedPartiesService(cemoApiClient)
+
+  const deviceWearerStoreService = new DeviceWearerStoreService(
+    config.redis.enabled ? new RedisStore(createRedisClient()) : new InMemoryStore(),
+  )
 
   const postcodeService = new PostcodeService(osDataHubClient)
 
@@ -158,6 +163,7 @@ export const services = () => {
     sectionService,
     sentencingActService,
     deviceWearerSearchResultsService,
+    deviceWearerStoreService,
   }
 }
 
