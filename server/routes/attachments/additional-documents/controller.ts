@@ -46,8 +46,6 @@ export default class AttachmentsController {
 
   getCurrentPage = (attachmentType: AttachmentType): Page => {
     switch (attachmentType) {
-      case AttachmentType.COURT_ORDER:
-        return PAGES.courtOrderUpload
       case AttachmentType.LICENCE:
         return PAGES.licenceUpload
       case AttachmentType.PHOTO_ID:
