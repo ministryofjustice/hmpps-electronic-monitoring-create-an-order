@@ -1,4 +1,5 @@
 import { getMockOrder } from '../../../test/mocks/mockOrder'
+import paths from '../../constants/paths'
 import { getRiskInformationTasks } from './riskInformationTasks'
 
 describe('getRiskInformationTasks', () => {
@@ -34,5 +35,18 @@ describe('getRiskInformationTasks', () => {
     order.mappa = { isMappa: 'YES', level: null, category: null }
 
     expect(getRiskInformationTasks(order).find(task => task.name === 'MAPPA')?.state).toBe('REQUIRED')
+  })
+
+  describe('details of installation path', () => {
+    const detailsOfInstallationTask = () =>
+      getRiskInformationTasks(getMockOrder()).find(task => task.name === 'DETAILS_OF_INSTALLATION')
+
+    afterEach(() => {
+      jest.restoreAllMocks()
+    })
+
+    it('starts at the risk behaviour page', () => {
+      expect(detailsOfInstallationTask()?.path).toBe(paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR)
+    })
   })
 })

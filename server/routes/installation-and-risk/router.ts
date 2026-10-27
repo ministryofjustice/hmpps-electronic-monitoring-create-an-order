@@ -6,9 +6,10 @@ import DapoController from './dapo/controller'
 import OffenceListDeleteController from './delete/controller'
 import MappaController from './mappa/controller'
 import { Services } from '../../services'
-import DetailsOfInstallationController from './details-of-installation/controller'
 import IsMappaController from './is-mappa/controller'
-import InstallationAndRiskController from './risk-information/controller'
+import RiskBehaviourController from './risk-behaviour/controller'
+import RiskAtAddressController from './risk-at-address/controller'
+import OtherRisksController from './other-risks/controller'
 import InstallationAndRiskCheckAnswersController from './check-your-answers/controller'
 import paths from '../../constants/paths'
 import { createFeatureRouter } from '../routeHelpers'
@@ -20,8 +21,7 @@ const createInstallationAndRiskRouter = (
     | 'offenceService'
     | 'mappaService'
     | 'offenceOtherInfoService'
-    | 'detailsOfInstallationService'
-    | 'installationAndRiskService'
+    | 'riskAtInstallationService'
     | 'orderChecklistService'
     | 'sectionService'
     | 'taskListService'
@@ -34,14 +34,12 @@ const createInstallationAndRiskRouter = (
     offenceService,
     mappaService,
     taskListService,
-    detailsOfInstallationService,
+    riskAtInstallationService,
     offenceOtherInfoService,
-    installationAndRiskService,
     orderChecklistService,
     sectionService,
   } = services
 
-  const installationAndRiskController = new InstallationAndRiskController(installationAndRiskService, taskListService)
   const installationAndRiskCheckAnswersController = new InstallationAndRiskCheckAnswersController(
     taskListService,
     orderChecklistService,
@@ -54,13 +52,9 @@ const createInstallationAndRiskRouter = (
   const deleteController = new OffenceListDeleteController(offenceService, dapoService)
   const isMappaController = new IsMappaController(mappaService, taskListService)
   const mappaController = new MappaController(mappaService, taskListService)
-  const detailsOfInstallationController = new DetailsOfInstallationController(
-    detailsOfInstallationService,
-    taskListService,
-  )
-
-  get(paths.INSTALLATION_AND_RISK.BASE_URL, installationAndRiskController.view)
-  post(paths.INSTALLATION_AND_RISK.BASE_URL, installationAndRiskController.update)
+  const riskBehaviourController = new RiskBehaviourController(riskAtInstallationService, taskListService)
+  const riskAtAddressController = new RiskAtAddressController(riskAtInstallationService, taskListService)
+  const otherRisksController = new OtherRisksController(riskAtInstallationService, taskListService)
   viewUpdate(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS, installationAndRiskCheckAnswersController)
   get(paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM, offenceController.view)
   get(paths.INSTALLATION_AND_RISK.OFFENCE, offenceController.view)
@@ -80,8 +74,9 @@ const createInstallationAndRiskRouter = (
   post(paths.INSTALLATION_AND_RISK.IS_MAPPA, isMappaController.update)
   get(paths.INSTALLATION_AND_RISK.MAPPA, mappaController.view)
   post(paths.INSTALLATION_AND_RISK.MAPPA, mappaController.update)
-  get(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION, detailsOfInstallationController.view)
-  post(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION, detailsOfInstallationController.update)
+  viewUpdate(paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR, riskBehaviourController)
+  viewUpdate(paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS, riskAtAddressController)
+  viewUpdate(paths.INSTALLATION_AND_RISK.OTHER_RISKS, otherRisksController)
 
   return router
 }
