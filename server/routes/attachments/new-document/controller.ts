@@ -27,9 +27,7 @@ export default class NewDocumentController {
 
     const validationResult = NewDocumentFormValidator.safeParse(formData)
     if (!validationResult.success) {
-      req.flash('formData', formData)
-      req.flash('validationErrors', convertZodErrorToValidationError(validationResult.error))
-      res.redirect(paths.ATTACHMENT.NEW_DOCUMENT.replace(':orderId', order.id))
+      this.redirectWithErrors(req, res, formData, convertZodErrorToValidationError(validationResult.error))
       return
     }
 
@@ -40,9 +38,7 @@ export default class NewDocumentController {
       data: { fileRequired, fileType: AttachmentType.LICENCE },
     })
     if (isValidationResult(result)) {
-      req.flash('formData', formData)
-      req.flash('validationErrors', result)
-      res.redirect(paths.ATTACHMENT.NEW_DOCUMENT.replace(':orderId', order.id))
+      this.redirectWithErrors(req, res, formData, result)
       return
     }
 
@@ -53,5 +49,11 @@ export default class NewDocumentController {
 
     order.orderParameters = { ...order.orderParameters, haveLicence: fileRequired === 'yes' }
     res.redirect(this.taskListService.getNextPage(PAGES.newDocument, order))
+  }
+
+  private redirectWithErrors(req: Request, res: Response, formData: NewDocumentFormData, errors: ValidationResult) {
+    req.flash('formData', formData)
+    req.flash('validationErrors', errors)
+    res.redirect(paths.ATTACHMENT.NEW_DOCUMENT.replace(':orderId', req.order!.id))
   }
 }

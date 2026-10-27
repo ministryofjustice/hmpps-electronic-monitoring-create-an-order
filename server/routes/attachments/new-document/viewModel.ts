@@ -3,14 +3,9 @@ import { Order } from '../../../models/Order'
 import { ValidationResult } from '../../../models/Validation'
 import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import { getError } from '../../../utils/validation/errorMessages'
-import { FileRequiredViewModel } from '../court-order/viewModel'
+import { convertBooleanToEnum } from '../../../utils/values'
+import FileRequiredViewModel from '../fileRequiredViewModel'
 import { NewDocumentFormData } from './formModel'
-
-const convertBooleanToAnswer = (value: boolean | undefined | null): string => {
-  if (value === true) return 'yes'
-  if (value === false) return 'no'
-  return ''
-}
 
 const construct = (
   order: Order,
@@ -19,27 +14,15 @@ const construct = (
   res: Response,
 ): FileRequiredViewModel => {
   const content = res.locals.content?.pages.newDocument
-  const question = content?.questions.newDocument ?? {}
-
-  if (errors.length > 0) {
-    return {
-      title: content?.title,
-      question,
-      fileRequired: {
-        value: formData?.fileRequired,
-        error: getError(errors, 'fileRequired'),
-      },
-      errorSummary: createGovukErrorSummary(errors),
-    }
-  }
+  const hasErrors = errors.length > 0
 
   return {
     title: content?.title,
-    question,
-    fileRequired: {
-      value: convertBooleanToAnswer(order.orderParameters?.haveLicence),
-    },
-    errorSummary: null,
+    question: content?.questions.newDocument ?? {},
+    fileRequired: hasErrors
+      ? { value: formData?.fileRequired, error: getError(errors, 'fileRequired') }
+      : { value: convertBooleanToEnum(order.orderParameters?.haveLicence, '', 'yes', 'no') },
+    errorSummary: hasErrors ? createGovukErrorSummary(errors) : null,
   }
 }
 

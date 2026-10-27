@@ -1,24 +1,11 @@
 import { Response } from 'express'
 import { Order } from '../../../models/Order'
 import { ValidationResult } from '../../../models/Validation'
-import { ErrorMessage } from '../../../models/view-models/utils'
 import { createGovukErrorSummary } from '../../../utils/validation/errors'
-import { ErrorSummary } from '../../../utils/views/govukFrontEndTypes/errorSummary'
 import { FileRequiredFormData } from '../fileRequiredFormModel'
+import FileRequiredViewModel from '../fileRequiredViewModel'
 import { getError } from '../../../utils/validation/errorMessages'
-
-export type FileRequiredViewModel = {
-  title?: string
-  question: {
-    text?: string
-    hint?: string
-  }
-  fileRequired: {
-    value?: string | undefined | null
-    error?: ErrorMessage
-  }
-  errorSummary: ErrorSummary | null
-}
+import { convertBooleanToEnum } from '../../../utils/values'
 
 const createFromEntity = (order: Order, res: Response): FileRequiredViewModel => {
   return {
@@ -28,7 +15,7 @@ const createFromEntity = (order: Order, res: Response): FileRequiredViewModel =>
       hint: res.locals.content?.pages.havePhoto.questions.havePhoto.hint,
     },
     fileRequired: {
-      value: convertHavePhotoBoolToString(order.orderParameters?.havePhoto),
+      value: convertBooleanToEnum(order.orderParameters?.havePhoto, '', 'yes', 'no'),
     },
     errorSummary: null,
   }
@@ -62,12 +49,6 @@ const contructModel = (
     return createFromFormData(errors, formData, res)
   }
   return createFromEntity(data, res)
-}
-
-const convertHavePhotoBoolToString = (fileRequired: boolean | undefined | null): string => {
-  if (fileRequired === true) return 'yes'
-  if (fileRequired === false) return 'no'
-  return ''
 }
 
 export default contructModel
