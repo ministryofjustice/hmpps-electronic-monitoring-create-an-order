@@ -48,7 +48,7 @@ context('offence other info page', () => {
     it('can view existing offence other info and ot editable', () => {
       const page = Page.visit(OffenceOtherInfoPage, { orderId: mockOrderId })
 
-      page.submittedBanner.should('contain', 'You are viewing a submitted order.')
+      page.submittedBanner.should('not.exist')
 
       page.form.hasOtherInformationField.shouldHaveValue('Yes')
       page.form.otherInformationDetailsField.shouldHaveValue('Risk of violence towards staff')

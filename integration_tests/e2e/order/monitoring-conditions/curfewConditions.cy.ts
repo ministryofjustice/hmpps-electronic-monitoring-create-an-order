@@ -85,7 +85,7 @@ context('Curfew conditions', () => {
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/conditions`)
       const page = Page.verifyOnPage(CurfewConditionsPage)
-      page.submittedBanner.should('contain', 'You are viewing a submitted order.')
+      page.submittedBanner.should('not.exist')
       cy.get('input[type="text"]').each($el => {
         cy.wrap($el).should('be.disabled')
       })

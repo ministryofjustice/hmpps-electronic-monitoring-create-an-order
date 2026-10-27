@@ -141,10 +141,10 @@ context('Monitoring conditions - Curfew timetable', () => {
       cy.signIn()
     })
 
-    it('Should indicate to the user that this is a submitted order', () => {
+    it('Should not display you are viewing a submitted order banner', () => {
       const page = Page.visit(CurfewTimetablePage, { orderId: mockOrderId })
 
-      page.submittedBanner.should('contain', 'You are viewing a submitted order.')
+      page.submittedBanner.should('not.exist')
     })
 
     it('Should correctly display the submitted data in disabled fields', () => {

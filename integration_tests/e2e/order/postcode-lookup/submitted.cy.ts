@@ -40,7 +40,7 @@ context('Postcode lookup submitted', () => {
 
         page.header.userName().should('contain.text', 'J. Smith')
         page.header.phaseBanner().should('contain.text', 'dev')
-        page.submittedBanner.should('contain', 'You are viewing a submitted order.')
+        page.submittedBanner.should('not.exist')
         page.form.findAddressButton.should('not.exist')
         page.form.saveAsDraftButton.should('not.exist')
         page.returnBackToFormSectionMenuButton
@@ -56,7 +56,7 @@ context('Postcode lookup submitted', () => {
 
         page.header.userName().should('contain.text', 'J. Smith')
         page.header.phaseBanner().should('contain.text', 'dev')
-        page.submittedBanner.should('contain', 'You are viewing a submitted order.')
+        page.submittedBanner.should('not.exist')
         page.form.saveAsDraftButton.should('not.exist')
         page.form.shouldBeDisabled()
         page.errorSummary.shouldNotExist()
@@ -73,7 +73,7 @@ context('Postcode lookup submitted', () => {
 
         page.header.userName().should('contain.text', 'J. Smith')
         page.header.phaseBanner().should('contain.text', 'dev')
-        page.submittedBanner.should('contain', 'You are viewing a submitted order.')
+        page.submittedBanner.should('not.exist')
         page.form.useAddressButton.should('not.exist')
         page.returnBackToFormSectionMenuButton
           .should('exist')
@@ -88,7 +88,7 @@ context('Postcode lookup submitted', () => {
 
         page.header.userName().should('contain.text', 'J. Smith')
         page.header.phaseBanner().should('contain.text', 'dev')
-        page.submittedBanner.should('contain', 'You are viewing a submitted order.')
+        page.submittedBanner.should('not.exist')
         page.form.saveAndContinueButton.should('not.exist')
         page.form.saveAsDraftButton.should('not.exist')
         page.returnBackToFormSectionMenuButton

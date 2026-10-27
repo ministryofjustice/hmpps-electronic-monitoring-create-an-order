@@ -33,7 +33,7 @@ context('dapo page', () => {
     it('can view a specific clause', () => {
       const page = Page.visit(DapoPage, { orderId: mockOrderId, clauseId }, {}, true)
 
-      page.submittedBanner.should('contain', 'You are viewing a submitted order.')
+      page.submittedBanner.should('not.exist')
 
       page.form.clauseNumberField.shouldHaveValue('some clause')
       page.form.clauseNumberField.shouldBeDisabled()

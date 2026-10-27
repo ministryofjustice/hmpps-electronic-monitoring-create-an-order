@@ -123,7 +123,7 @@ context('Attendance monitoring', () => {
     it('Should correctly display the submitted data in disabled fields', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/add-to-list/attendance/${mockConditionId}`)
       const page = Page.verifyOnPage(AttendanceMonitoringAddToListPage)
-      page.submittedBanner.should('contain', 'You are viewing a submitted order.')
+      page.submittedBanner.should('not.exist')
       page.form.startDateField.shouldHaveValue(new Date(2024, 2, 27))
       page.form.endDateField.shouldHaveValue(new Date(2025, 3, 28))
       page.form.purposeField.shouldHaveValue('To attend')

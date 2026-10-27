@@ -274,7 +274,7 @@ context('Order Summary', () => {
     })
   })
 
-  context('Sentencing act banner', () => {
+  context('Sentencing act banner should not exist', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -291,21 +291,12 @@ context('Order Summary', () => {
       })
     }
 
-    it('shows the Sentencing Act message when order is flagged', () => {
+    it('does not show the Sentencing Act banner', () => {
       stubOrderWithSentencingAct(true)
       Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
-      cy.get('.moj-alert')
-        .should('contain.text', 'This order is subject to the Sentencing Act 2026 changes.')
-        .and('not.have.class', 'moj-alert--warning')
-        .and('have.class', 'moj-alert--information')
-    })
-
-    it('doesnt show the Sentencing Act banner when order is not sentencing act', () => {
-      stubOrderWithSentencingAct(false)
-      Page.visit(OrderTasksPage, { orderId: mockOrderId })
-
       cy.get('.moj-alert').should('not.exist')
+      cy.contains('This order is subject to the Sentencing Act 2026 changes.').should('not.exist')
     })
   })
 })

@@ -172,7 +172,7 @@ context('Curfew monitoring - release date', () => {
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/release-date`)
       const page = Page.verifyOnPage(CurfewReleaseDatePage)
-      page.submittedBanner.should('contain', 'You are viewing a submitted order.')
+      page.submittedBanner.should('not.exist')
       checkFormFields()
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAsDraftButton.should('not.exist')

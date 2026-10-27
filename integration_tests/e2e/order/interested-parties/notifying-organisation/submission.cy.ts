@@ -76,7 +76,8 @@ context('Submit notifying organisations', () => {
       }).should('be.true')
 
       Page.verifyOnPage(OrderTasksPage)
-      cy.get('.moj-alert').should('contain.text', 'This order is subject to the Sentencing Act 2026 changes.')
+      cy.get('.moj-alert').should('not.exist')
+      cy.contains('This order is subject to the Sentencing Act 2026 changes.').should('not.exist')
     })
 
     it('other cohort can submit order', () => {
