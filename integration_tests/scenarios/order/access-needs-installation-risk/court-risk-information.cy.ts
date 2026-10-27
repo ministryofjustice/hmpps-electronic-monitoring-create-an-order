@@ -1,4 +1,3 @@
-import DetailsOfInstallationPage from '../../../e2e/order/access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
 import OffenceOtherInfoPage from '../../../e2e/order/access-needs-installation-risk/offences/offence-other-info/offenceOtherInfoPage'
 import OffencePage from '../../../e2e/order/access-needs-installation-risk/offences/offence/offencePage'
 import { createFakeAdultDeviceWearer, createFakeInterestedParties } from '../../../mockApis/faker'
@@ -8,6 +7,7 @@ import OrderSummaryPage from '../../../pages/order/summary'
 import Page from '../../../pages/page'
 import fillInAboutTheDeviceWearer from '../../../utils/scenario-flows/about-the-device-wearer-flow.cy'
 import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
+import fillInRiskAtInstallationWith from '../../../utils/scenario-flows/risk-at-installation.cy'
 
 context('Court risk information', () => {
   const deviceWearerDetails = {
@@ -19,8 +19,8 @@ context('Court risk information', () => {
   }
 
   const detailsOfInstallation = {
-    possibleRisks: ['Violent behaviour or threats of violence'],
-    riskCategories: ['Safeguarding child'],
+    possibleRisk: ['Violent behaviour or threats of violence'],
+    riskCategory: ['Safeguarding child'],
     riskDetails: 'some details',
   }
 
@@ -59,10 +59,7 @@ context('Court risk information', () => {
   it('skips offence pages for Civil Court', () => {
     startRiskInformation('Civil and County Court')
 
-    const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
-    cy.get('#offence').should('not.exist')
-    detailsOfInstallationPage.form.fillInWith(detailsOfInstallation)
-    detailsOfInstallationPage.form.saveAndContinueButton.click()
+    fillInRiskAtInstallationWith(detailsOfInstallation)
 
     const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
     cyaPage.installationRiskSection.shouldHaveItems([
@@ -71,10 +68,10 @@ context('Court risk information', () => {
         value: 'Violent behaviour or threats of violence',
       },
       {
-        key: 'What are the possible risks at the installation address? (optional)',
+        key: 'At installation what are the possible risks at the address?',
         value: 'Safeguarding child',
       },
-      { key: 'Any other risks to be aware of? (optional)', value: 'some details' },
+      { key: 'Are there other risks to be aware of', value: 'some details' },
     ])
     // Do not render fixed offence on cya for court
     cyaPage.installationRiskSection.shouldNotHaveItem('Offences')
@@ -83,10 +80,7 @@ context('Court risk information', () => {
   it('skips offence and DAPO clause pages for Family Court', () => {
     startRiskInformation('Family Court')
 
-    const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
-    cy.get('#offence').should('not.exist')
-    detailsOfInstallationPage.form.fillInWith(detailsOfInstallation)
-    detailsOfInstallationPage.form.saveAndContinueButton.click()
+    fillInRiskAtInstallationWith(detailsOfInstallation)
 
     const cyaPage = Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answer')
     cyaPage.installationRiskSection.shouldNotHaveItem('Offences')
@@ -96,10 +90,7 @@ context('Court risk information', () => {
   it('shows every standard Risk Information page for Prison', () => {
     startRiskInformation('Prison')
 
-    const detailsOfInstallationPage = Page.verifyOnPage(DetailsOfInstallationPage)
-    cy.get('#offence').should('not.exist')
-    detailsOfInstallationPage.form.fillInWith(detailsOfInstallation)
-    detailsOfInstallationPage.form.saveAndContinueButton.click()
+    fillInRiskAtInstallationWith(detailsOfInstallation)
 
     const offencePage = Page.verifyOnPage(OffencePage)
     offencePage.form.fillInWith({ offenceType: 'Criminal damage and arson' })
