@@ -4,7 +4,7 @@ import OffenceListPage from './offenceListPage'
 import OffencePage from '../offence/offencePage'
 import DapoPage from '../dapo/DapoPage'
 import OffenceOtherInfoPage from '../offence-other-info/offenceOtherInfoPage'
-import DetailsOfInstallationPage from '../../details-of-installation/DetailsOfInstallationPage'
+import RiskBehaviourPage from '../../risk-behaviour/RiskBehaviourPage'
 import OrderTasksPage from '../../../../../pages/order/summary'
 
 const mockOrderId = uuidv4()
@@ -155,7 +155,7 @@ context('Offence list page', () => {
       })
       page.form.saveAndContinueButton.click()
 
-      Page.verifyOnPage(DetailsOfInstallationPage)
+      Page.verifyOnPage(RiskBehaviourPage)
     })
 
     it('Should go to order summary page if save as draft', () => {

@@ -5,7 +5,7 @@ import AttachmentType from '../../../../server/models/AttachmentType'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
 import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
-import DetailsOfInstallationPage from '../access-needs-installation-risk/details-of-installation/DetailsOfInstallationPage'
+import RiskBehaviourPage from '../access-needs-installation-risk/risk-behaviour/RiskBehaviourPage'
 import ResponsibleOfficerPage from '../interested-parties/responsible-officer/responsibleOfficerPage'
 import InterestedPartiesCheckYourAnswersPage from '../interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
@@ -103,7 +103,7 @@ context('Order Summary', () => {
       page.riskInformationTask.link.should(
         'have.attr',
         'href',
-        `/order/${mockOrderId}/installation-and-risk/details-of-installation`,
+        `/order/${mockOrderId}/installation-and-risk/risk-behaviour`,
       )
 
       page.electronicMonitoringTask.shouldHaveStatus('Cannot start yet')
@@ -171,11 +171,11 @@ context('Order Summary', () => {
       page.riskInformationTask.link.should(
         'have.attr',
         'href',
-        `/order/${mockOrderId}/installation-and-risk/details-of-installation`,
+        `/order/${mockOrderId}/installation-and-risk/risk-behaviour`,
       )
       page.riskInformationTask.click()
 
-      Page.verifyOnPage(DetailsOfInstallationPage)
+      Page.verifyOnPage(RiskBehaviourPage)
     })
 
     it('Disables submit when risk information is incomplete', () => {
@@ -271,7 +271,7 @@ context('Order Summary', () => {
       page.riskInformationTask.link.should(
         'have.attr',
         'href',
-        `/order/${mockOrderId}/installation-and-risk/details-of-installation`,
+        `/order/${mockOrderId}/installation-and-risk/risk-behaviour`,
       )
 
       page.electronicMonitoringTask.shouldHaveStatus('Cannot start yet')
