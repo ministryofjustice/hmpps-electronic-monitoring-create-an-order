@@ -5,12 +5,12 @@ import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import { getError } from '../../../utils/validation/errorMessages'
 import { convertBooleanToEnum } from '../../../utils/values'
 import FileRequiredViewModel from '../fileRequiredViewModel'
-import { NewDocumentFormData } from './formModel'
+import { FileRequiredFormData } from '../fileRequiredFormModel'
 
 const construct = (
   order: Order,
   errors: ValidationResult,
-  formData: NewDocumentFormData | undefined,
+  formData: FileRequiredFormData | undefined,
   res: Response,
 ): FileRequiredViewModel => {
   const content = res.locals.content?.pages.newDocument

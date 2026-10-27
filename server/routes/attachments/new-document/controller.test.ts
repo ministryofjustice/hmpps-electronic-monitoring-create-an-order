@@ -82,17 +82,15 @@ describe('NewDocumentController', () => {
   })
 
   describe('update', () => {
-    it('asks the user to answer when no option is selected', async () => {
+    it('asks the service to use the new document message when no option is selected', async () => {
       const req = requestWith({ action: 'continue' })
       const res = createMockResponse(order)
 
       await controller.update(req, res, jest.fn())
 
-      expect(attachmentService.updateFileRequired).not.toHaveBeenCalled()
-      expect(req.flash).toHaveBeenCalledWith('validationErrors', [
-        { field: 'fileRequired', error: 'Select Yes if you need to upload a new document' },
-      ])
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/attachments/new-document`)
+      expect(attachmentService.updateFileRequired).toHaveBeenCalledWith(
+        expect.objectContaining({ requiredMessage: 'Select Yes if you need to upload a new document' }),
+      )
     })
 
     it('records that a new document is needed and goes to the licence upload', async () => {
@@ -105,6 +103,7 @@ describe('NewDocumentController', () => {
         accessToken: 'fakeUserToken',
         orderId: order.id,
         data: expect.objectContaining({ fileRequired: 'yes', fileType: 'LICENCE' }),
+        requiredMessage: 'Select Yes if you need to upload a new document',
       })
       expect(res.redirect).toHaveBeenCalledWith(`/order/${order.id}/attachments/licence`)
     })

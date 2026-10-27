@@ -2,10 +2,10 @@ import { Request, RequestHandler, Response } from 'express'
 import AttachmentService from '../service'
 import { ValidationResult, isValidationResult } from '../../../models/Validation'
 import paths from '../../../constants/paths'
+import { validationErrors } from '../../../constants/validationErrors'
 import TaskListService, { PAGES } from '../../../services/taskListService'
 import AttachmentType from '../../../models/AttachmentType'
-import { convertZodErrorToValidationError } from '../../../utils/validation/errors'
-import NewDocumentFormModel, { NewDocumentFormData, NewDocumentFormValidator } from './formModel'
+import { FileRequiredFormData, FileRequiredFormDataModel } from '../fileRequiredFormModel'
 import constructModel from './viewModel'
 
 export default class NewDocumentController {
@@ -16,29 +16,25 @@ export default class NewDocumentController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const errors = req.flash('validationErrors') as unknown as ValidationResult
-    const formData = req.flash('formData') as unknown as NewDocumentFormData[]
+    const formData = req.flash('formData') as unknown as FileRequiredFormData[]
     const model = constructModel(req.order!, errors, formData[0], res)
     res.render('pages/order/attachments/file-required', model)
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const formData = NewDocumentFormModel.parse(req.body)
+    const formData = { ...FileRequiredFormDataModel.parse(req.body), fileType: AttachmentType.LICENCE }
 
-    const validationResult = NewDocumentFormValidator.safeParse(formData)
-    if (!validationResult.success) {
-      this.redirectWithErrors(req, res, formData, convertZodErrorToValidationError(validationResult.error))
-      return
-    }
-
-    const { fileRequired } = validationResult.data
     const result = await this.attachmentService.updateFileRequired({
       accessToken: res.locals.user.token,
       orderId: order.id,
-      data: { fileRequired, fileType: AttachmentType.LICENCE },
+      data: formData,
+      requiredMessage: validationErrors.attachments.newDocumentRequired,
     })
     if (isValidationResult(result)) {
-      this.redirectWithErrors(req, res, formData, result)
+      req.flash('formData', formData)
+      req.flash('validationErrors', result)
+      res.redirect(paths.ATTACHMENT.NEW_DOCUMENT.replace(':orderId', order.id))
       return
     }
 
@@ -47,13 +43,7 @@ export default class NewDocumentController {
       return
     }
 
-    order.orderParameters = { ...order.orderParameters, haveLicence: fileRequired === 'yes' }
+    order.orderParameters = { ...order.orderParameters, haveLicence: formData.fileRequired === 'yes' }
     res.redirect(this.taskListService.getNextPage(PAGES.newDocument, order))
-  }
-
-  private redirectWithErrors(req: Request, res: Response, formData: NewDocumentFormData, errors: ValidationResult) {
-    req.flash('formData', formData)
-    req.flash('validationErrors', errors)
-    res.redirect(paths.ATTACHMENT.NEW_DOCUMENT.replace(':orderId', req.order!.id))
   }
 }
