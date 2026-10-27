@@ -54,7 +54,7 @@ const constructModel = (order: Order, errors: ValidationResult): MonitoringTypeM
     model.allconditionsDisabled = true
   }
 
-  return { ...model, showRestrictionZone: isSentencingAct }
+  return { ...model, showRestrictionZone: isSentencingAct || enabled.options.includes('restrictionZone') }
 }
 
 const isConditionDisabled = (order: Order, condition: keyof MonitoringTypes) => {
