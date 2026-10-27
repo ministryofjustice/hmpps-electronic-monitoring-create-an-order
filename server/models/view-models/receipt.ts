@@ -4,38 +4,65 @@ import * as RiskInformationCheckAnswers from '../../routes/installation-and-risk
 import * as AdditionalDocumentsCheckAnswers from '../../routes/attachments/additional-documents/viewModel'
 import * as VariationDetailsCheckAnswers from './variationDetailsCheckAnswers'
 import InterestedPartiesCheckAnswers from '../../routes/interested-parties/check-your-answers/viewModel'
-import { createAnswer, createDateTimeAnswer } from '../../utils/views/checkYourAnswers'
+import { Answer, createAnswer, createDateTimeAnswer } from '../../utils/views/checkYourAnswers'
 
-import { Order } from '../Order'
+import { Order, OrderStatus, OrderType } from '../Order'
 import I18n from '../../types/i18n'
 import FeatureFlags from '../../utils/featureFlags'
 import { isNotNullOrEmptyString } from '../../utils/values'
+import isVariationType from '../../utils/order/isVariationType'
 
 const createOrderStatusAnswers = (order: Order) => {
   const answerOpts = { ignoreActions: true }
-  const answers = [
-    createAnswer('Status', order.status, '', answerOpts),
-    createAnswer('Type', getOrderTypeName(order.type), '', answerOpts),
-    createAnswer('Reference number', order.id, '', answerOpts),
-    createDateTimeAnswer('Date submitted', order.fmsResultDate, '', answerOpts),
-    createAnswer('Submitted by', order.submittedBy, '', answerOpts),
+  const answers: Answer[] = []
+  answers.push(createAnswer('Status', order.status, '', answerOpts))
+  answers.push(createAnswer('Type', getOrderTypeName(order.type, order.status), '', answerOpts))
+
+  if (isVariationType(order.type)) {
+    answers.push(createAnswer('Type of Change', getTypeOfChange(order.type), '', answerOpts))
+  }
+  answers.push(createAnswer('Reference number', order.id, '', answerOpts))
+  answers.push(createDateTimeAnswer('Date submitted', order.fmsResultDate, '', answerOpts))
+  answers.push(createAnswer('Submitted by', order.submittedBy, '', answerOpts))
+  answers.push(
     createAnswer('Notifying organisation', order.interestedParties?.notifyingOrganisation || '', '', answerOpts),
+  )
+  answers.push(
     createAnswer(
       "Notifying organisation's name or region",
       order.interestedParties?.notifyingOrganisationName || '',
       '',
       answerOpts,
     ),
+  )
+  answers.push(
     createAnswer(
       "Notifying organisation's contact email address",
       order.interestedParties?.notifyingOrganisationEmail || '',
       '',
       answerOpts,
     ),
-  ]
+  )
+
   return answers
 }
-
+const getTypeOfChange = (type: OrderType) => {
+  switch (type) {
+    case 'VARIATION':
+      return 'Other change'
+    case 'REINSTALL_AT_DIFFERENT_ADDRESS':
+      return 'Added second or third curfew address'
+    case 'REINSTALL_DEVICE':
+      return 'Changed primary address'
+    case 'REVOCATION':
+      return 'Ended (Recall)'
+    case 'END_MONITORING':
+      return 'Ended'
+    default: {
+      return ''
+    }
+  }
+}
 const getOrderTypeName = (
   type:
     | 'REQUEST'
@@ -46,32 +73,35 @@ const getOrderTypeName = (
     | 'REINSTALL_DEVICE'
     | 'REVOCATION'
     | 'END_MONITORING',
+  status: OrderStatus,
 ) => {
   switch (type) {
+    case 'AMEND_ORIGINAL_REQUEST':
     case 'REQUEST': {
-      return 'New order'
-    }
-    case 'VARIATION': {
-      return 'Change to an order'
+      if (status === 'IN_PROGRESS') {
+        return 'Draft order'
+      }
+      return 'Order Submitted'
     }
     case 'REJECTED': {
-      return 'Rejected order'
+      return 'Form returned'
     }
-    case 'AMEND_ORIGINAL_REQUEST': {
-      return 'New order (original order was rejected)'
-    }
-    case 'REINSTALL_AT_DIFFERENT_ADDRESS': {
-      return 'Reinstall at different address'
-    }
+    case 'VARIATION':
+    case 'REINSTALL_AT_DIFFERENT_ADDRESS':
     case 'REINSTALL_DEVICE': {
-      return 'Reinstall device'
+      if (status === 'IN_PROGRESS') {
+        return 'Changes to an order'
+      }
+      return 'Changes submitted'
     }
-    case 'REVOCATION': {
-      return 'Revocation'
-    }
+    case 'REVOCATION':
     case 'END_MONITORING': {
-      return 'End all monitoring'
+      if (status === 'IN_PROGRESS') {
+        return 'Changes to an order'
+      }
+      return 'Monitoring ended'
     }
+
     default: {
       return ''
     }
