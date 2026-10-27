@@ -18,6 +18,8 @@
 {% set questionName = title%}
 {% block formInputs %}
 
+  {% if heading %}{{ guidanceHtml | safe }}{% endif %}
+
   {{ govukRadios({
   classes: "govuk-radios--inline",
   name: "fileRequired",
@@ -26,13 +28,13 @@
   fieldset: {
     legend: {
       text: question.text,
-      isPageHeading: true,
-      classes: "govuk-fieldset__legend--l"
+      isPageHeading: not heading,
+      classes: "govuk-fieldset__legend--s" if heading else "govuk-fieldset__legend--l"
     }
   },
   hint: {
     text: question.hint,
-    html: guidanceHtml if question.guidance
+    html: guidanceHtml if (question.guidance and not heading)
   },
   items: [
     {

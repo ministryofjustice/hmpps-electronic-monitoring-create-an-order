@@ -48,6 +48,7 @@ describe('NewDocumentController', () => {
         'pages/order/attachments/file-required',
         expect.objectContaining({
           title: 'Check if you need to upload a new document',
+          heading: 'Check if you need to upload a new document',
           question: expect.objectContaining({
             text: 'Do you need to upload a new document?',
             guidance: expect.objectContaining({

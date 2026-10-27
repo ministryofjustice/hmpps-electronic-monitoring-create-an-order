@@ -18,6 +18,7 @@ const construct = (
 
   return {
     title: content?.title,
+    heading: content?.title,
     question: content?.questions.newDocument ?? {},
     fileRequired: hasErrors
       ? { value: formData?.fileRequired, error: getError(errors, 'fileRequired') }

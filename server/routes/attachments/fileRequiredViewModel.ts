@@ -4,6 +4,7 @@ import { ErrorSummary } from '../../utils/views/govukFrontEndTypes/errorSummary'
 
 type FileRequiredViewModel = {
   title?: string
+  heading?: string
   question: Partial<Question>
   fileRequired: {
     value?: string | undefined | null
