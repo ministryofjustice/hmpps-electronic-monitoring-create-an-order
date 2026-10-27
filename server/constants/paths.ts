@@ -94,6 +94,9 @@ const paths = {
     MAPPA: `${INSTALLATION_AND_RISK_BASE}/mappa`,
     IS_MAPPA: `${INSTALLATION_AND_RISK_BASE}/is-mappa`,
     DETAILS_OF_INSTALLATION: `${INSTALLATION_AND_RISK_BASE}/details-of-installation`,
+    RISK_BEHAVIOUR: `${INSTALLATION_AND_RISK_BASE}/risk-behaviour`,
+    RISK_AT_ADDRESS: `${INSTALLATION_AND_RISK_BASE}/risk-at-address`,
+    OTHER_RISKS: `${INSTALLATION_AND_RISK_BASE}/other-risks`,
   },
 
   POSTCODE_LOOKUP: {
