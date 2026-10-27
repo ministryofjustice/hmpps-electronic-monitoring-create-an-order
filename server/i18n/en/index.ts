@@ -37,9 +37,7 @@ import getReferenceData from './reference'
 import havePhotoPageContent from './pages/havePhoto'
 import isRejectionPageContent from './pages/isRejection'
 import serviceRequestTypePageContent from './pages/serviceRequestType'
-import haveCourtOrderPageContent from './pages/haveCourtOrder'
 import newDocumentPageContent from './pages/newDocument'
-import uploadCourtOrderPageContent from './pages/uploadCourtOrder'
 import dapoContent from './pages/dapo'
 import offenceContent from './pages/offence'
 import mappaPageContent from './pages/mappa'
@@ -106,9 +104,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       uploadLicense: uploadLicencePageContent,
       uploadRevocationPaperwork: uploadRevocationPaperworkPageContent,
       uploadPhotoId: uploadPhotoIdPageContent,
-      uploadCourtOrder: uploadCourtOrderPageContent,
       havePhoto: havePhotoPageContent,
-      haveCourtOrder: haveCourtOrderPageContent,
       newDocument: newDocumentPageContent,
       variationDetails: variationDetailsPageContent,
       probationDeliveryUnit: probationDeliveryUnitPageContent,

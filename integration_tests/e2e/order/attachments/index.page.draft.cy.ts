@@ -7,13 +7,17 @@ import { FUTURE_START_DATE, probationChangeOrderStub } from '../../../utils/data
 
 const mockOrderId = uuidv4()
 const mockOrderIdWithAttachments = uuidv4()
+const mockOrderIdForCourt = uuidv4()
 
 context('Attachments', () => {
   context('Summary', () => {
     context('Viewing a draft order', () => {
       beforeEach(() => {
         cy.task('reset')
-        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+        cy.task('stubSignIn', {
+          name: 'john smith',
+          roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        })
         cy.task('stubCemoListOrders')
         cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
         cy.task('stubCemoGetOrderWithAttachments', {
@@ -167,11 +171,98 @@ context('Attachments', () => {
       })
     })
 
+    context('court cohort, viewing a draft order', () => {
+      beforeEach(() => {
+        cy.task('reset')
+
+        cy.task('stubSignIn', {
+          name: 'john smith',
+          roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+          stubCohort: false,
+          userId: '123',
+        })
+
+        cy.task('stubCemoRequest', {
+          httpStatus: 200,
+          method: 'GET',
+          subPath: 'user-cohort',
+          response: { cohort: 'COURT' },
+        })
+
+        cy.task('stubCemoListOrders')
+
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderIdForCourt,
+          status: 'IN_PROGRESS',
+          order: {
+            interestedParties: {
+              notifyingOrganisation: 'FAMILY_COURT',
+              notifyingOrganisationName: '',
+              notifyingOrganisationEmail: '',
+              responsibleOfficerName: '',
+              responsibleOfficerPhoneNumber: '',
+              responsibleOrganisation: 'FIELD_MONITORING_SERVICE',
+              responsibleOrganisationAddress: {
+                addressType: 'RESPONSIBLE_ORGANISATION',
+                addressLine1: '',
+                addressLine2: '',
+                addressLine3: '',
+                addressLine4: '',
+                postcode: '',
+              },
+              responsibleOrganisationEmail: '',
+              responsibleOrganisationPhoneNumber: '',
+              responsibleOrganisationRegion: '',
+            },
+            additionalDocuments: [
+              { id: uuidv4(), orderId: mockOrderIdForCourt, fileName: 'photo.jpeg', fileType: 'PHOTO_ID' },
+            ],
+            orderParameters: {
+              havePhoto: true,
+            },
+          },
+        })
+
+        cy.signIn()
+      })
+
+      it('Should render the attachment summary page for a draft order with uploaded attachments', () => {
+        const page = Page.visit(AttachmentSummaryPage, { orderId: mockOrderIdForCourt }, {}, 'Check your answers')
+
+        // Header
+        page.header.userName().should('contain.text', 'J. Smith')
+        page.header.phaseBanner().should('contain.text', 'dev')
+
+        // Attachments
+        page.attachmentsSection.shouldHaveItems([
+          { key: 'Do you have a photo to upload?', value: 'Yes' },
+          { key: 'Upload a photo of the device wearer', value: 'photo.jpeg' },
+        ])
+
+        page.attachmentsSection.shouldNotHaveItem('Do you have a court order document to upload?')
+
+        page.attachmentsSection.element
+          .find('.govuk-summary-list__value')
+          .contains('photo.jpeg')
+          .should('have.attr', 'href', `/order/${mockOrderIdForCourt}/attachments/photo_Id/photo.jpeg`)
+
+        page.changeLinks.should('exist')
+
+        // Buttons
+        page.saveAndReturnButton.should('exist')
+        page.backButton.should('exist')
+      })
+    })
+
     context('viewing a previous version', () => {
       const mockVersionId = uuidv4()
       beforeEach(() => {
         cy.task('reset')
-        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+        cy.task('stubSignIn', {
+          name: 'john smith',
+          roles: ['ROLE_EM_CEMO__CREATE_ORDER'],
+        })
         cy.task('stubCemoListOrders')
         cy.task('stubCemoGetVersion', {
           httpStatus: 200,

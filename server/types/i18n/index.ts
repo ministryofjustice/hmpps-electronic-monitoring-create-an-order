@@ -28,7 +28,6 @@ import VariationDetailsPageContent from './pages/variationDetails'
 import ReferenceData from './reference'
 import IsRejectionPageContent from './pages/isRejection'
 import ServiceRequestTypePageContent from './pages/serviceRequestType'
-import HaveCourtOrderPageContent from './pages/haveCourtOrder'
 import NewDocumentPageContent from './pages/newDocument'
 import DapoContent from './pages/dapo'
 import OffenceContent from './pages/offence'
@@ -66,7 +65,6 @@ type I18n = {
     exclusionZone: EnforcementZonePageContent
     restrictionZone: EnforcementZonePageContent
     havePhoto: HavePhotoPageContent
-    haveCourtOrder: HaveCourtOrderPageContent
     newDocument: NewDocumentPageContent
     identityNumbers: IdentityNumbersPageContent
     installationAddress: AddressPageContent
@@ -86,7 +84,6 @@ type I18n = {
     uploadLicense: UploadDocumentPageContent
     uploadRevocationPaperwork: UploadDocumentPageContent
     uploadPhotoId: UploadDocumentPageContent
-    uploadCourtOrder: UploadDocumentPageContent
     variationDetails: VariationDetailsPageContent
     isRejection: IsRejectionPageContent
     setSentencingAct: SetSentencingActPageContent

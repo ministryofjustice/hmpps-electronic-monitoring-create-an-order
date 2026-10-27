@@ -62,7 +62,7 @@ describe('TaskListService', () => {
 
       expect(tasks.find(task => task.name === 'DETAILS_OF_INSTALLATION')?.state).toBe('OPTIONAL')
 
-      expect(tasks.find(task => task.name === 'ATTACHMENTS_HAVE_COURT_ORDER')?.state).toBe('OPTIONAL')
+      expect(tasks.find(task => task.name === 'ATTACHMENTS_HAVE_PHOTO')?.state).toBe('OPTIONAL')
     })
   })
 
@@ -307,10 +307,7 @@ describe('TaskListService', () => {
 
       // Then
       expect(nextPage).toBe(
-        paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
-          ':fileType(photo_Id|licence|court_order)',
-          'licence',
-        ),
+        paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(':fileType(photo_Id|licence)', 'licence'),
       )
     })
 
