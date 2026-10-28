@@ -9,6 +9,7 @@ import logger from '../../../logger'
 import ReferenceData from '../../types/i18n/reference/reference'
 import { CheckboxItem } from './govukFrontEndTypes/checkBoxItem'
 import { RadiosItem } from './govukFrontEndTypes/radioItem'
+import exclusiveOptions from '../exclusiveOptions'
 import { camelCaseToSentenceCase, initialiseName } from '../strings'
 import { checkType, isEmpty } from '../values'
 
@@ -17,7 +18,6 @@ const toOptions = (
   disabled: boolean = false,
   includeEmptyOption: boolean = false,
   type: string = '',
-  lastItemExclusive: boolean = false,
   keyAsValue: boolean = true,
 ): Array<CheckboxItem | RadiosItem> => {
   const options = Object.keys(values).map(key => {
@@ -44,10 +44,6 @@ const toOptions = (
     else options.unshift({ value: '', text: 'Select', disabled })
   }
 
-  if (lastItemExclusive) {
-    ;(options[options.length - 1] as CheckboxItem).behaviour = 'exclusive'
-  }
-
   return options
 }
 
@@ -66,8 +62,6 @@ const addDivider = (items: Array<CheckboxItem>, dividerText: string = 'or'): Arr
 const removeOptions = (items: Array<CheckboxItem>, itemsToRemove: string[]): Array<CheckboxItem | RadiosItem> => {
   return items.filter(item => !itemsToRemove.includes(item.value))
 }
-
-type Option = { value?: string; [key: string]: unknown }
 
 export default function nunjucksSetup(app: express.Express): void {
   app.set('view engine', 'njk')
@@ -109,12 +103,9 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('toOptions', toOptions)
   njkEnv.addFilter('addDivider', addDivider)
   njkEnv.addFilter('removeOptions', removeOptions)
+  njkEnv.addFilter('exclusiveOptions', exclusiveOptions)
   Object.entries(mojFilters()).forEach(([name, filter]) => {
     // @ts-expect-error/filter is unknown as import does not have typing
     njkEnv.addFilter(name, filter)
   })
-  // Deselect for checkboxes
-  njkEnv.addFilter('addExclusive', (options: Option[], value: string) =>
-    options.map(o => (o.value === value ? { ...o, behaviour: 'exclusive' } : o)),
-  )
 }

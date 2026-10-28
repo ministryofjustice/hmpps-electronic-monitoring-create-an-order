@@ -62,7 +62,7 @@ describe('TaskListService', () => {
 
       expect(tasks.find(task => task.name === 'DETAILS_OF_INSTALLATION')?.state).toBe('OPTIONAL')
 
-      expect(tasks.find(task => task.name === 'ATTACHMENTS_HAVE_COURT_ORDER')?.state).toBe('OPTIONAL')
+      expect(tasks.find(task => task.name === 'ATTACHMENTS_HAVE_PHOTO')?.state).toBe('OPTIONAL')
     })
   })
 
@@ -232,7 +232,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR.replace(':orderId', order.id))
     })
 
     it('should return installation appointment if current page is installation location and location is PRISON', () => {
@@ -307,10 +307,7 @@ describe('TaskListService', () => {
 
       // Then
       expect(nextPage).toBe(
-        paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(
-          ':fileType(photo_Id|licence|court_order)',
-          'licence',
-        ),
+        paths.ATTACHMENT.FILE_VIEW.replace(':orderId', order.id).replace(':fileType(photo_Id|licence)', 'licence'),
       )
     })
 

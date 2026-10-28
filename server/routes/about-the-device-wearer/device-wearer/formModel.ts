@@ -9,9 +9,9 @@ import { DisabilityEnum, IdentityNumbersEnum } from '../../../models/DeviceWeare
 import { validationErrors } from '../../../constants/validationErrors'
 
 const DeviceWearerFormDataParser = FormDataModel.extend({
-  firstName: z.string(),
+  firstName: z.string().trim(),
   middleName: z.string().optional(),
-  lastName: z.string(),
+  lastName: z.string().trim(),
   alias: z.string(),
   dateOfBirth: z.object({
     day: z.string(),

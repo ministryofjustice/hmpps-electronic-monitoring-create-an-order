@@ -19,11 +19,20 @@ export default class SummaryListComponentWithoutHeading {
     return items.map(({ key, value }) => this.shouldHaveItem(key, value))
   }
 
-  shouldHaveItem(key: string, value: string) {
+  shouldHaveItem(key: string, value: string | string[]) {
+    const values = Array.isArray(value) ? value : [value]
+    const valueElement = this.element.contains('.govuk-summary-list__key', key).siblings('.govuk-summary-list__value')
+
+    values.forEach(expected => valueElement.should('contain.text', expected))
+    return valueElement
+  }
+
+  changeAnswer(key: string) {
     return this.element
       .contains('.govuk-summary-list__key', key)
-      .siblings('.govuk-summary-list__value')
-      .should('contain.text', value)
+      .siblings('.govuk-summary-list__actions')
+      .contains('a', 'Change')
+      .click()
   }
 
   shouldNotHaveItem(key: string) {

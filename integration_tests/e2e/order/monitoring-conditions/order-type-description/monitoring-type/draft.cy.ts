@@ -142,14 +142,12 @@ context('monitoring types', () => {
   it('hdc no, pilot unknown', () => {
     stubGetOrder({ monitoringConditions: createMonitoringConditions({ hdc: 'NO', pilot: 'UNKNOWN' }) })
     const monitoringTypePage = Page.visit(MonitoringTypePage, { orderId: mockOrderId })
-    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Curfew')
-    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Exclusion zone monitoring')
-    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Trail')
-    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Mandatory attendance monitoring')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Curfew')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Exclusion zone monitoring')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Trail')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Restriction zone monitoring')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Mandatory attendance monitoring')
     monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Alcohol')
-    monitoringTypePage.form.message.contains(
-      "Some monitoring types can't be selected because the device wearer is not on a Home Detention Curfew (HDC) or part of any pathfinders or programmes.",
-    )
   })
 
   it('hdc no, pilot GPS', () => {
@@ -157,14 +155,12 @@ context('monitoring types', () => {
       monitoringConditions: createMonitoringConditions({ hdc: 'NO', pilot: 'GPS_ACQUISITIVE_CRIME_PAROLE' }),
     })
     const monitoringTypePage = Page.visit(MonitoringTypePage, { orderId: mockOrderId })
-    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Curfew')
-    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Exclusion zone monitoring')
-    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Trail')
-    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Mandatory attendance monitoring')
-    monitoringTypePage.form.monitoringTypesField.shouldHaveDisabledOption('Alcohol')
-    monitoringTypePage.form.message.contains(
-      "Some monitoring types can't be selected because the device wearer is not on a Home Detention Curfew (HDC).",
-    )
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Curfew')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Exclusion zone monitoring')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Trail monitoring')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Restriction zone monitoring')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Mandatory attendance monitoring')
+    monitoringTypePage.form.monitoringTypesField.shouldHaveEnabledOption('Alcohol monitoring')
   })
 
   it('no fixed address, sds, hdc no, pilot GPS', () => {
@@ -218,12 +214,17 @@ context('monitoring types', () => {
   })
 
   it('youth', () => {
-    stubGetOrder({ notifyingOrg: 'PROBATION', deviceWearer: createDeviceWearer(false) })
+    stubGetOrder({
+      notifyingOrg: 'PROBATION',
+      deviceWearer: createDeviceWearer(false),
+      monitoringConditions: createMonitoringConditions({ hdc: 'NO', pilot: 'UNKNOWN' }),
+    })
     const monitoringTypesPage = Page.visit(MonitoringTypePage, { orderId: mockOrderId })
 
     monitoringTypesPage.form.monitoringTypesField.shouldHaveEnabledOption('Curfew')
     monitoringTypesPage.form.monitoringTypesField.shouldHaveEnabledOption('Exclusion zone monitoring')
     monitoringTypesPage.form.monitoringTypesField.shouldHaveEnabledOption('Trail')
+    monitoringTypesPage.form.monitoringTypesField.shouldHaveEnabledOption('Restriction zone monitoring')
     monitoringTypesPage.form.monitoringTypesField.shouldHaveEnabledOption('Mandatory attendance monitoring')
     monitoringTypesPage.form.monitoringTypesField.shouldHaveDisabledOption('Alcohol')
     monitoringTypesPage.form.message.contains(
@@ -296,6 +297,7 @@ context('monitoring types', () => {
   context('No condition available', () => {
     it('should disable continue button', () => {
       stubGetOrder({
+        addresses: createAddresses(true),
         monitoringConditions: createMonitoringConditions({ alcohol: true, hdc: 'NO', pilot: 'UNKNOWN' }),
         monitoringConditionsAlcohol: {
           endDate: null,
@@ -323,7 +325,10 @@ context('monitoring types', () => {
 
   context('isSentencingAct order', () => {
     it('should render the restriction zone field', () => {
-      stubGetOrder({ isSentencingAct: true })
+      stubGetOrder({
+        isSentencingAct: true,
+        monitoringConditions: createMonitoringConditions({ hdc: 'NO', pilot: 'UNKNOWN' }),
+      })
 
       const page = Page.visit(MonitoringTypePage, { orderId: mockOrderId })
 
@@ -342,6 +347,23 @@ context('monitoring types', () => {
       page.form.continueButton.should('exist')
 
       page.form.ReturnToMonitoringListPageButton.should('not.exist')
+    })
+
+    it('allows a fixed-address youth all types except alcohol', () => {
+      stubGetOrder({
+        deviceWearer: createDeviceWearer(false),
+        monitoringConditions: createMonitoringConditions({ hdc: 'NO', pilot: 'UNKNOWN' }),
+        isSentencingAct: true,
+      })
+
+      const page = Page.visit(MonitoringTypePage, { orderId: mockOrderId })
+
+      page.form.monitoringTypesField.shouldHaveEnabledOption('Curfew')
+      page.form.monitoringTypesField.shouldHaveEnabledOption('Exclusion zone monitoring')
+      page.form.monitoringTypesField.shouldHaveEnabledOption('Trail monitoring')
+      page.form.monitoringTypesField.shouldHaveEnabledOption('Restriction zone monitoring')
+      page.form.monitoringTypesField.shouldHaveEnabledOption('Mandatory attendance monitoring')
+      page.form.monitoringTypesField.shouldHaveDisabledOption('Alcohol monitoring')
     })
   })
 })
