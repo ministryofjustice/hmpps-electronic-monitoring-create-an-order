@@ -128,7 +128,7 @@ describe('order type controller', () => {
     )
   })
 
-  it.skip('should construct the correct model when notifying org is probation', async () => {
+  it('should construct the correct model when notifying org is probation', async () => {
     mockOrder.interestedParties = createInterestedParties({ notifyingOrganisation: 'PROBATION' })
     req.order = mockOrder
     const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
@@ -144,9 +144,8 @@ describe('order type controller', () => {
         },
         {
           question: 'Community',
-          hint: 'Managing community orders is not currently part of the service and any notifications should continue to be submitted by email.',
+          hint: 'Monitoring is a condition of a court order where they were convicted of a crime, but received a community rather than custodial sentence.',
           value: 'COMMUNITY',
-          disabled: true,
         },
       ],
       orderType: { value: '' },

@@ -28,11 +28,7 @@ export default class OrderTypeController extends MonitoringConditionsBaseControl
       throw new Error('notifyingOrganisation not set')
     }
 
-    if (
-      notifyingOrganisation === 'PRISON' ||
-      notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE' ||
-      notifyingOrganisation === 'PROBATION'
-    ) {
+    if (notifyingOrganisation === 'PRISON' || notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE') {
       this.montoringConditionsStoreService.updateOrderType(order, { orderType: 'POST_RELEASE' })
       res.redirect(paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE.replace(':orderId', order.id))
       return
@@ -42,17 +38,18 @@ export default class OrderTypeController extends MonitoringConditionsBaseControl
       await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, req, res)
       return
     }
+    if (notifyingOrganisation === 'PROBATION') {
+      const errors = req.flash('validationErrors') as unknown as ValidationResult
+      const model = constructModel(notifyingOrganisation, monitoringConditions, errors)
+
+      res.render('pages/order/monitoring-conditions/order-type-description/order-type', model)
+      return
+    }
     if (notifyingOrganisationCourts.includes(notifyingOrganisation)) {
       await this.montoringConditionsStoreService.updateOrderType(order, { orderType: 'BAIL' })
       await this.montoringConditionsStoreService.updateField(order, 'pilot', 'DOMESTIC_ABUSE_PROTECTION_ORDER')
       await super.UpdateMonitoringConditionAndGoToMonitoringTypePage(order, req, res)
-      return
     }
-
-    const errors = req.flash('validationErrors') as unknown as ValidationResult
-    const model = constructModel(notifyingOrganisation, monitoringConditions, errors)
-
-    res.render('pages/order/monitoring-conditions/order-type-description/order-type', model)
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {

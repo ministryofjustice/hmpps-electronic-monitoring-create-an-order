@@ -303,8 +303,7 @@ context('Order type descriptions', () => {
     })
 
     const monitoringOrderTypeDescription = {
-      // commented out due to ELM-4526
-      // orderType: 'Release from prison',
+      orderType: 'Release from prison',
       sentenceType: 'Standard Determinate Sentence',
       hdc: 'No',
       prarr: 'Yes',
@@ -324,9 +323,40 @@ context('Order type descriptions', () => {
     verifyResult({ monitoringOrderTypeDescription })
   })
 
-  // Order type communities disabled ELM-4495 skipping test until the option is enabled again
-  it.skip('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
-    const interestedParties = createFakeInterestedParties('Probation service', 'Home Office', null, null)
+  it('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
+    cy.task('stubSignIn', {
+      name: 'Cemor Stubs',
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PROBATION'],
+    })
+
+    const interestedParties = createFakeInterestedParties(
+      'Probation service',
+      'Probation',
+      null,
+      'Kent, Surrey & Sussex',
+    )
+
+    createNewOrder({
+      notifyingOrganisation: interestedParties,
+    })
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+
+    const probationDeliveryUnit = {
+      unit: 'Surrey',
+    }
+
+    orderSummaryPage.interestedPartiesTask.click()
+    fillInInterestedPartiesWith({
+      responsibleOfficer: interestedParties.responsibleOfficer,
+      responsibleOrganisation: {
+        responsibleOrganisation: interestedParties.responsibleOrganisation,
+        probationRegion: interestedParties.responsibleOrganisationRegion,
+      },
+      pdu: probationDeliveryUnit.unit,
+      continueOnCya: true,
+    })
+
     const monitoringOrderTypeDescription = {
       orderType: 'Community',
       sentenceType: 'Youth Rehabilitation Order (YRO)',
@@ -339,14 +369,47 @@ context('Order type descriptions', () => {
       interestedParties,
       primaryAddressDetails,
       monitoringOrderTypeDescription,
+      probationDeliveryUnit,
+      newDeviceWearerFlow: true,
     })
 
     verifyResult({ monitoringOrderTypeDescription })
   })
 
-  // Order type communities disabled ELM-4495 skipping test until the option is enabled again
-  it.skip('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
-    const interestedParties = createFakeInterestedParties('Probation service', 'Home Office', null, null)
+  it('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
+    cy.task('stubSignIn', {
+      name: 'Cemor Stubs',
+      roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PROBATION'],
+    })
+
+    const interestedParties = createFakeInterestedParties(
+      'Probation service',
+      'Probation',
+      null,
+      'Kent, Surrey & Sussex',
+    )
+
+    createNewOrder({
+      notifyingOrganisation: interestedParties,
+    })
+
+    orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
+
+    const probationDeliveryUnit = {
+      unit: 'Surrey',
+    }
+
+    orderSummaryPage.interestedPartiesTask.click()
+    fillInInterestedPartiesWith({
+      responsibleOfficer: interestedParties.responsibleOfficer,
+      responsibleOrganisation: {
+        responsibleOrganisation: interestedParties.responsibleOrganisation,
+        probationRegion: interestedParties.responsibleOrganisationRegion,
+      },
+      pdu: probationDeliveryUnit.unit,
+      continueOnCya: true,
+    })
+
     const monitoringOrderTypeDescription = {
       orderType: 'Community',
       sentenceType: 'Suspended Sentence',
@@ -358,6 +421,7 @@ context('Order type descriptions', () => {
       interestedParties,
       primaryAddressDetails,
       monitoringOrderTypeDescription,
+      newDeviceWearerFlow: true,
     })
     verifyResult({ monitoringOrderTypeDescription })
   })
@@ -436,8 +500,6 @@ context('Order type descriptions', () => {
     orderSummaryPage.aboutTheDeviceWearerTask.click()
 
     const monitoringOrderTypeDescription = {
-      // commented out due to ELM-4526
-      // orderType: 'Bail',
       monitoringCondition: 'Trail monitoring',
     }
 

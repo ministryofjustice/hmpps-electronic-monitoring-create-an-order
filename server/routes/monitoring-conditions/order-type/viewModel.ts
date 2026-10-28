@@ -13,7 +13,6 @@ type OrderTypeQuestion = {
   question: string
   hint: string
   value: string
-  disabled?: boolean
 }
 
 const contructModel = (
@@ -48,9 +47,8 @@ const getQuestions = (notifyingOrg: NotifyingOrganisation) => {
         },
         {
           question: 'Community',
-          hint: 'Managing community orders is not currently part of the service and any notifications should continue to be submitted by email.',
+          hint: 'Monitoring is a condition of a court order where they were convicted of a crime, but received a community rather than custodial sentence.',
           value: 'COMMUNITY',
-          disabled: true,
         },
       ]
     case 'CIVIL_COUNTY_COURT':

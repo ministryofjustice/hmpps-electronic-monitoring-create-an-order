@@ -4,6 +4,7 @@ import HdcPage from '../../e2e/order/monitoring-conditions/order-type-descriptio
 import IsspPage from '../../e2e/order/monitoring-conditions/order-type-description/issp/isspPage'
 import MonitoringTypePage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-type/MonitoringTypesPage'
 import OffenceTypePage from '../../e2e/order/monitoring-conditions/order-type-description/offence-type/OffenceTypePage'
+import OrderTypePage from '../../e2e/order/monitoring-conditions/order-type-description/order-type/OrderTypePage'
 // commented out due to ELM-4526
 // import OrderTypePage from '../../e2e/order/monitoring-conditions/order-type-description/order-type/OrderTypePage'
 import PilotPage from '../../e2e/order/monitoring-conditions/order-type-description/pilot/PilotPage'
@@ -19,8 +20,7 @@ const fillinSingleQuestionFormWith = (form: SingleQuestionFormComponent, value: 
 }
 
 export default function fillInOrderTypeDescriptionsWith({
-  // commented out due to ELM-4526
-  // orderType = undefined,
+  orderType = undefined,
   sentenceType = undefined,
   issp = undefined,
   hdc = undefined,
@@ -32,12 +32,10 @@ export default function fillInOrderTypeDescriptionsWith({
   dapolMissedInError = undefined,
   hdcPause = undefined,
 }): void {
-  // commented out due to ELM-4526, page is always redirected from
-  // Order type page
-  // if (orderType) {
-  //   const orderTypePage = Page.verifyOnPage(OrderTypePage)
-  //   fillinSingleQuestionFormWith(orderTypePage.form, orderType)
-  // }
+  if (orderType) {
+    const orderTypePage = Page.verifyOnPage(OrderTypePage)
+    fillinSingleQuestionFormWith(orderTypePage.form, orderType)
+  }
 
   // sentence type page
   if (sentenceType) {
