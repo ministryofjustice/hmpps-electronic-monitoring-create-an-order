@@ -70,7 +70,7 @@ context('Index', () => {
 
       // Sub nav
       page.subNav.should('exist')
-      page.subNav.contains('Draft forms').should('have.attr', 'href', `/`)
+      page.subNav.contains('Draft forms').should('have.attr', 'href', `/drafts`)
       page.subNav.contains('Draft forms').should('have.attr', 'aria-current', 'page')
       page.subNav.contains('Search for a form').should('have.attr', 'href', `/search`)
       page.subNav.contains('Search for a form').should('not.have.attr', 'aria-current', `page`)
@@ -123,7 +123,7 @@ context('Index', () => {
 
       // Sub nav
       page.subNav.should('exist')
-      page.subNav.contains('Draft forms').should('have.attr', 'href', `/`)
+      page.subNav.contains('Draft forms').should('have.attr', 'href', `/drafts`)
       page.subNav.contains('Draft forms').should('have.attr', 'aria-current', 'page')
       page.subNav.contains('Search for a form').should('have.attr', 'href', `/search`)
       page.subNav.contains('Search for a form').should('not.have.attr', 'aria-current', `page`)
@@ -141,7 +141,7 @@ context('Index', () => {
       cy.task('stubCemoListOrders')
       const page = Page.visit(IndexPage)
 
-      page.subNav.contains('Draft forms').should('have.attr', 'href', `/`)
+      page.subNav.contains('Draft forms').should('have.attr', 'href', `/drafts`)
 
       Page.verifyOnPage(IndexPage)
     })
@@ -247,11 +247,11 @@ context('Index', () => {
       cy.get('.moj-pagination__item--prev').should('not.exist')
       cy.get('.moj-pagination__item--next a').click()
 
-      cy.url().should('include', '/?view=MY_ORDERS&page=1&size=20')
+      cy.url().should('include', '/drafts?view=MY_ORDERS&page=1&size=20')
       page.orders.should('have.length', 20)
       page.OrderFor('Draft user20').should('exist')
       page.OrderFor('Draft user0').should('not.exist')
-      cy.get('.moj-pagination__item--prev a').should('have.attr', 'href', '/?view=MY_ORDERS&page=0&size=20')
+      cy.get('.moj-pagination__item--prev a').should('have.attr', 'href', '/drafts?view=MY_ORDERS&page=0&size=20')
       cy.get('.moj-pagination__item--next a').should('exist')
     })
   })
