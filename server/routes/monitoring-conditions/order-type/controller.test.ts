@@ -185,18 +185,33 @@ describe('order type controller', () => {
     )
   })
 
-  it('should save order type and redirect if notifyingOrg is probation', async () => {
+  it('should render the order type page when notifyingOrg is probation', async () => {
     mockOrder.interestedParties = createInterestedParties({ notifyingOrganisation: 'PROBATION' })
+    req.order = mockOrder
     const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
 
     await controller.view(req, res, next)
 
-    expect(mockMonitoringConditionsStoreService.updateOrderType).toHaveBeenCalledWith(mockOrder, {
-      orderType: 'POST_RELEASE',
-    })
+    const expectedViewObject: OrderTypeModel = {
+      orderTypeQuestions: [
+        {
+          question: 'Release from prison',
+          hint: 'Monitoring is a condition of being released from prison following a custodial sentence.',
+          value: 'POST_RELEASE',
+        },
+        {
+          question: 'Community',
+          hint: 'Monitoring is a condition of a court order where they were convicted of a crime, but received a community rather than custodial sentence.',
+          value: 'COMMUNITY',
+        },
+      ],
+      orderType: { value: '' },
+      errorSummary: null,
+    }
 
-    expect(res.redirect).toHaveBeenCalledWith(
-      paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE.replace(':orderId', mockOrder.id),
+    expect(res.render).toHaveBeenCalledWith(
+      'pages/order/monitoring-conditions/order-type-description/order-type',
+      expectedViewObject,
     )
   })
 
