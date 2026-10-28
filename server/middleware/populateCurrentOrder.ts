@@ -17,15 +17,16 @@ const populateOrder =
       const versionId = req.params.versionId as string
 
       if (orderId && validate(orderId)) {
+        res.locals.orderId = orderId
         let order
 
         if (versionId && validate(versionId)) {
+          res.locals.versionId = versionId
           order = await orderService.getVersion({ accessToken: token, orderId, versionId })
           res.locals.orderSummaryUri = paths.ORDER.SUMMARY.replace(':orderId', order.id).replace(
             `order/${order.id}/`,
             `order/${order.id}/version/${versionId}/`,
           )
-          res.locals.versionId = versionId
         } else {
           order = await orderService.getOrder({ accessToken: token, orderId })
           res.locals.orderSummaryUri = paths.ORDER.SUMMARY.replace(':orderId', order.id)
