@@ -88,8 +88,11 @@ export default class OrderService {
         token: input.accessToken,
       })
       return VersionInformationList.parse(result)
-    } catch {
-      logger.error(`No versions found for orderId: ${input.orderId}`)
+    } catch (error) {
+      logger.error(
+        { err: error, event: 'order_history_load_failed', orderId: input.orderId },
+        'Failed to load order version history',
+      )
       return []
     }
   }
