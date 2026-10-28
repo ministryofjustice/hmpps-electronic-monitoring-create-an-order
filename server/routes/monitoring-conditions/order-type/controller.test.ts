@@ -64,8 +64,7 @@ describe('order type controller', () => {
     next = jest.fn()
   })
 
-  // Currently all notifying orgs lead to a redirect so skipping model tests
-  it.skip('should render the correct view', async () => {
+  it('should render the correct view', async () => {
     const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
 
     await controller.view(req, res, next)
@@ -76,7 +75,7 @@ describe('order type controller', () => {
     )
   })
 
-  it.skip('should construct the correct model when there is no data in the store', async () => {
+  it('should construct the correct model when there is no data in the store', async () => {
     const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
 
     await controller.view(req, res, next)
@@ -87,7 +86,7 @@ describe('order type controller', () => {
     )
   })
 
-  it.skip('should construct the correct model when there is data in the store', async () => {
+  it('should construct the correct model when there is data in the store', async () => {
     const data: MonitoringConditions = { orderType: 'COMMUNITY' }
     mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue(data)
 
@@ -104,7 +103,7 @@ describe('order type controller', () => {
     )
   })
 
-  it.skip('should construct the correct model when there are errors', async () => {
+  it('should construct the correct model when there are errors', async () => {
     req.flash = jest.fn().mockReturnValueOnce([
       {
         error: 'Select the order type',
