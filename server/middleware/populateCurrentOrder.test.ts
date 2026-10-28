@@ -95,7 +95,7 @@ describe('populateCurrentOrder', () => {
     const req = createMockRequest({ orderId: uuidv4() })
     const res = createMockResponse()
     const next = jest.fn()
-    const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED })
+    const mockOrder = getMockOrder({ status: OrderStatusEnum.enum.SUBMITTED })
     mockOrderService.getOrder.mockResolvedValue(mockOrder)
     // When
     await populateCurrentOrder(mockOrderService)(req, res, next)
@@ -113,7 +113,7 @@ describe('populateCurrentOrder', () => {
     const req = createMockRequest({ orderId: uuidv4() })
     const res = createMockResponse()
     const next = jest.fn()
-    const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.IN_PROGRESS })
+    const mockOrder = getMockOrder({ status: OrderStatusEnum.enum.IN_PROGRESS })
     mockOrderService.getOrder.mockResolvedValue(mockOrder)
 
     // When
@@ -134,7 +134,7 @@ describe('populateCurrentOrder', () => {
     const req = createMockRequest({ orderId, versionId })
     const res = createMockResponse()
     const next = jest.fn()
-    const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED })
+    const mockOrder = getMockOrder({ status: OrderStatusEnum.enum.SUBMITTED })
     mockOrderService.getVersion.mockResolvedValue(mockOrder)
 
     // When
