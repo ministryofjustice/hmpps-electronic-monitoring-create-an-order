@@ -28,6 +28,7 @@ import VariationDetailsPageContent from './pages/variationDetails'
 import ReferenceData from './reference'
 import IsRejectionPageContent from './pages/isRejection'
 import ServiceRequestTypePageContent from './pages/serviceRequestType'
+import NewDocumentPageContent from './pages/newDocument'
 import DapoContent from './pages/dapo'
 import OffenceContent from './pages/offence'
 import MappaPageContent from './pages/mappa'
@@ -64,6 +65,7 @@ type I18n = {
     exclusionZone: EnforcementZonePageContent
     restrictionZone: EnforcementZonePageContent
     havePhoto: HavePhotoPageContent
+    newDocument: NewDocumentPageContent
     identityNumbers: IdentityNumbersPageContent
     installationAddress: AddressPageContent
     installationAndRisk: InstallationAndRiskPageContent
@@ -80,6 +82,7 @@ type I18n = {
     tertiaryAddress: AddressPageContent
     trailMonitoring: TrailMonitoringPageContent
     uploadLicense: UploadDocumentPageContent
+    uploadRevocationPaperwork: UploadDocumentPageContent
     uploadPhotoId: UploadDocumentPageContent
     variationDetails: VariationDetailsPageContent
     isRejection: IsRejectionPageContent
