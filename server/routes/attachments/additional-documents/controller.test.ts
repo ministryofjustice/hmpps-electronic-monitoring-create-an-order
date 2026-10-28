@@ -205,7 +205,7 @@ describe('AttachmentController', () => {
 
   describe('view upload file page', () => {
     it('order is submitted, redirect to summary page', async () => {
-      req.order!.status = OrderStatusEnum.Enum.SUBMITTED
+      req.order!.status = OrderStatusEnum.enum.SUBMITTED
       req.params.fileType = 'licence'
       await controller.uploadFileView(req, res, next)
 

@@ -69,7 +69,7 @@ export default class TimelineModel {
     if (versionInformation.type === 'REVOCATION') {
       return 'Monitoring ended'
     }
-    if (Object.keys(VariationTypesEnum.Values).includes(versionInformation.type)) {
+    if (Object.keys(VariationTypesEnum.enum).includes(versionInformation.type)) {
       return 'Changes submitted'
     }
     return versionInformation.status === 'SUBMITTED' ? 'Form submitted' : 'Failed to submit'

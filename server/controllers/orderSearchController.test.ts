@@ -43,8 +43,8 @@ describe('OrderSearchController', () => {
 
   beforeEach(() => {
     mockSubmittedOrder = getMockOrder({
-      status: OrderStatusEnum.Enum.SUBMITTED,
-      type: OrderTypeEnum.Enum.VARIATION,
+      status: OrderStatusEnum.enum.SUBMITTED,
+      type: OrderTypeEnum.enum.VARIATION,
       deviceWearer: {
         nomisId: null,
         pncId: 'some id number',
