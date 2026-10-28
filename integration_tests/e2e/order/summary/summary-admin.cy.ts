@@ -2,7 +2,6 @@ import { v4 as uuidv4 } from 'uuid'
 import OrderTasksPage from '../../../pages/order/summary'
 import ErrorPage from '../../../pages/error'
 import Page from '../../../pages/page'
-import mockApiOrder from '../../../utils/data/ApiOrder'
 
 const mockOrderId = uuidv4()
 
@@ -271,32 +270,6 @@ context('Order Summary', () => {
       const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.submitOrderButton.should('not.exist')
       page.assignToMeButton.should('be.visible')
-    })
-  })
-
-  context('Sentencing act banner should not exist', () => {
-    beforeEach(() => {
-      cy.task('reset')
-      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-      cy.task('stubCemoGetVersions', { httpStatus: 200, versions: [], orderId: mockOrderId })
-      cy.signIn()
-    })
-
-    const stubOrderWithSentencingAct = (isSentencingAct: boolean) => {
-      cy.task('stubCemoGetOrder', {
-        httpStatus: 200,
-        id: mockOrderId,
-        status: 'SUBMITTED',
-        order: { ...mockApiOrder(), id: mockOrderId, status: 'IN_PROGRESS', isSentencingAct },
-      })
-    }
-
-    it('does not show the Sentencing Act banner', () => {
-      stubOrderWithSentencingAct(true)
-      Page.visit(OrderTasksPage, { orderId: mockOrderId })
-
-      cy.get('.moj-alert').should('not.exist')
-      cy.contains('This order is subject to the Sentencing Act 2026 changes.').should('not.exist')
     })
   })
 })

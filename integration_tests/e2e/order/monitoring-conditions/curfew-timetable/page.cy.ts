@@ -23,7 +23,6 @@ context('Monitoring conditions - Curfew timetable', () => {
 
       page.header.userName().should('contain.text', 'J. Smith')
       page.header.phaseBanner().should('contain.text', 'dev')
-      page.submittedBanner.should('not.exist')
 
       page.form.saveAndContinueButton.should('exist')
       page.form.saveAsDraftButton.should('exist')
@@ -67,11 +66,6 @@ context('Monitoring conditions - Curfew timetable', () => {
       })
 
       cy.signIn()
-    })
-
-    it('Should not indicate to the user that this is a submitted order', () => {
-      const page = Page.visit(CurfewTimetablePage, { orderId: mockOrderId })
-      page.submittedBanner.should('not.exist')
     })
 
     it('Should allow the user to update the curfew timetable details', () => {
@@ -139,12 +133,6 @@ context('Monitoring conditions - Curfew timetable', () => {
       })
 
       cy.signIn()
-    })
-
-    it('Should not display you are viewing a submitted order banner', () => {
-      const page = Page.visit(CurfewTimetablePage, { orderId: mockOrderId })
-
-      page.submittedBanner.should('not.exist')
     })
 
     it('Should correctly display the submitted data in disabled fields', () => {

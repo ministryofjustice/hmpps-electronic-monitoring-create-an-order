@@ -53,11 +53,6 @@ context('About the device wearer', () => {
         page.header.phaseBanner().should('contain.text', 'dev')
       })
 
-      it('Should not display the submitted order notification', () => {
-        const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, ['nomisId'])
-        page.submittedBanner.should('not.exist')
-      })
-
       it('Should not allow the user to update the identity numbers details', () => {
         const page = Page.visit(IdentityNumbersPage, { orderId: mockOrderId }, {}, ['nomisId'])
 

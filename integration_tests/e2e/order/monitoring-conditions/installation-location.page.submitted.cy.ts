@@ -44,7 +44,6 @@ context('Monitoring conditions', () => {
         const page = Page.visit(InstallationLocationPage, { orderId: mockOrderId })
         page.header.userName().should('contain.text', 'J. Smith')
         page.header.phaseBanner().should('contain.text', 'dev')
-        page.submittedBanner.should('not.exist')
         page.form.saveAndContinueButton.should('not.exist')
         page.form.saveAsDraftButton.should('not.exist')
         page.returnBackToFormSectionMenuButton

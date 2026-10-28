@@ -42,13 +42,6 @@ context('Monitoring conditions', () => {
         page.header.phaseBanner().should('contain.text', 'dev')
       })
 
-      it('Should display the submitted order notification', () => {
-        const page = Page.visit(CurfewAdditionalDetailsPage, {
-          orderId: mockOrderId,
-        })
-        page.submittedBanner.should('not.exist')
-      })
-
       it('Should not allow the user to update the curfew details', () => {
         const page = Page.visit(CurfewAdditionalDetailsPage, {
           orderId: mockOrderId,

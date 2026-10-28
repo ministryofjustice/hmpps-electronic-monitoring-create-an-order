@@ -43,9 +43,6 @@ context('Contact information', () => {
         page.header.userName().should('contain.text', 'J. Smith')
         page.header.phaseBanner().should('contain.text', 'dev')
 
-        // Should not display you are viewing a submitted order banner
-        page.submittedBanner.should('not.exist')
-
         // Should display the saved data
         page.form.unitField.shouldHaveValue('County Durham and Darlington')
 

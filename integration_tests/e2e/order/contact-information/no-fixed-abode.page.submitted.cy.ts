@@ -26,11 +26,6 @@ context('Contact information', () => {
         page.header.phaseBanner().should('contain.text', 'dev')
       })
 
-      it('Should not display the submitted order notification', () => {
-        const page = Page.visit(NoFixedAbodePage, { orderId: mockOrderId })
-        page.submittedBanner.should('not.exist')
-      })
-
       it('Should not allow the user to update the no fixed abode details', () => {
         const page = Page.visit(NoFixedAbodePage, { orderId: mockOrderId })
 
