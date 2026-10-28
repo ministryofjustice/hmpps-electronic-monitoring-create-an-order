@@ -9,7 +9,7 @@ import AuditService, { Page } from '../services/auditService'
 import DeviceWearerService from './about-the-device-wearer/device-wearer/service'
 import OrderSearchService from '../services/orderSearchService'
 import OrderService from '../services/orderService'
-import { appWithAllRoutes, flashProvider, unauthorisedUser, user } from './testutils/appSetup'
+import { appWithAllRoutes, flashProvider, probationUser, unauthorisedUser, user } from './testutils/appSetup'
 import TaskListService from '../services/taskListService'
 import OrderChecklistService from '../services/orderChecklistService'
 import OrderChecklistModel from '../models/OrderChecklist'
@@ -94,7 +94,7 @@ describe('authorised user', () => {
   })
 
   describe('GET /', () => {
-    it('should render order search page', () => {
+    it('should redirect to the order search page', () => {
       auditService.logPageView.mockResolvedValue()
       orderSearchService.listOrders.mockResolvedValue({
         content: [],
@@ -105,6 +105,33 @@ describe('authorised user', () => {
 
       return request(app)
         .get('/')
+        .expect(302)
+        .expect('Location', '/drafts')
+        .then(redirect =>
+          request(app)
+            .get(redirect.headers.location)
+            .expect(200)
+            .expect('Content-Type', /html/)
+            .expect(res => {
+              expect(res.text).toContain('Electronic Monitoring Order (EMO) forms')
+              expect(res.text).toContain('Draft forms')
+            }),
+        )
+    })
+  })
+
+  describe('GET /drafts', () => {
+    it('should render order search page', () => {
+      auditService.logPageView.mockResolvedValue()
+      orderSearchService.listOrders.mockResolvedValue({
+        content: [],
+        page: 0,
+        size: 20,
+        hasNext: false,
+      })
+
+      return request(app)
+        .get('/drafts')
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Electronic Monitoring Order (EMO) forms')
@@ -120,7 +147,7 @@ describe('authorised user', () => {
       orderSearchService.listOrders.mockRejectedValue(mock500Error)
 
       return request(app)
-        .get('/')
+        .get('/drafts')
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Electronic Monitoring Order (EMO) forms')
@@ -444,6 +471,57 @@ describe('unauthorised user', () => {
   ])('%s', (_, method, path) => {
     it('should redirect to authError', () => {
       return request(app)[method](path).expect(302).expect('Location', '/authError')
+    })
+  })
+})
+
+describe('authorised probation user', () => {
+  let app: Express
+
+  beforeEach(() => {
+    app = appWithAllRoutes({
+      services: {
+        auditService,
+        orderService,
+        deviceWearerService,
+        orderSearchService,
+        taskListService,
+        sectionService,
+        orderChecklistService: mockOrderChecklistService,
+        deviceWearerSearchResultsService,
+      },
+      userSupplier: () => probationUser,
+    })
+  })
+
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
+  describe('GET /', () => {
+    it('should return the search page', () => {
+      auditService.logPageView.mockResolvedValue()
+      orderSearchService.listOrders.mockResolvedValue({
+        content: [],
+        page: 0,
+        size: 20,
+        hasNext: false,
+      })
+
+      return request(app)
+        .get('/')
+        .expect(302)
+        .expect('Location', '/search')
+        .then(redirect =>
+          request(app)
+            .get(redirect.headers.location)
+            .expect(200)
+            .expect('Content-Type', /html/)
+            .expect(res => {
+              expect(res.text).toContain('Electronic Monitoring Order (EMO) forms')
+              expect(res.text).toContain('Search for a form')
+            }),
+        )
     })
   })
 })

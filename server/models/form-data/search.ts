@@ -159,7 +159,7 @@ export function constructListViewModel(
 }
 
 function constructPagination(ordersPage: OrderListInformationPage, view: OrderListView) {
-  const pageHref = (page: number) => `/?view=${view}&page=${page}&size=${ordersPage.size}`
+  const pageHref = (page: number) => `/drafts?view=${view}&page=${page}&size=${ordersPage.size}`
   return {
     previous: ordersPage.page > 0 ? { text: 'Previous', href: pageHref(ordersPage.page - 1) } : undefined,
     next: ordersPage.hasNext ? { text: 'Next', href: pageHref(ordersPage.page + 1) } : undefined,

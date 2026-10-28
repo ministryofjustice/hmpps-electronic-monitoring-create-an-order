@@ -38,7 +38,7 @@ context('Search', () => {
       page.searchHint.contains('For example Bob Smith C4365JN.')
 
       page.subNav.should('exist')
-      page.subNav.contains('Draft forms').should('have.attr', 'href', `/`)
+      page.subNav.contains('Draft forms').should('have.attr', 'href', `/drafts`)
       page.subNav.contains('Draft forms').should('not.have.attr', 'aria-current', 'page')
       page.subNav.contains('Search for a form').should('have.attr', 'href', `/search`)
       page.subNav.contains('Search for a form').should('have.attr', 'aria-current', `page`)
