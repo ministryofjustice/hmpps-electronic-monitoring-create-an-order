@@ -44,7 +44,9 @@ context('Offence validations', () => {
       const page = Page.visit(OffencePage, { orderId: mockOrderId })
 
       page.form.saveAndContinueButton.click()
-      page.form.getOffenceTypeField(isRadio).shouldHaveValidationMessage('Required')
+      page.form
+        .getOffenceTypeField(isRadio)
+        .shouldHaveValidationMessage('Enter date of offence the device wearer committed')
       page.form.offenceDateField.shouldHaveValidationMessage('Enter date of offence the device wearer committed')
     })
 
