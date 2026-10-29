@@ -36,7 +36,7 @@ context('orderType', () => {
   it('Should submit the form', () => {
     const page = Page.visit(OrderTypePage, { orderId: mockOrderId })
 
-    page.form.fillInWith('Release from prison')
+    page.form.fillInWith('License')
     page.form.continueButton.click()
 
     const sentenceTypePage = Page.verifyOnPage(

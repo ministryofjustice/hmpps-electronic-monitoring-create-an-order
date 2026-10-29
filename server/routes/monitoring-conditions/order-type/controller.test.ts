@@ -137,13 +137,13 @@ describe('order type controller', () => {
     const expectedViewObject: OrderTypeModel = {
       orderTypeQuestions: [
         {
-          question: 'Release from prison',
+          question: 'License',
           hint: 'Monitoring is a condition of being released from prison following a custodial sentence.',
           value: 'POST_RELEASE',
         },
         {
-          question: 'Community',
-          hint: 'Monitoring is a condition of a court order where they were convicted of a crime, but received a community rather than custodial sentence.',
+          question: 'Court order',
+          hint: 'Monitoring is a condition of a court order where they were convicted of a crime, but are serving it in the community rather than a prison.',
           value: 'COMMUNITY',
         },
       ],
@@ -194,13 +194,13 @@ describe('order type controller', () => {
     const expectedViewObject: OrderTypeModel = {
       orderTypeQuestions: [
         {
-          question: 'Release from prison',
+          question: 'License',
           hint: 'Monitoring is a condition of being released from prison following a custodial sentence.',
           value: 'POST_RELEASE',
         },
         {
-          question: 'Community',
-          hint: 'Monitoring is a condition of a court order where they were convicted of a crime, but received a community rather than custodial sentence.',
+          question: 'Court order',
+          hint: 'Monitoring is a condition of a court order where they were convicted of a crime, but are serving it in the community rather than a prison.',
           value: 'COMMUNITY',
         },
       ],

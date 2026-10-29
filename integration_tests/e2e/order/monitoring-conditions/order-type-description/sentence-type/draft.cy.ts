@@ -35,7 +35,7 @@ context('sentenceType', () => {
   it('Page accessible', () => {
     const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
 
-    orderTypePage.form.fillInWith('Release from prison')
+    orderTypePage.form.fillInWith('License')
     orderTypePage.form.continueButton.click()
 
     const page = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
@@ -45,7 +45,7 @@ context('sentenceType', () => {
   it('Should display content', () => {
     const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
 
-    orderTypePage.form.fillInWith('Release from prison')
+    orderTypePage.form.fillInWith('License')
     orderTypePage.form.continueButton.click()
 
     const page = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
@@ -61,7 +61,7 @@ context('sentenceType', () => {
   it('when order type is Post Release', () => {
     const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
 
-    orderTypePage.form.fillInWith('Release from prison')
+    orderTypePage.form.fillInWith('License')
     orderTypePage.form.continueButton.click()
 
     const page = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
@@ -72,9 +72,9 @@ context('sentenceType', () => {
     page.form.sentenceTypeField.shouldHaveOption('Section 250 / Section 91')
   })
 
-  it('when order type is Community', () => {
+  it('when order type is Court order', () => {
     const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
-    orderTypePage.form.fillInWith('Community')
+    orderTypePage.form.fillInWith('Court order')
     orderTypePage.form.continueButton.click()
 
     const page = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })

@@ -52,8 +52,8 @@ context('orderType', () => {
     stubGetOrder('PROBATION')
     const page = Page.visit(OrderTypePage, { orderId: mockOrderId })
 
-    page.form.orderTypeField.shouldHaveOption('Release from prison')
-    page.form.orderTypeField.shouldHaveOption('Community')
+    page.form.orderTypeField.shouldHaveOption('License')
+    page.form.orderTypeField.shouldHaveOption('Court order')
   })
 
   // This test can be re-added when the order type page is added for courts.

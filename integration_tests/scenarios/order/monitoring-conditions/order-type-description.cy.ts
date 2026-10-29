@@ -73,9 +73,7 @@ context('Order type descriptions', () => {
 
     const page = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answer')
     const expectedOrderType =
-      monitoringOrderTypeDescription.orderType === 'Release from prison'
-        ? 'Post Release'
-        : monitoringOrderTypeDescription.orderType
+      monitoringOrderTypeDescription.orderType === 'License' ? 'Post Release' : monitoringOrderTypeDescription.orderType
     verifyValueInCheckYourAnswerPage(page, 'What is the order type?', expectedOrderType)
 
     verifyValueInCheckYourAnswerPage(
@@ -303,7 +301,7 @@ context('Order type descriptions', () => {
     })
 
     const monitoringOrderTypeDescription = {
-      orderType: 'Release from prison',
+      orderType: 'License',
       sentenceType: 'Standard Determinate Sentence',
       hdc: 'No',
       prarr: 'Yes',
@@ -323,7 +321,7 @@ context('Order type descriptions', () => {
     verifyResult({ monitoringOrderTypeDescription })
   })
 
-  it('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
+  it('Notification org is Probation, ordertype Court order, sentence Section SDS, Pilot DAPOL, HDC no', () => {
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PROBATION'],
@@ -358,7 +356,7 @@ context('Order type descriptions', () => {
     })
 
     const monitoringOrderTypeDescription = {
-      orderType: 'Community',
+      orderType: 'Court order',
       sentenceType: 'Youth Rehabilitation Order (YRO)',
       issp: 'Yes',
       monitoringCondition: 'Trail monitoring',
@@ -376,7 +374,7 @@ context('Order type descriptions', () => {
     verifyResult({ monitoringOrderTypeDescription })
   })
 
-  it('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
+  it('Notification org is Probation, ordertype Court order, sentence Section SDS, Pilot DAPOL, HDC no', () => {
     cy.task('stubSignIn', {
       name: 'Cemor Stubs',
       roles: ['ROLE_EM_CEMO__CREATE_ORDER', 'PROBATION'],
@@ -411,7 +409,7 @@ context('Order type descriptions', () => {
     })
 
     const monitoringOrderTypeDescription = {
-      orderType: 'Community',
+      orderType: 'Court order',
       sentenceType: 'Suspended Sentence',
       monitoringCondition: 'Trail monitoring',
     }

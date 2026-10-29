@@ -41,7 +41,7 @@ context('sentenceType form submission', () => {
   it('Should submit the form and display the correct answers for a Post Release journey', () => {
     const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
 
-    orderTypePage.form.fillInWith('Release from prison')
+    orderTypePage.form.fillInWith('License')
     orderTypePage.form.continueButton.click()
 
     const sentenceTypePage = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
@@ -65,7 +65,7 @@ context('sentenceType form submission', () => {
     prarrPage.form.continueButton.click()
   })
 
-  it('Should submit the form and display the correct answers for a Community journey', () => {
+  it('Should submit the form and display the correct answers for a Court order journey', () => {
     cy.task('stubCemoSubmitOrder', {
       httpStatus: 200,
       id: mockOrderId,
@@ -92,7 +92,7 @@ context('sentenceType form submission', () => {
     })
 
     const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
-    orderTypePage.form.fillInWith('Community')
+    orderTypePage.form.fillInWith('Court order')
     orderTypePage.form.continueButton.click()
 
     const sentenceTypePage = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
