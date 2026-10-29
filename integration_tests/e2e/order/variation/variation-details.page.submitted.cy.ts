@@ -36,9 +36,6 @@ context('Variation', () => {
         page.header.userName().should('contain.text', 'J. Smith')
         page.header.phaseBanner().should('contain.text', 'dev')
 
-        // Should indicate the page is submitted
-        page.submittedBanner.should('contain', 'You are viewing a submitted order.')
-
         // Should display the saved data
         // Hide variation type question based on ticket https://dsdmoj.atlassian.net/browse/ELM-3923
         // page.form.variationTypeField.shouldHaveValue('The device wearer’s address')

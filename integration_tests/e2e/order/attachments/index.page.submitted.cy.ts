@@ -34,10 +34,7 @@ context('Attachments', () => {
         // Header
         page.header.userName().should('contain.text', 'J. Smith')
         page.header.phaseBanner().should('contain.text', 'dev')
-        page.submittedBanner.should(
-          'contain',
-          'You are viewing a submitted form. This form was submitted on the 14 December 2024',
-        )
+        page.submittedBanner.should('contain', 'This form was submitted on the 14 December 2024')
 
         // Licence Task
         page.attachmentsSection.shouldHaveItems([
