@@ -19,4 +19,8 @@ export default class DeviceWearerStoreService {
 
     return DeviceWearerCacheModel.parse(JSON.parse(result))
   }
+
+  public async clearDeviceWearer(order: Order): Promise<void> {
+    await this.dataStore.delete(this.keyFromOrder(order))
+  }
 }

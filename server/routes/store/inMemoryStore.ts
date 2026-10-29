@@ -16,4 +16,8 @@ export default class InMemoryStore implements Store {
     }
     return null
   }
+
+  async delete(key: string): Promise<void> {
+    this.map.delete(key)
+  }
 }

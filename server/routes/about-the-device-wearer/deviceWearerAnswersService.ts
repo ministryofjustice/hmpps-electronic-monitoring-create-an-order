@@ -57,7 +57,9 @@ export default class DeviceWearerAnswersService {
         data: { ...answers, disabilities: (disabilities ?? []).join(',') },
         token: accessToken,
       })
-      return DeviceWearerModel.parse(result)
+      const deviceWearer = DeviceWearerModel.parse(result)
+      await this.store.clearDeviceWearer(order)
+      return deviceWearer
     } catch (e) {
       const sanitisedError = e as SanitisedError
       if (sanitisedError.status === 400) {

@@ -31,4 +31,13 @@ describe('DeviceWearerStoreService', () => {
     expect(result.firstName).toEqual('Cached')
     expect(result.disabilities).toEqual(['VISION'])
   })
+
+  it('clears cached data so the order is used again', async () => {
+    await store.set(`${order.id}+${order.versionId}+deviceWearer`, JSON.stringify({ firstName: 'Cached' }), 60)
+
+    await service.clearDeviceWearer(order)
+
+    const result = await service.getDeviceWearer(order)
+    expect(result.firstName).toEqual(order.deviceWearer.firstName)
+  })
 })
