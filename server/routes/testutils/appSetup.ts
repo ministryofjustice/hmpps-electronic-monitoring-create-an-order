@@ -37,7 +37,7 @@ export const probationUser: ProbationUser = {
   username: 'user1',
   displayName: 'First Last',
   authSource: 'delius',
-  cohort: { cohort: CohortEnum.Enum.PROBATION },
+  cohort: { cohort: CohortEnum.enum.PROBATION },
   userRoles: [],
 }
 

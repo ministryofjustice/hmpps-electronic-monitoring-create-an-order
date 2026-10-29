@@ -191,7 +191,7 @@ const createInstallationAddressAnswers = (order: Order, content: I18n, answerOpt
   }
   const uri = getInstallationAddressLink(order)
   const installationAddress = order.addresses.find(
-    ({ addressType }) => addressType === AddressTypeEnum.Enum.INSTALLATION,
+    ({ addressType }) => addressType === AddressTypeEnum.enum.INSTALLATION,
   )
 
   return [createAddressAnswer(content.pages.installationAddress.title, installationAddress, uri, answerOpts)]

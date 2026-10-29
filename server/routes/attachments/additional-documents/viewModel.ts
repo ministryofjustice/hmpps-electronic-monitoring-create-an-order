@@ -7,6 +7,14 @@ import paths from '../../../constants/paths'
 import { Attachment } from '../../../models/Attachment'
 import { notifyingOrganisationCourts } from '../../../models/NotifyingOrganisation'
 import hasOptionalVariationSectionIsHOCourt from '../../../utils/order/optionalVariationSections'
+import { isNotNullOrUndefined } from '../../../utils/values'
+import { isPastDatedProbationVariation } from '../../../utils/order/orderStartDate'
+import usesRevocationPaperwork from '../../../utils/order/revocationPaperwork'
+
+// The start date may have passed since an order was submitted, so only editable orders rely on it alone.
+const asksForNewDocument = (order: Order) =>
+  isPastDatedProbationVariation(order) &&
+  (order.status === 'IN_PROGRESS' || isNotNullOrUndefined(order.orderParameters?.haveLicence))
 
 const createViewModel = (order: Order, content: I18n | undefined) => {
   const licence = order.additionalDocuments.find(x => x.fileType === AttachmentType.LICENCE)
@@ -18,7 +26,30 @@ const createViewModel = (order: Order, content: I18n | undefined) => {
     order.interestedParties?.notifyingOrganisation ?? '',
   )
 
-  if (!isCourtOrder && order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE') {
+  if (asksForNewDocument(order)) {
+    answers.push(
+      createBooleanAnswer(
+        content?.pages.newDocument.questions.newDocument.text || '',
+        order.orderParameters?.haveLicence,
+        paths.ATTACHMENT.NEW_DOCUMENT.replace(':orderId', order.id),
+        answerOpts,
+      ),
+    )
+
+    if (order.orderParameters?.haveLicence) {
+      const uploadContent = usesRevocationPaperwork(order)
+        ? content?.pages.uploadRevocationPaperwork
+        : content?.pages.uploadLicense
+      answers.push(
+        createAttachmentAnswer(
+          licence,
+          uploadContent?.questions.file.text || '',
+          paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'licence').replace(':orderId', order.id),
+          order,
+        ),
+      )
+    }
+  } else if (!isCourtOrder && order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE') {
     answers.push(
       createAttachmentAnswer(
         licence,

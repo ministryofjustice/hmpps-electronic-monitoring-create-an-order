@@ -23,7 +23,7 @@ const DateInputModel = (messages: DateErrorMessages) => {
           },
         })
 
-        return z.NEVER
+        return
       }
 
       if ((val.year !== '' && val.year.length !== 4) || Number.isNaN(Number(val.year))) {
@@ -36,7 +36,7 @@ const DateInputModel = (messages: DateErrorMessages) => {
           },
         })
 
-        return z.NEVER
+        return
       }
 
       if (val.day === '' && (val.month !== '' || val.year !== '')) {
@@ -49,7 +49,7 @@ const DateInputModel = (messages: DateErrorMessages) => {
           },
         })
 
-        return z.NEVER
+        return
       }
 
       if (val.month === '' && (val.day !== '' || val.year !== '')) {
@@ -62,7 +62,7 @@ const DateInputModel = (messages: DateErrorMessages) => {
           },
         })
 
-        return z.NEVER
+        return
       }
 
       if (val.year === '' && (val.month !== '' || val.day !== '')) {
@@ -75,7 +75,7 @@ const DateInputModel = (messages: DateErrorMessages) => {
           },
         })
 
-        return z.NEVER
+        return
       }
 
       if (
@@ -96,7 +96,7 @@ const DateInputModel = (messages: DateErrorMessages) => {
           },
         })
 
-        return z.NEVER
+        return
       }
 
       const inputDate = new Date(Number(val.year), Number(val.month), Number(val.day))
@@ -110,11 +110,7 @@ const DateInputModel = (messages: DateErrorMessages) => {
             focusPath: 'day',
           },
         })
-
-        return z.NEVER
       }
-
-      return false
     })
     .transform(value => {
       if (value.day === '' && value.month === '' && value.year === '') {
@@ -165,7 +161,7 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
             },
           })
 
-          return z.NEVER
+          return
         }
 
         if (val.day === '' && (val.month !== '' || val.year !== '')) {
@@ -178,7 +174,7 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
             },
           })
 
-          return z.NEVER
+          return
         }
 
         if (val.month === '' && (val.day !== '' || val.year !== '')) {
@@ -191,7 +187,7 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
             },
           })
 
-          return z.NEVER
+          return
         }
 
         if (val.year === '' && (val.month !== '' || val.day !== '')) {
@@ -204,7 +200,7 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
             },
           })
 
-          return z.NEVER
+          return
         }
 
         const inputDate = new Date(Number(val.year), Number(val.month), Number(val.day))
@@ -218,7 +214,7 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
             },
           })
 
-          return z.NEVER
+          return
         }
 
         if (
@@ -239,7 +235,7 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
             },
           })
 
-          return z.NEVER
+          return
         }
       }
 
@@ -251,7 +247,7 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
             fatal: true,
           })
 
-          return z.NEVER
+          return
         }
 
         if (val.hours !== '' && val.minutes === '') {
@@ -261,19 +257,19 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
             fatal: true,
           })
 
-          return z.NEVER
+          return
         }
         if (
           z
             .object({
               hours: z
                 .string()
-                .transform(hour => (hour === '' ? Number.isNaN : hour))
-                .pipe(z.coerce.number().int().min(0).max(23)),
+                .transform(hour => (hour === '' ? NaN : hour))
+                .pipe(z.coerce.number<string | number>().int().min(0).max(23)),
               minutes: z
                 .string()
-                .transform(min => (min === '' ? Number.isNaN : min))
-                .pipe(z.coerce.number().int().min(0).max(59)),
+                .transform(min => (min === '' ? NaN : min))
+                .pipe(z.coerce.number<string | number>().int().min(0).max(59)),
             })
             .safeParse(val).error
         ) {
@@ -283,7 +279,7 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
             fatal: true,
           })
 
-          return z.NEVER
+          return
         }
       }
       if (messages.time.required && val.hours === '' && val.minutes === '') {
@@ -293,11 +289,7 @@ const DateTimeInputModel = (messages: DateTimeErrorMessages) => {
           fatal: true,
           path: ['hours'],
         })
-
-        return z.NEVER
       }
-
-      return false
     })
     .transform(value => {
       if (value.day === '' && value.month === '' && value.year === '') {
