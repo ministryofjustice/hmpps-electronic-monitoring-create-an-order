@@ -76,9 +76,7 @@ describe('Order Search Service', () => {
       })
       const { id, status, type, versionId } = mockNewOrder
       const { firstName, lastName, notifyingOrganisation } = mockReturnValue
-      expect([{ id, status, type, versionId, firstName, lastName, notifyingOrganisation }]).toEqual(
-        expect.objectContaining(orders.content),
-      )
+      expect(orders.content).toEqual([{ id, status, type, versionId, firstName, lastName, notifyingOrganisation }])
       expect(orders.page).toBe(1)
       expect(orders.size).toBe(10)
       expect(orders.hasNext).toBe(true)

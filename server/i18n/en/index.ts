@@ -27,6 +27,7 @@ import tertiaryAddressPageContent from './pages/tertiaryAddress'
 import trailMonitoringPageContent from './pages/trailMonitoring'
 import uploadLicencePageContent from './pages/uploadLicence'
 import uploadPhotoIdPageContent from './pages/uploadPhotoId'
+import uploadRevocationPaperworkPageContent from './pages/uploadRevocationPaperwork'
 import variationDetailsPageContent from './pages/variationDetails'
 import probationDeliveryUnitPageContent from './pages/probationDeliveryUnit'
 import pduPageContent from './pages/probationDeliveryUnitPage'
@@ -36,6 +37,7 @@ import getReferenceData from './reference'
 import havePhotoPageContent from './pages/havePhoto'
 import isRejectionPageContent from './pages/isRejection'
 import serviceRequestTypePageContent from './pages/serviceRequestType'
+import newDocumentPageContent from './pages/newDocument'
 import dapoContent from './pages/dapo'
 import offenceContent from './pages/offence'
 import mappaPageContent from './pages/mappa'
@@ -100,8 +102,10 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       tertiaryAddress: tertiaryAddressPageContent,
       trailMonitoring: trailMonitoringPageContent,
       uploadLicense: uploadLicencePageContent,
+      uploadRevocationPaperwork: uploadRevocationPaperworkPageContent,
       uploadPhotoId: uploadPhotoIdPageContent,
       havePhoto: havePhotoPageContent,
+      newDocument: newDocumentPageContent,
       variationDetails: variationDetailsPageContent,
       probationDeliveryUnit: probationDeliveryUnitPageContent,
       pdu: pduPageContent,

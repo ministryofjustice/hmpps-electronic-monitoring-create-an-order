@@ -35,7 +35,7 @@ describe('dapo form model', () => {
       const result = validator.safeParse(data)
 
       expect(result.success).toBe(false)
-      const error = result.error?.errors[0]
+      const error = result.error?.issues[0]
       expect(error?.message).toBe('Enter a DAPO order clause number')
       expect(error?.path[0]).toBe('clause')
     })
@@ -55,7 +55,7 @@ describe('dapo form model', () => {
       const result = validator.safeParse(data)
 
       expect(result.success).toBe(false)
-      const error = result.error?.errors[0]
+      const error = result.error?.issues[0]
       expect(error?.message).toBe('Enter date of DAPO requirement')
     })
   })
