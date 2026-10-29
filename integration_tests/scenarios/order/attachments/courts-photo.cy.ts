@@ -47,7 +47,7 @@ context('Service-Request-Types', () => {
     const installationAddressDetails = createFakeAddress()
 
     const monitoringOrderTypeDescription = {
-      // TODO: Confirm this isnt needed...
+      // Only needed when civil courts are added.
       // orderType: 'Civil',
       monitoringCondition: ['Trail monitoring'],
     }

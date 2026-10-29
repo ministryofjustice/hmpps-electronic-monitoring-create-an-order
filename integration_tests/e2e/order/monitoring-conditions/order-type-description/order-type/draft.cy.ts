@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import OrderTypePage from './OrderTypePage'
 import Page from '../../../../../pages/page'
 
-const stubGetOrder = (notifyingOrg: string = 'CIVIL_COUNTY_COURT') => {
+const stubGetOrder = (notifyingOrg: string = 'PROBATION') => {
   cy.task('stubCemoGetOrder', {
     httpStatus: 200,
     id: mockOrderId,
@@ -22,8 +22,7 @@ const stubGetOrder = (notifyingOrg: string = 'CIVIL_COUNTY_COURT') => {
 }
 
 const mockOrderId = uuidv4()
-// skipped out due to ELM-4526
-context.skip('orderType', () => {
+context('orderType', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -55,10 +54,10 @@ context.skip('orderType', () => {
 
     page.form.orderTypeField.shouldHaveOption('Release from prison')
     page.form.orderTypeField.shouldHaveOption('Community')
-    page.form.orderTypeField.shouldHaveDisabledOption('Community')
   })
 
-  it('when notifying org is a court', () => {
+  // This test can be re-added when the order type page is added for courts.
+  it.skip('when notifying org is a court', () => {
     stubGetOrder('CROWN_COURT')
     const page = Page.visit(OrderTypePage, { orderId: mockOrderId })
 

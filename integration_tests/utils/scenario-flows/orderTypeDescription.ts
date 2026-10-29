@@ -5,8 +5,6 @@ import IsspPage from '../../e2e/order/monitoring-conditions/order-type-descripti
 import MonitoringTypePage from '../../e2e/order/monitoring-conditions/order-type-description/monitoring-type/MonitoringTypesPage'
 import OffenceTypePage from '../../e2e/order/monitoring-conditions/order-type-description/offence-type/OffenceTypePage'
 import OrderTypePage from '../../e2e/order/monitoring-conditions/order-type-description/order-type/OrderTypePage'
-// commented out due to ELM-4526
-// import OrderTypePage from '../../e2e/order/monitoring-conditions/order-type-description/order-type/OrderTypePage'
 import PilotPage from '../../e2e/order/monitoring-conditions/order-type-description/pilot/PilotPage'
 import PoliceAreaPage from '../../e2e/order/monitoring-conditions/order-type-description/police-area/PoliceAreaPage'
 import PrarrPage from '../../e2e/order/monitoring-conditions/order-type-description/prarr/PrarrPage'
