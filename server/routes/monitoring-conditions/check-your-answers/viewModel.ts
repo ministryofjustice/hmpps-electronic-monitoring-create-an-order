@@ -27,7 +27,7 @@ const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n
     const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE
     answers.push(
       createAnswer(
-        'What is the order type?',
+        content.pages.monitoringConditions.questions.orderType.text,
         lookup(content.reference.orderTypes, data.orderType),
         path.replace(':orderId', order.id),
         answerOpts,

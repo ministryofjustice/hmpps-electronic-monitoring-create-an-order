@@ -72,9 +72,14 @@ context('Order type descriptions', () => {
     }
 
     const page = Page.verifyOnPage(MonitoringConditionsCheckYourAnswersPage, 'Check your answer')
+    const expectedOrderTypes = { License: 'Post Release', 'Court order': 'Community' }
     const expectedOrderType =
-      monitoringOrderTypeDescription.orderType === 'License' ? 'Post Release' : monitoringOrderTypeDescription.orderType
-    verifyValueInCheckYourAnswerPage(page, 'What is the order type?', expectedOrderType)
+      expectedOrderTypes[monitoringOrderTypeDescription.orderType] ?? monitoringOrderTypeDescription.orderType
+    verifyValueInCheckYourAnswerPage(
+      page,
+      'What type of order includes electronic monitoring as a condition?',
+      expectedOrderType,
+    )
 
     verifyValueInCheckYourAnswerPage(
       page,
