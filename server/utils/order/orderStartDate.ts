@@ -17,4 +17,7 @@ const isStartDateInPast = (order: Order, { now = new Date(), treatMissingAsPast 
 const isPastDatedVariation = (order: Order, options: StartDateOptions = {}) =>
   isVariationType(order.type) && isStartDateInPast(order, options)
 
-export { isStartDateInPast, isPastDatedVariation }
+const isPastDatedProbationVariation = (order: Order, options: StartDateOptions = {}) =>
+  order.interestedParties?.notifyingOrganisation === 'PROBATION' && isPastDatedVariation(order, options)
+
+export { isStartDateInPast, isPastDatedVariation, isPastDatedProbationVariation }

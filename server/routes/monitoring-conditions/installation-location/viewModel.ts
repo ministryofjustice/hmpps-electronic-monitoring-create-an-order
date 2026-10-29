@@ -27,7 +27,7 @@ const getPilotPrisonStatus = (order: Order): boolean => {
 }
 
 const createPrimaryAddressView = (addresses: Address[]): string => {
-  const primaryAddress = addresses?.find(address => address.addressType === AddressTypeEnum.Enum.PRIMARY)
+  const primaryAddress = addresses?.find(address => address.addressType === AddressTypeEnum.enum.PRIMARY)
   return primaryAddress ? createAddressPreview(primaryAddress) : ''
 }
 

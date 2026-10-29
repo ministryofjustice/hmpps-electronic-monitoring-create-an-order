@@ -152,6 +152,7 @@ const paths = {
     DOWNLOAD_FILE: `${ATTACHMENT_BASE}/:fileType(photo_Id|licence)/:filename`,
     DELETE_FILE: `${ATTACHMENT_BASE}/:fileType(photo_Id|licence)/delete`,
     HAVE_PHOTO: `${ATTACHMENT_BASE}/have-photo`,
+    NEW_DOCUMENT: `${ATTACHMENT_BASE}/new-document`,
   },
 
   VARIATION: {

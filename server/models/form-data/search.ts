@@ -82,7 +82,7 @@ const getIdList = (order: OrderSearchResult) => {
 }
 
 const createOrderItem = (order: OrderSearchResult) => {
-  const currentAddress = order.addresses.find(address => address.addressType === AddressTypeEnum.Values.PRIMARY)
+  const currentAddress = order.addresses.find(address => address.addressType === AddressTypeEnum.enum.PRIMARY)
 
   return {
     name: formatName(order.deviceWearer.firstName, order.deviceWearer.lastName),

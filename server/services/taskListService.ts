@@ -9,6 +9,7 @@ import { getRiskInformationTasks } from '../routes/installation-and-risk/riskInf
 import { TaskListCohortDefinition, taskListCohortDefinitions } from './taskListCohorts'
 import hasOptionalVariationSectionIsHOCourt from '../utils/order/optionalVariationSections'
 import { convertBooleanToEnum, isNotNullOrEmptyString, isNotNullOrUndefined } from '../utils/values'
+import { isPastDatedProbationVariation } from '../utils/order/orderStartDate'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
@@ -60,6 +61,7 @@ const PAGES = {
   licenceUpload: 'LICENCE_ATTACHMENT',
   photoUpload: 'PHOTO_ATTACHMENT',
   havePhoto: 'ATTACHMENTS_HAVE_PHOTO',
+  newDocument: 'ATTACHMENTS_NEW_DOCUMENT',
   attachments: 'CHECK_ANSWERS_ATTACHMENTS',
   variationDetails: 'VARIATION_DETAILS',
   installationLocation: 'INSTALLATION_LOCATION',
@@ -179,7 +181,29 @@ const getInterestedPartiesTasks = (order: Order, cohortDefinition: TaskListCohor
 const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCohortDefinition): Task[] => {
   const tasks: Task[] = []
 
-  if (cohortDefinition.attachment === 'LICENCE') {
+  if (isPastDatedProbationVariation(order)) {
+    tasks.push(
+      {
+        section: SECTIONS.additionalDocuments,
+        name: PAGES.newDocument,
+        path: paths.ATTACHMENT.NEW_DOCUMENT,
+        state: STATES.required,
+        completed: isNotNullOrUndefined(order.orderParameters?.haveLicence),
+      },
+      {
+        section: SECTIONS.additionalDocuments,
+        name: PAGES.licenceUpload,
+        path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'licence'),
+        state: convertBooleanToEnum<State>(
+          order.orderParameters?.haveLicence ?? null,
+          STATES.cantBeStarted,
+          STATES.required,
+          STATES.notRequired,
+        ),
+        completed: doesOrderHaveDocument(order, AttachmentType.LICENCE) || order.orderParameters?.haveLicence === false,
+      },
+    )
+  } else if (cohortDefinition.attachment === 'LICENCE') {
     tasks.push({
       section: SECTIONS.additionalDocuments,
       name: PAGES.licenceUpload,
