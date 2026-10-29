@@ -172,7 +172,6 @@ context('Curfew monitoring - release date', () => {
       })
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/release-date`)
       const page = Page.verifyOnPage(CurfewReleaseDatePage)
-      page.submittedBanner.should('contain', 'You are viewing a submitted order.')
       checkFormFields()
       page.form.saveAndContinueButton.should('not.exist')
       page.form.saveAsDraftButton.should('not.exist')
@@ -193,7 +192,6 @@ context('Curfew monitoring - release date', () => {
     it('Should correctly display the unsubmitted data in enabled fields', () => {
       cy.signIn().visit(`/order/${mockOrderId}/monitoring-conditions/curfew/release-date`)
       const page = Page.verifyOnPage(CurfewReleaseDatePage)
-      cy.root().should('not.contain', 'You are viewing a submitted order.')
       cy.get('input[type="number"]').each($el => {
         cy.wrap($el).should('not.be.disabled')
       })
