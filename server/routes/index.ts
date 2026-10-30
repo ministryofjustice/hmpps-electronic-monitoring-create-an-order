@@ -56,6 +56,7 @@ export default function routes({
   sectionService,
   sentencingActService,
   deviceWearerSearchResultsService,
+  deviceWearerAnswersService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -121,6 +122,7 @@ export default function routes({
       deviceWearerService,
       deviceWearerResponsibleAdultService,
       deviceWearerSearchResultsService,
+      deviceWearerAnswersService,
       taskListService,
       orderChecklistService,
       sectionService,

@@ -505,7 +505,6 @@ context('Device wearer - check your answers', () => {
         { key: "What is the device wearer's last name?", value: 'tester' },
         { key: "What is the device wearer's preferred name or names? (optional)", value: 'tes' },
         { key: "What is the device wearer's date of birth?", value: '01/01/2000' },
-        { key: 'Is a responsible adult required?', value: 'No' },
         { key: 'What is the sex of the device wearer?', value: 'Male' },
         { key: "What is the device wearer's gender?", value: 'Male' },
         {
@@ -568,7 +567,7 @@ context('Device wearer - check your answers', () => {
       cy.task('resetFeatureFlags')
     })
 
-    it('should show otherDisability question and answer', () => {
+    it('shows the otherDisability question and saved answer', () => {
       const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
 
       page.personDetailsSection.shouldExist()
@@ -577,7 +576,6 @@ context('Device wearer - check your answers', () => {
         { key: "What is the device wearer's last name?", value: 'tester' },
         { key: "What is the device wearer's preferred name or names? (optional)", value: 'tes' },
         { key: "What is the device wearer's date of birth?", value: '01/01/2000' },
-        { key: 'Is a responsible adult required?', value: 'No' },
         { key: 'What is the sex of the device wearer?', value: 'Female' },
         { key: "What is the device wearer's gender?", value: 'Self identify' },
         {
@@ -607,6 +605,7 @@ context('Device wearer - check your answers', () => {
         id: mockOrderId,
         status: 'IN_PROGRESS',
         order: {
+          interestedParties: { notifyingOrganisation: 'YOUTH_COURT' },
           deviceWearer: {
             nomisId: 'nomis',
             pncId: 'pnc',
@@ -683,6 +682,7 @@ context('Device wearer - check your answers', () => {
         id: mockOrderId,
         status: 'IN_PROGRESS',
         order: {
+          interestedParties: { notifyingOrganisation: 'YOUTH_COURT' },
           deviceWearer: {
             nomisId: 'nomis',
             pncId: 'pnc',
@@ -812,7 +812,6 @@ context('Device wearer - check your answers', () => {
         { key: "What is the device wearer's last name?", value: 'tester' },
         { key: "What is the device wearer's preferred name or names? (optional)", value: 'tes' },
         { key: "What is the device wearer's date of birth?", value: '01/01/2000' },
-        { key: 'Is a responsible adult required?', value: 'No' },
         { key: 'What is the sex of the device wearer?', value: 'Male' },
         { key: "What is the device wearer's gender?", value: 'Male' },
         {
@@ -911,7 +910,6 @@ context('Device wearer - check your answers', () => {
         { key: "What is the device wearer's last name?", value: 'tester' },
         { key: "What is the device wearer's preferred name or names? (optional)", value: 'tes' },
         { key: "What is the device wearer's date of birth?", value: '01/01/2000' },
-        { key: 'Is a responsible adult required?', value: 'No' },
         { key: 'What is the sex of the device wearer?', value: 'Male' },
         { key: "What is the device wearer's gender?", value: 'Male' },
         {

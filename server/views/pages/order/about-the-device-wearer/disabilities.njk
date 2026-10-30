@@ -1,0 +1,71 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% set section = content.pages.deviceWearer.section %}
+{% set heading = content.pages.deviceWearer.disabilitiesTitle %}
+{% set singleQuestionPage = true %}
+
+{% block formInputs %}
+  {% set otherDisabilityHtml %}
+    {{ govukInput({
+      label: {
+        text: content.pages.deviceWearer.questions.otherDisability.text
+      },
+      id: "otherDisability",
+      name: "otherDisability",
+      errorMessage: otherDisability.error,
+      disabled: not isOrderEditable,
+      value: otherDisability.value
+    }) }}
+  {% endset %}
+
+  {% set disabilityOptions = [] %}
+  {% for disability in content.reference.disabilities | toOptions(not isOrderEditable) %}
+
+    {% if disability.value == 'OTHER' %}
+      {% set disabilityOptions = (
+        disabilityOptions.push({
+          value: disability.value,
+          text: disability.text,
+          disabled: disability.disabled,
+          conditional: { html: otherDisabilityHtml }
+        }), disabilityOptions
+      ) %}
+
+    {% elif disability.value == 'NO_LISTED_CONDITION' or disability.value == 'NONE' %}
+      {% set disabilityOptions = (
+        disabilityOptions.push({divider: "or"}),
+        disabilityOptions.push(disability), disabilityOptions
+      ) %}
+
+    {% elif disability.value == 'PREFER_NOT_TO_SAY' %}
+      {# This option is not shown in the UI #}
+
+    {% else %}
+      {% set disabilityOptions = (
+        disabilityOptions.push(disability), disabilityOptions
+      ) %}
+    {% endif %}
+  {% endfor %}
+
+  {{ govukCheckboxes({
+    name: "disabilities",
+    classes: "govuk-checkboxes--small app-disabilities-checkboxes",
+    fieldset: {
+      legend: {
+        text: content.pages.deviceWearer.questions.disabilities.text,
+        isPageHeading: false,
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    hint: {
+      text: content.pages.deviceWearer.questions.disabilities.hint
+    },
+    items: disabilityOptions,
+    values: disabilities.values,
+    errorMessage: disabilities.error,
+    disabled: not isOrderEditable
+  }) }}
+{% endblock %}

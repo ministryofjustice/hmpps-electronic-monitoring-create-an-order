@@ -1,4 +1,5 @@
 import RestClient from '../../../data/restClient'
+import mockApiOrder from '../../../../integration_tests/utils/data/ApiOrder'
 import DeviceWearerSearchResultsService from './service'
 
 jest.mock('../../../data/restClient')
@@ -82,6 +83,20 @@ describe('DeviceWearerSearchResultsService', () => {
       token: 'fake-token',
       data: { organisationSearchId: 'A1234BC' },
     })
+  })
+
+  it('reads back the device wearer the API stored for the order', async () => {
+    // Confirming responds with no content, so the stored person is read from the order
+    const apiOrder = mockApiOrder()
+    mockRestClient.get.mockResolvedValue({
+      ...apiOrder,
+      deviceWearer: { ...apiOrder.deviceWearer, firstName: 'Ermintrude', sex: 'FEMALE', gender: null },
+    })
+
+    const deviceWearer = await service.getStoredDeviceWearer({ accessToken: 'fake-token', orderId: 'order-123' })
+
+    expect(mockRestClient.get).toHaveBeenCalledWith({ path: '/api/orders/order-123', token: 'fake-token' })
+    expect(deviceWearer).toEqual(expect.objectContaining({ firstName: 'Ermintrude', sex: 'FEMALE', gender: null }))
   })
 
   it('returns true when search result has a matching person', () => {
