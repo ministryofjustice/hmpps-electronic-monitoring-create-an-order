@@ -21,13 +21,19 @@ export default class DeviceWearerAnswersService {
   }
 
   async saveDeviceWearerDetails(
-    _order: Order,
-    _data: Pick<
-      DeviceWearerCache,
-      'firstName' | 'middleName' | 'lastName' | 'alias' | 'dateOfBirth' | 'sex' | 'gender'
-    >,
+    order: Order,
+    data: Pick<DeviceWearerCache, 'firstName' | 'middleName' | 'lastName' | 'alias' | 'dateOfBirth' | 'sex' | 'gender'>,
   ): Promise<void> {
-    throw new Error('Not implemented')
+    await this.store.updateDeviceWearer(order, data)
+  }
+
+  // CPR does not provide a gender, so when a person is loaded from CPR without one the answer defaults to
+  // 'Not able to provide this information'. The order should be the one the API stored after the lookup.
+  async defaultGenderAfterCprLookup(order: Order): Promise<void> {
+    const { gender } = await this.store.getDeviceWearer(order)
+    if (!gender) {
+      await this.store.updateDeviceWearer(order, { gender: 'NOT_ABLE_TO_PROVIDE_THIS_INFORMATION' })
+    }
   }
 
   async saveDisabilities(
@@ -49,12 +55,39 @@ export default class DeviceWearerAnswersService {
   }
 
   async submit({ accessToken, order }: SubmitDeviceWearerInput): Promise<DeviceWearer | ValidationResult> {
-    const { disabilities, ...answers } = await this.store.getDeviceWearer(order)
+    // Only send the answers the device wearer pages own (the fields of the API's UpdateDeviceWearerDto)
+    const {
+      firstName,
+      middleName,
+      lastName,
+      alias,
+      dateOfBirth,
+      sex,
+      gender,
+      disabilities,
+      otherDisability,
+      interpreterRequired,
+      language,
+      adultAtTimeOfInstallation,
+    } = await this.store.getDeviceWearer(order)
 
     try {
       const result = await this.apiClient.put({
         path: `/api/orders/${order.id}/device-wearer`,
-        data: { ...answers, disabilities: (disabilities ?? []).join(',') },
+        data: {
+          firstName,
+          middleName,
+          lastName,
+          alias,
+          dateOfBirth,
+          sex,
+          gender,
+          disabilities: (disabilities ?? []).join(','),
+          otherDisability,
+          interpreterRequired,
+          language,
+          adultAtTimeOfInstallation,
+        },
         token: accessToken,
       })
       const deviceWearer = DeviceWearerModel.parse(result)

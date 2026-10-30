@@ -122,7 +122,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's first name?",
               },
@@ -139,7 +139,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's middle name? (optional)",
               },
@@ -156,7 +156,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's last name?",
               },
@@ -173,7 +173,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's preferred name or names? (optional)",
               },
@@ -190,7 +190,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's date of birth?",
               },
@@ -224,7 +224,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'what is the sex of the device wearer?',
               },
@@ -241,7 +241,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's gender?",
               },
@@ -384,7 +384,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's first name?",
               },
@@ -401,7 +401,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's middle name? (optional)",
               },
@@ -418,7 +418,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's last name?",
               },
@@ -435,7 +435,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's preferred name or names? (optional)",
               },
@@ -452,7 +452,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's date of birth?",
               },
@@ -486,7 +486,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'what is the sex of the device wearer?',
               },
@@ -503,7 +503,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's gender?",
               },
@@ -654,7 +654,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's first name?",
               },
@@ -671,7 +671,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's middle name? (optional)",
               },
@@ -688,7 +688,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's last name?",
               },
@@ -705,7 +705,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's preferred name or names? (optional)",
               },
@@ -722,7 +722,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's date of birth?",
               },
@@ -756,7 +756,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'what is the sex of the device wearer?',
               },
@@ -773,7 +773,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's gender?",
               },

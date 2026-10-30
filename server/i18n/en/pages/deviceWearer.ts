@@ -14,6 +14,7 @@ const deviceWearerPageContent: DeviceWearerPageContent = {
     },
     dateOfBirth: {
       text: "What is the device wearer's date of birth?",
+      hint: 'For example, 21 05 2005',
     },
     disabilities: {
       text: 'Does the device wearer have any of the disabilities or health conditions listed?',
