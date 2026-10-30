@@ -14,6 +14,14 @@ describe('in memory order type description store', () => {
     expect(result).toEqual('some token')
   })
 
+  it('should delete a stored value', async () => {
+    await store.set('some key', 'some token', 1000)
+
+    await store.delete('some key')
+
+    expect(await store.get('some key')).toEqual(null)
+  })
+
   it('should return null if expiry time is in the past', async () => {
     await store.set('some key', 'test token', -1)
 
