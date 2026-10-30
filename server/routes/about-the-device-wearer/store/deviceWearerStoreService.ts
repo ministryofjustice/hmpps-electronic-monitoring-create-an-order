@@ -41,24 +41,6 @@ export default class DeviceWearerStoreService {
     await this.dataStore.set(this.keyFromOrder(order), JSON.stringify(entry), this.TTL_SECONDS)
   }
 
-  public async updateDeviceWearer(order: Order, answers: DeviceWearerCache): Promise<void> {
-    const current = await this.getDeviceWearer(order)
-
-    await this.dataStore.set(this.keyFromOrder(order), JSON.stringify({ ...current, ...answers }), this.TTL_SECONDS)
-  }
-
-  public async updateDeviceWearer(order: Order, answers: DeviceWearerCache): Promise<void> {
-    const current = await this.getDeviceWearer(order)
-
-    await this.dataStore.set(this.keyFromOrder(order), JSON.stringify({ ...current, ...answers }), this.TTL_SECONDS)
-  }
-
-  public async updateDeviceWearer(order: Order, answers: DeviceWearerCache): Promise<void> {
-    const current = await this.getDeviceWearer(order)
-
-    await this.dataStore.set(this.keyFromOrder(order), JSON.stringify({ ...current, ...answers }), this.TTL_SECONDS)
-  }
-
   public async clearDeviceWearer(order: Order): Promise<void> {
     await this.dataStore.delete(this.keyFromOrder(order))
   }

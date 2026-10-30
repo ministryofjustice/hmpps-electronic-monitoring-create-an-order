@@ -32,6 +32,8 @@ describe('DeviceWearerAnswersService', () => {
   })
 
   describe('saveLanguage', () => {
+    const order = getMockOrder()
+
     it('saves the interpreter language when an interpreter is needed', async () => {
       await service.saveLanguage(order, { interpreterRequired: true, language: 'Arabic' })
 

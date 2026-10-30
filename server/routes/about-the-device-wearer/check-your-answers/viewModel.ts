@@ -31,7 +31,6 @@ const createResponsibleAdultQuestionAnswer = (order: Order, content: I18n, answe
 }
 
 const createDeviceWearerAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
-  const uri = paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id)
   const personalDetailsUri = paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id)
   const languageUri = paths.ABOUT_THE_DEVICE_WEARER.LANGUAGE.replace(':orderId', order.id)
   const disabilities = order.deviceWearer.disabilities.map(disability =>

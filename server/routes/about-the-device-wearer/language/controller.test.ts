@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
-import { createDeviceWearer, getMockOrder } from '../../../../test/mocks/mockOrder'
+import { createDeviceWearer, createInterestedParties, getMockOrder } from '../../../../test/mocks/mockOrder'
 import paths from '../../../constants/paths'
 import RestClient from '../../../data/restClient'
 import { Order } from '../../../models/Order'
@@ -237,7 +237,10 @@ describe('LanguageController', () => {
     })
 
     it('saves the answers and goes to the next unanswered device wearer page', async () => {
-      const order = answeredOrder({ adultAtTimeOfInstallation: null })
+      const order = {
+        ...answeredOrder({ adultAtTimeOfInstallation: null }),
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'YOUTH_COURT' }),
+      }
       requestFor(order)
       req.body = { action: 'continue', interpreterRequired: 'false', language: '' }
 
