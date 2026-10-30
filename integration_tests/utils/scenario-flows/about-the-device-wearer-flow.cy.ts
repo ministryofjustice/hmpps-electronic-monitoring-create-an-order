@@ -8,6 +8,7 @@ import IdentityNumbersPage, {
   identityNumberNamesForNotifyingOrganisation,
 } from '../../pages/order/about-the-device-wearer/identity-numbers'
 import DeviceWearerSearchResultsPage from '../../pages/order/about-the-device-wearer/device-wearer-search-results'
+import OrderSummaryPage from '../../pages/order/summary'
 
 import ResponsibleAdultDetailsPage from '../../pages/order/about-the-device-wearer/responsible-adult-details'
 import ContactDetailsPage from '../../pages/order/contact-information/contact-details'
@@ -42,6 +43,10 @@ export default function fillInAboutTheDeviceWearer({
     deviceWearerDetails.prisonNumber ||
     deviceWearerDetails.complianceAndEnforcementPersonReference ||
     deviceWearerDetails.courtCaseReferenceNumber
+
+  submitIfOnPage(paths.ORDER.SUMMARY, () => {
+    Page.verifyOnPage(OrderSummaryPage).aboutTheDeviceWearerTask.click()
+  })
 
   submitIfOnPage(paths.ABOUT_THE_DEVICE_WEARER.IDENTITY_NUMBERS, () => {
     const identityNumbersPage = Page.verifyOnPage(IdentityNumbersPage, {}, {}, identityNumberNames)
@@ -161,9 +166,5 @@ export default function fillInAboutTheDeviceWearer({
     })
   }
 
-  cy.location('pathname').then(pathname => {
-    if (pathname.endsWith(paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS.replace(paths.ORDER.BASE_URL, ''))) {
-      Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
-    }
-  })
+  Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
 }

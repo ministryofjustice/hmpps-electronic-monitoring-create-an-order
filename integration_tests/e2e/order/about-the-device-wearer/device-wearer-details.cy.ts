@@ -3,6 +3,8 @@ import Page from '../../../pages/page'
 import DeviceWearerDetailsPage from '../../../pages/order/about-the-device-wearer/device-wearer-details'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import DeviceWearerSearchResultsPage from '../../../pages/order/about-the-device-wearer/device-wearer-search-results'
+import OrderSummaryPage from '../../../pages/order/summary'
+import fillInAboutTheDeviceWearer from '../../../utils/scenario-flows/about-the-device-wearer-flow.cy'
 import paths from '../../../../server/constants/paths'
 
 // A fresh order for every test, so answers cached by the app for one test cannot leak into another
@@ -265,6 +267,30 @@ context('About the device wearer', () => {
     })
 
     context('Check your answers', () => {
+      it('opens the device wearer task when scenario setup starts at the order summary', () => {
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: {
+            deviceWearer: {
+              ...savedDeviceWearer,
+              nomisId: 'A1234BC',
+              disabilities: 'NONE',
+              interpreterRequired: false,
+              noFixedAbode: true,
+            },
+            contactDetails: { phoneNumberAvailable: false, contactNumber: '' },
+          },
+        })
+        cy.signIn()
+
+        Page.visit(OrderSummaryPage, { orderId: mockOrderId })
+        fillInAboutTheDeviceWearer({ deviceWearerDetails: {} })
+
+        Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
+      })
+
       it('links the personal details answers to the personal details page', () => {
         cy.task('stubCemoGetOrder', {
           httpStatus: 200,
