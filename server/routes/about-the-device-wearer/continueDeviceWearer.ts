@@ -13,7 +13,7 @@ const continueDeviceWearer = async (
 ) => {
   const order = req.order!
 
-  const unansweredPage = firstUnansweredPage(await deviceWearerAnswersService.getDeviceWearer(order), order.id)
+  const unansweredPage = firstUnansweredPage(await deviceWearerAnswersService.getDeviceWearer(order), order)
   if (unansweredPage) {
     res.redirect(unansweredPage)
     return
@@ -22,7 +22,7 @@ const continueDeviceWearer = async (
   const result = await deviceWearerAnswersService.submit({ accessToken: res.locals.user.token, order })
 
   if (isValidationResult(result)) {
-    const route = pageForErrors(result, order.id) ?? { path: currentPath, errors: result }
+    const route = pageForErrors(result, order) ?? { path: currentPath, errors: result }
     req.flash('validationErrors', route.errors)
     res.redirect(route.path)
   } else {

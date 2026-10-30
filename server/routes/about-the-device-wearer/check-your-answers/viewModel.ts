@@ -13,6 +13,7 @@ import { IdentityNumbersEnum } from '../../../models/DeviceWearer'
 import { Order } from '../../../models/Order'
 import { formatDateTime } from '../../../utils/dateTime'
 import { lookup } from '../../../utils/views/displayHelpers'
+import { shouldAskResponsibleAdultQuestion } from '../../../utils/order/responsibleAdultQuestion'
 
 const createOtherDisabilityAnswer = (order: Order, content: I18n, uri: string, answerOpts: AnswerOptions) => {
   if (order.deviceWearer.disabilities.includes('OTHER')) {
@@ -27,6 +28,21 @@ const createOtherDisabilityAnswer = (order: Order, content: I18n, uri: string, a
   }
 
   return []
+}
+
+const createResponsibleAdultQuestionAnswer = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
+  if (!shouldAskResponsibleAdultQuestion(order)) {
+    return []
+  }
+
+  return [
+    createBooleanAnswer(
+      content.pages.deviceWearer.questions.adultAtTimeOfInstallation.text,
+      order.deviceWearer.adultAtTimeOfInstallation === null ? null : !order.deviceWearer.adultAtTimeOfInstallation,
+      paths.ABOUT_THE_DEVICE_WEARER.ADULT_AT_INSTALLATION.replace(':orderId', order.id),
+      answerOpts,
+    ),
+  ]
 }
 
 const createDeviceWearerAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
@@ -46,12 +62,7 @@ const createDeviceWearerAnswers = (order: Order, content: I18n, answerOpts: Answ
       uri,
       answerOpts,
     ),
-    createBooleanAnswer(
-      content.pages.deviceWearer.questions.adultAtTimeOfInstallation.text,
-      order.deviceWearer.adultAtTimeOfInstallation === null ? null : !order.deviceWearer.adultAtTimeOfInstallation,
-      uri,
-      answerOpts,
-    ),
+    ...createResponsibleAdultQuestionAnswer(order, content, answerOpts),
     createAnswer(
       content.pages.deviceWearer.questions.sex.text,
       lookup(content.reference.sex, order.deviceWearer.sex),
