@@ -1,0 +1,48 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+
+{% set section = content.pages.deviceWearer.section %}
+{% set heading = content.pages.deviceWearer.disabilitiesTitle %}
+{% set singleQuestionPage = true %}
+
+{% block formInputs %}
+  {% set disabilityOptions = [] %}
+  {% for disability in content.reference.disabilities | toOptions(not isOrderEditable) %}
+
+    {% if disability.value == 'NO_LISTED_CONDITION' or disability.value == 'NONE' %}
+      {% set disabilityOptions = (
+        disabilityOptions.push({divider: "or"}),
+        disabilityOptions.push(disability), disabilityOptions
+      ) %}
+
+    {% elif disability.value == 'PREFER_NOT_TO_SAY' %}
+      {# This option is not shown in the UI #}
+
+    {% else %}
+      {# 'OTHER' has no conditional input: the unlisted condition description is not captured #}
+      {% set disabilityOptions = (
+        disabilityOptions.push(disability), disabilityOptions
+      ) %}
+    {% endif %}
+  {% endfor %}
+
+  {{ govukCheckboxes({
+    name: "disabilities",
+    classes: "govuk-checkboxes--small",
+    fieldset: {
+      legend: {
+        text: content.pages.deviceWearer.questions.disabilities.text,
+        isPageHeading: false,
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    hint: {
+      text: content.pages.deviceWearer.questions.disabilities.hint
+    },
+    items: disabilityOptions,
+    values: disabilities.values,
+    errorMessage: disabilities.error,
+    disabled: not isOrderEditable
+  }) }}
+{% endblock %}

@@ -37,10 +37,10 @@ export default class DeviceWearerAnswersService {
   }
 
   async saveDisabilities(
-    _order: Order,
-    _data: Pick<DeviceWearerCache, 'disabilities' | 'otherDisability'>,
+    order: Order,
+    data: Pick<DeviceWearerCache, 'disabilities' | 'otherDisability'>,
   ): Promise<void> {
-    throw new Error('Not implemented')
+    await this.store.updateDeviceWearer(order, data)
   }
 
   async saveLanguage(_order: Order, _data: Pick<DeviceWearerCache, 'interpreterRequired' | 'language'>): Promise<void> {
@@ -65,7 +65,6 @@ export default class DeviceWearerAnswersService {
       sex,
       gender,
       disabilities,
-      otherDisability,
       interpreterRequired,
       language,
       adultAtTimeOfInstallation,
@@ -83,7 +82,7 @@ export default class DeviceWearerAnswersService {
           sex,
           gender,
           disabilities: (disabilities ?? []).join(','),
-          otherDisability,
+          otherDisability: null,
           interpreterRequired,
           language,
           adultAtTimeOfInstallation,

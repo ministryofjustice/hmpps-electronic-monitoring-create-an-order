@@ -258,7 +258,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'does the device wearer have any of the disabilities or health conditions listed?',
               },
@@ -520,7 +520,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'does the device wearer have any of the disabilities or health conditions listed?',
               },
@@ -790,7 +790,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'does the device wearer have any of the disabilities or health conditions listed?',
               },
@@ -951,5 +951,20 @@ describe('DeviceWearerCheckAnswersController', () => {
       ],
       submittedDate: undefined,
     })
+  })
+
+  it('should not show an unlisted disability description because it is no longer captured', async () => {
+    const order = getMockOrder({
+      deviceWearer: { ...adultDeviceWearer, disabilities: ['OTHER'], otherDisability: 'Broken arm' },
+    })
+    const req = createMockRequest({ order })
+    const res = createMockResponse()
+
+    await controller.view(req, res, jest.fn())
+
+    const [, { deviceWearer }] = (res.render as jest.Mock).mock.calls[0]
+    const keys = deviceWearer.map((row: { key: { text: string } }) => row.key.text)
+    expect(keys).toContain('Does the device wearer have any of the disabilities or health conditions listed?')
+    expect(keys).not.toContain("What is the device wearer's disability or health condition?")
   })
 })

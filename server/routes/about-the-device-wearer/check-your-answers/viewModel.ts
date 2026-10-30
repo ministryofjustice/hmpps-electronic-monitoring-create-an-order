@@ -14,21 +14,6 @@ import { Order } from '../../../models/Order'
 import { formatDateTime } from '../../../utils/dateTime'
 import { lookup } from '../../../utils/views/displayHelpers'
 
-const createOtherDisabilityAnswer = (order: Order, content: I18n, uri: string, answerOpts: AnswerOptions) => {
-  if (order.deviceWearer.disabilities.includes('OTHER')) {
-    return [
-      createAnswer(
-        content.pages.deviceWearer.questions.otherDisability.text,
-        order.deviceWearer.otherDisability,
-        uri,
-        answerOpts,
-      ),
-    ]
-  }
-
-  return []
-}
-
 const createDeviceWearerAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id)
   const personalDetailsUri = paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id)
@@ -85,8 +70,12 @@ const createDeviceWearerAnswers = (order: Order, content: I18n, answerOpts: Answ
       personalDetailsUri,
       answerOpts,
     ),
-    createMultipleChoiceAnswer(content.pages.deviceWearer.questions.disabilities.text, disabilities, uri, answerOpts),
-    ...createOtherDisabilityAnswer(order, content, uri, answerOpts),
+    createMultipleChoiceAnswer(
+      content.pages.deviceWearer.questions.disabilities.text,
+      disabilities,
+      paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES.replace(':orderId', order.id),
+      answerOpts,
+    ),
     createAnswer(content.pages.deviceWearer.questions.language.text, order.deviceWearer.language, uri, answerOpts),
     createBooleanAnswer(
       content.pages.deviceWearer.questions.interpreterRequired.text,

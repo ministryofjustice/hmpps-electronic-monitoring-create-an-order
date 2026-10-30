@@ -34,12 +34,16 @@ describe('deviceWearerPages', () => {
   })
 
   it('maps api errors back to the page that owns the field', () => {
-    const page = pageForErrors([{ field: 'otherDisability', error: 'x' }], '1')
+    const page = pageForErrors([{ field: 'disabilities', error: 'x' }], '1')
 
     expect(page).toEqual({
       path: paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES.replace(':orderId', '1'),
-      errors: [{ field: 'otherDisability', error: 'x' }],
+      errors: [{ field: 'disabilities', error: 'x' }],
     })
     expect(pageForErrors([{ field: 'unknown', error: 'x' }], '1')).toBeNull()
+  })
+
+  it('does not route otherDisability errors to the disabilities page, which no longer shows that field', () => {
+    expect(pageForErrors([{ field: 'otherDisability', error: 'x' }], '1')).toBeNull()
   })
 })
