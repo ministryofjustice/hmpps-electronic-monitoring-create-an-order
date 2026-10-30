@@ -40,4 +40,12 @@ describe('DeviceWearerStoreService', () => {
     const result = await service.getDeviceWearer(order)
     expect(result.firstName).toEqual(order.deviceWearer.firstName)
   })
+
+  it('updates the cached answers, keeping the other answers', async () => {
+    await service.updateDeviceWearer(order, { adultAtTimeOfInstallation: false })
+
+    const result = await service.getDeviceWearer(order)
+    expect(result.adultAtTimeOfInstallation).toBe(false)
+    expect(result.firstName).toEqual(order.deviceWearer.firstName)
+  })
 })
