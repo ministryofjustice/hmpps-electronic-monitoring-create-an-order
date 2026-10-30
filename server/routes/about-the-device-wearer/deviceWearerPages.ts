@@ -36,7 +36,7 @@ const PAGES = [
   },
   {
     path: paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES,
-    fields: ['disabilities', 'otherDisability'],
+    fields: ['disabilities'],
     validator: DisabilitiesAnswered,
   },
   {

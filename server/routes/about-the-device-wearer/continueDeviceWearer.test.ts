@@ -44,7 +44,7 @@ describe('continueDeviceWearer', () => {
   })
 
   it('redirects to the page that owns an api validation error', async () => {
-    const errors: ValidationResult = [{ field: 'otherDisability', error: 'x' }]
+    const errors: ValidationResult = [{ field: 'disabilities', error: 'x' }]
     service.getDeviceWearer.mockResolvedValue(answered)
     service.submit.mockResolvedValue(errors)
 
