@@ -1,0 +1,59 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "../../../components/accessible-autocomplete/macro.njk" import accessibleAutocomplete %}
+
+{% set section = content.pages.deviceWearer.section %}
+{% set heading = content.pages.deviceWearer.languagePage.title %}
+{% set singleQuestionPage = true %}
+
+{% set visuallyHiddenHint %}
+  <span class="govuk-visually-hidden"> Selecting this will reveal an additional input</span>
+{% endset %}
+
+{% set languageHtml %}
+  {{ accessibleAutocomplete({
+    id: "language",
+    name: "language",
+    label: content.pages.deviceWearer.questions.language.text,
+    hint: content.pages.deviceWearer.questions.language.hint,
+    options: content.reference.languages | toOptions(false, true,'',false,false),
+    value: language.value,
+    errorMessage: language.error,
+    disabled: not isOrderEditable,
+    nonce: cspNonce
+  }) }}
+{% endset %}
+
+{% set interpreterRequiredItems = [] %}
+{% for item in interpreterRequired.items %}
+  {% if item.value == 'true' %}
+    {% set item = {
+      value: item.value,
+      text: item.text,
+      disabled: item.disabled,
+      hint: { html: visuallyHiddenHint },
+      conditional: { html: languageHtml }
+    } %}
+  {% endif %}
+  {% set interpreterRequiredItems = (interpreterRequiredItems.push(item), interpreterRequiredItems) %}
+{% endfor %}
+
+{% block formInputs %}
+  {{ govukRadios({
+    name: "interpreterRequired",
+    idPrefix: "interpreterRequired",
+    fieldset: {
+      legend: {
+        text: content.pages.deviceWearer.questions.interpreterRequired.text,
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    hint: {
+      text: content.pages.deviceWearer.questions.interpreterRequired.hint
+    },
+    items: interpreterRequiredItems,
+    value: interpreterRequired.value,
+    errorMessage: interpreterRequired.error
+  }) }}
+{% endblock %}
