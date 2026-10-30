@@ -51,6 +51,10 @@ const deviceWearerPageContent: DeviceWearerPageContent = {
   section: 'About the device wearer',
   title: 'Personal details',
   disabilitiesTitle: 'Disability and health conditions',
+  languagePage: {
+    title: 'Language',
+    interpreterRequiredDontKnow: "Don't know",
+  },
 }
 
 export default deviceWearerPageContent

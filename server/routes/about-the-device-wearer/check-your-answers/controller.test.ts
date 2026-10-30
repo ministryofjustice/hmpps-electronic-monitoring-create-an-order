@@ -275,7 +275,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.LANGUAGE.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'what language does the interpreter need to use?',
               },
@@ -292,7 +292,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.LANGUAGE.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'is an interpreter needed?',
               },
@@ -537,7 +537,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.LANGUAGE.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'what language does the interpreter need to use?',
               },
@@ -554,7 +554,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.LANGUAGE.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'is an interpreter needed?',
               },
@@ -807,7 +807,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.LANGUAGE.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'what language does the interpreter need to use?',
               },
@@ -824,7 +824,7 @@ describe('DeviceWearerCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
+                href: paths.ABOUT_THE_DEVICE_WEARER.LANGUAGE.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: 'is an interpreter needed?',
               },

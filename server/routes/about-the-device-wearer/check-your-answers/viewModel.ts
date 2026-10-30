@@ -17,6 +17,7 @@ import { lookup } from '../../../utils/views/displayHelpers'
 const createDeviceWearerAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id)
   const personalDetailsUri = paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id)
+  const languageUri = paths.ABOUT_THE_DEVICE_WEARER.LANGUAGE.replace(':orderId', order.id)
   const disabilities = order.deviceWearer.disabilities.map(disability =>
     lookup(content.reference.disabilities, disability),
   )
@@ -76,11 +77,16 @@ const createDeviceWearerAnswers = (order: Order, content: I18n, answerOpts: Answ
       paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES.replace(':orderId', order.id),
       answerOpts,
     ),
-    createAnswer(content.pages.deviceWearer.questions.language.text, order.deviceWearer.language, uri, answerOpts),
+    createAnswer(
+      content.pages.deviceWearer.questions.language.text,
+      order.deviceWearer.language,
+      languageUri,
+      answerOpts,
+    ),
     createBooleanAnswer(
       content.pages.deviceWearer.questions.interpreterRequired.text,
       order.deviceWearer.interpreterRequired,
-      uri,
+      languageUri,
       answerOpts,
     ),
   ]

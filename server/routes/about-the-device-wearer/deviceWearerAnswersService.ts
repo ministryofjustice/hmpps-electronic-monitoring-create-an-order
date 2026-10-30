@@ -43,8 +43,11 @@ export default class DeviceWearerAnswersService {
     await this.store.updateDeviceWearer(order, data)
   }
 
-  async saveLanguage(_order: Order, _data: Pick<DeviceWearerCache, 'interpreterRequired' | 'language'>): Promise<void> {
-    throw new Error('Not implemented')
+  async saveLanguage(
+    order: Order,
+    { interpreterRequired, language }: Pick<DeviceWearerCache, 'interpreterRequired' | 'language'>,
+  ): Promise<void> {
+    await this.store.updateDeviceWearer(order, { interpreterRequired, language: interpreterRequired ? language : '' })
   }
 
   async saveAdultAtInstallation(
