@@ -22,22 +22,18 @@ import { isNotNullOrUndefined, isNullOrUndefined } from '../../../utils/values'
 const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const answers = []
   const data = order.monitoringConditions
-  // this logic may be required later so commenting
-  // const notifyingOrg = order.interestedParties?.notifyingOrganisation
-  // if (
-  //   !(notifyingOrg === 'PRISON' || notifyingOrg === 'YOUTH_CUSTODY_SERVICE' || notifyingOrg === 'HOME_OFFICE') &&
-  //   data.orderType !== null
-  // ) {
-  //   const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE
-  //   answers.push(
-  //     createAnswer(
-  //       'What is the order type?',
-  //       lookup(content.reference.orderTypes, data.orderType),
-  //       path.replace(':orderId', order.id),
-  //       answerOpts,
-  //     ),
-  //   )
-  // }
+  const notifyingOrg = order.interestedParties?.notifyingOrganisation
+  if (notifyingOrg === 'PROBATION' && data.orderType !== null) {
+    const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE
+    answers.push(
+      createAnswer(
+        content.pages.monitoringConditions.questions.orderType.text,
+        lookup(content.reference.orderTypes, data.orderType),
+        path.replace(':orderId', order.id),
+        answerOpts,
+      ),
+    )
+  }
 
   if (data.sentenceType && data.sentenceType !== null) {
     const question =
