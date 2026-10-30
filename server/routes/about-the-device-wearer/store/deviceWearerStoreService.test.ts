@@ -32,6 +32,24 @@ describe('DeviceWearerStoreService', () => {
     expect(result.disabilities).toEqual(['VISION'])
   })
 
+  it('updates the cached answers, keeping the answers that are not changed', async () => {
+    await service.updateDeviceWearer(order, { interpreterRequired: true, language: 'Arabic' })
+
+    const result = await service.getDeviceWearer(order)
+    expect(result.interpreterRequired).toBe(true)
+    expect(result.language).toEqual('Arabic')
+    expect(result.firstName).toEqual(order.deviceWearer.firstName)
+  })
+
+  it('keeps answers for each order version separately', async () => {
+    const variation = { ...order, versionId: 'another-version' }
+
+    await service.updateDeviceWearer(variation, { language: 'Arabic' })
+
+    expect((await service.getDeviceWearer(variation)).language).toEqual('Arabic')
+    expect((await service.getDeviceWearer(order)).language).toEqual(order.deviceWearer.language)
+  })
+
   it('clears cached data so the order is used again', async () => {
     await store.set(`${order.id}+${order.versionId}+deviceWearer`, JSON.stringify({ firstName: 'Cached' }), 60)
 
