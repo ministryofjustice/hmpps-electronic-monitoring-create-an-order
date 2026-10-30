@@ -77,7 +77,27 @@ describe('deviceWearerPages', () => {
     expect(pageForErrors(errors, probationOrder)).toBeNull()
   })
 
-  it('does not route otherDisability errors to the disabilities page, which no longer shows that field', () => {
-    expect(pageForErrors([{ field: 'otherDisability', error: 'x' }], youthOrder)).toBeNull()
+  it('routes otherDisability errors to the disabilities page', () => {
+    expect(pageForErrors([{ field: 'otherDisability', error: 'x' }], youthOrder)).toEqual({
+      path: paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES.replace(':orderId', '1'),
+      errors: [{ field: 'otherDisability', error: 'x' }],
+    })
+  })
+
+  it.each([undefined, null, '', '   '])('requires a description for OTHER in the cache: %p', otherDisability => {
+    const answers: DeviceWearerCache = { ...answered, disabilities: ['OTHER'], otherDisability }
+
+    expect(findMissingAnswers(answers, youthOrder)).toEqual([
+      { field: 'otherDisability', error: "Enter the device wearer's disability or health condition" },
+    ])
+    expect(firstUnansweredPage(answers, youthOrder)).toEqual(
+      paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES.replace(':orderId', '1'),
+    )
+  })
+
+  it('accepts OTHER with a description', () => {
+    expect(
+      findMissingAnswers({ ...answered, disabilities: ['OTHER'], otherDisability: 'Broken arm' }, youthOrder),
+    ).toEqual([])
   })
 })

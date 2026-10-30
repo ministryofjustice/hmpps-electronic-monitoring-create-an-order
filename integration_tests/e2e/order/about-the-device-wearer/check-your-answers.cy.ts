@@ -567,7 +567,7 @@ context('Device wearer - check your answers', () => {
       cy.task('resetFeatureFlags')
     })
 
-    it('should not show the otherDisability question and answer', () => {
+    it('shows the otherDisability question and saved answer', () => {
       const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
 
       page.personDetailsSection.shouldExist()
@@ -582,10 +582,10 @@ context('Device wearer - check your answers', () => {
           key: 'Does the device wearer have any of the disabilities or health conditions listed?',
           value: 'The device wearer has a disability or health condition not listed',
         },
+        { key: "What is the device wearer's disability or health condition?", value: 'Broken arm' },
         { key: 'What language does the interpreter need to use?', value: '' },
         { key: 'Is an interpreter needed?', value: 'No' },
       ])
-      page.personDetailsSection.shouldNotHaveItem("What is the device wearer's disability or health condition?")
       page.identityNumbersSection.shouldExist()
       page.identityNumbersSection.shouldHaveItems([
         { key: 'Police National Computer (PNC)', value: 'pnc' },

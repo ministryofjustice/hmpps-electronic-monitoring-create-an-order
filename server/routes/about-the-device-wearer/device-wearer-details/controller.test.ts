@@ -188,6 +188,61 @@ describe('DeviceWearerDetailsController', () => {
   })
 
   describe('update', () => {
+    it.each([undefined, '', '   ', 'My own description', 'INVALID_GENDER'])(
+      'requires an explicit supported gender answer instead of defaulting or remapping %p',
+      async gender => {
+        order = getMockOrder({ deviceWearer: createDeviceWearer({ gender: null }) })
+        const res = response()
+
+        await controller.update(request({ body: { ...validBody, gender } }), res, jest.fn())
+
+        expect(res.redirect).toHaveBeenCalledWith(
+          paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
+        )
+        expect(flashed.validationErrors).toEqual([
+          {
+            field: 'gender',
+            error: "Select the device wearer's gender, or select 'Not able to provide this information'",
+          },
+        ])
+        expect((await storeService.getDeviceWearer(order)).gender).toBeNull()
+        expect(apiClient.put).not.toHaveBeenCalled()
+      },
+    )
+
+    it.each(['MALE', 'FEMALE', 'NON_BINARY', 'PREFER_TO_SELF_DESCRIBE', 'NOT_ABLE_TO_PROVIDE_THIS_INFORMATION'])(
+      'saves the explicitly chosen gender %s without changing its representation',
+      async gender => {
+        order = getMockOrder({ deviceWearer: createDeviceWearer({ gender: null }) })
+        const res = response()
+
+        await controller.update(request({ body: { ...validBody, gender } }), res, jest.fn())
+
+        expect((await storeService.getDeviceWearer(order)).gender).toEqual(gender)
+        expect(res.redirect).toHaveBeenCalledWith(
+          paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES.replace(':orderId', order.id),
+        )
+      },
+    )
+
+    it('redisplays a missing gender unselected rather than reverting to a previously saved answer', async () => {
+      await controller.update(request({ body: { ...validBody, gender: undefined } }), response(), jest.fn())
+      const res = response()
+
+      await controller.view(request(), res, jest.fn())
+
+      expect(res.render).toHaveBeenCalledWith(
+        VIEW,
+        expect.objectContaining({
+          gender: {
+            value: '',
+            error: { text: "Select the device wearer's gender, or select 'Not able to provide this information'" },
+          },
+        }),
+      )
+      expect((await storeService.getDeviceWearer(order)).gender).toEqual('MALE')
+    })
+
     it('returns to the order summary for the version being viewed without saving when the order cannot be edited', async () => {
       const versionSummaryUri = `/order/${order.id}/version/${order.versionId}/summary`
       const res = response(false)

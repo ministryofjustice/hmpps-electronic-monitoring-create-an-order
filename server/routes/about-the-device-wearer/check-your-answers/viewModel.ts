@@ -87,6 +87,16 @@ const createDeviceWearerAnswers = (order: Order, content: I18n, answerOpts: Answ
       paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES.replace(':orderId', order.id),
       answerOpts,
     ),
+    ...(order.deviceWearer.disabilities.includes('OTHER')
+      ? [
+          createAnswer(
+            content.pages.deviceWearer.questions.otherDisability.text,
+            order.deviceWearer.otherDisability,
+            paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES.replace(':orderId', order.id),
+            answerOpts,
+          ),
+        ]
+      : []),
     createAnswer(
       content.pages.deviceWearer.questions.language.text,
       order.deviceWearer.language,

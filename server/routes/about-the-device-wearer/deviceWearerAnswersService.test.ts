@@ -31,6 +31,27 @@ describe('DeviceWearerAnswersService', () => {
     service = new DeviceWearerAnswersService(new DeviceWearerStoreService(new InMemoryStore()), apiClient)
   })
 
+  describe('saveDisabilities', () => {
+    it('saves the description alongside OTHER and preserves other answers', async () => {
+      const order = orderFrom('YOUTH_COURT')
+
+      await service.saveDisabilities(order, { disabilities: ['VISION', 'OTHER'], otherDisability: 'Broken arm' })
+
+      expect(await service.getDeviceWearer(order)).toEqual(
+        expect.objectContaining({ firstName: 'Jo', disabilities: ['VISION', 'OTHER'], otherDisability: 'Broken arm' }),
+      )
+    })
+
+    it('clears a description when OTHER is no longer selected', async () => {
+      const order = orderFrom('YOUTH_COURT')
+      await service.saveDisabilities(order, { disabilities: ['OTHER'], otherDisability: 'Broken arm' })
+
+      await service.saveDisabilities(order, { disabilities: ['VISION'], otherDisability: 'Broken arm' })
+
+      expect((await service.getDeviceWearer(order)).otherDisability).toEqual('')
+    })
+  })
+
   describe('saveLanguage', () => {
     const order = getMockOrder()
 
@@ -83,6 +104,30 @@ describe('DeviceWearerAnswersService', () => {
         ...(data as object),
         disabilities: 'VISION',
       }))
+    })
+
+    it('sends the description when OTHER is selected', async () => {
+      const order = orderFrom('YOUTH_COURT')
+      await service.saveDisabilities(order, { disabilities: ['VISION', 'OTHER'], otherDisability: 'Broken arm' })
+
+      await service.submit({ accessToken: 'token', order })
+
+      expect(apiClient.put).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ disabilities: 'VISION,OTHER', otherDisability: 'Broken arm' }),
+        }),
+      )
+    })
+
+    it('sends null for a stale description when OTHER is not selected', async () => {
+      const order = orderFrom('YOUTH_COURT')
+      order.deviceWearer.otherDisability = 'Stale description'
+
+      await service.submit({ accessToken: 'token', order })
+
+      expect(apiClient.put).toHaveBeenCalledWith(
+        expect.objectContaining({ data: expect.objectContaining({ disabilities: 'VISION', otherDisability: null }) }),
+      )
     })
 
     it.each<NotifyingOrganisation>(['YOUTH_CUSTODY_SERVICE', 'YOUTH_COURT', 'PRISON'])(

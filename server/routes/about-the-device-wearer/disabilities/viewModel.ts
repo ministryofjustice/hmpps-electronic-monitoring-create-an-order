@@ -1,6 +1,6 @@
 import { Disability } from '../../../models/DeviceWearer'
 import { ValidationResult } from '../../../models/Validation'
-import { MultipleChoiceField, ViewModelBase } from '../../../models/view-models/utils'
+import { MultipleChoiceField, TextField, ViewModelBase } from '../../../models/view-models/utils'
 import { getError } from '../../../utils/validation/errorMessages'
 import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import { DeviceWearerCache } from '../store/model'
@@ -8,6 +8,7 @@ import { DisabilitiesFormData } from './formModel'
 
 type DisabilitiesViewModel = ViewModelBase & {
   disabilities: MultipleChoiceField & { values: Disability[] }
+  otherDisability: TextField
 }
 
 const construct = (
@@ -16,11 +17,16 @@ const construct = (
   errors: ValidationResult,
 ): DisabilitiesViewModel => {
   const error = getError(errors, 'disabilities')
+  const otherDisabilityError = getError(errors, 'otherDisability')
 
   return {
     disabilities: {
       values: formData?.disabilities ?? answers.disabilities ?? [],
       ...(error ? { error } : {}),
+    },
+    otherDisability: {
+      value: formData?.otherDisability ?? answers.otherDisability ?? '',
+      ...(otherDisabilityError ? { error: otherDisabilityError } : {}),
     },
     errorSummary: createGovukErrorSummary(errors),
   }

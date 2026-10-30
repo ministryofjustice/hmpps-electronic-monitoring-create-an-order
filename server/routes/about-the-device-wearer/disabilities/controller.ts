@@ -38,8 +38,8 @@ export default class DisabilitiesController {
     }
 
     const currentPath = paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES.replace(':orderId', order.id)
-    const { disabilities } = DisabilitiesFormDataModel.parse(req.body)
-    const formData = { disabilities }
+    const { disabilities, otherDisability } = DisabilitiesFormDataModel.parse(req.body)
+    const formData = { disabilities, otherDisability }
     const result = DisabilitiesFormDataValidator.safeParse(formData)
 
     if (!result.success) {
@@ -49,7 +49,7 @@ export default class DisabilitiesController {
       return
     }
 
-    await this.deviceWearerAnswersService.saveDisabilities(order, { disabilities: result.data.disabilities })
+    await this.deviceWearerAnswersService.saveDisabilities(order, result.data)
 
     await continueDeviceWearer(req, res, this.deviceWearerAnswersService, this.taskListService, currentPath)
   }

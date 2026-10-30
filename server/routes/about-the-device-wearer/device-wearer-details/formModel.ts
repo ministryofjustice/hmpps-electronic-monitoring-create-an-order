@@ -39,7 +39,9 @@ const DeviceWearerDetailsFormDataValidator = z.object({
     .string()
     .min(1, validationErrors.deviceWearer.sexRequired)
     .pipe(z.enum(SexEnum.options, { error: validationErrors.deviceWearer.sexRequired })),
-  gender: z.string().min(1, validationErrors.deviceWearer.genderRequired),
+  gender: z.enum(['MALE', 'FEMALE', 'NON_BINARY', 'PREFER_TO_SELF_DESCRIBE', 'NOT_ABLE_TO_PROVIDE_THIS_INFORMATION'], {
+    error: validationErrors.deviceWearer.genderRequired,
+  }),
 })
 
 type DeviceWearerDetailsAnswers = z.infer<typeof DeviceWearerDetailsFormDataValidator>

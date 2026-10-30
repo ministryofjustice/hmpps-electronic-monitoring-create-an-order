@@ -60,6 +60,7 @@ describe('DisabilitiesController', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/order/about-the-device-wearer/disabilities', {
         disabilities: { values: ['VISION', 'MOBILITY'] },
+        otherDisability: { value: '' },
         errorSummary: null,
       })
     })
@@ -87,8 +88,74 @@ describe('DisabilitiesController', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/order/about-the-device-wearer/disabilities', {
         disabilities: { values: [], error: { text: requiredError } },
+        otherDisability: { value: '' },
         errorSummary: { titleText: 'There is a problem', errorList: [{ href: '#disabilities', text: requiredError }] },
       })
+    })
+
+    it('prefills the saved description and prefers the cached description on revisiting', async () => {
+      order.deviceWearer.disabilities = ['OTHER']
+      order.deviceWearer.otherDisability = 'Existing description'
+
+      await controller.view(createRequest(), res, next)
+
+      expect(res.render).toHaveBeenLastCalledWith(
+        'pages/order/about-the-device-wearer/disabilities',
+        expect.objectContaining({ otherDisability: { value: 'Existing description' } }),
+      )
+
+      await controller.update(
+        createRequest({ disabilities: 'OTHER', otherDisability: 'Cached description' }),
+        res,
+        next,
+      )
+      await controller.view(createRequest(), res, next)
+
+      expect(res.render).toHaveBeenLastCalledWith(
+        'pages/order/about-the-device-wearer/disabilities',
+        expect.objectContaining({ otherDisability: { value: 'Cached description' } }),
+      )
+    })
+
+    it('redisplays a submitted blank description instead of the saved description', async () => {
+      order.deviceWearer.otherDisability = 'Existing description'
+      const error = "Enter the device wearer's disability or health condition"
+
+      await controller.view(
+        createRequest(
+          {},
+          {
+            validationErrors: [{ field: 'otherDisability', error }],
+            formData: [{ disabilities: ['OTHER'], otherDisability: '' }],
+          },
+        ),
+        res,
+        next,
+      )
+
+      expect(res.render).toHaveBeenCalledWith('pages/order/about-the-device-wearer/disabilities', {
+        disabilities: { values: ['OTHER'] },
+        otherDisability: { value: '', error: { text: error } },
+        errorSummary: { titleText: 'There is a problem', errorList: [{ href: '#otherDisability', text: error }] },
+      })
+    })
+
+    it('shows the saved description alongside an API error', async () => {
+      order.deviceWearer.disabilities = ['OTHER']
+      order.deviceWearer.otherDisability = 'Existing description'
+
+      await controller.view(
+        createRequest({}, { validationErrors: [{ field: 'otherDisability', error: 'Invalid description' }] }),
+        res,
+        next,
+      )
+
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/order/about-the-device-wearer/disabilities',
+        expect.objectContaining({
+          otherDisability: { value: 'Existing description', error: { text: 'Invalid description' } },
+        }),
+      )
     })
 
     it('shows the saved answers alongside errors returned from the api', async () => {
@@ -126,14 +193,14 @@ describe('DisabilitiesController', () => {
       expect(req.flash).toHaveBeenCalledWith('validationErrors', [
         expect.objectContaining({ field: 'disabilities', error: requiredError }),
       ])
-      expect(req.flash).toHaveBeenCalledWith('formData', { disabilities: [] })
+      expect(req.flash).toHaveBeenCalledWith('formData', { disabilities: [], otherDisability: '' })
       expect(res.redirect).toHaveBeenCalledWith(
         paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES.replace(':orderId', order.id),
       )
       expect((await storeService.getDeviceWearer(order)).disabilities).toEqual(['VISION'])
     })
 
-    it('does not capture a posted unlisted condition description', async () => {
+    it('saves a posted unlisted condition description', async () => {
       order.deviceWearer.disabilities = ['OTHER']
       order.deviceWearer.otherDisability = 'Existing description'
       const req = createRequest({ disabilities: 'OTHER', otherDisability: 'Posted description' })
@@ -142,7 +209,38 @@ describe('DisabilitiesController', () => {
 
       const cached = await storeService.getDeviceWearer(order)
       expect(cached.disabilities).toEqual(['OTHER'])
-      expect(cached.otherDisability).toEqual('Existing description')
+      expect(cached.otherDisability).toEqual('Posted description')
+    })
+
+    it.each(['', '   '])('rejects a blank description when OTHER is selected: %p', async otherDisability => {
+      const req = createRequest({ disabilities: 'OTHER', otherDisability })
+
+      await controller.update(req, res, next)
+
+      expect(req.flash).toHaveBeenCalledWith('validationErrors', [
+        expect.objectContaining({
+          field: 'otherDisability',
+          error: "Enter the device wearer's disability or health condition",
+        }),
+      ])
+      expect(req.flash).toHaveBeenCalledWith('formData', { disabilities: ['OTHER'], otherDisability })
+      expect(res.redirect).toHaveBeenCalledWith(
+        paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES.replace(':orderId', order.id),
+      )
+      expect(apiClient.put).not.toHaveBeenCalled()
+      expect((await storeService.getDeviceWearer(order)).disabilities).toEqual([])
+    })
+
+    it('clears the description when OTHER is unselected', async () => {
+      order.deviceWearer.otherDisability = 'Existing description'
+
+      await controller.update(
+        createRequest({ disabilities: 'HEARING', otherDisability: 'Stale description' }),
+        res,
+        next,
+      )
+
+      expect((await storeService.getDeviceWearer(order)).otherDisability).toEqual('')
     })
 
     it('submits instead of going to the language page when language has already been answered', async () => {
@@ -163,7 +261,21 @@ describe('DisabilitiesController', () => {
       )
     })
 
-    it('submits a previously saved unlisted condition description as null', async () => {
+    it('submits the posted unlisted condition description when all pages are answered', async () => {
+      order.deviceWearer = { ...order.deviceWearer, interpreterRequired: false, adultAtTimeOfInstallation: true }
+      apiClient.put.mockResolvedValue({ ...order.deviceWearer, disabilities: 'OTHER', otherDisability: 'Broken arm' })
+
+      await controller.update(createRequest({ disabilities: 'OTHER', otherDisability: 'Broken arm' }), res, next)
+
+      expect(apiClient.put).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ disabilities: 'OTHER', otherDisability: 'Broken arm' }),
+        }),
+      )
+      expect(res.redirect).toHaveBeenCalledWith('/next')
+    })
+
+    it('keeps the existing description when an OTHER answer is posted without a description', async () => {
       order.deviceWearer = {
         ...order.deviceWearer,
         disabilities: ['OTHER'],
@@ -171,15 +283,10 @@ describe('DisabilitiesController', () => {
         interpreterRequired: false,
         adultAtTimeOfInstallation: true,
       }
-      apiClient.put.mockResolvedValue({ ...order.deviceWearer, disabilities: 'OTHER', otherDisability: null })
-
       await controller.update(createRequest({ disabilities: 'OTHER' }), res, next)
 
-      expect(apiClient.put).toHaveBeenCalledWith(
-        expect.objectContaining({
-          data: expect.objectContaining({ disabilities: 'OTHER', otherDisability: null }),
-        }),
-      )
+      expect(apiClient.put).not.toHaveBeenCalled()
+      expect((await storeService.getDeviceWearer(order)).otherDisability).toEqual('Existing description')
     })
   })
 

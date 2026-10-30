@@ -31,20 +31,14 @@ export default class DeviceWearerAnswersService {
     await this.store.updateDeviceWearer(order, data)
   }
 
-  // CPR does not provide a gender, so when a person is loaded from CPR without one the answer defaults to
-  // 'Not able to provide this information'. The order should be the one the API stored after the lookup.
-  async defaultGenderAfterCprLookup(order: Order): Promise<void> {
-    const { gender } = await this.store.getDeviceWearer(order)
-    if (!gender) {
-      await this.store.updateDeviceWearer(order, { gender: 'NOT_ABLE_TO_PROVIDE_THIS_INFORMATION' })
-    }
-  }
-
   async saveDisabilities(
     order: Order,
-    data: Pick<DeviceWearerCache, 'disabilities' | 'otherDisability'>,
+    { disabilities, otherDisability }: Pick<DeviceWearerCache, 'disabilities' | 'otherDisability'>,
   ): Promise<void> {
-    await this.store.updateDeviceWearer(order, data)
+    await this.store.updateDeviceWearer(order, {
+      disabilities,
+      otherDisability: disabilities?.includes('OTHER') ? otherDisability : '',
+    })
   }
 
   async saveLanguage(
@@ -72,6 +66,7 @@ export default class DeviceWearerAnswersService {
       sex,
       gender,
       disabilities,
+      otherDisability,
       interpreterRequired,
       language,
       adultAtTimeOfInstallation,
@@ -91,7 +86,7 @@ export default class DeviceWearerAnswersService {
           sex,
           gender,
           disabilities: (disabilities ?? []).join(','),
-          otherDisability: null,
+          otherDisability: disabilities?.includes('OTHER') ? otherDisability : null,
           interpreterRequired,
           language,
           adultAtTimeOfInstallation,

@@ -18,9 +18,15 @@ const DeviceWearerDetailsAnswered = z.object({
   gender: z.string({ message: validationErrors.deviceWearer.genderRequired }).min(1),
 })
 
-const DisabilitiesAnswered = z.object({
-  disabilities: z.array(z.string(), { message: validationErrors.deviceWearer.disabilitiesRequired }).min(1),
-})
+const DisabilitiesAnswered = z
+  .object({
+    disabilities: z.array(z.string(), { message: validationErrors.deviceWearer.disabilitiesRequired }).min(1),
+    otherDisability: z.string().nullish(),
+  })
+  .refine(({ disabilities, otherDisability }) => !disabilities.includes('OTHER') || !!otherDisability?.trim(), {
+    path: ['otherDisability'],
+    message: "Enter the device wearer's disability or health condition",
+  })
 
 const LanguageAnswered = z.object({
   interpreterRequired: z.boolean({ message: validationErrors.deviceWearer.interpreterRequired }),
@@ -45,7 +51,7 @@ const PAGES: DeviceWearerPageDefinition[] = [
   },
   {
     path: paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES,
-    fields: ['disabilities'],
+    fields: ['disabilities', 'otherDisability'],
     validator: DisabilitiesAnswered,
   },
   {

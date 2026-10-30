@@ -21,6 +21,18 @@ const responsibleAdultQuestionRow = (
 }
 
 describe('device wearer check your answers view model', () => {
+  it('does not show a stale unlisted description when OTHER is not selected', () => {
+    const order = getMockOrder({
+      deviceWearer: createDeviceWearer({ disabilities: ['VISION'], otherDisability: 'Previous description' }),
+    })
+
+    const rows = createViewModel(order, getContent('en', 'DDV5'), true).deviceWearer
+
+    expect(rows.some(answer => answer.key.text === "What is the device wearer's disability or health condition?")).toBe(
+      false,
+    )
+  })
+
   describe('responsible adult question', () => {
     it.each<NotifyingOrganisation>(['YOUTH_CUSTODY_SERVICE', 'YOUTH_COURT', 'PRISON'])(
       'is shown for %s orders and links to the responsible adult question page',

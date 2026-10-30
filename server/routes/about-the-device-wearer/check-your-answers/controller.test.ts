@@ -902,7 +902,7 @@ describe('DeviceWearerCheckAnswersController', () => {
     })
   })
 
-  it('should not show an unlisted disability description because it is no longer captured', async () => {
+  it('shows the saved unlisted disability description with a link to the disabilities page', async () => {
     const order = getMockOrder({
       deviceWearer: { ...adultDeviceWearer, disabilities: ['OTHER'], otherDisability: 'Broken arm' },
     })
@@ -914,6 +914,18 @@ describe('DeviceWearerCheckAnswersController', () => {
     const [, { deviceWearer }] = (res.render as jest.Mock).mock.calls[0]
     const keys = deviceWearer.map((row: { key: { text: string } }) => row.key.text)
     expect(keys).toContain('Does the device wearer have any of the disabilities or health conditions listed?')
-    expect(keys).not.toContain("What is the device wearer's disability or health condition?")
+    expect(deviceWearer).toContainEqual(
+      expect.objectContaining({
+        key: { text: "What is the device wearer's disability or health condition?" },
+        value: { text: 'Broken arm' },
+        actions: {
+          items: [
+            expect.objectContaining({
+              href: paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES.replace(':orderId', order.id),
+            }),
+          ],
+        },
+      }),
+    )
   })
 })

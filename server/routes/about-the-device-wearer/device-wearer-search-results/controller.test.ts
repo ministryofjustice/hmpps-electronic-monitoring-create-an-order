@@ -122,7 +122,7 @@ describe('DeviceWearerSearchResultsController', () => {
       expect(res.redirect).toHaveBeenCalledWith(paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id))
     })
 
-    it('selects "Not able to provide this information" for gender when the person found has no gender', async () => {
+    it('leaves gender null when the person found has no gender in CPR', async () => {
       const order = getMockOrder({ deviceWearer: createDeviceWearer({ firstName: null, gender: null }) })
       const fromCpr = createDeviceWearer({ firstName: 'Ermintrude', sex: 'FEMALE', gender: null })
       mockService.getStoredDeviceWearer.mockResolvedValue(fromCpr)
@@ -130,11 +130,12 @@ describe('DeviceWearerSearchResultsController', () => {
 
       await controller.update(req, createMockResponse(), jest.fn())
 
-      // The next request loads the order as the API stored it from CPR
       const answers = await storeService.getDeviceWearer({ ...order, deviceWearer: fromCpr })
-      expect(answers.gender).toEqual('NOT_ABLE_TO_PROVIDE_THIS_INFORMATION')
+      expect(answers.gender).toBeNull()
       expect(answers.firstName).toEqual('Ermintrude')
       expect(answers.sex).toEqual('FEMALE')
+      expect(store.map.size).toEqual(0)
+      expect(mockService.getStoredDeviceWearer).not.toHaveBeenCalled()
     })
 
     it('keeps the gender of the person found', async () => {
@@ -148,7 +149,7 @@ describe('DeviceWearerSearchResultsController', () => {
       expect((await storeService.getDeviceWearer({ ...order, deviceWearer: fromCpr })).gender).toEqual('FEMALE')
     })
 
-    it('still redirects without a gender default when the saved person cannot be read back', async () => {
+    it('does not read back the saved person to apply a gender default', async () => {
       const order = getMockOrder()
       const apiClient = {
         put: jest.fn().mockResolvedValue(undefined),
@@ -164,6 +165,7 @@ describe('DeviceWearerSearchResultsController', () => {
       await realController.update(req, res, jest.fn())
 
       expect(apiClient.put).toHaveBeenCalledTimes(1)
+      expect(apiClient.get).not.toHaveBeenCalled()
       expect(store.map.size).toEqual(0)
       expect(res.redirect).toHaveBeenCalledWith(paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id))
     })

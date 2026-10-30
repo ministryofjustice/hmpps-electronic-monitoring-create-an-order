@@ -95,6 +95,44 @@ describe('device wearer details view', () => {
     )
   })
 
+  it('leaves every gender option unselected when CPR supplies no gender', async () => {
+    const model = viewModel.construct({ gender: null }, undefined, [])
+    const gender = fieldset(await render({ ...model, isOrderEditable: true }), 'gender')
+
+    expect(model.gender.value).toEqual('')
+    expect(gender).not.toContain('checked')
+    expect(gender).not.toContain('disabled')
+  })
+
+  it.each(['MALE', 'FEMALE', 'NON_BINARY', 'PREFER_TO_SELF_DESCRIBE', 'NOT_ABLE_TO_PROVIDE_THIS_INFORMATION'])(
+    'preserves an existing gender answer of %s',
+    async value => {
+      const model = viewModel.construct({ gender: value }, undefined, [])
+      const gender = fieldset(await render({ ...model, isOrderEditable: true }), 'gender')
+
+      expect(gender).toContain(`value="${value}" checked`)
+      expect(gender.match(/ checked/g)).toHaveLength(1)
+    },
+  )
+
+  it('associates gender inputs with the question, labels, hint and errors', async () => {
+    const error = "Select the device wearer's gender, or select 'Not able to provide this information'"
+    const model = viewModel.construct({ gender: null }, blankFormData, [{ field: 'gender', error }])
+    const html = await render({ ...model, isOrderEditable: true })
+    const gender = fieldset(html, 'gender')
+
+    expect(html).toContain('href="#gender"')
+    expect(gender).toContain('What is the device wearer&#39;s gender?')
+    expect(gender).toContain('aria-describedby="gender-hint gender-error"')
+    expect(gender).toContain('id="gender-hint"')
+    expect(gender).toContain('id="gender-error"')
+    expect(gender).toContain('id="gender" name="gender" type="radio" value="MALE"')
+    expect(gender).toContain('for="gender"')
+    expect(gender).toContain('id="gender-6" name="gender" type="radio"')
+    expect(gender).toContain('for="gender-6"')
+    expect(gender).not.toContain('checked')
+  })
+
   it('links errors to their fields', async () => {
     const model = viewModel.construct({}, { ...blankFormData, sex: '' }, [
       { field: 'sex', error: "Select the device wearer's sex, or select 'Not able to provide this information'" },
@@ -111,6 +149,9 @@ describe('device wearer details view', () => {
 
     expect(html).toMatch(/id="firstName" name="firstName" type="text" value="Jane" disabled/)
     expect(fieldset(html, 'sex')).toMatch(/value="FEMALE" checked disabled/)
+    const gender = fieldset(html, 'gender')
+    expect(gender).toMatch(/value="MALE" checked disabled/)
+    expect(gender.match(/ disabled/g)).toHaveLength(5)
     expect(html).not.toContain('Save as draft')
   })
 })

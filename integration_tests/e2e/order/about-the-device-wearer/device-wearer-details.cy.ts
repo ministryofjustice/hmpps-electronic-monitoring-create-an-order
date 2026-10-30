@@ -64,6 +64,8 @@ context('About the device wearer', () => {
         page.form.aliasField.shouldExist()
         page.form.dateOfBirthField.shouldExist()
         page.form.shouldHaveAllOptions()
+        page.form.sexField.shouldNotHaveValue()
+        page.form.genderIdentityField.shouldNotHaveValue()
 
         cy.contains('Does the device wearer have any of the disabilities or health conditions listed?').should(
           'not.exist',
@@ -86,11 +88,6 @@ context('About the device wearer', () => {
 
         page.form.sexField.shouldHaveDivider('or')
         page.form.genderIdentityField.shouldHaveDivider('or')
-      })
-
-      it('is accessible', () => {
-        const page = Page.visit(DeviceWearerDetailsPage, { orderId: mockOrderId })
-        page.checkIsAccessible()
       })
 
       it('shows the existing validation errors when nothing is entered', () => {
@@ -184,6 +181,7 @@ context('About the device wearer', () => {
         page.form.genderIdentityField.shouldHaveValue('Non binary')
         page.form.shouldBeDisabled()
         page.form.saveAsDraftButton.should('not.exist')
+        page.checkIsAccessible()
 
         // As a single question page, Continue is still shown; it returns to the order summary without saving
         page.form.continueButton.should('exist').click()
@@ -195,8 +193,7 @@ context('About the device wearer', () => {
     context('Person found in the Core Person Record', () => {
       const searchedIdentifier = 'A1234BC'
 
-      it('selects "Not able to provide this information" for gender when the person has no gender', () => {
-        // The order as the API stores it after loading the person from CPR, which has no gender
+      const confirmPersonFound = (gender: string | null): DeviceWearerDetailsPage => {
         cy.task('stubCemoGetOrder', {
           httpStatus: 200,
           id: mockOrderId,
@@ -209,7 +206,7 @@ context('About the device wearer', () => {
               alias: null,
               middleName: null,
               sex: 'FEMALE',
-              gender: null,
+              gender,
             },
           },
         })
@@ -239,10 +236,31 @@ context('About the device wearer', () => {
         })
         searchResults.form.useThisDeviceWearerButton.click()
 
-        const page = Page.visit(DeviceWearerDetailsPage, { orderId: mockOrderId })
+        return Page.visit(DeviceWearerDetailsPage, { orderId: mockOrderId })
+      }
+
+      it('leaves gender unselected when CPR supplies no gender and requires an explicit answer', () => {
+        const page = confirmPersonFound(null)
+
         page.form.firstNameField.shouldHaveValue('Ermintrude')
         page.form.sexField.shouldHaveValue('Female')
-        page.form.genderIdentityField.shouldHaveValue('Not able to provide this information')
+        page.form.genderIdentityField.shouldNotHaveValue()
+        page.checkIsAccessible()
+
+        page.form.continueButton.click()
+
+        cy.location('pathname').should('eq', detailsPath())
+        page.form.genderIdentityField.shouldNotHaveValue()
+        page.form.genderIdentityField.shouldHaveValidationMessage(
+          "Select the device wearer's gender, or select 'Not able to provide this information'",
+        )
+        page.checkIsAccessible()
+      })
+
+      it('preserves a gender supplied by CPR', () => {
+        const page = confirmPersonFound('NON_BINARY')
+
+        page.form.genderIdentityField.shouldHaveValue('Non binary')
       })
     })
 
