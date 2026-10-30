@@ -39,10 +39,10 @@ context('sentenceType form submission', () => {
   })
 
   it('Should submit the form and display the correct answers for a Post Release journey', () => {
-    Page.visit(OrderTypePage, { orderId: mockOrderId })
-    // commented out due to ELM-4526
-    // orderTypePage.form.fillInWith('Release from prison')
-    // orderTypePage.form.continueButton.click()
+    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
+
+    orderTypePage.form.fillInWith('License')
+    orderTypePage.form.continueButton.click()
 
     const sentenceTypePage = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
     sentenceTypePage.form.fillInWith('Standard Determinate Sentence')
@@ -65,12 +65,35 @@ context('sentenceType form submission', () => {
     prarrPage.form.continueButton.click()
   })
 
-  // Order type communities disabled ELM-4495 skipping test until the option is enabled again
-  it.skip('Should submit the form and display the correct answers for a Community journey', () => {
-    Page.visit(OrderTypePage, { orderId: mockOrderId })
-    // commented out due to ELM-4526
-    // orderTypePage.form.fillInWith('Community')
-    // orderTypePage.form.continueButton.click()
+  it('Should submit the form and display the correct answers for a Court order journey', () => {
+    cy.task('stubCemoSubmitOrder', {
+      httpStatus: 200,
+      id: mockOrderId,
+      subPath: '/monitoring-conditions',
+      response: {
+        startDate: null,
+        endDate: null,
+        orderType: 'COMMUNITY',
+        curfew: null,
+        exclusionZone: null,
+        trail: null,
+        mandatoryAttendance: null,
+        alcohol: null,
+        conditionType: 'REQUIREMENT_OF_A_COMMUNITY_ORDER',
+        orderTypeDescription: null,
+        sentenceType: 'COMMUNITY_SDO',
+        issp: null,
+        hdc: null,
+        prarr: null,
+        pilot: null,
+        offenceType: null,
+        policeArea: null,
+      },
+    })
+
+    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
+    orderTypePage.form.fillInWith('Court order')
+    orderTypePage.form.continueButton.click()
 
     const sentenceTypePage = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
     sentenceTypePage.form.fillInWith('Supervision Default Order')
