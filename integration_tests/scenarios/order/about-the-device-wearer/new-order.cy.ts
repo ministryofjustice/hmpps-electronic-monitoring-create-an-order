@@ -217,7 +217,7 @@ context('New about device wearer flow', () => {
     cyaPage.personDetailsSection.shouldExist()
     cyaPage.personDetailsSection.shouldHaveItems([
       { key: "What is the device wearer's first name?", value: 'Urhreede' },
-      { key: "What is the device wearer's middle name?", value: 'Angelle Shanir' },
+      { key: "What is the device wearer's middle name? (optional)", value: 'Angelle Shanir' },
       { key: "What is the device wearer's last name?", value: 'Bobbiqua' },
       { key: "What is the device wearer's preferred name or names? (optional)", value: 'Dyfreiico Joderly' },
       { key: "What is the device wearer's date of birth?", value: '08/05/1974' },
@@ -288,7 +288,7 @@ context('New about device wearer flow', () => {
     cyaPage.personDetailsSection.shouldExist()
     cyaPage.personDetailsSection.shouldHaveItems([
       { key: "What is the device wearer's first name?", value: 'Urhreede' },
-      { key: "What is the device wearer's middle name?", value: 'Angelle Shanir' },
+      { key: "What is the device wearer's middle name? (optional)", value: 'Angelle Shanir' },
       { key: "What is the device wearer's last name?", value: 'Bobbiqua' },
       { key: "What is the device wearer's preferred name or names? (optional)", value: 'Dyfreiico Joderly' },
       { key: "What is the device wearer's date of birth?", value: '08/05/1974' },

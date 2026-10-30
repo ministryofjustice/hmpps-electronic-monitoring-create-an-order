@@ -60,6 +60,7 @@ describe('DeviceWearerSearchResultsController', () => {
         expect.objectContaining({
           searchedIdentifier: 'A1234BC',
           fullName: 'Ermintrude Jones',
+          enterDetailsManuallyLink: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
         }),
       )
     })
@@ -79,7 +80,9 @@ describe('DeviceWearerSearchResultsController', () => {
       await controller.view(req, res, jest.fn())
 
       expect(res.render).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id))
+      expect(res.redirect).toHaveBeenCalledWith(
+        paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
+      )
     })
 
     it('does not swallow errors that are not server errors', async () => {
@@ -119,7 +122,9 @@ describe('DeviceWearerSearchResultsController', () => {
         orderId: order.id,
         searchedIdentifier: 'A1234BC',
       })
-      expect(res.redirect).toHaveBeenCalledWith(paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id))
+      expect(res.redirect).toHaveBeenCalledWith(
+        paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
+      )
     })
 
     it('leaves gender null when the person found has no gender in CPR', async () => {
@@ -167,7 +172,9 @@ describe('DeviceWearerSearchResultsController', () => {
       expect(apiClient.put).toHaveBeenCalledTimes(1)
       expect(apiClient.get).not.toHaveBeenCalled()
       expect(store.map.size).toEqual(0)
-      expect(res.redirect).toHaveBeenCalledWith(paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id))
+      expect(res.redirect).toHaveBeenCalledWith(
+        paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
+      )
     })
 
     it('does not hide a failure to save the person found', async () => {
