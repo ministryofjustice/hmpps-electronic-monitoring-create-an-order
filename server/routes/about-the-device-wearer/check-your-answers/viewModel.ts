@@ -31,19 +31,40 @@ const createOtherDisabilityAnswer = (order: Order, content: I18n, uri: string, a
 
 const createDeviceWearerAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id)
+  const personalDetailsUri = paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id)
   const disabilities = order.deviceWearer.disabilities.map(disability =>
     lookup(content.reference.disabilities, disability),
   )
 
   return [
-    createAnswer(content.pages.deviceWearer.questions.firstName.text, order.deviceWearer.firstName, uri, answerOpts),
-    createAnswer(content.pages.deviceWearer.questions.middleName.text, order.deviceWearer.middleName, uri, answerOpts),
-    createAnswer(content.pages.deviceWearer.questions.lastName.text, order.deviceWearer.lastName, uri, answerOpts),
-    createAnswer(content.pages.deviceWearer.questions.alias.text, order.deviceWearer.alias, uri, answerOpts),
+    createAnswer(
+      content.pages.deviceWearer.questions.firstName.text,
+      order.deviceWearer.firstName,
+      personalDetailsUri,
+      answerOpts,
+    ),
+    createAnswer(
+      content.pages.deviceWearer.questions.middleName.text,
+      order.deviceWearer.middleName,
+      personalDetailsUri,
+      answerOpts,
+    ),
+    createAnswer(
+      content.pages.deviceWearer.questions.lastName.text,
+      order.deviceWearer.lastName,
+      personalDetailsUri,
+      answerOpts,
+    ),
+    createAnswer(
+      content.pages.deviceWearer.questions.alias.text,
+      order.deviceWearer.alias,
+      personalDetailsUri,
+      answerOpts,
+    ),
     createDateAnswer(
       content.pages.deviceWearer.questions.dateOfBirth.text,
       order.deviceWearer.dateOfBirth,
-      uri,
+      personalDetailsUri,
       answerOpts,
     ),
     createBooleanAnswer(
@@ -55,13 +76,13 @@ const createDeviceWearerAnswers = (order: Order, content: I18n, answerOpts: Answ
     createAnswer(
       content.pages.deviceWearer.questions.sex.text,
       lookup(content.reference.sex, order.deviceWearer.sex),
-      uri,
+      personalDetailsUri,
       answerOpts,
     ),
     createAnswer(
       content.pages.deviceWearer.questions.gender.text,
       lookup(content.reference.gender, order.deviceWearer.gender),
-      uri,
+      personalDetailsUri,
       answerOpts,
     ),
     createMultipleChoiceAnswer(content.pages.deviceWearer.questions.disabilities.text, disabilities, uri, answerOpts),
