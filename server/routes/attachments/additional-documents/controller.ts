@@ -6,6 +6,7 @@ import TaskListService, { PAGES, Page } from '../../../services/taskListService'
 import createViewModel from './viewModel'
 import OrderChecklistService from '../../../services/orderChecklistService'
 import { formatDateTime } from '../../../utils/dateTime'
+import usesRevocationPaperwork from '../../../utils/order/revocationPaperwork'
 
 export default class AttachmentsController {
   constructor(
@@ -31,6 +32,7 @@ export default class AttachmentsController {
       res.render(`pages/order/attachments/edit`, {
         orderId,
         fileType: fileType.toLocaleLowerCase(),
+        revocationPaperwork: usesRevocationPaperwork(req.order!),
         error: { text: error.userMessage },
       })
     } else {
@@ -64,6 +66,7 @@ export default class AttachmentsController {
       res.render(`pages/order/attachments/edit`, {
         orderId: order.id,
         fileType: fileType.toLocaleLowerCase(),
+        revocationPaperwork: usesRevocationPaperwork(order),
       })
     }
   }

@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 const OrderParametersModel = z.object({
   havePhoto: z.boolean().nullable().optional(),
+  haveLicence: z.boolean().nullable().optional(),
   haveGrantOfBail: z.boolean().nullable().optional(),
 })
 

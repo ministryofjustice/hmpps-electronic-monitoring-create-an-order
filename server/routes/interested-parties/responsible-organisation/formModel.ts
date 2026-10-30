@@ -47,15 +47,15 @@ export const ResponsibleOrganisationValidator = (cohort?: string) =>
       ctx.addIssue({
         code: z.ZodIssueCode.too_big,
         maximum: 200,
-        type: 'string',
+        origin: 'string',
         inclusive: true,
         message: 'Email address must be 200 characters or less',
         path: ['responsibleOrganisationEmail'],
       })
     } else if (email && !z.string().email().safeParse(email).success) {
       ctx.addIssue({
-        code: z.ZodIssueCode.invalid_string,
-        validation: 'email',
+        code: z.ZodIssueCode.invalid_format,
+        format: 'email',
         message: 'Invalid email address format',
         path: ['responsibleOrganisationEmail'],
       })

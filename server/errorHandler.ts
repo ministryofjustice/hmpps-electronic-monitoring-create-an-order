@@ -1,10 +1,21 @@
 import type { Request, Response, NextFunction } from 'express'
 import logger from '../logger'
 import { SanitisedError } from './sanitisedError'
+import { reportException } from './utils/azureAppInsights'
 
 export default function createErrorHandler(production: boolean) {
   return (error: SanitisedError, req: Request, res: Response, next: NextFunction): void => {
-    logger.error(`Error handling request for '${req.originalUrl}', user '${res.locals.user?.username}'`, error)
+    const context = {
+      method: req.method,
+      path: req.path,
+      route: req.route?.path,
+      status: error.status || 500,
+      orderId: req.params.orderId || res.locals.orderId,
+      versionId: req.params.versionId || res.locals.versionId,
+      operationId: res.locals.operationId,
+    }
+    logger.error({ err: error, ...context }, 'Error handling request')
+    if (context.status >= 500) reportException(error, context)
 
     res.locals.message = production
       ? 'Something went wrong. The error has been logged. Please try again'

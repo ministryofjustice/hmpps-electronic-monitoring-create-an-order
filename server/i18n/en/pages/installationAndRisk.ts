@@ -18,22 +18,6 @@ const installationAndRiskPageContent: InstallationAndRiskPageContent = {
       text: 'Any other information to be aware of about the offence committed? (optional)',
       hint: "Provide additional risk information about the device wearer's offence.",
     },
-    possibleRisk: {
-      text: "At installation what are the possible risks from the device wearer's behaviour?",
-      hint: 'Check if there are any alerts for the device wearer. Select all that apply',
-    },
-    genderRiskDetails: {
-      text: 'What sex or gender are they a risk to?',
-      hint: 'For example, Women',
-    },
-    riskCategory: {
-      text: 'What are the possible risks at the installation address? (optional)',
-      hint: "Risks relate to the device wearer's behaviour and installation address. Select all that apply",
-    },
-    riskDetails: {
-      text: 'Any other risks to be aware of? (optional)',
-      hint: "Provide additional risk information about the device wearer's behaviour or the installation address.",
-    },
   },
   section: 'Risk information',
   title: 'Details for installation',

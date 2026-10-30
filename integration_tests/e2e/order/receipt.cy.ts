@@ -3,6 +3,7 @@ import path from 'path'
 import Page from '../../pages/page'
 import ReceiptPage from '../../pages/order/receipt'
 import AttachmentType from '../../../server/models/AttachmentType'
+import { probationChangeOrderStub } from '../../utils/data/probationChangeOrder'
 
 const mockOrderId = uuidv4()
 const mockOrder = {
@@ -228,7 +229,7 @@ context('Receipt', () => {
       page.orderStatusSection.shouldExist()
       page.orderStatusSection.shouldHaveItems([
         { key: 'Status', value: 'IN_PROGRESS' },
-        { key: 'Type', value: 'New order' },
+        { key: 'Type', value: 'Draft order' },
         { key: 'Reference number', value: mockOrderId },
         { key: 'Date submitted', value: '01/01/2025, 10:30' },
         { key: 'Submitted by', value: 'test name' },
@@ -243,7 +244,7 @@ context('Receipt', () => {
           key: "At installation what are the possible risks from the device wearer's behaviour?",
           value: 'Offensive towards someone because of their sex or gender',
         },
-        { key: 'Any other risks to be aware of? (optional)', value: 'Information about potential risks' },
+        { key: 'Are there other risks to be aware of?', value: 'Information about potential risks' },
       ])
       page.deviceWearerSection.shouldExist()
       page.monitoringConditionsSection.shouldExist()
@@ -463,7 +464,7 @@ context('Receipt', () => {
       const page = Page.verifyOnPage(ReceiptPage)
 
       page.orderStatusSection.shouldExist()
-      page.orderStatusSection.shouldHaveItems([{ key: 'Type', value: 'New order' }])
+      page.orderStatusSection.shouldHaveItems([{ key: 'Type', value: 'Order Submitted' }])
     })
 
     it('Should type as Change to an order when order type is VARIATION', () => {
@@ -478,7 +479,26 @@ context('Receipt', () => {
       const page = Page.verifyOnPage(ReceiptPage)
 
       page.orderStatusSection.shouldExist()
-      page.orderStatusSection.shouldHaveItems([{ key: 'Type', value: 'Change to an order' }])
+      page.orderStatusSection.shouldHaveItems([{ key: 'Type', value: 'Changes submitted' }])
+    })
+
+    it('Should show the new document answer and recall document for a past-dated probation revocation', () => {
+      const stub = probationChangeOrderStub({
+        id: mockOrderId,
+        status: 'SUBMITTED',
+        type: 'REVOCATION',
+        haveLicence: true,
+        licenceFileName: 'recall.pdf',
+      })
+      cy.task('stubCemoGetOrder', { ...stub, order: { ...mockOrder, ...stub.order } })
+      cy.visit(`/order/${mockOrderId}/receipt`)
+      const page = Page.verifyOnPage(ReceiptPage)
+
+      page.additionalDocumentsSection.shouldHaveItems([
+        { key: 'Do you need to upload a new document?', value: 'Yes' },
+        { key: 'Upload a copy of the recall document', value: 'recall.pdf' },
+        { key: 'Do you have a photo to upload?', value: 'No' },
+      ])
     })
 
     it('Should type as Change to an order when order type is REJECTED', () => {
@@ -493,22 +513,7 @@ context('Receipt', () => {
       const page = Page.verifyOnPage(ReceiptPage)
 
       page.orderStatusSection.shouldExist()
-      page.orderStatusSection.shouldHaveItems([{ key: 'Type', value: 'Rejected order' }])
-    })
-
-    it('Should type as Change to an order when order type is AMEND_ORIGINAL_REQUEST', () => {
-      cy.task('stubCemoGetOrder', {
-        httpStatus: 200,
-        id: mockOrderId,
-        status: 'SUBMITTED',
-        order: mockOrder,
-        type: 'AMEND_ORIGINAL_REQUEST',
-      })
-      cy.visit(`/order/${mockOrderId}/receipt`)
-      const page = Page.verifyOnPage(ReceiptPage)
-
-      page.orderStatusSection.shouldExist()
-      page.orderStatusSection.shouldHaveItems([{ key: 'Type', value: 'New order (original order was rejected)' }])
+      page.orderStatusSection.shouldHaveItems([{ key: 'Type', value: 'Form returned' }])
     })
 
     it('should have no change links', () => {

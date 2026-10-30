@@ -7,7 +7,11 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 
-{% if (fileType) == "licence" %}
+{% if (fileType) == "licence" and revocationPaperwork %}
+
+  {% set pageContent = content.pages.uploadRevocationPaperwork %}
+
+{% elif (fileType) == "licence" %}
 
   {% set pageContent = content.pages.uploadLicense %}
 

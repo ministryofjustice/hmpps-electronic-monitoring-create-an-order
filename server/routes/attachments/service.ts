@@ -7,7 +7,7 @@ import { SanitisedError } from '../../sanitisedError'
 import Result from '../../interfaces/result'
 import { validationErrors } from '../../constants/validationErrors'
 import { convertBackendErrorToValidationError, convertZodErrorToValidationError } from '../../utils/validation/errors'
-import { FileRequiredFormData, FileRequiredFormDataValidator } from './fileRequiredFormModel'
+import { FileRequiredFormData, createFileRequiredValidator } from './fileRequiredFormModel'
 
 type AttachmentRequestInput = AuthenticatedRequestInput & {
   orderId: string
@@ -19,6 +19,7 @@ type UploadAttachmentRequestInput = AttachmentRequestInput & {
 type FileRequiredFormInput = AuthenticatedRequestInput & {
   orderId: string
   data: FileRequiredFormData
+  requiredMessage?: string
 }
 
 export default class AttachmentService {
@@ -87,7 +88,7 @@ export default class AttachmentService {
 
   async updateFileRequired(input: FileRequiredFormInput) {
     try {
-      const requestBody = FileRequiredFormDataValidator.parse(input.data)
+      const requestBody = createFileRequiredValidator(input.requiredMessage).parse(input.data)
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/attachments/file-required`,
         data: requestBody,

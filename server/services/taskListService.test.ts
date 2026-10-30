@@ -232,7 +232,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR.replace(':orderId', order.id))
     })
 
     it('should return installation appointment if current page is installation location and location is PRISON', () => {
@@ -536,6 +536,80 @@ describe('TaskListService', () => {
 
       expect(task?.state).toBe('DISABLED')
       expect(task?.completed).toBe(false)
+    })
+
+    describe('additional documents for a probation change to an order', () => {
+      const probationVariation = (startDate: string, overrides: Partial<Order> = {}) =>
+        getMockOrder({
+          type: 'VARIATION',
+          interestedParties: createInterestedParties({ notifyingOrganisation: 'PROBATION' }),
+          monitoringConditions: createMonitoringConditions({ startDate }),
+          ...overrides,
+        })
+      const additionalDocumentTasks = (order: Order) =>
+        new TaskListService().getTasks(order).filter(task => task.section === 'ADDITIONAL_DOCUMENTS')
+
+      it('asks whether a new document is needed instead of the licence upload when the order has started', () => {
+        const tasks = additionalDocumentTasks(probationVariation('2020-01-01T00:00:00.000Z'))
+
+        expect(tasks.map(task => task.name)).toEqual([
+          'ATTACHMENTS_NEW_DOCUMENT',
+          'LICENCE_ATTACHMENT',
+          'ATTACHMENTS_HAVE_PHOTO',
+          'PHOTO_ATTACHMENT',
+          'CHECK_ANSWERS_ATTACHMENTS',
+        ])
+        expect(tasks[0]).toEqual(
+          expect.objectContaining({ path: paths.ATTACHMENT.NEW_DOCUMENT, state: 'REQUIRED', completed: false }),
+        )
+      })
+
+      it('requires the document upload once the user says a new document is needed', () => {
+        const tasks = additionalDocumentTasks(
+          probationVariation('2020-01-01T00:00:00.000Z', { orderParameters: { haveLicence: true } }),
+        )
+
+        expect(tasks.find(task => task.name === 'LICENCE_ATTACHMENT')).toEqual(
+          expect.objectContaining({ state: 'REQUIRED', completed: false }),
+        )
+      })
+
+      it('keeps the licence upload when the order has not started yet', () => {
+        const tasks = additionalDocumentTasks(probationVariation('2099-01-01T00:00:00.000Z'))
+
+        expect(tasks.map(task => task.name)).toContain('LICENCE_ATTACHMENT')
+        expect(tasks.map(task => task.name)).not.toContain('ATTACHMENTS_NEW_DOCUMENT')
+      })
+
+      it.each(['PRISON', 'YOUTH_CUSTODY_SERVICE'] as const)(
+        'keeps the licence upload for a %s change to an order that has started',
+        notifyingOrganisation => {
+          const tasks = additionalDocumentTasks(
+            probationVariation('2020-01-01T00:00:00.000Z', {
+              interestedParties: createInterestedParties({ notifyingOrganisation }),
+            }),
+          )
+
+          expect(tasks.map(task => task.name)).toContain('LICENCE_ATTACHMENT')
+        },
+      )
+
+      it('is complete once the user says no new document is needed', () => {
+        const tasks = additionalDocumentTasks(
+          probationVariation('2020-01-01T00:00:00.000Z', { orderParameters: { haveLicence: false } }),
+        )
+
+        expect(tasks.find(task => task.name === 'ATTACHMENTS_NEW_DOCUMENT')?.completed).toBe(true)
+        expect(tasks.find(task => task.name === 'LICENCE_ATTACHMENT')).toEqual(
+          expect.objectContaining({ state: 'NOT_REQUIRED', completed: true }),
+        )
+      })
+
+      it('keeps the licence upload for a new probation order', () => {
+        const tasks = additionalDocumentTasks(probationVariation('2020-01-01T00:00:00.000Z', { type: 'REQUEST' }))
+
+        expect(tasks.map(task => task.name)).toContain('LICENCE_ATTACHMENT')
+      })
     })
   })
 })

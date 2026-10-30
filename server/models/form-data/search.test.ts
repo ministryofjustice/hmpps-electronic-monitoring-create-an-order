@@ -26,9 +26,9 @@ describe('constructListViewModel', () => {
   })
 
   it.each([
-    [OrderStatusEnum.Enum.IN_PROGRESS, [{ text: 'Draft', type: 'DRAFT' }]],
-    [OrderStatusEnum.Enum.ERROR, [{ text: 'Failed to submit', type: 'FAILED' }]],
-    [OrderStatusEnum.Enum.SUBMITTED, [{ text: 'Submitted', type: 'SUBMITTED' }]],
+    [OrderStatusEnum.enum.IN_PROGRESS, [{ text: 'Draft', type: 'DRAFT' }]],
+    [OrderStatusEnum.enum.ERROR, [{ text: 'Failed to submit', type: 'FAILED' }]],
+    [OrderStatusEnum.enum.SUBMITTED, [{ text: 'Submitted', type: 'SUBMITTED' }]],
   ])('should create the correct status tags for a %s order', (status, expectedTags) => {
     const model = constructListViewModel(
       { content: [getMockOrderListInformation({ status })], page: 0, size: 20, hasNext: false },
@@ -45,13 +45,13 @@ describe('constructListViewModel', () => {
       getMockOrderListInformation({
         firstName: 'Bob',
         lastName: 'Two',
-        status: OrderStatusEnum.Enum.ERROR,
+        status: OrderStatusEnum.enum.ERROR,
         notifyingOrganisation: 'PRISON',
       }),
       getMockOrderListInformation({
         firstName: 'Carol',
         lastName: 'Three',
-        type: OrderTypeEnum.Enum.VARIATION,
+        type: OrderTypeEnum.enum.VARIATION,
         notifyingOrganisation: 'PRISON',
       }),
     ]
@@ -82,8 +82,8 @@ describe('constructListViewModel', () => {
     const model = constructListViewModel({ content: orders, page: 2, size: 20, hasNext: true }, 'PRISON_ORDERS', true)
 
     expect(model.pagination).toEqual({
-      previous: { text: 'Previous', href: '/?view=PRISON_ORDERS&page=1&size=20' },
-      next: { text: 'Next', href: '/?view=PRISON_ORDERS&page=3&size=20' },
+      previous: { text: 'Previous', href: '/drafts?view=PRISON_ORDERS&page=1&size=20' },
+      next: { text: 'Next', href: '/drafts?view=PRISON_ORDERS&page=3&size=20' },
     })
   })
 
@@ -92,7 +92,7 @@ describe('constructListViewModel', () => {
 
     expect(model.pagination).toEqual({
       previous: undefined,
-      next: { text: 'Next', href: '/?view=MY_ORDERS&page=1&size=20' },
+      next: { text: 'Next', href: '/drafts?view=MY_ORDERS&page=1&size=20' },
     })
   })
 
@@ -100,7 +100,7 @@ describe('constructListViewModel', () => {
     const model = constructListViewModel({ content: [], page: 1, size: 20, hasNext: false }, 'MY_ORDERS', false)
 
     expect(model.pagination).toEqual({
-      previous: { text: 'Previous', href: '/?view=MY_ORDERS&page=0&size=20' },
+      previous: { text: 'Previous', href: '/drafts?view=MY_ORDERS&page=0&size=20' },
       next: undefined,
     })
   })
@@ -113,8 +113,8 @@ describe('constructListViewModel', () => {
 
   it('should sort returned orders before other statuses', () => {
     const orders = [
-      getMockOrderListInformation({ firstName: 'Draft', lastName: 'Person', status: OrderStatusEnum.Enum.IN_PROGRESS }),
-      getMockOrderListInformation({ firstName: 'Returned', lastName: 'Person', status: OrderStatusEnum.Enum.REJECTED }),
+      getMockOrderListInformation({ firstName: 'Draft', lastName: 'Person', status: OrderStatusEnum.enum.IN_PROGRESS }),
+      getMockOrderListInformation({ firstName: 'Returned', lastName: 'Person', status: OrderStatusEnum.enum.REJECTED }),
     ]
 
     const model = constructListViewModel({ content: orders, page: 0, size: 20, hasNext: false }, 'MY_ORDERS', false)

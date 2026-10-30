@@ -69,10 +69,9 @@ export default class TimelineModel {
     if (versionInformation.type === 'REVOCATION') {
       return 'Monitoring ended'
     }
-    if (Object.keys(VariationTypesEnum.Values).includes(versionInformation.type)) {
+    if (Object.keys(VariationTypesEnum.enum).includes(versionInformation.type)) {
       return 'Changes submitted'
     }
-
     return versionInformation.status === 'SUBMITTED' ? 'Form submitted' : 'Failed to submit'
   }
 
@@ -134,18 +133,18 @@ export default class TimelineModel {
 
   private static getVariationText = (type: OrderType): string | undefined => {
     switch (type) {
-      case 'VARIATION': {
-        return 'Change to an order'
-      }
-      case 'REINSTALL_AT_DIFFERENT_ADDRESS': {
-        return 'Reinstall at different address'
-      }
-      case 'REINSTALL_DEVICE': {
-        return 'Reinstall device'
-      }
-      default: {
+      case 'VARIATION':
+        return 'Other change'
+      case 'REINSTALL_AT_DIFFERENT_ADDRESS':
+        return 'Added second or third curfew address'
+      case 'REINSTALL_DEVICE':
+        return 'Changed primary address'
+      case 'REVOCATION':
+        return 'Ended (Recall)'
+      case 'END_MONITORING':
+        return 'Ended'
+      default:
         return undefined
-      }
     }
   }
 }
