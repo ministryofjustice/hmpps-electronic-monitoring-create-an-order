@@ -1,7 +1,9 @@
 import { z } from 'zod'
 import paths from '../../constants/paths'
 import { validationErrors } from '../../constants/validationErrors'
+import { Order } from '../../models/Order'
 import { ValidationResult } from '../../models/Validation'
+import { shouldAskResponsibleAdultQuestion } from '../../utils/order/responsibleAdultQuestion'
 import { convertZodErrorToValidationError } from '../../utils/validation/errors'
 import { DeviceWearerCache } from './store/model'
 
@@ -28,7 +30,14 @@ const AdultAtInstallationAnswered = z.object({
   adultAtTimeOfInstallation: z.boolean({ message: validationErrors.deviceWearer.responsibleAdultRequired }),
 })
 
-const PAGES = [
+type DeviceWearerPageDefinition = {
+  path: string
+  fields: string[]
+  validator: z.ZodTypeAny
+  isAsked?: (order: Order) => boolean
+}
+
+const PAGES: DeviceWearerPageDefinition[] = [
   {
     path: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS,
     fields: ['firstName', 'middleName', 'lastName', 'alias', 'dateOfBirth', 'sex', 'gender'],
@@ -48,24 +57,28 @@ const PAGES = [
     path: paths.ABOUT_THE_DEVICE_WEARER.ADULT_AT_INSTALLATION,
     fields: ['adultAtTimeOfInstallation'],
     validator: AdultAtInstallationAnswered,
+    // Other orders skip this page, and submit always sends "no responsible adult required" for them
+    isAsked: shouldAskResponsibleAdultQuestion,
   },
 ]
 
-export const pageForErrors = (errors: ValidationResult, orderId: string): DeviceWearerPage | null => {
-  const page = PAGES.find(({ fields }) => errors.some(({ field }) => fields.includes(field)))
+const pagesAskedFor = (order: Order) => PAGES.filter(({ isAsked }) => isAsked?.(order) ?? true)
+
+export const pageForErrors = (errors: ValidationResult, order: Order): DeviceWearerPage | null => {
+  const page = pagesAskedFor(order).find(({ fields }) => errors.some(({ field }) => fields.includes(field)))
   if (!page) return null
 
   return {
-    path: page.path.replace(':orderId', orderId),
+    path: page.path.replace(':orderId', order.id),
     errors: errors.filter(({ field }) => page.fields.includes(field)),
   }
 }
 
-export const findMissingAnswers = (answers: DeviceWearerCache): ValidationResult =>
-  PAGES.flatMap(({ validator }) => {
+export const findMissingAnswers = (answers: DeviceWearerCache, order: Order): ValidationResult =>
+  pagesAskedFor(order).flatMap(({ validator }) => {
     const result = validator.safeParse(answers)
     return result.success ? [] : convertZodErrorToValidationError(result.error)
   })
 
-export const firstUnansweredPage = (answers: DeviceWearerCache, orderId: string): string | null =>
-  pageForErrors(findMissingAnswers(answers), orderId)?.path ?? null
+export const firstUnansweredPage = (answers: DeviceWearerCache, order: Order): string | null =>
+  pageForErrors(findMissingAnswers(answers, order), order)?.path ?? null

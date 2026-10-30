@@ -4,6 +4,10 @@ import DeviceWearerModel, { DeviceWearer } from '../../models/DeviceWearer'
 import { Order } from '../../models/Order'
 import { ValidationResult } from '../../models/Validation'
 import { SanitisedError } from '../../sanitisedError'
+import {
+  NO_RESPONSIBLE_ADULT_REQUIRED,
+  shouldAskResponsibleAdultQuestion,
+} from '../../utils/order/responsibleAdultQuestion'
 import { convertBackendErrorToValidationError } from '../../utils/validation/errors'
 import { DeviceWearerCache } from './store/model'
 import DeviceWearerStoreService from './store/deviceWearerStoreService'
@@ -51,10 +55,10 @@ export default class DeviceWearerAnswersService {
   }
 
   async saveAdultAtInstallation(
-    _order: Order,
-    _data: Pick<DeviceWearerCache, 'adultAtTimeOfInstallation'>,
+    order: Order,
+    { adultAtTimeOfInstallation }: Pick<DeviceWearerCache, 'adultAtTimeOfInstallation'>,
   ): Promise<void> {
-    throw new Error('Not implemented')
+    await this.store.updateDeviceWearer(order, { adultAtTimeOfInstallation })
   }
 
   async submit({ accessToken, order }: SubmitDeviceWearerInput): Promise<DeviceWearer | ValidationResult> {
@@ -71,7 +75,9 @@ export default class DeviceWearerAnswersService {
       interpreterRequired,
       language,
       adultAtTimeOfInstallation,
-    } = await this.store.getDeviceWearer(order)
+    } = shouldAskResponsibleAdultQuestion(order)
+      ? await this.store.getDeviceWearer(order)
+      : { ...(await this.store.getDeviceWearer(order)), ...NO_RESPONSIBLE_ADULT_REQUIRED }
 
     try {
       const result = await this.apiClient.put({

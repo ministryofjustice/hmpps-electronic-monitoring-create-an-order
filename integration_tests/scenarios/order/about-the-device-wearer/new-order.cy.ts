@@ -292,7 +292,6 @@ context('New about device wearer flow', () => {
       { key: "What is the device wearer's last name?", value: 'Bobbiqua' },
       { key: "What is the device wearer's preferred name or names? (optional)", value: 'Dyfreiico Joderly' },
       { key: "What is the device wearer's date of birth?", value: '08/05/1974' },
-      { key: 'Is a responsible adult required?', value: 'No' },
       { key: 'What is the sex of the device wearer?', value: 'Male' },
       { key: "What is the device wearer's gender?", value: partiDeviceWearerDetails.genderIdentity },
       {
@@ -302,6 +301,7 @@ context('New about device wearer flow', () => {
       { key: 'What language does the interpreter need to use?', value: '' },
       { key: 'Is an interpreter needed?', value: 'No' },
     ])
+    cyaPage.personDetailsSection.shouldNotHaveItem('Is a responsible adult required?')
     cyaPage.identityNumbersSection.shouldExist()
     cyaPage.identityNumbersSection.shouldHaveItems([{ key: 'Prison number', value: 'A1234BC' }])
     cyaPage.identityNumbersSection.shouldHaveItems([{ key: 'Police National Computer (PNC)', value: '1991/0078050W' }])

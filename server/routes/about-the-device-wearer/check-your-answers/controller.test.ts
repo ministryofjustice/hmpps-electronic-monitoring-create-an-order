@@ -199,23 +199,6 @@ describe('DeviceWearerCheckAnswersController', () => {
         },
         {
           key: {
-            text: 'Is a responsible adult required?',
-          },
-          value: {
-            text: '',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'is a responsible adult required?',
-              },
-            ],
-          },
-        },
-        {
-          key: {
             text: 'What is the sex of the device wearer?',
           },
           value: {
@@ -455,23 +438,6 @@ describe('DeviceWearerCheckAnswersController', () => {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's date of birth?",
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'Is a responsible adult required?',
-          },
-          value: {
-            text: 'No',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'is a responsible adult required?',
               },
             ],
           },
@@ -725,23 +691,6 @@ describe('DeviceWearerCheckAnswersController', () => {
                 href: paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id),
                 text: 'Change',
                 visuallyHiddenText: "what is the device wearer's date of birth?",
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: 'Is a responsible adult required?',
-          },
-          value: {
-            text: 'Yes',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: 'is a responsible adult required?',
               },
             ],
           },
