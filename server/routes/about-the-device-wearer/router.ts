@@ -45,7 +45,10 @@ const createAboutTheDeviceWearerRouter = (
     orderChecklistService,
     sectionService,
   )
-  const deviceWearerSearchResultsController = new DeviceWearerSearchResultsController(deviceWearerSearchResultsService)
+  const deviceWearerSearchResultsController = new DeviceWearerSearchResultsController(
+    deviceWearerSearchResultsService,
+    deviceWearerAnswersService,
+  )
 
   get(paths.ABOUT_THE_DEVICE_WEARER.BASE_URL, deviceWearerController.viewDeviceWearer)
   post(paths.ABOUT_THE_DEVICE_WEARER.BASE_URL, deviceWearerController.updateDeviceWearer)
