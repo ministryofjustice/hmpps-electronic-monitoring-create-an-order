@@ -31,10 +31,10 @@ export default class DeviceWearerAnswersService {
   }
 
   async saveDisabilities(
-    _order: Order,
-    _data: Pick<DeviceWearerCache, 'disabilities' | 'otherDisability'>,
+    order: Order,
+    data: Pick<DeviceWearerCache, 'disabilities' | 'otherDisability'>,
   ): Promise<void> {
-    throw new Error('Not implemented')
+    await this.store.updateDeviceWearer(order, data)
   }
 
   async saveLanguage(_order: Order, _data: Pick<DeviceWearerCache, 'interpreterRequired' | 'language'>): Promise<void> {
@@ -54,7 +54,7 @@ export default class DeviceWearerAnswersService {
     try {
       const result = await this.apiClient.put({
         path: `/api/orders/${order.id}/device-wearer`,
-        data: { ...answers, disabilities: (disabilities ?? []).join(',') },
+        data: { ...answers, disabilities: (disabilities ?? []).join(','), otherDisability: null },
         token: accessToken,
       })
       const deviceWearer = DeviceWearerModel.parse(result)

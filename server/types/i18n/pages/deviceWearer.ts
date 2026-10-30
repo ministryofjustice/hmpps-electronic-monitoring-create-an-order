@@ -13,6 +13,9 @@ type DeviceWearerPageContent = QuestionPageContent<
   | 'language'
   | 'otherDisability'
   | 'sex'
->
+> & {
+  // Heading for the separate disability and health conditions page
+  disabilitiesTitle: string
+}
 
 export default DeviceWearerPageContent

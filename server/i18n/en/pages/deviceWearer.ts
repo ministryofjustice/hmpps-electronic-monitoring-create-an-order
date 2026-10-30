@@ -49,6 +49,7 @@ const deviceWearerPageContent: DeviceWearerPageContent = {
   },
   section: 'About the device wearer',
   title: 'Personal details',
+  disabilitiesTitle: 'Disability and health conditions',
 }
 
 export default deviceWearerPageContent

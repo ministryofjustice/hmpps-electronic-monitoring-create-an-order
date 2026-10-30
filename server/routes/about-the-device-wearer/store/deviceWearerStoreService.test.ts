@@ -32,6 +32,17 @@ describe('DeviceWearerStoreService', () => {
     expect(result.disabilities).toEqual(['VISION'])
   })
 
+  it('merges updated answers into the cached answers', async () => {
+    await service.updateDeviceWearer(order, { firstName: 'Saved' })
+    await service.updateDeviceWearer(order, { disabilities: ['HEARING'] })
+
+    const result = await service.getDeviceWearer(order)
+
+    expect(result.firstName).toEqual('Saved')
+    expect(result.disabilities).toEqual(['HEARING'])
+    expect(result.lastName).toEqual(order.deviceWearer.lastName)
+  })
+
   it('clears cached data so the order is used again', async () => {
     await store.set(`${order.id}+${order.versionId}+deviceWearer`, JSON.stringify({ firstName: 'Cached' }), 60)
 

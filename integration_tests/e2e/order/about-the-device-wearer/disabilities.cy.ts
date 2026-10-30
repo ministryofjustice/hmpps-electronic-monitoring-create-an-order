@@ -1,0 +1,154 @@
+import { v4 as uuidv4 } from 'uuid'
+import Page from '../../../pages/page'
+import DisabilitiesPage from '../../../pages/order/about-the-device-wearer/disabilities'
+import CheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
+import paths from '../../../../server/constants/paths'
+
+const mockOrderId = uuidv4()
+const apiPath = '/device-wearer'
+
+const personalDetailsAnswered = {
+  nomisId: null,
+  pncId: null,
+  deliusId: null,
+  prisonNumber: null,
+  homeOfficeReferenceNumber: null,
+  complianceAndEnforcementPersonReference: null,
+  courtCaseReferenceNumber: null,
+  firstName: 'Jo',
+  middleName: null,
+  lastName: 'Bloggs',
+  alias: null,
+  dateOfBirth: '1980-01-01T00:00:00Z',
+  adultAtTimeOfInstallation: null,
+  sex: 'FEMALE',
+  gender: 'FEMALE',
+  disabilities: '',
+  otherDisability: null,
+  noFixedAbode: null,
+  interpreterRequired: null,
+  language: null,
+}
+
+const stubOrder = (status: string, deviceWearer: object, dataDictionaryVersion = 'DDV4') =>
+  cy.task('stubCemoGetOrder', {
+    httpStatus: 200,
+    id: mockOrderId,
+    status,
+    order: { deviceWearer, dataDictionaryVersion },
+  })
+
+context('About the device wearer', () => {
+  context('Disability and health conditions', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+      cy.signIn()
+    })
+
+    it('shows the disability question without the additional not-listed field', () => {
+      stubOrder('IN_PROGRESS', personalDetailsAnswered)
+
+      const page = Page.visit(DisabilitiesPage, { orderId: mockOrderId })
+
+      page.form.disabilitiesField.shouldHaveAllOptions()
+      page.form.disabilitiesField.shouldNotHaveOption('Prefer not to say')
+      page.form.disabilitiesField.set('The device wearer has a disability or health condition not listed')
+      page.form.otherDisabilityField.should('not.exist')
+      page.form.continueButton.should('exist')
+      page.form.saveAsDraftButton.should('not.exist')
+      page.errorSummary.shouldNotExist()
+    })
+
+    it('shows the data dictionary v5 options', () => {
+      stubOrder('IN_PROGRESS', personalDetailsAnswered, 'DDV5')
+
+      const page = Page.visit(DisabilitiesPage, { orderId: mockOrderId })
+
+      page.form.disabilitiesFieldDDv5.shouldHaveAllOptions()
+      page.form.disabilitiesFieldDDv5.shouldNotHaveOption('Prefer not to say')
+    })
+
+    it('shows previously saved answers', () => {
+      stubOrder('IN_PROGRESS', { ...personalDetailsAnswered, disabilities: 'VISION,MOBILITY' })
+
+      const page = Page.visit(DisabilitiesPage, { orderId: mockOrderId })
+
+      page.form.disabilitiesField.shouldHaveValue('Visual impairment or blindness not corrected by wearing glasses')
+      page.form.disabilitiesField.shouldHaveValue('Physical disability or mobility issue')
+    })
+
+    it('shows a validation error when nothing is selected', () => {
+      stubOrder('IN_PROGRESS', personalDetailsAnswered)
+
+      const page = Page.visit(DisabilitiesPage, { orderId: mockOrderId })
+      page.form.continueButton.click()
+
+      const errorPage = Page.verifyOnPage(DisabilitiesPage)
+      errorPage.form.disabilitiesField.shouldHaveValidationMessage(
+        'Select if the device wearer has any disability or health conditions',
+      )
+      errorPage.errorSummary.shouldHaveError('Select if the device wearer has any disability or health conditions')
+    })
+
+    it('goes to the language page on continue when language has not been answered', () => {
+      stubOrder('IN_PROGRESS', personalDetailsAnswered)
+
+      const page = Page.visit(DisabilitiesPage, { orderId: mockOrderId })
+      page.form.disabilitiesField.set('Mental health condition')
+      page.form.continueButton.click()
+
+      cy.location('pathname').should('eq', paths.ABOUT_THE_DEVICE_WEARER.LANGUAGE.replace(':orderId', mockOrderId))
+    })
+
+    it('clears a previously saved unlisted condition description when the order is submitted', () => {
+      stubOrder('IN_PROGRESS', {
+        ...personalDetailsAnswered,
+        disabilities: 'OTHER',
+        otherDisability: 'Broken arm',
+        interpreterRequired: false,
+        adultAtTimeOfInstallation: true,
+      })
+      cy.task('stubCemoSubmitOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        subPath: apiPath,
+        response: { ...personalDetailsAnswered, disabilities: 'OTHER', interpreterRequired: false },
+      })
+
+      const page = Page.visit(DisabilitiesPage, { orderId: mockOrderId })
+      page.form.disabilitiesField.shouldHaveValue('The device wearer has a disability or health condition not listed')
+      page.form.continueButton.click()
+
+      cy.task('getStubbedRequest', `/orders/${mockOrderId}${apiPath}`).then(requests => {
+        expect(requests).to.have.length(1)
+        expect(requests[0]).to.deep.include({ disabilities: 'OTHER', otherDisability: null })
+      })
+    })
+
+    it('is read only for a submitted order', () => {
+      stubOrder('SUBMITTED', { ...personalDetailsAnswered, disabilities: 'HEARING' })
+
+      const page = Page.visit(DisabilitiesPage, { orderId: mockOrderId })
+
+      page.form.disabilitiesField.shouldHaveValue('Deafness or serious hearing impairment')
+      page.form.disabilitiesField.shouldBeDisabled()
+      page.form.saveAsDraftButton.should('not.exist')
+
+      page.form.continueButton.click()
+
+      cy.location('pathname').should('eq', paths.ORDER.SUMMARY.replace(':orderId', mockOrderId))
+      page.errorSummary.shouldNotExist()
+    })
+
+    it('is linked from the check your answers page', () => {
+      stubOrder('IN_PROGRESS', { ...personalDetailsAnswered, disabilities: 'HEARING' })
+
+      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, 'Check your answers')
+
+      page.personDetailsSection
+        .getChangeLink('Does the device wearer have any of the disabilities or health conditions listed?')
+        .should('have.attr', 'href', paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES.replace(':orderId', mockOrderId))
+    })
+  })
+})
