@@ -73,7 +73,7 @@ context('Postcode Lookup', () => {
   })
 
   it('Should able to search for postcode and select address', () => {
-    fillInAboutTheDeviceWearer({ deviceWearerDetails, notifyingOrganisation: 'Prison' })
+    fillInAboutTheDeviceWearer({ deviceWearerDetails, notifyingOrganisation: 'Prison', stopAtAddressLookup: true })
 
     fillinAddress({ findAddress: { postcode: 'SA11 1AA' }, addressResult: { address: '10' }, enterAddress: {} })
 
@@ -81,7 +81,7 @@ context('Postcode Lookup', () => {
   })
 
   it('Should able to enter address manually', () => {
-    fillInAboutTheDeviceWearer({ deviceWearerDetails, notifyingOrganisation: 'Prison' })
+    fillInAboutTheDeviceWearer({ deviceWearerDetails, notifyingOrganisation: 'Prison', stopAtAddressLookup: true })
 
     fillinAddress({
       findAddress: {},
@@ -93,7 +93,7 @@ context('Postcode Lookup', () => {
   })
 
   it('Should able to search for a curfew address', () => {
-    fillInAboutTheDeviceWearer({ deviceWearerDetails, notifyingOrganisation: 'Prison' })
+    fillInAboutTheDeviceWearer({ deviceWearerDetails, notifyingOrganisation: 'Prison', stopAtAddressLookup: true })
 
     fillinAddress({
       findAddress: { postcode: 'SA11 1AA' },

@@ -34,15 +34,13 @@ export default function fillInAboutTheDeviceWearer({
   section = 'About the device wearer',
   notifyingOrganisation = undefined,
   loadFromCPR = false,
+  stopAtAddressLookup = false,
 }): void {
   const identityNumberNames = identityNumberNamesForNotifyingOrganisation(notifyingOrganisation)
   const searchedIdentifier =
-    deviceWearerDetails.nomisId ||
-    deviceWearerDetails.deliusId ||
-    deviceWearerDetails.pncId ||
-    deviceWearerDetails.prisonNumber ||
-    deviceWearerDetails.complianceAndEnforcementPersonReference ||
-    deviceWearerDetails.courtCaseReferenceNumber
+    notifyingOrganisation === 'Probation' || notifyingOrganisation === 'Probation service'
+      ? deviceWearerDetails.deliusId || deviceWearerDetails.nomisId
+      : deviceWearerDetails.nomisId || deviceWearerDetails.pncId
 
   submitIfOnPage(paths.ORDER.SUMMARY, () => {
     Page.verifyOnPage(OrderSummaryPage).aboutTheDeviceWearerTask.click()
@@ -62,7 +60,10 @@ export default function fillInAboutTheDeviceWearer({
     notifyingOrganisation === 'Youth Custody Service'
   ) {
     submitIfOnPage(
-      paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_SEARCH_RESULTS.replace(':identifyNumber', searchedIdentifier),
+      paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_SEARCH_RESULTS.replace(
+        ':identifyNumber',
+        encodeURIComponent(searchedIdentifier),
+      ),
       () => {
         const deviceWearerSearchResultsPage = Page.verifyOnPage(DeviceWearerSearchResultsPage, {
           identifyNumber: searchedIdentifier,
@@ -134,6 +135,14 @@ export default function fillInAboutTheDeviceWearer({
       noFixedAbode.form.fillInWith(deviceWearerDetails)
       noFixedAbode.form.saveAndContinueButton.click()
     })
+  }
+
+  if (stopAtAddressLookup) {
+    cy.location('pathname').should(
+      'include',
+      paths.POSTCODE_LOOKUP.FIND_ADDRESS.replace(paths.ORDER.BASE_URL, '').replace(':addressType', 'PRIMARY'),
+    )
+    return
   }
 
   if (primaryAddressDetails) {
