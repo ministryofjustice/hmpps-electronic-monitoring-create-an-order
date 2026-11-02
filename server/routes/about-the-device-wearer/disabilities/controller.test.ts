@@ -62,7 +62,30 @@ describe('DisabilitiesController', () => {
         disabilities: { values: ['VISION', 'MOBILITY'] },
         otherDisability: { value: '' },
         errorSummary: null,
+        isOrderEditable: true,
       })
+    })
+
+    it('shows persisted answers read-only to a non-owner, ignoring cached and flashed answers', async () => {
+      order.isOwner = false
+      order.deviceWearer.disabilities = ['VISION']
+      await storeService.updateDeviceWearer(order, { disabilities: ['HEARING'] })
+      const getCachedAnswers = jest.spyOn(storeService, 'getDeviceWearer')
+
+      await controller.view(
+        createRequest(
+          {},
+          { formData: [{ disabilities: [] }], validationErrors: [{ field: 'disabilities', error: requiredError }] },
+        ),
+        res,
+        next,
+      )
+
+      expect(getCachedAnswers).not.toHaveBeenCalled()
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/order/about-the-device-wearer/disabilities',
+        expect.objectContaining({ disabilities: { values: ['VISION'] }, isOrderEditable: false, errorSummary: null }),
+      )
     })
 
     it('prefers answers already in the cache over the order', async () => {
@@ -90,6 +113,7 @@ describe('DisabilitiesController', () => {
         disabilities: { values: [], error: { text: requiredError } },
         otherDisability: { value: '' },
         errorSummary: { titleText: 'There is a problem', errorList: [{ href: '#disabilities', text: requiredError }] },
+        isOrderEditable: true,
       })
     })
 
@@ -137,6 +161,7 @@ describe('DisabilitiesController', () => {
         disabilities: { values: ['OTHER'] },
         otherDisability: { value: '', error: { text: error } },
         errorSummary: { titleText: 'There is a problem', errorList: [{ href: '#otherDisability', text: error }] },
+        isOrderEditable: true,
       })
     })
 
@@ -174,6 +199,17 @@ describe('DisabilitiesController', () => {
   })
 
   describe('update', () => {
+    it('redirects a non-owner without changing cached answers or submitting to the API', async () => {
+      order.isOwner = false
+      const saveAnswers = jest.spyOn(storeService, 'updateDeviceWearer')
+
+      await controller.update(createRequest({ disabilities: ['HEARING'] }), res, next)
+
+      expect(saveAnswers).not.toHaveBeenCalled()
+      expect(apiClient.put).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith(paths.ORDER.SUMMARY.replace(':orderId', order.id))
+    })
+
     it('saves the answer and continues to the language page', async () => {
       const req = createRequest({ disabilities: ['MENTAL_HEALTH', 'MEMORY'] })
 

@@ -98,6 +98,23 @@ describe('DeviceWearerDetailsController', () => {
       expect(res.render).toHaveBeenCalledWith(VIEW, expect.objectContaining({ firstName: { value: 'Cached' } }))
     })
 
+    it('shows persisted answers read-only to a non-owner, ignoring cached and flashed answers', async () => {
+      order.isOwner = false
+      await storeService.updateDeviceWearer(order, { firstName: 'Cached' })
+      flashed.formData = [{ ...validBody, firstName: 'Flashed' }]
+      flashed.validationErrors = [{ field: 'firstName', error: 'Invalid name' }]
+      const getCachedAnswers = jest.spyOn(storeService, 'getDeviceWearer')
+      const res = response()
+
+      await controller.view(request(), res, jest.fn())
+
+      expect(getCachedAnswers).not.toHaveBeenCalled()
+      expect(res.render).toHaveBeenCalledWith(
+        VIEW,
+        expect.objectContaining({ firstName: { value: 'Saved' }, isOrderEditable: false, errorSummary: null }),
+      )
+    })
+
     it('does not show answers saved against a different version of the order', async () => {
       await storeService.updateDeviceWearer({ ...order, versionId: 'another-version' }, { firstName: 'Other' })
       const res = response()
@@ -188,6 +205,18 @@ describe('DeviceWearerDetailsController', () => {
   })
 
   describe('update', () => {
+    it('redirects a non-owner without changing cached answers or submitting to the API', async () => {
+      order.isOwner = false
+      const saveAnswers = jest.spyOn(storeService, 'updateDeviceWearer')
+      const res = response()
+
+      await controller.update(request({ body: validBody }), res, jest.fn())
+
+      expect(saveAnswers).not.toHaveBeenCalled()
+      expect(apiClient.put).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith(paths.ORDER.SUMMARY.replace(':orderId', order.id))
+    })
+
     it.each([undefined, '', '   ', 'My own description', 'INVALID_GENDER'])(
       'requires an explicit supported gender answer instead of defaulting or remapping %p',
       async gender => {

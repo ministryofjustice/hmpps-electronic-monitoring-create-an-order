@@ -56,6 +56,35 @@ describe('AdultAtInstallationController', () => {
   })
 
   describe('view', () => {
+    it('shows persisted answers read-only to a non-owner, ignoring cached and flashed answers', async () => {
+      req.order = { ...order, isOwner: false, deviceWearer: { ...order.deviceWearer, adultAtTimeOfInstallation: true } }
+      req.flash = jest
+        .fn()
+        .mockImplementation((key: string) =>
+          key === 'formData'
+            ? [{ adultAtTimeOfInstallation: 'false' }]
+            : [{ field: 'adultAtTimeOfInstallation', error: ERROR }],
+        )
+
+      await controller.view(req, res, next)
+
+      expect(service.getDeviceWearer).not.toHaveBeenCalled()
+      expect(res.render).toHaveBeenCalledWith(
+        VIEW,
+        expect.objectContaining({
+          adultAtTimeOfInstallation: expect.objectContaining({
+            value: 'true',
+            items: [
+              { value: 'false', text: 'Yes', disabled: true },
+              { value: 'true', text: 'No', disabled: true },
+            ],
+          }),
+          isOrderEditable: false,
+          errorSummary: null,
+        }),
+      )
+    })
+
     it('renders the saved answer', async () => {
       await controller.view(req, res, next)
 
@@ -113,6 +142,22 @@ describe('AdultAtInstallationController', () => {
   })
 
   describe('update', () => {
+    it.each<NotifyingOrganisation>(['YOUTH_COURT', 'PROBATION'])(
+      'redirects a non-owner of a %s order without saving or submitting',
+      async notifyingOrganisation => {
+        req.order = { ...order, isOwner: false, interestedParties: createInterestedParties({ notifyingOrganisation }) }
+        req.body = { action: 'continue', adultAtTimeOfInstallation: 'false' }
+
+        await controller.update(req, res, next)
+
+        expect(service.saveAdultAtInstallation).not.toHaveBeenCalled()
+        expect(service.getDeviceWearer).not.toHaveBeenCalled()
+        expect(service.submit).not.toHaveBeenCalled()
+        expect(req.flash).not.toHaveBeenCalled()
+        expect(res.redirect).toHaveBeenCalledWith(paths.ORDER.SUMMARY.replace(':orderId', order.id))
+      },
+    )
+
     it('redisplays the page with an error when no answer is selected', async () => {
       req.body = { action: 'continue' }
 

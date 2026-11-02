@@ -48,6 +48,32 @@ describe('LanguageController', () => {
   })
 
   describe('view', () => {
+    it('shows persisted answers read-only to a non-owner, ignoring cached and flashed answers', async () => {
+      const order = { ...answeredOrder({ interpreterRequired: true, language: 'Arabic' }), isOwner: false }
+      await service.saveLanguage(order, { interpreterRequired: false, language: '' })
+      requestFor(order, {
+        formData: [{ interpreterRequired: 'false', language: '' }],
+        validationErrors: [{ field: 'language', error: 'Select the language required' }],
+      })
+      const getCachedAnswers = jest.spyOn(service, 'getDeviceWearer')
+
+      await controller.view(req, res, next)
+
+      expect(getCachedAnswers).not.toHaveBeenCalled()
+      expect(res.render).toHaveBeenCalledWith(
+        view,
+        expect.objectContaining({
+          interpreterRequired: expect.objectContaining({
+            value: 'true',
+            items: expect.arrayContaining([expect.objectContaining({ value: 'true', disabled: true })]),
+          }),
+          language: { value: 'Arabic' },
+          isOrderEditable: false,
+          errorSummary: null,
+        }),
+      )
+    })
+
     it('shows the answers saved on the order', async () => {
       requestFor(answeredOrder({ interpreterRequired: true, language: 'Arabic' }))
 
@@ -150,6 +176,20 @@ describe('LanguageController', () => {
   })
 
   describe('update', () => {
+    it('redirects a non-owner without changing cached answers or submitting to the API', async () => {
+      const order = { ...answeredOrder(), isOwner: false }
+      requestFor(order)
+      req.body = { action: 'continue', interpreterRequired: 'true', language: 'Arabic' }
+      const saveAnswers = jest.spyOn(service, 'saveLanguage')
+
+      await controller.update(req, res, next)
+
+      expect(saveAnswers).not.toHaveBeenCalled()
+      expect(apiClient.put).not.toHaveBeenCalled()
+      expect(req.flash).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith(paths.ORDER.SUMMARY.replace(':orderId', order.id))
+    })
+
     it('saves nothing and returns to the order when the order cannot be edited', async () => {
       const order = answeredOrder()
       requestFor(order)

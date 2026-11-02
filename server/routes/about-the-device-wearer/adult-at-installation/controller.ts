@@ -25,7 +25,8 @@ export default class AdultAtInstallationController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    const disabled = !res.locals.isOrderEditable
+    const isOrderEditable = Boolean(res.locals.isOrderEditable && order.isOwner)
+    const disabled = !isOrderEditable
     // Orders that cannot be edited show what was submitted, not unsubmitted answers
     const getSaved = async () =>
       disabled ? order.deviceWearer : this.deviceWearerAnswersService.getDeviceWearer(order)
@@ -44,19 +45,19 @@ export default class AdultAtInstallationController {
     const [submitted] = req.flash('formData') as unknown as AdultAtInstallationFormInput[]
     const errors = req.flash('validationErrors') as unknown as ValidationResult
     const adultAtTimeOfInstallation =
-      submitted?.adultAtTimeOfInstallation ??
+      (isOrderEditable ? submitted?.adultAtTimeOfInstallation : undefined) ??
       convertBooleanToEnum((await getSaved()).adultAtTimeOfInstallation, '', 'true', 'false')
 
-    res.render(
-      'pages/order/about-the-device-wearer/adult-at-installation',
-      AdultAtInstallationViewModel.construct(adultAtTimeOfInstallation, disabled, errors),
-    )
+    res.render('pages/order/about-the-device-wearer/adult-at-installation', {
+      ...AdultAtInstallationViewModel.construct(adultAtTimeOfInstallation, disabled, isOrderEditable ? errors : []),
+      isOrderEditable,
+    })
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
     // Checked first, so orders that cannot be edited are never saved or submitted
-    if (!res.locals.isOrderEditable) {
+    if (!res.locals.isOrderEditable || !order.isOwner) {
       res.redirect(res.locals.orderSummaryUri ?? paths.ORDER.SUMMARY.replace(':orderId', order.id))
       return
     }

@@ -16,23 +16,26 @@ export default class DisabilitiesController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
+    const isOrderEditable = Boolean(res.locals.isOrderEditable && order.isOwner)
     const errors = req.flash('validationErrors') as unknown as ValidationResult
     const formData = req.flash('formData') as unknown as DisabilitiesFormData[]
     // Orders that can no longer be edited show what was submitted, not any cached answers
-    const answers = res.locals.isOrderEditable
-      ? await this.deviceWearerAnswersService.getDeviceWearer(order)
-      : order.deviceWearer
+    const answers = isOrderEditable ? await this.deviceWearerAnswersService.getDeviceWearer(order) : order.deviceWearer
 
-    res.render(
-      'pages/order/about-the-device-wearer/disabilities',
-      disabilitiesViewModel.construct(answers, formData[0], errors),
-    )
+    res.render('pages/order/about-the-device-wearer/disabilities', {
+      ...disabilitiesViewModel.construct(
+        answers,
+        isOrderEditable ? formData[0] : undefined,
+        isOrderEditable ? errors : [],
+      ),
+      isOrderEditable,
+    })
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
 
-    if (!res.locals.isOrderEditable) {
+    if (!res.locals.isOrderEditable || !order.isOwner) {
       res.redirect(res.locals.orderSummaryUri ?? paths.ORDER.SUMMARY.replace(':orderId', order.id))
       return
     }

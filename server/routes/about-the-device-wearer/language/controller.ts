@@ -16,22 +16,29 @@ export default class LanguageController {
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
+    const isOrderEditable = Boolean(res.locals.isOrderEditable && order.isOwner)
     const [submitted] = req.flash('formData') as unknown as LanguageFormInput[]
     const errors = req.flash('validationErrors') as unknown as ValidationResult
-    const disabled = !res.locals.isOrderEditable
+    const disabled = !isOrderEditable
     // Orders that cannot be edited show what was submitted, not unsubmitted answers
-    const answers =
-      submitted ?? (disabled ? order.deviceWearer : await this.deviceWearerAnswersService.getDeviceWearer(order))
+    const answers = disabled
+      ? order.deviceWearer
+      : (submitted ?? (await this.deviceWearerAnswersService.getDeviceWearer(order)))
 
-    res.render(
-      'pages/order/about-the-device-wearer/language',
-      LanguageViewModel.construct(answers, res.locals.content!.pages.deviceWearer.languagePage, disabled, errors),
-    )
+    res.render('pages/order/about-the-device-wearer/language', {
+      ...LanguageViewModel.construct(
+        answers,
+        res.locals.content!.pages.deviceWearer.languagePage,
+        disabled,
+        isOrderEditable ? errors : [],
+      ),
+      isOrderEditable,
+    })
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
-    if (!res.locals.isOrderEditable) {
+    if (!res.locals.isOrderEditable || !order.isOwner) {
       res.redirect(res.locals.orderSummaryUri ?? paths.ORDER.SUMMARY.replace(':orderId', order.id))
       return
     }
