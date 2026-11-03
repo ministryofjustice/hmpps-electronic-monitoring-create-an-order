@@ -69,6 +69,7 @@ const PAGES = {
   responsibleOrganisation: 'RESPONSIBLE_ORGANISATION',
   responsibleOfficer: 'RESPONSIBLE_OFFICER',
   sentencingAct: 'SENTENCING_ACT',
+  riskAssessment: 'RISK_ASSESSMENT',
 } as const
 
 type Page = (typeof PAGES)[keyof typeof PAGES]
