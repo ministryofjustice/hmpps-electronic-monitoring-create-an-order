@@ -154,7 +154,10 @@ context('Service-Request-Types', () => {
     Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').saveAndReturnButton.click()
     orderSummaryPage.riskInformationTask.click()
 
-    if (variationType === 'I need to change something else in the form' && interestedParties.notifyingOrganisation === 'PROBATION') {
+    if (
+      variationType === 'I need to change something else in the form' &&
+      interestedParties.notifyingOrganisation === 'PROBATION'
+    ) {
       const checkRiskPage = Page.verifyOnPage(InstallationAndRiskCheckRiskPage)
       checkRiskPage.form.fillInWith('No')
       checkRiskPage.form.continueButton.click()
