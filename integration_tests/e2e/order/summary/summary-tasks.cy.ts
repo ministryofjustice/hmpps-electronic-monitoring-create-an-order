@@ -10,7 +10,6 @@ import ResponsibleOfficerPage from '../interested-parties/responsible-officer/re
 import InterestedPartiesCheckYourAnswersPage from '../interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import versionInformation from './summary-helpers'
-import InstallationAndRiskCheckRiskPage from '../../../pages/order/installation-and-risk/check-risk'
 
 const mockOrderId = uuidv4()
 
@@ -272,7 +271,7 @@ context('Order Summary', () => {
       page.riskInformationTask.link.should(
         'have.attr',
         'href',
-        `/order/${mockOrderId}/installation-and-risk/check-risk`,
+        `/order/${mockOrderId}/installation-and-risk/risk-behaviour`,
       )
 
       page.electronicMonitoringTask.shouldHaveStatus('Cannot start yet')
@@ -762,7 +761,7 @@ context('Order Summary', () => {
 
       page.aboutTheDeviceWearerTask.shouldHaveStatus('Optional')
 
-      page.riskInformationTask.shouldHaveStatus('Incomplete')
+      page.riskInformationTask.shouldHaveStatus('Optional')
 
       page.electronicMonitoringTask.shouldHaveStatus('Optional')
 
@@ -805,12 +804,9 @@ context('Order Summary', () => {
 
     it('should display status as Complete after view Risk Information check your answer page', () => {
       let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
-      page.riskInformationTask.shouldHaveStatus('Incomplete')
+      page.riskInformationTask.shouldHaveStatus('Optional')
       page.riskInformationTask.link.click()
 
-      const checkRiskPage = Page.verifyOnPage(InstallationAndRiskCheckRiskPage)
-      checkRiskPage.form.fillInWith('No')
-      checkRiskPage.form.continueButton.click()
       const riskInformationCyaPage = Page.verifyOnPage(
         InstallationAndRiskCheckYourAnswersPage,
         { orderId: mockOrderId },
@@ -1030,9 +1026,6 @@ context('Order Summary', () => {
 
       let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.riskInformationTask.link.click()
-      const checkRiskPage = Page.verifyOnPage(InstallationAndRiskCheckRiskPage)
-      checkRiskPage.form.fillInWith('No')
-      checkRiskPage.form.continueButton.click()
 
       page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 

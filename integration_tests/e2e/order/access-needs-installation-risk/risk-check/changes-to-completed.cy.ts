@@ -4,7 +4,7 @@ import OrderTasksPage from '../../../../pages/order/summary'
 import InstallationAndRiskCheckRiskPage from '../../../../pages/order/installation-and-risk/check-risk'
 import InstallationAndRiskCheckYourAnswersPage from '../../../../pages/order/installation-and-risk/check-your-answers'
 import RiskAtAddressPage from '../risk-at-address/RiskAtAddressPage'
-import RiskBehaviourPage from './RiskBehaviourPage'
+import RiskBehaviourPage from '../risk-behaviour/RiskBehaviourPage'
 
 const mockOriginalId = '00a00000-79cd-49f9-a498-b1f07c543b8a'
 const mockVariationId = '11a11111-79cd-49f9-a498-b1f07c543b8a'
@@ -13,9 +13,32 @@ const mockOffenceId = '22a22222-79cd-49f9-a498-b1f07c543b8a'
 
 const daysAgo = (days: number) => new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * days).setHours(0, 0, 0, 0))
 
+function getMockedMonitoringConditions(mockDate = new Date(2000, 10, 20).toISOString()) {
+  return {
+    orderType: null,
+    curfew: null,
+    exclusionZone: null,
+    trail: null,
+    mandatoryAttendance: null,
+    alcohol: null,
+    orderTypeDescription: null,
+    conditionType: null,
+    startDate: mockDate,
+    endDate: mockDate,
+    sentenceType: null,
+    issp: null,
+    hdc: null,
+    prarr: null,
+    pilot: null,
+    dapolMissedInError: null,
+    offenceType: null,
+    isValid: false,
+  }
+}
+
 const completedRiskInformation = {
   interestedParties: {
-    notifyingOrganisation: 'PRISON',
+    notifyingOrganisation: 'PROBATION',
     notifyingOrganisationName: 'ALTCOURSE_PRISON',
     notifyingOrganisationEmail: 'notifying@organisation',
   },
@@ -47,7 +70,11 @@ context('Making changes to a previously submitted order', () => {
       id: mockOriginalId,
       status: 'IN_PROGRESS',
       type: 'VARIATION',
-      order: { ...completedRiskInformation, fmsResultDate: daysAgo(32) },
+      order: {
+        ...completedRiskInformation,
+        monitoringConditions: getMockedMonitoringConditions(),
+        fmsResultDate: daysAgo(32),
+      },
     })
 
     confirmPage.confirmButton().click()
@@ -65,7 +92,11 @@ context('Making changes to a previously submitted order', () => {
       id: mockOriginalId,
       status: 'IN_PROGRESS',
       type: 'VARIATION',
-      order: { ...completedRiskInformation, fmsResultDate: daysAgo(32) },
+      order: {
+        ...completedRiskInformation,
+        monitoringConditions: getMockedMonitoringConditions(),
+        fmsResultDate: daysAgo(32),
+      },
     })
 
     confirmPage.confirmButton().click()
@@ -76,6 +107,23 @@ context('Making changes to a previously submitted order', () => {
 
   it('Shows the Check Risk page when the user clicks on the Risk Information Section', () => {
     goToCheckRiskPage()
+  })
+
+  it('Does not show the Check Risk page when the user clicks on the Risk Information Section when the order start date is in the future', () => {
+    cy.visit(`/order/${mockOriginalId}/edit`)
+    Page.verifyOnPage(ConfirmVariationPage)
+
+    cy.task('stubCemoGetOrder', {
+      httpStatus: 200,
+      id: mockOriginalId,
+      status: 'IN_PROGRESS',
+      type: 'VARIATION',
+      order: {
+        ...completedRiskInformation,
+        monitoringConditions: getMockedMonitoringConditions(new Date(3000, 10, 20).toISOString()),
+        fmsResultDate: daysAgo(32),
+      },
+    })
   })
 
   it('goes to the normal risk assessment journey when the user answers Yes', () => {
@@ -170,7 +218,12 @@ context('Making changes to a previously submitted order', () => {
       id: mockOriginalId,
       status: 'IN_PROGRESS',
       type: 'VARIATION',
-      order: { ...completedRiskInformation, fmsResultDate: daysAgo(32), versionId: mockUncachedVersionId },
+      order: {
+        ...completedRiskInformation,
+        monitoringConditions: getMockedMonitoringConditions(),
+        fmsResultDate: daysAgo(32),
+        versionId: mockUncachedVersionId,
+      },
     })
     cy.reload()
 

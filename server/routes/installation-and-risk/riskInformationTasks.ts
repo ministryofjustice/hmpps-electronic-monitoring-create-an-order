@@ -7,6 +7,7 @@ import {
   riskInformationPages,
 } from '../../services/riskInformationFlow'
 import hasOptionalVariationSectionIsHOCourt from '../../utils/order/optionalVariationSections'
+import { isPastDatedProbationVariation, isStartDateInPast } from '../../utils/order/orderStartDate'
 
 type RiskInformationTaskState = 'REQUIRED' | 'NOT_REQUIRED' | 'OPTIONAL'
 
@@ -80,7 +81,12 @@ export const getRiskInformationTasks = (order: Order): RiskInformationTask[] => 
   const flow = getRiskInformationFlow(order.interestedParties?.notifyingOrganisation)
 
   const pages = flow.pages.map(page => riskInformationTaskDefinitions[page](order))
-  if (order.type === 'VARIATION') {
+  if (
+    isPastDatedProbationVariation(order) &&
+    order.type === 'VARIATION' &&
+    order.status === 'IN_PROGRESS' &&
+    isStartDateInPast(order)
+  ) {
     pages.unshift(...getRiskAssessmentFlow().pages.map(page => riskInformationTaskDefinitions[page](order)))
   }
 
