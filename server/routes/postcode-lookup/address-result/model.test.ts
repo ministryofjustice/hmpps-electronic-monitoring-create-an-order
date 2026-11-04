@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from 'uuid'
 import Model from './model'
 import { AddressWithUPRN } from '../../../models/Address'
-import { createAddressPreview } from '../../../utils/utils'
 import paths from '../../../constants/paths'
 import getContent from '../../../i18n'
+import { createAddressPreview } from '../../../utils/views/displayHelpers'
 
 const mockOrderId = uuidv4()
 const content = getContent('en', 'DDV6')

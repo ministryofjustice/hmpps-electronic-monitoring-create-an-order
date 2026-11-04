@@ -8,6 +8,7 @@ const logger = bunyan.createLogger({
   name: 'Hmpps·Electronic·Monitoring·Create·An·Order',
   stream: formatOut,
   level: config.logLevel as bunyan.LogLevel,
+  serializers: { err: bunyan.stdSerializers.err },
 })
 
 export default logger

@@ -1,63 +1,60 @@
-import { createAnswer, createBooleanAnswer } from '../../../utils/checkYourAnswers'
+import { createAnswer, createBooleanAnswer } from '../../../utils/views/checkYourAnswers'
 
 import { Order } from '../../../models/Order'
 import AttachmentType from '../../../models/AttachmentType'
 import I18n from '../../../types/i18n'
 import paths from '../../../constants/paths'
 import { Attachment } from '../../../models/Attachment'
-import { isNotNullOrUndefined, hasOptionalVariationSectionIsHOCourt } from '../../../utils/utils'
 import { notifyingOrganisationCourts } from '../../../models/NotifyingOrganisation'
+import hasOptionalVariationSectionIsHOCourt from '../../../utils/order/optionalVariationSections'
+import { isNotNullOrUndefined } from '../../../utils/values'
+import { isPastDatedProbationVariation } from '../../../utils/order/orderStartDate'
+import usesRevocationPaperwork from '../../../utils/order/revocationPaperwork'
+
+// The start date may have passed since an order was submitted, so only editable orders rely on it alone.
+const asksForNewDocument = (order: Order) =>
+  isPastDatedProbationVariation(order) &&
+  (order.status === 'IN_PROGRESS' || isNotNullOrUndefined(order.orderParameters?.haveLicence))
 
 const createViewModel = (order: Order, content: I18n | undefined) => {
   const licence = order.additionalDocuments.find(x => x.fileType === AttachmentType.LICENCE)
   const photo = order.additionalDocuments.find(x => x.fileType === AttachmentType.PHOTO_ID)
-  const courtOrder = order.additionalDocuments.find(x => x.fileType === AttachmentType.COURT_ORDER)
   const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' || !order.isOwner }
   const sectionIsOptional = hasOptionalVariationSectionIsHOCourt(order)
   const answers = []
+  const isCourtOrder = (notifyingOrganisationCourts as readonly string[]).includes(
+    order.interestedParties?.notifyingOrganisation ?? '',
+  )
 
-  if (
-    isNotNullOrUndefined(order.interestedParties?.notifyingOrganisation) &&
-    (notifyingOrganisationCourts as readonly string[]).includes(order.interestedParties?.notifyingOrganisation)
-  ) {
+  if (asksForNewDocument(order)) {
     answers.push(
-      sectionIsOptional
-        ? createBooleanAnswer(
-            content?.pages.haveCourtOrder.questions.haveCourtOrder.text || '',
-            order.orderParameters?.haveCourtOrder,
-            paths.ATTACHMENT.HAVE_COURT_ORDER.replace(':orderId', order.id),
-            answerOpts,
-          )
-        : createAnswer(
-            content?.pages.haveCourtOrder.questions.haveCourtOrder.text || '',
-            order.orderParameters?.haveCourtOrder ? 'Yes' : 'No',
-            paths.ATTACHMENT.HAVE_COURT_ORDER.replace(':orderId', order.id),
-            answerOpts,
-          ),
+      createBooleanAnswer(
+        content?.pages.newDocument.questions.newDocument.text || '',
+        order.orderParameters?.haveLicence,
+        paths.ATTACHMENT.NEW_DOCUMENT.replace(':orderId', order.id),
+        answerOpts,
+      ),
     )
 
-    if (order.orderParameters?.haveCourtOrder) {
+    if (order.orderParameters?.haveLicence) {
+      const uploadContent = usesRevocationPaperwork(order)
+        ? content?.pages.uploadRevocationPaperwork
+        : content?.pages.uploadLicense
       answers.push(
         createAttachmentAnswer(
-          courtOrder,
-          content?.pages.uploadCourtOrder.questions.file.text || '',
-          paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'court_order').replace(
-            ':orderId',
-            order.id,
-          ),
+          licence,
+          uploadContent?.questions.file.text || '',
+          paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'licence').replace(':orderId', order.id),
           order,
         ),
       )
     }
-  } else if (order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE') {
+  } else if (!isCourtOrder && order.interestedParties?.notifyingOrganisation !== 'HOME_OFFICE') {
     answers.push(
       createAttachmentAnswer(
         licence,
         content?.pages.uploadLicense.questions.file.text || '',
-        paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'licence').replace(
-          ':orderId',
-          order.id,
-        ),
+        paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'licence').replace(':orderId', order.id),
         order,
       ),
     )
@@ -84,10 +81,7 @@ const createViewModel = (order: Order, content: I18n | undefined) => {
       createAttachmentAnswer(
         photo,
         content?.pages.uploadPhotoId.questions.file.text || '',
-        paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'photo_Id').replace(
-          ':orderId',
-          order.id,
-        ),
+        paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'photo_Id').replace(':orderId', order.id),
         order,
       ),
     )

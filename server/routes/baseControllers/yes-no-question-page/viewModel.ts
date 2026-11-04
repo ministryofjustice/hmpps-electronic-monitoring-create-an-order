@@ -1,8 +1,8 @@
 import { ValidationResult } from '../../../models/Validation'
 import { ViewModel } from '../../../models/view-models/utils'
-import { createGovukErrorSummary } from '../../../utils/errors'
-import { getError } from '../../../utils/utils'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import { YesNoQuestionFormData } from './formModel'
+import { getError } from '../../../utils/validation/errorMessages'
 
 export type YesNoQuestionPageViewModel = ViewModel<YesNoQuestionFormData> & {
   question: string

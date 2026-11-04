@@ -42,7 +42,7 @@ export default class OffenceListController {
         ).replace(':orderId', order.id)
       } else {
         nextPagePath = isFamilyCourt
-          ? paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION.replace(':orderId', order.id)
+          ? paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR.replace(':orderId', order.id)
           : paths.INSTALLATION_AND_RISK.OFFENCE_OTHER_INFO.replace(':orderId', order.id)
       }
     }

@@ -2,7 +2,7 @@ import { OrderCohort } from '../models/OrderCohort'
 
 export type TaskListCohortDefinition = {
   responsibleParty: 'RESPONSIBLE_OFFICER' | 'RESPONSIBLE_ORGANISATION'
-  attachment: 'LICENCE' | 'COURT_ORDER' | 'NONE'
+  attachment: 'LICENCE' | 'NONE'
 }
 
 export const taskListCohortDefinitions: Record<OrderCohort, TaskListCohortDefinition> = {
@@ -16,10 +16,10 @@ export const taskListCohortDefinitions: Record<OrderCohort, TaskListCohortDefini
   },
   COURT: {
     responsibleParty: 'RESPONSIBLE_ORGANISATION',
-    attachment: 'COURT_ORDER',
+    attachment: 'NONE',
   },
   FAMILY_COURT: {
     responsibleParty: 'RESPONSIBLE_ORGANISATION',
-    attachment: 'COURT_ORDER',
+    attachment: 'NONE',
   },
 }

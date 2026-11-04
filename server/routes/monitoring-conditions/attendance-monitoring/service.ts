@@ -5,7 +5,10 @@ import AttendanceMonitoringModel, { AttendanceMonitoring } from '../../../models
 import { ValidationResult } from '../../../models/Validation'
 import { SanitisedError } from '../../../sanitisedError'
 import { AttendanceMonitoringAddToListFormData, AttendanceMonitoringAddToListFormDataValidator } from './formModel'
-import { convertBackendErrorToValidationError, convertZodErrorToValidationError } from '../../../utils/errors'
+import {
+  convertBackendErrorToValidationError,
+  convertZodErrorToValidationError,
+} from '../../../utils/validation/errors'
 
 type AttendanceMonitoringInput = AuthenticatedRequestInput & {
   orderId: string

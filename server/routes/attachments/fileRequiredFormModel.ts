@@ -7,15 +7,16 @@ export const FileRequiredFormDataModel = z.object({
   fileType: z.string().optional().default(''),
 })
 
-const FileRequiredFormDataValidator = z
-  .object({
-    fileRequired: z.string().min(1, validationErrors.attachments.haveFileRequired),
-    fileType: z.string().optional().default(''),
-  })
-  .transform(({ fileRequired, fileType }) => ({
-    fileRequired: fileRequired === 'yes',
-    fileType,
-  }))
+const createFileRequiredValidator = (requiredMessage: string = validationErrors.attachments.haveFileRequired) =>
+  z
+    .object({
+      fileRequired: z.string().min(1, requiredMessage),
+      fileType: z.string().optional().default(''),
+    })
+    .transform(({ fileRequired, fileType }) => ({
+      fileRequired: fileRequired === 'yes',
+      fileType,
+    }))
 
 export type FileRequiredFormData = Omit<z.infer<typeof FileRequiredFormDataModel>, 'action'>
-export { FileRequiredFormDataValidator }
+export { createFileRequiredValidator }

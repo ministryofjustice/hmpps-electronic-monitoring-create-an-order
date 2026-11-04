@@ -48,11 +48,12 @@ const mockDefaultOrder = {
 const noPilotOptionHintText =
   'To be eligible for tagging the device wearer must either be part of a pathfinder or programme or have Alcohol Monitoring on Licence (AML) as a licence condition.'
 
-const stubGetOrder = order => {
+const stubGetOrder = (order: object, type = 'REQUEST') => {
   cy.task('stubCemoGetOrder', {
     httpStatus: 200,
     id: mockOrderId,
     status: 'IN_PROGRESS',
+    type,
     order,
   })
 }
@@ -104,6 +105,38 @@ context('pilot', () => {
     page.form.pilotField.shouldNotHaveOption('Licence Variation Project')
   })
 
+  it('allows all other pilots for a past-dated probation variation without responsible organisation or region', () => {
+    stubGetOrder(
+      {
+        ...mockDefaultOrder,
+        monitoringConditions: {
+          ...mockDefaultOrder.monitoringConditions,
+          hdc: 'NO',
+          startDate: '2000-01-01T00:00:00Z',
+        },
+        interestedParties: {
+          notifyingOrganisation: 'PROBATION',
+          notifyingOrganisationName: '',
+          notifyingOrganisationEmail: 'notifying@organisation',
+          responsibleOrganisation: null,
+          responsibleOrganisationRegion: '',
+          responsibleOrganisationEmail: '',
+          responsibleOfficerName: 'name',
+          responsibleOfficerPhoneNumber: '01234567891',
+        },
+        isSentencingAct: false,
+      },
+      'VARIATION',
+    )
+
+    const page = Page.visit(PilotPage, { orderId: mockOrderId })
+
+    page.form.pilotField.shouldHaveEnabledOption('Domestic Abuse Perpetrator on Licence (DAPOL)')
+    page.form.pilotField.shouldHaveEnabledOption('GPS acquisitive crime (EMAC)')
+    page.form.pilotField.shouldHaveEnabledOption('They are not part of any of these pathfinders or programmes')
+    page.form.pilotField.shouldNotHaveOption('Licence Variation Project')
+  })
+
   it('Should not show pilot pathfinders hint when order is sentencing act', () => {
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
     stubGetOrder({
@@ -143,11 +176,9 @@ context('pilot', () => {
       },
     })
 
-    Page.visit(PilotPage, { orderId: mockOrderId })
+    const page = Page.visit(PilotPage, { orderId: mockOrderId })
 
-    cy.get('input[type="radio"][value="DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC"]').should(
-      'be.enabled',
-    )
+    page.form.pilotField.shouldHaveEnabledOption('Domestic Abuse Perpetrator on Licence (DAPOL)')
 
     cy.get('body').should(
       'not.contain',
@@ -173,14 +204,11 @@ context('pilot', () => {
       isSentencingAct: true,
     })
 
-    Page.visit(PilotPage, { orderId: mockOrderId })
-
-    cy.get('input[type="radio"][value="DOMESTIC_ABUSE_PERPETRATOR_ON_LICENCE_HOME_DETENTION_CURFEW_DAPOL_HDC"]').should(
-      'be.enabled',
-    )
+    const page = Page.visit(PilotPage, { orderId: mockOrderId })
+    page.form.pilotField.shouldHaveEnabledOption('Domestic Abuse Perpetrator on Licence (DAPOL)')
   })
 
-  it('Should enable licence variation project option if probation user and region in pilot and is not sentencing act', () => {
+  it('allows all pilots when the probation region is empty', () => {
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
     mockDefaultOrder.monitoringConditions.hdc = 'YES'
     stubGetOrder({
@@ -191,16 +219,19 @@ context('pilot', () => {
         notifyingOrganisationEmail: 'notifying@organisation',
         responsibleOrganisation: 'PROBATION',
         responsibleOrganisationEmail: 'responsible@organisation',
-        responsibleOrganisationRegion: 'YORKSHIRE_AND_THE_HUMBER',
+        responsibleOrganisationRegion: '',
         responsibleOfficerName: 'name',
         responsibleOfficerPhoneNumber: '01234567891',
       },
       isSentencingAct: false,
     })
 
-    Page.visit(PilotPage, { orderId: mockOrderId })
+    const page = Page.visit(PilotPage, { orderId: mockOrderId })
 
-    cy.get('input[type="radio"][value="LICENCE_VARIATION_PROJECT"]').should('be.enabled')
+    page.form.pilotField.shouldHaveEnabledOption('Domestic Abuse Perpetrator on Licence (DAPOL)')
+    page.form.pilotField.shouldHaveEnabledOption('GPS acquisitive crime (EMAC)')
+    page.form.pilotField.shouldHaveEnabledOption('Licence Variation Project')
+    page.form.pilotField.shouldHaveEnabledOption('They are not part of any of these pathfinders or programmes')
   })
 
   it('dapol option is disabled if not probation user', () => {
@@ -223,7 +254,7 @@ context('pilot', () => {
     page.form.pilotField.shouldHaveDisabledOption('Domestic Abuse Perpetrator on Licence (DAPOL)')
   })
 
-  it('Should enable licence variation and hide warning message for any probation region', () => {
+  it('shows licence variation for a probation order with any region', () => {
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
     mockDefaultOrder.monitoringConditions.hdc = 'YES'
     stubGetOrder({
@@ -240,9 +271,9 @@ context('pilot', () => {
       },
     })
 
-    Page.visit(PilotPage, { orderId: mockOrderId })
+    const page = Page.visit(PilotPage, { orderId: mockOrderId })
 
-    cy.get('input[type="radio"][value="LICENCE_VARIATION_PROJECT"]').should('be.enabled')
+    page.form.pilotField.shouldHaveEnabledOption('Licence Variation Project')
 
     cy.contains(
       '.govuk-inset-text',

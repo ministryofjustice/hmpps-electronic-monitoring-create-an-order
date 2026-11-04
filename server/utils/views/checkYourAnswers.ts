@@ -1,0 +1,119 @@
+import { AddressWithoutType } from '../../models/Address'
+import { isNullOrUndefined, convertBooleanToEnum } from '../values'
+import { createAddressPreview } from './displayHelpers'
+import { trimSeconds } from '../dateTime'
+
+type Optional<T> = T | null | undefined
+
+type Action = {
+  href: string
+  text: string
+  visuallyHiddenText: string
+}
+
+export type Answer = {
+  key: {
+    text: string
+  }
+  value: {
+    text?: string
+    html?: string
+  }
+  actions: {
+    items: Array<Action>
+  }
+}
+
+export interface AnswerOptions {
+  ignoreActions?: boolean
+  deleteUri?: string
+  valueType?: 'html' | 'text'
+}
+
+export const createAnswer = (key: string, value: Optional<string>, uri: string, opts: AnswerOptions = {}): Answer => {
+  const answer: Answer = {
+    key: {
+      text: key,
+    },
+    value: {},
+    actions: {
+      items: [],
+    },
+  }
+
+  if (opts.valueType === 'html') {
+    answer.value.html = isNullOrUndefined(value) ? '' : value
+  } else {
+    answer.value.text = isNullOrUndefined(value) ? '' : value
+  }
+
+  if (opts.ignoreActions !== true) {
+    answer.actions.items.push({
+      href: uri,
+      text: 'Change',
+      visuallyHiddenText: key.toLowerCase(),
+    })
+  }
+  if (opts.deleteUri !== undefined) {
+    answer.actions.items.push({
+      href: opts.deleteUri,
+      text: 'Delete',
+      visuallyHiddenText: key.toLowerCase(),
+    })
+  }
+
+  return answer
+}
+
+export const createDatePreview = (value: Optional<string>) =>
+  isNullOrUndefined(value) ? '' : new Date(value).toLocaleDateString('en-GB')
+
+const createTimePreview = (value: Optional<string>) =>
+  isNullOrUndefined(value) ? '' : trimSeconds(new Date(value).toLocaleTimeString('en-GB'))
+
+const createDateTimePreview = (value: Optional<string>) =>
+  isNullOrUndefined(value) ? '' : trimSeconds(new Date(value).toLocaleString('en-GB'))
+
+export const createDateAnswer = (key: string, value: Optional<string>, uri: string, opts: AnswerOptions = {}): Answer =>
+  createAnswer(key, createDatePreview(value), uri, opts)
+
+export const createTimeAnswer = (key: string, value: Optional<string>, uri: string, opts: AnswerOptions = {}): Answer =>
+  createAnswer(key, createTimePreview(value), uri, opts)
+
+export const createDateTimeAnswer = (
+  key: string,
+  value: Optional<string>,
+  uri: string,
+  opts: AnswerOptions = {},
+): Answer => createAnswer(key, createDateTimePreview(value), uri, opts)
+
+export const createBooleanAnswer = (
+  key: string,
+  value: boolean | null | undefined,
+  uri: string,
+  opts: AnswerOptions = {},
+): Answer => createAnswer(key, convertBooleanToEnum(value, '', 'Yes', 'No'), uri, opts)
+
+export const createMultipleChoiceAnswer = (
+  key: string,
+  values: Array<string>,
+  uri: string,
+  opts: AnswerOptions = {},
+): Answer => {
+  return createAnswer(key, values.join('<br/>'), uri, { ...opts, valueType: 'html' })
+}
+
+export const createMultipleAddressAnswer = (
+  key: string,
+  values: Array<AddressWithoutType>,
+  uri: string,
+  opts: AnswerOptions = {},
+): Answer =>
+  createMultipleChoiceAnswer(key, isNullOrUndefined(values) ? [] : values.map(createAddressPreview), uri, opts)
+
+export const createAddressAnswer = (
+  key: string,
+  value: Optional<AddressWithoutType>,
+  uri: string,
+  opts: AnswerOptions = {},
+): Answer => createMultipleAddressAnswer(key, isNullOrUndefined(value) ? [] : [value], uri, opts)

@@ -3,7 +3,7 @@ import { AuthenticatedRequestInput } from '../../interfaces/request'
 import { ValidationResult } from '../../models/Validation'
 import { SanitisedError } from '../../sanitisedError'
 import logger from '../../../logger'
-import { convertBackendErrorToValidationError } from '../../utils/errors'
+import { convertBackendErrorToValidationError } from '../../utils/validation/errors'
 
 type SetSentencingActFlag = AuthenticatedRequestInput & {
   orderId: string

@@ -1,9 +1,9 @@
 import { Order } from '../../../models/Order'
 import { ViewModel } from '../../../models/view-models/utils'
 import { ValidationResult } from '../../../models/Validation'
-import { createGovukErrorSummary } from '../../../utils/errors'
-import { getError } from '../../../utils/utils'
-import { isStandardCurfewTimes } from '../../../utils/standardCurfewTimes'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
+import { isStandardCurfewTimes } from '../../../utils/order/standardCurfewTimes'
+import { getError } from '../../../utils/validation/errorMessages'
 
 export type CurfewDayOfReleaseViewModel = ViewModel<{
   standardCurfewTimes: string

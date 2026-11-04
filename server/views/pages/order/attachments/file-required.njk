@@ -3,8 +3,22 @@
 
 {% set section = 'Additional documents' %}
 
+{% set guidanceHtml %}
+  {% if question.guidance %}
+    <p class="govuk-body">{{ question.guidance.intro }}</p>
+    <ul class="govuk-list govuk-list--bullet">
+      {% for item in question.guidance.items %}
+        <li>{{ item }}</li>
+      {% endfor %}
+    </ul>
+    <p class="govuk-body">{{ question.guidance.outro }}</p>
+  {% endif %}
+{% endset %}
+
 {% set questionName = title%}
 {% block formInputs %}
+
+  {% if heading %}{{ guidanceHtml | safe }}{% endif %}
 
   {{ govukRadios({
   classes: "govuk-radios--inline",
@@ -14,12 +28,13 @@
   fieldset: {
     legend: {
       text: question.text,
-      isPageHeading: true,
-      classes: "govuk-fieldset__legend--l"
+      isPageHeading: not heading,
+      classes: "govuk-fieldset__legend--s" if heading else "govuk-fieldset__legend--l"
     }
   },
   hint: {
-    text: question.hint
+    text: question.hint,
+    html: guidanceHtml if (question.guidance and not heading)
   },
   items: [
     {

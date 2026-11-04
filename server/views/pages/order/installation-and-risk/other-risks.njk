@@ -1,0 +1,55 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+
+{% set section = content.pages.detailsOfInstallation.section %}
+{% set singleQuestionPage = true %}
+{% set questionName = content.pages.detailsOfInstallation.questions.otherRisks.text %}
+
+{% set riskDetailsHtml %}
+  {{ govukCharacterCount({
+    name: "riskDetails",
+    id: "riskDetails",
+    maxlength: 200,
+    label: {
+      text: content.pages.detailsOfInstallation.questions.otherRisksDetails.text
+    },
+    hint: {
+      text: content.pages.detailsOfInstallation.questions.otherRisksDetails.hint
+    },
+    value: riskDetails.value,
+    errorMessage: riskDetails.error,
+    attributes: {} if isOrderEditable else { disabled: true }
+  }) }}
+{% endset %}
+
+{% set otherRisksItems = [] %}
+{% for item in hasOtherRisks.items %}
+  {% if item.value == 'YES' %}
+    {% set item = {
+      value: item.value,
+      text: item.text,
+      disabled: item.disabled,
+      conditional: { html: riskDetailsHtml }
+    } %}
+  {% endif %}
+  {% set otherRisksItems = (otherRisksItems.push(item), otherRisksItems) %}
+{% endfor %}
+
+{% block formInputs %}
+  {{ govukRadios({
+    name: "hasOtherRisks",
+    idPrefix: "hasOtherRisks",
+    fieldset: {
+      legend: {
+        text: content.pages.detailsOfInstallation.questions.otherRisks.text,
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
+      }
+    },
+    items: otherRisksItems,
+    value: hasOtherRisks.value,
+    errorMessage: hasOtherRisks.error
+  }) }}
+{% endblock %}

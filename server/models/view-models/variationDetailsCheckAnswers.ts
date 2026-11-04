@@ -1,7 +1,7 @@
 import paths from '../../constants/paths'
 import I18n from '../../types/i18n'
-import { createAnswer, createDateAnswer } from '../../utils/checkYourAnswers'
-import isVariationType from '../../utils/isVariationType'
+import { createAnswer, createDateAnswer } from '../../utils/views/checkYourAnswers'
+import isVariationType from '../../utils/order/isVariationType'
 import { Order } from '../Order'
 
 const createViewModel = (order: Order, content: I18n | undefined) => {

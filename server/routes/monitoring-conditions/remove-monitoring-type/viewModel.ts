@@ -1,4 +1,4 @@
-import { createDatePreview } from '../../../utils/checkYourAnswers'
+import { createDatePreview } from '../../../utils/views/checkYourAnswers'
 import { MonitoringTypeData } from '../utils/monitoringTypes'
 
 type RemoveMonitoringTypeViewModel = {

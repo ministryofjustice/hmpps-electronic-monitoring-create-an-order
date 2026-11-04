@@ -5,7 +5,7 @@ import { VariationDetailsFormData, validateVariationDetailsFormData } from '../m
 import VariationDetailsModel, { VariationDetails } from '../models/VariationDetails'
 import { ValidationResult } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
-import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../utils/errors'
+import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../utils/validation/errors'
 
 type UpdateVariationDetailsRequest = AuthenticatedRequestInput & {
   orderId: string

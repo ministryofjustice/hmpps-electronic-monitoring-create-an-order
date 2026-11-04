@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { DateTimeInputModel } from '../../../models/form-data/formData'
 import { validationErrors } from '../../../constants/validationErrors'
-import { serialiseTime } from '../../../utils/utils'
+import { serialiseTime } from '../../../utils/dateTime'
 
 const AttendanceMonitoringAddToListFormDataModel = z.object({
   action: z.string().default('continue'),

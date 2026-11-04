@@ -1,11 +1,11 @@
 import { ViewModel } from '../../../models/view-models/utils'
 import { ValidationResult } from '../../../models/Validation'
-import { getError } from '../../../utils/utils'
-import { createGovukErrorSummary } from '../../../utils/errors'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import { Address, AddressType } from '../../../models/Address'
 import { AddressFormData } from '../../../models/form-data/address'
 import I18n from '../../../types/i18n'
 import ManualAddressPageContent from '../../../types/i18n/pages/manualAddress'
+import { getError } from '../../../utils/validation/errorMessages'
 
 type AddressViewModel = ViewModel<Address> & {
   content: ManualAddressPageContent

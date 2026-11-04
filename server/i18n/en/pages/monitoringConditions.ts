@@ -24,7 +24,7 @@ const monitoringConditionsPageContent: MonitoringConditionsPageContent = {
       hint: 'Select one, if you need to you will be able to add other monitoring types later',
     },
     orderType: {
-      text: 'What is the order type?',
+      text: 'What type of order includes electronic monitoring as a condition?',
     },
     orderTypeDescription: {
       text: 'What pathfinder or programme is the device wearer part of?',

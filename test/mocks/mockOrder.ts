@@ -192,10 +192,10 @@ export const createAttatchment = (overrideProperties?: Partial<Attachment>): Att
 
 export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
   id: randomUUID(),
-  status: OrderStatusEnum.Enum.IN_PROGRESS,
+  status: OrderStatusEnum.enum.IN_PROGRESS,
   canAmend: false,
-  type: OrderTypeEnum.Enum.REQUEST,
-  dataDictionaryVersion: DataDictionaryVersionEnum.Enum.DDV4,
+  type: OrderTypeEnum.enum.REQUEST,
+  dataDictionaryVersion: DataDictionaryVersionEnum.enum.DDV4,
   deviceWearer: createDeviceWearer(),
   deviceWearerResponsibleAdult: null,
   contactDetails: null,
@@ -223,10 +223,10 @@ export const getMockOrder = (overrideProperties?: Partial<Order>): Order => ({
 
 export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order => ({
   id: randomUUID(),
-  status: OrderStatusEnum.Enum.IN_PROGRESS,
+  status: OrderStatusEnum.enum.IN_PROGRESS,
   canAmend: false,
-  type: OrderTypeEnum.Enum.REQUEST,
-  dataDictionaryVersion: DataDictionaryVersionEnum.Enum.DDV4,
+  type: OrderTypeEnum.enum.REQUEST,
+  dataDictionaryVersion: DataDictionaryVersionEnum.enum.DDV4,
   deviceWearer: {
     nomisId: '',
     pncId: null,
@@ -294,7 +294,7 @@ export const getFilledMockOrder = (overrideProperties?: Partial<Order>): Order =
 })
 
 export const getMockSubmittedOrder = (overrideProperties?: Partial<Order>) => {
-  return getMockOrder({ ...overrideProperties, status: OrderStatusEnum.Enum.SUBMITTED })
+  return getMockOrder({ ...overrideProperties, status: OrderStatusEnum.enum.SUBMITTED })
 }
 
 export const getMockOrderListInformation = (
@@ -302,8 +302,8 @@ export const getMockOrderListInformation = (
 ): OrderListInformation => ({
   id: randomUUID(),
   versionId: randomUUID(),
-  status: OrderStatusEnum.Enum.IN_PROGRESS,
-  type: OrderTypeEnum.Enum.REQUEST,
+  status: OrderStatusEnum.enum.IN_PROGRESS,
+  type: OrderTypeEnum.enum.REQUEST,
   firstName: null,
   lastName: null,
   notifyingOrganisation: null,

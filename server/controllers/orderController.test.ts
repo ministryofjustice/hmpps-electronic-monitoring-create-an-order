@@ -447,7 +447,7 @@ describe('OrderController', () => {
 
     it('should not delete the order and redirect to a failed page for a submitted order', async () => {
       // Given
-      const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED })
+      const mockOrder = getMockOrder({ status: OrderStatusEnum.enum.SUBMITTED })
       const req = createMockRequest({ body: { action: 'continue' }, order: mockOrder, flash: jest.fn() })
       const res = createMockResponse()
       const next = jest.fn()
@@ -473,7 +473,7 @@ describe('OrderController', () => {
 
     it('should not delete the order and redirect to a failed page for a submitted order', async () => {
       // Given
-      const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED })
+      const mockOrder = getMockOrder({ status: OrderStatusEnum.enum.SUBMITTED })
       const req = createMockRequest({ body: { action: 'continue' }, order: mockOrder, flash: jest.fn() })
       const res = createMockResponse()
       const next = jest.fn()
@@ -499,7 +499,7 @@ describe('OrderController', () => {
 
     it('should redirect to the summary pages if the user does not confirm the delete', async () => {
       // Given
-      const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED })
+      const mockOrder = getMockOrder({ status: OrderStatusEnum.enum.SUBMITTED })
       const req = createMockRequest({ body: { action: 'back' }, order: mockOrder, flash: jest.fn() })
       const res = createMockResponse()
       const next = jest.fn()
@@ -572,7 +572,7 @@ describe('OrderController', () => {
 
     it('should not submit the order and redirect to a failed page for a submitted order', async () => {
       // Given
-      const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.SUBMITTED })
+      const mockOrder = getMockOrder({ status: OrderStatusEnum.enum.SUBMITTED })
       const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
       const res = createMockResponse()
       const next = jest.fn()
@@ -593,7 +593,7 @@ describe('OrderController', () => {
 
     it('should submit the order and redirect to a partial success page for a order failed submit attachments', async () => {
       // Given
-      const mockOrder = getMockOrder({ status: OrderStatusEnum.Enum.ERROR })
+      const mockOrder = getMockOrder({ status: OrderStatusEnum.enum.ERROR })
       const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
       const res = createMockResponse()
       const next = jest.fn()

@@ -33,20 +33,20 @@ context('sentenceType', () => {
   })
 
   it('Page accessible', () => {
-    Page.visit(OrderTypePage, { orderId: mockOrderId })
-    // commented out due to ELM-4526
-    // orderTypePage.form.fillInWith('Release from prison')
-    // orderTypePage.form.continueButton.click()
+    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
+
+    orderTypePage.form.fillInWith('License')
+    orderTypePage.form.continueButton.click()
 
     const page = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
     page.checkIsAccessible()
   })
 
   it('Should display content', () => {
-    Page.visit(OrderTypePage, { orderId: mockOrderId })
-    // commented out due to ELM-4526
-    // orderTypePage.form.fillInWith('Release from prison')
-    // orderTypePage.form.continueButton.click()
+    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
+
+    orderTypePage.form.fillInWith('License')
+    orderTypePage.form.continueButton.click()
 
     const page = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
 
@@ -59,10 +59,10 @@ context('sentenceType', () => {
   })
 
   it('when order type is Post Release', () => {
-    Page.visit(OrderTypePage, { orderId: mockOrderId })
-    // commented out due to ELM-4526
-    // orderTypePage.form.fillInWith('Release from prison')
-    // orderTypePage.form.continueButton.click()
+    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
+
+    orderTypePage.form.fillInWith('License')
+    orderTypePage.form.continueButton.click()
 
     const page = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
 
@@ -72,12 +72,10 @@ context('sentenceType', () => {
     page.form.sentenceTypeField.shouldHaveOption('Section 250 / Section 91')
   })
 
-  // Order type communities disabled ELM-4495 skipping test until the option is enabled again
-  it.skip('when order type is Community', () => {
-    Page.visit(OrderTypePage, { orderId: mockOrderId })
-    // commented out due to ELM-4526
-    // orderTypePage.form.fillInWith('Community')
-    // orderTypePage.form.continueButton.click()
+  it('when order type is Court order', () => {
+    const orderTypePage = Page.visit(OrderTypePage, { orderId: mockOrderId })
+    orderTypePage.form.fillInWith('Court order')
+    orderTypePage.form.continueButton.click()
 
     const page = Page.verifyOnPage(SentenceTypePage, { orderId: mockOrderId })
 

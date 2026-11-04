@@ -4,7 +4,7 @@ import { isValidationResult } from '../../../models/Validation'
 import CurfewConditionsService from './service'
 import { CurfewConditionsFormDataModel } from './formModel'
 import CurfewConditionsViewModel from './viewModel'
-import shouldShowCurfewDayOfRelease from '../../../utils/curfewDayOfReleaseEligibility'
+import shouldShowCurfewDayOfRelease from '../../../utils/order/curfewDayOfReleaseEligibility'
 
 export default class CurfewConditionsController {
   constructor(private readonly curfewConditionsService: CurfewConditionsService) {}

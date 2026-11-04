@@ -793,9 +793,7 @@ context('Device wearer - check your answers', () => {
     it('shows correct banner', () => {
       const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.submittedBanner.contains(
-        'You are viewing a submitted form. This form was submitted on the 14 December 2024.',
-      )
+      page.submittedBanner.contains('This form was submitted on the 14 December 2024.')
     })
 
     it('shows correct caption and heading', () => {

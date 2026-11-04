@@ -2,7 +2,10 @@ import { ZodError } from 'zod'
 import RestClient from '../../../data/restClient'
 import { OffenceOtherInfoFormDataValidator, OffenceOtherInfoInput } from './formModel'
 import { SanitisedError } from '../../../sanitisedError'
-import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../../../utils/errors'
+import {
+  convertZodErrorToValidationError,
+  convertBackendErrorToValidationError,
+} from '../../../utils/validation/errors'
 
 type Input = {
   orderId: string

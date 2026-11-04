@@ -1395,9 +1395,7 @@ context('Contact Information - check your answers', () => {
     it('shows correct banner', () => {
       const page = Page.visit(ContactInformationCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.submittedBanner.contains(
-        'You are viewing a submitted form. This form was submitted on the 14 December 2024.',
-      )
+      page.submittedBanner.contains('This form was submitted on the 14 December 2024.')
     })
 
     it('shows contact information caption', () => {

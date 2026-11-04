@@ -1,12 +1,12 @@
 import { InterestedParties } from '../model'
 import { ValidationResult } from '../../../models/Validation'
 import { ViewModel } from '../../../models/view-models/utils'
-import { getError } from '../../../utils/utils'
 import { NotifyingOrganisationInput } from './formModel'
 import { getNotifyingOrganisationName } from './utils'
-import { createGovukErrorSummary } from '../../../utils/errors'
-import isOrderDataDictionarySameOrAbove from '../../../utils/dataDictionaryVersionComparer'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
+import isOrderDataDictionarySameOrAbove from '../../../utils/order/dataDictionaryVersionComparer'
 import { Order } from '../../../models/Order'
+import { getError } from '../../../utils/validation/errorMessages'
 
 type NotifyingOrganisationViewModel = ViewModel<
   Pick<InterestedParties, 'notifyingOrganisation' | 'notifyingOrganisationName' | 'notifyingOrganisationEmail'>

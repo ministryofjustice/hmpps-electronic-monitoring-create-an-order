@@ -35,7 +35,7 @@ describe('offence other info form model', () => {
       const result = validator.safeParse(data)
 
       expect(result.success).toBe(false)
-      const error = result.error?.errors[0]
+      const error = result.error?.issues[0]
       expect(error?.message).toBe(validationErrors.offenceOtherInformation.detailsRequired)
       expect(error?.path[0]).toBe('otherInformationDetails')
     })
@@ -49,7 +49,7 @@ describe('offence other info form model', () => {
       const result = validator.safeParse(data)
 
       expect(result.success).toBe(false)
-      const error = result.error?.errors[0]
+      const error = result.error?.issues[0]
       expect(error?.message).toBe(validationErrors.offenceOtherInformation.tooLong)
       expect(error?.path[0]).toBe('otherInformationDetails')
     })

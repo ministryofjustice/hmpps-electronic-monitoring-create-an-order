@@ -10,7 +10,8 @@ const ContactDetailsFormDataModel = z.object({
 export const ContactDetailsFormDataValidator = z
   .object({
     phoneNumberAvailable: z.string({
-      required_error: validationErrors.contactInformation.phoneNumberAvailableRequired,
+      error: issue =>
+        issue.input === undefined ? validationErrors.contactInformation.phoneNumberAvailableRequired : undefined,
     }),
     contactNumber: z.string().nullable().optional().default(null),
   })

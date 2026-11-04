@@ -3,9 +3,9 @@ import paths from '../../../constants/paths'
 import { validationErrors } from '../../../constants/validationErrors'
 import { isValidationResult, ValidationResult } from '../../../models/Validation'
 import CurfewReleaseDateService from '../curfew-release-date/service'
-import shouldShowCurfewDayOfRelease from '../../../utils/curfewDayOfReleaseEligibility'
+import shouldShowCurfewDayOfRelease from '../../../utils/order/curfewDayOfReleaseEligibility'
 import { CurfewDayOfReleaseFormDataModel } from './formModel'
-import { STANDARD_CURFEW_TIMES } from '../../../utils/standardCurfewTimes'
+import { STANDARD_CURFEW_TIMES } from '../../../utils/order/standardCurfewTimes'
 import constructModel from './viewModel'
 
 export default class CurfewDayOfReleaseController {

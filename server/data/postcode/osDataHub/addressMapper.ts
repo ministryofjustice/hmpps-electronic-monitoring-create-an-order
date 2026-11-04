@@ -1,7 +1,7 @@
 import { AddressWithoutTypeUPRN } from '../../../models/Address'
 import { OSDataHubAddress, OSDataHubPostcodeResponse } from './osDataHubPostcodeResponse'
-import { toTitleCase } from '../../../utils/utils'
 import logger from '../../../../logger'
+import { toTitleCase } from '../../../utils/strings'
 
 export default class AddressMapper {
   mapToAddresses(data: OSDataHubPostcodeResponse): AddressWithoutTypeUPRN[] {

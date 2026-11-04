@@ -4,6 +4,13 @@ export type Question = {
 
   // Help text to aid the user in answering the question.
   hint?: string
+
+  // Structured guidance shown under the question: an intro, a bullet list and a closing paragraph.
+  guidance?: {
+    intro: string
+    items: string[]
+    outro: string
+  }
 }
 
 type QuestionPageContent<T extends string> = {

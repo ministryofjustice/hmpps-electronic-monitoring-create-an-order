@@ -1,6 +1,6 @@
-import { deserialiseTime } from '../../../../../server/utils/utils'
 import { PageElement } from '../../../page'
 import FormComponent from '../../formComponent'
+import { deserialiseTime } from '../../../../../server/utils/dateTime'
 
 export type CurfewTimetableFormData = {
   day?: string

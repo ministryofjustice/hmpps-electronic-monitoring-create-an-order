@@ -34,4 +34,43 @@ describe('Attachment service', () => {
       })
     })
   })
+
+  describe('updateFileRequired', () => {
+    const input = (fileRequired: string, requiredMessage?: string) => ({
+      accessToken: 'mockToken',
+      orderId: 'mockUid',
+      data: { fileRequired, fileType: 'LICENCE' },
+      requiredMessage,
+    })
+
+    it('asks the user to answer when no option is selected', async () => {
+      const attachmentService = new AttachmentService(mockRestClient)
+
+      const result = await attachmentService.updateFileRequired(input(''))
+
+      expect(mockRestClient.put).not.toHaveBeenCalled()
+      expect(result).toEqual([{ field: 'fileRequired', error: 'Select Yes if you have a document to upload' }])
+    })
+
+    it('uses the caller’s message when no option is selected', async () => {
+      const attachmentService = new AttachmentService(mockRestClient)
+
+      const result = await attachmentService.updateFileRequired(input('', 'Select Yes if you need a new document'))
+
+      expect(mockRestClient.put).not.toHaveBeenCalled()
+      expect(result).toEqual([{ field: 'fileRequired', error: 'Select Yes if you need a new document' }])
+    })
+
+    it('saves the answer', async () => {
+      const attachmentService = new AttachmentService(mockRestClient)
+
+      await attachmentService.updateFileRequired(input('yes'))
+
+      expect(mockRestClient.put).toHaveBeenCalledWith({
+        path: '/api/orders/mockUid/attachments/file-required',
+        data: { fileRequired: true, fileType: 'LICENCE' },
+        token: 'mockToken',
+      })
+    })
+  })
 })

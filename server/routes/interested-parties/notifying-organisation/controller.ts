@@ -4,11 +4,11 @@ import InterestedPartiesStoreService from '../interestedPartiesStoreService'
 import NotifyingOrganisationFormModel, { NotifyingOrganisationInput, NotifyingOrganisationValidator } from './formModel'
 import ViewModel from './viewModel'
 import { ValidationResult } from '../../../models/Validation'
-import { convertZodErrorToValidationError } from '../../../utils/errors'
+import { convertZodErrorToValidationError } from '../../../utils/validation/errors'
 import InterestedPartiesBaseController from '../base/interestedPartiesBaseController'
 import UpdateInterestedPartiesService from '../interestedPartiesService'
 import { InterestedParties } from '../model'
-import { filterNullValues } from '../../../utils/utils'
+import { filterNullValues } from '../../../utils/values'
 
 export default class NotifingOrganisationController extends InterestedPartiesBaseController {
   constructor(

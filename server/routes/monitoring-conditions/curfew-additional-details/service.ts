@@ -4,7 +4,10 @@ import { AuthenticatedRequestInput } from '../../../interfaces/request'
 import CurfewConditionsModel, { CurfewConditions } from '../../../models/CurfewConditions'
 import { ValidationResult } from '../../../models/Validation'
 import { SanitisedError } from '../../../sanitisedError'
-import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../../../utils/errors'
+import {
+  convertZodErrorToValidationError,
+  convertBackendErrorToValidationError,
+} from '../../../utils/validation/errors'
 import { CurfewAdditionalDetailsFormData, CurfewAdditionalDetailsFormDataValidator } from './formModel'
 
 type CurfewAdditionalDetailsInput = AuthenticatedRequestInput & {

@@ -42,8 +42,28 @@ const isYouth = (order: Order): boolean => {
   return !order.deviceWearer.adultAtTimeOfInstallation
 }
 
+const getFixedAddressEligibility = (order: Order, isSentencingAct: boolean): MonitoringTypeEligibility | undefined => {
+  if (!hasFixedAddress(order)) {
+    return undefined
+  }
+
+  if (isYouth(order)) {
+    return {
+      options: ['curfew', 'exclusionZone', 'trail', 'mandatoryAttendance', 'restrictionZone'],
+      message: isSentencingAct ? eligibilityMessagesISR.youthAlcoholExcluded : eligibilityMessages.youthAlcoholExcluded,
+    }
+  }
+
+  return { options: ['curfew', 'exclusionZone', 'trail', 'mandatoryAttendance', 'alcohol', 'restrictionZone'] }
+}
+
 export class DefaultMonitoringEligibilityService {
   getEnabled(order: Order): MonitoringTypeEligibility {
+    const fixedAddressEligibility = getFixedAddressEligibility(order, false)
+    if (fixedAddressEligibility) {
+      return fixedAddressEligibility
+    }
+
     if (order.monitoringConditions.hdc === 'NO') {
       if (order.monitoringConditions.pilot === 'UNKNOWN') {
         return {
@@ -92,6 +112,11 @@ export class DefaultMonitoringEligibilityService {
 
 export class ISRMonitoringEligibilityService {
   getEnabled(order: Order): MonitoringTypeEligibility {
+    const fixedAddressEligibility = getFixedAddressEligibility(order, true)
+    if (fixedAddressEligibility) {
+      return fixedAddressEligibility
+    }
+
     const notifyingOrganisation = order.interestedParties?.notifyingOrganisation
 
     if (isYouth(order)) {

@@ -4,19 +4,20 @@ Node.js/Express TypeScript app (Nunjucks views, GOV.UK/MoJ frontend) for creatin
 
 ## Repo layout
 
-The codebase is migrating from a layered structure to feature folders. **New features must use the feature-folder structure.** Leave existing code where it is unless the task is to migrate it.
+The codebase is migrating from a layered structure to feature folders under `server/routes/`. **New features must use a feature folder in `server/routes/<feature>/`.** Leave existing code where it is unless the task is to migrate it.
 
 ### Target structure (new code)
 
-`server/[feature]/` contains:
+`server/routes/<feature>/` (kebab-case) contains, as needed:
 
-- `[feature].controller.ts` — request handlers
-- `[feature].service.ts` — business logic
-- `[feature].routes.ts` — route definitions, registered in the app setup
-- `[feature].types.ts` — types and Zod schemas
-- `[feature].test.ts` — Jest tests, alongside the code
+- `controller.ts` — request handlers
+- `service.ts` — business logic
+- `formModel.ts` / `viewModel.ts` — Zod form schemas and view models
+- `controller.test.ts`, `viewModel.test.ts` etc. — Jest tests, alongside the code
 
-Features depend on shared utilities, not on each other.
+Feature folders may be nested under a section folder (e.g. `server/routes/installation-and-risk/mappa/`). Routes are registered in the section's `router.ts`. Features depend on shared utilities, not on each other.
+
+Reference examples: `server/routes/return-reasons/`, `server/routes/sentencing-act-selection/`, `server/routes/installation-and-risk/mappa/`.
 
 ### Current structure (legacy, being migrated)
 
@@ -29,7 +30,7 @@ Features depend on shared utilities, not on each other.
 - `server/data/` — API clients. `server/testutils/`, `test/` — Jest helpers, mocks, fixtures.
 - `integration_tests/` — Cypress: `e2e/` specs, `pages/` page objects, `mockApis/` Wiremock stubs, `scenarios/` scenario tests.
 
-When adding a feature, use the feature-folder structure and follow the nearest analogous existing feature for patterns. Once a feature folder has been migrated, use it as the reference.
+When adding a feature, use a `server/routes/<feature>/` folder and follow the nearest analogous existing feature for patterns. Once a feature folder has been migrated, use it as the reference.
 
 ## Architecture
 

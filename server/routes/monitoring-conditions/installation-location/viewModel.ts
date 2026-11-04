@@ -4,9 +4,10 @@ import { Address, AddressTypeEnum } from '../../../models/Address'
 import { InstallationLocation } from '../../../models/InstallationLocation'
 import { InstallationLocationFormData } from './formModel'
 import { ValidationResult } from '../../../models/Validation'
-import { createGovukErrorSummary } from '../../../utils/errors'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
 import FeatureFlags from '../../../utils/featureFlags'
-import { createAddressPreview, getError } from '../../../utils/utils'
+import { getError } from '../../../utils/validation/errorMessages'
+import { createAddressPreview } from '../../../utils/views/displayHelpers'
 
 type InstallationLocationViewModel = ViewModel<InstallationLocation> & {
   primaryAddressView: TextField
@@ -26,7 +27,7 @@ const getPilotPrisonStatus = (order: Order): boolean => {
 }
 
 const createPrimaryAddressView = (addresses: Address[]): string => {
-  const primaryAddress = addresses?.find(address => address.addressType === AddressTypeEnum.Enum.PRIMARY)
+  const primaryAddress = addresses?.find(address => address.addressType === AddressTypeEnum.enum.PRIMARY)
   return primaryAddress ? createAddressPreview(primaryAddress) : ''
 }
 

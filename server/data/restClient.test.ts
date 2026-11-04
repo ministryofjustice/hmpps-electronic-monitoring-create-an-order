@@ -1,5 +1,7 @@
 import nock from 'nock'
+import bunyan from 'bunyan'
 
+import logger from '../../logger'
 import { AgentConfig } from '../config'
 import RestClient from './restClient'
 
@@ -13,6 +15,16 @@ const restClient = new RestClient('api-name', {
 })
 
 describe.each(['get', 'patch', 'post', 'put', 'delete'] as const)('Method: %s', method => {
+  let warnSpy: jest.SpyInstance
+
+  beforeEach(() => {
+    warnSpy = jest.spyOn(logger, 'warn').mockImplementation(() => null)
+  })
+
+  afterEach(() => {
+    warnSpy.mockRestore()
+  })
+
   it('should return response body', async () => {
     nock('http://localhost:8080', {
       reqheaders: { authorization: 'Bearer token-1' },
@@ -147,7 +159,13 @@ describe.each(['get', 'patch', 'post', 'put', 'delete'] as const)('Method: %s', 
       reqheaders: { authorization: 'Bearer token-1' },
     })
       [method]('/api/test')
-      .reply(400)
+      .reply(
+        400,
+        { errorCode: 'ORDER_INVALID', privateValue: 'private-response-body' },
+        {
+          'x-private-header': 'private-response-header',
+        },
+      )
 
     await expect(
       restClient[method]({
@@ -159,6 +177,22 @@ describe.each(['get', 'patch', 'post', 'put', 'delete'] as const)('Method: %s', 
     ).rejects.toThrow('Bad Request')
 
     expect(nock.isDone()).toBe(true)
+
+    expect(warnSpy).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        api: 'api-name',
+        method: method.toUpperCase(),
+        path: '/test',
+        status: 400,
+        errorCode: 'ORDER_INVALID',
+        err: expect.any(Error),
+      }),
+      'Error calling api-name',
+    )
+    const fields = warnSpy.mock.calls[warnSpy.mock.calls.length - 1][0]
+    const loggedFields = { ...fields, err: bunyan.stdSerializers.err(fields.err) }
+    expect(JSON.stringify(loggedFields)).not.toContain('private-response-body')
+    expect(JSON.stringify(loggedFields)).not.toContain('private-response-header')
   })
 
   it('should explicitly retry on 429 Too Many Requests', async () => {

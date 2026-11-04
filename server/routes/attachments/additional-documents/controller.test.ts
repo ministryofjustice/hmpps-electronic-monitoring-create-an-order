@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from 'express'
 import { Readable } from 'stream'
 import { v4 as uuidv4 } from 'uuid'
-import { getMockOrder } from '../../../../test/mocks/mockOrder'
+import { createInterestedParties, createMonitoringConditions, getMockOrder } from '../../../../test/mocks/mockOrder'
 import HmppsAuditClient from '../../../data/hmppsAuditClient'
 import RestClient from '../../../data/restClient'
 import AttachmentType from '../../../models/AttachmentType'
@@ -205,7 +205,7 @@ describe('AttachmentController', () => {
 
   describe('view upload file page', () => {
     it('order is submitted, redirect to summary page', async () => {
-      req.order!.status = OrderStatusEnum.Enum.SUBMITTED
+      req.order!.status = OrderStatusEnum.enum.SUBMITTED
       req.params.fileType = 'licence'
       await controller.uploadFileView(req, res, next)
 
@@ -221,6 +221,34 @@ describe('AttachmentController', () => {
         expect.objectContaining({
           fileType: 'licence',
         }),
+      )
+    })
+  })
+
+  describe('revocation wording', () => {
+    it('flags revocation paperwork for a past-dated probation revocation', async () => {
+      req.params.fileType = 'licence'
+      req.order = getMockOrder({
+        id: mockId,
+        type: 'REVOCATION',
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'PROBATION' }),
+        monitoringConditions: createMonitoringConditions({ startDate: '2020-01-01T00:00:00.000Z' }),
+      })
+      await controller.uploadFileView(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/order/attachments/edit',
+        expect.objectContaining({ revocationPaperwork: true }),
+      )
+    })
+
+    it('does not flag revocation paperwork for other orders', async () => {
+      req.params.fileType = 'licence'
+      await controller.uploadFileView(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/order/attachments/edit',
+        expect.objectContaining({ revocationPaperwork: false }),
       )
     })
   })

@@ -12,7 +12,7 @@ const mockDapoId = uuidv4()
 const mockDate = new Date(2025, 0, 1)
 
 context('offence delete page', () => {
-  let mockOrder: Order
+  let mockOrder: Partial<Order>
   const deleteOffencePath = `/offence/delete/${mockOffenceId}`
   const deleteDapoPath = `/dapo/delete/${mockDapoId}`
   beforeEach(() => {

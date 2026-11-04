@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import HaveCourtOrderController from './court-order/controller'
+import NewDocumentController from './new-document/controller'
 import paths from '../../constants/paths'
 import { Services } from '../../services'
 import HavePhotoController from './photo-id/controller'
@@ -17,15 +17,15 @@ const createAttachmentRouter = (
     taskListService,
     orderChecklistService,
   )
-  const haveCourtOrderController = new HaveCourtOrderController(attachmentService, taskListService)
   const havePhotoController = new HavePhotoController(attachmentService, taskListService)
+  const newDocumentController = new NewDocumentController(attachmentService, taskListService)
 
   get(paths.ATTACHMENT.BASE_URL, attachmentsController.view)
   get(paths.ATTACHMENT.FILE_VIEW, attachmentsController.uploadFileView)
   post(paths.ATTACHMENT.FILE_VIEW, attachmentsController.uploadFile)
   get(paths.ATTACHMENT.DOWNLOAD_FILE, attachmentsController.downloadFile)
-  get(paths.ATTACHMENT.HAVE_COURT_ORDER, haveCourtOrderController.view)
-  post(paths.ATTACHMENT.HAVE_COURT_ORDER, haveCourtOrderController.update)
+  get(paths.ATTACHMENT.NEW_DOCUMENT, newDocumentController.view)
+  post(paths.ATTACHMENT.NEW_DOCUMENT, newDocumentController.update)
   get(paths.ATTACHMENT.HAVE_PHOTO, havePhotoController.view)
   post(paths.ATTACHMENT.HAVE_PHOTO, havePhotoController.update)
 

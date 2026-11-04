@@ -80,5 +80,32 @@ context('About the device wearer', () => {
         page.form.lastNameField.shouldHaveValidationMessage('Last name must be 200 characters or less')
       })
     })
+
+    context('When I enter a first name and last name as a space', () => {
+      it('should display relevant errors', () => {
+        const page = Page.visit(AboutDeviceWearerPage, { orderId: mockOrderId })
+
+        page.form.fillInWith({
+          firstName: ' ',
+          middleName: '',
+          lastName: ' ',
+          alias: 'Barty',
+          dob: new Date('2020-01-01T00:00:00.000Z'),
+          is18: false,
+          sex: 'Male',
+          genderIdentity: 'Male',
+          disabilities: 'The device wearer does not have any of the disabilities or health conditions listed',
+          interpreterRequired: false,
+        })
+
+        page.form.saveAndContinueButton.click()
+
+        page.errorSummary.shouldHaveError("Enter device wearer's first name")
+        page.errorSummary.shouldHaveError("Enter device wearer's last name")
+
+        page.form.firstNameField.shouldHaveValidationMessage("Enter device wearer's first name")
+        page.form.lastNameField.shouldHaveValidationMessage("Enter device wearer's last name")
+      })
+    })
   })
 })

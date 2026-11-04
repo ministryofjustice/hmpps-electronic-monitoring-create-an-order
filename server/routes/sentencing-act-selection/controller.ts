@@ -4,9 +4,9 @@ import { validationErrors } from '../../constants/validationErrors'
 import YesNoQuestionPageController from '../baseControllers/yes-no-question-page/controller'
 import SentencingActService from './SentencingActService'
 import { isValidationResult } from '../../models/Validation'
-import { isNullOrUndefined } from '../../utils/utils'
 import FeatureFlags from '../../utils/featureFlags'
-import isVariationType from '../../utils/isVariationType'
+import isVariationType from '../../utils/order/isVariationType'
+import { isNullOrUndefined } from '../../utils/values'
 
 export default class SentencingActSelection extends YesNoQuestionPageController {
   constructor(private readonly sentencingActService: SentencingActService) {

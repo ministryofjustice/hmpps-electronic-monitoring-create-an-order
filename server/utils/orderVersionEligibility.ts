@@ -1,6 +1,6 @@
 import { Order } from '../models/Order'
 import { StatusUpdate } from '../models/StatusUpdate'
-import isVariationType from './isVariationType'
+import isVariationType from './order/isVariationType'
 
 export const ORDER_CHANGE_STATUS_CHANGED_MESSAGE =
   'The status of this form has changed. Check its current status before making changes.'

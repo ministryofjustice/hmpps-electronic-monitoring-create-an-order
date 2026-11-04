@@ -6,7 +6,7 @@ import { isValidationResult } from '../../../models/Validation'
 import paths from '../../../constants/paths'
 import InstallationLocationService from './service'
 import { Order } from '../../../models/Order'
-import isVariationType from '../../../utils/isVariationType'
+import isVariationType from '../../../utils/order/isVariationType'
 
 export default class InstallationLocationController {
   constructor(

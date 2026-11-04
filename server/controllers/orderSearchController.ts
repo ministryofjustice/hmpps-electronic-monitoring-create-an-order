@@ -21,6 +21,15 @@ export default class OrderSearchController {
     private readonly orderSearchService: OrderSearchService,
   ) {}
 
+  home: RequestHandler = async (req: Request, res: Response) => {
+    const cohort = res.locals.user.cohort?.cohort
+    if (cohort === 'PROBATION') {
+      res.redirect('/search')
+      return
+    }
+    res.redirect('/drafts')
+  }
+
   list: RequestHandler = async (req: Request, res: Response) => {
     await this.auditService.logPageView(Page.ORDER_SEARCH_PAGE, {
       who: res.locals.user.username,

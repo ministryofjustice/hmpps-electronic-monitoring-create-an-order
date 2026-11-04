@@ -1,18 +1,15 @@
 import { Order } from '../models/Order'
 import paths from '../constants/paths'
 import { AddressType } from '../models/Address'
-import {
-  convertBooleanToEnum,
-  hasOptionalVariationSectionIsHOCourt,
-  isNotNullOrEmptyString,
-  isNotNullOrUndefined,
-} from '../utils/utils'
 import AttachmentType from '../models/AttachmentType'
 import FeatureFlags from '../utils/featureFlags'
-import isVariationType from '../utils/isVariationType'
+import isVariationType from '../utils/order/isVariationType'
 import { getOrderCohort } from '../models/OrderCohort'
 import { getRiskInformationTasks } from '../routes/installation-and-risk/riskInformationTasks'
 import { TaskListCohortDefinition, taskListCohortDefinitions } from './taskListCohorts'
+import hasOptionalVariationSectionIsHOCourt from '../utils/order/optionalVariationSections'
+import { convertBooleanToEnum, isNotNullOrEmptyString, isNotNullOrUndefined } from '../utils/values'
+import { isPastDatedProbationVariation } from '../utils/order/orderStartDate'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
@@ -64,8 +61,7 @@ const PAGES = {
   licenceUpload: 'LICENCE_ATTACHMENT',
   photoUpload: 'PHOTO_ATTACHMENT',
   havePhoto: 'ATTACHMENTS_HAVE_PHOTO',
-  courtOrderUpload: 'COURT_ORDER_ATTACHMENT',
-  haveCourtOrder: 'ATTACHMENTS_HAVE_COURT_ORDER',
+  newDocument: 'ATTACHMENTS_NEW_DOCUMENT',
   attachments: 'CHECK_ANSWERS_ATTACHMENTS',
   variationDetails: 'VARIATION_DETAILS',
   installationLocation: 'INSTALLATION_LOCATION',
@@ -185,34 +181,33 @@ const getInterestedPartiesTasks = (order: Order, cohortDefinition: TaskListCohor
 const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCohortDefinition): Task[] => {
   const tasks: Task[] = []
 
-  if (cohortDefinition.attachment === 'COURT_ORDER') {
+  if (isPastDatedProbationVariation(order)) {
     tasks.push(
       {
         section: SECTIONS.additionalDocuments,
-        name: PAGES.haveCourtOrder,
-        path: paths.ATTACHMENT.HAVE_COURT_ORDER,
-        state: hasOptionalVariationSectionIsHOCourt(order) ? 'OPTIONAL' : 'REQUIRED',
-        completed: isNotNullOrUndefined(order.orderParameters?.haveCourtOrder),
+        name: PAGES.newDocument,
+        path: paths.ATTACHMENT.NEW_DOCUMENT,
+        state: STATES.required,
+        completed: isNotNullOrUndefined(order.orderParameters?.haveLicence),
       },
       {
         section: SECTIONS.additionalDocuments,
-        name: PAGES.courtOrderUpload,
-        path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'court_order'),
+        name: PAGES.licenceUpload,
+        path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'licence'),
         state: convertBooleanToEnum<State>(
-          order.orderParameters?.haveCourtOrder || null,
+          order.orderParameters?.haveLicence ?? null,
           STATES.cantBeStarted,
           STATES.required,
           STATES.notRequired,
         ),
-        completed:
-          doesOrderHaveDocument(order, AttachmentType.COURT_ORDER) || order.orderParameters?.haveCourtOrder === false,
+        completed: doesOrderHaveDocument(order, AttachmentType.LICENCE) || order.orderParameters?.haveLicence === false,
       },
     )
   } else if (cohortDefinition.attachment === 'LICENCE') {
     tasks.push({
       section: SECTIONS.additionalDocuments,
       name: PAGES.licenceUpload,
-      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'licence'),
+      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'licence'),
       state: hasOptionalVariationSectionIsHOCourt(order) ? 'OPTIONAL' : 'REQUIRED',
       completed: doesOrderHaveDocument(order, AttachmentType.LICENCE),
     })
@@ -229,7 +224,7 @@ const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCoho
     {
       section: SECTIONS.additionalDocuments,
       name: PAGES.photoUpload,
-      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence|court_order)', 'photo_Id'),
+      path: paths.ATTACHMENT.FILE_VIEW.replace(':fileType(photo_Id|licence)', 'photo_Id'),
       state: convertBooleanToEnum<State>(
         order.orderParameters?.havePhoto || null,
         STATES.cantBeStarted,

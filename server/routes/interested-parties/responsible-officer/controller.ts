@@ -1,7 +1,7 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../../constants/paths'
 import ResponsibleOfficerFormModel, { ResponsibleOfficer, ResponsibleOfficerFormValidator } from './formModel'
-import { convertZodErrorToValidationError } from '../../../utils/errors'
+import { convertZodErrorToValidationError } from '../../../utils/validation/errors'
 import { ValidationResult } from '../../../models/Validation'
 import ViewModel from './viewModel'
 import InterestedPartiesStoreService from '../interestedPartiesStoreService'

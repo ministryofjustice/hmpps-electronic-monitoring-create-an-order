@@ -671,7 +671,7 @@ context('Order Summary', () => {
         page.timeline.formVariationComponent.element.should('exist')
         page.timeline.formVariationComponent.bylineContains('Person Two')
         page.timeline.formVariationComponent.resultDateIs('3 January 2025 at 10:30am')
-        page.timeline.formVariationComponent.variationTextIs('Change to an order')
+        page.timeline.formVariationComponent.variationTextIs('Other change')
         page.timeline.formVariationComponent.bylineContains('From Whitemoor Prison')
         page.timeline.formSubmittedComponent.description
           .contains('View submitted form')
@@ -765,7 +765,7 @@ context('Order Summary', () => {
       page.timeline.formVariationComponent.element.should('exist')
       page.timeline.formVariationComponent.bylineContains('Person Two')
       page.timeline.formVariationComponent.resultDateIs('3 January 2025 at 10:30am')
-      page.timeline.formVariationComponent.variationTextIs('Change to an order')
+      page.timeline.formVariationComponent.variationTextIs('Other change')
       page.timeline.formVariationComponent.description.contains('You are viewing this version of the form')
       page.timeline.formVariationComponent.bylineContains('From Whitemoor Prison')
     })

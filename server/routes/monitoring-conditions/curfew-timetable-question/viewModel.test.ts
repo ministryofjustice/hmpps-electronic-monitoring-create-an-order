@@ -1,6 +1,6 @@
 import { getMockOrder, createCurfewConditions } from '../../../../test/mocks/mockOrder'
 import { validationErrors } from '../../../constants/validationErrors'
-import { createStandardCurfewSchedule, STANDARD_CURFEW_ADDRESS } from '../../../utils/standardCurfewTimes'
+import { createStandardCurfewSchedule, STANDARD_CURFEW_ADDRESS } from '../../../utils/order/standardCurfewTimes'
 import constructModel from './viewModel'
 
 describe('curfew timetable question view model', () => {

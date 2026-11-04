@@ -32,7 +32,7 @@ describe('AddressService', () => {
         hasAnotherAddress: 'false',
       }
       const mockApiResponse: Address = {
-        addressType: AddressTypeEnum.Enum.PRIMARY,
+        addressType: AddressTypeEnum.enum.PRIMARY,
         addressLine1: 'Mock Address Line 1',
         addressLine2: 'Mock Address Line 2',
         addressLine3: 'Mock Address Line 3',

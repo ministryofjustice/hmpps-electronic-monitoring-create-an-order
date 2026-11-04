@@ -3,15 +3,16 @@ import { NotFound } from 'http-errors'
 import { v4 as uuidv4 } from 'uuid'
 import jwt from 'jsonwebtoken'
 import routes from '../index'
-import nunjucksSetup from '../../utils/nunjucksSetup'
+import nunjucksSetup from '../../utils/views/nunjucksSetup'
 import errorHandler from '../../errorHandler'
 import * as auth from '../../authentication/auth'
 import type { Services } from '../../services'
 import AuditService from '../../services/auditService'
-import { HmppsUser } from '../../interfaces/hmppsUser'
+import { HmppsUser, ProbationUser } from '../../interfaces/hmppsUser'
 import setUpWebSession from '../../middleware/setUpWebSession'
 import HmppsAuditClient from '../../data/hmppsAuditClient'
 import authorisationMiddleware, { cemoAuthorisedRoles } from '../../middleware/authorisationMiddleware'
+import { CohortEnum } from '../../models/UserCohort'
 
 jest.mock('../../services/auditService')
 jest.mock('../../data/hmppsAuditClient')
@@ -26,6 +27,17 @@ export const user: HmppsUser = {
   displayName: 'First Last',
   authSource: 'nomis',
   staffId: 1234,
+  userRoles: [],
+}
+
+export const probationUser: ProbationUser = {
+  name: 'FIRST LAST',
+  userId: 'id',
+  token: createToken(['ROLE_EM_CEMO__CREATE_ORDER']),
+  username: 'user1',
+  displayName: 'First Last',
+  authSource: 'delius',
+  cohort: { cohort: CohortEnum.enum.PROBATION },
   userRoles: [],
 }
 

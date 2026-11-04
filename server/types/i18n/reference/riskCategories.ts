@@ -8,6 +8,8 @@ type RiskCategories = ReferenceData<
   | 'OTHER_OCCUPANTS'
   | 'OTHER_RISKS'
   | 'SAFEGUARDING_ISSUE'
+  | 'NO_RISK_AT_ADDRESS'
+  | 'RISK_AT_ADDRESS_UNKNOWN'
   | 'UNDER_18'
 >
 
@@ -21,6 +23,8 @@ type RiskCategoriesDDv5 = ReferenceData<
   | 'SAFEGUARDING_ADULT'
   | 'SAFEGUARDING_CHILD'
   | 'SAFEGUARDING_DOMESTIC_ABUSE'
+  | 'NO_RISK_AT_ADDRESS'
+  | 'RISK_AT_ADDRESS_UNKNOWN'
   | 'UNDER_18'
 >
 

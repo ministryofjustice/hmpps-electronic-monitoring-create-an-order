@@ -1,6 +1,6 @@
 import { ValidationResult } from '../../models/Validation'
 import { FindAddress, FindAddressForm, FindAddressValidator } from './find-address/formModel'
-import { convertZodErrorToValidationError } from '../../utils/errors'
+import { convertZodErrorToValidationError } from '../../utils/validation/errors'
 import { AddressType, AddressWithoutTypeUPRN, AddressWithUPRN } from '../../models/Address'
 import { PostcodeLookupClient } from '../../data/postcode/PostcodeLookupClient'
 

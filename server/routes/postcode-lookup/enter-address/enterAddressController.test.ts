@@ -12,7 +12,7 @@ jest.mock('../../../data/restClient')
 jest.mock('../postcodeService')
 
 const primaryAddress = {
-  addressType: AddressTypeEnum.Enum.PRIMARY,
+  addressType: AddressTypeEnum.enum.PRIMARY,
   addressLine1: '',
   addressLine2: '',
   addressLine3: '',
@@ -21,7 +21,7 @@ const primaryAddress = {
 }
 
 const installationAddress = {
-  addressType: AddressTypeEnum.Enum.INSTALLATION,
+  addressType: AddressTypeEnum.enum.INSTALLATION,
   addressLine1: '',
   addressLine2: '',
   addressLine3: '',

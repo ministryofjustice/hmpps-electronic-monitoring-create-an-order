@@ -5,7 +5,7 @@ import AddressModel, { Address } from '../models/Address'
 import { AddressFormData, AddressFormDataValidator } from '../models/form-data/address'
 import { ValidationResult } from '../models/Validation'
 import { SanitisedError } from '../sanitisedError'
-import { convertBackendErrorToValidationError, convertZodErrorToValidationError } from '../utils/errors'
+import { convertBackendErrorToValidationError, convertZodErrorToValidationError } from '../utils/validation/errors'
 
 export type UpdateAddressRequest = AuthenticatedRequestInput & {
   orderId: string

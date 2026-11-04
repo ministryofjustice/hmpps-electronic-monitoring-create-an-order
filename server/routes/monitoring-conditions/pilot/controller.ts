@@ -5,7 +5,7 @@ import { validationErrors } from '../../../constants/validationErrors'
 import { ValidationResult } from '../../../models/Validation'
 import paths from '../../../constants/paths'
 import { PilotFormDataModel } from './formModel'
-import isOrderDataDictionarySameOrAbove from '../../../utils/dataDictionaryVersionComparer'
+import isOrderDataDictionarySameOrAbove from '../../../utils/order/dataDictionaryVersionComparer'
 
 export default class PilotController {
   constructor(private readonly store: MonitoringConditionsStoreService) {}

@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
 import OrderTasksPage from '../../../pages/order/summary'
+import { probationChangeOrderStub } from '../../../utils/data/probationChangeOrder'
 
 const mockOrderId = uuidv4()
 
@@ -33,10 +34,7 @@ context('Attachments', () => {
         // Header
         page.header.userName().should('contain.text', 'J. Smith')
         page.header.phaseBanner().should('contain.text', 'dev')
-        page.submittedBanner.should(
-          'contain',
-          'You are viewing a submitted form. This form was submitted on the 14 December 2024',
-        )
+        page.submittedBanner.should('contain', 'This form was submitted on the 14 December 2024')
 
         // Licence Task
         page.attachmentsSection.shouldHaveItems([
@@ -68,6 +66,34 @@ context('Attachments', () => {
         page.backToSummaryButton.click()
 
         Page.verifyOnPage(OrderTasksPage)
+      })
+    })
+
+    context('Viewing a submitted probation change to an order that had already started', () => {
+      beforeEach(() => {
+        cy.task('reset')
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+        cy.task(
+          'stubCemoGetOrder',
+          probationChangeOrderStub({
+            id: mockOrderId,
+            status: 'SUBMITTED',
+            haveLicence: true,
+            licenceFileName: 'new-licence.pdf',
+          }),
+        )
+        cy.signIn()
+      })
+
+      it('shows the new document answer and uploaded licence without change links', () => {
+        const page = Page.visit(AttachmentSummaryPage, { orderId: mockOrderId }, {}, 'View answers')
+
+        page.attachmentsSection.shouldHaveItems([
+          { key: 'Do you need to upload a new document?', value: 'Yes' },
+          { key: 'Upload a copy of the licence or court order document', value: 'new-licence.pdf' },
+          { key: 'Do you have a photo to upload?', value: 'No' },
+        ])
+        page.changeLinks.should('not.exist')
       })
     })
   })

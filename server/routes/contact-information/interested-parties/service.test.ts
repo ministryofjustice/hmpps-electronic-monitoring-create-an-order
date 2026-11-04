@@ -32,9 +32,9 @@ describe('Interested parties service', () => {
       mockRestClient.put.mockResolvedValue(mockApiResponse)
 
       const mockRequestData = {
-        notifyingOrganisation: NotifyingOrganisationEnum.Enum.PRISON,
+        notifyingOrganisation: NotifyingOrganisationEnum.enum.PRISON,
         prison: 'FELTHAM_PRISON',
-        responsibleOrganisation: ResponsibleOrganisationEnum.Enum.PROBATION,
+        responsibleOrganisation: ResponsibleOrganisationEnum.enum.PROBATION,
         responsibleOrgProbationRegion: 'NORTH_EAST',
         notifyingOrganisationEmail: 'notifying@organisation',
         responsibleOrganisationEmail: 'responsible@organisation',
@@ -90,9 +90,9 @@ describe('Interested parties service', () => {
       mockRestClient.put.mockResolvedValue(mockApiResponse)
 
       const mockRequestData = {
-        notifyingOrganisation: NotifyingOrganisationEnum.Enum.CROWN_COURT,
+        notifyingOrganisation: NotifyingOrganisationEnum.enum.CROWN_COURT,
         crownCourt: 'BRISTOL_CROWN_COURT',
-        responsibleOrganisation: ResponsibleOrganisationEnum.Enum.POLICE,
+        responsibleOrganisation: ResponsibleOrganisationEnum.enum.POLICE,
         policeArea: 'CHESHIRE',
         notifyingOrganisationEmail: 'notifying@organisation',
         responsibleOrganisationEmail: 'responsible@organisation',
@@ -148,9 +148,9 @@ describe('Interested parties service', () => {
       mockRestClient.put.mockResolvedValue(mockApiResponse)
 
       const mockRequestData = {
-        notifyingOrganisation: NotifyingOrganisationEnum.Enum.YOUTH_CUSTODY_SERVICE,
+        notifyingOrganisation: NotifyingOrganisationEnum.enum.YOUTH_CUSTODY_SERVICE,
         youthCustodyServiceRegion: 'MIDLANDS',
-        responsibleOrganisation: ResponsibleOrganisationEnum.Enum.YJS,
+        responsibleOrganisation: ResponsibleOrganisationEnum.enum.YJS,
         yjsRegion: 'YORKSHIRE_AND_HUMBERSIDE',
         notifyingOrganisationEmail: 'notifying@organisation',
         responsibleOrganisationEmail: 'responsible@organisation',

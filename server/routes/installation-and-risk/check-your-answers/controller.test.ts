@@ -9,6 +9,7 @@ import OrderChecklistService from '../../../services/orderChecklistService'
 import mappaPageContent from '../../../i18n/en/pages/mappa'
 import isMappaPageContent from '../../../i18n/en/pages/isMappa'
 import SectionService from '../../../services/sectionsService'
+import detailsOfInstallationPageContent from '../../../i18n/en/pages/details-of-installation'
 
 jest.mock('../../../services/auditService')
 jest.mock('../../../services/orderService')
@@ -25,6 +26,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
   let controller: CheckAnswersController
   let mockedSectionService: jest.Mocked<SectionService>
   const { questions } = installationAndRiskPageContent
+  const detailsOfInstallationQuestions = detailsOfInstallationPageContent.questions
   const isMappaQuestions = isMappaPageContent.questions
   const mappaQuestions = mappaPageContent.questions
   const mockOrderChecklistService = {
@@ -70,7 +72,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         },
         {
           key: {
-            text: questions.possibleRisk.text,
+            text: detailsOfInstallationQuestions.possibleRisk.text,
           },
           value: {
             html: '',
@@ -78,16 +80,16 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.possibleRisk.text.toLowerCase(),
+                visuallyHiddenText: detailsOfInstallationQuestions.possibleRisk.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.riskCategory.text,
+            text: detailsOfInstallationQuestions.riskAtAddress.text,
           },
           value: {
             html: '',
@@ -95,26 +97,26 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.riskCategory.text.toLowerCase(),
+                visuallyHiddenText: detailsOfInstallationQuestions.riskAtAddress.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.riskDetails.text,
+            text: detailsOfInstallationQuestions.otherRisks.text,
           },
           value: {
-            text: '',
+            text: 'No',
           },
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.OTHER_RISKS.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.riskDetails.text.toLowerCase(),
+                visuallyHiddenText: detailsOfInstallationQuestions.otherRisks.text.toLowerCase(),
               },
             ],
           },
@@ -167,7 +169,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         },
         {
           key: {
-            text: questions.possibleRisk.text,
+            text: detailsOfInstallationQuestions.possibleRisk.text,
           },
           value: {
             html: 'Offensive towards someone because of their sex or gender',
@@ -175,16 +177,16 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.possibleRisk.text.toLowerCase(),
+                visuallyHiddenText: detailsOfInstallationQuestions.possibleRisk.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.riskCategory.text,
+            text: detailsOfInstallationQuestions.riskAtAddress.text,
           },
           value: {
             html: '',
@@ -192,16 +194,16 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.riskCategory.text.toLowerCase(),
+                visuallyHiddenText: detailsOfInstallationQuestions.riskAtAddress.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.riskDetails.text,
+            text: detailsOfInstallationQuestions.otherRisks.text,
           },
           value: {
             text: 'some risk details',
@@ -209,9 +211,9 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.OTHER_RISKS.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.riskDetails.text.toLowerCase(),
+                visuallyHiddenText: detailsOfInstallationQuestions.otherRisks.text.toLowerCase(),
               },
             ],
           },
@@ -273,7 +275,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         },
         {
           key: {
-            text: questions.possibleRisk.text,
+            text: detailsOfInstallationQuestions.possibleRisk.text,
           },
           value: {
             html: 'Offensive towards someone because of their sex or gender',
@@ -281,16 +283,16 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.possibleRisk.text.toLowerCase(),
+                visuallyHiddenText: detailsOfInstallationQuestions.possibleRisk.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.riskCategory.text,
+            text: detailsOfInstallationQuestions.riskAtAddress.text,
           },
           value: {
             html: '',
@@ -298,16 +300,16 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.riskCategory.text.toLowerCase(),
+                visuallyHiddenText: detailsOfInstallationQuestions.riskAtAddress.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.riskDetails.text,
+            text: detailsOfInstallationQuestions.otherRisks.text,
           },
           value: {
             text: 'some risk details',
@@ -315,9 +317,9 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.OTHER_RISKS.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.riskDetails.text.toLowerCase(),
+                visuallyHiddenText: detailsOfInstallationQuestions.otherRisks.text.toLowerCase(),
               },
             ],
           },
@@ -385,7 +387,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
         },
         {
           key: {
-            text: questions.possibleRisk.text,
+            text: detailsOfInstallationQuestions.possibleRisk.text,
           },
           value: {
             html: 'Offensive towards someone because of their sex or gender',
@@ -393,16 +395,16 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.possibleRisk.text.toLowerCase(),
+                visuallyHiddenText: detailsOfInstallationQuestions.possibleRisk.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.riskCategory.text,
+            text: detailsOfInstallationQuestions.riskAtAddress.text,
           },
           value: {
             html: '',
@@ -410,16 +412,16 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.riskCategory.text.toLowerCase(),
+                visuallyHiddenText: detailsOfInstallationQuestions.riskAtAddress.text.toLowerCase(),
               },
             ],
           },
         },
         {
           key: {
-            text: questions.riskDetails.text,
+            text: detailsOfInstallationQuestions.otherRisks.text,
           },
           value: {
             text: 'some risk details',
@@ -427,9 +429,9 @@ describe('InstallationAndRiskCheckAnswersController', () => {
           actions: {
             items: [
               {
-                href: paths.INSTALLATION_AND_RISK.BASE_URL.replace(':orderId', order.id),
+                href: paths.INSTALLATION_AND_RISK.OTHER_RISKS.replace(':orderId', order.id),
                 text: 'Change',
-                visuallyHiddenText: questions.riskDetails.text.toLowerCase(),
+                visuallyHiddenText: detailsOfInstallationQuestions.otherRisks.text.toLowerCase(),
               },
             ],
           },

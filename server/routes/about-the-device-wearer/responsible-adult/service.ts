@@ -6,7 +6,10 @@ import DeviceWearerResponsibleAdultModel, {
 } from '../../../models/DeviceWearerResponsibleAdult'
 import { ValidationResult } from '../../../models/Validation'
 import { SanitisedError } from '../../../sanitisedError'
-import { convertBackendErrorToValidationError, convertZodErrorToValidationError } from '../../../utils/errors'
+import {
+  convertBackendErrorToValidationError,
+  convertZodErrorToValidationError,
+} from '../../../utils/validation/errors'
 
 type UpdateDeviceWearerResponsibleAdultRequestInput = AuthenticatedRequestInput & {
   orderId: string

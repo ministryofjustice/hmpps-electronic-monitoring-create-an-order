@@ -1,7 +1,7 @@
 import paths from '../../constants/paths'
 import { Order } from '../../models/Order'
 import { getRiskInformationFlow, RiskInformationPage, riskInformationPages } from '../../services/riskInformationFlow'
-import { hasOptionalVariationSectionIsHOCourt } from '../../utils/utils'
+import hasOptionalVariationSectionIsHOCourt from '../../utils/order/optionalVariationSections'
 
 type RiskInformationTaskState = 'REQUIRED' | 'NOT_REQUIRED' | 'OPTIONAL'
 
@@ -41,11 +41,12 @@ const riskInformationTaskDefinitions: Record<RiskInformationPage, RiskInformatio
     paths.INSTALLATION_AND_RISK.DAPO,
     order => order.dapoClauses.length > 0,
   ),
-  [riskInformationPages.detailsOfInstallation]: task(
-    riskInformationPages.detailsOfInstallation,
-    paths.INSTALLATION_AND_RISK.DETAILS_OF_INSTALLATION,
-    order => order.detailsOfInstallation !== null && order.detailsOfInstallation !== undefined,
-  ),
+  [riskInformationPages.detailsOfInstallation]: order =>
+    task(
+      riskInformationPages.detailsOfInstallation,
+      paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR,
+      it => it.detailsOfInstallation !== null && it.detailsOfInstallation !== undefined,
+    )(order),
   [riskInformationPages.isMappa]: task(
     riskInformationPages.isMappa,
     paths.INSTALLATION_AND_RISK.IS_MAPPA,

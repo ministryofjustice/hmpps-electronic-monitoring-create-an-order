@@ -1,17 +1,8 @@
 import paths from '../../../constants/paths'
-import {
-  convertToTitleCase,
-  createAddressPreview,
-  formatDateTime,
-  isNotNullOrUndefined,
-  isNullOrUndefined,
-  lookup,
-  trimSeconds,
-} from '../../../utils/utils'
 import { AddressType, AddressTypeEnum } from '../../../models/Address'
 import { CurfewSchedule, CurfewTimetable } from '../../../models/CurfewTimetable'
 import { Order } from '../../../models/Order'
-import shouldShowCurfewDayOfRelease from '../../../utils/curfewDayOfReleaseEligibility'
+import shouldShowCurfewDayOfRelease from '../../../utils/order/curfewDayOfReleaseEligibility'
 import {
   createAddressAnswer,
   createDateAnswer,
@@ -19,30 +10,30 @@ import {
   createMultipleChoiceAnswer,
   createAnswer,
   AnswerOptions,
-} from '../../../utils/checkYourAnswers'
+} from '../../../utils/views/checkYourAnswers'
 import I18n from '../../../types/i18n'
-import isOrderDataDictionarySameOrAbove from '../../../utils/dataDictionaryVersionComparer'
+import isOrderDataDictionarySameOrAbove from '../../../utils/order/dataDictionaryVersionComparer'
 import { notifyingOrganisationCourts } from '../../../models/NotifyingOrganisation'
+import { convertToTitleCase } from '../../../utils/strings'
+import { createAddressPreview, lookup } from '../../../utils/views/displayHelpers'
+import { formatDateTime, trimSeconds } from '../../../utils/dateTime'
+import { isNotNullOrUndefined, isNullOrUndefined } from '../../../utils/values'
 
 const createMonitoringOrderTypeDescriptionAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const answers = []
   const data = order.monitoringConditions
-  // this logic may be required later so commenting
-  // const notifyingOrg = order.interestedParties?.notifyingOrganisation
-  // if (
-  //   !(notifyingOrg === 'PRISON' || notifyingOrg === 'YOUTH_CUSTODY_SERVICE' || notifyingOrg === 'HOME_OFFICE') &&
-  //   data.orderType !== null
-  // ) {
-  //   const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE
-  //   answers.push(
-  //     createAnswer(
-  //       'What is the order type?',
-  //       lookup(content.reference.orderTypes, data.orderType),
-  //       path.replace(':orderId', order.id),
-  //       answerOpts,
-  //     ),
-  //   )
-  // }
+  const notifyingOrg = order.interestedParties?.notifyingOrganisation
+  if (notifyingOrg === 'PROBATION' && data.orderType !== null) {
+    const path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.ORDER_TYPE
+    answers.push(
+      createAnswer(
+        content.pages.monitoringConditions.questions.orderType.text,
+        lookup(content.reference.orderTypes, data.orderType),
+        path.replace(':orderId', order.id),
+        answerOpts,
+      ),
+    )
+  }
 
   if (data.sentenceType && data.sentenceType !== null) {
     const question =
@@ -200,7 +191,7 @@ const createInstallationAddressAnswers = (order: Order, content: I18n, answerOpt
   }
   const uri = getInstallationAddressLink(order)
   const installationAddress = order.addresses.find(
-    ({ addressType }) => addressType === AddressTypeEnum.Enum.INSTALLATION,
+    ({ addressType }) => addressType === AddressTypeEnum.enum.INSTALLATION,
   )
 
   return [createAddressAnswer(content.pages.installationAddress.title, installationAddress, uri, answerOpts)]

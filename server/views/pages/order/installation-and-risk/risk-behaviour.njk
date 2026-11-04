@@ -1,0 +1,61 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% set section = content.pages.detailsOfInstallation.section %}
+{% set singleQuestionPage = true %}
+{% set questionName = content.pages.detailsOfInstallation.questions.possibleRisk.text %}
+
+{% set genderRiskDetailsHtml %}
+  {{ govukInput({
+    label: {
+      text: content.pages.detailsOfInstallation.questions.genderRiskDetails.text
+    },
+    hint: {
+      text: content.pages.detailsOfInstallation.questions.genderRiskDetails.hint
+    },
+    id: "genderRiskDetails",
+    name: "genderRiskDetails",
+    classes: "govuk-!-width-one-third",
+    errorMessage: genderRiskDetails.error,
+    value: genderRiskDetails.value,
+    disabled: not isOrderEditable
+  }) }}
+{% endset %}
+
+{% set possibleRiskOptions = [] %}
+{% for risk in possibleRisk.items %}
+  {% if risk.value == genderRiskDetails.revealedBy %}
+    {% set risk = {
+      value: risk.value,
+      text: risk.text,
+      hint: {
+        html: '<span class="govuk-visually-hidden">Selecting this will reveal an additional input</span>'
+      },
+      disabled: risk.disabled,
+      conditional: { html: genderRiskDetailsHtml }
+    } %}
+  {% endif %}
+  {% set possibleRiskOptions = (possibleRiskOptions.push(risk), possibleRiskOptions) %}
+{% endfor %}
+
+{% block formInputs %}
+  {{ govukCheckboxes({
+    idPrefix: "possibleRisk",
+    name: "possibleRisk[]",
+    fieldset: {
+      legend: {
+        text: content.pages.detailsOfInstallation.questions.possibleRisk.text,
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
+      }
+    },
+    hint: {
+      text: content.pages.detailsOfInstallation.questions.possibleRisk.hint
+    },
+    items: possibleRiskOptions,
+    values: possibleRisk.values,
+    errorMessage: possibleRisk.error
+  }) }}
+{% endblock %}

@@ -7,7 +7,7 @@ import ResponsibleOrganisationFormModel, {
   ResponsibleOrganisationValidator,
 } from './formModel'
 import ViewModel from './viewModel'
-import { convertZodErrorToValidationError } from '../../../utils/errors'
+import { convertZodErrorToValidationError } from '../../../utils/validation/errors'
 import InterestedPartiesBaseController from '../base/interestedPartiesBaseController'
 import UpdateInterestedPartiesService from '../interestedPartiesService'
 

@@ -16,6 +16,6 @@ describe('validator', () => {
     const result = FindAddressValidator.safeParse(data)
 
     expect(result.success).toBe(false)
-    expect(result.error?.errors[0].message).toBe(validationErrors.postcodeLookup.postcodeRequired)
+    expect(result.error?.issues[0].message).toBe(validationErrors.postcodeLookup.postcodeRequired)
   })
 })

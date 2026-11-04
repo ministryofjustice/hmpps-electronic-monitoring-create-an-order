@@ -12,7 +12,10 @@ export type CurfewAdditionalDetailsFormData = z.infer<typeof CurfewAdditionalDet
 const CurfewAdditionalDetailsFormDataValidator = z
   .object({
     curfewAdditionalDetails: z.string(),
-    details: z.string({ required_error: validationErrors.curfewAdditionalDetails.changeCurfewDetailsRequired }),
+    details: z.string({
+      error: issue =>
+        issue.input === undefined ? validationErrors.curfewAdditionalDetails.changeCurfewDetailsRequired : undefined,
+    }),
   })
   .superRefine((data, ctx) => {
     if (data.details === 'yes') {

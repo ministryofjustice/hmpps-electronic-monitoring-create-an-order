@@ -197,7 +197,7 @@ context('Order type descriptions', () => {
   it('Notification org is Probation, order type Post Release, sentence Section SDS, Pilot DAPOL, HDC no', () => {
     stubGetOrder()
     const monitoringOrderTypeDescription = {
-      orderType: 'Release from prison',
+      orderType: 'License',
       sentenceType: 'Standard Determinate Sentence',
       hdc: 'No',
       prarr: 'Yes',
@@ -227,11 +227,10 @@ context('Order type descriptions', () => {
     }).should('be.true')
   })
 
-  // Order type communities disabled ELM-4495 skipping test until the option is enabled again
-  it.skip('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
+  it('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
     stubGetOrder()
     const monitoringOrderTypeDescription = {
-      orderType: 'Community',
+      orderType: 'Court order',
       sentenceType: 'Youth Rehabilitation Order (YRO)',
       issp: 'Yes',
       monitoringCondition: 'Trail monitoring',
@@ -256,11 +255,11 @@ context('Order type descriptions', () => {
       },
     }).should('be.true')
   })
-  // Order type communities disabled ELM-4495 skipping test until the option is enabled again
-  it.skip('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
+
+  it('Notification org is Probation, ordertype community, sentence Section SDS, Pilot DAPOL, HDC no', () => {
     stubGetOrder()
     const monitoringOrderTypeDescription = {
-      orderType: 'Community',
+      orderType: 'Court order',
       sentenceType: 'Suspended Sentence',
       monitoringCondition: 'Trail monitoring',
     }
@@ -410,7 +409,7 @@ context('Order type descriptions', () => {
     it('Notification org is Probation, order type Post Release, sentence Section SDS, Pilot DAPOL, HDC no', () => {
       stubGetOrder('PROBATION', 'DDV6')
       const monitoringOrderTypeDescription = {
-        orderType: 'Release from prison',
+        orderType: 'License',
         sentenceType: 'Standard Determinate Sentence',
         hdc: 'No',
         prarr: 'Yes',

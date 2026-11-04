@@ -17,15 +17,16 @@ const populateOrder =
       const versionId = req.params.versionId as string
 
       if (orderId && validate(orderId)) {
+        res.locals.orderId = orderId
         let order
 
         if (versionId && validate(versionId)) {
+          res.locals.versionId = versionId
           order = await orderService.getVersion({ accessToken: token, orderId, versionId })
           res.locals.orderSummaryUri = paths.ORDER.SUMMARY.replace(':orderId', order.id).replace(
             `order/${order.id}/`,
             `order/${order.id}/version/${versionId}/`,
           )
-          res.locals.versionId = versionId
         } else {
           order = await orderService.getOrder({ accessToken: token, orderId })
           res.locals.orderSummaryUri = paths.ORDER.SUMMARY.replace(':orderId', order.id)
@@ -33,8 +34,8 @@ const populateOrder =
         req.order = order
         res.locals.orderId = order.id
         res.locals.orderStatus = order.status
-        res.locals.isOrderEditable = order.status === OrderStatusEnum.Enum.IN_PROGRESS
-        res.locals.isViewOnly = order.status === OrderStatusEnum.Enum.IN_PROGRESS && !order.isOwner
+        res.locals.isOrderEditable = order.status === OrderStatusEnum.enum.IN_PROGRESS
+        res.locals.isViewOnly = order.status === OrderStatusEnum.enum.IN_PROGRESS && !order.isOwner
         res.locals.content = getContent(Locales.en, order.dataDictionaryVersion)
         res.locals.isSentencingAct = order.isSentencingAct
       }

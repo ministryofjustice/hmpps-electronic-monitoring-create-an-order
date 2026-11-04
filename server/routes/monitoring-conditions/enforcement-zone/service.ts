@@ -4,7 +4,10 @@ import { AuthenticatedRequestInput } from '../../../interfaces/request'
 import { ValidationResult } from '../../../models/Validation'
 import ErrorResponseModel, { ErrorResponse } from '../../../models/ErrorResponse'
 import { SanitisedError } from '../../../sanitisedError'
-import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../../../utils/errors'
+import {
+  convertZodErrorToValidationError,
+  convertBackendErrorToValidationError,
+} from '../../../utils/validation/errors'
 import { EnforcementZoneAddToListFormData, EnforcementZoneAddToListFormDataValidator } from './formModel'
 import { NotifyingOrganisation } from '../../../models/NotifyingOrganisation'
 import { AddToListEnforcementZoneTypes } from '../model'

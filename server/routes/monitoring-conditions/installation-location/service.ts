@@ -5,7 +5,10 @@ import InstallationLocationModel, { InstallationLocation } from '../../../models
 import { ValidationResult } from '../../../models/Validation'
 import { InstallationLocationFormDataValidator } from './formModel'
 import { SanitisedError } from '../../../sanitisedError'
-import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../../../utils/errors'
+import {
+  convertZodErrorToValidationError,
+  convertBackendErrorToValidationError,
+} from '../../../utils/validation/errors'
 
 type UpdateInstallationLocationInput = AuthenticatedRequestInput & {
   orderId: string

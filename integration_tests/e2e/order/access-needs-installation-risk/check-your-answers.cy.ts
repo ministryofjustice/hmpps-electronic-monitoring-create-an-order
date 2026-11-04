@@ -4,8 +4,12 @@ import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/instal
 import OrderTasksPage from '../../../pages/order/summary'
 import paths from '../../../../server/constants/paths'
 import OffencePage from './offences/offence/offencePage'
+import detailsOfInstallationPageContent from '../../../../server/i18n/en/pages/details-of-installation'
+import installationAndRiskPageContent from '../../../../server/i18n/en/pages/installationAndRisk'
 
 const mockOrderId = uuidv4()
+const detailsOfInstallationQuestions = detailsOfInstallationPageContent.questions
+const installationAndRiskPageContentQuestions = installationAndRiskPageContent.questions
 
 context('installation and risk - check your answers', () => {
   context('Draft order', () => {
@@ -107,16 +111,16 @@ context('installation and risk - check your answers', () => {
 
       page.installationRiskSection.shouldExist()
       page.installationRiskSection.shouldHaveItems([
-        { key: 'What type of offence did the device wearer commit?', value: 'Sexual offences' },
+        { key: installationAndRiskPageContentQuestions.offence.text, value: 'Sexual offences' },
         {
-          key: 'Any other information to be aware of about the offence committed? (optional)',
+          key: installationAndRiskPageContentQuestions.offenceAdditionalDetails.text,
           value: 'some offence details',
         },
         {
-          key: "At installation what are the possible risks from the device wearer's behaviour?",
+          key: detailsOfInstallationQuestions.possibleRisk.text,
           value: 'Offensive towards someone because of their sex or gender',
         },
-        { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
+        { key: detailsOfInstallationQuestions.otherRisks.text, value: 'some risk details' },
       ])
     })
 
@@ -166,9 +170,7 @@ context('installation and risk - check your answers', () => {
     it('shows correct banner', () => {
       const page = Page.visit(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
 
-      page.submittedBanner.contains(
-        'You are viewing a submitted form. This form was submitted on the 14 December 2024.',
-      )
+      page.submittedBanner.contains('This form was submitted on the 14 December 2024.')
     })
 
     it('shows correct caption and heading', () => {
@@ -182,24 +184,24 @@ context('installation and risk - check your answers', () => {
 
       page.installationRiskSection.shouldExist()
       page.installationRiskSection.shouldHaveItems([
-        { key: 'What type of offence did the device wearer commit?', value: 'Sexual offences' },
+        { key: installationAndRiskPageContentQuestions.offence.text, value: 'Sexual offences' },
         {
-          key: 'Any other information to be aware of about the offence committed? (optional)',
+          key: installationAndRiskPageContentQuestions.offenceAdditionalDetails.text,
           value: 'some offence details',
         },
         {
-          key: "At installation what are the possible risks from the device wearer's behaviour?",
+          key: detailsOfInstallationQuestions.possibleRisk.text,
           value: 'Offensive towards someone because of their sex or gender',
         },
         {
-          key: 'What are the possible risks at the installation address? (optional)',
+          key: detailsOfInstallationQuestions.riskAtAddress.text,
           value: 'Managed through IOM',
         },
         {
-          key: 'What are the possible risks at the installation address? (optional)',
+          key: detailsOfInstallationQuestions.riskAtAddress.text,
           value: 'History of substance abuse',
         },
-        { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
+        { key: detailsOfInstallationQuestions.otherRisks.text, value: 'some risk details' },
       ])
     })
 
@@ -264,16 +266,16 @@ context('installation and risk - check your answers', () => {
 
       page.installationRiskSection.shouldExist()
       page.installationRiskSection.shouldHaveItems([
-        { key: 'What type of offence did the device wearer commit?', value: 'Sexual offences' },
+        { key: installationAndRiskPageContentQuestions.offence.text, value: 'Sexual offences' },
         {
-          key: 'Any other information to be aware of about the offence committed? (optional)',
+          key: installationAndRiskPageContentQuestions.offenceAdditionalDetails.text,
           value: 'some offence details',
         },
         {
-          key: "At installation what are the possible risks from the device wearer's behaviour?",
+          key: detailsOfInstallationQuestions.possibleRisk.text,
           value: 'Offensive towards someone because of their sex or gender',
         },
-        { key: 'Any other risks to be aware of? (optional)', value: 'some risk details' },
+        { key: detailsOfInstallationQuestions.otherRisks.text, value: 'some risk details' },
       ])
     })
 
@@ -407,9 +409,9 @@ context('installation and risk - check your answers', () => {
 
       page.installationRiskSection.shouldExist()
       page.installationRiskSection.shouldHaveItems([
-        { key: 'What type of offence did the device wearer commit?', value: 'Sexual offences' },
+        { key: installationAndRiskPageContentQuestions.offence.text, value: 'Sexual offences' },
         {
-          key: "At installation what are the possible risks from the device wearer's behaviour?",
+          key: detailsOfInstallationQuestions.possibleRisk.text,
           value: 'Offensive towards someone because of their sex or gender',
         },
       ])
@@ -634,15 +636,15 @@ context('installation and risk - check your answers', () => {
       page.installationRiskSection.shouldExist()
       page.installationRiskSection.shouldHaveItems([
         {
-          key: "At installation what are the possible risks from the device wearer's behaviour?",
+          key: detailsOfInstallationQuestions.possibleRisk.text,
           value: 'Violent behaviour or threats of violence',
         },
         {
-          key: 'What are the possible risks at the installation address? (optional)',
+          key: detailsOfInstallationQuestions.riskAtAddress.text,
           value: 'Safeguarding child',
         },
         {
-          key: 'Any other risks to be aware of? (optional)',
+          key: detailsOfInstallationQuestions.otherRisks.text,
           value: 'some risk details',
         },
       ])
@@ -668,15 +670,15 @@ context('installation and risk - check your answers', () => {
       page.installationRiskSection.shouldExist()
       page.installationRiskSection.shouldHaveItems([
         {
-          key: "At installation what are the possible risks from the device wearer's behaviour?",
+          key: detailsOfInstallationQuestions.possibleRisk.text,
           value: 'Offensive towards someone because of their sex or gender',
         },
         {
-          key: 'What sex or gender are they a risk to?',
+          key: detailsOfInstallationQuestions.genderRiskDetails.text,
           value: 'Women',
         },
         {
-          key: 'Any other risks to be aware of? (optional)',
+          key: detailsOfInstallationQuestions.otherRisks.text,
           value: 'some risk details',
         },
       ])

@@ -64,8 +64,7 @@ describe('order type controller', () => {
     next = jest.fn()
   })
 
-  // Currently all notifying orgs lead to a redirect so skipping model tests
-  it.skip('should render the correct view', async () => {
+  it('should render the correct view', async () => {
     const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
 
     await controller.view(req, res, next)
@@ -76,7 +75,7 @@ describe('order type controller', () => {
     )
   })
 
-  it.skip('should construct the correct model when there is no data in the store', async () => {
+  it('should construct the correct model when there is no data in the store', async () => {
     const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
 
     await controller.view(req, res, next)
@@ -87,7 +86,7 @@ describe('order type controller', () => {
     )
   })
 
-  it.skip('should construct the correct model when there is data in the store', async () => {
+  it('should construct the correct model when there is data in the store', async () => {
     const data: MonitoringConditions = { orderType: 'COMMUNITY' }
     mockMonitoringConditionsStoreService.getMonitoringConditions.mockResolvedValue(data)
 
@@ -104,7 +103,7 @@ describe('order type controller', () => {
     )
   })
 
-  it.skip('should construct the correct model when there are errors', async () => {
+  it('should construct the correct model when there are errors', async () => {
     req.flash = jest.fn().mockReturnValueOnce([
       {
         error: 'Select the order type',
@@ -128,7 +127,7 @@ describe('order type controller', () => {
     )
   })
 
-  it.skip('should construct the correct model when notifying org is probation', async () => {
+  it('should construct the correct model when notifying org is probation', async () => {
     mockOrder.interestedParties = createInterestedParties({ notifyingOrganisation: 'PROBATION' })
     req.order = mockOrder
     const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
@@ -138,15 +137,14 @@ describe('order type controller', () => {
     const expectedViewObject: OrderTypeModel = {
       orderTypeQuestions: [
         {
-          question: 'Release from prison',
+          question: 'License',
           hint: 'Monitoring is a condition of being released from prison following a custodial sentence.',
           value: 'POST_RELEASE',
         },
         {
-          question: 'Community',
-          hint: 'Managing community orders is not currently part of the service and any notifications should continue to be submitted by email.',
+          question: 'Court order',
+          hint: 'Monitoring is a condition of a court order where they were convicted of a crime, but are serving it in the community rather than a prison.',
           value: 'COMMUNITY',
-          disabled: true,
         },
       ],
       orderType: { value: '' },
@@ -186,18 +184,33 @@ describe('order type controller', () => {
     )
   })
 
-  it('should save order type and redirect if notifyingOrg is probation', async () => {
+  it('should render the order type page when notifyingOrg is probation', async () => {
     mockOrder.interestedParties = createInterestedParties({ notifyingOrganisation: 'PROBATION' })
+    req.order = mockOrder
     const controller = new OrderTypeController(mockMonitoringConditionsStoreService, mockService)
 
     await controller.view(req, res, next)
 
-    expect(mockMonitoringConditionsStoreService.updateOrderType).toHaveBeenCalledWith(mockOrder, {
-      orderType: 'POST_RELEASE',
-    })
+    const expectedViewObject: OrderTypeModel = {
+      orderTypeQuestions: [
+        {
+          question: 'License',
+          hint: 'Monitoring is a condition of being released from prison following a custodial sentence.',
+          value: 'POST_RELEASE',
+        },
+        {
+          question: 'Court order',
+          hint: 'Monitoring is a condition of a court order where they were convicted of a crime, but are serving it in the community rather than a prison.',
+          value: 'COMMUNITY',
+        },
+      ],
+      orderType: { value: '' },
+      errorSummary: null,
+    }
 
-    expect(res.redirect).toHaveBeenCalledWith(
-      paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.SENTENCE_TYPE.replace(':orderId', mockOrder.id),
+    expect(res.render).toHaveBeenCalledWith(
+      'pages/order/monitoring-conditions/order-type-description/order-type',
+      expectedViewObject,
     )
   })
 

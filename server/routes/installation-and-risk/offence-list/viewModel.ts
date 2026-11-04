@@ -7,9 +7,10 @@ import { ViewModel } from '../../../models/view-models/utils'
 import I18n from '../../../types/i18n'
 import DapoClauseListPageConent from '../../../types/i18n/pages/dapoClauseListPage'
 import OffenceListPageContent from '../../../types/i18n/pages/offenceListPage'
-import { Answer, createAnswer, createDatePreview } from '../../../utils/checkYourAnswers'
-import { createGovukErrorSummary } from '../../../utils/errors'
-import { getError, lookup } from '../../../utils/utils'
+import { Answer, createAnswer, createDatePreview } from '../../../utils/views/checkYourAnswers'
+import { createGovukErrorSummary } from '../../../utils/validation/errors'
+import { getError } from '../../../utils/validation/errorMessages'
+import { lookup } from '../../../utils/views/displayHelpers'
 
 type OffenceListSummaryItem = Answer
 

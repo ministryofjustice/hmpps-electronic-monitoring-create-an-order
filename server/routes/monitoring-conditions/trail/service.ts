@@ -5,7 +5,10 @@ import { TrailMonitoringFormData, TrailMonitoringFormDataValidator } from './for
 import TrailMonitoringModel, { TrailMonitoring } from '../../../models/TrailMonitoring'
 import { ValidationResult } from '../../../models/Validation'
 import { SanitisedError } from '../../../sanitisedError'
-import { convertZodErrorToValidationError, convertBackendErrorToValidationError } from '../../../utils/errors'
+import {
+  convertZodErrorToValidationError,
+  convertBackendErrorToValidationError,
+} from '../../../utils/validation/errors'
 import { NotifyingOrganisation } from '../../../models/NotifyingOrganisation'
 
 type TrailMonitoringInput = AuthenticatedRequestInput & {

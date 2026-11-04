@@ -1,4 +1,4 @@
-import { ErrorSummary } from '../../utils/govukFrontEndTypes/errorSummary'
+import { ErrorSummary } from '../../utils/views/govukFrontEndTypes/errorSummary'
 import { Address, AddressTypeEnum } from '../Address'
 
 export type AddressType = {
@@ -84,9 +84,9 @@ export type AddressViewsViewModel<T> = ViewModel<T> & {
 }
 
 export const getAddressViews = (addresses: Address[]): AddressViews => {
-  const primaryAddress = addresses?.find(address => address.addressType === AddressTypeEnum.Enum.PRIMARY)
-  const secondaryAddress = addresses?.find(address => address.addressType === AddressTypeEnum.Enum.SECONDARY)
-  const tertiaryAddress = addresses?.find(address => address.addressType === AddressTypeEnum.Enum.TERTIARY)
+  const primaryAddress = addresses?.find(address => address.addressType === AddressTypeEnum.enum.PRIMARY)
+  const secondaryAddress = addresses?.find(address => address.addressType === AddressTypeEnum.enum.SECONDARY)
+  const tertiaryAddress = addresses?.find(address => address.addressType === AddressTypeEnum.enum.TERTIARY)
 
   const addressViews = {
     primaryAddressView: primaryAddress ? primaryAddress.addressLine1 : '',
