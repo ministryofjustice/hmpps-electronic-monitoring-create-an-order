@@ -3,6 +3,7 @@ import ConfirmVariationPage from '../../../../pages/order/variation/confirmVaria
 import OrderTasksPage from '../../../../pages/order/summary'
 import InstallationAndRiskCheckRiskPage from '../../../../pages/order/installation-and-risk/check-risk'
 import InstallationAndRiskCheckYourAnswersPage from '../../../../pages/order/installation-and-risk/check-your-answers'
+import OtherRisksPage from '../other-risks/OtherRisksPage'
 import RiskAtAddressPage from '../risk-at-address/RiskAtAddressPage'
 import RiskBehaviourPage from '../risk-behaviour/RiskBehaviourPage'
 
@@ -12,6 +13,12 @@ const mockUncachedVersionId = '33a33333-79cd-49f9-a498-b1f07c543b8a'
 const mockOffenceId = '22a22222-79cd-49f9-a498-b1f07c543b8a'
 
 const daysAgo = (days: number) => new Date(new Date(Date.now() - 1000 * 60 * 60 * 24 * days).setHours(0, 0, 0, 0))
+
+const fullyAnsweredDetailsOfInstallation = {
+  riskCategory: ['THREATS_OF_VIOLENCE', 'DANGEROUS_ANIMALS'],
+  riskDetails: 'Some other risk',
+  genderRiskDetails: '',
+}
 
 function getMockedMonitoringConditions(mockDate = new Date(2000, 10, 20).toISOString()) {
   return {
@@ -83,7 +90,7 @@ context('Making changes to a previously submitted order', () => {
     orderTasksPage.riskInformationTask.shouldHaveStatus('Incomplete')
   })
 
-  const goToCheckRiskPage = () => {
+  const goToCheckRiskPage = (orderOverrides: object = {}) => {
     cy.visit(`/order/${mockOriginalId}/edit`)
     const confirmPage = Page.verifyOnPage(ConfirmVariationPage)
 
@@ -96,6 +103,7 @@ context('Making changes to a previously submitted order', () => {
         ...completedRiskInformation,
         monitoringConditions: getMockedMonitoringConditions(),
         fmsResultDate: daysAgo(32),
+        ...orderOverrides,
       },
     })
 
@@ -161,6 +169,32 @@ context('Making changes to a previously submitted order', () => {
     riskBehaviourPage.form.continueButton.click()
 
     Page.verifyOnPage(RiskAtAddressPage)
+  })
+
+  it('asks the address and other risk questions after Yes, even when the order already has answers for them', () => {
+    cy.task('stubCemoSubmitOrder', {
+      httpStatus: 200,
+      id: mockOriginalId,
+      subPath: '/details-of-installation',
+      response: fullyAnsweredDetailsOfInstallation,
+    })
+    const page = goToCheckRiskPage({
+      dataDictionaryVersion: 'DDV6',
+      detailsOfInstallation: fullyAnsweredDetailsOfInstallation,
+    })
+
+    page.form.fillInWith('Yes')
+    page.form.continueButton.click()
+
+    const riskBehaviourPage = Page.verifyOnPage(RiskBehaviourPage)
+    riskBehaviourPage.form.fillInWith('Sex offender')
+    riskBehaviourPage.form.continueButton.click()
+
+    Page.verifyOnPage(RiskAtAddressPage).form.continueButton.click()
+
+    Page.verifyOnPage(OtherRisksPage).form.continueButton.click()
+
+    Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOriginalId }, {}, 'Check your answers')
   })
 
   it('shows Risk information as Complete on the order list page once the question is answered', () => {
