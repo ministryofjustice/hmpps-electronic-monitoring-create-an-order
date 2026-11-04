@@ -20,7 +20,7 @@ export function fillInInstallationAndRiskWith({
   const { notifyingOrganisation } = interestedParties
   const isCourt = notifyingOrganisation?.includes('Court')
 
-  if (isVariationOrder) {
+  if (isVariationOrder && notifyingOrganisation === 'PROBATION') {
     const checkRiskPage = Page.verifyOnPage(InstallationAndRiskCheckRiskPage)
     checkRiskPage.form.fillInWith('Yes')
     checkRiskPage.form.continueButton.click()
