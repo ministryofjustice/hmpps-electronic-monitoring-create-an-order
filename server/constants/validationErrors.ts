@@ -426,7 +426,7 @@ const validationErrors: ValidationErrors = {
     required: 'Select Yes if the device wearer is a MAPPA offender',
   },
   checkRisk: {
-    required: `Select yes if the device wearer's risk has changed`,
+    required: `Select Yes if you need to review their risk`,
   },
   mappa: {
     levelRequired: 'Select the level of MAPPA that applies to the device wearer',
