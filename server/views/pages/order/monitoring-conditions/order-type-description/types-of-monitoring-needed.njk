@@ -1,11 +1,26 @@
 {% extends "../../../../partials/form-layout.njk" %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 
 {% set section = "Electronic monitoring required" %}
 {% set heading = "Types of monitoring needed" %}
 
 {% block formInputs %}
+
+  {% if ineligibleErrors and ineligibleErrors.length %}
+    {% set ineligibleHtml %}
+      {% for message in ineligibleErrors %}
+        <p class="govuk-body" data-qa="ineligible-monitoring-message">{{ message }}</p>
+      {% endfor %}
+      <p class="govuk-body govuk-!-font-weight-bold">You must:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>delete the invalid monitoring conditions from the order</li>
+        <li>ensure any required documents are also updated and attached to the order. For example, the licence.</li>
+      </ul>
+    {% endset %}
+    {{ govukNotificationBanner({ html: ineligibleHtml, attributes: { "data-qa": "ineligible-monitoring-banner" } }) }}
+  {% endif %}
 
   {{ govukSummaryList({
       rows: items,

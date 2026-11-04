@@ -569,12 +569,14 @@ context('Order Summary', () => {
   })
 
   context('Complete order, variation, not submitted', () => {
+    let completeOrderStub: { httpStatus: number; id: string; status: string; order: Record<string, unknown> }
+
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
       // Create an order with all fields present (even though they're not valid)
-      cy.task('stubCemoGetOrder', {
+      completeOrderStub = {
         httpStatus: 200,
         id: mockOrderId,
         status: 'IN_PROGRESS',
@@ -594,7 +596,7 @@ context('Order Summary', () => {
             lastName: 'Bloggs',
             alias: null,
             dateOfBirth: null,
-            adultAtTimeOfInstallation: false,
+            adultAtTimeOfInstallation: true,
             sex: null,
             gender: null,
             disabilities: '',
@@ -743,7 +745,8 @@ context('Order Summary', () => {
           },
           type: 'VARIATION',
         },
-      })
+      }
+      cy.task('stubCemoGetOrder', completeOrderStub)
 
       cy.task('stubCemoGetVersions', {
         httpStatus: 200,
@@ -752,6 +755,21 @@ context('Order Summary', () => {
       })
 
       cy.signIn()
+    })
+
+    it('should show a problem and block submit when monitoring conditions are ineligible', () => {
+      cy.task('stubCemoGetOrder', {
+        ...completeOrderStub,
+        order: {
+          ...completeOrderStub.order,
+          deviceWearer: { ...(completeOrderStub.order.deviceWearer as object), adultAtTimeOfInstallation: false },
+        },
+      })
+
+      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+
+      page.electronicMonitoringTask.shouldHaveStatus('There is a problem')
+      page.submitOrderButton.should('be.disabled')
     })
 
     it('should display all tasks as incomplete or unable to start for a new variation', () => {
@@ -868,7 +886,7 @@ context('Order Summary', () => {
             lastName: 'Bloggs',
             alias: null,
             dateOfBirth: null,
-            adultAtTimeOfInstallation: false,
+            adultAtTimeOfInstallation: true,
             sex: null,
             gender: null,
             disabilities: '',
@@ -1055,7 +1073,7 @@ context('Order Summary', () => {
             lastName: 'Bloggs',
             alias: null,
             dateOfBirth: null,
-            adultAtTimeOfInstallation: false,
+            adultAtTimeOfInstallation: true,
             sex: null,
             gender: null,
             disabilities: '',
