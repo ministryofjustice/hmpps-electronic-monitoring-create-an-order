@@ -331,6 +331,62 @@ describe('TimelineModel', () => {
       })
     })
 
+    it('shows acceptance after a return without removing the return history', () => {
+      const statusUpdates = [
+        {
+          id: 'returned-update',
+          versionId: '456',
+          status: 'REJECTED' as const,
+          datetimeOfStatusChange: '2026-01-02T12:00:00Z',
+          statusUpdateReasons: [],
+        },
+        {
+          id: 'accepted-update',
+          versionId: '456',
+          status: 'ACCEPTED' as const,
+          datetimeOfStatusChange: '2026-01-03T12:00:00Z',
+          statusUpdateReasons: [],
+        },
+      ]
+
+      const result = TimelineModel.mapToTimelineItems(
+        content,
+        [createMockVersion()],
+        undefined,
+        undefined,
+        statusUpdates,
+      )
+
+      expect(result.map(item => item.label.text)).toEqual(['Form accepted', 'Form returned', 'Form submitted'])
+      expect(result[0]).toEqual({
+        label: { text: 'Form accepted' },
+        datetime: { timestamp: '2026-01-03T12:00:00Z', type: 'datetime' },
+        byline: { text: 'The Electronic Monitoring Service (EMS)' },
+        notifyingOrganisationDetails: '',
+      })
+    })
+
+    it('shows only the latest acceptance when acceptance observations arrive out of order', () => {
+      const statusUpdates = ['2026-01-03T12:00:00Z', '2026-01-02T12:00:00Z'].map(datetimeOfStatusChange => ({
+        id: datetimeOfStatusChange,
+        versionId: '456',
+        status: 'ACCEPTED' as const,
+        datetimeOfStatusChange,
+        statusUpdateReasons: [],
+      }))
+
+      const result = TimelineModel.mapToTimelineItems(
+        content,
+        [createMockVersion()],
+        undefined,
+        undefined,
+        statusUpdates,
+      )
+
+      expect(result.map(item => item.label.text)).toEqual(['Form accepted', 'Form submitted'])
+      expect(result[0].datetime.timestamp).toBe('2026-01-03T12:00:00Z')
+    })
+
     it.each<[OrderType, string]>([
       ['VARIATION', 'Other change'],
       ['REINSTALL_AT_DIFFERENT_ADDRESS', 'Added second or third curfew address'],

@@ -31,10 +31,16 @@ export default class TimelineModel {
     statusUpdates?: StatusUpdate[] | null,
   ): TimelineItem[] => {
     const versionItems = versions.map(version => this.mapSingleItem(content, version, orderId, currentVersionId))
-    const latestRejectedStatusUpdate = (statusUpdates ?? [])
-      .filter(statusUpdate => statusUpdate.status === 'REJECTED')
-      .sort((a, b) => new Date(b.datetimeOfStatusChange).getTime() - new Date(a.datetimeOfStatusChange).getTime())[0]
-    const statusUpdateItems = latestRejectedStatusUpdate ? [this.mapStatusUpdateItem(latestRejectedStatusUpdate)] : []
+    const latestStatusUpdates = new Map<StatusUpdate['status'], StatusUpdate>()
+    for (const statusUpdate of statusUpdates ?? []) {
+      const latest = latestStatusUpdates.get(statusUpdate.status)
+      if (!latest || Date.parse(statusUpdate.datetimeOfStatusChange) > Date.parse(latest.datetimeOfStatusChange)) {
+        latestStatusUpdates.set(statusUpdate.status, statusUpdate)
+      }
+    }
+    const statusUpdateItems = [...latestStatusUpdates.values()].map(statusUpdate =>
+      this.mapStatusUpdateItem(statusUpdate),
+    )
 
     return [...versionItems, ...statusUpdateItems].sort((a, b) => {
       const aTime = a.datetime.timestamp ? new Date(a.datetime.timestamp).getTime() : 0
@@ -47,7 +53,7 @@ export default class TimelineModel {
 
   private static mapStatusUpdateItem = (statusUpdate: StatusUpdate): TimelineItem => ({
     label: {
-      text: 'Form returned',
+      text: statusUpdate.status === 'REJECTED' ? 'Form returned' : 'Form accepted',
     },
     datetime: {
       timestamp: statusUpdate.datetimeOfStatusChange,
