@@ -1,4 +1,5 @@
 import { Request, RequestHandler, Response } from 'express'
+import { defaultClient } from 'applicationinsights'
 import { OrderService } from '../services'
 import paths from '../constants/paths'
 import { CreateOrderFormDataParser } from '../models/form-data/order'
@@ -149,9 +150,24 @@ export default class OrderController {
   submit: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
 
-    const result = await this.orderService.submitOrder({
-      orderId: order.id,
-      accessToken: res.locals.user.token,
+    const result = await this.orderService
+      .submitOrder({
+        orderId: order.id,
+        accessToken: res.locals.user.token,
+      })
+      .catch(error => {
+        defaultClient?.trackEvent({
+          name: 'order_submission_attempt',
+          properties: { outcome: 'failure' },
+        })
+        throw error
+      })
+
+    const outcome = result.submitted ? 'success' : 'failure'
+
+    defaultClient?.trackEvent({
+      name: 'order_submission_attempt',
+      properties: { outcome },
     })
 
     if (result.submitted) {

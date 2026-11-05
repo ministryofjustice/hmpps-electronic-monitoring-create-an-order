@@ -1,4 +1,5 @@
 import { randomUUID } from 'crypto'
+import { defaultClient } from 'applicationinsights'
 import { createInterestedParties, getMockOrder } from '../../test/mocks/mockOrder'
 import { createMockRequest, createMockResponse } from '../../test/mocks/mockExpress'
 import RestClient from '../data/restClient'
@@ -7,6 +8,12 @@ import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
 import OrderService from '../services/orderService'
 import OrderController from './orderController'
 import SectionService from '../services/sectionsService'
+
+jest.mock('applicationinsights', () => ({
+  defaultClient: {
+    trackEvent: jest.fn(),
+  },
+}))
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -339,6 +346,79 @@ describe('OrderController', () => {
       // Then
       expect(mockOrderService.submitOrder).toHaveBeenCalledWith({ accessToken: 'fakeUserToken', orderId: mockOrder.id })
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/submit/success`)
+    })
+
+    it('should emit one successful submission event', async () => {
+      // Given
+      jest.mocked(defaultClient.trackEvent).mockClear()
+      const mockOrder = getMockOrder()
+      const req = createMockRequest({
+        order: mockOrder,
+        params: {
+          orderId: mockOrder.id,
+        },
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+      mockOrderService.submitOrder.mockResolvedValue({
+        submitted: true,
+        data: mockOrder,
+      })
+
+      // When
+      await orderController.submit(req, res, next)
+
+      // Then
+      expect(defaultClient.trackEvent).toHaveBeenCalledTimes(1)
+      expect(defaultClient.trackEvent).toHaveBeenCalledWith({
+        name: 'order_submission_attempt',
+        properties: { outcome: 'success' },
+      })
+    })
+
+    it('should emit one failed submission event', async () => {
+      // Given
+      jest.mocked(defaultClient.trackEvent).mockClear()
+      const mockOrder = getMockOrder()
+      const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
+      const res = createMockResponse()
+      const next = jest.fn()
+      mockOrderService.submitOrder.mockResolvedValue({
+        submitted: false,
+        error: 'This order has already been submitted',
+        type: 'alreadySubmitted',
+      })
+
+      // When
+      await orderController.submit(req, res, next)
+
+      // Then
+      expect(defaultClient.trackEvent).toHaveBeenCalledTimes(1)
+      expect(defaultClient.trackEvent).toHaveBeenCalledWith({
+        name: 'order_submission_attempt',
+        properties: { outcome: 'failure' },
+      })
+    })
+
+    it('should emit a failed submission event when the submission service rejects', async () => {
+      // Given
+      jest.mocked(defaultClient.trackEvent).mockClear()
+      const mockOrder = getMockOrder()
+      const req = createMockRequest({ order: mockOrder })
+      const res = createMockResponse()
+      const next = jest.fn()
+      const submissionError = new Error('Submission failed')
+      mockOrderService.submitOrder.mockRejectedValue(submissionError)
+
+      // When
+      await expect(orderController.submit(req, res, next)).rejects.toBe(submissionError)
+
+      // Then
+      expect(defaultClient.trackEvent).toHaveBeenCalledTimes(1)
+      expect(defaultClient.trackEvent).toHaveBeenCalledWith({
+        name: 'order_submission_attempt',
+        properties: { outcome: 'failure' },
+      })
     })
 
     it('should not submit the order and redirect to a failed page for a submitted order', async () => {

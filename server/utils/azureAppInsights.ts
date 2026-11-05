@@ -2,7 +2,10 @@ import { defaultClient, getCorrelationContext, setup, TelemetryClient } from 'ap
 import type { HttpInstrumentationConfig } from '@opentelemetry/instrumentation-http'
 import { resourceFromAttributes } from '@opentelemetry/resources'
 import { Request, RequestHandler } from 'express'
+import { AsyncLocalStorage } from 'node:async_hooks'
 import type { ApplicationInfo } from '../applicationInfo'
+
+const telemetryCohort = new AsyncLocalStorage<string>()
 
 export function initialiseAppInsights(applicationInfo?: ApplicationInfo): void {
   if (process.env.APPLICATIONINSIGHTS_CONNECTION_STRING) {
@@ -26,6 +29,23 @@ export function initialiseAppInsights(applicationInfo?: ApplicationInfo): void {
     }
     defaultClient.config.azureMonitorOpenTelemetryOptions = {
       ...options,
+      logRecordProcessors: [
+        ...(options?.logRecordProcessors ?? []),
+        {
+          onEmit(logRecord) {
+            const cohort = telemetryCohort.getStore()
+            if (cohort) {
+              logRecord.setAttribute('cohort', cohort)
+            }
+          },
+          forceFlush() {
+            return Promise.resolve()
+          },
+          shutdown() {
+            return Promise.resolve()
+          },
+        },
+      ],
       instrumentationOptions: {
         ...options?.instrumentationOptions,
         http: httpInstrumentation,
@@ -68,6 +88,13 @@ export function appInsightsMiddleware(): RequestHandler {
     next()
   }
 }
+
+export function appInsightsUserMiddleware(): RequestHandler {
+  return (_req, res, next) => {
+    telemetryCohort.run(res.locals.user.cohort?.cohort ?? 'unknown', next)
+  }
+}
+
 // explicit 500 handler
 export function reportException(error: Error, properties: Record<string, unknown>): void {
   defaultClient?.trackException({ exception: error, properties })
