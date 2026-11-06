@@ -19,6 +19,7 @@ describe('RiskBehaviourController', () => {
     riskDetails: '',
     hasOtherRisks: null,
     genderRiskDetails: 'Women',
+    riskCheck: null,
   }
   let service: jest.Mocked<RiskAtInstallationService>
   let taskListService: jest.Mocked<TaskListService>
@@ -98,6 +99,7 @@ describe('RiskBehaviourController', () => {
       riskDetails: '',
       hasOtherRisks: 'NO',
       genderRiskDetails: '',
+      riskCheck: null,
     }
 
     beforeEach(() => {

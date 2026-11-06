@@ -806,6 +806,7 @@ context('Order Summary', () => {
       let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
       page.riskInformationTask.shouldHaveStatus('Optional')
       page.riskInformationTask.link.click()
+
       const riskInformationCyaPage = Page.verifyOnPage(
         InstallationAndRiskCheckYourAnswersPage,
         { orderId: mockOrderId },
@@ -1023,7 +1024,10 @@ context('Order Summary', () => {
         },
       })
 
-      const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      let page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
+      page.riskInformationTask.link.click()
+
+      page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
       page.submitOrderButton.should('not.be.disabled')
     })

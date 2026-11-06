@@ -5,10 +5,12 @@ import RestClient from '../data/restClient'
 import { OrderStatusEnum } from '../models/Order'
 import { SanitisedError } from '../sanitisedError'
 import OrderService from '../services/orderService'
+import RiskAtInstallationService from '../routes/installation-and-risk/riskAtInstallationService'
 import populateCurrentOrder from './populateCurrentOrder'
 
 jest.mock('../data/restClient')
 jest.mock('../services/orderService')
+jest.mock('../routes/installation-and-risk/riskAtInstallationService')
 
 const createMockRequest = (params: Record<string, string> = {}): Request => {
   return {
@@ -56,6 +58,7 @@ const mockNotFoundRequest: SanitisedError = {
 describe('populateCurrentOrder', () => {
   let mockRestClient: jest.Mocked<RestClient>
   let mockOrderService: jest.Mocked<OrderService>
+  let mockRiskAtInstallationService: jest.Mocked<RiskAtInstallationService>
 
   beforeEach(() => {
     jest.resetAllMocks()
@@ -67,6 +70,10 @@ describe('populateCurrentOrder', () => {
     }) as jest.Mocked<RestClient>
 
     mockOrderService = new OrderService(mockRestClient) as jest.Mocked<OrderService>
+    mockRiskAtInstallationService = new RiskAtInstallationService(
+      undefined as never,
+      undefined as never,
+    ) as jest.Mocked<RiskAtInstallationService>
   })
 
   it.each([undefined, uuidv4()])(
@@ -80,7 +87,7 @@ describe('populateCurrentOrder', () => {
       mockOrderService.getVersion.mockRejectedValue(mockNotFoundRequest)
 
       // When
-      await populateCurrentOrder(mockOrderService)(req, res, next)
+      await populateCurrentOrder(mockOrderService, mockRiskAtInstallationService)(req, res, next)
 
       // Then
       expect(next).toHaveBeenCalledWith(mockNotFoundRequest)
@@ -98,7 +105,7 @@ describe('populateCurrentOrder', () => {
     const mockOrder = getMockOrder({ status: OrderStatusEnum.enum.SUBMITTED })
     mockOrderService.getOrder.mockResolvedValue(mockOrder)
     // When
-    await populateCurrentOrder(mockOrderService)(req, res, next)
+    await populateCurrentOrder(mockOrderService, mockRiskAtInstallationService)(req, res, next)
 
     // Then
     expect(next).toHaveBeenCalled()
@@ -117,7 +124,7 @@ describe('populateCurrentOrder', () => {
     mockOrderService.getOrder.mockResolvedValue(mockOrder)
 
     // When
-    await populateCurrentOrder(mockOrderService)(req, res, next)
+    await populateCurrentOrder(mockOrderService, mockRiskAtInstallationService)(req, res, next)
 
     // Then
     expect(next).toHaveBeenCalled()
@@ -138,7 +145,7 @@ describe('populateCurrentOrder', () => {
     mockOrderService.getVersion.mockResolvedValue(mockOrder)
 
     // When
-    await populateCurrentOrder(mockOrderService)(req, res, next)
+    await populateCurrentOrder(mockOrderService, mockRiskAtInstallationService)(req, res, next)
 
     // Then
     expect(next).toHaveBeenCalled()
