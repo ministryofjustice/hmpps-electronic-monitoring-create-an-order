@@ -13,64 +13,100 @@ import { IdentityNumbersEnum } from '../../../models/DeviceWearer'
 import { Order } from '../../../models/Order'
 import { formatDateTime } from '../../../utils/dateTime'
 import { lookup } from '../../../utils/views/displayHelpers'
+import { shouldAskResponsibleAdultQuestion } from '../../../utils/order/responsibleAdultQuestion'
 
-const createOtherDisabilityAnswer = (order: Order, content: I18n, uri: string, answerOpts: AnswerOptions) => {
-  if (order.deviceWearer.disabilities.includes('OTHER')) {
-    return [
-      createAnswer(
-        content.pages.deviceWearer.questions.otherDisability.text,
-        order.deviceWearer.otherDisability,
-        uri,
-        answerOpts,
-      ),
-    ]
+const createResponsibleAdultQuestionAnswer = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
+  if (!shouldAskResponsibleAdultQuestion(order)) {
+    return []
   }
 
-  return []
+  return [
+    createBooleanAnswer(
+      content.pages.deviceWearer.questions.adultAtTimeOfInstallation.text,
+      order.deviceWearer.adultAtTimeOfInstallation === null ? null : !order.deviceWearer.adultAtTimeOfInstallation,
+      paths.ABOUT_THE_DEVICE_WEARER.ADULT_AT_INSTALLATION.replace(':orderId', order.id),
+      answerOpts,
+    ),
+  ]
 }
 
 const createDeviceWearerAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
-  const uri = paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id)
+  const personalDetailsUri = paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id)
+  const languageUri = paths.ABOUT_THE_DEVICE_WEARER.LANGUAGE.replace(':orderId', order.id)
   const disabilities = order.deviceWearer.disabilities.map(disability =>
     lookup(content.reference.disabilities, disability),
   )
 
   return [
-    createAnswer(content.pages.deviceWearer.questions.firstName.text, order.deviceWearer.firstName, uri, answerOpts),
-    createAnswer(content.pages.deviceWearer.questions.middleName.text, order.deviceWearer.middleName, uri, answerOpts),
-    createAnswer(content.pages.deviceWearer.questions.lastName.text, order.deviceWearer.lastName, uri, answerOpts),
-    createAnswer(content.pages.deviceWearer.questions.alias.text, order.deviceWearer.alias, uri, answerOpts),
-    createDateAnswer(
-      content.pages.deviceWearer.questions.dateOfBirth.text,
-      order.deviceWearer.dateOfBirth,
-      uri,
-      answerOpts,
-    ),
-    createBooleanAnswer(
-      content.pages.deviceWearer.questions.adultAtTimeOfInstallation.text,
-      order.deviceWearer.adultAtTimeOfInstallation === null ? null : !order.deviceWearer.adultAtTimeOfInstallation,
-      uri,
+    createAnswer(
+      content.pages.deviceWearer.questions.firstName.text,
+      order.deviceWearer.firstName,
+      personalDetailsUri,
       answerOpts,
     ),
     createAnswer(
+      content.pages.deviceWearer.questions.middleName.text,
+      order.deviceWearer.middleName,
+      personalDetailsUri,
+      answerOpts,
+    ),
+    createAnswer(
+      content.pages.deviceWearer.questions.lastName.text,
+      order.deviceWearer.lastName,
+      personalDetailsUri,
+      answerOpts,
+    ),
+    createAnswer(
+      content.pages.deviceWearer.questions.alias.text,
+      order.deviceWearer.alias,
+      personalDetailsUri,
+      answerOpts,
+    ),
+    createDateAnswer(
+      content.pages.deviceWearer.questions.dateOfBirth.text,
+      order.deviceWearer.dateOfBirth,
+      personalDetailsUri,
+      answerOpts,
+    ),
+    ...createResponsibleAdultQuestionAnswer(order, content, answerOpts),
+    createAnswer(
       content.pages.deviceWearer.questions.sex.text,
       lookup(content.reference.sex, order.deviceWearer.sex),
-      uri,
+      personalDetailsUri,
       answerOpts,
     ),
     createAnswer(
       content.pages.deviceWearer.questions.gender.text,
       lookup(content.reference.gender, order.deviceWearer.gender),
-      uri,
+      personalDetailsUri,
       answerOpts,
     ),
-    createMultipleChoiceAnswer(content.pages.deviceWearer.questions.disabilities.text, disabilities, uri, answerOpts),
-    ...createOtherDisabilityAnswer(order, content, uri, answerOpts),
-    createAnswer(content.pages.deviceWearer.questions.language.text, order.deviceWearer.language, uri, answerOpts),
+    createMultipleChoiceAnswer(
+      content.pages.deviceWearer.questions.disabilities.text,
+      disabilities,
+      paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES.replace(':orderId', order.id),
+      answerOpts,
+    ),
+    ...(order.deviceWearer.disabilities.includes('OTHER')
+      ? [
+          createAnswer(
+            content.pages.deviceWearer.questions.otherDisability.text,
+            order.deviceWearer.otherDisability,
+            paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES.replace(':orderId', order.id),
+            answerOpts,
+          ),
+        ]
+      : []),
+    createAnswer(
+      content.pages.deviceWearer.questions.language.text,
+      order.deviceWearer.language,
+      languageUri,
+      answerOpts,
+    ),
     createBooleanAnswer(
       content.pages.deviceWearer.questions.interpreterRequired.text,
       order.deviceWearer.interpreterRequired,
-      uri,
+      languageUri,
       answerOpts,
     ),
   ]

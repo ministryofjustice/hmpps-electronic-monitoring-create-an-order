@@ -2,6 +2,7 @@ import { Request, RequestHandler, Response } from 'express'
 import z from 'zod'
 import paths from '../../../constants/paths'
 import DeviceWearerSearchResultsService from './service'
+import DeviceWearerAnswersService from '../deviceWearerAnswersService'
 import Model from './viewModel'
 import logger from '../../../../logger'
 import { SanitisedError } from '../../../sanitisedError'
@@ -12,7 +13,10 @@ const FormModel = z.object({
 })
 
 export default class DeviceWearerSearchResultsController {
-  constructor(private readonly service: DeviceWearerSearchResultsService) {}
+  constructor(
+    private readonly service: DeviceWearerSearchResultsService,
+    _deviceWearerAnswersService: DeviceWearerAnswersService,
+  ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
@@ -33,7 +37,7 @@ export default class DeviceWearerSearchResultsController {
       }
 
       logger.error(error)
-      res.redirect(paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id))
+      res.redirect(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id))
       return
     }
 
@@ -58,6 +62,6 @@ export default class DeviceWearerSearchResultsController {
       searchedIdentifier,
     })
 
-    res.redirect(paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id))
+    res.redirect(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id))
   }
 }

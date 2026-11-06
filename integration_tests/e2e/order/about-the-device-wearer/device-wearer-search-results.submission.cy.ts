@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Page from '../../../pages/page'
 import DeviceWearerSearchResultsPage from '../../../pages/order/about-the-device-wearer/device-wearer-search-results'
 import IdentityNumbersPage from '../../../pages/order/about-the-device-wearer/identity-numbers'
-import AboutDeviceWearerPage from '../../../pages/order/about-the-device-wearer/device-wearer'
+import DeviceWearerDetailsPage from '../../../pages/order/about-the-device-wearer/device-wearer-details'
 import OrderSummaryPage from '../../../pages/order/summary'
 
 const mockOrderId = uuidv4()
@@ -53,7 +53,7 @@ context('About the device wearer', () => {
         },
       }).should('be.true')
 
-      Page.verifyOnPage(AboutDeviceWearerPage, { orderId: mockOrderId })
+      Page.verifyOnPage(DeviceWearerDetailsPage, { orderId: mockOrderId })
     })
 
     it('should return to identity numbers when searching again', () => {
@@ -73,7 +73,7 @@ context('About the device wearer', () => {
       })
       page.form.enterDetailsManuallyLink.click()
 
-      Page.verifyOnPage(AboutDeviceWearerPage, { orderId: mockOrderId })
+      Page.verifyOnPage(DeviceWearerDetailsPage, { orderId: mockOrderId })
     })
 
     it('should return to summary when saving as draft', () => {

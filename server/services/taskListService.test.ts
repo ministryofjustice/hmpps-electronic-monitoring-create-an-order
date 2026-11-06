@@ -120,7 +120,7 @@ describe('TaskListService', () => {
       const nextPage = taskListService.getNextPage(currentPage, order)
 
       // Then
-      expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.BASE_URL.replace(':orderId', order.id))
+      expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.DEVICE_WEARER_DETAILS.replace(':orderId', order.id))
     })
 
     it('should go to monitoring conditions if current page is device wearer check your answers', () => {

@@ -65,6 +65,10 @@ const paths = {
     CHECK_YOUR_ANSWERS_VERSION: `${ABOUT_THE_DEVICE_WEARER_VERSION_BASE}/check-your-answers`,
     DEVICE_WEARER_SEARCH_RESULTS: `${ABOUT_THE_DEVICE_WEARER_BASE}/:identifyNumber/device-wearer-search-results`,
     RESPONSIBLE_ADULT: `${ABOUT_THE_DEVICE_WEARER_BASE}/responsible-adult`,
+    DEVICE_WEARER_DETAILS: `${ABOUT_THE_DEVICE_WEARER_BASE}/device-wearer-details`,
+    DISABILITIES: `${ABOUT_THE_DEVICE_WEARER_BASE}/disabilities`,
+    LANGUAGE: `${ABOUT_THE_DEVICE_WEARER_BASE}/language`,
+    ADULT_AT_INSTALLATION: `${ABOUT_THE_DEVICE_WEARER_BASE}/adult-at-installation`,
     IDENTITY_NUMBERS: `${ABOUT_THE_DEVICE_WEARER_BASE}/identity-numbers`,
   },
 

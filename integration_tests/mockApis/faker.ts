@@ -11,7 +11,7 @@ import yjsRegions from '../../server/i18n/en/reference/youthJusticeServiceRegion
 import youthCustodyServiceRegions from '../../server/i18n/en/reference/ddv6/youthCustodyServiceRegions'
 import policeAreas from '../../server/i18n/en/reference/ddv6/policeAreas'
 
-const sexOptions = ['Male', 'Female', 'Prefer not to say', 'Not able to provide this information']
+const sexOptions = ['Male', 'Female', 'Not able to provide this information']
 
 const genderOptions = ['Male', 'Female', 'Non binary', 'Not able to provide this information', 'Self identify']
 
