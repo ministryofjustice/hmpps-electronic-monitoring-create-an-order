@@ -7,6 +7,7 @@ import { OrderService } from '../services'
 import getContent from '../i18n'
 import { Locales } from '../types/i18n/locale'
 import RiskAtInstallationService from '../routes/installation-and-risk/riskAtInstallationService'
+import isVariationType from '../utils/order/isVariationType'
 
 const populateOrder =
   (orderService: OrderService, riskAtInstallationService: RiskAtInstallationService): RequestHandler =>
@@ -33,7 +34,7 @@ const populateOrder =
           res.locals.orderSummaryUri = paths.ORDER.SUMMARY.replace(':orderId', order.id)
         }
         req.order = order
-        if (order.type === 'VARIATION') {
+        if (isVariationType(order.type)) {
           const { riskCheck } = await riskAtInstallationService.getRiskAtInstallation(order)
           req.order = { ...order, riskCheck }
         }

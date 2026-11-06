@@ -203,6 +203,41 @@ context('Making changes to a previously submitted order as a Probation user', ()
     Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOriginalId }, {}, 'Check your answers')
   })
 
+  it('shows Risk information as Complete on the order list page once the question is answered for a REINSTALL_AT_DIFFERENT_ADDRESS', () => {
+    cy.visit(`/order/${mockOriginalId}/edit`)
+    const confirmPage = Page.verifyOnPage(ConfirmVariationPage)
+
+    cy.task('stubCemoGetOrder', {
+      httpStatus: 200,
+      id: mockOriginalId,
+      status: 'IN_PROGRESS',
+      type: 'REINSTALL_AT_DIFFERENT_ADDRESS',
+      order: {
+        ...completedRiskInformation,
+        monitoringConditions: getMockedMonitoringConditions(),
+        fmsResultDate: daysAgo(32),
+      },
+    })
+
+    confirmPage.confirmButton().click()
+
+    Page.verifyOnPage(OrderTasksPage).riskInformationTask.click()
+    const page = Page.verifyOnPage(InstallationAndRiskCheckRiskPage)
+
+    page.form.fillInWith('No')
+    page.form.continueButton.click()
+
+    const checkYourAnswersPage = Page.verifyOnPage(
+      InstallationAndRiskCheckYourAnswersPage,
+      { orderId: mockOriginalId },
+      {},
+      'Check your answers',
+    )
+    checkYourAnswersPage.return()
+
+    Page.verifyOnPage(OrderTasksPage).riskInformationTask.shouldHaveStatus('Complete')
+  })
+
   it('shows Risk information as Complete on the order list page once the question is answered', () => {
     const page = goToCheckRiskPage()
 
