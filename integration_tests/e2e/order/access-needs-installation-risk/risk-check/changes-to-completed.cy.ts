@@ -54,10 +54,16 @@ const completedRiskInformation = {
   offenceAdditionalDetails: { additionalDetails: 'details' },
 }
 
-context('Making changes to a previously submitted order', () => {
+context('Making changes to a previously submitted order as a Probation user', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+    cy.task('stubCemoRequest', {
+      httpStatus: 200,
+      method: 'GET',
+      subPath: 'user-cohort',
+      response: { cohort: 'PROBATION', activeCaseLoad: 'Probation Test' },
+    })
     cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOriginalId, status: 'SUBMITTED' })
     cy.task('stubCemoCreateVariation', {
       httpStatus: 200,
@@ -265,5 +271,60 @@ context('Making changes to a previously submitted order', () => {
     orderTasksPage.riskInformationTask.shouldHaveStatus('Incomplete')
     orderTasksPage.riskInformationTask.click()
     Page.verifyOnPage(InstallationAndRiskCheckRiskPage)
+  })
+})
+
+function testSetup(cohort: string) {
+  cy.task('reset')
+  cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+  cy.task('stubCemoRequest', {
+    httpStatus: 200,
+    method: 'GET',
+    subPath: 'user-cohort',
+    response: { cohort, activeCaseLoad: 'Probation Test' },
+  })
+  cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOriginalId, status: 'SUBMITTED' })
+  cy.task('stubCemoCreateVariation', {
+    httpStatus: 200,
+    originalId: mockOriginalId,
+    variationId: mockVariationId,
+  })
+  cy.task('stubCemoGetVersions', { httpStatus: 200, versions: [], orderId: mockOriginalId })
+  cy.signIn()
+}
+
+const nonProbationCohorts = [
+  { cohort: 'PRISON', label: 'a Prison' },
+  { cohort: 'HOME_OFFICE', label: 'a Home Office' },
+  { cohort: 'COURT', label: 'a Court' },
+  { cohort: 'OTHER', label: 'an Other' },
+]
+
+context('Making changes to a previously submitted order as a non Probation user', () => {
+  nonProbationCohorts.forEach(({ cohort, label }) => {
+    it(`Should not see the Check Risk page when signed in as ${label} user`, () => {
+      testSetup(cohort)
+      cy.visit(`/order/${mockOriginalId}/edit`)
+      const confirmPage = Page.verifyOnPage(ConfirmVariationPage)
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOriginalId,
+        status: 'IN_PROGRESS',
+        type: 'VARIATION',
+        order: {
+          ...completedRiskInformation,
+          monitoringConditions: getMockedMonitoringConditions(),
+          fmsResultDate: daysAgo(32),
+        },
+      })
+
+      confirmPage.confirmButton().click()
+
+      const orderTasksPage = Page.verifyOnPage(OrderTasksPage)
+      orderTasksPage.riskInformationTask.shouldHaveStatus('Optional')
+      orderTasksPage.riskInformationTask.click()
+      Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, { orderId: mockOriginalId }, {}, 'Check your answers')
+    })
   })
 })

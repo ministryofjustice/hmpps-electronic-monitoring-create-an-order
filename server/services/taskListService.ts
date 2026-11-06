@@ -10,6 +10,7 @@ import { TaskListCohortDefinition, taskListCohortDefinitions } from './taskListC
 import hasOptionalVariationSectionIsHOCourt from '../utils/order/optionalVariationSections'
 import { convertBooleanToEnum, isNotNullOrEmptyString, isNotNullOrUndefined } from '../utils/values'
 import { isPastDatedProbationVariation } from '../utils/order/orderStartDate'
+import { Cohort } from '../models/UserCohort'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
@@ -249,7 +250,7 @@ const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCoho
 export default class TaskListService {
   constructor() {}
 
-  getTasks(order: Order): Array<Task> {
+  getTasks(order: Order, userCohort?: Cohort): Array<Task> {
     const tasks: Array<Task> = []
     const cohort = getOrderCohort(order.interestedParties?.notifyingOrganisation)
     const cohortDefinition = taskListCohortDefinitions[cohort]
@@ -393,7 +394,7 @@ export default class TaskListService {
       completed: true,
     })
 
-    tasks.push(...getRiskInformationTasks(order))
+    tasks.push(...getRiskInformationTasks(order, userCohort))
 
     tasks.push(...getAdditionalDocumentTasks(order, cohortDefinition))
 
