@@ -122,11 +122,11 @@ export default function fillInAboutTheDeviceWearer({
   }
 
   if (!deviceWearerDetails.hideContactNumberPage) {
-    submitIfOnPage(paths.CONTACT_INFORMATION.CONTACT_DETAILS, () => {
-      const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage, section)
+    const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage, section)
+    if (deviceWearerDetails.hideContactNumberPage !== false) {
       contactDetailsPage.form.fillInWith(deviceWearerDetails)
-      contactDetailsPage.form.saveAndContinueButton.click()
-    })
+    }
+    contactDetailsPage.form.saveAndContinueButton.click()
   }
 
   if (deviceWearerDetails.hasFixedAddress) {
