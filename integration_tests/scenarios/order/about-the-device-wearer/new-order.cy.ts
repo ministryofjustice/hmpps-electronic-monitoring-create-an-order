@@ -206,10 +206,17 @@ context('New about device wearer flow', () => {
       interpreterRequired: false,
       language: '',
       hideContactNumberPage: true,
+      hasFixedAddress: 'Yes',
     }
     fillInAboutTheDeviceWearer({
       deviceWearerDetails: partiDeviceWearerDetails,
       notifyingOrganisation: 'Prison',
+      primaryAddressDetails: {
+        addressLine1: '20',
+        addressLine2: 'Somewhere',
+        addressLine3: 'Somecounty',
+        postcode: 'X27 8OS',
+      },
       loadFromCPR: true,
     })
     const cyaPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
@@ -277,10 +284,17 @@ context('New about device wearer flow', () => {
       interpreterRequired: false,
       language: '',
       hideContactNumberPage: true,
+      hasFixedAddress: 'Yes',
     }
     fillInAboutTheDeviceWearer({
       deviceWearerDetails: partiDeviceWearerDetails,
       notifyingOrganisation: 'Probation',
+      primaryAddressDetails: {
+        addressLine1: '20',
+        addressLine2: 'Somewhere',
+        addressLine3: 'Somecounty',
+        postcode: 'X27 8OS',
+      },
       loadFromCPR: true,
     })
     const cyaPage = Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answer')
