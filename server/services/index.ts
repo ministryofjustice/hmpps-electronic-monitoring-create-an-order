@@ -14,6 +14,7 @@ import EnforcementZoneAddToListService from '../routes/monitoring-conditions/enf
 import InterestedPartiesService from '../routes/contact-information/interested-parties/service'
 import OrderSearchService from './orderSearchService'
 import OrderService from './orderService'
+import ApplicationInsightsTelemetryService from './telemetryService'
 import TaskListService from './taskListService'
 import TrailMonitoringService from '../routes/monitoring-conditions/trail/service'
 import VariationService from './variationService'
@@ -69,6 +70,7 @@ export const services = () => {
   const zoneAddToListService = new EnforcementZoneAddToListService(cemoApiClient)
   const orderSearchService = new OrderSearchService(cemoApiClient)
   const orderService = new OrderService(cemoApiClient)
+  const telemetryService = new ApplicationInsightsTelemetryService()
   const orderChecklistService = new OrderChecklistService(
     config.redis.enabled ? new RedisOrderChecklistStore(createRedisClient()) : new InMemoryOrderChecklistStore(),
   )
@@ -130,6 +132,7 @@ export const services = () => {
     interestedPartiesService,
     orderSearchService,
     orderService,
+    telemetryService,
     taskListService,
     trailMonitoringService,
     variationService,
@@ -175,6 +178,7 @@ export {
   EnforcementZoneAddToListService,
   OrderSearchService,
   OrderService,
+  ApplicationInsightsTelemetryService,
   TrailMonitoringService,
   ProbationDeliveryUnitService,
   InstallationLocationService,

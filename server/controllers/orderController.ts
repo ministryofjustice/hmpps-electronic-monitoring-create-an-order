@@ -1,6 +1,6 @@
 import { Request, RequestHandler, Response } from 'express'
-import { defaultClient } from 'applicationinsights'
 import { OrderService } from '../services'
+import type { TelemetryEvents, TelemetryService } from '../services/telemetryService'
 import paths from '../constants/paths'
 import { CreateOrderFormDataParser } from '../models/form-data/order'
 import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
@@ -14,6 +14,7 @@ export default class OrderController {
   constructor(
     private readonly orderService: OrderService,
     private readonly sectionService: SectionService,
+    private readonly telemetryService: TelemetryService,
   ) {}
 
   create: RequestHandler = async (req: Request, res: Response) => {
@@ -156,19 +157,18 @@ export default class OrderController {
         accessToken: res.locals.user.token,
       })
       .catch(error => {
-        defaultClient?.trackEvent({
-          name: 'order_submission_attempt',
-          properties: { outcome: 'failure' },
-        })
+        this.telemetryService.trackEvent('order_submission_attempt', { outcome: 'failure' })
         throw error
       })
 
-    const outcome = result.submitted ? 'success' : 'failure'
+    const properties: TelemetryEvents['order_submission_attempt'] = {
+      outcome: result.submitted ? 'success' : 'failure',
+    }
+    if (!result.submitted && result.type === 'alreadySubmitted') {
+      properties.failureReason = 'already_submitted'
+    }
 
-    defaultClient?.trackEvent({
-      name: 'order_submission_attempt',
-      properties: { outcome },
-    })
+    this.telemetryService.trackEvent('order_submission_attempt', properties)
 
     if (result.submitted) {
       res.redirect(paths.ORDER.SUBMIT_SUCCESS.replace(':orderId', order.id))
