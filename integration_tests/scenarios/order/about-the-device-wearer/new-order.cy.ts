@@ -205,7 +205,7 @@ context('New about device wearer flow', () => {
       otherDisability: null,
       interpreterRequired: false,
       language: '',
-      hideContactNumberPage: true,
+      hideContactNumberPage: false,
       hasFixedAddress: 'Yes',
     }
     fillInAboutTheDeviceWearer({
@@ -283,7 +283,7 @@ context('New about device wearer flow', () => {
       otherDisability: null,
       interpreterRequired: false,
       language: '',
-      hideContactNumberPage: true,
+      hideContactNumberPage: false,
       hasFixedAddress: 'Yes',
     }
     fillInAboutTheDeviceWearer({
