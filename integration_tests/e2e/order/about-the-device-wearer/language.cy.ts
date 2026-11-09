@@ -78,7 +78,8 @@ context('About the device wearer', () => {
       page.form.interpreterRequiredField.shouldHaveOption('Yes')
       page.form.interpreterRequiredField.shouldHaveOption('No')
       page.form.interpreterRequiredField.shouldHaveDivider('or')
-      page.form.interpreterRequiredField.shouldHaveOption("Don't know")
+      cy.get('h1').should('have.length', 1)
+      page.form.interpreterRequiredField.shouldHaveOption('Not able to provide this information')
       page.form.interpreterRequiredField.shouldNotHaveValue()
       cy.get('input#language').should('not.be.visible')
       page.checkIsAccessible()
@@ -212,7 +213,7 @@ context('About the device wearer', () => {
       Page.verifyOnPage(ContactDetailsPage, { orderId })
     })
 
-    it("clears a saved language and submits don't know as no interpreter needed", () => {
+    it('clears a saved language and submits not able to provide as no interpreter needed', () => {
       stubOrder({ interpreterRequired: true, language: 'Arabic' })
       cy.task('stubCemoPutDeviceWearer', {
         httpStatus: 200,
@@ -222,7 +223,7 @@ context('About the device wearer', () => {
       })
 
       const page = Page.visit(LanguagePage, { orderId })
-      page.form.fillInWith({ interpreterRequired: "Don't know" })
+      page.form.fillInWith({ interpreterRequired: 'Not able to provide this information' })
       page.form.continueButton.click()
 
       cy.task('stubCemoVerifyRequestReceived', {

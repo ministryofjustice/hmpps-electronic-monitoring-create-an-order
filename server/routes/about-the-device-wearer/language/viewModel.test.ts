@@ -1,6 +1,7 @@
+import getContent from '../../../i18n'
 import LanguageViewModel from './viewModel'
 
-const labels = { title: 'Language', interpreterRequiredDontKnow: "Don't know" }
+const labels = getContent('en', 'DDV5').pages.deviceWearer.languagePage
 
 describe('language view model', () => {
   it('has no answer when nothing is saved', () => {
@@ -37,12 +38,12 @@ describe('language view model', () => {
     ).toBe('DONT_KNOW')
   })
 
-  it("offers yes and no, then don't know after an or divider, disabled when the order is not editable", () => {
+  it('offers yes and no, then not able to provide after an or divider, disabled when the order is not editable', () => {
     expect(LanguageViewModel.construct({}, labels, true).interpreterRequired.items).toEqual([
       { value: 'true', text: 'Yes', disabled: true },
       { value: 'false', text: 'No', disabled: true },
       { divider: 'or' },
-      { value: 'DONT_KNOW', text: "Don't know", disabled: true },
+      { value: 'DONT_KNOW', text: 'Not able to provide this information', disabled: true },
     ])
   })
 

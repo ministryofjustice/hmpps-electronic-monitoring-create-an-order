@@ -8,6 +8,10 @@ export default class DisabilitiesPage extends AppFormPage {
   form = new DisabilitiesFormComponent()
 
   constructor() {
-    super('Disability and health conditions', paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES, 'About the device wearer')
+    super(
+      'Does the device wearer have any of the disabilities or health conditions listed?',
+      paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES,
+      'About the device wearer',
+    )
   }
 }

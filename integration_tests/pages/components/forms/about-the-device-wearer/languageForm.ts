@@ -3,13 +3,18 @@ import FormRadiosComponent from '../../formRadiosComponent'
 import FormAutocompleteComponent from '../../formAutocompleteComponent'
 
 export type LanguageFormData = {
-  interpreterRequired?: 'Yes' | 'No' | "Don't know"
+  interpreterRequired?: 'Yes' | 'No' | 'Not able to provide this information'
   language?: string
 }
 
 export default class LanguageFormComponent extends FormComponent {
   get interpreterRequiredField(): FormRadiosComponent {
-    return new FormRadiosComponent(this.form, 'Is an interpreter needed?', ['Yes', 'No', "Don't know"], true)
+    return new FormRadiosComponent(
+      this.form,
+      'Is an interpreter needed?',
+      ['Yes', 'No', 'Not able to provide this information'],
+      true,
+    )
   }
 
   get languageField(): FormAutocompleteComponent {

@@ -1,54 +1,22 @@
 {% extends "../../../partials/form-layout.njk" %}
 
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
-{% from "govuk/components/input/macro.njk" import govukInput %}
 
 {% set section = content.pages.deviceWearer.section %}
-{% set heading = content.pages.deviceWearer.disabilitiesTitle %}
+{% set heading = '' %}
+{% set questionName = content.pages.deviceWearer.questions.disabilities.text %}
 {% set singleQuestionPage = true %}
 
 {% block formInputs %}
-  {% set otherDisabilityHtml %}
-    {{ govukInput({
-      label: {
-        text: content.pages.deviceWearer.questions.otherDisability.text
-      },
-      id: "otherDisability",
-      name: "otherDisability",
-      errorMessage: otherDisability.error,
-      disabled: not isOrderEditable,
-      value: otherDisability.value
-    }) }}
+  {% set disabilityHint %}
+    <p class="govuk-!-margin-top-0">{{ content.pages.deviceWearer.disabilitiesHelpText }}</p>
+    <p class="govuk-!-margin-bottom-0">{{ content.pages.deviceWearer.questions.disabilities.hint }}</p>
   {% endset %}
 
-  {% set disabilityOptions = [] %}
-  {% for disability in content.reference.disabilities | toOptions(not isOrderEditable) %}
-
-    {% if disability.value == 'OTHER' %}
-      {% set disabilityOptions = (
-        disabilityOptions.push({
-          value: disability.value,
-          text: disability.text,
-          disabled: disability.disabled,
-          conditional: { html: otherDisabilityHtml }
-        }), disabilityOptions
-      ) %}
-
-    {% elif disability.value == 'NO_LISTED_CONDITION' or disability.value == 'NONE' %}
-      {% set disabilityOptions = (
-        disabilityOptions.push({divider: "or"}),
-        disabilityOptions.push(disability), disabilityOptions
-      ) %}
-
-    {% elif disability.value == 'PREFER_NOT_TO_SAY' %}
-      {# This option is not shown in the UI #}
-
-    {% else %}
-      {% set disabilityOptions = (
-        disabilityOptions.push(disability), disabilityOptions
-      ) %}
-    {% endif %}
-  {% endfor %}
+  {% set disabilityOptions = content.reference.disabilities
+    | toOptions(not isOrderEditable)
+    | removeOptions(['PREFER_NOT_TO_SAY'])
+    | exclusiveOptions(['NO_LISTED_CONDITION', 'NONE']) %}
 
   {{ govukCheckboxes({
     name: "disabilities",
@@ -56,12 +24,12 @@
     fieldset: {
       legend: {
         text: content.pages.deviceWearer.questions.disabilities.text,
-        isPageHeading: false,
-        classes: "govuk-fieldset__legend--s"
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
       }
     },
     hint: {
-      text: content.pages.deviceWearer.questions.disabilities.hint
+      html: disabilityHint
     },
     items: disabilityOptions,
     values: disabilities.values,

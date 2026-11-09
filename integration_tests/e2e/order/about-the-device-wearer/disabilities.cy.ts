@@ -46,19 +46,20 @@ context('About the device wearer', () => {
       cy.signIn()
     })
 
-    it('shows the description input only when the not-listed checkbox is selected', () => {
+    it('shows the question and help text without an unlisted condition input', () => {
       stubOrder('IN_PROGRESS', personalDetailsAnswered)
 
       const page = Page.visit(DisabilitiesPage, { orderId: mockOrderId })
 
       page.form.disabilitiesField.shouldHaveAllOptions()
       page.form.disabilitiesField.shouldNotHaveOption('Prefer not to say')
-      page.form.otherDisabilityField.should('not.be.visible')
+      cy.get('h1').should('have.length', 1)
+      cy.contains(
+        "Provide disability or health conditions information to help plan installation. Answer questions based on what you know about the device wearer's access needs and requirements.",
+      ).should('be.visible')
+      page.form.otherDisabilityField.should('not.exist')
       page.form.disabilitiesField.set('The device wearer has a disability or health condition not listed')
-      page.form.otherDisabilityField.should('be.visible').and('have.attr', 'id', 'otherDisability')
-      cy.get('label[for="otherDisability"]')
-        .should('be.visible')
-        .and('contain.text', "What is the device wearer's disability or health condition?")
+      page.form.otherDisabilityField.should('not.exist')
       page.form.continueButton.should('exist')
       page.form.saveAsDraftButton.should('not.exist')
       page.errorSummary.shouldNotExist()
@@ -94,39 +95,39 @@ context('About the device wearer', () => {
       )
       errorPage.errorSummary.shouldHaveError('Select if the device wearer has any disability or health conditions')
     })
+    ;(['macbook-13', 'iphone-x'] as const).forEach(viewport => {
+      it(`makes the last two checkboxes exclusive on ${viewport}`, () => {
+        cy.viewport(viewport)
+        stubOrder('IN_PROGRESS', personalDetailsAnswered)
 
-    it('requires a description and redisplays all selected conditions', () => {
-      stubOrder('IN_PROGRESS', personalDetailsAnswered)
+        const page = Page.visit(DisabilitiesPage, { orderId: mockOrderId })
 
-      const page = Page.visit(DisabilitiesPage, { orderId: mockOrderId })
-      page.form.disabilitiesField.set([
-        'Mental health condition',
-        'The device wearer has a disability or health condition not listed',
-      ])
-      page.form.continueButton.click()
+        ;['NO_LISTED_CONDITION', 'NONE'].forEach(value => {
+          page.form.disabilitiesField.element.find('input[value="VISION"]').check()
+          page.form.disabilitiesField.element.find('input[value="OTHER"]').check()
+          page.form.disabilitiesField.element.find(`input[value="${value}"]`).check()
+          page.form.disabilitiesField.element.find('input:checked').should('have.length', 1).and('have.value', value)
+          page.form.disabilitiesField.element.find('input[value="MOBILITY"]').check()
+          page.form.disabilitiesField.element.find(`input[value="${value}"]`).should('not.be.checked')
+        })
 
-      const errorPage = Page.verifyOnPage(DisabilitiesPage)
-      errorPage.errorSummary.shouldHaveError("Enter the device wearer's disability or health condition")
-      cy.get('a[href="#otherDisability"]').should('be.visible')
-      errorPage.form.disabilitiesField.shouldHaveValue('Mental health condition')
-      errorPage.form.disabilitiesField.shouldHaveValue(
-        'The device wearer has a disability or health condition not listed',
-      )
-      errorPage.form.otherDisabilityField
-        .should('be.visible')
-        .and('have.value', '')
-        .and('have.attr', 'aria-describedby', 'otherDisability-error')
-      cy.get('a[href="#otherDisability"]').click()
-      errorPage.form.otherDisabilityField.should('be.focused')
-      errorPage.checkIsAccessible()
+        page.form.disabilitiesField.element.find('input[value="NO_LISTED_CONDITION"]').check()
+        page.form.disabilitiesField.element.find('input[value="NONE"]').check()
+        page.form.disabilitiesField.element.find('input:checked').should('have.length', 1).and('have.value', 'NONE')
+        cy.document().then(document => {
+          expect(document.documentElement.scrollWidth).to.be.at.most(document.documentElement.clientWidth)
+        })
+        cy.injectAxe()
+        cy.checkA11y('main')
+        cy.screenshot(`disabilities-${viewport}`, { capture: 'fullPage' })
+      })
     })
 
-    it('retains the description when continuing and revisiting cached answers', () => {
+    it('accepts an unlisted condition without a description and retains the selection on revisiting', () => {
       stubOrder('IN_PROGRESS', personalDetailsAnswered)
 
       const page = Page.visit(DisabilitiesPage, { orderId: mockOrderId })
       page.form.disabilitiesField.set('The device wearer has a disability or health condition not listed')
-      page.form.otherDisabilityField.type('Broken arm')
       page.form.continueButton.click()
 
       cy.location('pathname').should('eq', paths.ABOUT_THE_DEVICE_WEARER.LANGUAGE.replace(':orderId', mockOrderId))
@@ -135,7 +136,7 @@ context('About the device wearer', () => {
       revisitedPage.form.disabilitiesField.shouldHaveValue(
         'The device wearer has a disability or health condition not listed',
       )
-      revisitedPage.form.otherDisabilityField.should('be.visible').and('have.value', 'Broken arm')
+      revisitedPage.form.otherDisabilityField.should('not.exist')
       revisitedPage.checkIsAccessible()
     })
 
@@ -149,7 +150,7 @@ context('About the device wearer', () => {
       cy.location('pathname').should('eq', paths.ABOUT_THE_DEVICE_WEARER.LANGUAGE.replace(':orderId', mockOrderId))
     })
 
-    it('prefills and submits the unlisted condition description when OTHER remains selected', () => {
+    it('submits an unlisted condition without the removed description', () => {
       stubOrder('IN_PROGRESS', {
         ...personalDetailsAnswered,
         disabilities: 'OTHER',
@@ -164,19 +165,19 @@ context('About the device wearer', () => {
         response: {
           ...personalDetailsAnswered,
           disabilities: 'OTHER',
-          otherDisability: 'Broken arm',
+          otherDisability: '',
           interpreterRequired: false,
         },
       })
 
       const page = Page.visit(DisabilitiesPage, { orderId: mockOrderId })
       page.form.disabilitiesField.shouldHaveValue('The device wearer has a disability or health condition not listed')
-      page.form.otherDisabilityField.should('be.visible').and('have.value', 'Broken arm')
+      page.form.otherDisabilityField.should('not.exist')
       page.form.continueButton.click()
 
       cy.task('getStubbedRequest', `/orders/${mockOrderId}${apiPath}`).then(requests => {
         expect(requests).to.have.length(1)
-        expect(requests[0]).to.deep.include({ disabilities: 'OTHER', otherDisability: 'Broken arm' })
+        expect(requests[0]).to.deep.include({ disabilities: 'OTHER', otherDisability: '' })
       })
     })
 
@@ -197,7 +198,7 @@ context('About the device wearer', () => {
 
       const page = Page.visit(DisabilitiesPage, { orderId: mockOrderId })
       page.form.disabilitiesField.element.find('input[value="OTHER"]').uncheck()
-      page.form.otherDisabilityField.should('not.be.visible')
+      page.form.otherDisabilityField.should('not.exist')
       page.form.disabilitiesField.set('Not able to provide this information')
       page.form.continueButton.click()
 
@@ -218,7 +219,7 @@ context('About the device wearer', () => {
 
       page.form.disabilitiesField.shouldHaveValue('Deafness or serious hearing impairment')
       page.form.disabilitiesField.shouldBeDisabled()
-      page.form.otherDisabilityField.should('have.value', 'Broken arm').and('be.disabled')
+      page.form.otherDisabilityField.should('not.exist')
       page.form.saveAsDraftButton.should('not.exist')
       page.checkIsAccessible()
 

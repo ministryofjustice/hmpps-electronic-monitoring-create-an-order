@@ -51,9 +51,11 @@ const deviceWearerPageContent: DeviceWearerPageContent = {
   section: 'About the device wearer',
   title: 'Personal details',
   disabilitiesTitle: 'Disability and health conditions',
+  disabilitiesHelpText:
+    "Provide disability or health conditions information to help plan installation. Answer questions based on what you know about the device wearer's access needs and requirements.",
   languagePage: {
     title: 'Language',
-    interpreterRequiredDontKnow: "Don't know",
+    interpreterRequiredDontKnow: 'Not able to provide this information',
   },
 }
 

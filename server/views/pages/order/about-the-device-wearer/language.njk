@@ -4,7 +4,8 @@
 {% from "../../../components/accessible-autocomplete/macro.njk" import accessibleAutocomplete %}
 
 {% set section = content.pages.deviceWearer.section %}
-{% set heading = content.pages.deviceWearer.languagePage.title %}
+{% set heading = '' %}
+{% set questionName = content.pages.deviceWearer.questions.interpreterRequired.text %}
 {% set singleQuestionPage = true %}
 
 {% set visuallyHiddenHint %}
@@ -46,7 +47,8 @@
     fieldset: {
       legend: {
         text: content.pages.deviceWearer.questions.interpreterRequired.text,
-        classes: "govuk-fieldset__legend--s"
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
       }
     },
     hint: {

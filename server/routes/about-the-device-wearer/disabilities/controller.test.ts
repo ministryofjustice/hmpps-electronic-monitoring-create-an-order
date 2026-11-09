@@ -248,23 +248,15 @@ describe('DisabilitiesController', () => {
       expect(cached.otherDisability).toEqual('Posted description')
     })
 
-    it.each(['', '   '])('rejects a blank description when OTHER is selected: %p', async otherDisability => {
+    it.each([undefined, '', '   '])('accepts OTHER without a description: %p', async otherDisability => {
       const req = createRequest({ disabilities: 'OTHER', otherDisability })
 
       await controller.update(req, res, next)
 
-      expect(req.flash).toHaveBeenCalledWith('validationErrors', [
-        expect.objectContaining({
-          field: 'otherDisability',
-          error: "Enter the device wearer's disability or health condition",
-        }),
-      ])
-      expect(req.flash).toHaveBeenCalledWith('formData', { disabilities: ['OTHER'], otherDisability })
-      expect(res.redirect).toHaveBeenCalledWith(
-        paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES.replace(':orderId', order.id),
-      )
+      expect(req.flash).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith(paths.ABOUT_THE_DEVICE_WEARER.LANGUAGE.replace(':orderId', order.id))
       expect(apiClient.put).not.toHaveBeenCalled()
-      expect((await storeService.getDeviceWearer(order)).disabilities).toEqual([])
+      expect((await storeService.getDeviceWearer(order)).disabilities).toEqual(['OTHER'])
     })
 
     it('clears the description when OTHER is unselected', async () => {
@@ -311,7 +303,7 @@ describe('DisabilitiesController', () => {
       expect(res.redirect).toHaveBeenCalledWith('/next')
     })
 
-    it('keeps the existing description when an OTHER answer is posted without a description', async () => {
+    it('submits OTHER without the previous description when no description is posted', async () => {
       order.deviceWearer = {
         ...order.deviceWearer,
         disabilities: ['OTHER'],
@@ -319,10 +311,14 @@ describe('DisabilitiesController', () => {
         interpreterRequired: false,
         adultAtTimeOfInstallation: true,
       }
+      apiClient.put.mockResolvedValue({ ...order.deviceWearer, disabilities: 'OTHER', otherDisability: '' })
+
       await controller.update(createRequest({ disabilities: 'OTHER' }), res, next)
 
-      expect(apiClient.put).not.toHaveBeenCalled()
-      expect((await storeService.getDeviceWearer(order)).otherDisability).toEqual('Existing description')
+      expect(apiClient.put).toHaveBeenCalledWith(
+        expect.objectContaining({ data: expect.objectContaining({ disabilities: 'OTHER', otherDisability: '' }) }),
+      )
+      expect(res.redirect).toHaveBeenCalledWith('/next')
     })
   })
 

@@ -48,21 +48,24 @@ describe('Disability and health conditions page', () => {
     jest.resetAllMocks()
   })
 
-  it('shows the conditional input with the saved unlisted condition', async () => {
+  it('uses the question as the only H1 and does not ask for an unlisted condition description', async () => {
     const order = getMockOrder()
     order.deviceWearer.disabilities = ['OTHER']
     order.deviceWearer.otherDisability = 'Broken arm'
 
     const res = await renderPage(order)
 
-    expect(res.text).toContain('Disability and health conditions')
-    expect(res.text).toContain('Does the device wearer have any of the disabilities or health conditions listed?')
-    expect(res.text).toMatch(/<input[^>]*name="disabilities"[^>]*value="OTHER"[^>]*checked/)
-    expect(res.text).toMatch(/<input[^>]*id="otherDisability"[^>]*name="otherDisability"[^>]*value="Broken arm"/)
-    expect(res.text).toContain('data-aria-controls')
+    expect(res.text.match(/<h1\b/g)).toHaveLength(1)
     expect(res.text).toMatch(
-      /<label[^>]*for="otherDisability"[^>]*>\s*What is the device wearer&#39;s disability or health condition\?/,
+      /<h1[^>]*>\s*Does the device wearer have any of the disabilities or health conditions listed\?\s*<\/h1>/,
     )
+    expect(res.text).toContain(
+      'Provide disability or health conditions information to help plan installation. Answer questions based on what you know about the device wearer&#39;s access needs and requirements.',
+    )
+    expect(res.text).toContain('Select all that apply')
+    expect(res.text).toMatch(/<input[^>]*name="disabilities"[^>]*value="OTHER"[^>]*checked/)
+    expect(res.text).not.toContain('name="otherDisability"')
+    expect(res.text).not.toContain('data-aria-controls')
     expect(res.text).not.toContain('value="PREFER_NOT_TO_SAY"')
     expect(res.text).toMatch(/<button[^>]*value="continue"[^>]*>\s*Continue\s*<\/button>/)
     expect(res.text).not.toContain('Save and continue')
@@ -103,19 +106,24 @@ describe('Disability and health conditions page', () => {
     },
   )
 
-  it('links description errors to the input and preserves the submitted checkboxes', async () => {
+  it('marks only the last two checkboxes as exclusive', async () => {
+    const res = await renderPage(getMockOrder())
+
+    expect(res.text).toMatch(/<input[^>]*value="NO_LISTED_CONDITION"[^>]*data-behaviour="exclusive"/)
+    expect(res.text).toMatch(/<input[^>]*value="NONE"[^>]*data-behaviour="exclusive"/)
+    expect(res.text.match(/data-behaviour="exclusive"/g)).toHaveLength(2)
+  })
+
+  it('preserves the submitted checkboxes alongside an error', async () => {
     flashProvider.mockImplementation((key: string) => {
-      if (key === 'validationErrors')
-        return [{ field: 'otherDisability', error: 'Enter the disability or health condition' }]
+      if (key === 'validationErrors') return [{ field: 'disabilities', error: requiredError }]
       if (key === 'formData') return [{ disabilities: ['OTHER', 'MEMORY'], otherDisability: '' }]
       return []
     })
 
     const res = await renderPage(getMockOrder())
 
-    expect(res.text).toContain('href="#otherDisability">Enter the disability or health condition</a>')
-    expect(res.text).toContain('id="otherDisability-error"')
-    expect(res.text).toMatch(/<input[^>]*id="otherDisability"[^>]*aria-describedby="otherDisability-error"/)
+    expect(res.text).toContain(`href="#disabilities">${requiredError}</a>`)
     expect(res.text).toMatch(/<input[^>]*value="OTHER"[^>]*checked/)
     expect(res.text).toMatch(/<input[^>]*value="MEMORY"[^>]*checked/)
   })
@@ -142,7 +150,7 @@ describe('Disability and health conditions page', () => {
 
     expect(res.text).toMatch(/<input[^>]*value="HEARING"[^>]*checked[^>]*disabled/)
     expect(res.text).toMatch(/<input[^>]*value="OTHER"[^>]*checked[^>]*disabled/)
-    expect(res.text).toMatch(/<input[^>]*name="otherDisability"[^>]*value="Broken arm"[^>]*disabled/)
+    expect(res.text).not.toContain('name="otherDisability"')
     expect(res.text).not.toContain('Save as draft')
   })
 })

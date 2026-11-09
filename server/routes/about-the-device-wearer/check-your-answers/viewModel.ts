@@ -68,7 +68,6 @@ const createDeviceWearerAnswers = (order: Order, content: I18n, answerOpts: Answ
       personalDetailsUri,
       answerOpts,
     ),
-    ...createResponsibleAdultQuestionAnswer(order, content, answerOpts),
     createAnswer(
       content.pages.deviceWearer.questions.sex.text,
       lookup(content.reference.sex, order.deviceWearer.sex),
@@ -87,7 +86,7 @@ const createDeviceWearerAnswers = (order: Order, content: I18n, answerOpts: Answ
       paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES.replace(':orderId', order.id),
       answerOpts,
     ),
-    ...(order.deviceWearer.disabilities.includes('OTHER')
+    ...(order.deviceWearer.disabilities.includes('OTHER') && order.deviceWearer.otherDisability?.trim()
       ? [
           createAnswer(
             content.pages.deviceWearer.questions.otherDisability.text,
@@ -97,18 +96,19 @@ const createDeviceWearerAnswers = (order: Order, content: I18n, answerOpts: Answ
           ),
         ]
       : []),
-    createAnswer(
-      content.pages.deviceWearer.questions.language.text,
-      order.deviceWearer.language,
-      languageUri,
-      answerOpts,
-    ),
     createBooleanAnswer(
       content.pages.deviceWearer.questions.interpreterRequired.text,
       order.deviceWearer.interpreterRequired,
       languageUri,
       answerOpts,
     ),
+    createAnswer(
+      content.pages.deviceWearer.questions.language.text,
+      order.deviceWearer.language,
+      languageUri,
+      answerOpts,
+    ),
+    ...createResponsibleAdultQuestionAnswer(order, content, answerOpts),
   ]
 }
 

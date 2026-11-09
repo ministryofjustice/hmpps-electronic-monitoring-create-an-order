@@ -153,7 +153,7 @@ describe('LanguageController', () => {
         expect.objectContaining({ value: 'true', disabled: true }),
         expect.objectContaining({ value: 'false', disabled: true }),
         { divider: 'or' },
-        expect.objectContaining({ value: 'DONT_KNOW', text: "Don't know", disabled: true }),
+        expect.objectContaining({ value: 'DONT_KNOW', text: 'Not able to provide this information', disabled: true }),
       ])
     })
 

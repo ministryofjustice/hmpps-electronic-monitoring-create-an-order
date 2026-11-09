@@ -84,15 +84,11 @@ describe('deviceWearerPages', () => {
     })
   })
 
-  it.each([undefined, null, '', '   '])('requires a description for OTHER in the cache: %p', otherDisability => {
+  it.each([undefined, null, '', '   '])('accepts OTHER without a description in the cache: %p', otherDisability => {
     const answers: DeviceWearerCache = { ...answered, disabilities: ['OTHER'], otherDisability }
 
-    expect(findMissingAnswers(answers, youthOrder)).toEqual([
-      { field: 'otherDisability', error: "Enter the device wearer's disability or health condition" },
-    ])
-    expect(firstUnansweredPage(answers, youthOrder)).toEqual(
-      paths.ABOUT_THE_DEVICE_WEARER.DISABILITIES.replace(':orderId', '1'),
-    )
+    expect(findMissingAnswers(answers, youthOrder)).toEqual([])
+    expect(firstUnansweredPage(answers, youthOrder)).toBeNull()
   })
 
   it('accepts OTHER with a description', () => {

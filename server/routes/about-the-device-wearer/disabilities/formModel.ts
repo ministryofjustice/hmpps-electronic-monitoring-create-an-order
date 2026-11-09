@@ -15,10 +15,6 @@ const DisabilitiesFormDataValidator = z
     disabilities: z.array(DisabilityEnum).min(1, validationErrors.deviceWearer.disabilitiesRequired),
     otherDisability: z.string().default(''),
   })
-  .refine(({ disabilities, otherDisability }) => !disabilities.includes('OTHER') || otherDisability.trim().length > 0, {
-    path: ['otherDisability'],
-    message: "Enter the device wearer's disability or health condition",
-  })
   .transform(({ disabilities, otherDisability }) => ({
     disabilities,
     otherDisability: disabilities.includes('OTHER') ? otherDisability : '',
