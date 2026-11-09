@@ -220,6 +220,12 @@
     "@ministryofjustice/eslint-config-hmpps": {
       "minimatch": "^3.1.5"
     },
-    "glob": "^14.0.2"
+    "glob": "^14.0.2",
+    "bunyan": {
+      "glob": "^13.0.6"
+    },
+    "esbuild-plugin-clean": {
+      "glob": "^13.0.6"
+    }
   }
 }
