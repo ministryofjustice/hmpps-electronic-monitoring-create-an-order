@@ -45,7 +45,7 @@ context('Edit Order', () => {
       Page.verifyOnPage(ServiceRequestTypePage)
     })
 
-    it('Should call amend-rejected-order endpoint and go to order summary page if Yes is selected', () => {
+    it('Should call the service-request amendment endpoint and go to the next order section if Yes is selected', () => {
       const page = Page.visit(IsAddressChangePage, { orderId: mockOrderId })
       page.form.fillInWith('Yes')
       page.form.saveAndContinueButton.click()

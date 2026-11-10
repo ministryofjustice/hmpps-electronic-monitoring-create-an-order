@@ -26,7 +26,6 @@ import TrailMonitoringPageContent from './pages/trailMonitoring'
 import UploadDocumentPageContent from './pages/uploadDocument'
 import VariationDetailsPageContent from './pages/variationDetails'
 import ReferenceData from './reference'
-import IsRejectionPageContent from './pages/isRejection'
 import ServiceRequestTypePageContent from './pages/serviceRequestType'
 import NewDocumentPageContent from './pages/newDocument'
 import DapoContent from './pages/dapo'
@@ -85,7 +84,6 @@ type I18n = {
     uploadRevocationPaperwork: UploadDocumentPageContent
     uploadPhotoId: UploadDocumentPageContent
     variationDetails: VariationDetailsPageContent
-    isRejection: IsRejectionPageContent
     setSentencingAct: SetSentencingActPageContent
     serviceRequestType: ServiceRequestTypePageContent
     dapo: DapoContent

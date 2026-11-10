@@ -40,7 +40,10 @@ export const DataDictionaryVersionEnum = z.enum(['DDV4', 'DDV5', 'DDV6', 'DDV7']
 const OrderModel = z.object({
   id: z.string().uuid(),
   status: OrderStatusEnum,
+  canAmend: z.boolean().default(false),
+  fmsResultId: z.string().uuid().nullable().optional(),
   type: OrderTypeEnum,
+  amendmentSourceType: OrderTypeEnum.optional(),
   deviceWearer: DeviceWearerModel,
   addresses: z.array(AddressModel),
   deviceWearerResponsibleAdult: DeviceWearerResponsibleAdultModel.nullable(),

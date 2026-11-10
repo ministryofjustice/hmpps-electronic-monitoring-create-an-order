@@ -162,6 +162,19 @@ const defaultGetOrderOptions = {
 
 const getOrder = (options: GetOrderStubOptions = defaultGetOrderOptions): SuperAgentRequest => {
   const stubOptions = { ...defaultGetOrderOptions, ...options }
+  const order = mockApiOrder()
+  const statusUpdates =
+    stubOptions.status === 'SUBMITTED'
+      ? [
+          {
+            id: uuidv4(),
+            versionId: order.versionId,
+            status: 'ACCEPTED',
+            datetimeOfStatusChange: '2025-01-01T12:00:00.000Z',
+            statusUpdateReasons: [],
+          },
+        ]
+      : []
 
   return stubFor({
     request: {
@@ -174,9 +187,11 @@ const getOrder = (options: GetOrderStubOptions = defaultGetOrderOptions): SuperA
       jsonBody:
         stubOptions.httpStatus === 200
           ? {
-              ...mockApiOrder(),
+              ...order,
               id: stubOptions.id,
               status: stubOptions.status,
+              canAmend: stubOptions.status === 'SUBMITTED' || stubOptions.status === 'REJECTED',
+              statusUpdates,
               type: stubOptions.type,
               ...(stubOptions.order ? stubOptions.order : {}),
             }
@@ -373,37 +388,6 @@ const deleteOrder = (options: DeleteOrderStubOptions) =>
         options.httpStatus === 200
           ? {}
           : { status: options.httpStatus, userMessage: options.error, developerMessage: '' },
-    },
-  })
-
-type CreateVariationStubOptions = {
-  httpStatus: number
-  originalId: string
-  variationId: string
-}
-
-const defaultCreateVariationOptions = {
-  httpStatus: 200,
-  originalId: uuidv4(),
-  variationId: uuidv4(),
-}
-const createVariation = (options: CreateVariationStubOptions = defaultCreateVariationOptions): SuperAgentRequest =>
-  stubFor({
-    request: {
-      method: 'POST',
-      urlPattern: `/cemo/api/orders/${options.originalId}/copy-as-variation`,
-    },
-    response: {
-      status: options.httpStatus,
-      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-      jsonBody:
-        options.httpStatus === 200
-          ? {
-              ...mockApiOrder(),
-              type: 'VARIATION',
-              id: options.variationId,
-            }
-          : null,
     },
   })
 
@@ -695,35 +679,75 @@ const tables = [
   'variation_details',
   'device_wearer',
   'address',
+  'status_update_reason',
+  'status_update',
   'order_version',
   'orders',
 ]
 
-const emptyNextTable = async (client: PostgresqlClient): Promise<boolean> => {
-  const table = tables.shift()
-  if (table) {
+const emptyNextTable = async (client: PostgresqlClient, index = 0): Promise<void> => {
+  const table = tables[index]
+  if (table !== undefined) {
     await client.query(`DELETE FROM ${table}`)
-
-    await emptyNextTable(client)
+    await emptyNextTable(client, index + 1)
   }
+}
 
-  return true
+const databaseConfig = {
+  user: 'postgres',
+  password: 'postgres',
+  host: 'localhost',
+  port: 5432,
+  database: 'postgres',
 }
 
 const resetDB = async () => {
-  const client = new PostgresqlClient({
-    user: 'postgres',
-    password: 'postgres',
-    host: 'localhost',
-    port: 5432,
-    database: 'postgres',
-  })
+  const client = new PostgresqlClient(databaseConfig)
 
   await client.connect()
   await emptyNextTable(client)
   await client.end()
 
   return true
+}
+
+export type ScenarioOrderVersion = {
+  id: string
+  versionId: number
+  status: Order['status']
+  type: Order['type']
+  fmsResultId: string | null
+}
+
+const setScenarioOrderVersion = async (options: { orderId: string; status: Order['status']; type: Order['type'] }) => {
+  const client = new PostgresqlClient(databaseConfig)
+  await client.connect()
+  try {
+    const result = await client.query(
+      `UPDATE order_version SET status = $2, type = $3
+       WHERE order_id = $1 AND version_id = (SELECT MAX(version_id) FROM order_version WHERE order_id = $1)`,
+      [options.orderId, options.status, options.type],
+    )
+    assert.strictEqual(result.rowCount, 1, 'Expected exactly one current order version')
+    return null
+  } finally {
+    await client.end()
+  }
+}
+
+const getScenarioOrderVersions = async (options: { orderId: string }): Promise<ScenarioOrderVersion[]> => {
+  const client = new PostgresqlClient(databaseConfig)
+  await client.connect()
+  try {
+    const result = await client.query<ScenarioOrderVersion>(
+      `SELECT id, version_id AS "versionId", status, type, fms_result_id AS "fmsResultId"
+       FROM order_version WHERE order_id = $1 ORDER BY version_id`,
+      [options.orderId],
+    )
+    return result.rows
+  } finally {
+    await client.end()
+  }
 }
 
 type UpdateOrderOwnerStubOptions = {
@@ -789,7 +813,6 @@ const setSentencingAct = (options: SetSentencingActStubOptions = defaultSetSente
 
 export default {
   stubCemoCreateOrder: createOrder,
-  stubCemoCreateVariation: createVariation,
   stubCemoGetOrder: getOrder,
   stubCemoGetVersion: getSpecificVersion,
   stubCemoPing: ping,
@@ -811,5 +834,7 @@ export default {
   stubCemoVerifyRequestReceived,
   stubDeleteOrder: deleteOrder,
   resetDB,
+  setScenarioOrderVersion,
+  getScenarioOrderVersions,
   stubCemoRequest,
 }

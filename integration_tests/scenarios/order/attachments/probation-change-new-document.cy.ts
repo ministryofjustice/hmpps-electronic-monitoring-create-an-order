@@ -9,7 +9,6 @@ import SubmitSuccessPage from '../../../pages/order/submit-success'
 import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
 import ReceiptPage from '../../../pages/order/receipt'
 import ConfirmVariationPage from '../../../pages/order/variation/confirmVariation'
-import IsRejectionPage from '../../../e2e/order/edit-order/is-rejection/isRejectionPage'
 import IsAddressChangePage from '../../../e2e/order/edit-order/is-address-change/isAddressChangePage'
 import ServiceRequestTypePage from '../../../e2e/order/variation/service-request-type/serviceRequestTypePage'
 import NotifyingOrganisationPage from '../../../e2e/order/interested-parties/notifying-organisation/notifyingOrganisationPage'
@@ -151,7 +150,6 @@ context('Attachments', () => {
 
     Page.verifyOnPage(OrderSummaryPage).makeChanges()
     Page.verifyOnPage(ConfirmVariationPage).confirm()
-    Page.verifyOnPage(IsRejectionPage).isNotRejection()
 
     const isAddressChangePage = Page.verifyOnPage(IsAddressChangePage)
     isAddressChangePage.form.fillInWith('No')
