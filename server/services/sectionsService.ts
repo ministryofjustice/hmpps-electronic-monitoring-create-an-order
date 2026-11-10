@@ -5,6 +5,7 @@ import OrderChecklistService from './orderChecklistService'
 import TaskListService, { canBeCompleted, Task } from './taskListService'
 import hasOptionalVariationSectionIsHOCourt from '../utils/order/optionalVariationSections'
 import { isNotNullOrEmptyString } from '../utils/values'
+import getIneligibleMonitoringConditionsErrors from '../utils/order/ineligibleMonitoringConditions'
 import { Cohort } from '../models/UserCohort'
 
 export const SECTIONS = {
@@ -26,6 +27,7 @@ export type TaskSection = {
   path: string
   isReady: boolean
   checked: boolean
+  hasProblem: boolean
 }
 
 export default class SectionService {
@@ -118,6 +120,9 @@ export default class SectionService {
       name: sectionName,
       completed,
       checked: checkList[sectionName],
+      hasProblem:
+        sectionName === SECTIONS.electronicMonitoringCondition &&
+        getIneligibleMonitoringConditionsErrors(order).length > 0,
       path,
       isReady: this.isSectionReady(sectionName, tasks, order),
     }
