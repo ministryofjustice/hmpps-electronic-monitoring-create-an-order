@@ -6,6 +6,7 @@ const RiskAtInstallationModel = z.object({
   riskDetails: z.string(),
   hasOtherRisks: z.enum(['YES', 'NO']).nullable().default(null),
   genderRiskDetails: z.string(),
+  riskCheck: z.enum(['YES', 'NO']).nullable().default(null),
 })
 
 export type RiskAtInstallation = z.infer<typeof RiskAtInstallationModel>
