@@ -46,7 +46,7 @@ const stubOrder = (
     id: mockOrderId,
     status,
     order: {
-      interestedParties: { notifyingOrganisation },
+      interestedParties: { notifyingOrganisation, notifyingOrganisationName: 'FELTHAM_YOUNG_OFFENDER_INSTITUTION' },
       deviceWearer: { ...answeredDeviceWearer, adultAtTimeOfInstallation },
     },
   })
@@ -72,7 +72,7 @@ context('About the device wearer', () => {
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
     })
 
-    const youthOrPrison: NotifyingOrganisation[] = ['YOUTH_CUSTODY_SERVICE', 'YOUTH_COURT', 'PRISON']
+    const youthOrPrison: NotifyingOrganisation[] = ['YOUTH_CUSTODY_SERVICE', 'PRISON']
 
     youthOrPrison.forEach(notifyingOrganisation => {
       context(`${notifyingOrganisation} order`, () => {
@@ -142,7 +142,7 @@ context('About the device wearer', () => {
 
     context('Submitted order', () => {
       it('shows the submitted answer, disabled, and continues to the summary without saving it', () => {
-        stubOrder('YOUTH_COURT', true, 'SUBMITTED')
+        stubOrder('YOUTH_CUSTODY_SERVICE', true, 'SUBMITTED')
         cy.signIn()
 
         const page = Page.visit(AdultAtInstallationPage, { orderId: mockOrderId })
@@ -160,7 +160,6 @@ context('About the device wearer', () => {
         })
       })
     })
-
     context('Other orders', () => {
       it('do not show the question on check your answers', () => {
         stubOrder('PROBATION', true)

@@ -16,7 +16,7 @@ const answered: DeviceWearerCache = {
 
 const youthOrder = getMockOrder({
   id: '1',
-  interestedParties: createInterestedParties({ notifyingOrganisation: 'YOUTH_COURT' }),
+  interestedParties: createInterestedParties({ notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE' }),
 })
 const probationOrder = getMockOrder({
   id: '1',
@@ -29,7 +29,7 @@ describe('deviceWearerPages', () => {
     expect(firstUnansweredPage(answered, youthOrder)).toBeNull()
   })
 
-  it('routes youth and prison orders to the responsible adult question when it is unanswered', () => {
+  it('routes an eligible order to the unanswered responsible adult question', () => {
     const answers = { ...answered, adultAtTimeOfInstallation: null }
 
     expect(firstUnansweredPage(answers, youthOrder)).toEqual(

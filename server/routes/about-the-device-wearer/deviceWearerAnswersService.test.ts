@@ -7,9 +7,9 @@ import DeviceWearerStoreService from './store/deviceWearerStoreService'
 
 jest.mock('../../data/restClient')
 
-const orderFrom = (notifyingOrganisation: NotifyingOrganisation) =>
+const orderFrom = (notifyingOrganisation: NotifyingOrganisation, notifyingOrganisationName?: string | null) =>
   getMockOrder({
-    interestedParties: createInterestedParties({ notifyingOrganisation }),
+    interestedParties: createInterestedParties({ notifyingOrganisation, notifyingOrganisationName }),
     deviceWearer: createDeviceWearer({
       firstName: 'Jo',
       lastName: 'Bloggs',
@@ -130,10 +130,10 @@ describe('DeviceWearerAnswersService', () => {
       )
     })
 
-    it.each<NotifyingOrganisation>(['YOUTH_CUSTODY_SERVICE', 'YOUTH_COURT', 'PRISON'])(
+    it.each<NotifyingOrganisation>(['YOUTH_CUSTODY_SERVICE', 'PRISON'])(
       'sends the answer to whether a responsible adult is required for %s orders',
       async notifyingOrganisation => {
-        const order = orderFrom(notifyingOrganisation)
+        const order = orderFrom(notifyingOrganisation, 'FELTHAM_YOUNG_OFFENDER_INSTITUTION')
 
         await service.submit({ accessToken: 'token', order })
 
@@ -141,7 +141,14 @@ describe('DeviceWearerAnswersService', () => {
       },
     )
 
-    it.each<NotifyingOrganisation>(['PROBATION', 'HOME_OFFICE', 'CROWN_COURT', 'FAMILY_COURT'])(
+    it.each<NotifyingOrganisation>([
+      'PROBATION',
+      'HOME_OFFICE',
+      'CROWN_COURT',
+      'FAMILY_COURT',
+      'YOUTH_COURT',
+      'PRISON',
+    ])(
       'sends that no responsible adult is required for %s orders, even if one was required before',
       async notifyingOrganisation => {
         const order = orderFrom(notifyingOrganisation)
@@ -161,7 +168,7 @@ describe('DeviceWearerAnswersService', () => {
       expect(submittedAdultAtTimeOfInstallation()).toBe(true)
     })
 
-    it('sends a No answer unchanged for youth and prison orders', async () => {
+    it('sends a No answer unchanged for an eligible organisation', async () => {
       const order = orderFrom('YOUTH_CUSTODY_SERVICE')
       await service.saveAdultAtInstallation(order, { adultAtTimeOfInstallation: true })
 

@@ -239,7 +239,7 @@ describe('AdultAtInstallationController', () => {
     const versionedSummaryUri = `/order/${order.id}/version/a-version-id/summary`
     const submittedOrder = getMockOrder({
       status: 'SUBMITTED',
-      interestedParties: createInterestedParties({ notifyingOrganisation: 'YOUTH_COURT' }),
+      interestedParties: createInterestedParties({ notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE' }),
       deviceWearer: createDeviceWearer({ ...answered, adultAtTimeOfInstallation: true }),
     })
 

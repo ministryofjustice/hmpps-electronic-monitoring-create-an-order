@@ -1,23 +1,36 @@
 import { DeviceWearer } from '../../models/DeviceWearer'
-import { NotifyingOrganisation } from '../../models/NotifyingOrganisation'
 import { Order } from '../../models/Order'
 
-const ORGANISATIONS_ASKING_RESPONSIBLE_ADULT_QUESTION: NotifyingOrganisation[] = [
-  'YOUTH_CUSTODY_SERVICE',
-  'YOUTH_COURT',
-  'PRISON',
-]
+const YOUNG_OFFENDER_INSTITUTIONS = new Set([
+  'ASKHAM_GRANGE_PRISON_AND_YOUNG_OFFENDER_INSTITUTION',
+  'AYLESBURY_PRISON_AND_YOUNG_OFFENDER_INSTITUTION',
+  'COOKHAM_WOOD_YOUNG_OFFENDER_INSTITUTION',
+  'DOWNVIEW_PRISON_AND_YOUNG_OFFENDER_INSTITUTION',
+  'DRAKE_HALL_PRISON_AND_YOUNG_OFFENDER_INSTITUTION',
+  'EAST_SUTTON_PARK_PRISON_AND_YOUNG_OFFENDER_INSTITUTION',
+  'EAST_SUTTON_PARK_PRISON_AND_YOUNG_OFFENDERS_INSTITUTION',
+  'EASTWOOD_PARK_PRISON_AND_YOUNG_OFFENDER_INSTITUTION',
+  'FELTHAM_YOUNG_OFFENDER_INSTITUTION',
+  'FOSTON_HALL_PRISON_AND_YOUNG_OFFENDER_INSTITUTION',
+  'LOW_NEWTON_PRISON_AND_YOUNG_OFFENDER_INSTITUTION',
+  'NEW_HALL_PRISON_AND_YOUNG_OFFENDER_INSTITUTION',
+  'PARC_PRISON_AND_YOUNG_OFFENDER_INSTITUTION',
+  'PORTLAND_PRISON_AND_YOUNG_OFFENDER_INSTITUTION',
+  'STYAL_PRISON_AND_YOUNG_OFFENDER_INSTITUTION',
+  'WERRINGTON_YOUNG_OFFENDER_INSTITUTION',
+  'WETHERBY_YOUNG_OFFENDER_INSTITUTION',
+])
 
-// The "Is a responsible adult required?" question is only asked for youth and prison orders.
 export const shouldAskResponsibleAdultQuestion = (order: Pick<Order, 'interestedParties'>): boolean => {
-  const notifyingOrganisation = order.interestedParties?.notifyingOrganisation
+  const { notifyingOrganisation, notifyingOrganisationName } = order.interestedParties ?? {}
   return (
-    notifyingOrganisation != null && ORGANISATIONS_ASKING_RESPONSIBLE_ADULT_QUESTION.includes(notifyingOrganisation)
+    notifyingOrganisation === 'YOUTH_CUSTODY_SERVICE' ||
+    (notifyingOrganisation === 'PRISON' &&
+      notifyingOrganisationName != null &&
+      YOUNG_OFFENDER_INSTITUTIONS.has(notifyingOrganisationName))
   )
 }
 
-// adultAtTimeOfInstallation is the inverse of "is a responsible adult required?". The API clears any responsible adult
-// details when it is true, and sends responsible_adult_required=false to FMS when there are no responsible adult details.
 export const NO_RESPONSIBLE_ADULT_REQUIRED: Pick<DeviceWearer, 'adultAtTimeOfInstallation'> = {
   adultAtTimeOfInstallation: true,
 }

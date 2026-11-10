@@ -152,11 +152,7 @@ const createOtherRelationshipAnswer = (order: Order, content: I18n, uri: string,
 const createResponsibeAdultAnswers = (order: Order, content: I18n, answerOpts: AnswerOptions) => {
   const uri = paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id)
 
-  if (order.deviceWearer.adultAtTimeOfInstallation === null) {
-    return []
-  }
-
-  if (order.deviceWearer.adultAtTimeOfInstallation) {
+  if (!shouldAskResponsibleAdultQuestion(order) || order.deviceWearer.adultAtTimeOfInstallation !== false) {
     return []
   }
 

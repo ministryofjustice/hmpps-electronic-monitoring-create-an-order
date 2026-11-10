@@ -10,6 +10,7 @@ import { TaskListCohortDefinition, taskListCohortDefinitions } from './taskListC
 import hasOptionalVariationSectionIsHOCourt from '../utils/order/optionalVariationSections'
 import { convertBooleanToEnum, isNotNullOrEmptyString, isNotNullOrUndefined } from '../utils/values'
 import { isPastDatedProbationVariation } from '../utils/order/orderStartDate'
+import { shouldAskResponsibleAdultQuestion } from '../utils/order/responsibleAdultQuestion'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
@@ -283,12 +284,14 @@ export default class TaskListService {
       section: SECTIONS.aboutTheDeviceWearer,
       name: PAGES.responsibleAdult,
       path: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT,
-      state: convertBooleanToEnum<State>(
-        order.deviceWearer.adultAtTimeOfInstallation,
-        STATES.cantBeStarted,
-        STATES.notRequired,
-        STATES.required,
-      ),
+      state: shouldAskResponsibleAdultQuestion(order)
+        ? convertBooleanToEnum<State>(
+            order.deviceWearer.adultAtTimeOfInstallation,
+            STATES.cantBeStarted,
+            STATES.notRequired,
+            STATES.required,
+          )
+        : STATES.notRequired,
       completed: isNotNullOrUndefined(order.deviceWearerResponsibleAdult),
     })
 

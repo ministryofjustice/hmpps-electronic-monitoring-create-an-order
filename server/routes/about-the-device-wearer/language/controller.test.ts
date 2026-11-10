@@ -279,7 +279,7 @@ describe('LanguageController', () => {
     it('saves the answers and goes to the next unanswered device wearer page', async () => {
       const order = {
         ...answeredOrder({ adultAtTimeOfInstallation: null }),
-        interestedParties: createInterestedParties({ notifyingOrganisation: 'YOUTH_COURT' }),
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE' }),
       }
       requestFor(order)
       req.body = { action: 'continue', interpreterRequired: 'false', language: '' }

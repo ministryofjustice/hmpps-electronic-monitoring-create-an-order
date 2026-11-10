@@ -11,7 +11,10 @@ const responsibleAdultQuestionRow = (
   adultAtTimeOfInstallation: boolean | null,
 ) => {
   const order = getMockOrder({
-    interestedParties: createInterestedParties({ notifyingOrganisation }),
+    interestedParties: createInterestedParties({
+      notifyingOrganisation,
+      notifyingOrganisationName: 'FELTHAM_YOUNG_OFFENDER_INSTITUTION',
+    }),
     deviceWearer: createDeviceWearer({ adultAtTimeOfInstallation }),
   })
   const row = createViewModel(order, getContent('en', 'DDV5'), true).deviceWearer.find(
@@ -47,7 +50,10 @@ describe('device wearer check your answers view model', () => {
 
   it('lists answers in the order the questions are asked', () => {
     const order = getMockOrder({
-      interestedParties: createInterestedParties({ notifyingOrganisation: 'PRISON' }),
+      interestedParties: createInterestedParties({
+        notifyingOrganisation: 'PRISON',
+        notifyingOrganisationName: 'FELTHAM_YOUNG_OFFENDER_INSTITUTION',
+      }),
     })
     const rows = createViewModel(order, getContent('en', 'DDV5'), true).deviceWearer
 
@@ -79,7 +85,7 @@ describe('device wearer check your answers view model', () => {
   })
 
   describe('responsible adult question', () => {
-    it.each<NotifyingOrganisation>(['YOUTH_CUSTODY_SERVICE', 'YOUTH_COURT', 'PRISON'])(
+    it.each<NotifyingOrganisation>(['YOUTH_CUSTODY_SERVICE', 'PRISON'])(
       'is shown for %s orders and links to the responsible adult question page',
       notifyingOrganisation => {
         const { order, row } = responsibleAdultQuestionRow(notifyingOrganisation, false)
@@ -97,11 +103,35 @@ describe('device wearer check your answers view model', () => {
       expect(row?.value).toEqual({ text: 'No' })
     })
 
-    it.each<NotifyingOrganisation>(['PROBATION', 'HOME_OFFICE', 'CROWN_COURT', 'FAMILY_COURT', 'MAGISTRATES_COURT'])(
-      'is not shown for %s orders',
-      notifyingOrganisation => {
-        expect(responsibleAdultQuestionRow(notifyingOrganisation, true).row).toBeUndefined()
-      },
-    )
+    it.each<NotifyingOrganisation>([
+      'YOUTH_COURT',
+      'PROBATION',
+      'HOME_OFFICE',
+      'CROWN_COURT',
+      'FAMILY_COURT',
+      'MAGISTRATES_COURT',
+    ])('is not shown for %s orders', notifyingOrganisation => {
+      expect(responsibleAdultQuestionRow(notifyingOrganisation, true).row).toBeUndefined()
+    })
+
+    it('hides the question and saved details for an ordinary prison', () => {
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({
+          notifyingOrganisation: 'PRISON',
+          notifyingOrganisationName: 'BEDFORD_PRISON',
+        }),
+        deviceWearer: createDeviceWearer({ adultAtTimeOfInstallation: false }),
+        deviceWearerResponsibleAdult: {
+          fullName: 'Parent Name',
+          relationship: 'parent',
+          otherRelationshipDetails: null,
+          contactNumber: '01234567890',
+        },
+      })
+      const model = createViewModel(order, getContent('en', 'DDV5'), true)
+
+      expect(model.deviceWearer.some(answer => answer.key.text === QUESTION)).toBe(false)
+      expect(model.responsibleAdult).toEqual([])
+    })
   })
 })

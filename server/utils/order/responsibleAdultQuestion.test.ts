@@ -1,21 +1,25 @@
 import { createInterestedParties, getMockOrder } from '../../../test/mocks/mockOrder'
-import { NotifyingOrganisation, notifyingOrganisations } from '../../models/NotifyingOrganisation'
+import { NotifyingOrganisation } from '../../models/NotifyingOrganisation'
 import { NO_RESPONSIBLE_ADULT_REQUIRED, shouldAskResponsibleAdultQuestion } from './responsibleAdultQuestion'
 
-const orderFrom = (notifyingOrganisation: NotifyingOrganisation) =>
-  getMockOrder({ interestedParties: createInterestedParties({ notifyingOrganisation }) })
+const orderFrom = (notifyingOrganisation: NotifyingOrganisation, notifyingOrganisationName?: string | null) =>
+  getMockOrder({ interestedParties: createInterestedParties({ notifyingOrganisation, notifyingOrganisationName }) })
 
 describe('shouldAskResponsibleAdultQuestion', () => {
-  const youthOrPrison: NotifyingOrganisation[] = ['YOUTH_CUSTODY_SERVICE', 'YOUTH_COURT', 'PRISON']
-
-  it.each(youthOrPrison)('asks the question for %s orders', notifyingOrganisation => {
-    expect(shouldAskResponsibleAdultQuestion(orderFrom(notifyingOrganisation))).toBe(true)
-  })
-
-  it.each(notifyingOrganisations.filter(org => !youthOrPrison.includes(org)))(
-    'does not ask the question for %s orders',
-    notifyingOrganisation => {
-      expect(shouldAskResponsibleAdultQuestion(orderFrom(notifyingOrganisation))).toBe(false)
+  it.each([
+    ['YOUTH_CUSTODY_SERVICE', null, true],
+    ['PRISON', 'FELTHAM_YOUNG_OFFENDER_INSTITUTION', true],
+    ['PRISON', 'AYLESBURY_PRISON_AND_YOUNG_OFFENDER_INSTITUTION', true],
+    ['PRISON', 'BEDFORD_PRISON', false],
+    ['PRISON', null, false],
+    ['YOUTH_COURT', null, false],
+    ['PROBATION', null, false],
+  ] as const)(
+    'responsible adult question for %s / %s: %s',
+    (notifyingOrganisation, notifyingOrganisationName, expected) => {
+      expect(shouldAskResponsibleAdultQuestion(orderFrom(notifyingOrganisation, notifyingOrganisationName))).toBe(
+        expected,
+      )
     },
   )
 

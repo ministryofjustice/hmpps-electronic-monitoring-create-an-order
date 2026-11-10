@@ -19,7 +19,10 @@ jest.mock('../../../data/restClient')
 describe('Changing the responsible adult question from check your answers', () => {
   // Synthetic order saved by the old single device wearer page, before the other new pages are released
   const order = getMockOrder({
-    interestedParties: createInterestedParties({ notifyingOrganisation: 'YOUTH_COURT' }),
+    interestedParties: createInterestedParties({
+      notifyingOrganisation: 'PRISON',
+      notifyingOrganisationName: 'AYLESBURY_PRISON_AND_YOUNG_OFFENDER_INSTITUTION',
+    }),
     deviceWearer: createDeviceWearer({
       firstName: 'Test',
       lastName: 'Wearer',

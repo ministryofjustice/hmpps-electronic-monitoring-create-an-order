@@ -87,6 +87,7 @@ describe('TaskListService', () => {
       const currentPage = 'DEVICE_WEARER'
       const taskListService = new TaskListService()
       const order = getMockOrder({
+        interestedParties: createInterestedParties({ notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE' }),
         deviceWearer: createDeviceWearer({ adultAtTimeOfInstallation: false }),
       })
 
@@ -95,6 +96,22 @@ describe('TaskListService', () => {
 
       // Then
       expect(nextPage).toBe(paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id))
+    })
+
+    it('skips responsible adult details for an ordinary prison despite a saved Yes answer', () => {
+      const order = getMockOrder({
+        interestedParties: createInterestedParties({
+          notifyingOrganisation: 'PRISON',
+          notifyingOrganisationName: 'BEDFORD_PRISON',
+        }),
+        deviceWearer: createDeviceWearer({ adultAtTimeOfInstallation: false }),
+      })
+      const service = new TaskListService()
+
+      expect(service.getTasks(order).find(task => task.name === 'RESPONSIBLE_ADULT')?.state).toBe('NOT_REQUIRED')
+      expect(service.getNextPage('DEVICE_WEARER', order)).toBe(
+        paths.CONTACT_INFORMATION.CONTACT_DETAILS.replace(':orderId', order.id),
+      )
     })
 
     it('should return contact details if current page is responsible adult', () => {

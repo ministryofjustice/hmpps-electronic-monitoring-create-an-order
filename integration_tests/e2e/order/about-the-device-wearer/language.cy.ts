@@ -155,8 +155,8 @@ context('About the device wearer', () => {
         .and('include', 'language-error')
     })
 
-    it('continues to the unanswered adult at installation page for a prison order', () => {
-      stubOrder({ adultAtTimeOfInstallation: null }, 'IN_PROGRESS', 'PRISON')
+    it('continues to the unanswered adult at installation page for a YCS order', () => {
+      stubOrder({ adultAtTimeOfInstallation: null }, 'IN_PROGRESS', 'YOUTH_CUSTODY_SERVICE')
 
       const page = Page.visit(LanguagePage, { orderId })
       page.form.fillInWith({ interpreterRequired: 'No' })
@@ -164,7 +164,6 @@ context('About the device wearer', () => {
 
       cy.url().should('include', `/order/${orderId}/about-the-device-wearer/adult-at-installation`)
     })
-
     it('skips the unanswered adult at installation page for a probation order', () => {
       stubOrder({ adultAtTimeOfInstallation: null }, 'IN_PROGRESS', 'PROBATION')
       cy.task('stubCemoPutDeviceWearer', {

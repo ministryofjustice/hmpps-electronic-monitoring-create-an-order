@@ -605,7 +605,7 @@ context('Device wearer - check your answers', () => {
         id: mockOrderId,
         status: 'IN_PROGRESS',
         order: {
-          interestedParties: { notifyingOrganisation: 'YOUTH_COURT' },
+          interestedParties: { notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE' },
           deviceWearer: {
             nomisId: 'nomis',
             pncId: 'pnc',
@@ -682,7 +682,7 @@ context('Device wearer - check your answers', () => {
         id: mockOrderId,
         status: 'IN_PROGRESS',
         order: {
-          interestedParties: { notifyingOrganisation: 'YOUTH_COURT' },
+          interestedParties: { notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE' },
           deviceWearer: {
             nomisId: 'nomis',
             pncId: 'pnc',

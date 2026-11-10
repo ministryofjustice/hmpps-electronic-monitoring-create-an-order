@@ -597,7 +597,7 @@ describe('DeviceWearerCheckAnswersController', () => {
     })
   })
 
-  it('should render the check answers page using the saved for a child device wearer', async () => {
+  it('hides saved responsible adult details for an ineligible child device wearer', async () => {
     // Given
     const order = getMockOrder({ deviceWearer: childDeviceWearer, deviceWearerResponsibleAdult: responsibleAdult })
     const req = createMockRequest({ order })
@@ -790,59 +790,7 @@ describe('DeviceWearerCheckAnswersController', () => {
         courtCaseReferenceNumber: 'ccrn',
         prisonNumber: 'prison',
       }),
-      responsibleAdult: [
-        {
-          key: {
-            text: "What is the responsible adult's relationship to the device wearer?",
-          },
-          value: {
-            text: 'Parent',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: "what is the responsible adult's relationship to the device wearer?",
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: "What is the responsible adult's full name?",
-          },
-          value: {
-            text: 'Firstname Lastname',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: "what is the responsible adult's full name?",
-              },
-            ],
-          },
-        },
-        {
-          key: {
-            text: "What is the responsible adult's telephone number? (optional)",
-          },
-          value: {
-            text: '07999999999',
-          },
-          actions: {
-            items: [
-              {
-                href: paths.ABOUT_THE_DEVICE_WEARER.RESPONSIBLE_ADULT.replace(':orderId', order.id),
-                text: 'Change',
-                visuallyHiddenText: "what is the responsible adult's telephone number? (optional)",
-              },
-            ],
-          },
-        },
-      ],
+      responsibleAdult: [],
       contactDetails: [
         {
           key: {

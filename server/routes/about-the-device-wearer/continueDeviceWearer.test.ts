@@ -43,8 +43,11 @@ describe('continueDeviceWearer', () => {
     expect(service.submit).not.toHaveBeenCalled()
   })
 
-  it('asks youth and prison orders whether a responsible adult is required', async () => {
-    req.order = { ...order, interestedParties: createInterestedParties({ notifyingOrganisation: 'YOUTH_COURT' }) }
+  it('asks a YCS order whether a responsible adult is required', async () => {
+    req.order = {
+      ...order,
+      interestedParties: createInterestedParties({ notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE' }),
+    }
     service.getDeviceWearer.mockResolvedValue({ ...answered, adultAtTimeOfInstallation: null })
 
     await continueDeviceWearer(req, res, service, taskListService, currentPath)
