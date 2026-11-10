@@ -188,6 +188,7 @@ it('correlates real request, Bunyan, exception and dependency telemetry in a sep
         'server/utils/azureAppInsights.ts',
         'server/applicationInfo.ts',
         'server/config.ts',
+        'server/routes/up3-simulation/config.ts',
         'logger.ts',
       ].map(filename => path.join(root, filename)),
       outbase: root,

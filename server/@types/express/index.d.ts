@@ -1,12 +1,14 @@
 import { HmppsUser } from '../../interfaces/hmppsUser'
 import { Order } from '../../models/Order'
 import I18n from '../../types/i18n'
+import { SimulationSession } from '../../routes/up3-simulation/controller'
 
 export declare module 'express-session' {
   // Declare that the session will potentially contain these additional fields
   interface SessionData {
     returnTo: string
     nowInMinutes: number
+    up3Simulation?: SimulationSession
   }
 }
 

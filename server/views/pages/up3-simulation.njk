@@ -1,0 +1,157 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back", href: summaryUrl or basePath }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row"><div class="govuk-grid-column-two-thirds">
+  <h1 class="govuk-heading-l">{{ pageTitle }}</h1>
+  {% if errors %}{{ govukErrorSummary({ titleText: "There is a problem", errorList: errors }) }}{% endif %}
+  {% if errorMessage %}
+    <p class="govuk-body" role="alert">{{ errorMessage }}</p>
+    <p class="govuk-body">{{ errorCode }}</p>
+    {% if recoveryUrl %}<p class="govuk-body"><a class="govuk-link" href="{{ recoveryUrl }}">Recover the original request</a></p>{% endif %}
+    {% if orderUrl %}<p class="govuk-body"><a class="govuk-link" href="{{ orderUrl }}">Refresh current order</a></p>{% endif %}
+    <p class="govuk-body"><a class="govuk-link" href="{{ basePath }}">Choose an order</a></p>
+    <p class="govuk-body"><a class="govuk-link" href="{{ basePath }}/create">Start a new creation intent</a></p>
+  {% endif %}
+
+  {% if mode == 'entry' %}
+    <form method="post" action="{{ basePath }}">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+      {{ govukInput({ id: "orderId", name: "orderId", value: orderId, label: { text: "Order UUID or GET order URL" }, hint: { text: "A current-order /api/orders/{uuid} URL is also accepted." } }) }}
+      {{ govukButton({ text: "Inspect order" }) }}
+    </form>
+    <p class="govuk-body">Load an owned, already simulated order. Inspection does not change the order. Ordinary orders cannot be enrolled from this page.</p>
+    <p class="govuk-body"><a class="govuk-link" href="{{ basePath }}/create">Create simulated test order</a></p>
+  {% endif %}
+
+  {% if mode == 'order' %}
+    <p class="govuk-body"><a class="govuk-link" href="{{ summaryUrl }}">Open normal order summary</a></p>
+    {{ govukSummaryList({ rows: [
+      { key: { text: "Order UUID" }, value: { text: order.id } },
+      { key: { text: "Current version UUID" }, value: { text: simulation.currentOrderVersionId if simulation else order.versionId } },
+      { key: { text: "CEMO status" }, value: { text: simulation.orderStatus if simulation else order.status } }
+    ] }) }}
+    {% if simulation %}
+      {{ govukSummaryList({ rows: [
+        { key: { text: "Current version number" }, value: { text: simulation.currentOrderVersionNumber } },
+        { key: { text: "Simulated submission UUID" }, value: { text: simulation.simulatedSubmissionVersionId or "Not submitted" } },
+        { key: { text: "Simulated submission number" }, value: { text: simulation.simulatedSubmissionVersionNumber if simulation.simulatedSubmissionVersionId else "Not submitted" } },
+        { key: { text: "Simulated case ID" }, value: { text: simulation.caseId or "Not submitted" } },
+        { key: { text: "Case state" }, value: { text: simulation.caseState or "Not submitted" } },
+        { key: { text: "Amendment eligibility" }, value: { text: "Eligible" if simulation.canAmend else "Not eligible" } },
+        { key: { text: "Captured user notifications" }, value: { text: simulation.capturedUserEmails } },
+        { key: { text: "Captured notifying-organisation notifications" }, value: { text: simulation.capturedNoEmails } },
+        { key: { text: "Last processed event (diagnostic)" }, value: { text: simulation.lastProcessedEventId or "None" } }
+      ] }) }}
+      {% if simulation.canControlSubmission and not pendingReturn %}
+        <form method="post" action="{{ basePath }}/orders/{{ order.id }}/state">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+          <input type="hidden" name="expectedCurrentOrderVersionId" value="{{ simulation.currentOrderVersionId }}">
+          <input type="hidden" name="expectedSimulatedSubmissionVersionId" value="{{ simulation.simulatedSubmissionVersionId }}">
+          {{ govukButton({ text: "Set processing", name: "state", value: "PROCESSING" }) }}
+          {{ govukButton({ text: "Set accepted", name: "state", value: "ACCEPTED", classes: "govuk-button--secondary" }) }}
+        </form>
+        <p class="govuk-body"><a class="govuk-link" href="{{ basePath }}/orders/{{ order.id }}/return">Return order</a></p>
+      {% elif pendingReturn %}
+        <p class="govuk-body">A return is pending or its result is unknown.</p>
+      {% elif simulation.orderStatus == 'IN_PROGRESS' %}
+        <p class="govuk-body">This is an editable draft, not a locked submitted order. Edit and submit it through the normal order summary.</p>
+      {% else %}
+        <p class="govuk-body">The current version cannot control this submission. Refresh or use the normal order summary.</p>
+      {% endif %}
+      {% if eventId %}<p class="govuk-body"><a class="govuk-link" href="{{ basePath }}/orders/{{ order.id }}/returns/{{ eventId }}">Check the retained return event</a></p>{% endif %}
+    {% else %}
+      <p class="govuk-body">This order is not simulated.</p>
+      <p class="govuk-body"><a class="govuk-link" href="{{ basePath }}/create">Create a synthetic test order</a></p>
+    {% endif %}
+    <p class="govuk-body"><a class="govuk-link" href="{{ basePath }}/orders/{{ order.id }}">Refresh</a></p>
+  {% endif %}
+
+  {% if mode == 'return' or mode == 'create' %}
+    {% if mode == 'create' %}
+      {{ govukWarningText({ text: "This creates a new disposable order. It does not anonymise supplied data or fabricate supporting documents. Document and map references must exist in the dev store.", iconFallbackText: "Warning" }) }}
+    {% endif %}
+    <form id="form" method="post" action="{{ formAction or (basePath + '/create') }}">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+      {% if mode == 'return' %}
+        <input type="hidden" name="eventId" value="{{ eventId }}">
+        <input type="hidden" name="expectedCurrentOrderVersionId" value="{{ expectedCurrentOrderVersionId or simulation.currentOrderVersionId }}">
+        <input type="hidden" name="expectedSimulatedSubmissionVersionId" value="{{ expectedSimulatedSubmissionVersionId or simulation.simulatedSubmissionVersionId }}">
+      {% else %}
+        <input type="hidden" name="creationRequestId" value="{{ creationRequestId }}">
+        <p class="govuk-body"><a class="govuk-link" href="{{ basePath }}/create?example=true">Use synthetic example</a></p>
+        {{ govukTextarea({ id: "orderJson", name: "orderJson", value: orderJson, rows: 15, label: { text: "Full OrderDto JSON" }, hint: { text: "Maximum 64 KiB. Business validation is performed by the API." } }) }}
+        {{ govukRadios({ idPrefix: "state", name: "state", fieldset: { legend: { text: "Initial state" } }, value: state,
+          items: [{ value: "DRAFT", text: "Draft" }, { value: "PROCESSING", text: "Processing" }, { value: "ACCEPTED", text: "Accepted" }, { value: "RETURNED", text: "Returned" }] }) }}
+      {% endif %}
+      <fieldset id="reasons" class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Return reasons{% if mode == 'create' %} (returned state only){% endif %}</legend>
+        {% for reason in reasons %}
+          {{ govukInput({ id: "section-" + loop.index0, name: "reasons[" + loop.index0 + "][section]", value: reason.section, label: { text: "Section" }, attributes: { maxlength: "255" }, hint: { text: "Use other for a general reason." } }) }}
+          {{ govukTextarea({ id: "details-" + loop.index0, name: "reasons[" + loop.index0 + "][details]", value: reason.details, rows: 3, label: { text: "Details" }, attributes: { maxlength: "10000" }, hint: { text: "Required for other. Maximum 10,000 characters." } }) }}
+        {% endfor %}
+      </fieldset>
+      {{ govukButton({ text: "Add another reason", name: "action", value: "addReason", classes: "govuk-button--secondary" }) }}
+      {{ govukButton({ text: "Publish return" if mode == 'return' else "Create simulated test order", name: "action", value: "submit" }) }}
+    </form>
+  {% endif %}
+
+  {% if mode == 'return-status' %}
+    <h2 class="govuk-heading-m">Return event</h2>
+    <p class="govuk-body">{{ eventId }}</p>
+    {% if statusMessage %}<p class="govuk-body" role="status">{{ statusMessage }}</p>{% endif %}
+    {% if receipt %}
+      {% if receipt.status == 'PENDING_PUBLICATION' %}<p class="govuk-body" role="status">Return recorded; awaiting publication.</p>
+      {% elif receipt.status == 'QUEUED' %}<p class="govuk-body" role="status">Return queued; awaiting processing.</p>
+      {% elif receipt.status == 'PROCESSED' %}<p class="govuk-body" role="status">Return processed. Open the normal summary to inspect the status, reasons and timeline.</p>
+      {% elif receipt.status == 'STALE_IGNORED' %}<p class="govuk-body" role="status">Return ignored: its original submission is no longer current and submitted. No version was changed.</p>
+      {% elif receipt.status == 'FAILED' %}
+        <p class="govuk-body" role="alert">Return failed at {{ receipt.failureStage }}: {{ receipt.errorCode }}.</p>
+        {% if receipt.failureStage == 'PUBLICATION' and not receipt.nextPublicationAttemptAt %}<p class="govuk-body">Automatic publication attempts are exhausted. Contact the service team.</p>
+        {% elif receipt.failureStage == 'PROCESSING' %}<p class="govuk-body">SQS may redeliver this event. This result does not confirm dead-letter queue placement.</p>
+        {% else %}<p class="govuk-body">Another publication attempt is scheduled.</p>{% endif %}
+      {% endif %}
+      {{ govukSummaryList({ rows: [
+        { key: { text: "Target version UUID" }, value: { text: receipt.targetOrderVersionId } },
+        { key: { text: "Publication attempts" }, value: { text: receipt.publicationAttempts } },
+        { key: { text: "Processing failures" }, value: { text: receipt.processingFailures } },
+        { key: { text: "Next publication attempt" }, value: { text: receipt.nextPublicationAttemptAt or "None" } }
+      ] }) }}
+    {% endif %}
+    <p class="govuk-body"><a class="govuk-link" href="{{ basePath }}/orders/{{ orderId }}/returns/{{ eventId }}">Refresh this event</a></p>
+    {% if retryCommand and not receipt %}
+      <form method="post" action="{{ basePath }}/orders/{{ orderId }}/returns/{{ eventId }}/retry">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        {{ govukButton({ text: "Retry the original return", classes: "govuk-button--secondary" }) }}
+      </form>
+    {% endif %}
+    <p class="govuk-body"><a class="govuk-link" href="/order/{{ orderId }}/summary">Open normal order summary</a></p>
+    <p class="govuk-body"><a class="govuk-link" href="{{ basePath }}/orders/{{ orderId }}">Inspect current simulation</a></p>
+  {% endif %}
+
+  {% if mode == 'creation-status' %}
+    <h2 class="govuk-heading-m">Creation recovery</h2>
+    <p class="govuk-body">{{ creationRequestId }}</p>
+    <p class="govuk-body" role="status">{{ statusMessage or "The reservation is pending. An order has not been confirmed; no new request will be generated." }}</p>
+    <p class="govuk-body"><a class="govuk-link" href="{{ basePath }}/creations/{{ creationRequestId }}">Refresh this creation request</a></p>
+    {% if canResume %}
+      <form method="post" action="{{ basePath }}/creations/{{ creationRequestId }}/resume">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        {{ govukButton({ text: "Resume the original creation request", classes: "govuk-button--secondary" }) }}
+      </form>
+    {% endif %}
+    <p class="govuk-body"><a class="govuk-link" href="{{ basePath }}/create">Start a new creation intent to correct data or create another order</a></p>
+  {% endif %}
+</div></div>
+{% endblock %}

@@ -16,6 +16,7 @@ interface Request {
   raw?: boolean
   token: string
   retryOnErr?: boolean
+  redactErrorDetails?: boolean
 }
 
 interface RequestWithBody extends Request {
@@ -54,17 +55,22 @@ export default class RestClient {
     return this.config.timeout
   }
 
-  private logError(error: UnsanitisedError, path: string | undefined, method: string): SanitisedError {
+  private logError(
+    error: UnsanitisedError,
+    path: string | undefined,
+    method: string,
+    redactErrorDetails = false,
+  ): SanitisedError {
     const sanitisedError = sanitiseError(error)
     logger.warn(
       {
-        err: sanitisedError,
+        err: redactErrorDetails ? undefined : sanitisedError,
         api: this.name,
         method,
         path: path ? new URL(path, this.apiUrl()).pathname : undefined,
         status: sanitisedError.status,
-        code: 'code' in error ? error.code : undefined,
-        errorCode: sanitisedError.data?.errorCode,
+        code: !redactErrorDetails && 'code' in error ? error.code : undefined,
+        errorCode: redactErrorDetails ? undefined : sanitisedError.data?.errorCode,
       },
       `Error calling ${this.name}`,
     )
@@ -78,6 +84,7 @@ export default class RestClient {
     responseType = '',
     raw = false,
     token,
+    redactErrorDetails = false,
   }: Request): Promise<Response> {
     logger.info(`${this.name} GET: ${this.apiUrl()}${path}`)
     try {
@@ -86,7 +93,8 @@ export default class RestClient {
         .query(query)
         .agent(this.agent)
         .retry(2, (err, res) => {
-          if (err) logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
+          if (err && !redactErrorDetails)
+            logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
         .auth(token, { type: 'bearer' })
@@ -96,7 +104,7 @@ export default class RestClient {
 
       return raw ? (result as Response) : result.body
     } catch (error) {
-      throw this.logError(error as UnsanitisedError, path, 'GET')
+      throw this.logError(error as UnsanitisedError, path, 'GET', redactErrorDetails)
     }
   }
 
@@ -107,6 +115,7 @@ export default class RestClient {
     responseType = '',
     raw = false,
     retryOnErr = false,
+    redactErrorDetails = false,
   }: Omit<Request, 'token'>): Promise<Response> {
     logger.info(`${this.name} GET: ${this.apiUrl()}${path}`)
     try {
@@ -115,7 +124,8 @@ export default class RestClient {
         .query(query)
         .agent(this.agent)
         .retry(2, (err, res) => {
-          if (err) logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
+          if (err && !redactErrorDetails)
+            logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
           if (retryOnErr) {
             if (res && res.status === 500) {
               logger.info(`Retrying ${this.name} due to 500 Internal Server Error`)
@@ -139,11 +149,18 @@ export default class RestClient {
 
       return raw ? (result as Response) : result.body
     } catch (error) {
-      throw this.logError(error as UnsanitisedError, path, 'GET')
+      throw this.logError(error as UnsanitisedError, path, 'GET', redactErrorDetails)
     }
   }
 
-  async getRawResponse({ path, query = {}, headers = {}, responseType = '', token }: Request): Promise<string> {
+  async getRawResponse({
+    path,
+    query = {},
+    headers = {},
+    responseType = '',
+    token,
+    redactErrorDetails = false,
+  }: Request): Promise<string> {
     logger.info(`${this.name} GET: ${this.apiUrl()}${path}`)
     try {
       const result = await superagent
@@ -151,7 +168,8 @@ export default class RestClient {
         .query(query)
         .agent(this.agent)
         .retry(2, (err, res) => {
-          if (err) logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
+          if (err && !redactErrorDetails)
+            logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
         .auth(token, { type: 'bearer' })
@@ -160,7 +178,7 @@ export default class RestClient {
         .timeout(this.timeoutConfig())
       return result.text
     } catch (error) {
-      throw this.logError(error as UnsanitisedError, path, 'GET')
+      throw this.logError(error as UnsanitisedError, path, 'GET', redactErrorDetails)
     }
   }
 
@@ -175,6 +193,7 @@ export default class RestClient {
       raw = false,
       token,
       retry = false,
+      redactErrorDetails = false,
     }: RequestWithBody,
   ): Promise<Response> {
     logger.info(`${this.name} ${method.toUpperCase()}: ${path}`)
@@ -187,7 +206,7 @@ export default class RestClient {
           if (retry === false) {
             return false
           }
-          if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
+          if (err && !redactErrorDetails) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
         .auth(token, { type: 'bearer' })
@@ -197,7 +216,7 @@ export default class RestClient {
 
       return raw ? (result as Response) : result.body
     } catch (error) {
-      throw this.logError(error as UnsanitisedError, path, method.toUpperCase())
+      throw this.logError(error as UnsanitisedError, path, method.toUpperCase(), redactErrorDetails)
     }
   }
 
@@ -212,6 +231,7 @@ export default class RestClient {
     token,
     retry = false,
     fileToUpload,
+    redactErrorDetails = false,
   }: PostMultiPartRequest): Promise<Response> {
     logger.info(`${this.name} POST: ${path}`)
     try {
@@ -228,7 +248,7 @@ export default class RestClient {
           if (retry === false) {
             return false
           }
-          if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
+          if (err && !redactErrorDetails) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
         .auth(token, { type: 'bearer' })
@@ -239,7 +259,7 @@ export default class RestClient {
       const result = await request
       return raw ? (result as Response) : result.body
     } catch (error) {
-      throw this.logError(error as UnsanitisedError, path, 'POST')
+      throw this.logError(error as UnsanitisedError, path, 'POST', redactErrorDetails)
     }
   }
 
@@ -262,6 +282,7 @@ export default class RestClient {
     responseType = '',
     raw = false,
     token,
+    redactErrorDetails = false,
   }: Request): Promise<Response> {
     logger.info(`${this.name} DELETE: ${path}`)
     try {
@@ -270,7 +291,8 @@ export default class RestClient {
         .query(query)
         .agent(this.agent)
         .retry(2, (err, res) => {
-          if (err) logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
+          if (err && !redactErrorDetails)
+            logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
         .auth(token, { type: 'bearer' })
@@ -280,7 +302,7 @@ export default class RestClient {
 
       return raw ? (result as Response) : result.body
     } catch (error) {
-      throw this.logError(error as UnsanitisedError, path, 'DELETE')
+      throw this.logError(error as UnsanitisedError, path, 'DELETE', redactErrorDetails)
     }
   }
 

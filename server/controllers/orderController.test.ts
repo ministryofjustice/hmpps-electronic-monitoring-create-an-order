@@ -78,16 +78,19 @@ describe('OrderController', () => {
     })
 
     it('should indicate when the order has been rejected', async () => {
-      const mockOrder = getMockOrder({ status: 'REJECTED', canAmend: true })
-      mockOrder.statusUpdates = [
-        {
-          id: randomUUID(),
-          versionId: mockOrder.versionId,
-          status: 'REJECTED',
-          datetimeOfStatusChange: '2026-01-01T12:00:00Z',
-          statusUpdateReasons: [],
-        },
-      ]
+      const mockOrder = getMockOrder({
+        status: 'REJECTED',
+        canAmend: true,
+        statusUpdates: [
+          {
+            id: randomUUID(),
+            versionId: randomUUID(),
+            status: 'REJECTED',
+            datetimeOfStatusChange: '2026-01-01T12:00:00Z',
+            statusUpdateReasons: [],
+          },
+        ],
+      })
       const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
       const res = createMockResponse()
       const next = jest.fn()

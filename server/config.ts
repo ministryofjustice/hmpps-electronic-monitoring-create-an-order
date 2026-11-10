@@ -1,3 +1,5 @@
+import readSimulationConfig from './routes/up3-simulation/config'
+
 const production = process.env.NODE_ENV === 'production'
 
 function get<T>(name: string, fallback: T, options = { requireInProduction: false }): T | string {
@@ -125,5 +127,6 @@ export default {
   tagAtSourcePilotPrions: get('TAG_AT_SOURCE_PILOT_PRISONS', ''),
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
+  up3Simulation: readSimulationConfig(process.env),
   logLevel: get('LOG_LEVEL', 'debug'),
 }
