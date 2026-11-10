@@ -64,7 +64,7 @@ export default class OrderController {
   summary: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
     const versionId = req.params.versionId as string
-
+    const cohort = res.locals.user.cohort?.cohort
     const error = req.flash('submissionError')
 
     const completedOrderVersions = await this.orderService.getVersionInformations({
@@ -79,7 +79,8 @@ export default class OrderController {
     const isNewOrderVariation =
       isVariationType(order.type) && isMostRecentVersion && completedOrderVersions.length === 1
 
-    const sections = await this.sectionService.getSectionsForOrder(order, versionId, isNewOrderVariation)
+    const sections = await this.sectionService.getSectionsForOrder(order, versionId, isNewOrderVariation, cohort)
+
     res.render('pages/order/summary', {
       order: req.order,
       sections,

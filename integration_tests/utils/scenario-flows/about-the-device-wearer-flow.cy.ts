@@ -63,7 +63,9 @@ export default function fillInAboutTheDeviceWearer({
 
   if (!deviceWearerDetails.hideContactNumberPage) {
     const contactDetailsPage = Page.verifyOnPage(ContactDetailsPage, section)
-    contactDetailsPage.form.fillInWith(deviceWearerDetails)
+    if (deviceWearerDetails.hideContactNumberPage !== false) {
+      contactDetailsPage.form.fillInWith(deviceWearerDetails)
+    }
     contactDetailsPage.form.saveAndContinueButton.click()
   }
 

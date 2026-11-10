@@ -133,6 +133,9 @@ interface ValidationErrors {
   isMappa: {
     required: string
   }
+  checkRisk: {
+    required: string
+  }
   mappa: {
     levelRequired: string
     categoryRequired: string
@@ -421,6 +424,9 @@ const validationErrors: ValidationErrors = {
   },
   isMappa: {
     required: 'Select Yes if the device wearer is a MAPPA offender',
+  },
+  checkRisk: {
+    required: `Select Yes if you need to review their risk`,
   },
   mappa: {
     levelRequired: 'Select the level of MAPPA that applies to the device wearer',

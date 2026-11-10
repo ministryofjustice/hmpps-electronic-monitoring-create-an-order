@@ -3,6 +3,7 @@ import { isValidationResult } from '../../models/Validation'
 import TaskListService from '../../services/taskListService'
 import RiskAtInstallationService from './riskAtInstallationService'
 import { firstUnansweredPage, pageForErrors } from './riskAtInstallationPages'
+import paths from '../../constants/paths'
 
 const continueRiskAtInstallation = async (
   req: Request,
@@ -12,6 +13,23 @@ const continueRiskAtInstallation = async (
   currentPath: string,
 ) => {
   const order = req.order!
+
+  const REVIEW_PAGES = [
+    paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR,
+    paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS,
+    paths.INSTALLATION_AND_RISK.OTHER_RISKS,
+  ]
+
+  const answers = await riskAtInstallationService.getRiskAtInstallation(order)
+
+  if (answers.riskCheck === 'YES') {
+    const reviewPages = REVIEW_PAGES.map(path => path.replace(':orderId', order.id))
+    const nextReviewPage = reviewPages[reviewPages.indexOf(currentPath) + 1]
+    if (nextReviewPage) {
+      res.redirect(nextReviewPage)
+      return
+    }
+  }
 
   const unansweredPage = firstUnansweredPage(await riskAtInstallationService.getRiskAtInstallation(order), order.id)
   if (unansweredPage) {
