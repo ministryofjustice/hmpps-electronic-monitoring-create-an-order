@@ -18,8 +18,9 @@
     label: questions.prisonName.text,
     labelClasses: "govuk-fieldset__legend--s",
     options: content.reference.prisons | toOptions(false, true) | removeOptions(['COOKHAM_WOOD_YOUNG_OFFENDER_INSTITUTION']),
-    value: notifyingOrganisation,
-    errorMessage: questions.prisonName.error,
+    value: placeName.value or notifyingOrganisation,
+    errorMessage: placeName.error,
+    disabled: not isOrderEditable,
     nonce: cspNonce
   }) }}
 {% else %}
