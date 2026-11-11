@@ -4,7 +4,7 @@ import logger from '../../logger'
 export type TelemetryEvents = {
   order_submission_attempt: {
     outcome: 'success' | 'failure'
-    failureReason?: 'already_submitted'
+    failureReason?: 'already_submitted' | 'incomplete' | 'error_status' | 'partial_success'
   }
 }
 

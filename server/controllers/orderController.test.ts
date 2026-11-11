@@ -393,6 +393,28 @@ describe('OrderController', () => {
       })
     })
 
+    it.each([
+      { type: 'incomplete' as const, failureReason: 'incomplete' as const },
+      { type: 'errorStatus' as const, failureReason: 'error_status' as const },
+      { type: 'partialSuccess' as const, failureReason: 'partial_success' as const },
+    ])('should include the $failureReason reason for a $type submission failure', async ({ type, failureReason }) => {
+      const mockOrder = getMockOrder()
+      const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
+      const res = createMockResponse()
+      mockOrderService.submitOrder.mockResolvedValue({
+        submitted: false,
+        error: 'Submission failed',
+        type,
+      })
+
+      await orderController.submit(req, res, jest.fn())
+
+      expect(telemetryService.trackEvent).toHaveBeenCalledWith('order_submission_attempt', {
+        outcome: 'failure',
+        failureReason,
+      })
+    })
+
     it('should emit a failed submission event when the submission service rejects', async () => {
       // Given
       telemetryService.trackEvent.mockClear()

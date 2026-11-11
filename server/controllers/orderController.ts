@@ -173,8 +173,23 @@ export default class OrderController {
     const properties: TelemetryEvents['order_submission_attempt'] = {
       outcome: result.submitted ? 'success' : 'failure',
     }
-    if (!result.submitted && result.type === 'alreadySubmitted') {
-      properties.failureReason = 'already_submitted'
+    if (!result.submitted) {
+      switch (result.type) {
+        case 'alreadySubmitted':
+          properties.failureReason = 'already_submitted'
+          break
+        case 'incomplete':
+          properties.failureReason = 'incomplete'
+          break
+        case 'errorStatus':
+          properties.failureReason = 'error_status'
+          break
+        case 'partialSuccess':
+          properties.failureReason = 'partial_success'
+          break
+        default:
+          break
+      }
     }
 
     this.telemetryService.trackEvent('order_submission_attempt', properties)
