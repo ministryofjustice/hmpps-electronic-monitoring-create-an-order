@@ -328,7 +328,6 @@ function testSetup(cohort: string) {
   cy.signIn()
 }
 
-
 context('Making changes to a previously submitted order as a non Probation user', () => {
   it(`Should not see the Check Risk page when signed in as a Prison user`, () => {
     testSetup('PRISON')
