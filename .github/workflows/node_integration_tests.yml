@@ -39,6 +39,9 @@ jobs:
     name: Run Integration Tests
     runs-on: ubuntu-latest
     needs: get-timings
+    env:
+      UP3_SIMULATION_UI_ENABLED: 'true'
+      CYPRESS_up3SimulationEnabled: 'true'
     services:
       redis:
         image: ${{ inputs.redis_tag && format('redis:{0}', inputs.redis_tag) || '' }}

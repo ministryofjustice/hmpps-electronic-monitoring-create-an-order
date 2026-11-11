@@ -44,6 +44,7 @@ suite('Dev UP3 simulation', () => {
       response: { available: true, code: 'UP3_SIMULATION_AVAILABLE' },
     })
     cy.task('stubUp3Simulation', { path: `/orders/${orderId}`, response: inspection })
+    cy.task('stubCemoGetVersions', { httpStatus: 200, orderId, versions: [] })
     stubOrder()
     cy.signIn()
   })

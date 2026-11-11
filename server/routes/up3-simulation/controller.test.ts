@@ -9,10 +9,13 @@ import OrderService from '../../services/orderService'
 import config from '../../config'
 import setupRequestParsing from '../../middleware/setupRequestParsing'
 import nunjucksSetup from '../../utils/views/nunjucksSetup'
-import createRouter from './router'
+import routes from '..'
+import { services } from '../../services'
 import Controller, { basePath } from './controller'
 import Up3SimulationService, { Up3SimulationError, Inspection, ReturnReceipt } from './service'
 import { creationSchema } from './formModel'
+
+jest.mock('../../applicationInfo')
 
 describe('UP3 simulation controller', () => {
   const simulation = {
@@ -327,10 +330,12 @@ describe('UP3 simulation controller', () => {
         next()
       })
       application.get('/csrf', (incoming, outgoing) => outgoing.json({ token: incoming.csrfToken?.() }))
-      application.use(
-        basePath,
-        createRouter(simulation as unknown as Up3SimulationService, orders as unknown as OrderService),
-      )
+      const dependencies = {
+        ...services(),
+        up3SimulationService: simulation as unknown as Up3SimulationService,
+        orderService: orders as unknown as OrderService,
+      }
+      application.use(routes(dependencies))
       application.use((error: { status?: number }, _incoming: Request, outgoing: Response, _next: NextFunction) => {
         outgoing.sendStatus(error.status ?? 500)
       })
@@ -339,6 +344,15 @@ describe('UP3 simulation controller', () => {
 
     afterEach(() => {
       config.up3Simulation.enabled = originalEnabled
+    })
+
+    it('constructs the simulator service in the production service factory', () => {
+      expect(Reflect.get(services(), 'up3SimulationService')).toBeInstanceOf(Up3SimulationService)
+    })
+
+    it('mounts the simulator entry page in the production router when enabled', async () => {
+      await request(app()).get(basePath).set(headers).expect(200)
+      expect(simulation.availability).toHaveBeenCalledWith('fakeUserToken')
     })
 
     it('returns 404 for disabled GET and valid-CSRF POST routes without calling the API', async () => {

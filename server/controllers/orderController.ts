@@ -8,6 +8,7 @@ import isVariationType from '../utils/order/isVariationType'
 import TimelineModel from '../models/view-models/timelineModel'
 import SectionService from '../services/sectionsService'
 import { SanitisedError } from '../sanitisedError'
+import config from '../config'
 import {
   canCreateOrderVersion,
   getOrderChangeBlockedMessage,
@@ -120,6 +121,10 @@ export default class OrderController {
       canCreateOrderVersion: canCreateOrderVersion(order),
       orderChangeBlockedMessage: getOrderChangeBlockedMessage(),
       returnReasonsUrl: paths.ORDER.RETURN_REASONS.replace(':orderId', order.id),
+      up3SimulationUrl:
+        config.up3Simulation.enabled && order.isOwner && !versionId
+          ? `/dev/up3-simulation/orders/${order.id}`
+          : undefined,
     })
   }
 

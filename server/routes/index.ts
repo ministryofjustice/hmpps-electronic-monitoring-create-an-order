@@ -14,6 +14,7 @@ import createContactInformationRouter from './contact-information/router'
 import createOrderRouter from './order/router'
 import createAboutTheDeviceWearerRouter from './about-the-device-wearer/router'
 import createVariationsRouter from './variations/router'
+import createUp3SimulationRouter from './up3-simulation/router'
 
 export default function routes({
   alcoholMonitoringService,
@@ -30,6 +31,7 @@ export default function routes({
   deviceWearerService,
   interestedPartiesService,
   orderService,
+  up3SimulationService,
   orderSearchService,
   taskListService,
   trailMonitoringService,
@@ -178,5 +180,6 @@ export default function routes({
       serviceRequestTypeService,
     }),
   )
+  router.use('/dev/up3-simulation', createUp3SimulationRouter(up3SimulationService, orderService))
   return router
 }

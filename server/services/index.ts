@@ -49,6 +49,7 @@ import PostcodeService from '../routes/postcode-lookup/postcodeService'
 import SentencingActService from '../routes/sentencing-act-selection/SentencingActService'
 import SectionService from './sectionsService'
 import DeviceWearerSearchResultsService from '../routes/about-the-device-wearer/device-wearer-search-results/service'
+import Up3SimulationService from '../routes/up3-simulation/service'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient, cemoApiClient, osDataHubClient } = dataAccess()
@@ -68,6 +69,7 @@ export const services = () => {
   const zoneAddToListService = new EnforcementZoneAddToListService(cemoApiClient)
   const orderSearchService = new OrderSearchService(cemoApiClient)
   const orderService = new OrderService(cemoApiClient)
+  const up3SimulationService = new Up3SimulationService(cemoApiClient)
   const orderChecklistService = new OrderChecklistService(
     config.redis.enabled ? new RedisOrderChecklistStore(createRedisClient()) : new InMemoryOrderChecklistStore(),
   )
@@ -128,6 +130,7 @@ export const services = () => {
     interestedPartiesService,
     orderSearchService,
     orderService,
+    up3SimulationService,
     taskListService,
     trailMonitoringService,
     variationService,

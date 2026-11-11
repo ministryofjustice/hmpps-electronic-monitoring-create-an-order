@@ -10,6 +10,7 @@ import SectionService from '../services/sectionsService'
 import { SanitisedError } from '../sanitisedError'
 import FeatureFlags from '../utils/featureFlags'
 import { getOrderChangeBlockedMessage, ORDER_CHANGE_STATUS_CHANGED_MESSAGE } from '../utils/orderVersionEligibility'
+import config from '../config'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -43,6 +44,37 @@ describe('OrderController', () => {
   })
 
   describe('summary', () => {
+    const originalSimulationEnabled = config.up3Simulation.enabled
+
+    afterEach(() => {
+      config.up3Simulation.enabled = originalSimulationEnabled
+    })
+
+    it.each([
+      { enabled: true, isOwner: true, versioned: false, showLink: true },
+      { enabled: false, isOwner: true, versioned: false, showLink: false },
+      { enabled: true, isOwner: false, versioned: false, showLink: false },
+      { enabled: true, isOwner: true, versioned: true, showLink: false },
+    ])('gates the simulator summary link for %j', async ({ enabled, isOwner, versioned, showLink }) => {
+      config.up3Simulation.enabled = enabled
+      const order = getMockOrder({ isOwner })
+      const req = createMockRequest({
+        order,
+        params: versioned ? { versionId: order.versionId } : {},
+        flash: jest.fn().mockReturnValue([]),
+      })
+      const res = createMockResponse()
+
+      await orderController.summary(req, res, jest.fn())
+
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/order/summary',
+        expect.objectContaining({
+          up3SimulationUrl: showLink ? `/dev/up3-simulation/orders/${order.id}` : undefined,
+        }),
+      )
+    })
+
     it('should render a summary of the order', async () => {
       // Given
       const mockOrder = getMockOrder()

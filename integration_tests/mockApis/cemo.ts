@@ -10,6 +10,26 @@ import { DeviceWearerResponsibleAdult as ResponsibleAdult } from '../../server/m
 import { OrderParameters } from '../../server/models/OrderParametersModel'
 import mockApiOrder from '../utils/data/ApiOrder'
 
+const stubUp3Simulation = ({
+  path,
+  method = 'GET',
+  status = 200,
+  response,
+}: {
+  path: string
+  method?: 'GET' | 'POST' | 'PUT'
+  status?: number
+  response: unknown
+}) =>
+  stubFor({
+    request: { method, urlPath: `/cemo/api/dev/up3-simulation${path}` },
+    response: {
+      status,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: response,
+    },
+  })
+
 const ping = (httpStatus = 200) =>
   stubFor({
     request: {
@@ -812,6 +832,7 @@ const setSentencingAct = (options: SetSentencingActStubOptions = defaultSetSente
 }
 
 export default {
+  stubUp3Simulation,
   stubCemoCreateOrder: createOrder,
   stubCemoGetOrder: getOrder,
   stubCemoGetVersion: getSpecificVersion,
