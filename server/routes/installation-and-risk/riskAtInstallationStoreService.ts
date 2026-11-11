@@ -39,6 +39,7 @@ export default class RiskAtInstallationStoreService {
       riskDetails,
       hasOtherRisks: this.otherRisksAnswer(saved?.riskCategory, riskDetails),
       genderRiskDetails: order.detailsOfInstallation?.genderRiskDetails ?? '',
+      riskCheck: null,
     }
   }
 

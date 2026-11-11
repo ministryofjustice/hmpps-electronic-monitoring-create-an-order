@@ -1,6 +1,7 @@
 import { OrderCohort, getOrderCohort } from '../models/OrderCohort'
 
 export const riskInformationPages = {
+  riskAssessment: 'RISK_ASSESSMENT',
   offence: 'OFFENCE',
   offenceOtherInfo: 'OFFENCE_OTHER_INFO',
   dapo: 'DAPO',
@@ -65,5 +66,11 @@ export const getRiskInformationFlow = (
 
   return {
     pages: defaultRiskInformationPages.filter(page => !excludedPages.has(page)),
+  }
+}
+
+export const getRiskAssessmentFlow = (): RiskInformationFlow => {
+  return {
+    pages: [riskInformationPages.riskAssessment],
   }
 }

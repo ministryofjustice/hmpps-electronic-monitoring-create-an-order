@@ -22,6 +22,7 @@ describe('OtherRisksController', () => {
     riskDetails: 'Aggressive neighbour',
     hasOtherRisks: 'YES',
     genderRiskDetails: '',
+    riskCheck: null,
   }
 
   let service: jest.Mocked<RiskAtInstallationService>
@@ -105,6 +106,7 @@ describe('OtherRisksController', () => {
       riskDetails: '',
       hasOtherRisks: 'NO',
       genderRiskDetails: '',
+      riskCheck: null,
     }
 
     beforeEach(() => {

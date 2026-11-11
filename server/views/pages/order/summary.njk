@@ -109,10 +109,15 @@
                   text: "Cannot start yet",
                   classes: "govuk-task-list__status--cannot-start-yet"                
           } %}
+        {% elif section.hasProblem %}
+          {% set allChecked = false %}
+          {% set statusArgs = {
+            html: '<strong class="govuk-tag govuk-tag--red">There is a problem</strong>'
+          } %}
         {% elif section.completed %}
-             {% if not section.checked and not isViewOnly %}
-	       {% if isVariationType %}
-                 {% set statusArgs = {
+          {% if not section.checked and not isViewOnly %}
+	          {% if isVariationType %}
+                {% set statusArgs = {
                    text: "Optional"
                  } %}
                {% else %}
@@ -120,12 +125,12 @@
                    html: '<strong class="govuk-tag">To check</strong>'
                  } %}
                  {% set allChecked = false %}
-	       {% endif %}
-             {% else %}
+	          {% endif %}
+          {% else %}
                {% set statusArgs = { 
                  text: 'Complete'
                } %}
-             {% endif %}
+          {% endif %}
         {% else %}
           {% set allChecked = false %}
           {% set statusArgs = { 

@@ -5,6 +5,8 @@ import OrderChecklistService from './orderChecklistService'
 import TaskListService, { canBeCompleted, Task } from './taskListService'
 import hasOptionalVariationSectionIsHOCourt from '../utils/order/optionalVariationSections'
 import { isNotNullOrEmptyString } from '../utils/values'
+import getIneligibleMonitoringConditionsErrors from '../utils/order/ineligibleMonitoringConditions'
+import { Cohort } from '../models/UserCohort'
 
 export const SECTIONS = {
   interestedParties: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
@@ -25,6 +27,7 @@ export type TaskSection = {
   path: string
   isReady: boolean
   checked: boolean
+  hasProblem: boolean
 }
 
 export default class SectionService {
@@ -54,9 +57,14 @@ export default class SectionService {
     return !nextSectionCompleted && orderStatusValid && isNewOrderOrVariation
   }
 
-  async getSectionsForOrder(order: Order, version?: string, isNewOrderVariation?: boolean): Promise<TaskSection[]> {
+  async getSectionsForOrder(
+    order: Order,
+    version?: string,
+    isNewOrderVariation?: boolean,
+    cohort?: Cohort,
+  ): Promise<TaskSection[]> {
     const sections = this.getRelevantSections(order, isNewOrderVariation)
-    const tasks = this.taskListService.getTasks(order)
+    const tasks = this.taskListService.getTasks(order, cohort)
 
     const checkList = await this.checkListService.getChecklist(`${order.id}-${order.versionId}`)
     return sections.map(section => this.getDetailsForSection(section, tasks, order, checkList, version))
@@ -112,6 +120,9 @@ export default class SectionService {
       name: sectionName,
       completed,
       checked: checkList[sectionName],
+      hasProblem:
+        sectionName === SECTIONS.electronicMonitoringCondition &&
+        getIneligibleMonitoringConditionsErrors(order).length > 0,
       path,
       isReady: this.isSectionReady(sectionName, tasks, order),
     }
