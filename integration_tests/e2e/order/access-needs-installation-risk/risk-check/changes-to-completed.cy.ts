@@ -311,7 +311,7 @@ context('Making changes to a previously submitted order as a Probation user', ()
 
 function testSetup(cohort: string) {
   cy.task('reset')
-  cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+  cy.task('stubSignIn', { name: 'Test user', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
   cy.task('stubCemoRequest', {
     httpStatus: 200,
     method: 'GET',
@@ -327,6 +327,7 @@ function testSetup(cohort: string) {
   cy.task('stubCemoGetVersions', { httpStatus: 200, versions: [], orderId: mockOriginalId })
   cy.signIn()
 }
+
 
 context('Making changes to a previously submitted order as a non Probation user', () => {
   it(`Should not see the Check Risk page when signed in as a Prison user`, () => {
