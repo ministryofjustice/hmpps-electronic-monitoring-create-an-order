@@ -1,7 +1,12 @@
 import QuestionPageContent from './questionPage'
 
 type InstallationAppointmentPageContent = QuestionPageContent<
-  'placeName' | 'appointmentDate' | 'appointmentTime' | 'preferredAppointmentTime' | 'appointmentTimeDetails'
+  | 'placeName'
+  | 'prisonName'
+  | 'appointmentDate'
+  | 'appointmentTime'
+  | 'preferredAppointmentTime'
+  | 'appointmentTimeDetails'
 >
 
 export default InstallationAppointmentPageContent

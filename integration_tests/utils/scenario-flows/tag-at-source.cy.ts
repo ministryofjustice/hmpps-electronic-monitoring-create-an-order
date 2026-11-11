@@ -19,7 +19,8 @@ export default function fillInTagAtSourceWith(
 
   if (installationAppointment) {
     const installationAppointmentPage = Page.verifyOnPage(InstallationAppointmentPage)
-    installationAppointmentPage.form.fillInWith(installationAppointment)
+    const isPrison = installationLocation?.location === 'At a prison'
+    installationAppointmentPage.form.fillInWith(installationAppointment, isPrison ? 'PRISON' : undefined)
     installationAppointmentPage.form.saveAndContinueButton.click()
   }
   if (installationAddressDetails) {
