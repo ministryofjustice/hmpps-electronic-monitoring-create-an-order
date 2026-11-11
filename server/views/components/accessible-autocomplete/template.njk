@@ -35,6 +35,12 @@
       inputClasses: 'govuk-input{{" govuk-input--error" if params.error}}',
       id: '{{ params.id }}'
     })
+    // Clearing the input doesn't reset the underlying select, so the previous value would still be submitted
+    document.querySelector('input#{{ params.id }}').addEventListener('input', function (event) {
+      if (!event.target.value) {
+        document.querySelector('#{{ params.id }}-select').value = ''
+      }
+    })
     {% if params.disabled %}
       document.querySelector('input#{{ params.id }}').disabled = true
     {% endif %}

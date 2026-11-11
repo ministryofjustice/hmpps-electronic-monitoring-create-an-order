@@ -56,6 +56,7 @@ export default class InstallationAppointmentController {
       orderId,
       data: formData,
       appointmentTimeDetailsRequired: this.shouldShowAppointmentTimeDetails(req.order!),
+      isPrisonLocation: req.order?.installationLocation?.location === 'PRISON',
     })
 
     if (isValidationResult(result)) {

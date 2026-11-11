@@ -14,6 +14,7 @@ type UpdateInstallationAppointmentInput = AuthenticatedRequestInput & {
   orderId: string
   data: InstallationAppointmentFormData
   appointmentTimeDetailsRequired: boolean
+  isPrisonLocation?: boolean
 }
 
 export default class InstallationAppointmentService {
@@ -21,9 +22,10 @@ export default class InstallationAppointmentService {
 
   async update(input: UpdateInstallationAppointmentInput): Promise<InstallationAppointment | ValidationResult> {
     try {
-      const requestBody = InstallationAppointmentFormDataValidator(input.appointmentTimeDetailsRequired).parse(
-        input.data,
-      )
+      const requestBody = InstallationAppointmentFormDataValidator(
+        input.appointmentTimeDetailsRequired,
+        input.isPrisonLocation,
+      ).parse(input.data)
 
       const result = await this.apiClient.put({
         path: `/api/orders/${input.orderId}/installation-appointment`,
