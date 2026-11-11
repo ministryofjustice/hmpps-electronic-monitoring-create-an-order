@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto'
 import { createInterestedParties, getMockOrder } from '../../test/mocks/mockOrder'
 import { createMockRequest, createMockResponse } from '../../test/mocks/mockExpress'
 import RestClient from '../data/restClient'
-import { OrderStatusEnum } from '../models/Order'
+import { Order, OrderStatusEnum } from '../models/Order'
 import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
 import OrderService from '../services/orderService'
 import type { TelemetryService } from '../services/telemetryService'
@@ -409,6 +409,27 @@ describe('OrderController', () => {
       // Then
       expect(telemetryService.trackEvent).toHaveBeenCalledTimes(1)
       expect(telemetryService.trackEvent).toHaveBeenCalledWith('order_submission_attempt', { outcome: 'failure' })
+    })
+
+    it('should not submit an order with ineligible monitoring conditions', async () => {
+      const mockOrder = {
+        ...getMockOrder(),
+        deviceWearer: { ...getMockOrder().deviceWearer, noFixedAbode: true },
+        interestedParties: { ...getMockOrder().interestedParties, notifyingOrganisation: 'PRISON' as const },
+        curfewConditions: { startDate: '2025-01-01' },
+      } as Order
+      const req = createMockRequest({ order: mockOrder, params: { orderId: mockOrder.id } })
+      req.flash = jest.fn()
+      const res = createMockResponse()
+
+      await orderController.submit(req, res, jest.fn())
+
+      expect(mockOrderService.submitOrder).not.toHaveBeenCalled()
+      expect(req.flash).toHaveBeenCalledWith(
+        'submissionError',
+        'The device wearer has no fixed address so only Alcohol monitoring is allowed.',
+      )
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/summary`)
     })
 
     it('should not submit the order and redirect to a failed page for a submitted order', async () => {

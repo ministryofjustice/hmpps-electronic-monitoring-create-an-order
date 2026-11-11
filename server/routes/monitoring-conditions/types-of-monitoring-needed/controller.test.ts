@@ -29,6 +29,9 @@ describe('TypesOfMonitoringNeededController', () => {
       items: [],
       addAnother: { value: '' },
       errorSummary: null,
+      ineligibleErrors: [],
+      continueDisabled: false,
+      draftDisabled: false,
     })
 
     req = createMockRequest()
@@ -76,6 +79,24 @@ describe('TypesOfMonitoringNeededController', () => {
 
       expect(res.redirect).toHaveBeenCalledWith(
         paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS.replace(':orderId', req.order!.id),
+      )
+    })
+
+    it('does not continue when the order has ineligible monitoring conditions', async () => {
+      const orderId = req.order!.id
+      req.order = {
+        ...req.order!,
+        deviceWearer: { noFixedAbode: true },
+        interestedParties: { notifyingOrganisation: 'PRISON' },
+        curfewConditions: { startDate: '2025-01-01' },
+      } as never
+      req.body = { action: 'continue', addAnother: 'true' }
+
+      await controller.update(req, res, next)
+
+      expect(res.redirect).toHaveBeenCalledTimes(1)
+      expect(res.redirect).toHaveBeenCalledWith(
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', orderId),
       )
     })
 

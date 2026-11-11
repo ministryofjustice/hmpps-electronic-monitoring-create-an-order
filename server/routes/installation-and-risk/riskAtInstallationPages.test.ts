@@ -13,6 +13,7 @@ describe('riskAtInstallationPages', () => {
     riskDetails: '',
     hasOtherRisks: 'NO',
     genderRiskDetails: '',
+    riskCheck: null,
   }
   const unanswered: RiskAtInstallation = {
     possibleRisk: [],
@@ -20,6 +21,7 @@ describe('riskAtInstallationPages', () => {
     riskDetails: '',
     hasOtherRisks: null,
     genderRiskDetails: '',
+    riskCheck: null,
   }
   const fieldsOf = (missing: { field: string }[]) => missing.map(({ field }) => field)
 

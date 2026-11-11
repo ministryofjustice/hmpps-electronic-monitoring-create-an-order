@@ -9,6 +9,7 @@ import isVariationType from '../utils/order/isVariationType'
 import TimelineModel from '../models/view-models/timelineModel'
 import { Order } from '../models/Order'
 import SectionService from '../services/sectionsService'
+import getIneligibleMonitoringConditionsErrors from '../utils/order/ineligibleMonitoringConditions'
 
 export default class OrderController {
   constructor(
@@ -65,7 +66,7 @@ export default class OrderController {
   summary: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
     const versionId = req.params.versionId as string
-
+    const cohort = res.locals.user.cohort?.cohort
     const error = req.flash('submissionError')
 
     const completedOrderVersions = await this.orderService.getVersionInformations({
@@ -80,7 +81,8 @@ export default class OrderController {
     const isNewOrderVariation =
       isVariationType(order.type) && isMostRecentVersion && completedOrderVersions.length === 1
 
-    const sections = await this.sectionService.getSectionsForOrder(order, versionId, isNewOrderVariation)
+    const sections = await this.sectionService.getSectionsForOrder(order, versionId, isNewOrderVariation, cohort)
+
     res.render('pages/order/summary', {
       order: req.order,
       sections,
@@ -150,6 +152,13 @@ export default class OrderController {
 
   submit: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
+
+    const ineligibleErrors = getIneligibleMonitoringConditionsErrors(order)
+    if (ineligibleErrors.length > 0) {
+      req.flash('submissionError', ineligibleErrors[0])
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
+      return
+    }
 
     const result = await this.orderService
       .submitOrder({
