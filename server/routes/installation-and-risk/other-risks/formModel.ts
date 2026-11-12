@@ -1,7 +1,7 @@
 import z from 'zod'
 import { validationErrors } from '../../../constants/validationErrors'
 
-export const OTHER_RISKS_DETAILS_MAX_LENGTH = 200
+export const OTHER_RISKS_DETAILS_MAX_LENGTH = 500
 
 const OtherRisksFormModel = z.object({
   action: z.string(),
@@ -26,7 +26,7 @@ export const OtherRisksFormValidator = z
     } else if (data.riskDetails.length > OTHER_RISKS_DETAILS_MAX_LENGTH) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: validationErrors.installationAndRisk.otherRisksDetailsTooLong,
+        message: validationErrors.installationAndRisk.riskDetailsTooLong,
         path: ['riskDetails'],
       })
     }

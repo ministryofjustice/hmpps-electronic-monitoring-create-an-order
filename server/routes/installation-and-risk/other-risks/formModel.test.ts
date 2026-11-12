@@ -28,12 +28,12 @@ describe('other risks form validator', () => {
     ])
   })
 
-  it('limits the details to 200 characters', () => {
-    const result = OtherRisksFormValidator.safeParse({ hasOtherRisks: 'YES', riskDetails: 'a'.repeat(201) })
+  it('limits the details to max 500 chars', () => {
+    const result = OtherRisksFormValidator.safeParse({ hasOtherRisks: 'YES', riskDetails: 'a'.repeat(501) })
 
     expect(result.error?.issues).toEqual([
       expect.objectContaining({
-        message: 'Any other risks to be aware of must be 200 characters or less',
+        message: 'Any other risks to be aware of must be 500 characters or less',
         path: ['riskDetails'],
       }),
     ])
@@ -47,5 +47,9 @@ describe('other risks form validator', () => {
     expect(
       OtherRisksFormValidator.safeParse({ hasOtherRisks: 'YES', riskDetails: 'Aggressive neighbour' }).success,
     ).toBe(true)
+  })
+
+  it('accepts yes with lots of details', () => {
+    expect(OtherRisksFormValidator.safeParse({ hasOtherRisks: 'YES', riskDetails: 'a'.repeat(500) }).success).toBe(true)
   })
 })
