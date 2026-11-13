@@ -311,7 +311,7 @@ context('Making changes to a previously submitted order as a Probation user', ()
 
 function testSetup(cohort: string) {
   cy.task('reset')
-  cy.task('stubSignIn', { name: 'test user', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+  cy.task('stubSignIn', { name: 'test tester', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
   cy.task('stubCemoRequest', {
     httpStatus: 200,
     method: 'GET',
