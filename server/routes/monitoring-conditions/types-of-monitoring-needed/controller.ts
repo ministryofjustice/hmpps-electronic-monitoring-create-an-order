@@ -1,5 +1,5 @@
 import { Request, RequestHandler, Response } from 'express'
-import constructModel from './viewModel'
+import constructModel, { hasIncompleteMonitoringTypes } from './viewModel'
 import { ValidationResult } from '../../../models/Validation'
 import { TypesOfMonitoringNeededFormDataModel } from './formModel'
 import paths from '../../../constants/paths'
@@ -22,7 +22,7 @@ export default class TypesOfMonitoringNeededController {
     const order = req.order!
     const formData = TypesOfMonitoringNeededFormDataModel.parse(req.body)
 
-    if (getIneligibleMonitoringConditionsErrors(order).length > 0) {
+    if (getIneligibleMonitoringConditionsErrors(order).length > 0 || hasIncompleteMonitoringTypes(order)) {
       return res.redirect(
         paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', order.id),
       )

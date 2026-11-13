@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
-import constructModel from './viewModel'
+import constructModel, { hasIncompleteMonitoringTypes } from './viewModel'
 import paths from '../../../constants/paths'
 import TypesOfMonitoringNeededController from './controller'
 import { validationErrors } from '../../../constants/validationErrors'
@@ -19,17 +19,20 @@ describe('TypesOfMonitoringNeededController', () => {
   let req: Request
   let next: NextFunction
   const mockConstructModel = jest.mocked(constructModel)
+  const mockHasIncomplete = jest.mocked(hasIncompleteMonitoringTypes)
 
   beforeEach(() => {
     jest.restoreAllMocks()
 
     controller = new TypesOfMonitoringNeededController(mockTaskListService)
+    mockHasIncomplete.mockReturnValue(false)
 
     mockConstructModel.mockReturnValue({
       items: [],
       addAnother: { value: '' },
       errorSummary: null,
       ineligibleErrors: [],
+      hasIncompleteItems: false,
       continueDisabled: false,
       draftDisabled: false,
     })
@@ -97,6 +100,21 @@ describe('TypesOfMonitoringNeededController', () => {
       expect(res.redirect).toHaveBeenCalledTimes(1)
       expect(res.redirect).toHaveBeenCalledWith(
         paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', orderId),
+      )
+    })
+
+    it('does not continue when any monitoring type is incomplete', async () => {
+      mockHasIncomplete.mockReturnValue(true)
+      req.body = { action: 'continue', addAnother: 'true' }
+
+      await controller.update(req, res, next)
+
+      expect(res.redirect).toHaveBeenCalledTimes(1)
+      expect(res.redirect).toHaveBeenCalledWith(
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(
+          ':orderId',
+          req.order!.id,
+        ),
       )
     })
 
