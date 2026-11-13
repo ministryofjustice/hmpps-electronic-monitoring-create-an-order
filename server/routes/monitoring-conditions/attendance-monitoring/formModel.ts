@@ -37,6 +37,10 @@ type AttendanceMonitoringAddToListFormData = z.infer<typeof AttendanceMonitoring
 
 export default AttendanceMonitoringAddToListFormDataModel
 
+// Time parts are optional, but when entered must be a real 24-hour time
+const HOURS_REGEX = /^([01]?\d|2[0-3])$/
+const MINUTES_REGEX = /^[0-5]?\d$/
+
 const AttendanceMonitoringAddToListFormDataValidator = z
   .object({
     id: z.string().nullable(),
@@ -53,6 +57,26 @@ const AttendanceMonitoringAddToListFormDataValidator = z
     startTimeMinutes: z.string(),
     endTimeHours: z.string(),
     endTimeMinutes: z.string(),
+  })
+  .superRefine((val, ctx) => {
+    const checks = [
+      { field: 'startTime', hours: val.startTimeHours, minutes: val.startTimeMinutes },
+      { field: 'endTime', hours: val.endTimeHours, minutes: val.endTimeMinutes },
+    ] as const
+
+    checks.forEach(({ field, hours, minutes }) => {
+      if (hours === '' && minutes === '') {
+        return
+      }
+      if (!HOURS_REGEX.test(hours) || !MINUTES_REGEX.test(minutes)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: validationErrors.mandatoryAttendanceConditions[`${field}Invalid`],
+          path: [field],
+          params: { focusPath: 'hours' },
+        })
+      }
+    })
   })
   .transform(({ startTimeHours, startTimeMinutes, endTimeHours, endTimeMinutes, postcode, ...formData }) => ({
     startTime: serialiseTime(startTimeHours, startTimeMinutes),

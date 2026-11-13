@@ -95,6 +95,32 @@ describe('types of monitoring needed viewModel', () => {
     expect(model.items[0].value.html).toContain(INCOMPLETE)
   })
 
+  it.each([
+    ['hour 25', '25:00:00'],
+    ['minute 70', '10:70:00'],
+  ])('tags a mandatory attendance item with an out of bounds time (%s)', (_, startTime) => {
+    const order = getMockOrder({
+      mandatoryAttendanceConditions: [
+        {
+          id: 'a1',
+          startDate: '2030-01-01T00:00:00.000Z',
+          endDate: '2030-02-01T00:00:00.000Z',
+          purpose: 'Meeting',
+          appointmentDay: 'Monday',
+          startTime,
+          endTime: '17:00:00',
+          addressLine1: '1 Street',
+          addressLine2: null,
+          addressLine3: 'Town',
+          addressLine4: null,
+          postcode: 'AB1 2CD',
+        },
+      ],
+    })
+
+    expect(constructModel(order, []).items[0].value.html).toContain(INCOMPLETE)
+  })
+
   it('tags an incomplete exclusion zone', () => {
     const order = getMockOrder({
       interestedParties: { notifyingOrganisation: 'PRISON' } as never,

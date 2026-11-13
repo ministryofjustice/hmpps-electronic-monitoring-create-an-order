@@ -57,6 +57,8 @@ interface ValidationErrors {
     addressLine1Required: string
     addressLine3Required: string
     postcodeRequired: string
+    startTimeInvalid: string
+    endTimeInvalid: string
     addAnotherRequired: string
   }
   contactInformation: {
@@ -324,6 +326,8 @@ const validationErrors: ValidationErrors = {
     addressLine1Required: 'Enter address line 1',
     addressLine3Required: 'Enter town or city',
     postcodeRequired: 'Enter postcode',
+    startTimeInvalid: 'Start time must be a real time, for example 09:30',
+    endTimeInvalid: 'End time must be a real time, for example 17:00',
     addAnotherRequired: 'Select yes if you need to add another appointment',
   },
   contactInformation: {
