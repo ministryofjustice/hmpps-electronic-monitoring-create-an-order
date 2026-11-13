@@ -166,7 +166,7 @@
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-plugin-manifest": "^1.0.5",
     "esbuild-sass-plugin": "^3.7.0",
-    "glob": "^13.0.6",
+    "glob": "^14.0.2",
     "husky": "^9.1.7",
     "jest": "^30.5.2",
     "jest-html-reporter": "^4.4.2",
@@ -215,6 +215,17 @@
     "@azure/msal-node": "^7.1.2",
     "@ministryofjustice/frontend": {
       "moment": "^2.31.0"
+    },
+    "minimatch": "^11.0.1",
+    "@ministryofjustice/eslint-config-hmpps": {
+      "minimatch": "^3.1.5"
+    },
+    "glob": "^14.0.2",
+    "bunyan": {
+      "glob": "^13.0.6"
+    },
+    "esbuild-plugin-clean": {
+      "glob": "^13.0.6"
     }
   }
 }
