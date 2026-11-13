@@ -1,5 +1,6 @@
 import { Request, RequestHandler, Response } from 'express'
 import { OrderService } from '../services'
+import type { TelemetryEvents, TelemetryService } from '../services/telemetryService'
 import paths from '../constants/paths'
 import { CreateOrderFormDataParser } from '../models/form-data/order'
 import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
@@ -14,6 +15,7 @@ export default class OrderController {
   constructor(
     private readonly orderService: OrderService,
     private readonly sectionService: SectionService,
+    private readonly telemetryService: TelemetryService,
   ) {}
 
   create: RequestHandler = async (req: Request, res: Response) => {
@@ -158,10 +160,39 @@ export default class OrderController {
       return
     }
 
-    const result = await this.orderService.submitOrder({
-      orderId: order.id,
-      accessToken: res.locals.user.token,
-    })
+    const result = await this.orderService
+      .submitOrder({
+        orderId: order.id,
+        accessToken: res.locals.user.token,
+      })
+      .catch(error => {
+        this.telemetryService.trackEvent('order_submission_attempt', { outcome: 'failure' })
+        throw error
+      })
+
+    const properties: TelemetryEvents['order_submission_attempt'] = {
+      outcome: result.submitted ? 'success' : 'failure',
+    }
+    if (!result.submitted) {
+      switch (result.type) {
+        case 'alreadySubmitted':
+          properties.failureReason = 'already_submitted'
+          break
+        case 'incomplete':
+          properties.failureReason = 'incomplete'
+          break
+        case 'errorStatus':
+          properties.failureReason = 'error_status'
+          break
+        case 'partialSuccess':
+          properties.failureReason = 'partial_success'
+          break
+        default:
+          break
+      }
+    }
+
+    this.telemetryService.trackEvent('order_submission_attempt', properties)
 
     if (result.submitted) {
       res.redirect(paths.ORDER.SUBMIT_SUCCESS.replace(':orderId', order.id))
