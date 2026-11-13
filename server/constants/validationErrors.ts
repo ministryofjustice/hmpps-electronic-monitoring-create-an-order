@@ -124,7 +124,6 @@ interface ValidationErrors {
     riskCategoryRequired: string
     riskDetailsRequired: string
     riskDetailsTooLong: string
-    otherRisksDetailsTooLong: string
     hasOtherRisksRequired: string
     genderRiskDetailsRequired: string
     genderRiskDetailsTooLong: string
@@ -415,7 +414,6 @@ const validationErrors: ValidationErrors = {
     riskCategoryRequired: 'Select all the possible risks at the installation address',
     riskDetailsRequired: 'Enter what other risks there are',
     riskDetailsTooLong: 'Any other risks to be aware of must be 500 characters or less',
-    otherRisksDetailsTooLong: 'Any other risks to be aware of must be 200 characters or less',
     hasOtherRisksRequired: 'Select yes if there are any other risks to be aware of',
     genderRiskDetailsRequired: 'Enter what sex or gender they are a risk to',
     genderRiskDetailsTooLong: 'Gender risk details to be aware of must be 100 characters or less',
