@@ -1,7 +1,7 @@
 import z from 'zod'
 import { DateTimeInputModel } from '../../../models/form-data/formData'
 import { validationErrors } from '../../../constants/validationErrors'
-import prisons from '../../../i18n/en/reference/prisons'
+import prisons from '../../../i18n/en/reference/ddv5/prisons'
 
 const PRISON_KEYS: string[] = Object.keys(prisons)
 
