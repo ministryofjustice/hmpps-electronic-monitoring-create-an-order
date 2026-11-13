@@ -5,6 +5,7 @@ import DeviceWearerResponsibleAdultService from './service'
 import TaskListService from '../../../services/taskListService'
 import DeviceWearerResponsibleAdultFormDataModel from './formModel'
 import responsibleAdultViewModel from './viewModel'
+import { shouldAskResponsibleAdultQuestion } from '../../../utils/order/responsibleAdultQuestion'
 
 export default class DeviceWearerResponsibleAdultController {
   constructor(
@@ -13,6 +14,11 @@ export default class DeviceWearerResponsibleAdultController {
   ) {}
 
   view: RequestHandler = async (req: Request, res: Response) => {
+    if (!shouldAskResponsibleAdultQuestion(req.order!)) {
+      res.redirect(res.locals.orderSummaryUri ?? paths.ORDER.SUMMARY.replace(':orderId', req.order!.id))
+      return
+    }
+
     const { deviceWearerResponsibleAdult } = req.order!
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
@@ -26,6 +32,11 @@ export default class DeviceWearerResponsibleAdultController {
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
+    if (!shouldAskResponsibleAdultQuestion(req.order!)) {
+      res.redirect(res.locals.orderSummaryUri ?? paths.ORDER.SUMMARY.replace(':orderId', req.order!.id))
+      return
+    }
+
     const orderId = req.params.orderId as string
     const { action, ...formData } = DeviceWearerResponsibleAdultFormDataModel.parse(req.body)
 

@@ -5,6 +5,7 @@ import ResponsibleAdultPage from '../../../pages/order/about-the-device-wearer/r
 import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
 
 const mockOrderId = uuidv4()
+const eligibleOrder = { interestedParties: { notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE' } }
 
 context('About the device wearer - Responsible Adult', () => {
   context('Draft order', () => {
@@ -12,7 +13,7 @@ context('About the device wearer - Responsible Adult', () => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS', order: eligibleOrder })
 
       cy.signIn()
     })
@@ -48,7 +49,7 @@ context('About the device wearer - Responsible Adult', () => {
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
       cy.task('stubCemoCreateOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
-      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS', order: eligibleOrder })
       cy.task('stubCemoPutResponsibleAdult', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
 
       cy.signIn()
@@ -87,7 +88,7 @@ context('About the device wearer - Responsible Adult', () => {
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
       cy.task('stubCemoCreateOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
-      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS' })
+      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'IN_PROGRESS', order: eligibleOrder })
 
       cy.signIn()
     })
@@ -202,7 +203,7 @@ context('About the device wearer - Responsible Adult', () => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
 
-      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'SUBMITTED' })
+      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'SUBMITTED', order: eligibleOrder })
 
       cy.signIn()
     })

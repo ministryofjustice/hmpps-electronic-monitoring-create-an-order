@@ -1,0 +1,28 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set section = content.pages.deviceWearer.section %}
+{% set questionName = content.pages.deviceWearer.questions.adultAtTimeOfInstallation.text %}
+{% set singleQuestionPage = true %}
+
+{% block formInputs %}
+  {{ govukRadios({
+    name: "adultAtTimeOfInstallation",
+    idPrefix: "adultAtTimeOfInstallation",
+    classes: "govuk-radios--inline",
+    fieldset: {
+      legend: {
+        text: content.pages.deviceWearer.questions.adultAtTimeOfInstallation.text,
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
+      }
+    },
+    hint: {
+      text: content.pages.deviceWearer.questions.adultAtTimeOfInstallation.hint
+    },
+    items: adultAtTimeOfInstallation.items,
+    value: adultAtTimeOfInstallation.value,
+    errorMessage: adultAtTimeOfInstallation.error
+  }) }}
+{% endblock %}

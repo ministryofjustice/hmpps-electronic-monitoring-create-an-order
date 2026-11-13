@@ -1,6 +1,8 @@
 import z from 'zod'
 import RestClient from '../../../data/restClient'
 import { AuthenticatedRequestInput } from '../../../interfaces/request'
+import { DeviceWearer } from '../../../models/DeviceWearer'
+import OrderModel from '../../../models/Order'
 import { SanitisedError } from '../../../sanitisedError'
 
 const DeviceWearerSearchResultResponseModel = z.object({
@@ -67,6 +69,12 @@ export default class DeviceWearerSearchResultsService {
         organisationSearchId: input.searchedIdentifier,
       },
     })
+  }
+
+  // Confirming responds with no content, so read back the device wearer the API stored from CPR
+  async getStoredDeviceWearer(input: AuthenticatedRequestInput & { orderId: string }): Promise<DeviceWearer> {
+    const order = await this.apiClient.get({ path: `/api/orders/${input.orderId}`, token: input.accessToken })
+    return OrderModel.parse(order).deviceWearer
   }
 
   hasSearchMatch(searchResult: DeviceWearerSearchResultResponse): boolean {
