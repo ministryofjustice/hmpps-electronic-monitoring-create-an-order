@@ -17,8 +17,9 @@ import Page from '../../pages/page'
 import fillinAddress from './postcode-lookup.cy'
 
 const submitIfOnPage = (path: string, submit: () => void): void => {
+  const expectedPath = path.replace(paths.ORDER.BASE_URL, '')
   cy.location('pathname').then(pathname => {
-    if (pathname.endsWith(path.replace(paths.ORDER.BASE_URL, ''))) {
+    if (pathname.endsWith(expectedPath)) {
       submit()
       cy.location('pathname').should('not.equal', pathname)
     }
@@ -130,7 +131,9 @@ export default function fillInAboutTheDeviceWearer({
   }
 
   if (deviceWearerDetails.hasFixedAddress) {
-    submitIfOnPage(paths.CONTACT_INFORMATION.NO_FIXED_ABODE, () => {
+    const path = paths.CONTACT_INFORMATION.NO_FIXED_ABODE.replace(paths.ORDER.BASE_URL, '')
+    cy.url().should('include', path)
+    submitIfOnPage(path, () => {
       const noFixedAbode = Page.verifyOnPage(NoFixedAbodePage, section)
       noFixedAbode.form.fillInWith(deviceWearerDetails)
       noFixedAbode.form.saveAndContinueButton.click()
