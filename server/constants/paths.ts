@@ -101,6 +101,7 @@ const paths = {
     RISK_BEHAVIOUR: `${INSTALLATION_AND_RISK_BASE}/risk-behaviour`,
     RISK_AT_ADDRESS: `${INSTALLATION_AND_RISK_BASE}/risk-at-address`,
     OTHER_RISKS: `${INSTALLATION_AND_RISK_BASE}/other-risks`,
+    CHECK_RISK: `${INSTALLATION_AND_RISK_BASE}/check-risk`,
   },
 
   POSTCODE_LOOKUP: {

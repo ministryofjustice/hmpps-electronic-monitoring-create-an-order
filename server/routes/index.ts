@@ -70,7 +70,10 @@ export default function routes({
   // order instead of the requested version. Mounting the lookup explicitly - ahead of every feature
   // router and with the versioned prefix listed first - captures both params in a single layer, so
   // the correct version is resolved regardless of the order the feature routers are mounted in.
-  router.use([paths.ORDER.BASE_URL_VERSION, paths.ORDER.BASE_URL], populateOrder(orderService))
+  router.use(
+    [paths.ORDER.BASE_URL_VERSION, paths.ORDER.BASE_URL],
+    populateOrder(orderService, riskAtInstallationService),
+  )
 
   get('/', orderSearchController.home)
   get('/drafts', orderSearchController.list)

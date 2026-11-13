@@ -11,6 +11,7 @@ import hasOptionalVariationSectionIsHOCourt from '../utils/order/optionalVariati
 import { convertBooleanToEnum, isNotNullOrEmptyString, isNotNullOrUndefined } from '../utils/values'
 import { isPastDatedProbationVariation } from '../utils/order/orderStartDate'
 import { shouldAskResponsibleAdultQuestion } from '../utils/order/responsibleAdultQuestion'
+import { Cohort } from '../models/UserCohort'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
 
@@ -70,6 +71,7 @@ const PAGES = {
   responsibleOrganisation: 'RESPONSIBLE_ORGANISATION',
   responsibleOfficer: 'RESPONSIBLE_OFFICER',
   sentencingAct: 'SENTENCING_ACT',
+  riskAssessment: 'RISK_ASSESSMENT',
 } as const
 
 type Page = (typeof PAGES)[keyof typeof PAGES]
@@ -249,7 +251,7 @@ const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCoho
 export default class TaskListService {
   constructor() {}
 
-  getTasks(order: Order): Array<Task> {
+  getTasks(order: Order, userCohort?: Cohort): Array<Task> {
     const tasks: Array<Task> = []
     const cohort = getOrderCohort(order.interestedParties?.notifyingOrganisation)
     const cohortDefinition = taskListCohortDefinitions[cohort]
@@ -395,7 +397,7 @@ export default class TaskListService {
       completed: true,
     })
 
-    tasks.push(...getRiskInformationTasks(order))
+    tasks.push(...getRiskInformationTasks(order, userCohort))
 
     tasks.push(...getAdditionalDocumentTasks(order, cohortDefinition))
 

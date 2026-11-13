@@ -14,6 +14,7 @@ import IsAddressChangePage from '../../../e2e/order/edit-order/is-address-change
 import ServiceRequestTypePage from '../../../e2e/order/variation/service-request-type/serviceRequestTypePage'
 import NotifyingOrganisationPage from '../../../e2e/order/interested-parties/notifying-organisation/notifyingOrganisationPage'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
+import InstallationAndRiskCheckRiskPage from '../../../pages/order/installation-and-risk/check-risk'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import NewDocumentPage from '../../../pages/order/attachments/newDocument'
 import UploadLicencePage from '../../../pages/order/attachments/uploadLicence'
@@ -170,6 +171,9 @@ context('Attachments', () => {
     orderSummaryPage.aboutTheDeviceWearerTask.click()
     Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').saveAndReturnButton.click()
     orderSummaryPage.riskInformationTask.click()
+    const checkRiskPage = Page.verifyOnPage(InstallationAndRiskCheckRiskPage)
+    checkRiskPage.form.fillInWith('No')
+    checkRiskPage.form.continueButton.click()
     Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers').saveAndReturnButton.click()
 
     const newDocumentPage = Page.verifyOnPage(NewDocumentPage)
