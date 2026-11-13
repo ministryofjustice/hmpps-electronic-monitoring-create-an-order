@@ -130,6 +130,60 @@ context('Monitoring conditions', () => {
         })
       })
     })
+    context('Prison place name validations', () => {
+      beforeEach(() => {
+        cy.task('reset')
+        cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: {
+            installationLocation: { location: 'PRISON' },
+            interestedParties: {
+              notifyingOrganisation: 'HOME_OFFICE',
+              notifyingOrganisationName: '',
+              notifyingOrganisationEmail: 'notifying@organisation',
+              responsibleOrganisation: 'HOME_OFFICE',
+              responsibleOfficerPhoneNumber: '',
+              responsibleOrganisationEmail: 'responsible@organisation',
+              responsibleOrganisationRegion: '',
+              responsibleOfficerName: 'name',
+            },
+          },
+        })
+        cy.signIn()
+      })
+
+      it('Should show error when no prison is selected', () => {
+        const page = Page.visit(InstallationAppointmentPage, { orderId: mockOrderId })
+        page.form.saveAndContinueButton.click()
+
+        page.errorSummary.shouldHaveError('Enter name of the place where installation takes place')
+      })
+
+      it('Should show error when a pre-populated prison is cleared', () => {
+        cy.task('stubCemoGetOrder', {
+          httpStatus: 200,
+          id: mockOrderId,
+          status: 'IN_PROGRESS',
+          order: {
+            installationLocation: { location: 'PRISON' },
+            installationAppointment: {
+              placeName: 'WYMOTT_PRISON',
+              appointmentDate: '2030-01-01T10:00:00Z',
+              appointmentTimeDetails: '',
+            },
+          },
+        })
+        const page = Page.visit(InstallationAppointmentPage, { orderId: mockOrderId })
+        cy.get('input#placeName').should('have.value', 'Wymott Prison').clear()
+        page.form.saveAndContinueButton.click()
+
+        Page.verifyOnPage(InstallationAppointmentPage)
+        page.errorSummary.shouldHaveError('Enter name of the place where installation takes place')
+      })
+    })
     context('Appointment time details validations', () => {
       const mockDefaultOrder = {
         deviceWearer: {

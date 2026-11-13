@@ -7,14 +7,29 @@
 {% set legend = content.pages.installationAppointment.legend %}
 {% set helpText = content.pages.installationAppointment.helpText %}
 {% set questions = content.pages.installationAppointment.questions %}
+{% from "../../../components/accessible-autocomplete/macro.njk" import accessibleAutocomplete %}
+
 {% block formInputs %}
 
-{{ govukInput({
+{% if installationLocation == 'PRISON' %}
+  {{ accessibleAutocomplete({
+    id: 'placeName',
+    name: 'placeName',
+    label: questions.prisonName.text,
+    labelClasses: "govuk-fieldset__legend--s",
+    options: content.reference.prisons | toOptions(false, true) | removeOptions(['COOKHAM_WOOD_YOUNG_OFFENDER_INSTITUTION']),
+    value: placeName.value or notifyingOrganisation,
+    errorMessage: placeName.error,
+    disabled: not isOrderEditable,
+    nonce: cspNonce
+  }) }}
+{% else %}
+  {{ govukInput({
       label: {
         text: questions.placeName.text,       
         classes: "govuk-fieldset__legend--s"
       },
-       hint: {
+      hint: {
           text: questions.placeName.hint
       },
       classes: "govuk-input--width-10",
@@ -23,7 +38,9 @@
       value: placeName.value,
       errorMessage: placeName.error,
       disabled: not isOrderEditable
-    }) }}
+    }) 
+  }}
+{% endif %}
 
 
 {{dateTimeInput({

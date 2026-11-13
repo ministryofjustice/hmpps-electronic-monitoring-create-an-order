@@ -512,8 +512,12 @@ const createInstallationAppointmentAnswer = (order: Order, content: I18n, answer
       ? questions.preferredAppointmentTime.text
       : questions.appointmentTime.text
 
+  const placeName = order.installationAppointment?.placeName
+  const placeNameText =
+    location === 'PRISON' ? lookup(content.reference.prisons, placeName, placeName ?? '') : placeName
+
   const answers = [
-    createAnswer(questions.placeName.text, order.installationAppointment?.placeName, uri, answerOpts),
+    createAnswer(questions.placeName.text, placeNameText, uri, answerOpts),
     createDateAnswer(questions.appointmentDate.text, order.installationAppointment?.appointmentDate, uri, answerOpts),
     createTimeAnswer(appointmentTimeText, order.installationAppointment?.appointmentDate, uri, answerOpts),
   ]

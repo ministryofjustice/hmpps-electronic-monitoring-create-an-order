@@ -11,7 +11,7 @@ context('Monitoring conditions', () => {
   context('Installation Appointment', () => {
     context('Submission', () => {
       const validFormData = {
-        placeName: 'Mock Place',
+        placeName: 'Altcourse Prison',
         appointmentDate: new Date(2025, 0, 1, 10, 0, 0),
       }
       beforeEach(() => {
@@ -24,6 +24,25 @@ context('Monitoring conditions', () => {
           order: {
             installationLocation: {
               location: 'PRISON',
+            },
+            interestedParties: {
+              notifyingOrganisation: 'PRISON',
+              notifyingOrganisationName: 'WYMOTT_PRISON',
+              notifyingOrganisationEmail: 'notifying@organisation',
+              responsibleOrganisation: 'POLICE',
+              responsibleOrganisationPhoneNumber: '01234567890',
+              responsibleOrganisationEmail: 'responsible@organisation',
+              responsibleOrganisationRegion: 'CHESHIRE',
+              responsibleOrganisationAddress: {
+                addressType: 'RESPONSIBLE_ORGANISATION',
+                addressLine1: 'addressLine1',
+                addressLine2: 'addressLine2',
+                addressLine3: 'addressLine3',
+                addressLine4: 'addressLine4',
+                postcode: 'postcode',
+              },
+              responsibleOfficerName: 'name',
+              responsibleOfficerPhoneNumber: '01234567891',
             },
           },
         })
@@ -42,12 +61,36 @@ context('Monitoring conditions', () => {
 
       it('Should submit a correctly formatted installation appointment and continue to installation address page', () => {
         const page = Page.visit(InstallationAppointmentPage, { orderId: mockOrderId })
-        page.form.fillInWith(validFormData)
+        page.form.fillInWith(validFormData, 'PRISON')
         page.form.saveAndContinueButton.click()
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOrderId}${apiPath}`,
           body: {
-            placeName: validFormData.placeName,
+            placeName: 'ALTCOURSE_PRISON',
+            appointmentDate: '2025-01-01T10:00:00.000Z',
+            appointmentTimeDetails: '',
+          },
+        }).should('be.true')
+        Page.verifyOnPage(FindAddressPage)
+      })
+
+      it('Should submit a correctly formatted installation appointment and continue to installation address page with the prison name auto populated when installation is at prison', () => {
+        const formDataUsingDefaultPlaceName = {
+          appointmentDate: new Date(2025, 0, 1, 10, 0, 0),
+        }
+        const page = Page.visit(InstallationAppointmentPage, { orderId: mockOrderId })
+
+        cy.contains('label', 'What is the name of the prison where installation will take place?').should('be.visible')
+
+        cy.get('input#placeName').should('have.value', 'Wymott Prison')
+        cy.get('select#placeName-select').should('have.value', 'WYMOTT_PRISON')
+
+        page.form.fillInWith(formDataUsingDefaultPlaceName, 'PRISON')
+        page.form.saveAndContinueButton.click()
+        cy.task('stubCemoVerifyRequestReceived', {
+          uri: `/orders/${mockOrderId}${apiPath}`,
+          body: {
+            placeName: 'WYMOTT_PRISON',
             appointmentDate: '2025-01-01T10:00:00.000Z',
             appointmentTimeDetails: '',
           },
@@ -57,6 +100,10 @@ context('Monitoring conditions', () => {
 
       context('when the address is primary', () => {
         it('should continue to check your answers', () => {
+          const formDataForSubmission = {
+            placeName: 'Mock Data',
+            appointmentDate: new Date(2025, 0, 1, 10, 0, 0),
+          }
           cy.task('stubCemoGetOrder', {
             httpStatus: 200,
             id: mockOrderId,
@@ -84,14 +131,14 @@ context('Monitoring conditions', () => {
           )
           page.form.fillInWith({
             appointmentTimeDetails,
-            ...validFormData,
+            ...formDataForSubmission,
           })
           page.form.saveAndContinueButton.click()
 
           cy.task('stubCemoVerifyRequestReceived', {
             uri: `/orders/${mockOrderId}${apiPath}`,
             body: {
-              placeName: validFormData.placeName,
+              placeName: formDataForSubmission.placeName,
               appointmentDate: '2025-01-01T10:00:00.000Z',
               appointmentTimeDetails,
             },

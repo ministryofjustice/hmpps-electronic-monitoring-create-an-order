@@ -1,6 +1,9 @@
 import z from 'zod'
 import { DateTimeInputModel } from '../../../models/form-data/formData'
 import { validationErrors } from '../../../constants/validationErrors'
+import prisons from '../../../i18n/en/reference/ddv5/prisons'
+
+const PRISON_KEYS: string[] = Object.keys(prisons)
 
 const InstallationAppointmentFormDataModel = z.object({
   action: z.string().default('continue'),
@@ -17,9 +20,17 @@ const InstallationAppointmentFormDataModel = z.object({
 
 type InstallationAppointmentFormData = z.infer<typeof InstallationAppointmentFormDataModel>
 
-const InstallationAppointmentFormDataValidator = (appointmentTimeDetailsRequired: boolean) =>
+const InstallationAppointmentFormDataValidator = (
+  appointmentTimeDetailsRequired: boolean,
+  isPrisonLocation: boolean = false,
+) =>
   z.object({
-    placeName: z.string().min(1, validationErrors.installationAppointment.placeNameRequired),
+    placeName: isPrisonLocation
+      ? z
+          .string()
+          .min(1, validationErrors.installationAppointment.placeNameRequired)
+          .refine(value => PRISON_KEYS.includes(value), validationErrors.installationAppointment.placeNameInvalidPrison)
+      : z.string().min(1, validationErrors.installationAppointment.placeNameRequired),
     appointmentDate: DateTimeInputModel(validationErrors.installationAppointment.appointmentDate),
     appointmentTimeDetails: appointmentTimeDetailsRequired
       ? z

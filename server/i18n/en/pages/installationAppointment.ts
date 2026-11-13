@@ -10,6 +10,10 @@ const installationAppointmentPageContent: InstallationAppointmentPageContent = {
       text: 'What is the name of the place where installation will take place?',
       hint: 'For example, the name of the prison or probation office.',
     },
+    prisonName: {
+      text: 'What is the name of the prison where installation will take place?',
+      hint: '',
+    },
     appointmentDate: {
       text: 'What date will installation take place?',
       hint: 'For example, 21 05 2025',

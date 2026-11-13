@@ -14,12 +14,16 @@ type InstallationAppointmentViewModel = ViewModel<
   appointmentTimeLabel: string
   appointmentTimeHint: string
   showAppointmentTimeDetails: boolean
+  installationLocation?: string
+  notifyingOrganisation?: string | null
 }
 
 const constructFromEntity = (
   appointment: InstallationAppointment | undefined | null,
   question: Question,
   showAppointmentTimeDetails: boolean,
+  installationLocation?: string,
+  notifyingOrganisation?: string | null,
 ): InstallationAppointmentViewModel => {
   return {
     placeName: {
@@ -35,6 +39,8 @@ const constructFromEntity = (
     appointmentTimeHint: question.hint!,
     appointmentTimeLabel: question.text,
     errorSummary: null,
+    installationLocation,
+    notifyingOrganisation,
   }
 }
 
@@ -43,6 +49,8 @@ const constructFromFormData = (
   validationErrors: ValidationResult,
   question: Question,
   showAppointmentTimeDetails: boolean,
+  installationLocation?: string,
+  notifyingOrganisation?: string | null,
 ): InstallationAppointmentViewModel => {
   return {
     placeName: {
@@ -68,6 +76,8 @@ const constructFromFormData = (
     appointmentTimeHint: question.hint!,
     appointmentTimeLabel: question.text,
     errorSummary: createGovukErrorSummary(validationErrors),
+    installationLocation,
+    notifyingOrganisation,
   }
 }
 
@@ -77,11 +87,26 @@ const construct = (
   question: Question,
   showAppointmentTimeDetails: boolean,
   validationErrors: ValidationResult,
+  installationLocation?: string,
+  notifyingOrganisation?: string | null,
 ): InstallationAppointmentViewModel => {
   if (validationErrors.length > 0 && formData) {
-    return constructFromFormData(formData, validationErrors, question, showAppointmentTimeDetails)
+    return constructFromFormData(
+      formData,
+      validationErrors,
+      question,
+      showAppointmentTimeDetails,
+      installationLocation,
+      notifyingOrganisation,
+    )
   }
-  return constructFromEntity(appointment, question, showAppointmentTimeDetails)
+  return constructFromEntity(
+    appointment,
+    question,
+    showAppointmentTimeDetails,
+    installationLocation,
+    notifyingOrganisation,
+  )
 }
 
 export default {

@@ -18,12 +18,17 @@ export default class InstallationAppointmentController {
   view: RequestHandler = async (req: Request, res: Response) => {
     const errors = req.flash('validationErrors')
     const formData = req.flash('formData')
+    const installationLocation = req.order?.installationLocation?.location
+    const notifyingOrganisation = req.order?.interestedParties?.notifyingOrganisationName
+
     const viewModel = installationAppointmenttViewModel.construct(
       req.order!.installationAppointment,
       formData[0] as never,
       this.getAppointmentTimeQuestion(req.order!, res.locals.content!.pages.installationAppointment),
       this.shouldShowAppointmentTimeDetails(req.order!),
       errors as never,
+      installationLocation,
+      notifyingOrganisation,
     )
     res.render('pages/order/monitoring-conditions/installation-appointment', viewModel)
   }
@@ -51,6 +56,7 @@ export default class InstallationAppointmentController {
       orderId,
       data: formData,
       appointmentTimeDetailsRequired: this.shouldShowAppointmentTimeDetails(req.order!),
+      isPrisonLocation: req.order?.installationLocation?.location === 'PRISON',
     })
 
     if (isValidationResult(result)) {
