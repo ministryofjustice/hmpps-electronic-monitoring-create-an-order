@@ -156,8 +156,6 @@ context('New about device wearer flow', () => {
       { key: "What is the device wearer's last name?", value: deviceWearerDetails.lastName },
       { key: "What is the device wearer's preferred name or names? (optional)", value: deviceWearerDetails.alias },
       { key: "What is the device wearer's date of birth?", value: '01/01/2000' },
-      // TODO: Confirm if this is needed?
-      // { key: 'Is a responsible adult required?', value: 'No' },
       { key: 'What is the sex of the device wearer?', value: deviceWearerDetails.sex },
       { key: "What is the device wearer's gender?", value: deviceWearerDetails.genderIdentity },
       {
@@ -229,8 +227,6 @@ context('New about device wearer flow', () => {
       { key: "What is the device wearer's last name?", value: 'Bobbiqua' },
       { key: "What is the device wearer's preferred name or names? (optional)", value: 'Dyfreiico Joderly' },
       { key: "What is the device wearer's date of birth?", value: '08/05/1974' },
-      // TODO: Confirm if this is needed?
-      // { key: 'Is a responsible adult required?', value: 'No' },
       { key: 'What is the sex of the device wearer?', value: 'Male' },
       { key: "What is the device wearer's gender?", value: partiDeviceWearerDetails.genderIdentity },
       {
