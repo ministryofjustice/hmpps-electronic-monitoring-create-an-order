@@ -40,6 +40,7 @@ generic-service:
     GOTENBERG_API_URL: http://hmpps-electronic-monitoring-create-an-order-gotenberg
     DOWNLOAD_FMS_REQUEST_JSON_ENABLED: 'false'
     TECHNOLOGY_PORTAL_PILOT_PRISONS: 'HDI,HLI,HMI,LEI,LHI,MDI,WEI,MKI,CWI,EXI,GMI,FMI,WNI,WYI,BLI,EWI,EEI,LYI,PDI,VEI,DTI,DMI,HHI,KVI,LCI,LII,MHI,NSI,ONI,WTI,AYI,BNI,GNI,HCI,WCI,BCI,HII,LPI,RSI,TCI,NMI,RNI,SKI,SUI,CDI,HPI,HBI,MTI,WII'
+    CVL_INTEGRATION_ENABLED: 'false'
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
