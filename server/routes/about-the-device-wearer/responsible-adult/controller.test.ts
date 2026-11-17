@@ -2,7 +2,8 @@ import DeviceWearerResponsibleAdultService from './service'
 import DeviceWearerResponsibleAdultController from './controller'
 import RestClient from '../../../data/restClient'
 import { createMockRequest, createMockResponse } from '../../../../test/mocks/mockExpress'
-import { getMockOrder } from '../../../../test/mocks/mockOrder'
+import { createInterestedParties, getMockOrder } from '../../../../test/mocks/mockOrder'
+import paths from '../../../constants/paths'
 import TaskListService from '../../../services/taskListService'
 
 jest.mock('../../../services/auditService')
@@ -13,6 +14,7 @@ jest.mock('../../../data/restClient')
 
 const createMockOrder = (name: string) =>
   getMockOrder({
+    interestedParties: createInterestedParties({ notifyingOrganisation: 'YOUTH_CUSTODY_SERVICE' }),
     deviceWearerResponsibleAdult: {
       relationship: 'parent',
       otherRelationshipDetails: null,
@@ -46,6 +48,21 @@ describe('DeviceWearerResponsibleAdultController', () => {
   })
 
   describe('view', () => {
+    it('does not render saved details for an ordinary prison', async () => {
+      const order = createMockOrder('Parent Name')
+      order.interestedParties = createInterestedParties({
+        notifyingOrganisation: 'PRISON',
+        notifyingOrganisationName: 'BEDFORD_PRISON',
+      })
+      const req = createMockRequest({ order, flash: jest.fn() })
+      const res = createMockResponse()
+
+      await deviceWearerResponsibleAdultController.view(req, res, jest.fn())
+
+      expect(res.render).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith(paths.ORDER.SUMMARY.replace(':orderId', order.id))
+    })
+
     it('should render the form using the saved responsible adult data', async () => {
       // Given
       const mockOrder = createMockOrder('Parent Name')
@@ -105,6 +122,21 @@ describe('DeviceWearerResponsibleAdultController', () => {
   })
 
   describe('update', () => {
+    it('does not save details for an ordinary prison', async () => {
+      const order = createMockOrder('Parent Name')
+      order.interestedParties = createInterestedParties({
+        notifyingOrganisation: 'PRISON',
+        notifyingOrganisationName: 'BEDFORD_PRISON',
+      })
+      const req = createMockRequest({ order, body: {}, flash: jest.fn() })
+      const res = createMockResponse()
+
+      await deviceWearerResponsibleAdultController.update(req, res, jest.fn())
+
+      expect(mockDeviceWearerResponsibleAdultService.updateDeviceWearerResponsibleAdult).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith(paths.ORDER.SUMMARY.replace(':orderId', order.id))
+    })
+
     it('should persist data and redirect to the form when the user submits invalid values', async () => {
       // Given
       const order = createMockOrder('Parent Name')
@@ -218,7 +250,7 @@ describe('DeviceWearerResponsibleAdultController', () => {
 
     it('should send a null contact number if no contact number is entered by the user', async () => {
       // Given
-      const order = getMockOrder()
+      const order = createMockOrder('Parent Name')
       const req = createMockRequest({
         order,
         body: {

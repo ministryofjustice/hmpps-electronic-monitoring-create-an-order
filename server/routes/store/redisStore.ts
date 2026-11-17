@@ -29,4 +29,9 @@ export default class RedisStore implements Store {
 
     return result
   }
+
+  public async delete(key: string): Promise<void> {
+    await this.ensureConnected()
+    await this.client.del(`${this.prefix}${key}`)
+  }
 }
