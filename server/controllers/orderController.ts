@@ -16,6 +16,7 @@ import {
   shouldShowServiceRequestTypeQuestions,
   ORDER_CHANGE_STATUS_CHANGED_MESSAGE,
 } from '../utils/orderVersionEligibility'
+import getIneligibleMonitoringConditionsErrors from '../utils/order/ineligibleMonitoringConditions'
 
 export default class OrderController {
   constructor(
@@ -88,6 +89,7 @@ export default class OrderController {
     const error = errors && errors.length > 0 ? errors[0] : undefined
     const isStaleProcessingError =
       error === getOrderChangeBlockedMessage() && (order.canAmend || order.status === 'IN_PROGRESS')
+    const cohort = res.locals.user.cohort?.cohort
 
     const completedOrderVersions = await this.orderService.getVersionInformations({
       orderId: order.id,
@@ -101,7 +103,8 @@ export default class OrderController {
     const isNewOrderVariation =
       isVariationType(order.type) && isMostRecentVersion && completedOrderVersions.length === 1
 
-    const sections = await this.sectionService.getSectionsForOrder(order, versionId, isNewOrderVariation)
+    const sections = await this.sectionService.getSectionsForOrder(order, versionId, isNewOrderVariation, cohort)
+
     res.render('pages/order/summary', {
       order: req.order,
       sections,
@@ -178,6 +181,13 @@ export default class OrderController {
 
   submit: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
+
+    const ineligibleErrors = getIneligibleMonitoringConditionsErrors(order)
+    if (ineligibleErrors.length > 0) {
+      req.flash('submissionError', ineligibleErrors[0])
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
+      return
+    }
 
     const result = await this.orderService.submitOrder({
       orderId: order.id,

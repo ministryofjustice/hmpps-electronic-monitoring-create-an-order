@@ -124,13 +124,15 @@ interface ValidationErrors {
     riskCategoryRequired: string
     riskDetailsRequired: string
     riskDetailsTooLong: string
-    otherRisksDetailsTooLong: string
     hasOtherRisksRequired: string
     genderRiskDetailsRequired: string
     genderRiskDetailsTooLong: string
     offenceAdditionalDetailsTooLong: string
   }
   isMappa: {
+    required: string
+  }
+  checkRisk: {
     required: string
   }
   mappa: {
@@ -409,7 +411,6 @@ const validationErrors: ValidationErrors = {
     riskCategoryRequired: 'Select all the possible risks at the installation address',
     riskDetailsRequired: 'Enter what other risks there are',
     riskDetailsTooLong: 'Any other risks to be aware of must be 500 characters or less',
-    otherRisksDetailsTooLong: 'Any other risks to be aware of must be 200 characters or less',
     hasOtherRisksRequired: 'Select yes if there are any other risks to be aware of',
     genderRiskDetailsRequired: 'Enter what sex or gender they are a risk to',
     genderRiskDetailsTooLong: 'Gender risk details to be aware of must be 100 characters or less',
@@ -418,6 +419,9 @@ const validationErrors: ValidationErrors = {
   },
   isMappa: {
     required: 'Select Yes if the device wearer is a MAPPA offender',
+  },
+  checkRisk: {
+    required: `Select Yes if you need to review their risk`,
   },
   mappa: {
     levelRequired: 'Select the level of MAPPA that applies to the device wearer',

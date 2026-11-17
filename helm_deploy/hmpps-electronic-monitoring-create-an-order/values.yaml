@@ -1,6 +1,6 @@
 generic-service:
   nameOverride: hmpps-electronic-monitoring-create-an-order
-  productId: 'HMPPS529' # productId for the product that this belongs too, i.e. DPS001, see README.md for details
+  productId: 'HMPPS539' # productId for the product that this belongs too, i.e. DPS001, see README.md for details
 
   # the IRSA service account name for accessing AWS resources
   # serviceAccountName: "hmpps-electronic-monitoring-create-an-order"

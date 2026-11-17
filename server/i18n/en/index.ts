@@ -69,6 +69,7 @@ import manualTagAtSourceAddressPageContent from './pages/manualTagAtSourceAddres
 import manualCurfewAddressPageContent from './pages/manualCurfewAddress'
 import restrictionZonePageContent from './pages/restrictionZone'
 import setSentencingActSelectionPageContent from './pages/setSentencingAct'
+import checkRiskPageContent from './pages/checkRisk'
 
 const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
   return {
@@ -117,6 +118,7 @@ const getEnglishContent = (ddVersion: DataDictionaryVersion): I18n => {
       mappa: mappaPageContent,
       offenceOtherInformation: offenceOtherInformationPageContent,
       isMappa: isMappaPageContent,
+      checkRisk: checkRiskPageContent,
       offenceList: offenceListPageContent,
       dapoClauseList: dapaClauseListPageContent,
       notifyingOrganisation: notifyingOrganisationPageContent,

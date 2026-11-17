@@ -13,6 +13,7 @@ import OtherRisksController from './other-risks/controller'
 import InstallationAndRiskCheckAnswersController from './check-your-answers/controller'
 import paths from '../../constants/paths'
 import { createFeatureRouter } from '../routeHelpers'
+import CheckRiskController from './check-risk/controller'
 
 const createInstallationAndRiskRouter = (
   services: Pick<
@@ -55,6 +56,7 @@ const createInstallationAndRiskRouter = (
   const riskBehaviourController = new RiskBehaviourController(riskAtInstallationService, taskListService)
   const riskAtAddressController = new RiskAtAddressController(riskAtInstallationService, taskListService)
   const otherRisksController = new OtherRisksController(riskAtInstallationService, taskListService)
+  const checkRiskController = new CheckRiskController(riskAtInstallationService)
   viewUpdate(paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS, installationAndRiskCheckAnswersController)
   get(paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM, offenceController.view)
   get(paths.INSTALLATION_AND_RISK.OFFENCE, offenceController.view)
@@ -77,6 +79,8 @@ const createInstallationAndRiskRouter = (
   viewUpdate(paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR, riskBehaviourController)
   viewUpdate(paths.INSTALLATION_AND_RISK.RISK_AT_ADDRESS, riskAtAddressController)
   viewUpdate(paths.INSTALLATION_AND_RISK.OTHER_RISKS, otherRisksController)
+  get(paths.INSTALLATION_AND_RISK.CHECK_RISK, checkRiskController.view)
+  viewUpdate(paths.INSTALLATION_AND_RISK.CHECK_RISK, checkRiskController)
 
   return router
 }

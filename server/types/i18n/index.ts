@@ -45,6 +45,7 @@ import IsAddressChangePageContent from './pages/isAddressChange'
 import AddressListContent from './pages/addressList'
 import ManualAddressPageContent from './pages/manualAddress'
 import SetSentencingActPageContent from './pages/setSentencingAct'
+import CheckRiskPageContent from './pages/checkRisk'
 
 type I18n = {
   pages: {
@@ -91,6 +92,7 @@ type I18n = {
     mappa: MappaPageContent
     offenceOtherInformation: OffenceOtherInformationPageContent
     isMappa: IsMappaPageContent
+    checkRisk: CheckRiskPageContent
     offenceList: OffenceListPageContent
     dapoClauseList: DapoClauseListPageConent
     notifyingOrganisation: NotifyingOrganisationPageContent

@@ -10,6 +10,7 @@ import MagistratesCourts, { MagistratesCourtsDDv5 } from './magistratesCourts'
 import MappaCategory from './mappaCategory'
 import MappaLevel from './mappaLevel'
 import IsMappa from './isMappa'
+import CheckRisk from './checkRisk'
 import MilitaryCourts from './militaryCourts'
 import NotifyingOrganisations, { NotifyingOrganisationsDDv5 } from './notifyingOrganisations'
 import Offences from './offences'
@@ -53,6 +54,7 @@ type ReferenceCatalogDDv4 = {
   mappaCategory: MappaCategory
   mappaLevel: MappaLevel
   isMappa: IsMappa
+  checkRisk: CheckRisk
   notifyingOrganisations: NotifyingOrganisations
   offences: Offences
   orderTypeDescriptions: OrderTypeDescriptions

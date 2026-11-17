@@ -64,6 +64,34 @@ describe('task list service', () => {
       ])
     })
 
+    it('flags the electronic monitoring section when conditions are ineligible', async () => {
+      const order = {
+        deviceWearer: { noFixedAbode: true },
+        interestedParties: { notifyingOrganisation: 'PRISON' },
+        monitoringConditionsTrail: { startDate: '2040-01-01' },
+        monitoringConditions: { startDate: new Date(2040, 0).toISOString() },
+      } as unknown as Order
+
+      const sections = await service.getSectionsForOrder(order)
+
+      expect(sections.filter(section => section.hasProblem).map(section => section.name)).toEqual([
+        'ELECTRONIC_MONITORING_CONDITIONS',
+      ])
+    })
+
+    it('does not flag any section for a valid order', async () => {
+      const order = {
+        deviceWearer: { noFixedAbode: false },
+        interestedParties: { notifyingOrganisation: 'PRISON' },
+        monitoringConditionsTrail: { startDate: '2040-01-01' },
+        monitoringConditions: { startDate: new Date(2040, 0).toISOString() },
+      } as unknown as Order
+
+      const sections = await service.getSectionsForOrder(order)
+
+      expect(sections.some(section => section.hasProblem)).toBe(false)
+    })
+
     it('lists electronic monitoring conditions above risk information', async () => {
       const order: Order = {
         interestedParties: { notifyingOrganisation: 'HOME_OFFICE' },

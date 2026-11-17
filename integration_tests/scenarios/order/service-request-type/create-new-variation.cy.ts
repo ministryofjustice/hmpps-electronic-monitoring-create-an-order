@@ -118,6 +118,7 @@ context('Service-Request-Types', () => {
       newDeviceWearerFlow: true,
       restrictionZoneDetails: undefined,
       fillInResponsibleOrganisationDetails: false,
+      isVariationOrder: option === 'I need to change something else in the form',
     })
 
     orderSummaryPage.submitOrderButton.click()

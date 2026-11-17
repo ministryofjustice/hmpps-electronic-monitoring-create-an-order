@@ -1,0 +1,41 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+
+{% set section = content.pages.checkRisk.section %}
+{% set helpText = content.pages.checkRisk.helpText %}
+{% set questions = content.pages.checkRisk.questions %}
+{% set singleQuestionPage = true %}
+
+{% set hintHtml %}
+    <div class="govuk-grid-row">
+        <p>You must review the device wearer's risk if:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>There is a change in the device wearer's address.</li>
+          <li>There is a change in responsible officer.</li>
+          <li>You are adding monitoring conditions.</li>
+          <li>The device wearer's risk has changed (RoSH, Risk to Staff, Domestic Abuse Perpetrator and/or Child Protection Flag).</li>
+        </ul>
+        <p><strong>Do you need to review their risk?</strong></p>
+    </div>
+{% endset %}
+
+{% block formInputs %}
+  {{ govukRadios({
+    name: "checkRisk",
+    classes: "govuk-radios--inline",
+    value: checkRisk.value,
+    fieldset: {
+      legend: {
+        text: questions.checkRisk.text,
+        classes: "govuk-fieldset__legend--l",
+        isPageHeading: true
+      }
+    },
+    hint: {html: hintHtml},
+    items: content.reference.checkRisk | toOptions(not isOrderEditable),
+    errorMessage: checkRisk.error 
+  })
+}}
+{% endblock %}
