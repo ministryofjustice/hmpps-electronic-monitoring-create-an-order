@@ -102,6 +102,20 @@ describe('additional documents check answers', () => {
     ])
   })
 
+  it.each(['PRISON', 'YOUTH_CUSTODY_SERVICE'] as const)(
+    'asks for licence reconfirmation for a past-dated %s variation',
+    notifyingOrganisation => {
+      const order = probationChange('2020-01-01T00:00:00.000Z', {
+        interestedParties: createInterestedParties({ notifyingOrganisation }),
+        orderParameters: { haveLicence: null, havePhoto: false },
+      })
+
+      const answers = createViewModel(order, content)
+
+      expect(answer(answers, 'Do you need to upload a new document?')).toBeDefined()
+    },
+  )
+
   it('does not show the court order upload question for a court order', () => {
     const order = getMockOrder({
       interestedParties: { ...getMockOrder().interestedParties!, notifyingOrganisation: 'FAMILY_COURT' },

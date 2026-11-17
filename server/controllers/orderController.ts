@@ -5,9 +5,17 @@ import { CreateOrderFormDataParser } from '../models/form-data/order'
 import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
 import FeatureFlags from '../utils/featureFlags'
 import isVariationType from '../utils/order/isVariationType'
+import { isStartDateInPast } from '../utils/order/orderStartDate'
 import TimelineModel from '../models/view-models/timelineModel'
-import { Order } from '../models/Order'
 import SectionService from '../services/sectionsService'
+import { SanitisedError } from '../sanitisedError'
+import {
+  canCreateOrderVersion,
+  getOrderChangeBlockedMessage,
+  getServiceRequestTypeFlowBlockedMessage,
+  shouldShowServiceRequestTypeQuestions,
+  ORDER_CHANGE_STATUS_CHANGED_MESSAGE,
+} from '../utils/orderVersionEligibility'
 import getIneligibleMonitoringConditionsErrors from '../utils/order/ineligibleMonitoringConditions'
 
 export default class OrderController {
@@ -33,39 +41,55 @@ export default class OrderController {
     const order = req.order!
 
     if (action === 'continue') {
-      if (this.shouldShowIsRejectionPage(order)) {
-        res.redirect(paths.ORDER.IS_REJECTION.replace(':orderId', orderId))
-      } else if (FeatureFlags.getInstance().get('SERVICE_REQUEST_TYPE_ENABLED')) {
-        res.redirect(paths.ORDER.IS_ADDRESS_CHANGE.replace(':orderId', orderId))
-      } else {
-        await this.orderService.createVariationFromExisting({
+      if (!order.canAmend) {
+        req.flash('submissionError', getOrderChangeBlockedMessage())
+        res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+        return
+      }
+
+      if (order.type === 'REJECTED' && !order.amendmentSourceType) {
+        req.flash('submissionError', getServiceRequestTypeFlowBlockedMessage(order))
+        res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
+        return
+      }
+
+      try {
+        if (
+          shouldShowServiceRequestTypeQuestions(order) &&
+          FeatureFlags.getInstance().get('SERVICE_REQUEST_TYPE_ENABLED')
+        ) {
+          res.redirect(paths.ORDER.IS_ADDRESS_CHANGE.replace(':orderId', orderId))
+          return
+        }
+
+        const amendment = await this.orderService.amendOrder({
           orderId,
           accessToken: res.locals.user.token,
         })
-        res.redirect(`/order/${orderId}/summary`)
+
+        if (amendment.outcome === 'REJECTED' || !isStartDateInPast(amendment.order)) {
+          res.redirect(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', orderId))
+        } else {
+          res.redirect(`/order/${orderId}/summary`)
+        }
+      } catch (error) {
+        if ((error as SanitisedError).status !== 409) throw error
+
+        req.flash('submissionError', ORDER_CHANGE_STATUS_CHANGED_MESSAGE)
+        res.redirect(paths.ORDER.SUMMARY.replace(':orderId', orderId))
       }
     }
-  }
-
-  private shouldShowIsRejectionPage = (order: Order): boolean => {
-    if (isVariationType(order.type)) {
-      return false
-    }
-
-    const fmsResultDate = order.fmsResultDate ? new Date(order.fmsResultDate) : new Date(1900, 0, 0)
-    const startDate = order.monitoringConditions?.startDate
-      ? new Date(order.monitoringConditions?.startDate)
-      : new Date(1900, 0, 0)
-    const compareDate = fmsResultDate < startDate ? fmsResultDate : startDate
-    compareDate.setDate(compareDate.getDate() + 30)
-    return new Date() < compareDate
   }
 
   summary: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
     const versionId = req.params.versionId as string
+
+    const errors = req.flash('submissionError')
+    const error = errors && errors.length > 0 ? errors[0] : undefined
+    const isStaleProcessingError =
+      error === getOrderChangeBlockedMessage() && (order.canAmend || order.status === 'IN_PROGRESS')
     const cohort = res.locals.user.cohort?.cohort
-    const error = req.flash('submissionError')
 
     const completedOrderVersions = await this.orderService.getVersionInformations({
       orderId: order.id,
@@ -84,7 +108,7 @@ export default class OrderController {
     res.render('pages/order/summary', {
       order: req.order,
       sections,
-      error: error && error.length > 0 ? error[0] : undefined,
+      error: isStaleProcessingError ? ORDER_CHANGE_STATUS_CHANGED_MESSAGE : error,
       createNewOrderVersionEnabled: isMostRecentVersion,
 
       timelineItems: TimelineModel.mapToTimelineItems(
@@ -97,11 +121,18 @@ export default class OrderController {
       isMostRecentVersion,
       isVariationType: isVariationType(order.type),
       isOrderRejected: order.status === 'REJECTED',
+      canCreateOrderVersion: canCreateOrderVersion(order),
+      orderChangeBlockedMessage: getOrderChangeBlockedMessage(),
       returnReasonsUrl: paths.ORDER.RETURN_REASONS.replace(':orderId', order.id),
     })
   }
 
   confirmEdit: RequestHandler = async (req: Request, res: Response) => {
+    if ((req.order!.status === 'SUBMITTED' || req.order!.status === 'REJECTED') && !canCreateOrderVersion(req.order!)) {
+      res.redirect(paths.ORDER.SUMMARY.replace(':orderId', req.order!.id))
+      return
+    }
+
     const viewModel = ConfirmationPageViewModel.construct(req.order!)
 
     res.render('pages/order/edit-confirm', {

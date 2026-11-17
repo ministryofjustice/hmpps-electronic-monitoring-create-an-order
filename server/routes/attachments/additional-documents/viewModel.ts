@@ -8,12 +8,12 @@ import { Attachment } from '../../../models/Attachment'
 import { notifyingOrganisationCourts } from '../../../models/NotifyingOrganisation'
 import hasOptionalVariationSectionIsHOCourt from '../../../utils/order/optionalVariationSections'
 import { isNotNullOrUndefined } from '../../../utils/values'
-import { isPastDatedProbationVariation } from '../../../utils/order/orderStartDate'
+import { isPastDatedLicenceVariation } from '../../../utils/order/orderStartDate'
 import usesRevocationPaperwork from '../../../utils/order/revocationPaperwork'
 
 // The start date may have passed since an order was submitted, so only editable orders rely on it alone.
 const asksForNewDocument = (order: Order) =>
-  isPastDatedProbationVariation(order) &&
+  isPastDatedLicenceVariation(order) &&
   (order.status === 'IN_PROGRESS' || isNotNullOrUndefined(order.orderParameters?.haveLicence))
 
 const createViewModel = (order: Order, content: I18n | undefined) => {

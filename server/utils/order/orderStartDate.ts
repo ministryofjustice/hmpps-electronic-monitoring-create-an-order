@@ -20,4 +20,10 @@ const isPastDatedVariation = (order: Order, options: StartDateOptions = {}) =>
 const isPastDatedProbationVariation = (order: Order, options: StartDateOptions = {}) =>
   order.interestedParties?.notifyingOrganisation === 'PROBATION' && isPastDatedVariation(order, options)
 
-export { isStartDateInPast, isPastDatedVariation, isPastDatedProbationVariation }
+const LICENCE_RECONFIRMATION_ORGANISATIONS = ['PROBATION', 'PRISON', 'YOUTH_CUSTODY_SERVICE']
+
+const isPastDatedLicenceVariation = (order: Order, options: StartDateOptions = {}) =>
+  LICENCE_RECONFIRMATION_ORGANISATIONS.includes(order.interestedParties?.notifyingOrganisation ?? '') &&
+  isPastDatedVariation(order, options)
+
+export { isStartDateInPast, isPastDatedVariation, isPastDatedProbationVariation, isPastDatedLicenceVariation }

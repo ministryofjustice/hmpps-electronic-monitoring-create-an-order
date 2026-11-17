@@ -9,7 +9,7 @@ import { getRiskInformationTasks } from '../routes/installation-and-risk/riskInf
 import { TaskListCohortDefinition, taskListCohortDefinitions } from './taskListCohorts'
 import hasOptionalVariationSectionIsHOCourt from '../utils/order/optionalVariationSections'
 import { convertBooleanToEnum, isNotNullOrEmptyString, isNotNullOrUndefined } from '../utils/values'
-import { isPastDatedProbationVariation } from '../utils/order/orderStartDate'
+import { isPastDatedLicenceVariation } from '../utils/order/orderStartDate'
 import { Cohort } from '../models/UserCohort'
 
 const CYA_PREFIX = 'CHECK_ANSWERS'
@@ -144,6 +144,13 @@ const getInterestedPartiesTasks = (order: Order, cohortDefinition: TaskListCohor
   const tasks: Task[] = [
     {
       section: SECTIONS.interestedParties,
+      name: PAGES.interestedParties,
+      path: paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION,
+      state: STATES.required,
+      completed: isNotNullOrEmptyString(order.interestedParties?.notifyingOrganisation),
+    },
+    {
+      section: SECTIONS.interestedParties,
       name: PAGES.sentencingAct,
       path: paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION,
       state: STATES.disabled,
@@ -183,7 +190,7 @@ const getInterestedPartiesTasks = (order: Order, cohortDefinition: TaskListCohor
 const getAdditionalDocumentTasks = (order: Order, cohortDefinition: TaskListCohortDefinition): Task[] => {
   const tasks: Task[] = []
 
-  if (isPastDatedProbationVariation(order)) {
+  if (isPastDatedLicenceVariation(order)) {
     tasks.push(
       {
         section: SECTIONS.additionalDocuments,

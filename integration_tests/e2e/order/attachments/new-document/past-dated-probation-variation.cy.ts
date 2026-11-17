@@ -9,7 +9,7 @@ const mockOrderId = uuidv4()
 const PAST_START_DATE = '2025-01-01T00:00:00.000Z'
 const FUTURE_START_DATE = '2040-01-01T00:00:00.000Z'
 
-const stubProbationVariation = (startDate: string, type = 'VARIATION') => {
+const stubProbationVariation = (startDate: string, type = 'VARIATION', notifyingOrganisation = 'PROBATION') => {
   cy.task('stubCemoGetOrder', {
     httpStatus: 200,
     id: mockOrderId,
@@ -17,7 +17,7 @@ const stubProbationVariation = (startDate: string, type = 'VARIATION') => {
     type,
     order: {
       interestedParties: {
-        notifyingOrganisation: 'PROBATION',
+        notifyingOrganisation,
         notifyingOrganisationName: 'NORTH_EAST',
         notifyingOrganisationEmail: 'notifying@organisation',
         responsibleOfficerFirstName: 'John',
@@ -90,6 +90,18 @@ context('Attachments', () => {
       cy.contains('li', 'Recall paperwork if the device wearer has been recalled to prison.')
       cy.contains('Your order will be rejected if the required paperwork is missing or does not match the new order.')
       page.checkIsAccessible()
+    })
+    ;['PRISON', 'YOUTH_CUSTODY_SERVICE'].forEach(notifyingOrganisation => {
+      it(`asks for licence reconfirmation for a ${notifyingOrganisation} variation`, () => {
+        stubProbationVariation(PAST_START_DATE, 'VARIATION', notifyingOrganisation)
+        cy.signIn()
+
+        const page = Page.visit(NewDocumentPage, { orderId: mockOrderId })
+
+        page.form.needNewDocumentField.shouldNotBeDisabled()
+        page.form.needNewDocumentField.shouldHaveOption('Yes')
+        page.form.needNewDocumentField.shouldHaveOption('No')
+      })
     })
 
     it('asks the user to choose when no answer is given', () => {

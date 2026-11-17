@@ -15,7 +15,6 @@ import InstallationAndRiskCheckRiskPage from '../../../pages/order/installation-
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
 import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
-import IsRejectionPage from '../../../e2e/order/edit-order/is-rejection/isRejectionPage'
 import ReceiptPage from '../../../pages/order/receipt'
 import IsAddressChangePage from '../../../e2e/order/edit-order/is-address-change/isAddressChangePage'
 import createNewOrder from '../../../utils/scenario-flows/create-new-order.cy'
@@ -123,10 +122,9 @@ context('Service-Request-Types', () => {
 
     Page.verifyOnPage(OrderSummaryPage).makeChanges()
 
-    Page.verifyOnPage(ConfirmVariationPage).confirm()
-
     cy.task('setFeatureFlags', testFlags)
-    Page.verifyOnPage(IsRejectionPage).isNotRejection()
+    Page.verifyOnPage(ConfirmVariationPage).confirm()
+    Page.verifyOnPage(IsAddressChangePage)
   }
 
   const fillInVariations = (
@@ -203,6 +201,12 @@ context('Service-Request-Types', () => {
     cy.task('stubFMSUpdateMonitoringOrder', {
       httpStatus: 200,
       response: { result: [{ id: uuidv4(), message: '' }] },
+    })
+
+    cy.task('stubFMSGetCaseState', {
+      httpStatus: 200,
+      caseId: fmsCaseId,
+      state: '11',
     })
 
     stubAttachments(files, fmsCaseId, hmppsDocumentId, true)
