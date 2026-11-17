@@ -75,7 +75,7 @@ export default function fillInNewOrderWith({
   monitoringOrderTypeDescription = undefined,
   newDeviceWearerFlow = false,
   fillInResponsibleOrganisationDetails = true,
-  isVariationOrder = false,
+  isPastDatedProbationVariation = false,
 }): void {
   const orderTasksPage = Page.verifyOnPage(OrderTasksPage)
 
@@ -122,7 +122,7 @@ export default function fillInNewOrderWith({
 
   continueFromMonitoringConditionsCya()
 
-  fillInInstallationAndRiskWith({ installationAndRisk, interestedParties, isVariationOrder })
+  fillInInstallationAndRiskWith({ installationAndRisk, interestedParties, isPastDatedProbationVariation })
 
   fillInAttachmentDetailsWith({ files })
 

@@ -6,9 +6,9 @@ import InstallationAndRiskCheckYourAnswersPage from '../../../../pages/order/ins
 import OtherRisksPage from '../other-risks/OtherRisksPage'
 import RiskAtAddressPage from '../risk-at-address/RiskAtAddressPage'
 import RiskBehaviourPage from '../risk-behaviour/RiskBehaviourPage'
+import mockApiOrder from '../../../../utils/data/ApiOrder'
 
 const mockOriginalId = '00a00000-79cd-49f9-a498-b1f07c543b8a'
-const mockVariationId = '11a11111-79cd-49f9-a498-b1f07c543b8a'
 const mockUncachedVersionId = '33a33333-79cd-49f9-a498-b1f07c543b8a'
 const mockOffenceId = '22a22222-79cd-49f9-a498-b1f07c543b8a'
 
@@ -65,10 +65,19 @@ context('Making changes to a previously submitted order as a Probation user', ()
       response: { cohort: 'PROBATION', activeCaseLoad: 'Probation Test' },
     })
     cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOriginalId, status: 'SUBMITTED' })
-    cy.task('stubCemoCreateVariation', {
+    cy.task('stubCemoSubmitOrder', {
       httpStatus: 200,
-      originalId: mockOriginalId,
-      variationId: mockVariationId,
+      method: 'POST',
+      id: mockOriginalId,
+      subPath: '/amend',
+      response: {
+        order: {
+          ...mockApiOrder('IN_PROGRESS', 'VARIATION'),
+          id: mockOriginalId,
+          monitoringConditions: getMockedMonitoringConditions(),
+        },
+        outcome: 'ACCEPTED',
+      },
     })
     cy.task('stubCemoGetVersions', { httpStatus: 200, versions: [], orderId: mockOriginalId })
     cy.signIn()
@@ -319,10 +328,19 @@ function testSetup(cohort: string) {
     response: { cohort, activeCaseLoad: 'Probation Test' },
   })
   cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOriginalId, status: 'SUBMITTED' })
-  cy.task('stubCemoCreateVariation', {
+  cy.task('stubCemoSubmitOrder', {
     httpStatus: 200,
-    originalId: mockOriginalId,
-    variationId: mockVariationId,
+    method: 'POST',
+    id: mockOriginalId,
+    subPath: '/amend',
+    response: {
+      order: {
+        ...mockApiOrder('IN_PROGRESS', 'VARIATION'),
+        id: mockOriginalId,
+        monitoringConditions: getMockedMonitoringConditions(),
+      },
+      outcome: 'ACCEPTED',
+    },
   })
   cy.task('stubCemoGetVersions', { httpStatus: 200, versions: [], orderId: mockOriginalId })
   cy.signIn()

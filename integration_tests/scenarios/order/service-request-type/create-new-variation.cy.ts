@@ -118,7 +118,8 @@ context('Service-Request-Types', () => {
       newDeviceWearerFlow: true,
       restrictionZoneDetails: undefined,
       fillInResponsibleOrganisationDetails: false,
-      isVariationOrder: option === 'I need to change something else in the form',
+      isPastDatedProbationVariation:
+        option === 'I need to change something else in the form' && trail.startDate.getTime() < Date.now(),
     })
 
     orderSummaryPage.submitOrderButton.click()

@@ -11,7 +11,7 @@ import fillInRiskAtInstallationWith from './risk-at-installation.cy'
 export function fillInInstallationAndRiskWith({
   installationAndRisk,
   interestedParties,
-  isVariationOrder = false,
+  isPastDatedProbationVariation = false,
 }): void {
   if (!installationAndRisk) {
     return
@@ -20,7 +20,7 @@ export function fillInInstallationAndRiskWith({
   const { notifyingOrganisation } = interestedParties
   const isCourt = notifyingOrganisation?.includes('Court')
 
-  if (isVariationOrder && notifyingOrganisation === 'PROBATION') {
+  if (isPastDatedProbationVariation && notifyingOrganisation === 'PROBATION') {
     const checkRiskPage = Page.verifyOnPage(InstallationAndRiskCheckRiskPage)
     checkRiskPage.form.fillInWith('Yes')
     checkRiskPage.form.continueButton.click()
