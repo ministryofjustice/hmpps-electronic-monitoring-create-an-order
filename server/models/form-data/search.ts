@@ -174,6 +174,8 @@ const getStatusTag = (status: OrderListInformation['status']) => {
       return [{ text: 'Failed to submit', type: 'FAILED' }]
     case 'SUBMITTED':
       return [{ text: 'Submitted', type: 'SUBMITTED' }]
+    case 'REJECTED':
+      return [{text: 'Returned', type: 'REJECTED'}]
 
     default:
       return []

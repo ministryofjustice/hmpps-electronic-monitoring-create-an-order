@@ -5,6 +5,7 @@ import { CreateOrderFormDataParser } from '../models/form-data/order'
 import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
 import FeatureFlags from '../utils/featureFlags'
 import isVariationType from '../utils/order/isVariationType'
+import { isStartDateInPast } from '../utils/order/orderStartDate'
 import TimelineModel from '../models/view-models/timelineModel'
 import SectionService from '../services/sectionsService'
 import { SanitisedError } from '../sanitisedError'
@@ -65,7 +66,7 @@ export default class OrderController {
           accessToken: res.locals.user.token,
         })
 
-        if (amendment.outcome === 'REJECTED') {
+        if (amendment.outcome === 'REJECTED' || !isStartDateInPast(amendment.order)) {
           res.redirect(paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION.replace(':orderId', orderId))
         } else {
           res.redirect(`/order/${orderId}/summary`)

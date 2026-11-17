@@ -142,6 +142,13 @@ const getInterestedPartiesTasks = (order: Order, cohortDefinition: TaskListCohor
   const tasks: Task[] = [
     {
       section: SECTIONS.interestedParties,
+      name: PAGES.interestedParties,
+      path: paths.INTEREST_PARTIES.NOTIFYING_ORGANISATION,
+      state: STATES.required,
+      completed: isNotNullOrEmptyString(order.interestedParties?.notifyingOrganisation),
+    },
+    {
+      section: SECTIONS.interestedParties,
       name: PAGES.sentencingAct,
       path: paths.INTEREST_PARTIES.SENTENCING_ACT_SELECTION,
       state: STATES.disabled,
