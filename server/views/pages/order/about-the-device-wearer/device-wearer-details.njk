@@ -1,0 +1,146 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+
+{% set section = content.pages.deviceWearer.section %}
+{% set heading = content.pages.deviceWearer.title %}
+{% set legend = content.pages.deviceWearer.legend %}
+{% set helpText = content.pages.deviceWearer.helpText %}
+{% set singleQuestionPage = true %}
+
+{% block formInputs %}
+  {{ govukInput({
+      label: {
+        text: content.pages.deviceWearer.questions.firstName.text,
+        classes: "govuk-fieldset__legend--s"
+      },
+      classes: "govuk-input--width-10",
+      id: "firstName",
+      name: "firstName",
+      value: firstName.value,
+      errorMessage: firstName.error,
+      disabled: not isOrderEditable
+    }) }}
+
+  {{ govukInput({
+      label: {
+        text: content.pages.deviceWearer.questions.middleName.text,
+        classes: "govuk-fieldset__legend--s"
+      },
+      classes: "govuk-input--width-10",
+      id: "middleName",
+      name: "middleName",
+      value: middleName.value,
+      errorMessage: middleName.error,
+      disabled: not isOrderEditable
+    }) }}
+
+  {{ govukInput({
+      label: {
+        text: content.pages.deviceWearer.questions.lastName.text,
+        classes: "govuk-fieldset__legend--s"
+      },
+      classes: "govuk-input--width-10",
+      id: "lastName",
+      name: "lastName",
+      value: lastName.value,
+      errorMessage: lastName.error,
+      disabled: not isOrderEditable
+    }) }}
+
+  {{ govukInput({
+      label: {
+        text: content.pages.deviceWearer.questions.alias.text,
+        classes: "govuk-fieldset__legend--s"
+      },
+      hint: {
+          text: content.pages.deviceWearer.questions.alias.hint
+      },
+      classes: "govuk-input--width-10",
+      id: "alias",
+      name: "alias",
+      value: alias.value,
+      errorMessage: alias.error,
+      disabled: not isOrderEditable
+    }) }}
+
+  {% set isDisabled = {} if isOrderEditable else { disabled: true } %}
+
+  {{ govukDateInput({
+    id: "dateOfBirth",
+    fieldset: {
+      legend: {
+        text: content.pages.deviceWearer.questions.dateOfBirth.text,
+        isPageHeading: false,
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    hint: {
+      text: content.pages.deviceWearer.questions.dateOfBirth.hint
+    },
+    items: [
+      {
+        id: "dateOfBirth-day",
+        name: "dateOfBirth[day]",
+        label: "Day",
+        classes: "govuk-input--width-2",
+        value: dateOfBirth.value.day,
+        attributes: isDisabled
+      },
+      {
+        id: "dateOfBirth-month",
+        name: "dateOfBirth[month]",
+        label: "Month",
+        classes: "govuk-input--width-2",
+        value: dateOfBirth.value.month,
+        attributes: isDisabled
+      },
+      {
+        id: "dateOfBirth-year",
+        name: "dateOfBirth[year]",
+        label: "Year",
+        classes: "govuk-input--width-4",
+        value: dateOfBirth.value.year,
+        attributes: isDisabled
+      }
+    ],
+    errorMessage: dateOfBirth.error
+  }) }}
+
+  {# 'Prefer not to say' is not offered; 'Not able to provide this information' is the last option, after an 'or' divider #}
+  {{ govukRadios({
+    name: "sex",
+    fieldset: {
+      legend: {
+        text: content.pages.deviceWearer.questions.sex.text,
+        isPageHeading: false,
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    hint: {
+      text: content.pages.deviceWearer.questions.sex.hint
+    },
+    items: content.reference.sex | toOptions(not isOrderEditable) | removeOptions(['PREFER_NOT_TO_SAY']) | addDivider,
+    value: sex.value,
+    errorMessage: sex.error
+  }) }}
+
+  {{ govukRadios({
+    name: "gender",
+    fieldset: {
+      legend: {
+        text: content.pages.deviceWearer.questions.gender.text,
+        isPageHeading: false,
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    hint: {
+      text: content.pages.deviceWearer.questions.gender.hint
+    },
+    items: content.reference.gender | toOptions(not isOrderEditable) | addDivider,
+    value: gender.value,
+    errorMessage: gender.error
+  }) }}
+{% endblock %}
