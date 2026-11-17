@@ -9,6 +9,13 @@ import paths from '../../../../server/constants/paths'
 
 const mockOriginalId = '00a00000-79cd-49f9-a498-b1f07c543b8a'
 const mockVersionId = '22a22222-79cd-49f9-a498-b1f07c543b8a'
+const mockApiOrderStarting = (startDate: string) => {
+  const order = mockApiOrder()
+  return {
+    ...order,
+    monitoringConditions: { ...order.monitoringConditions, startDate },
+  }
+}
 
 const stubOrder = (
   outcome: 'ACCEPTED' | 'REJECTED' | 'PROCESSING',
@@ -80,7 +87,7 @@ context('Variation', () => {
         method: 'POST',
         id: mockOriginalId,
         subPath: '/amend',
-        response: { order: mockApiOrder(), outcome: 'ACCEPTED' },
+        response: { order: mockApiOrderStarting('2000-01-01T00:00:00.000Z'), outcome: 'ACCEPTED' },
       })
       cy.signIn()
     })
@@ -382,12 +389,19 @@ context('Variation', () => {
 
       it('amends a future-dated accepted order without showing the service-request questions', () => {
         stubOrder('ACCEPTED', 'SUBMITTED', 'REQUEST', '2999-01-01T00:00:00.000Z')
+        cy.task('stubCemoSubmitOrder', {
+          httpStatus: 200,
+          method: 'POST',
+          id: mockOriginalId,
+          subPath: '/amend',
+          response: { order: mockApiOrderStarting('2999-01-01T00:00:00.000Z'), outcome: 'ACCEPTED' },
+        })
         const page = Page.visit(OrderTasksPage, { orderId: mockOriginalId })
 
         page.makeChangesButton.click()
         Page.verifyOnPage(ConfirmVariationPage).confirmButton().click()
 
-        Page.verifyOnPage(OrderTasksPage)
+        Page.verifyOnPage(NotifyingOrganisationPage)
         cy.task('stubCemoVerifyRequestReceived', {
           uri: `/orders/${mockOriginalId}/amend`,
           body: {},

@@ -4,7 +4,6 @@ import { stubAttachments } from '../../utils'
 import Page from '../../../pages/page'
 import OrderSummaryPage from '../../../pages/order/summary'
 import ConfirmVariationPage from '../../../pages/order/variation/confirmVariation'
-import InterestedPartiesCheckYourAnswersPage from '../../../e2e/order/interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
 import NotifyingOrganisationPage from '../../../e2e/order/interested-parties/notifying-organisation/notifyingOrganisationPage'
 import type { ScenarioOrderVersion } from '../../../mockApis/cemo'
 
@@ -60,7 +59,7 @@ context('Interested parties flow', () => {
     cy.task('resetFeatureFlags')
   })
 
-  it('amends a future-dated order without service-request questions when the flow is enabled', () => {
+  it('asks for notifying organisation details after creating a future-dated variation', () => {
     cy.task('setFeatureFlags', { SERVICE_REQUEST_TYPE_ENABLED: true })
     fillInNewOrder({
       startDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(0, 0, 0, 0)),
@@ -69,17 +68,7 @@ context('Interested parties flow', () => {
     })
     Page.verifyOnPage(OrderSummaryPage).makeChanges()
     Page.verifyOnPage(ConfirmVariationPage).confirm()
-    const orderSummaryPage = Page.verifyOnPage(OrderSummaryPage)
-
-    orderSummaryPage.interestedPartiesTask.click()
-
-    const cyaPage = Page.verifyOnPage(InterestedPartiesCheckYourAnswersPage)
-    cyaPage.organisationDetailsSection.shouldHaveItems([
-      { key: "What is the Responsible Officer's first name?", value: '' },
-      { key: "What is the Responsible Officer's last name?", value: '' },
-      { key: "What is the Responsible Officer's email address?", value: '' },
-      { key: "What is the Responsible Officer's organisation?", value: '' },
-    ])
+    Page.verifyOnPage(NotifyingOrganisationPage).checkIsAccessible()
   })
 
   it('amends a submitted request with a rejected FMS outcome', () => {

@@ -242,6 +242,7 @@ describe('OrderController', () => {
       const orderId = randomUUID()
       const order = getMockOrder({ id: orderId, status: 'SUBMITTED', canAmend: true })
       order.monitoringConditions.startDate = '2000-01-01T00:00:00Z'
+      mockOrderService.amendOrder.mockResolvedValue({ order, outcome: 'ACCEPTED' })
       order.statusUpdates = [
         {
           id: randomUUID(),
@@ -290,10 +291,10 @@ describe('OrderController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/is-address-change`)
     })
 
-    it('amends future-dated accepted orders directly even when the service-request flow is enabled', async () => {
+    it('sends an accepted future-dated variation to the notifying organisation page', async () => {
       jest.spyOn(FeatureFlags.getInstance(), 'get').mockReturnValue(true)
       const orderId = randomUUID()
-      const order = getMockOrder({ id: orderId, status: 'SUBMITTED', canAmend: true })
+      const order = getMockOrder({ id: orderId, status: 'SUBMITTED', type: 'VARIATION', canAmend: true })
       order.monitoringConditions.startDate = '2999-01-01T00:00:00Z'
       order.statusUpdates = [
         {
@@ -304,18 +305,20 @@ describe('OrderController', () => {
           statusUpdateReasons: [],
         },
       ]
+      mockOrderService.amendOrder.mockResolvedValue({ order, outcome: 'ACCEPTED' })
       const req = createMockRequest({ order, body: { action: 'continue' }, params: { orderId } })
       const res = createMockResponse()
 
       await orderController.createVariation(req, res, jest.fn())
 
       expect(mockOrderService.amendOrder).toHaveBeenCalledWith({ orderId, accessToken: 'fakeUserToken' })
-      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/summary`)
+      expect(res.redirect).toHaveBeenCalledWith(`/order/${orderId}/interest-parties/notifying-organisation`)
     })
 
     it('uses the API outcome instead of an earlier rejected status observation', async () => {
       const orderId = randomUUID()
       const order = getMockOrder({ id: orderId, status: 'SUBMITTED', canAmend: true })
+      order.monitoringConditions.startDate = '2000-01-01T00:00:00Z'
       order.statusUpdates = [
         {
           id: randomUUID(),
@@ -325,6 +328,7 @@ describe('OrderController', () => {
           statusUpdateReasons: [],
         },
       ]
+      mockOrderService.amendOrder.mockResolvedValue({ order, outcome: 'ACCEPTED' })
       const req = createMockRequest({ order, body: { action: 'continue' }, params: { orderId } })
       const res = createMockResponse()
       mockOrderService.amendOrder.mockResolvedValue({ order, outcome: 'ACCEPTED' })

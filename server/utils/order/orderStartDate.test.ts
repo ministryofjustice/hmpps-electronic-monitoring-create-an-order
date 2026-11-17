@@ -1,5 +1,10 @@
 import { createInterestedParties, createMonitoringConditions, getMockOrder } from '../../../test/mocks/mockOrder'
-import { isPastDatedProbationVariation, isPastDatedVariation, isStartDateInPast } from './orderStartDate'
+import {
+  isPastDatedLicenceVariation,
+  isPastDatedProbationVariation,
+  isPastDatedVariation,
+  isStartDateInPast,
+} from './orderStartDate'
 
 const now = new Date('2026-06-15T12:00:00.000Z')
 
@@ -71,5 +76,28 @@ describe('isPastDatedProbationVariation', () => {
     })
 
     expect(isPastDatedProbationVariation(order, { now })).toBe(false)
+  })
+})
+
+describe('isPastDatedLicenceVariation', () => {
+  it.each(['PROBATION', 'PRISON', 'YOUTH_CUSTODY_SERVICE'] as const)(
+    'returns true for a past-dated %s variation',
+    notifyingOrganisation => {
+      const order = orderStarting('2026-01-01T00:00:00.000Z', {
+        type: 'VARIATION',
+        interestedParties: createInterestedParties({ notifyingOrganisation }),
+      })
+
+      expect(isPastDatedLicenceVariation(order, { now })).toBe(true)
+    },
+  )
+
+  it('returns false for a court variation', () => {
+    const order = orderStarting('2026-01-01T00:00:00.000Z', {
+      type: 'VARIATION',
+      interestedParties: createInterestedParties({ notifyingOrganisation: 'FAMILY_COURT' }),
+    })
+
+    expect(isPastDatedLicenceVariation(order, { now })).toBe(false)
   })
 })
