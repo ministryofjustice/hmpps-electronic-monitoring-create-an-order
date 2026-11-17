@@ -91,7 +91,6 @@ context('Attachments', () => {
       cy.contains('Your order will be rejected if the required paperwork is missing or does not match the new order.')
       page.checkIsAccessible()
     })
-
     ;['PRISON', 'YOUTH_CUSTODY_SERVICE'].forEach(notifyingOrganisation => {
       it(`asks for licence reconfirmation for a ${notifyingOrganisation} variation`, () => {
         stubProbationVariation(PAST_START_DATE, 'VARIATION', notifyingOrganisation)
