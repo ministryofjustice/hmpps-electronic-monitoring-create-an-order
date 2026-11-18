@@ -7,6 +7,9 @@ import createViewModel from './viewModel'
 import OrderChecklistService from '../../../services/orderChecklistService'
 import { formatDateTime } from '../../../utils/dateTime'
 import usesRevocationPaperwork from '../../../utils/order/revocationPaperwork'
+import { TelemetryService } from '../../../services/telemetryService'
+import { SanitisedError } from '../../../sanitisedError'
+import { ErrorResponse } from '../../../models/ErrorResponse'
 
 export default class AttachmentsController {
   constructor(
@@ -14,6 +17,7 @@ export default class AttachmentsController {
     private readonly attachmentService: AttachmentService,
     private readonly taskListService: TaskListService,
     private readonly checklistService: OrderChecklistService,
+    private readonly telemetryService: TelemetryService,
   ) {}
 
   uploadFile: RequestHandler = async (req: Request, res: Response) => {
@@ -21,12 +25,25 @@ export default class AttachmentsController {
     const fileType = req.params.fileType as string
     const attachment = req.file as Express.Multer.File
 
-    const error = await this.attachmentService.uploadAttachment({
-      accessToken: res.locals.user.token,
-      orderId,
-      fileType: fileType.toUpperCase(),
-      file: attachment,
-    })
+    let error: ErrorResponse
+    try {
+      error = await this.attachmentService.uploadAttachment({
+        accessToken: res.locals.user.token,
+        orderId,
+        fileType: fileType.toUpperCase(),
+        file: attachment,
+      })
+    } catch (uploadError) {
+      const { status } = uploadError as SanitisedError
+      const attachmentType = fileType.toUpperCase()
+      if ((status === undefined || status >= 500) && (attachmentType === 'LICENCE' || attachmentType === 'PHOTO_ID')) {
+        this.telemetryService.trackEvent('attachment_upload_failure', {
+          attachmentType,
+          reason: 'system_error',
+        })
+      }
+      throw uploadError
+    }
 
     if (error.userMessage != null) {
       res.render(`pages/order/attachments/edit`, {

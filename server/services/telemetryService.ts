@@ -1,10 +1,37 @@
 import { defaultClient } from 'applicationinsights'
 import logger from '../../logger'
+import type { OrderType } from '../models/Order'
+
+type OrderSubmissionAttemptEvent =
+  | {
+      outcome: 'success'
+      orderType: OrderType
+      durationMs: number
+    }
+  | {
+      outcome: 'blocked'
+      reason: 'already_submitted' | 'incomplete' | 'ineligible_monitoring_conditions'
+      orderType: OrderType
+      durationMs: number
+    }
+  | {
+      outcome: 'failure'
+      reason: 'error_status' | 'unexpected_error'
+      orderType: OrderType
+      durationMs: number
+    }
+  | {
+      outcome: 'partial_success'
+      reason: 'attachments_to_serco_failed'
+      orderType: OrderType
+      durationMs: number
+    }
 
 export type TelemetryEvents = {
-  order_submission_attempt: {
-    outcome: 'success' | 'failure'
-    failureReason?: 'already_submitted' | 'incomplete' | 'error_status' | 'partial_success'
+  order_submission_attempt: OrderSubmissionAttemptEvent
+  attachment_upload_failure: {
+    attachmentType: 'LICENCE' | 'PHOTO_ID'
+    reason: 'system_error'
   }
 }
 

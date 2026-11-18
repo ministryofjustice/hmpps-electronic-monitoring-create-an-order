@@ -366,10 +366,14 @@ describe('OrderController', () => {
 
       // Then
       expect(telemetryService.trackEvent).toHaveBeenCalledTimes(1)
-      expect(telemetryService.trackEvent).toHaveBeenCalledWith('order_submission_attempt', { outcome: 'success' })
+      expect(telemetryService.trackEvent).toHaveBeenCalledWith('order_submission_attempt', {
+        outcome: 'success',
+        orderType: mockOrder.type,
+        durationMs: expect.any(Number),
+      })
     })
 
-    it('should emit one failed submission event', async () => {
+    it('should emit one blocked submission event when the order is already submitted', async () => {
       // Given
       telemetryService.trackEvent.mockClear()
       const mockOrder = getMockOrder()
@@ -387,33 +391,46 @@ describe('OrderController', () => {
 
       // Then
       expect(telemetryService.trackEvent).toHaveBeenCalledTimes(1)
-      expect(telemetryService.trackEvent).toHaveBeenCalledWith('order_submission_attempt', {
-        outcome: 'failure',
-        failureReason: 'already_submitted',
-      })
+      expect(telemetryService.trackEvent).toHaveBeenCalledWith(
+        'order_submission_attempt',
+        expect.objectContaining({
+          outcome: 'blocked',
+          reason: 'already_submitted',
+          orderType: mockOrder.type,
+          durationMs: expect.any(Number),
+        }),
+      )
     })
 
     it.each([
-      { type: 'incomplete' as const, failureReason: 'incomplete' as const },
-      { type: 'errorStatus' as const, failureReason: 'error_status' as const },
-      { type: 'partialSuccess' as const, failureReason: 'partial_success' as const },
-    ])('should include the $failureReason reason for a $type submission failure', async ({ type, failureReason }) => {
-      const mockOrder = getMockOrder()
-      const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
-      const res = createMockResponse()
-      mockOrderService.submitOrder.mockResolvedValue({
-        submitted: false,
-        error: 'Submission failed',
-        type,
-      })
+      { type: 'incomplete' as const, outcome: 'blocked', reason: 'incomplete' },
+      { type: 'errorStatus' as const, outcome: 'failure', reason: 'error_status' },
+      { type: 'partialSuccess' as const, outcome: 'partial_success', reason: 'attachments_to_serco_failed' },
+    ])(
+      'should emit an $outcome event with reason $reason for a $type submission',
+      async ({ type, outcome, reason }) => {
+        const mockOrder = getMockOrder()
+        const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
+        const res = createMockResponse()
+        mockOrderService.submitOrder.mockResolvedValue({
+          submitted: false,
+          error: 'Submission failed',
+          type,
+        })
 
-      await orderController.submit(req, res, jest.fn())
+        await orderController.submit(req, res, jest.fn())
 
-      expect(telemetryService.trackEvent).toHaveBeenCalledWith('order_submission_attempt', {
-        outcome: 'failure',
-        failureReason,
-      })
-    })
+        expect(telemetryService.trackEvent).toHaveBeenCalledWith(
+          'order_submission_attempt',
+          expect.objectContaining({
+            outcome,
+            reason,
+            orderType: mockOrder.type,
+            durationMs: expect.any(Number),
+          }),
+        )
+      },
+    )
 
     it('should emit a failed submission event when the submission service rejects', async () => {
       // Given
@@ -430,7 +447,12 @@ describe('OrderController', () => {
 
       // Then
       expect(telemetryService.trackEvent).toHaveBeenCalledTimes(1)
-      expect(telemetryService.trackEvent).toHaveBeenCalledWith('order_submission_attempt', { outcome: 'failure' })
+      expect(telemetryService.trackEvent).toHaveBeenCalledWith('order_submission_attempt', {
+        outcome: 'failure',
+        reason: 'unexpected_error',
+        orderType: mockOrder.type,
+        durationMs: expect.any(Number),
+      })
     })
 
     it('should not submit an order with ineligible monitoring conditions', async () => {
@@ -452,6 +474,13 @@ describe('OrderController', () => {
         'The device wearer has no fixed address so only Alcohol monitoring is allowed.',
       )
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/summary`)
+      expect(telemetryService.trackEvent).toHaveBeenCalledTimes(1)
+      expect(telemetryService.trackEvent).toHaveBeenCalledWith('order_submission_attempt', {
+        outcome: 'blocked',
+        reason: 'ineligible_monitoring_conditions',
+        orderType: mockOrder.type,
+        durationMs: expect.any(Number),
+      })
     })
 
     it('should not submit the order and redirect to a failed page for a submitted order', async () => {

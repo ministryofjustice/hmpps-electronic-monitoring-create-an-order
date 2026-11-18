@@ -151,10 +151,18 @@ export default class OrderController {
   }
 
   submit: RequestHandler = async (req: Request, res: Response) => {
+    const submissionStartedAt = performance.now()
     const order = req.order!
+    const getDurationMs = () => Math.round(performance.now() - submissionStartedAt)
 
     const ineligibleErrors = getIneligibleMonitoringConditionsErrors(order)
     if (ineligibleErrors.length > 0) {
+      this.telemetryService.trackEvent('order_submission_attempt', {
+        outcome: 'blocked',
+        reason: 'ineligible_monitoring_conditions',
+        orderType: order.type,
+        durationMs: getDurationMs(),
+      })
       req.flash('submissionError', ineligibleErrors[0])
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
       return
@@ -166,29 +174,42 @@ export default class OrderController {
         accessToken: res.locals.user.token,
       })
       .catch(error => {
-        this.telemetryService.trackEvent('order_submission_attempt', { outcome: 'failure' })
+        this.telemetryService.trackEvent('order_submission_attempt', {
+          outcome: 'failure',
+          reason: 'unexpected_error',
+          orderType: order.type,
+          durationMs: getDurationMs(),
+        })
         throw error
       })
 
-    const properties: TelemetryEvents['order_submission_attempt'] = {
-      outcome: result.submitted ? 'success' : 'failure',
-    }
-    if (!result.submitted) {
+    let properties: TelemetryEvents['order_submission_attempt']
+    if (result.submitted) {
+      properties = {
+        outcome: 'success',
+        orderType: order.type,
+        durationMs: getDurationMs(),
+      }
+    } else {
+      const eventDetails = {
+        orderType: order.type,
+        durationMs: getDurationMs(),
+      }
       switch (result.type) {
         case 'alreadySubmitted':
-          properties.failureReason = 'already_submitted'
+          properties = { outcome: 'blocked', reason: 'already_submitted', ...eventDetails }
           break
         case 'incomplete':
-          properties.failureReason = 'incomplete'
+          properties = { outcome: 'blocked', reason: 'incomplete', ...eventDetails }
           break
         case 'errorStatus':
-          properties.failureReason = 'error_status'
+          properties = { outcome: 'failure', reason: 'error_status', ...eventDetails }
           break
         case 'partialSuccess':
-          properties.failureReason = 'partial_success'
+          properties = { outcome: 'partial_success', reason: 'attachments_to_serco_failed', ...eventDetails }
           break
         default:
-          break
+          properties = { outcome: 'failure', reason: 'unexpected_error', ...eventDetails }
       }
     }
 

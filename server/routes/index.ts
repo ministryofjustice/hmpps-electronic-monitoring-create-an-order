@@ -163,6 +163,7 @@ export default function routes({
       attachmentService,
       orderChecklistService,
       taskListService,
+      telemetryService,
     }),
   )
   router.use(

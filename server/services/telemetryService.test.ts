@@ -18,24 +18,32 @@ describe('ApplicationInsightsTelemetryService', () => {
   })
 
   it('sends a typed event to Application Insights', () => {
-    telemetryService.trackEvent('order_submission_attempt', { outcome: 'success' })
+    const properties = { outcome: 'success' as const, orderType: 'REQUEST' as const, durationMs: 120 }
+    telemetryService.trackEvent('order_submission_attempt', properties)
 
     expect(defaultClient.trackEvent).toHaveBeenCalledWith({
       name: 'order_submission_attempt',
-      properties: { outcome: 'success' },
+      properties,
     })
   })
 
-  it('logs and suppresses errors thrown by the Application Insights SDK', () => {
-    const error = new Error('Telemetry unavailable')
+  it('logs errors thrown by the Application Insights SDK', () => {
+    const sdkError = new Error('Telemetry unavailable')
     jest.mocked(defaultClient.trackEvent).mockImplementationOnce(() => {
-      throw error
+      throw sdkError
     })
     const warn = jest.spyOn(logger, 'warn').mockImplementation(() => logger)
 
-    expect(() => telemetryService.trackEvent('order_submission_attempt', { outcome: 'failure' })).not.toThrow()
+    expect(() =>
+      telemetryService.trackEvent('order_submission_attempt', {
+        outcome: 'success',
+        orderType: 'REQUEST',
+        durationMs: 120,
+      }),
+    ).not.toThrow()
+
     expect(warn).toHaveBeenCalledWith(
-      { err: error, event: 'order_submission_attempt' },
+      { err: sdkError, event: 'order_submission_attempt' },
       'Failed to record event with the Application Insights SDK',
     )
   })
