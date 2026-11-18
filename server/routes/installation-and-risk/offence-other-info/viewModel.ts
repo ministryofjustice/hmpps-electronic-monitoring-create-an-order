@@ -27,12 +27,11 @@ const constructFromFormData = (
 }
 
 const constructFromOrder = (order: Order): OffenceOtherInfoViewModel => {
-  if (order.offenceAdditionalDetails) {
-    const details = order.offenceAdditionalDetails.additionalDetails ?? ''
-
+  const details = order.offenceAdditionalDetails?.additionalDetails
+  if (details?.trim()) {
     return {
       hasOtherInformation: {
-        value: details.length > 0 ? 'yes' : 'no',
+        value: 'yes',
       },
       otherInformationDetails: {
         value: details,
