@@ -1,10 +1,15 @@
+import StatusUpdateService from '../status-updates/service'
 import ReturnReasonsController from './controller'
 import { getMockOrder } from '../../../test/mocks/mockOrder'
 import { createMockRequest, createMockResponse } from '../../../test/mocks/mockExpress'
 
+const statusUpdateService = {
+  getStatusUpdates: jest.fn().mockResolvedValue([]),
+} as unknown as StatusUpdateService
+
 describe('ReturnReasonsController', () => {
   it('renders return reasons for the current order', async () => {
-    const controller = new ReturnReasonsController()
+    const controller = new ReturnReasonsController(statusUpdateService)
     const order = getMockOrder()
     const req = createMockRequest({ order })
     const res = createMockResponse(order)
@@ -18,7 +23,7 @@ describe('ReturnReasonsController', () => {
   })
 
   it('returns to the order summary', async () => {
-    const controller = new ReturnReasonsController()
+    const controller = new ReturnReasonsController(statusUpdateService)
     const order = getMockOrder()
     const req = createMockRequest({ order, body: { action: 'returnToSummary' } })
     const res = createMockResponse(order)

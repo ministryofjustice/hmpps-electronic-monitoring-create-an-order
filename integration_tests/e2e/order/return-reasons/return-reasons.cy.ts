@@ -17,7 +17,6 @@ const stubRejectedOrder = (additionalReasons = []) => {
   const reasons = [
     ...monitoringConditionsReasons.map(details => ({
       id: uuidv4(),
-      statusUpdateId: uuidv4(),
       section: monitoringConditionsSection,
       details,
     })),
@@ -28,18 +27,22 @@ const stubRejectedOrder = (additionalReasons = []) => {
     httpStatus: 200,
     id: mockOrderId,
     status: mockOrder.status,
-    order: {
-      ...mockOrder,
-      statusUpdates: [
-        {
-          id: uuidv4(),
-          versionId: mockOrder.versionId,
-          status: 'REJECTED',
-          datetimeOfStatusChange: '2026-01-01T12:00:00Z',
-          statusUpdateReasons: reasons,
-        },
-      ],
-    },
+    order: mockOrder,
+  })
+  cy.task('stubCemoGetStatusUpdates', {
+    httpStatus: 200,
+    orderId: mockOrderId,
+    statusUpdates: [
+      {
+        id: uuidv4(),
+        orderId: mockOrderId,
+        orderVersionId: mockOrder.versionId,
+        orderVersionType: 'REQUEST',
+        status: 'REJECTED',
+        datetimeOfStatusChange: '2026-01-01T12:00:00Z',
+        reasons,
+      },
+    ],
   })
 }
 

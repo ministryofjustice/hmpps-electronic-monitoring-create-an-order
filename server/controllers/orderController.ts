@@ -8,12 +8,14 @@ import isVariationType from '../utils/order/isVariationType'
 import TimelineModel from '../models/view-models/timelineModel'
 import { Order } from '../models/Order'
 import SectionService from '../services/sectionsService'
+import StatusUpdateService from '../routes/status-updates/service'
 import getIneligibleMonitoringConditionsErrors from '../utils/order/ineligibleMonitoringConditions'
 
 export default class OrderController {
   constructor(
     private readonly orderService: OrderService,
     private readonly sectionService: SectionService,
+    private readonly statusUpdateService: StatusUpdateService,
   ) {}
 
   create: RequestHandler = async (req: Request, res: Response) => {
@@ -66,8 +68,11 @@ export default class OrderController {
     const versionId = req.params.versionId as string
     const cohort = res.locals.user.cohort?.cohort
     const error = req.flash('submissionError')
-
     const completedOrderVersions = await this.orderService.getVersionInformations({
+      orderId: order.id,
+      accessToken: res.locals.user.token,
+    })
+    const statusUpdates = await this.statusUpdateService.getStatusUpdates({
       orderId: order.id,
       accessToken: res.locals.user.token,
     })
@@ -89,10 +94,10 @@ export default class OrderController {
 
       timelineItems: TimelineModel.mapToTimelineItems(
         res.locals.content!,
+        statusUpdates,
         completedOrderVersions,
         order.id,
         currentVersion,
-        order.statusUpdates,
       ),
       isMostRecentVersion,
       isVariationType: isVariationType(order.type),

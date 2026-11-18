@@ -1,4 +1,4 @@
-import { Order } from '../../models/Order'
+import { StatusUpdate } from '../../models/StatusUpdate'
 
 export type ReturnReasonsSection = {
   heading: string
@@ -11,13 +11,13 @@ export type ReturnReasonsViewModel = {
   orderSummaryUri: string
 }
 
-const construct = (order: Order, orderSummaryUri: string): ReturnReasonsViewModel => {
+const construct = (statusUpdates: StatusUpdate[], orderSummaryUri: string): ReturnReasonsViewModel => {
   const sections = new Map<string, string[]>()
 
-  for (const statusUpdate of order.statusUpdates ?? []) {
+  for (const statusUpdate of statusUpdates) {
     if (statusUpdate.status === 'REJECTED') {
-      for (const reason of statusUpdate.statusUpdateReasons) {
-        if (reason.details !== null) {
+      for (const reason of statusUpdate.reasons) {
+        if (reason.details) {
           const details = sections.get(reason.section) ?? []
           details.push(reason.details)
           sections.set(reason.section, details)

@@ -1,5 +1,6 @@
 import getEnglishContent from '../../i18n/en'
 import { OrderType } from '../Order'
+import { StatusUpdate } from '../StatusUpdate'
 import { VersionInformation } from '../VersionInformation'
 import TimelineModel from './timelineModel'
 
@@ -16,11 +17,39 @@ describe('TimelineModel', () => {
     ...overrides,
   })
 
+  const createMockStatusUpdate = (overrides: Partial<StatusUpdate> = {}): StatusUpdate => ({
+    id: 'c4b8f4b9-7c64-4ef0-bc8e-bd0a7a6a8b6a',
+    orderId: 'c4b8f4b9-7c64-4ef0-bc8e-bd0a7a6a8b6e',
+    orderVersionId: '456',
+    orderVersionType: 'REQUEST',
+    status: 'REJECTED',
+    datetimeOfStatusChange: '2026-01-01T12:00:00Z',
+    reasons: [],
+    ...overrides,
+  })
+
+  const timeline = (versions: VersionInformation[], orderId?: string, currentVersionId?: string) =>
+    TimelineModel.mapToTimelineItems(
+      content,
+      versions.map(version =>
+        createMockStatusUpdate({
+          orderVersionId: version.versionId,
+          orderVersionType: version.type,
+          status: 'SUBMITTED',
+          datetimeOfStatusChange: version.fmsResultDate ?? '2023-10-05T10:00:00Z',
+        }),
+      ),
+      versions,
+      orderId,
+      currentVersionId,
+    )
+
   describe('mapToTimelineItems', () => {
     it('map to timeline items', () => {
       const versions = [
         createMockVersion({
           submittedBy: 'Alice',
+          versionId: 'alice-version',
           type: 'VARIATION',
           notifyingOrganisation: 'PRISON',
           notifyingOrganisationName: 'WHITEMOOR_PRISON',
@@ -31,7 +60,7 @@ describe('TimelineModel', () => {
         }),
       ]
 
-      const result = TimelineModel.mapToTimelineItems(content, versions)
+      const result = timeline(versions)
 
       expect(result).toHaveLength(2)
 
@@ -61,7 +90,7 @@ describe('TimelineModel', () => {
         }),
       ]
 
-      const result = TimelineModel.mapToTimelineItems(content, versions)
+      const result = timeline(versions)
 
       expect(result).toHaveLength(1)
 
@@ -84,7 +113,7 @@ describe('TimelineModel', () => {
         }),
       ]
 
-      const result = TimelineModel.mapToTimelineItems(content, versions)
+      const result = timeline(versions)
 
       expect(result).toHaveLength(1)
 
@@ -107,7 +136,7 @@ describe('TimelineModel', () => {
         }),
       ]
 
-      const result = TimelineModel.mapToTimelineItems(content, versions)
+      const result = timeline(versions)
 
       expect(result).toHaveLength(1)
 
@@ -130,7 +159,7 @@ describe('TimelineModel', () => {
         }),
       ]
 
-      const result = TimelineModel.mapToTimelineItems(content, versions)
+      const result = timeline(versions)
 
       expect(result).toHaveLength(1)
 
@@ -153,7 +182,7 @@ describe('TimelineModel', () => {
         }),
       ]
 
-      const result = TimelineModel.mapToTimelineItems(content, versions)
+      const result = timeline(versions)
 
       expect(result).toHaveLength(1)
 
@@ -176,7 +205,7 @@ describe('TimelineModel', () => {
         }),
       ]
 
-      const result = TimelineModel.mapToTimelineItems(content, versions)
+      const result = timeline(versions)
 
       expect(result).toHaveLength(1)
 
@@ -199,7 +228,7 @@ describe('TimelineModel', () => {
         }),
       ]
 
-      const result = TimelineModel.mapToTimelineItems(content, versions)
+      const result = timeline(versions)
 
       expect(result).toHaveLength(1)
 
@@ -222,7 +251,7 @@ describe('TimelineModel', () => {
         }),
       ]
 
-      const result = TimelineModel.mapToTimelineItems(content, versions)
+      const result = timeline(versions)
 
       expect(result).toHaveLength(1)
 
@@ -245,7 +274,7 @@ describe('TimelineModel', () => {
         }),
       ]
 
-      const result = TimelineModel.mapToTimelineItems(content, versions)
+      const result = timeline(versions)
 
       expect(result).toHaveLength(1)
 
@@ -268,7 +297,7 @@ describe('TimelineModel', () => {
         }),
       ]
 
-      const result = TimelineModel.mapToTimelineItems(content, versions)
+      const result = timeline(versions)
 
       expect(result).toHaveLength(1)
 
@@ -282,7 +311,7 @@ describe('TimelineModel', () => {
     })
 
     it('returns an empty array if no versions are provided', () => {
-      const result = TimelineModel.mapToTimelineItems(content, [])
+      const result = TimelineModel.mapToTimelineItems(content, [], [])
       expect(result).toEqual([])
     })
 
@@ -293,7 +322,7 @@ describe('TimelineModel', () => {
           type: 'REJECTED',
         }),
       ]
-      const result = TimelineModel.mapToTimelineItems(content, versions)
+      const result = timeline(versions)
       expect(result[0]).toEqual({
         label: { text: 'Form submitted' },
         datetime: { timestamp: '2023-10-05T10:00:00Z', type: 'datetime' },
@@ -302,33 +331,49 @@ describe('TimelineModel', () => {
       })
     })
 
-    it('adds the most recent returned status update to the timeline', () => {
-      const versions = [createMockVersion({ lastUpdatedDateTime: '2026-01-01T12:00:00Z' })]
+    it('maps rejected status updates to returned items, newest first, without using versions', () => {
       const statusUpdates = [
-        {
-          id: 'c4b8f4b9-7c64-4ef0-bc8e-bd0a7a6a8b6a',
-          versionId: 'c4b8f4b9-7c64-4ef0-bc8e-bd0a7a6a8b6b',
-          status: 'REJECTED' as const,
-          datetimeOfStatusChange: '2026-01-02T12:00:00Z',
-          statusUpdateReasons: [],
-        },
-        {
-          id: 'c4b8f4b9-7c64-4ef0-bc8e-bd0a7a6a8b6c',
-          versionId: 'c4b8f4b9-7c64-4ef0-bc8e-bd0a7a6a8b6d',
-          status: 'REJECTED' as const,
+        createMockStatusUpdate({ orderVersionId: 'v1', datetimeOfStatusChange: '2026-01-02T12:00:00Z' }),
+        createMockStatusUpdate({
+          orderVersionId: 'v2',
           datetimeOfStatusChange: '2026-01-03T12:00:00Z',
-          statusUpdateReasons: [],
-        },
+          statusUpdatedBy: 'Jane',
+        }),
       ]
 
-      const result = TimelineModel.mapToTimelineItems(content, versions, undefined, undefined, statusUpdates)
+      const result = TimelineModel.mapToTimelineItems(content, statusUpdates, [createMockVersion()])
 
-      expect(result[0]).toEqual({
-        label: { text: 'Form returned' },
-        datetime: { timestamp: '2026-01-03T12:00:00Z', type: 'datetime' },
-        byline: { text: 'The Electronic Monitoring Service (EMS)' },
-        notifyingOrganisationDetails: '',
-      })
+      expect(result).toEqual([
+        {
+          label: { text: 'Form returned' },
+          datetime: { timestamp: '2026-01-03T12:00:00Z', type: 'datetime' },
+          byline: { text: 'Jane' },
+          notifyingOrganisationDetails: '',
+        },
+        {
+          label: { text: 'Form returned' },
+          datetime: { timestamp: '2026-01-02T12:00:00Z', type: 'datetime' },
+          byline: { text: 'The Electronic Monitoring Service (EMS)' },
+          notifyingOrganisationDetails: '',
+        },
+      ])
+    })
+
+    it.each<[StatusUpdate['status'], string]>([
+      ['CREATED', 'Order Created'],
+      ['VERSION_CREATED', 'Version Created'],
+      ['SUBMITTED', 'Form submitted'],
+      ['SUBMISSION_FAILED', 'Failed to submit'],
+      ['ACCEPTED', 'Form accepted'],
+      ['REJECTED', 'Form returned'],
+    ])('labels a %s status update as "%s"', (status, label) => {
+      const result = TimelineModel.mapToTimelineItems(content, [createMockStatusUpdate({ status })])
+
+      expect(result[0].label.text).toBe(label)
+    })
+
+    it('does not create items for versions without a status update', () => {
+      expect(TimelineModel.mapToTimelineItems(content, [], [createMockVersion()])).toEqual([])
     })
 
     it.each<[OrderType, string]>([
@@ -340,7 +385,7 @@ describe('TimelineModel', () => {
     ])('returns correct timeline label if type is $type', (type, text) => {
       const versions = [createMockVersion({ submittedBy: 'Alice', type })]
 
-      const result = TimelineModel.mapToTimelineItems(content, versions)
+      const result = timeline(versions)
 
       expect(result[0].text).toBe(text)
     })
@@ -363,10 +408,84 @@ describe('TimelineModel', () => {
         }),
       ]
 
-      const result = TimelineModel.mapToTimelineItems(content, versions, 'someOrderId', 'version2')
+      const result = timeline(versions, 'someOrderId', 'version2')
 
       expect(result[0].href).toBe('/order/someOrderId/version/version1/summary')
       expect(result[1].href).toBeUndefined()
+      expect(result[1].isCurrentVersion).toBe(true)
+    })
+
+    it('returns only the latest item of each version, newest first', () => {
+      const updates = [
+        createMockStatusUpdate({
+          orderVersionId: 'v1',
+          status: 'CREATED',
+          datetimeOfStatusChange: '2026-01-01T09:00:00Z',
+        }),
+        createMockStatusUpdate({
+          orderVersionId: 'v1',
+          status: 'SUBMITTED',
+          datetimeOfStatusChange: '2026-01-01T10:00:00Z',
+        }),
+        createMockStatusUpdate({
+          orderVersionId: 'v1',
+          status: 'REJECTED',
+          datetimeOfStatusChange: '2026-01-02T10:00:00Z',
+        }),
+        createMockStatusUpdate({
+          orderVersionId: 'v2',
+          status: 'VERSION_CREATED',
+          datetimeOfStatusChange: '2026-01-03T09:00:00Z',
+        }),
+        createMockStatusUpdate({
+          orderVersionId: 'v2',
+          status: 'SUBMITTED',
+          datetimeOfStatusChange: '2026-01-03T10:00:00Z',
+        }),
+        createMockStatusUpdate({
+          orderVersionId: 'v3',
+          status: 'VERSION_CREATED',
+          datetimeOfStatusChange: '2026-01-04T09:00:00Z',
+        }),
+      ]
+
+      const result = TimelineModel.mapToTimelineItems(content, updates)
+
+      expect(result.map(item => item.label.text)).toEqual(['Version Created', 'Form submitted', 'Form returned'])
+      expect(result.map(item => item.datetime.timestamp)).toEqual([
+        '2026-01-04T09:00:00Z',
+        '2026-01-03T10:00:00Z',
+        '2026-01-02T10:00:00Z',
+      ])
+    })
+
+    it('links every version that is not the current version and marks the current one', () => {
+      const updates = [
+        createMockStatusUpdate({
+          orderVersionId: 'v1',
+          status: 'SUBMITTED',
+          datetimeOfStatusChange: '2026-01-01T10:00:00Z',
+        }),
+        createMockStatusUpdate({
+          orderVersionId: 'v2',
+          status: 'SUBMITTED',
+          datetimeOfStatusChange: '2026-01-03T10:00:00Z',
+        }),
+        createMockStatusUpdate({
+          orderVersionId: 'v3',
+          status: 'VERSION_CREATED',
+          datetimeOfStatusChange: '2026-01-04T09:00:00Z',
+        }),
+      ]
+
+      const result = TimelineModel.mapToTimelineItems(content, updates, [], 'order1', 'v2')
+
+      expect(result.map(item => item.href)).toEqual([
+        '/order/order1/version/v3/summary',
+        undefined,
+        '/order/order1/version/v1/summary',
+      ])
+      expect(result.map(item => item.isCurrentVersion)).toEqual([undefined, true, undefined])
     })
 
     it('no href when current version is not provided', () => {
@@ -378,7 +497,7 @@ describe('TimelineModel', () => {
         }),
       ]
 
-      const result = TimelineModel.mapToTimelineItems(content, versions)
+      const result = timeline(versions)
 
       expect(result[0].href).toBeUndefined()
       expect(result[0].label.text).toBeDefined()

@@ -238,21 +238,18 @@
           {% if timelineItems | length %}
             {% set processedTimeLineItems = [] %}
             {% for item in timelineItems %}
-              {% if item.href %}
-                {% set itemHtml %}               
-                 <p> {{ item.text if item.text }} </p>
+              {% set itemHtml %}
+                <p> {{ item.text if item.text }} </p>
+                {% if item.href %}
                   <div class="govuk-!-margin-top-2">
-                    <a href="{{ item.href }}">View submitted form</a>
+                    <a href="{{ item.href }}">View this form</a>
                   </div>
-                {% endset %}
-              {% else %}
-                {% set itemHtml %}              
-                  <p> {{ item.text if item.text }} </p>
+                {% elif item.isCurrentVersion %}
                   <div class="govuk-!-margin-top-2">
                     <p>You are viewing this version of the form</p>
                   </div>
-                {% endset %}
-              {% endif %}
+                {% endif %}
+              {% endset %}
 
               {% set byLineHtml %}
                  {{ item.byline.text}}

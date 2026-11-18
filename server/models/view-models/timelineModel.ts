@@ -20,86 +20,93 @@ type TimelineItem = {
   }
   text?: string
   href?: string
+  isCurrentVersion?: boolean
 }
 
 export default class TimelineModel {
   public static mapToTimelineItems = (
     content: I18n,
-    versions: VersionInformation[],
+    statusUpdates: StatusUpdate[],
+    versions: VersionInformation[] = [],
     orderId?: string,
     currentVersionId?: string,
-    statusUpdates?: StatusUpdate[] | null,
   ): TimelineItem[] => {
-    const versionItems = versions.map(version => this.mapSingleItem(content, version, orderId, currentVersionId))
-    const latestRejectedStatusUpdate = (statusUpdates ?? [])
-      .filter(statusUpdate => statusUpdate.status === 'REJECTED')
-      .sort((a, b) => new Date(b.datetimeOfStatusChange).getTime() - new Date(a.datetimeOfStatusChange).getTime())[0]
-    const statusUpdateItems = latestRejectedStatusUpdate ? [this.mapStatusUpdateItem(latestRejectedStatusUpdate)] : []
+    const sorted = [...statusUpdates].sort(
+      (a, b) => new Date(b.datetimeOfStatusChange).getTime() - new Date(a.datetimeOfStatusChange).getTime(),
+    )
+    const seenVersionIds = new Set<string>()
 
-    return [...versionItems, ...statusUpdateItems].sort((a, b) => {
-      const aTime = a.datetime.timestamp ? new Date(a.datetime.timestamp).getTime() : 0
+    return sorted
+      .filter(statusUpdate => {
+        // Sorted newest first, so the first update seen for a version is its latest
+        if (seenVersionIds.has(statusUpdate.orderVersionId)) {
+          return false
+        }
+        seenVersionIds.add(statusUpdate.orderVersionId)
+        return true
+      })
+      .map(statusUpdate => {
+        const item = this.mapStatusUpdateItem(
+          content,
+          statusUpdate,
+          versions.find(version => version.versionId === statusUpdate.orderVersionId),
+        )
 
-      const bTime = b.datetime.timestamp ? new Date(b.datetime.timestamp).getTime() : 0
+        if (statusUpdate.orderVersionId === currentVersionId) {
+          item.isCurrentVersion = true
+        } else if (orderId && currentVersionId) {
+          item.href = paths.ORDER.SUMMARY_VERSION.replace(':orderId', orderId).replace(
+            ':versionId',
+            statusUpdate.orderVersionId,
+          )
+        }
 
-      return bTime - aTime
-    })
+        return item
+      })
   }
 
-  private static mapStatusUpdateItem = (statusUpdate: StatusUpdate): TimelineItem => ({
-    label: {
-      text: 'Form returned',
-    },
-    datetime: {
-      timestamp: statusUpdate.datetimeOfStatusChange,
-      type: 'datetime',
-    },
-    notifyingOrganisationDetails: '',
-    byline: {
-      text: 'The Electronic Monitoring Service (EMS)',
-    },
-  })
-
-  private static getTimelineText = (versionInformation: VersionInformation) => {
-    if (versionInformation.status === 'IN_PROGRESS') {
-      return 'Draft'
-    }
-    if (versionInformation.status === 'REJECTED') {
-      return 'Form submitted'
-    }
-    if (versionInformation.type === 'REVOCATION') {
-      return 'Monitoring ended'
-    }
-    if (Object.keys(VariationTypesEnum.enum).includes(versionInformation.type)) {
-      return 'Changes submitted'
-    }
-    return versionInformation.status === 'SUBMITTED' ? 'Form submitted' : 'Failed to submit'
-  }
-
-  private static mapSingleItem = (
+  private static mapStatusUpdateItem = (
     content: I18n,
-    version: VersionInformation,
-    orderId?: string,
-    currentVersionId?: string,
+    statusUpdate: StatusUpdate,
+    version?: VersionInformation,
   ): TimelineItem => {
-    const item: TimelineItem = {
-      label: {
-        text: this.getTimelineText(version),
-      },
-      text: this.getVariationText(version.type),
-      datetime: {
-        timestamp: version.fmsResultDate ?? version.lastUpdatedDateTime ?? new Date().toISOString(),
-        type: 'datetime',
-      },
-      notifyingOrganisationDetails: this.getNotifyingOrganisationText(version, content),
-      byline: {
-        text: version.submittedBy ?? version.lastUpdatedBy,
-      },
-    }
-    if (orderId && currentVersionId && currentVersionId !== version.versionId) {
-      item.href = paths.ORDER.SUMMARY_VERSION.replace(':orderId', orderId).replace(':versionId', version.versionId)
+    const datetime = { timestamp: statusUpdate.datetimeOfStatusChange, type: 'datetime' as const }
+
+    if (statusUpdate.status === 'REJECTED' || statusUpdate.status === 'ACCEPTED') {
+      return {
+        label: { text: statusUpdate.status === 'REJECTED' ? 'Form returned' : 'Form accepted' },
+        datetime,
+        notifyingOrganisationDetails: '',
+        byline: { text: statusUpdate.statusUpdatedBy ?? 'The Electronic Monitoring Service (EMS)' },
+      }
     }
 
-    return item
+    return {
+      label: { text: this.getTimelineText(statusUpdate) },
+      text: this.getVariationText(statusUpdate.orderVersionType),
+      datetime,
+      notifyingOrganisationDetails: version ? this.getNotifyingOrganisationText(version, content) : '',
+      byline: { text: statusUpdate.statusUpdatedBy ?? version?.submittedBy ?? version?.lastUpdatedBy },
+    }
+  }
+
+  private static getTimelineText = (statusUpdate: StatusUpdate) => {
+    switch (statusUpdate.status) {
+      case 'CREATED':
+        return 'Order Created'
+      case 'VERSION_CREATED':
+        return 'Version Created'
+      case 'SUBMISSION_FAILED':
+        return 'Failed to submit'
+      default:
+        if (statusUpdate.orderVersionType === 'REVOCATION') {
+          return 'Monitoring ended'
+        }
+        if (Object.keys(VariationTypesEnum.enum).includes(statusUpdate.orderVersionType)) {
+          return 'Changes submitted'
+        }
+        return 'Form submitted'
+    }
   }
 
   private static getNotifyingOrganisationText = (version: VersionInformation, content: I18n): string => {
@@ -131,7 +138,7 @@ export default class TimelineModel {
     }
   }
 
-  private static getVariationText = (type: OrderType): string | undefined => {
+  private static getVariationText = (type: OrderType | StatusUpdate['orderVersionType']): string | undefined => {
     switch (type) {
       case 'VARIATION':
         return 'Other change'

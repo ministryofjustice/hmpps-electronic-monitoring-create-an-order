@@ -7,6 +7,7 @@ import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
 import OrderService from '../services/orderService'
 import OrderController from './orderController'
 import SectionService from '../services/sectionsService'
+import StatusUpdateService from '../routes/status-updates/service'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -18,6 +19,7 @@ describe('OrderController', () => {
   let mockOrderService: jest.Mocked<OrderService>
   let orderController: OrderController
   let sectionService: jest.Mocked<SectionService>
+  let statusUpdateService: jest.Mocked<StatusUpdateService>
 
   beforeEach(() => {
     mockRestClient = new RestClient('cemoApi', {
@@ -30,7 +32,10 @@ describe('OrderController', () => {
     sectionService = {
       getSectionsForOrder: jest.fn().mockReturnValue(Promise.resolve([])),
     } as unknown as jest.Mocked<SectionService>
-    orderController = new OrderController(mockOrderService, sectionService)
+    statusUpdateService = {
+      getStatusUpdates: jest.fn().mockResolvedValue([]),
+    } as unknown as jest.Mocked<StatusUpdateService>
+    orderController = new OrderController(mockOrderService, sectionService, statusUpdateService)
   })
 
   describe('summary', () => {
@@ -71,16 +76,18 @@ describe('OrderController', () => {
     it('should indicate when the order has been rejected', async () => {
       const mockOrder = getMockOrder({
         status: 'REJECTED',
-        statusUpdates: [
-          {
-            id: randomUUID(),
-            versionId: randomUUID(),
-            status: 'REJECTED',
-            datetimeOfStatusChange: '2026-01-01T12:00:00Z',
-            statusUpdateReasons: [],
-          },
-        ],
       })
+      statusUpdateService.getStatusUpdates.mockResolvedValue([
+        {
+          id: randomUUID(),
+          orderId: mockOrder.id,
+          orderVersionId: randomUUID(),
+          orderVersionType: 'REQUEST',
+          status: 'REJECTED',
+          datetimeOfStatusChange: '2026-01-01T12:00:00Z',
+          reasons: [],
+        },
+      ])
       const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
       const res = createMockResponse()
       const next = jest.fn()
@@ -88,6 +95,10 @@ describe('OrderController', () => {
 
       await orderController.summary(req, res, next)
 
+      expect(statusUpdateService.getStatusUpdates).toHaveBeenCalledWith({
+        orderId: mockOrder.id,
+        accessToken: res.locals.user.token,
+      })
       expect(res.render).toHaveBeenCalledWith(
         'pages/order/summary',
         expect.objectContaining({

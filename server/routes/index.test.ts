@@ -14,6 +14,7 @@ import TaskListService from '../services/taskListService'
 import OrderChecklistService from '../services/orderChecklistService'
 import OrderChecklistModel from '../models/OrderChecklist'
 import SectionsService from '../services/sectionsService'
+import StatusUpdateService from './status-updates/service'
 import DeviceWearerSearchResultsService from './about-the-device-wearer/device-wearer-search-results/service'
 
 jest.mock('../services/auditService')
@@ -84,6 +85,7 @@ describe('authorised user', () => {
         sectionService,
         orderChecklistService: mockOrderChecklistService,
         deviceWearerSearchResultsService,
+        statusUpdateService: { getStatusUpdates: jest.fn().mockResolvedValue([]) } as unknown as StatusUpdateService,
       },
       userSupplier: () => user,
     })

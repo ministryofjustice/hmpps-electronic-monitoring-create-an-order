@@ -14,21 +14,33 @@ import ReturnReasonsController from '../return-reasons/controller'
 const createOrderRouter = (
   services: Pick<
     Services,
-    'orderService' | 'sectionService' | 'fmsRequestService' | 'isRejectionService' | 'serviceRequestTypeService'
+    | 'orderService'
+    | 'sectionService'
+    | 'fmsRequestService'
+    | 'isRejectionService'
+    | 'serviceRequestTypeService'
+    | 'statusUpdateService'
   >,
 ): Router => {
   const { router, get, post, viewUpdate } = createFeatureRouter()
 
-  const { orderService, sectionService, fmsRequestService, isRejectionService, serviceRequestTypeService } = services
+  const {
+    orderService,
+    sectionService,
+    fmsRequestService,
+    isRejectionService,
+    serviceRequestTypeService,
+    statusUpdateService,
+  } = services
 
-  const orderController = new OrderController(orderService, sectionService)
+  const orderController = new OrderController(orderService, sectionService, statusUpdateService)
   const receiptController = new ReceiptController(fmsRequestService)
   const isRejectionController = new IsRejectionController(isRejectionService)
   const specialOrderController = new SpecialOrderController()
   const isAddressChangeController = new IsAddressChangeController(serviceRequestTypeService)
   const noRefitsController = new NoRefitsController()
   const noChangeResponsibleOfficer = new NoChangeResponsibleOfficerController()
-  const returnReasonsController = new ReturnReasonsController()
+  const returnReasonsController = new ReturnReasonsController(statusUpdateService)
 
   post(paths.ORDER.CREATE, orderController.create)
   get(paths.ORDER.DELETE_SUCCESS, orderController.deleteSuccess)

@@ -1,13 +1,20 @@
 import { Request, RequestHandler, Response } from 'express'
 import paths from '../../constants/paths'
+import StatusUpdateService from '../status-updates/service'
 import ReturnReasonsFormModel from './formModel'
 import returnReasonsViewModel from './viewModel'
 
 export default class ReturnReasonsController {
+  constructor(private readonly statusUpdateService: StatusUpdateService) {}
+
   view: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
     const orderSummaryUri = res.locals.orderSummaryUri ?? paths.ORDER.SUMMARY.replace(':orderId', order.id)
-    res.render('pages/order/return-reasons', returnReasonsViewModel.construct(order, orderSummaryUri))
+    const statusUpdates = await this.statusUpdateService.getStatusUpdates({
+      orderId: order.id,
+      accessToken: res.locals.user.token,
+    })
+    res.render('pages/order/return-reasons', returnReasonsViewModel.construct(statusUpdates, orderSummaryUri))
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {

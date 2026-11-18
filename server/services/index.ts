@@ -49,6 +49,7 @@ import UpdateInterestedPartiesService from '../routes/interested-parties/interes
 import PostcodeService from '../routes/postcode-lookup/postcodeService'
 import SentencingActService from '../routes/sentencing-act-selection/SentencingActService'
 import SectionService from './sectionsService'
+import StatusUpdateService from '../routes/status-updates/service'
 import DeviceWearerSearchResultsService from '../routes/about-the-device-wearer/device-wearer-search-results/service'
 
 export const services = () => {
@@ -113,6 +114,7 @@ export const services = () => {
   const deviceWearerSearchResultsService = new DeviceWearerSearchResultsService(cemoApiClient)
 
   const fmsRequestService = new FmsRequestService(cemoApiClient)
+  const statusUpdateService = new StatusUpdateService(cemoApiClient)
   return {
     alcoholMonitoringService,
     applicationInfo,
@@ -156,6 +158,7 @@ export const services = () => {
     sectionService,
     sentencingActService,
     deviceWearerSearchResultsService,
+    statusUpdateService,
   }
 }
 
@@ -192,4 +195,5 @@ export {
   MappaService,
   SectionService as SectionsService,
   SentencingActService,
+  StatusUpdateService,
 }

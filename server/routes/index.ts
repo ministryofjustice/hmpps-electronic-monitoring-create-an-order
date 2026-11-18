@@ -45,6 +45,7 @@ export default function routes({
   removeMonitoringTypeService,
   serviceRequestTypeService,
   fmsRequestService,
+  statusUpdateService,
   dapoService,
   offenceService,
   mappaService,
@@ -180,6 +181,7 @@ export default function routes({
       sectionService,
       fmsRequestService,
       isRejectionService,
+      statusUpdateService,
       serviceRequestTypeService,
     }),
   )

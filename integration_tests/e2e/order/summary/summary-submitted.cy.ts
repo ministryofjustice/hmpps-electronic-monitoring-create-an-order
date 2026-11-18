@@ -286,7 +286,7 @@ context('Order Summary', () => {
 
     context('Rejected order', () => {
       it('shows the returned form message and a link to the return reasons', () => {
-        stubReturnedOrder([rejectedStatusUpdate('2026-01-03T12:00:00Z')], 'REJECTED')
+        stubReturnedOrder([createstatusUpdate('2026-01-03T12:00:00Z')], 'REJECTED')
 
         const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
@@ -313,7 +313,10 @@ context('Order Summary', () => {
           versions: [versionOne],
           orderId: mockOrderId,
         })
-        stubReturnedOrder([rejectedStatusUpdate('2026-01-02T12:00:00Z'), rejectedStatusUpdate('2026-01-03T12:00:00Z')])
+        stubReturnedOrder([
+          createstatusUpdate('2026-01-02T12:00:00Z', 'SUBMITTED'),
+          createstatusUpdate('2026-01-03T12:00:00Z'),
+        ])
 
         const page = Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
@@ -674,7 +677,7 @@ context('Order Summary', () => {
         page.timeline.formVariationComponent.variationTextIs('Other change')
         page.timeline.formVariationComponent.bylineContains('From Whitemoor Prison')
         page.timeline.formSubmittedComponent.description
-          .contains('View submitted form')
+          .contains('View this form')
           .should(
             'have.attr',
             'href',
@@ -690,12 +693,24 @@ context('Order Summary', () => {
     })
   })
 
-  const rejectedStatusUpdate = (datetimeOfStatusChange: string) => ({
+  const createstatusUpdate = (
+    datetimeOfStatusChange: string,
+    stattus:
+      | 'REJECTED'
+      | 'ACCEPTED'
+      | 'SUBMITTED'
+      | 'SUBMISSION_FAILED'
+      | 'CREATED'
+      | 'VERSION_CREATED'
+      | 'SUBMISSION_FAILED' = 'REJECTED',
+  ) => ({
     id: uuidv4(),
-    versionId: uuidv4(),
-    status: 'REJECTED' as const,
+    orderId: mockOrderId,
+    orderVersionId: uuidv4(),
+    orderVersionType: 'REQUEST' as const,
+    status: stattus,
     datetimeOfStatusChange,
-    statusUpdateReasons: [],
+    reasons: [],
   })
 
   const stubReturnedOrder = (statusUpdates: Array<StatusUpdate> = [], status = 'SUBMITTED') => {
@@ -705,9 +720,9 @@ context('Order Summary', () => {
       status,
       order: {
         status,
-        statusUpdates,
       },
     })
+    cy.task('stubCemoGetStatusUpdates', { httpStatus: 200, orderId: mockOrderId, statusUpdates })
   }
   context('Complete order, variation', () => {
     const versionOneId = uuidv4()
@@ -755,7 +770,7 @@ context('Order Summary', () => {
       page.timeline.formSubmittedComponent.bylineContains('Person One')
       page.timeline.formSubmittedComponent.resultDateIs('1 January 2025 at 10:30am')
       page.timeline.formSubmittedComponent.description
-        .contains('View submitted form')
+        .contains('View this form')
         .should(
           'have.attr',
           'href',

@@ -132,8 +132,52 @@ const defaultGetVersionsOptions = {
   orderId: uuidv4(),
 }
 
-const getVersionInformation = (options: GetVersionsStubOptions = defaultGetVersionsOptions): SuperAgentRequest =>
+type GetStatusUpdatesStubOptions = {
+  httpStatus: number
+  orderId: string
+  statusUpdates?: object[]
+}
+
+const getStatusUpdates = (options: GetStatusUpdatesStubOptions): SuperAgentRequest =>
   stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: `/cemo/api/orders/${options.orderId}/status-updates`,
+    },
+    response: {
+      status: options.httpStatus,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: options.httpStatus === 200 ? (options.statusUpdates ?? []) : null,
+    },
+  })
+
+const versionStatusToStatusUpdate: Record<string, string> = {
+  IN_PROGRESS: 'CREATED',
+  SUBMITTED: 'SUBMITTED',
+  ERROR: 'SUBMISSION_FAILED',
+  REJECTED: 'SUBMITTED',
+}
+
+// The timeline is built from status updates, so derive one per version (overridable by stubCemoGetStatusUpdates)
+const getVersionInformation = (options: GetVersionsStubOptions = defaultGetVersionsOptions): Promise<unknown> => {
+  const versions = (options.versions ?? []) as Array<Record<string, string | null | undefined>>
+  const statusUpdatesStub = getStatusUpdates({
+    httpStatus: options.httpStatus,
+    orderId: options.orderId,
+    statusUpdates: versions.map(version => ({
+      id: uuidv4(),
+      orderId: options.orderId,
+      orderVersionId: version.versionId,
+      orderVersionType: version.type,
+      status: versionStatusToStatusUpdate[version.status ?? ''] ?? 'SUBMITTED',
+      datetimeOfStatusChange: new Date(
+        version.fmsResultDate ?? version.lastUpdatedDateTime ?? Date.now(),
+      ).toISOString(),
+      statusUpdatedBy: version.submittedBy ?? version.lastUpdatedBy ?? null,
+      reasons: [],
+    })),
+  })
+  const versionsStub = stubFor({
     request: {
       method: 'GET',
       urlPattern: `/cemo/api/orders/${options.orderId}/versions`,
@@ -144,6 +188,8 @@ const getVersionInformation = (options: GetVersionsStubOptions = defaultGetVersi
       jsonBody: options.httpStatus === 200 ? options.versions : null,
     },
   })
+  return Promise.all([statusUpdatesStub, versionsStub])
+}
 
 type GetOrderStubOptions = {
   httpStatus: number
@@ -796,6 +842,7 @@ export default {
   stubCemoListOrders: listOrders,
   stubCemoSearchOrders: searchOrders,
   stubCemoGetVersions: getVersionInformation,
+  stubCemoGetStatusUpdates: getStatusUpdates,
   stubCemoGetOrderWithAttachments: getOrderWithAttachments,
   stubCemoGetVersionWithAttachments: getVersionWithAttachments,
   stubCemoPutContactDetails: updateContactDetails,
