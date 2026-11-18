@@ -14,6 +14,7 @@ const deviceWearerPageContent: DeviceWearerPageContent = {
     },
     dateOfBirth: {
       text: "What is the device wearer's date of birth?",
+      hint: 'For example, 21 05 2005',
     },
     disabilities: {
       text: 'Does the device wearer have any of the disabilities or health conditions listed?',
@@ -49,6 +50,13 @@ const deviceWearerPageContent: DeviceWearerPageContent = {
   },
   section: 'About the device wearer',
   title: 'Personal details',
+  disabilitiesTitle: 'Disability and health conditions',
+  disabilitiesHelpText:
+    "Provide disability or health conditions information to help plan installation. Answer questions based on what you know about the device wearer's access needs and requirements.",
+  languagePage: {
+    title: 'Language',
+    interpreterRequiredDontKnow: 'Not able to provide this information',
+  },
 }
 
 export default deviceWearerPageContent
