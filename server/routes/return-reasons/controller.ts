@@ -14,7 +14,13 @@ export default class ReturnReasonsController {
       orderId: order.id,
       accessToken: res.locals.user.token,
     })
-    res.render('pages/order/return-reasons', returnReasonsViewModel.construct(statusUpdates, orderSummaryUri))
+    res.render(
+      'pages/order/return-reasons',
+      returnReasonsViewModel.construct(
+        statusUpdates.filter(statusUpdate => statusUpdate.orderVersionId === order.versionId),
+        orderSummaryUri,
+      ),
+    )
   }
 
   update: RequestHandler = async (req: Request, res: Response) => {
