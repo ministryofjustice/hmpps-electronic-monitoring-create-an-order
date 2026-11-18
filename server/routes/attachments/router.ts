@@ -7,15 +7,19 @@ import AttachmentsController from './additional-documents/controller'
 import { createFeatureRouter } from '../routeHelpers'
 
 const createAttachmentRouter = (
-  services: Pick<Services, 'attachmentService' | 'taskListService' | 'auditService' | 'orderChecklistService'>,
+  services: Pick<
+    Services,
+    'attachmentService' | 'taskListService' | 'auditService' | 'orderChecklistService' | 'telemetryService'
+  >,
 ): Router => {
   const { router, get, post } = createFeatureRouter(paths.ATTACHMENT.BASE_URL)
-  const { attachmentService, taskListService, auditService, orderChecklistService } = services
+  const { attachmentService, taskListService, auditService, orderChecklistService, telemetryService } = services
   const attachmentsController = new AttachmentsController(
     auditService,
     attachmentService,
     taskListService,
     orderChecklistService,
+    telemetryService,
   )
   const havePhotoController = new HavePhotoController(attachmentService, taskListService)
   const newDocumentController = new NewDocumentController(attachmentService, taskListService)

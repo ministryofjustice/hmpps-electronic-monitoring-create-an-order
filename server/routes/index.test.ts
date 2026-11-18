@@ -78,6 +78,7 @@ describe('authorised user', () => {
       services: {
         auditService,
         orderService,
+        telemetryService: { trackEvent: jest.fn() },
         deviceWearerService,
         orderSearchService,
         taskListService,

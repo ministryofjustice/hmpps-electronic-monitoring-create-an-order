@@ -72,6 +72,22 @@ describe('Application Insights', () => {
     expect(configuration.start).not.toHaveBeenCalled()
   })
 
+  it('preserves existing log processors when adding cohort enrichment', () => {
+    const existingProcessor = {
+      onEmit: jest.fn(),
+      forceFlush: jest.fn().mockResolvedValue(undefined),
+      shutdown: jest.fn().mockResolvedValue(undefined),
+    }
+    defaultClient.config.azureMonitorOpenTelemetryOptions = { logRecordProcessors: [existingProcessor] }
+
+    initialiseAppInsights(applicationInfo)
+
+    expect(defaultClient.config.azureMonitorOpenTelemetryOptions.logRecordProcessors).toEqual([
+      existingProcessor,
+      expect.objectContaining({ onEmit: expect.any(Function) }),
+    ])
+  })
+
   it.each([undefined, /^\/order\//])('preserves existing HTTP hooks and SDK naming for route %s', route => {
     const previousHook = jest.fn()
     const httpOptions: HttpInstrumentationConfig = { enabled: true, applyCustomAttributesOnSpan: previousHook }
@@ -120,7 +136,7 @@ describe('Application Insights', () => {
   })
 })
 
-it('correlates real request, Bunyan, exception and dependency telemetry in a separate process', async () => {
+it('correlates telemetry and enriches custom events with isolated request cohorts in a separate process', async () => {
   type Envelope = {
     tags: Record<string, string>
     data: {
@@ -131,6 +147,7 @@ it('correlates real request, Bunyan, exception and dependency telemetry in a sep
         url?: string
         data?: string
         message?: string
+        properties?: Record<string, string>
         exceptions?: { message: string }[]
       }
     }
@@ -207,7 +224,7 @@ it('correlates real request, Bunyan, exception and dependency telemetry in a sep
       const https = require('node:https')
       const { context, trace } = require('@opentelemetry/api')
       const logger = require(process.env.SMOKE_BUILD + '/logger.js').default
-      const { appInsightsMiddleware, reportException } = require(process.env.SMOKE_BUILD + '/server/utils/azureAppInsights.js')
+      const { appInsightsMiddleware, appInsightsUserMiddleware, reportException } = require(process.env.SMOKE_BUILD + '/server/utils/azureAppInsights.js')
       const { defaultClient } = require('applicationinsights')
       const get = (url, headers = {}) => new Promise((resolve, reject) => {
         const client = url.startsWith('https:') ? https : http
@@ -220,6 +237,18 @@ it('correlates real request, Bunyan, exception and dependency telemetry in a sep
       const run = async () => {
         const app = express()
         app.use(appInsightsMiddleware())
+        app.use((req, res, next) => {
+          res.locals.user = { cohort: { cohort: req.headers['x-test-cohort'] } }
+          next()
+        })
+        app.use(appInsightsUserMiddleware())
+        app.get('/submission-smoke', (req, res) => {
+          setTimeout(() => {
+            defaultClient.trackEvent({ name: 'order_submission_attempt', properties: { outcome: 'success' } })
+            reportException(new Error('submission-smoke-exception'), {})
+            res.sendStatus(200)
+          }, req.headers['x-test-cohort'] === 'PRISON' ? 20 : 5)
+        })
         const router = express.Router()
         app.use('/order/:orderId', router)
         router.get('/telemetry-smoke/:section', (req, res, next) => {
@@ -237,6 +266,9 @@ it('correlates real request, Bunyan, exception and dependency telemetry in a sep
         const headers = await context.with(parent, () =>
           get('http://127.0.0.1:' + server.address().port + '/order/test-order/telemetry-smoke/summary'))
         if (headers['x-operation-id'] !== '${traceId}') throw new Error('Missing request operation ID')
+        await Promise.all(['PRISON', 'COURT'].map(cohort =>
+          get('http://127.0.0.1:' + server.address().port + '/submission-smoke', { 'x-test-cohort': cohort })))
+        defaultClient.trackEvent({ name: 'outside_request' })
         await new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()))
         await defaultClient.flush()
         await defaultClient.shutdown()
@@ -299,6 +331,24 @@ it('correlates real request, Bunyan, exception and dependency telemetry in a sep
     expect(exception?.tags['ai.operation.parentId']).toBe(request?.data.baseData.id)
     expect(dependency?.tags['ai.operation.parentId']).toBe(request?.data.baseData.id)
     expect(dependencyTraceparent).toBe(`00-${traceId}-${dependency?.data.baseData.id}-01`)
+    const events = telemetry.filter(
+      item => item.data.baseType === 'EventData' && item.data.baseData.name === 'order_submission_attempt',
+    )
+    expect(events).toHaveLength(2)
+    expect(events.map(item => item.data.baseData.properties?.cohort).sort()).toEqual(['COURT', 'PRISON'])
+    for (const event of events) {
+      expect(event.data.baseData.properties?.outcome).toBe('success')
+    }
+    const submissionExceptions = telemetry.filter(
+      item =>
+        item.data.baseType === 'ExceptionData' &&
+        item.data.baseData.exceptions?.some(error => error.message === 'submission-smoke-exception'),
+    )
+    expect(submissionExceptions).toHaveLength(2)
+    expect(submissionExceptions.map(item => item.data.baseData.properties?.cohort).sort()).toEqual(['COURT', 'PRISON'])
+    const outsideEvent = telemetry.find(item => item.data.baseData.name === 'outside_request')
+    expect(outsideEvent).toBeDefined()
+    expect(outsideEvent?.data.baseData.properties?.cohort).toBeUndefined()
   } finally {
     collector.closeAllConnections()
     await new Promise<void>((resolve, reject) => {

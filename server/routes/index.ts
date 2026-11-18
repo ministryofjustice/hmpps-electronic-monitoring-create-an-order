@@ -30,6 +30,7 @@ export default function routes({
   deviceWearerService,
   interestedPartiesService,
   orderService,
+  telemetryService,
   orderSearchService,
   taskListService,
   trailMonitoringService,
@@ -164,6 +165,7 @@ export default function routes({
       attachmentService,
       orderChecklistService,
       taskListService,
+      telemetryService,
     }),
   )
   router.use(
@@ -180,6 +182,7 @@ export default function routes({
     createOrderRouter({
       orderService,
       sectionService,
+      telemetryService,
       fmsRequestService,
       isRejectionService,
       serviceRequestTypeService,

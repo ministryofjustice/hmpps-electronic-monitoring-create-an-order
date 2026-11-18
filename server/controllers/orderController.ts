@@ -1,5 +1,6 @@
 import { Request, RequestHandler, Response } from 'express'
 import { OrderService } from '../services'
+import type { TelemetryEvents, TelemetryService } from '../services/telemetryService'
 import paths from '../constants/paths'
 import { CreateOrderFormDataParser } from '../models/form-data/order'
 import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
@@ -14,6 +15,7 @@ export default class OrderController {
   constructor(
     private readonly orderService: OrderService,
     private readonly sectionService: SectionService,
+    private readonly telemetryService: TelemetryService,
   ) {}
 
   create: RequestHandler = async (req: Request, res: Response) => {
@@ -149,19 +151,69 @@ export default class OrderController {
   }
 
   submit: RequestHandler = async (req: Request, res: Response) => {
+    const submissionStartedAt = performance.now()
     const order = req.order!
+    const getDurationMs = () => Math.round(performance.now() - submissionStartedAt)
 
     const ineligibleErrors = getIneligibleMonitoringConditionsErrors(order)
     if (ineligibleErrors.length > 0) {
+      this.telemetryService.trackEvent('order_submission_attempt', {
+        outcome: 'blocked',
+        reason: 'ineligible_monitoring_conditions',
+        orderType: order.type,
+        durationMs: getDurationMs(),
+      })
       req.flash('submissionError', ineligibleErrors[0])
       res.redirect(paths.ORDER.SUMMARY.replace(':orderId', order.id))
       return
     }
 
-    const result = await this.orderService.submitOrder({
-      orderId: order.id,
-      accessToken: res.locals.user.token,
-    })
+    const result = await this.orderService
+      .submitOrder({
+        orderId: order.id,
+        accessToken: res.locals.user.token,
+      })
+      .catch(error => {
+        this.telemetryService.trackEvent('order_submission_attempt', {
+          outcome: 'failure',
+          reason: 'unexpected_error',
+          orderType: order.type,
+          durationMs: getDurationMs(),
+        })
+        throw error
+      })
+
+    let properties: TelemetryEvents['order_submission_attempt']
+    if (result.submitted) {
+      properties = {
+        outcome: 'success',
+        orderType: order.type,
+        durationMs: getDurationMs(),
+      }
+    } else {
+      const eventDetails = {
+        orderType: order.type,
+        durationMs: getDurationMs(),
+      }
+      switch (result.type) {
+        case 'alreadySubmitted':
+          properties = { outcome: 'blocked', reason: 'already_submitted', ...eventDetails }
+          break
+        case 'incomplete':
+          properties = { outcome: 'blocked', reason: 'incomplete', ...eventDetails }
+          break
+        case 'errorStatus':
+          properties = { outcome: 'failure', reason: 'error_status', ...eventDetails }
+          break
+        case 'partialSuccess':
+          properties = { outcome: 'partial_success', reason: 'attachments_to_serco_failed', ...eventDetails }
+          break
+        default:
+          properties = { outcome: 'failure', reason: 'unexpected_error', ...eventDetails }
+      }
+    }
+
+    this.telemetryService.trackEvent('order_submission_attempt', properties)
 
     if (result.submitted) {
       res.redirect(paths.ORDER.SUBMIT_SUCCESS.replace(':orderId', order.id))

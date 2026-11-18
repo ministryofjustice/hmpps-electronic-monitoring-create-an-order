@@ -13,6 +13,7 @@ import { createMockRequest } from '../../../../test/mocks/mockExpress'
 import TaskListService from '../../../services/taskListService'
 import OrderChecklistService from '../../../services/orderChecklistService'
 import OrderChecklistModel from '../../../models/OrderChecklist'
+import type { TelemetryService } from '../../../services/telemetryService'
 
 jest.mock('../../../services/auditService')
 jest.mock('../../../services/orderService')
@@ -26,6 +27,7 @@ describe('AttachmentController', () => {
   let mockAuditClient: jest.Mocked<HmppsAuditClient>
   let mockAuditService: jest.Mocked<AuditService>
   let mockAttachmentService: jest.Mocked<AttachmentService>
+  let telemetryService: jest.Mocked<TelemetryService>
   const taskListService = {
     getNextCheckYourAnswersPage: jest.fn(),
     getNextPage: jest.fn(),
@@ -52,12 +54,14 @@ describe('AttachmentController', () => {
     }) as jest.Mocked<RestClient>
     mockAuditService = new AuditService(mockAuditClient) as jest.Mocked<AuditService>
     mockAttachmentService = new AttachmentService(mockRestClient) as jest.Mocked<AttachmentService>
+    telemetryService = { trackEvent: jest.fn() } as jest.Mocked<TelemetryService>
 
     controller = new AttachmentController(
       mockAuditService,
       mockAttachmentService,
       taskListService,
       mockOrderChecklistService,
+      telemetryService,
     )
 
     req = {
@@ -280,6 +284,55 @@ describe('AttachmentController', () => {
           error: { text: 'Mock Error' },
         }),
       )
+      expect(telemetryService.trackEvent).not.toHaveBeenCalled()
+    })
+
+    it('records and rethrows an unexpected upload service error', async () => {
+      req.file = {
+        filename: 'mockfile.jpeg',
+        originalname: '',
+        encoding: '',
+        mimetype: '',
+        size: 0,
+        stream: new Readable(),
+        destination: '',
+        fieldname: '',
+        path: '',
+        buffer: Buffer.from(''),
+      }
+      const uploadError = new Error('Upload service unavailable')
+      mockAttachmentService.uploadAttachment = jest.fn().mockRejectedValue(uploadError)
+      req.params.fileType = 'licence'
+
+      await expect(controller.uploadFile(req, res, next)).rejects.toBe(uploadError)
+
+      expect(telemetryService.trackEvent).toHaveBeenCalledWith('attachment_upload_failure', {
+        attachmentType: 'LICENCE',
+        reason: 'system_error',
+      })
+    })
+
+    it('does not record a client error as a system upload failure', async () => {
+      req.file = {
+        filename: 'mockfile.jpeg',
+        originalname: '',
+        encoding: '',
+        mimetype: '',
+        size: 0,
+        stream: new Readable(),
+        destination: '',
+        fieldname: '',
+        path: '',
+        buffer: Buffer.from(''),
+      }
+      mockAttachmentService.uploadAttachment = jest
+        .fn()
+        .mockRejectedValue(Object.assign(new Error('Invalid upload'), { status: 400 }))
+      req.params.fileType = 'photo_Id'
+
+      await expect(controller.uploadFile(req, res, next)).rejects.toMatchObject({ status: 400 })
+
+      expect(telemetryService.trackEvent).not.toHaveBeenCalled()
     })
 
     it('Licence upload successful, log audit redirect to have photo page', async () => {

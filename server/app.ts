@@ -5,7 +5,7 @@ import createError from 'http-errors'
 import multer from 'multer'
 import nunjucksSetup from './utils/views/nunjucksSetup'
 import errorHandler from './errorHandler'
-import { appInsightsMiddleware } from './utils/azureAppInsights'
+import { appInsightsMiddleware, appInsightsUserMiddleware } from './utils/azureAppInsights'
 import authorisationMiddleware, { cemoAuthorisedRoles } from './middleware/authorisationMiddleware'
 import setUpAuthentication from './middleware/setUpAuthentication'
 import setUpCsrf from './middleware/setUpCsrf'
@@ -45,6 +45,7 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpCsrf())
   app.use(setUpRenderPdf(new GotenbergClient(config.apis.gotenberg.apiUrl)))
   app.use(setUpCurrentUser(services))
+  app.use(appInsightsUserMiddleware())
 
   app.use(routes(services))
 

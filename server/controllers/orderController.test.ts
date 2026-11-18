@@ -5,6 +5,7 @@ import RestClient from '../data/restClient'
 import { Order, OrderStatusEnum } from '../models/Order'
 import ConfirmationPageViewModel from '../models/view-models/confirmationPage'
 import OrderService from '../services/orderService'
+import type { TelemetryService } from '../services/telemetryService'
 import OrderController from './orderController'
 import SectionService from '../services/sectionsService'
 
@@ -18,6 +19,7 @@ describe('OrderController', () => {
   let mockOrderService: jest.Mocked<OrderService>
   let orderController: OrderController
   let sectionService: jest.Mocked<SectionService>
+  let telemetryService: jest.Mocked<TelemetryService>
 
   beforeEach(() => {
     mockRestClient = new RestClient('cemoApi', {
@@ -30,7 +32,8 @@ describe('OrderController', () => {
     sectionService = {
       getSectionsForOrder: jest.fn().mockReturnValue(Promise.resolve([])),
     } as unknown as jest.Mocked<SectionService>
-    orderController = new OrderController(mockOrderService, sectionService)
+    telemetryService = { trackEvent: jest.fn() } as jest.Mocked<TelemetryService>
+    orderController = new OrderController(mockOrderService, sectionService, telemetryService)
   })
 
   describe('summary', () => {
@@ -341,6 +344,117 @@ describe('OrderController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/submit/success`)
     })
 
+    it('should emit one successful submission event', async () => {
+      // Given
+      telemetryService.trackEvent.mockClear()
+      const mockOrder = getMockOrder()
+      const req = createMockRequest({
+        order: mockOrder,
+        params: {
+          orderId: mockOrder.id,
+        },
+      })
+      const res = createMockResponse()
+      const next = jest.fn()
+      mockOrderService.submitOrder.mockResolvedValue({
+        submitted: true,
+        data: mockOrder,
+      })
+
+      // When
+      await orderController.submit(req, res, next)
+
+      // Then
+      expect(telemetryService.trackEvent).toHaveBeenCalledTimes(1)
+      expect(telemetryService.trackEvent).toHaveBeenCalledWith('order_submission_attempt', {
+        outcome: 'success',
+        orderType: mockOrder.type,
+        durationMs: expect.any(Number),
+      })
+    })
+
+    it('should emit one blocked submission event when the order is already submitted', async () => {
+      // Given
+      telemetryService.trackEvent.mockClear()
+      const mockOrder = getMockOrder()
+      const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
+      const res = createMockResponse()
+      const next = jest.fn()
+      mockOrderService.submitOrder.mockResolvedValue({
+        submitted: false,
+        error: 'This order has already been submitted',
+        type: 'alreadySubmitted',
+      })
+
+      // When
+      await orderController.submit(req, res, next)
+
+      // Then
+      expect(telemetryService.trackEvent).toHaveBeenCalledTimes(1)
+      expect(telemetryService.trackEvent).toHaveBeenCalledWith(
+        'order_submission_attempt',
+        expect.objectContaining({
+          outcome: 'blocked',
+          reason: 'already_submitted',
+          orderType: mockOrder.type,
+          durationMs: expect.any(Number),
+        }),
+      )
+    })
+
+    it.each([
+      { type: 'incomplete' as const, outcome: 'blocked', reason: 'incomplete' },
+      { type: 'errorStatus' as const, outcome: 'failure', reason: 'error_status' },
+      { type: 'partialSuccess' as const, outcome: 'partial_success', reason: 'attachments_to_serco_failed' },
+    ])(
+      'should emit an $outcome event with reason $reason for a $type submission',
+      async ({ type, outcome, reason }) => {
+        const mockOrder = getMockOrder()
+        const req = createMockRequest({ order: mockOrder, flash: jest.fn() })
+        const res = createMockResponse()
+        mockOrderService.submitOrder.mockResolvedValue({
+          submitted: false,
+          error: 'Submission failed',
+          type,
+        })
+
+        await orderController.submit(req, res, jest.fn())
+
+        expect(telemetryService.trackEvent).toHaveBeenCalledWith(
+          'order_submission_attempt',
+          expect.objectContaining({
+            outcome,
+            reason,
+            orderType: mockOrder.type,
+            durationMs: expect.any(Number),
+          }),
+        )
+      },
+    )
+
+    it('should emit a failed submission event when the submission service rejects', async () => {
+      // Given
+      telemetryService.trackEvent.mockClear()
+      const mockOrder = getMockOrder()
+      const req = createMockRequest({ order: mockOrder })
+      const res = createMockResponse()
+      const next = jest.fn()
+      const submissionError = new Error('Submission failed')
+      mockOrderService.submitOrder.mockRejectedValue(submissionError)
+
+      // When
+      await expect(orderController.submit(req, res, next)).rejects.toBe(submissionError)
+
+      // Then
+      expect(telemetryService.trackEvent).toHaveBeenCalledTimes(1)
+      expect(telemetryService.trackEvent).toHaveBeenCalledWith('order_submission_attempt', {
+        outcome: 'failure',
+        reason: 'unexpected_error',
+        orderType: mockOrder.type,
+        durationMs: expect.any(Number),
+      })
+    })
+
     it('should not submit an order with ineligible monitoring conditions', async () => {
       const mockOrder = {
         ...getMockOrder(),
@@ -360,6 +474,13 @@ describe('OrderController', () => {
         'The device wearer has no fixed address so only Alcohol monitoring is allowed.',
       )
       expect(res.redirect).toHaveBeenCalledWith(`/order/${mockOrder.id}/summary`)
+      expect(telemetryService.trackEvent).toHaveBeenCalledTimes(1)
+      expect(telemetryService.trackEvent).toHaveBeenCalledWith('order_submission_attempt', {
+        outcome: 'blocked',
+        reason: 'ineligible_monitoring_conditions',
+        orderType: mockOrder.type,
+        durationMs: expect.any(Number),
+      })
     })
 
     it('should not submit the order and redirect to a failed page for a submitted order', async () => {
