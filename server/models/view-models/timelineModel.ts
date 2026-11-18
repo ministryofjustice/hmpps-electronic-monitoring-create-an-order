@@ -93,9 +93,8 @@ export default class TimelineModel {
   private static getTimelineText = (statusUpdate: StatusUpdate) => {
     switch (statusUpdate.status) {
       case 'CREATED':
-        return 'Order Created'
       case 'VERSION_CREATED':
-        return 'Version Created'
+        return 'Draft'
       case 'SUBMISSION_FAILED':
         return 'Failed to submit'
       default:

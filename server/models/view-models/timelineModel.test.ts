@@ -360,8 +360,8 @@ describe('TimelineModel', () => {
     })
 
     it.each<[StatusUpdate['status'], string]>([
-      ['CREATED', 'Order Created'],
-      ['VERSION_CREATED', 'Version Created'],
+      ['CREATED', 'Draft'],
+      ['VERSION_CREATED', 'Draft'],
       ['SUBMITTED', 'Form submitted'],
       ['SUBMISSION_FAILED', 'Failed to submit'],
       ['ACCEPTED', 'Form accepted'],
@@ -451,7 +451,7 @@ describe('TimelineModel', () => {
 
       const result = TimelineModel.mapToTimelineItems(content, updates)
 
-      expect(result.map(item => item.label.text)).toEqual(['Version Created', 'Form submitted', 'Form returned'])
+      expect(result.map(item => item.label.text)).toEqual(['Draft', 'Form submitted', 'Form returned'])
       expect(result.map(item => item.datetime.timestamp)).toEqual([
         '2026-01-04T09:00:00Z',
         '2026-01-03T10:00:00Z',
