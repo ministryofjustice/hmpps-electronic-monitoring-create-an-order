@@ -227,7 +227,7 @@ context('Order Summary timeline', () => {
       })
       Page.visit(OrderTasksPage, { orderId: mockOrderId })
 
-      expectTimelineTitles(['Version Created', 'Form accepted', 'Form returned'])
+      expectTimelineTitles(['Draft', 'Form accepted', 'Form returned'])
       timelineItem(0).should('contain.text', '5 January 2025 at 9am').and('contain.text', 'Person Two')
       timelineItem(1).should('contain.text', '4 January 2025 at 12pm')
       timelineItem(1).should('contain.text', 'The Electronic Monitoring Service (EMS)')
