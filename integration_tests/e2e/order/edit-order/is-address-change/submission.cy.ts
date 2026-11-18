@@ -5,6 +5,7 @@ import OrderTasksPage from '../../../../pages/order/summary'
 import IsAddressChangePage from './isAddressChangePage'
 import ServiceRequestTypePage from '../../variation/service-request-type/serviceRequestTypePage'
 import NotifyingOrganisationPage from '../../interested-parties/notifying-organisation/notifyingOrganisationPage'
+import mockApiOrder from '../../../../utils/data/ApiOrder'
 
 const mockOrderId = uuidv4()
 const amendPath = '/amend-order'
@@ -14,7 +15,17 @@ context('Edit Order', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
-      cy.task('stubCemoGetOrder', { httpStatus: 200, id: mockOrderId, status: 'SUBMITTED' })
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'SUBMITTED',
+        order: {
+          monitoringConditions: {
+            ...mockApiOrder().monitoringConditions,
+            startDate: '2000-01-01T00:00:00.000Z',
+          },
+        },
+      })
       cy.task('stubCemoSubmitOrder', {
         httpStatus: 200,
         method: 'POST',
