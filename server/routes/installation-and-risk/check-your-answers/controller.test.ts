@@ -109,7 +109,7 @@ describe('InstallationAndRiskCheckAnswersController', () => {
             text: detailsOfInstallationQuestions.otherRisks.text,
           },
           value: {
-            text: 'No',
+            text: '',
           },
           actions: {
             items: [

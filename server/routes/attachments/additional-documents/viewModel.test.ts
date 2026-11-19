@@ -21,6 +21,23 @@ const pastDatedProbationChange = (overrides: Partial<Order> = {}) =>
 const answer = (answers: ReturnType<typeof createViewModel>, key: string) => answers.find(a => a.key.text === key)
 
 describe('additional documents check answers', () => {
+  it('hides change links on a returned order but keeps the document download', () => {
+    const order = pastDatedProbationChange({
+      status: 'REJECTED',
+      isOwner: true,
+      orderParameters: { haveLicence: true, havePhoto: false },
+      additionalDocuments: [licence],
+    })
+
+    const answers = createViewModel(order, content)
+
+    expect(answers.length).toBeGreaterThan(0)
+    expect(answers.every(row => row.actions.items.length === 0)).toBe(true)
+    expect(answers.some(row => row.value.html?.includes(`/order/${order.id}/attachments/licence/licence.pdf`))).toBe(
+      true,
+    )
+  })
+
   describe('past-dated probation change', () => {
     it('shows No and no document when a new document is not needed', () => {
       const order = pastDatedProbationChange({ orderParameters: { haveLicence: false, havePhoto: false } })

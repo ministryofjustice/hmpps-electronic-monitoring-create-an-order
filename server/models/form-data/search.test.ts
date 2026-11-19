@@ -1,8 +1,16 @@
-import { getMockOrderListInformation } from '../../../test/mocks/mockOrder'
+import { getMockOrder, getMockOrderListInformation } from '../../../test/mocks/mockOrder'
 import { OrderStatusEnum, OrderTypeEnum } from '../Order'
-import { constructListViewModel } from './search'
+import { constructListViewModel, constructSearchViewModel } from './search'
 
 describe('constructListViewModel', () => {
+  it('uses the red returned tag type in search results', () => {
+    const order = getMockOrder({ status: 'REJECTED' })
+
+    const model = constructSearchViewModel([order], '')
+
+    expect(model.orders[0]).toMatchObject({ statusTags: [{ text: 'Returned', type: 'RETURNED' }] })
+  })
+
   it('should map an order to a list item', () => {
     const order = getMockOrderListInformation({
       notifyingOrganisation: 'PRISON',

@@ -195,6 +195,7 @@ const createAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOpt
         content.pages.addressList.questions.addAnother.text,
         'Yes',
         paths.POSTCODE_LOOKUP.ADDRESS_LIST.replace(':orderId', order.id),
+        answerOpts,
       ),
     )
     answers.push(
@@ -213,7 +214,7 @@ const createAddressAnswers = (order: Order, content: I18n, answerOpts: AnswerOpt
 
 const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean) => {
   const ignoreActions = {
-    ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' || !order.isOwner,
+    ignoreActions: order.status !== 'IN_PROGRESS' || !order.isOwner,
   }
 
   return {

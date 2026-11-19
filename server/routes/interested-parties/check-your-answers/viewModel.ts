@@ -136,7 +136,7 @@ const createProbationDeliveryUnitAnswer = (order: Order, content: I18n, answerOp
 
 const construct = (order: Order, content: I18n, goToNextSectionNavigation: boolean) => {
   const answerOpts = {
-    ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' || !order.isOwner,
+    ignoreActions: order.status !== 'IN_PROGRESS' || !order.isOwner,
   }
 
   const interestedParties = createInterestedPartiesAnswers(order, content, answerOpts)

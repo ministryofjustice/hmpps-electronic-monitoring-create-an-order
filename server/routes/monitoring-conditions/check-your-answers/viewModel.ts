@@ -532,7 +532,7 @@ const createInstallationAppointmentAnswer = (order: Order, content: I18n, answer
 
 const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean) => {
   const ignoreActions = {
-    ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' || !order.isOwner,
+    ignoreActions: order.status !== 'IN_PROGRESS' || !order.isOwner,
   }
   return {
     monitoringConditions: createMonitoringOrderTypeDescriptionAnswers(order, content, ignoreActions),

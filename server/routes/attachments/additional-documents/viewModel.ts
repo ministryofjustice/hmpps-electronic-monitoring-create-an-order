@@ -19,7 +19,7 @@ const asksForNewDocument = (order: Order) =>
 const createViewModel = (order: Order, content: I18n | undefined) => {
   const licence = order.additionalDocuments.find(x => x.fileType === AttachmentType.LICENCE)
   const photo = order.additionalDocuments.find(x => x.fileType === AttachmentType.PHOTO_ID)
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' || !order.isOwner }
+  const answerOpts = { ignoreActions: order.status !== 'IN_PROGRESS' || !order.isOwner }
   const sectionIsOptional = hasOptionalVariationSectionIsHOCourt(order)
   const answers = []
   const isCourtOrder = (notifyingOrganisationCourts as readonly string[]).includes(
@@ -94,7 +94,7 @@ export default createViewModel
 function createAttachmentAnswer(attachment: Attachment | undefined, text: string, uri: string, order: Order) {
   return createAnswer(text, createFileNameLink(attachment, order.id), uri, {
     valueType: 'html',
-    ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' || !order.isOwner,
+    ignoreActions: order.status !== 'IN_PROGRESS' || !order.isOwner,
   })
 }
 

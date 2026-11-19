@@ -42,7 +42,7 @@ const constructFromOrder = (order: Order): OffenceOtherInfoViewModel => {
 
   return {
     hasOtherInformation: {
-      value: '',
+      value: order.offenceAdditionalDetails?.id ? 'no' : '',
     },
     otherInformationDetails: {
       value: '',

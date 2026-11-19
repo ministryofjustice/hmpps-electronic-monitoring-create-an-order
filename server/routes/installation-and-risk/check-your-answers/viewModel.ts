@@ -13,7 +13,7 @@ import { lookup } from '../../../utils/views/displayHelpers'
 const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation: boolean, uri: string = '') => {
   const { questions } = content.pages.installationAndRisk
 
-  const answerOpts = { ignoreActions: order.status === 'SUBMITTED' || order.status === 'ERROR' || !order.isOwner }
+  const answerOpts = { ignoreActions: order.status !== 'IN_PROGRESS' || !order.isOwner }
   const offenceAnswers = []
   const riskAnswers = []
 
@@ -29,6 +29,10 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
 
   if (isNewOffenceFlow) {
     if (riskInformationFlow.pages.includes(riskInformationPages.offence)) {
+      let offenceOtherInformation = order.offenceAdditionalDetails?.id ? 'No' : ''
+      if (order.offenceAdditionalDetails?.additionalDetails?.trim()) {
+        offenceOtherInformation = order.offenceAdditionalDetails.additionalDetails
+      }
       offenceAnswers.push(
         createMultipleChoiceAnswer(
           questions.offence.text,
@@ -40,7 +44,7 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
       offenceAnswers.push(
         createAnswer(
           'Any other information to be aware of about the offence committed?',
-          order.offenceAdditionalDetails?.additionalDetails || '',
+          offenceOtherInformation,
           paths.INSTALLATION_AND_RISK.OFFENCE_OTHER_INFO.replace(':orderId', order.id),
           answerOpts,
         ),
@@ -72,11 +76,11 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
   let genderRiskDetailsFromOrder
   let riskDetailsFromOrder
   if (isOrderDataDictionarySameOrAbove('DDV6', order)) {
-    riskCategoriesFromOrder = order.detailsOfInstallation?.riskCategory || []
+    riskCategoriesFromOrder = order.detailsOfInstallation?.riskCategory
     genderRiskDetailsFromOrder = order.detailsOfInstallation?.genderRiskDetails
     riskDetailsFromOrder = order.detailsOfInstallation?.riskDetails
   } else {
-    riskCategoriesFromOrder = order.installationAndRisk?.riskCategory || []
+    riskCategoriesFromOrder = order.installationAndRisk?.riskCategory
     riskDetailsFromOrder = order.installationAndRisk?.riskDetails
   }
 
@@ -116,10 +120,15 @@ const createViewModel = (order: Order, content: I18n, goToNextSectionNavigation:
     ),
   )
 
+  let otherRisksAnswer = riskCategoriesFromOrder != null ? 'No' : ''
+  if (riskDetailsFromOrder?.trim()) {
+    otherRisksAnswer = riskDetailsFromOrder
+  }
+
   riskAnswers.push(
     createAnswer(
       content.pages.detailsOfInstallation.questions.otherRisks.text,
-      riskDetailsFromOrder || 'No',
+      otherRisksAnswer,
       paths.INSTALLATION_AND_RISK.OTHER_RISKS.replace(':orderId', order.id),
       answerOpts,
     ),

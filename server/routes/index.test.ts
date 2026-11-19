@@ -1,7 +1,7 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import { v4 as uuidv4 } from 'uuid'
-import { getMockOrder, getMockSubmittedOrder } from '../../test/mocks/mockOrder'
+import { createAddress, getMockOrder, getMockSubmittedOrder } from '../../test/mocks/mockOrder'
 import HmppsAuditClient from '../data/hmppsAuditClient'
 import RestClient from '../data/restClient'
 import { SanitisedError } from '../sanitisedError'
@@ -15,6 +15,7 @@ import OrderChecklistService from '../services/orderChecklistService'
 import OrderChecklistModel from '../models/OrderChecklist'
 import SectionsService from '../services/sectionsService'
 import DeviceWearerSearchResultsService from './about-the-device-wearer/device-wearer-search-results/service'
+import paths from '../constants/paths'
 
 jest.mock('../services/auditService')
 jest.mock('../services/orderService')
@@ -161,6 +162,17 @@ describe('authorised user', () => {
   })
 
   describe('GET /search', () => {
+    it('renders returned orders with a red tag', () => {
+      orderSearchService.searchOrders.mockResolvedValue([getMockOrder({ status: 'REJECTED' })])
+
+      return request(app)
+        .get('/search?searchTerm=Returned')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toMatch(/govuk-tag--red[^>]*>Returned<\/strong>/)
+        })
+    })
+
     it('should render order search page', () => {
       auditService.logPageView.mockResolvedValue()
       orderSearchService.searchOrders.mockResolvedValue([mockSubmittedOrder])
@@ -185,6 +197,34 @@ describe('authorised user', () => {
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('Electronic Monitoring application form')
+        })
+    })
+  })
+
+  describe('viewing returned order sections', () => {
+    it.each([
+      paths.ABOUT_THE_DEVICE_WEARER.CHECK_YOUR_ANSWERS,
+      paths.CONTACT_INFORMATION.CHECK_YOUR_ANSWERS,
+      paths.INTEREST_PARTIES.CHECK_YOUR_ANSWERS,
+      paths.INSTALLATION_AND_RISK.CHECK_YOUR_ANSWERS,
+      paths.MONITORING_CONDITIONS.CHECK_YOUR_ANSWERS,
+    ])('does not render change or delete links on %s', async path => {
+      const order = getMockOrder({
+        status: 'REJECTED',
+        isOwner: true,
+        addresses: [
+          createAddress({ addressType: 'PRIMARY', addressLine1: 'First address' }),
+          createAddress({ addressType: 'SECONDARY', addressLine1: 'Second address' }),
+        ],
+      })
+      orderService.getOrder.mockResolvedValue(order)
+      sectionService.checkBlankVariationOrNewOrder.mockResolvedValue(false)
+
+      await request(app)
+        .get(path.replace(':orderId', order.id))
+        .expect(200)
+        .expect(res => {
+          expect(res.text).not.toMatch(/>\s*(Change|Delete)\s*(<span|<\/a>)/)
         })
     })
   })

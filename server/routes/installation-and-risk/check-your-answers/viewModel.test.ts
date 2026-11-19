@@ -13,6 +13,62 @@ describe('risk information check answers view model', () => {
     jest.restoreAllMocks()
   })
 
+  it.each(['SUBMITTED', 'ERROR', 'REJECTED'] as const)('hides change links for %s orders', status => {
+    const order = getMockOrder({ status, isOwner: true, dataDictionaryVersion: 'DDV6' })
+
+    const model = createViewModel(order, getContent('en', 'DDV6'), false)
+
+    expect(model.riskInformation.length).toBeGreaterThan(0)
+    expect(model.riskInformation.every(answer => answer.actions.items.length === 0)).toBe(true)
+  })
+
+  it('hides change links for drafts owned by another user', () => {
+    const order = getMockOrder({ status: 'IN_PROGRESS', isOwner: false, dataDictionaryVersion: 'DDV6' })
+
+    const model = createViewModel(order, getContent('en', 'DDV6'), false)
+
+    expect(model.riskInformation.every(answer => answer.actions.items.length === 0)).toBe(true)
+  })
+
+  it('shows explicit negative risk selections', () => {
+    const order = getMockOrder({
+      dataDictionaryVersion: 'DDV6',
+      detailsOfInstallation: { riskCategory: ['NO_RISK', 'NO_RISK_AT_ADDRESS'], riskDetails: '' },
+    })
+
+    const model = createViewModel(order, getContent('en', 'DDV6'), true)
+
+    expect(model.riskInformation[0].value.html).toBe('There are no risks that the installer should be aware of')
+    expect(model.riskInformation[1].value.html).toBe('No risk at the address')
+    expect(model.riskInformation[2].value.text).toBe('No')
+  })
+
+  it.each(['saved-offence-details-id', undefined])(
+    'displays No only for a saved empty offence-details answer (id=%s)',
+    id => {
+      const order = getMockOrder({
+        dataDictionaryVersion: 'DDV6',
+        offenceAdditionalDetails: { id, additionalDetails: '' },
+      })
+
+      const model = createViewModel(order, getContent('en', 'DDV6'), true)
+      const row = model.riskInformation.find(
+        answer => answer.key.text === 'Any other information to be aware of about the offence committed?',
+      )
+
+      expect(row?.value.text).toBe(id ? 'No' : '')
+    },
+  )
+
+  it('leaves unanswered other risks blank', () => {
+    const order = getMockOrder({ dataDictionaryVersion: 'DDV6', detailsOfInstallation: null })
+
+    const model = createViewModel(order, getContent('en', 'DDV6'), true)
+    const row = model.riskInformation.find(answer => answer.key.text === 'Are there other risks to be aware of?')
+
+    expect(row?.value.text).toBe('')
+  })
+
   it('shows only the questions asked for a court order', () => {
     const order = getMockOrder({
       dataDictionaryVersion: 'DDV6',
