@@ -7,6 +7,7 @@ import hasOptionalVariationSectionIsHOCourt from '../utils/order/optionalVariati
 import { isNotNullOrEmptyString } from '../utils/values'
 import getIneligibleMonitoringConditionsErrors from '../utils/order/ineligibleMonitoringConditions'
 import { Cohort } from '../models/UserCohort'
+import paths from '../constants/paths'
 
 export const SECTIONS = {
   interestedParties: 'ABOUT_THE_NOTIFYING_AND_RESPONSIBLE_ORGANISATIONS',
@@ -116,13 +117,18 @@ export default class SectionService {
       path = this.taskListService.getNextTaskPath(sectionTasks, order.id, versionId)
     }
 
+    const hasProblem =
+      sectionName === SECTIONS.electronicMonitoringCondition &&
+      getIneligibleMonitoringConditionsErrors(order).length > 0
+
+    if (hasProblem && order.status === 'IN_PROGRESS') {
+      path = paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', order.id)
+    }
     return {
       name: sectionName,
       completed,
       checked: checkList[sectionName],
-      hasProblem:
-        sectionName === SECTIONS.electronicMonitoringCondition &&
-        getIneligibleMonitoringConditionsErrors(order).length > 0,
+      hasProblem,
       path,
       isReady: this.isSectionReady(sectionName, tasks, order),
     }

@@ -10,6 +10,7 @@ import ResponsibleOfficerPage from '../interested-parties/responsible-officer/re
 import InterestedPartiesCheckYourAnswersPage from '../interested-parties/check-your-answers/interestedPartiesCheckYourAnswersPage'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import versionInformation from './summary-helpers'
+import TypesOfMonitoringNeededPage from '../monitoring-conditions/order-type-description/types-of-monitoring-needed/TypesOfMonitoringNeededPage'
 
 const mockOrderId = uuidv4()
 
@@ -757,7 +758,7 @@ context('Order Summary', () => {
       cy.signIn()
     })
 
-    it('should show a problem and block submit when monitoring conditions are ineligible', () => {
+    it('should show a problem and block submit when monitoring conditions are ineligible and should link to type of monitoring needed page', () => {
       cy.task('stubCemoGetOrder', {
         ...completeOrderStub,
         order: {
@@ -770,6 +771,9 @@ context('Order Summary', () => {
 
       page.electronicMonitoringTask.shouldHaveStatus('There is a problem')
       page.submitOrderButton.should('be.disabled')
+
+      page.electronicMonitoringTask.click()
+      Page.verifyOnPage(TypesOfMonitoringNeededPage)
     })
 
     it('should display all tasks as incomplete or unable to start for a new variation', () => {
