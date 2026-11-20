@@ -43,20 +43,17 @@
       const select = document.getElementById('{{ params.id }}')
       accessibleAutocomplete.enhanceSelectElement({
         defaultValue: "",
-        selectElement: document.querySelector('#{{ params.id }}'),
+        selectElement: select,
         inputClasses: 'govuk-input{{" govuk-input--error" if errorMessage}}',
         id: '{{ params.id }}'
       })
+      const input = document.getElementById('{{ params.id }}')
       // Clearing the input doesn't reset the underlying select, so the previous value would still be submitted
-      document.querySelector('input#{{ params.id }}').addEventListener('input', function (event) {
+      input.addEventListener('input', function (event) {
         if (!event.target.value) {
-          document.querySelector('#{{ params.id }}-select').value = ''
+          select.value = ''
         }
       })
-      {% if params.disabled %}
-        document.querySelector('input#{{ params.id }}').disabled = true
-      {% endif %}
-      const input = document.getElementById('{{ params.id }}')
       if (select.hasAttribute('aria-invalid')) {
         input.setAttribute('aria-invalid', select.getAttribute('aria-invalid'))
       }

@@ -80,6 +80,7 @@ describe('accessible autocomplete template', () => {
     const input = {
       getAttribute: (name: string) => attributes.get(name) ?? null,
       setAttribute: jest.fn((name: string, value: string) => attributes.set(name, value)),
+      addEventListener: jest.fn(),
     }
     const select = {
       hasAttribute: (name: string) => name === 'aria-invalid',
