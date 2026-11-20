@@ -48,6 +48,12 @@
         id: '{{ params.id }}'
       })
       const input = document.getElementById('{{ params.id }}')
+      // Clearing the input doesn't reset the underlying select, so the previous value would still be submitted
+      input.addEventListener('input', function (event) {
+        if (!event.target.value) {
+          select.value = ''
+        }
+      })
       if (select.hasAttribute('aria-invalid')) {
         input.setAttribute('aria-invalid', select.getAttribute('aria-invalid'))
       }

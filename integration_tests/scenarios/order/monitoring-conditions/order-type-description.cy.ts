@@ -450,7 +450,7 @@ context('Order type descriptions', () => {
     }
 
     const installationAppointment = {
-      placeName: 'mock prison',
+      placeName: 'Sudbury Prison',
       appointmentDate: new Date(new Date(Date.now() + 1000 * 60 * 60 * 24 * 15).setHours(13, 0, 0, 0)),
     }
 

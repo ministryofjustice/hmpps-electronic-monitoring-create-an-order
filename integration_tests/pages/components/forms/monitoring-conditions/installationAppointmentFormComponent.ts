@@ -17,6 +17,11 @@ export default class InstallationAppointmentFormComponent extends FormComponent 
     return new FormInputComponent(this.form, label)
   }
 
+  get prisonNameField(): FormInputComponent {
+    const label = 'What is the name of the prison where installation will take place?'
+    return new FormInputComponent(this.form, label)
+  }
+
   get appointmentDateField(): FormDateTimeComponent {
     return new FormDateTimeComponent(this.form, 'appointmentDate')
   }
@@ -29,8 +34,10 @@ export default class InstallationAppointmentFormComponent extends FormComponent 
   }
   // FORM HELPERS
 
-  fillInWith(profile: InstallationAppointmentFormData): void {
-    if (profile.placeName) {
+  fillInWith(profile: InstallationAppointmentFormData, installationLocation?: string): void {
+    if (profile.placeName && installationLocation === 'PRISON') {
+      this.prisonNameField.set(profile.placeName)
+    } else if (profile.placeName) {
       this.placeNameField.set(profile.placeName)
     }
 

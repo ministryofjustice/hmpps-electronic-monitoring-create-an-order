@@ -114,6 +114,7 @@ interface ValidationErrors {
   }
   installationAppointment: {
     placeNameRequired: string
+    placeNameInvalidPrison: string
     appointmentDate: DateTimeErrorMessages
     appointmentTimeDetailsRequired: string
     appointmentTimeDetailsTooLong: string
@@ -387,6 +388,7 @@ const validationErrors: ValidationErrors = {
   },
   installationAppointment: {
     placeNameRequired: 'Enter name of the place where installation takes place',
+    placeNameInvalidPrison: 'Select the name of the prison from the list',
     appointmentDate: {
       date: {
         mustBeReal: 'Date of installation must be a real date',
