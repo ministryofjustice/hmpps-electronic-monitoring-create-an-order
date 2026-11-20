@@ -85,7 +85,7 @@ context('Monitoring conditions', () => {
         page.returnBackToFormSectionMenuButton
           .should('exist')
           .should('have.attr', 'href', `/order/${mockOrderId}/summary`)
-        page.form.prisonNameField.shouldHaveValue('Altcourse Prison')
+        page.form.prisonNameField.element.find('option:selected').should('have.text', 'Altcourse Prison')
         page.form.appointmentDateField.shouldHaveValue(new Date(2025, 0, 1, 10, 0, 0))
         page.form.prisonNameField.shouldBeDisabled()
         page.errorSummary.shouldNotExist()
