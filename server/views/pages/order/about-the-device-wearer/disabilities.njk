@@ -1,0 +1,39 @@
+{% extends "../../../partials/form-layout.njk" %}
+
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+
+{% set section = content.pages.deviceWearer.section %}
+{% set heading = '' %}
+{% set questionName = content.pages.deviceWearer.questions.disabilities.text %}
+{% set singleQuestionPage = true %}
+
+{% block formInputs %}
+  {% set disabilityHint %}
+    <p class="govuk-!-margin-top-0">{{ content.pages.deviceWearer.disabilitiesHelpText }}</p>
+    <p class="govuk-!-margin-bottom-0">{{ content.pages.deviceWearer.questions.disabilities.hint }}</p>
+  {% endset %}
+
+  {% set disabilityOptions = content.reference.disabilities
+    | toOptions(not isOrderEditable)
+    | removeOptions(['PREFER_NOT_TO_SAY'])
+    | exclusiveOptions(['NO_LISTED_CONDITION', 'NONE']) %}
+
+  {{ govukCheckboxes({
+    name: "disabilities",
+    classes: "govuk-checkboxes--small app-disabilities-checkboxes",
+    fieldset: {
+      legend: {
+        text: content.pages.deviceWearer.questions.disabilities.text,
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
+      }
+    },
+    hint: {
+      html: disabilityHint
+    },
+    items: disabilityOptions,
+    values: disabilities.values,
+    errorMessage: disabilities.error,
+    disabled: not isOrderEditable
+  }) }}
+{% endblock %}
