@@ -99,6 +99,67 @@ describe('DeviceWearerCheckAnswersController', () => {
     )
   })
 
+  it('should not display an old number if the saved answer is no', async () => {
+    // Given
+    const order = getMockOrder({
+      contactDetails: { phoneNumberAvailable: false, contactNumber: '07911123456' },
+    })
+    const req = createMockRequest({ order })
+    const res = createMockResponse()
+    const next = jest.fn()
+
+    // When
+    await controller.view(req, res, next)
+
+    // Then
+    expect(res.render).toHaveBeenCalledWith(
+      'pages/order/about-the-device-wearer/check-your-answers',
+      expect.objectContaining({
+        contactDetails: expect.arrayContaining([
+          expect.objectContaining({
+            key: { text: 'Does the device wearer have a contact telephone number?' },
+            value: { text: 'No' },
+          }),
+          expect.objectContaining({
+            key: { text: "What is the device wearer's telephone number?" },
+            value: { text: '' },
+          }),
+        ]),
+      }),
+    )
+  })
+
+  it('should display the saved number on a submitted order when yes is selected', async () => {
+    // Given
+    const order = getMockOrder({
+      status: 'SUBMITTED',
+      contactDetails: { phoneNumberAvailable: true, contactNumber: '07911123456' },
+    })
+    const req = createMockRequest({ order })
+    const res = createMockResponse()
+    const next = jest.fn()
+
+    // When
+    await controller.view(req, res, next)
+
+    // Then
+    expect(res.render).toHaveBeenCalledWith(
+      'pages/order/about-the-device-wearer/check-your-answers',
+      expect.objectContaining({
+        contactDetails: expect.arrayContaining([
+          expect.objectContaining({
+            key: { text: 'Does the device wearer have a contact telephone number?' },
+            value: { text: 'Yes' },
+          }),
+          expect.objectContaining({
+            key: { text: "What is the device wearer's telephone number?" },
+            value: { text: '07911123456' },
+          }),
+        ]),
+      }),
+    )
+  })
+
   it('should render the check answers page without any answers completed', async () => {
     // Given
     const order = getMockOrder()

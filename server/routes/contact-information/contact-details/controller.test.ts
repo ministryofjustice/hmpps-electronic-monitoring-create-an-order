@@ -73,6 +73,23 @@ describe('ContactDetailsController', () => {
       )
     })
 
+    it('should not show a previous saved number when no is selected', async () => {
+      // Given
+      const mockOrder = getMockOrder({ contactDetails: { contactNumber: '07911123456', phoneNumberAvailable: false } })
+      const req = createMockRequest({ order: mockOrder, flash: jest.fn().mockReturnValue([]) })
+      const res = createMockResponse()
+      const next = jest.fn()
+
+      // When
+      await contactDetailsController.view(req, res, next)
+
+      // Then
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/order/contact-information/contact-details',
+        expect.objectContaining({ contactNumber: { value: '' } }),
+      )
+    })
+
     it('should render the form using submitted data when there are validation errors', async () => {
       // Given
       const mockOrder = getMockOrder({ contactDetails: { contactNumber: '01234567890', phoneNumberAvailable: true } })
