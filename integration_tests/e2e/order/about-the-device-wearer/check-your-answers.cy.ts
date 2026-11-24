@@ -752,6 +752,8 @@ context('Device wearer - check your answers', () => {
   })
 
   context('Device wearer inputs contact number then changes answer', () => {
+    const mockVersionId = uuidv4()
+
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
@@ -810,6 +812,7 @@ context('Device wearer - check your answers', () => {
       contactNumberPage.form.contactNumberAvailableField.set('Yes')
       contactNumberPage.form.contactNumberField.set('01234567890')
       contactNumberPage.form.saveAsDraftButton.click()
+      Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
 
       cy.task('stubCemoVerifyRequestReceived', {
         uri: `/orders/${mockOrderId}${apiPath}`,
@@ -836,6 +839,8 @@ context('Device wearer - check your answers', () => {
 
       savedContactNumberPage.form.contactNumberAvailableField.set('No')
       savedContactNumberPage.form.saveAsDraftButton.click()
+
+      Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
 
       cy.task('getStubbedRequest', `/orders/${mockOrderId}/contact-details`).then(requests => {
         expect(requests).to.have.length(2)
