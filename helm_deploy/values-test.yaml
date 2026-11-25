@@ -1,0 +1,32 @@
+---
+# Per environment values which override defaults in hmpps-electronic-monitoring-create-an-order/values.yaml
+
+generic-service:
+  replicaCount: 2
+
+  ingress:
+    host: hmpps-electronic-monitoring-create-an-order-dev.hmpps.service.justice.gov.uk
+
+  env:
+    INGRESS_URL: "https://hmpps-electronic-monitoring-create-an-order-dev.hmpps.service.justice.gov.uk"
+    HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
+    TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
+    CEMO_API_URL: "https://hmpps-electronic-monitoring-create-an-order-api-dev.hmpps.service.justice.gov.uk"
+    ENVIRONMENT_NAME: DEV
+    AUDIT_ENABLED: "false"
+    DOWNLOAD_FMS_REQUEST_JSON_ENABLED: "true"
+    TAG_AT_SOURCE_PILOT_PRISONS: "PETERBOROUGH_PRISON,FOSSE_WAY_PRISON,SUDBURY_PRISON,RANBY_PRISON,SWANSEA_PRISON,CARDIFF_PRISON"
+    OS_DATA_HUB_API_URL: "https://api.os.uk"
+    SENTENCING_ACT_ENABLED: "true"
+    CVL_INTEGRATION_ENABLED: "true"
+
+  allowlist:
+    home-office-vpn-1: 52.56.62.128/25
+    groups:
+      - digital_staff_and_mojo
+      - moj_cloud_platform
+      - home_office
+
+
+generic-prometheus-alerts:
+  alertSeverity: hmpps-ems-cemo-ui-dev

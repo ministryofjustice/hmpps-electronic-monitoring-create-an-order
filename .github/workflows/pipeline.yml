@@ -78,6 +78,18 @@ jobs:
       environment: 'dev'
       app_version: '${{ needs.build.outputs.app_version }}'
       helm_timeout: '5m'
+  deploy_test:
+    name: Deploy to the test environment
+    if: github.ref != 'refs/heads/main'
+    needs:
+    - build
+    - helm_lint
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
+    secrets: inherit
+    with:
+      environment: 'test'
+      app_version: '${{ needs.build.outputs.app_version }}'
+      helm_timeout: '5m'
   deploy_preprod:
     name: Deploy to the preprod environment
     if: github.ref == 'refs/heads/main'
