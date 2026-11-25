@@ -5,7 +5,7 @@ generic-service:
   replicaCount: 2
 
   ingress:
-    host: hmpps-electronic-monitoring-create-an-order-dev.hmpps.service.justice.gov.uk
+    host: hmpps-electronic-monitoring-create-an-order-test.hmpps.service.justice.gov.uk
 
   env:
     INGRESS_URL: "https://hmpps-electronic-monitoring-create-an-order-dev.hmpps.service.justice.gov.uk"
