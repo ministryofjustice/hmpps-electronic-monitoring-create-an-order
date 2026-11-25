@@ -29,7 +29,7 @@ const constructFromEntity = (contactDetails: ContactDetails): ContactDetailsView
   if (contactDetails) {
     return {
       contactNumber: {
-        value: contactDetails.contactNumber ?? '',
+        value: contactDetails.phoneNumberAvailable === false ? '' : (contactDetails.contactNumber ?? ''),
       },
       phoneNumberAvailable: {
         value: convertBooleanToEnum(contactDetails.phoneNumberAvailable, '', 'true', 'false'),

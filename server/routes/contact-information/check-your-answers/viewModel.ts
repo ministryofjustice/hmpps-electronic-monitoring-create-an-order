@@ -23,7 +23,7 @@ const createContactDetailsAnswers = (order: Order, content: I18n, answerOpts: An
     ),
     createAnswer(
       content.pages.contactDetails.questions.contactNumber.text,
-      order.contactDetails?.contactNumber,
+      order.contactDetails?.phoneNumberAvailable === false ? null : order.contactDetails?.contactNumber,
       uri,
       answerOpts,
     ),

@@ -28,6 +28,10 @@ export const ContactDetailsFormDataValidator = z
       }
     }
   })
+  .transform(data => ({
+    ...data,
+    contactNumber: data.phoneNumberAvailable === 'false' ? null : data.contactNumber,
+  }))
 
 export type ContactDetailsFormData = Omit<z.infer<typeof ContactDetailsFormDataModel>, 'action'>
 

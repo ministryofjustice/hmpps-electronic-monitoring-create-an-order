@@ -24,6 +24,29 @@ const responsibleAdultQuestionRow = (
 }
 
 describe('device wearer check your answers view model', () => {
+  it('does not display an old number if the saved answer is No', () => {
+    const order = getMockOrder({
+      contactDetails: { phoneNumberAvailable: false, contactNumber: '07911123456' },
+    })
+
+    const rows = createViewModel(order, getContent('en', 'DDV5'), true).contactDetails
+    const numberAnswer = rows.find(answer => answer.key.text === "What is the device wearer's telephone number?")
+
+    expect(numberAnswer?.value).toEqual({ text: '' })
+  })
+
+  it('displays the saved number on a submitted order if the answer is Yes', () => {
+    const order = getMockOrder({
+      status: 'SUBMITTED',
+      contactDetails: { phoneNumberAvailable: true, contactNumber: '07911123456' },
+    })
+
+    const rows = createViewModel(order, getContent('en', 'DDV5'), true).contactDetails
+    const numberAnswer = rows.find(answer => answer.key.text === "What is the device wearer's telephone number?")
+
+    expect(numberAnswer?.value).toEqual({ text: '07911123456' })
+  })
+
   it.each([undefined, null, '', '   '])('does not show an empty unlisted description: %p', otherDisability => {
     const order = getMockOrder({
       deviceWearer: createDeviceWearer({ disabilities: ['OTHER'], otherDisability }),

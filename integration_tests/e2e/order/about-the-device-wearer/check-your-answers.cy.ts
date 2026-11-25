@@ -4,9 +4,11 @@ import Page from '../../../pages/page'
 import CheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import OrderTasksPage from '../../../pages/order/summary'
 import { NotifyingOrganisation } from '../../../../server/models/NotifyingOrganisation'
+import ContactDetailsPage from '../../../pages/order/contact-information/contact-details'
 
 const mockOrderId = uuidv4()
 const pagePath = '/about-the-device-wearer/check-your-answers'
+const apiPath = '/contact-details'
 
 const identityNumberLabels = {
   nomisId: 'Prison number',
@@ -746,6 +748,124 @@ context('Device wearer - check your answers', () => {
         { key: "What is the responsible adult's full name?", value: 'Audrey Taylor' },
         { key: "What is the responsible adult's telephone number? (optional)", value: '07101 123 456' },
       ])
+    })
+  })
+
+  context('Device wearer inputs contact number then changes answer', () => {
+    const mockVersionId = uuidv4()
+
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubSignIn', { name: 'john smith', roles: ['ROLE_EM_CEMO__CREATE_ORDER'] })
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: { interestedParties: { notifyingOrganisation: 'PRISON' } },
+      })
+      cy.signIn()
+    })
+
+    const pageHeading = 'Check your answers'
+
+    it('should not show contact number if entered initially but then selected no', () => {
+      const order = {
+        dataDictionaryVersion: 'DDV5',
+        contactDetails: {
+          contactNumber: '01234567890',
+          phoneNumberAvailable: true,
+        },
+        deviceWearer: {
+          nomisId: 'nomis',
+          pncId: 'pnc',
+          deliusId: 'delius',
+          prisonNumber: 'prison',
+          homeOfficeReferenceNumber: '',
+          complianceAndEnforcementPersonReference: 'cepr',
+          courtCaseReferenceNumber: 'ccrn',
+          firstName: 'test',
+          lastName: 'tester',
+          alias: 'tes',
+          dateOfBirth: '2000-01-01T00:00:00Z',
+          adultAtTimeOfInstallation: true,
+          sex: 'MALE',
+          gender: 'MALE',
+          disabilities: 'MENTAL_HEALTH',
+          otherDisability: null,
+          noFixedAbode: true,
+          interpreterRequired: false,
+        },
+      }
+
+      cy.task('stubCemoSubmitOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        subPath: apiPath,
+        response: {
+          contactNumber: '01234567890',
+          phoneNumberAvailable: true,
+        },
+      })
+
+      const contactNumberPage = Page.visit(ContactDetailsPage, { orderId: mockOrderId })
+      contactNumberPage.form.contactNumberAvailableField.set('Yes')
+      contactNumberPage.form.contactNumberField.set('01234567890')
+      contactNumberPage.form.saveAsDraftButton.click()
+      Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
+
+      cy.task('stubCemoVerifyRequestReceived', {
+        uri: `/orders/${mockOrderId}${apiPath}`,
+        body: { phoneNumberAvailable: 'true', contactNumber: '01234567890' },
+      }).should('be.true')
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order,
+      })
+
+      const savedContactNumberPage = Page.visit(ContactDetailsPage, { orderId: mockOrderId })
+      savedContactNumberPage.form.contactNumberAvailableField.shouldHaveValue('Yes')
+      savedContactNumberPage.form.contactNumberField.shouldHaveValue('01234567890')
+
+      cy.task('stubCemoSubmitOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        subPath: '/contact-details',
+        response: { phoneNumberAvailable: false, contactNumber: null },
+      })
+
+      savedContactNumberPage.form.contactNumberAvailableField.set('No')
+      savedContactNumberPage.form.saveAsDraftButton.click()
+
+      Page.verifyOnPage(OrderTasksPage, { orderId: mockOrderId, versionId: mockVersionId }, {}, true)
+
+      cy.task('getStubbedRequest', `/orders/${mockOrderId}/contact-details`).then(requests => {
+        expect(requests).to.have.length(2)
+        expect(requests).to.deep.include({ phoneNumberAvailable: 'false', contactNumber: null })
+      })
+
+      cy.task('stubCemoGetOrder', {
+        httpStatus: 200,
+        id: mockOrderId,
+        status: 'IN_PROGRESS',
+        order: { ...order, contactDetails: { phoneNumberAvailable: false, contactNumber: null } },
+      })
+
+      const page = Page.visit(CheckYourAnswersPage, { orderId: mockOrderId }, {}, pageHeading)
+
+      page.contactDetailsSection.shouldExist()
+      page.contactDetailsSection.shouldHaveItems([
+        { key: 'Does the device wearer have a contact telephone number?', value: 'No' },
+        { key: "What is the device wearer's telephone number?", value: '' },
+      ])
+      page.contactDetailsSection.list
+        .contains('.govuk-summary-list__key', "What is the device wearer's telephone number?")
+        .siblings('.govuk-summary-list__value')
+        .invoke('text')
+        .should('match', /^\s*$/)
     })
   })
 
