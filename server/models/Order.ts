@@ -76,6 +76,7 @@ const OrderModel = z.object({
   isOwner: z.boolean().default(true),
   isSentencingAct: z.boolean().nullable().optional(),
   statusUpdates: z.array(StatusUpdateModel).nullable().optional(),
+  riskCheck: z.string().nullable().optional(),
 })
 
 export type Order = z.infer<typeof OrderModel>

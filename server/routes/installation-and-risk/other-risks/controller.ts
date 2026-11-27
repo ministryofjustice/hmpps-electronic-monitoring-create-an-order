@@ -40,6 +40,8 @@ export default class OtherRisksController {
     }
 
     await this.riskAtInstallationService.saveOtherRisks(order, validation.data)
+    // This flag change ensures that users do not have to do a full risk check everytime they load the page
+    await this.riskAtInstallationService.saveRiskCheck(order, { riskCheck: 'NO' })
 
     await continueRiskAtInstallation(req, res, this.riskAtInstallationService, this.taskListService, otherRisksPath)
   }

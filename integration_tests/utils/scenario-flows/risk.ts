@@ -1,19 +1,30 @@
 import Page from '../../pages/page'
 import OrderTasksPage from '../../pages/order/summary'
 import InstallationAndRiskCheckYourAnswersPage from '../../pages/order/installation-and-risk/check-your-answers'
+import InstallationAndRiskCheckRiskPage from '../../pages/order/installation-and-risk/check-risk'
 import OffencePage from '../../e2e/order/access-needs-installation-risk/offences/offence/offencePage'
 import OffenceOtherInfoPage from '../../e2e/order/access-needs-installation-risk/offences/offence-other-info/offenceOtherInfoPage'
 import IsMappaPage from '../../e2e/order/access-needs-installation-risk/is-mappa/IsMappaPage'
 import { fillInNewDeviceWearerWith } from './general-order-details'
 import fillInRiskAtInstallationWith from './risk-at-installation.cy'
 
-export function fillInInstallationAndRiskWith({ installationAndRisk, interestedParties }): void {
+export function fillInInstallationAndRiskWith({
+  installationAndRisk,
+  interestedParties,
+  isVariationOrder = false,
+}): void {
   if (!installationAndRisk) {
     return
   }
 
   const { notifyingOrganisation } = interestedParties
   const isCourt = notifyingOrganisation?.includes('Court')
+
+  if (isVariationOrder && notifyingOrganisation === 'PROBATION') {
+    const checkRiskPage = Page.verifyOnPage(InstallationAndRiskCheckRiskPage)
+    checkRiskPage.form.fillInWith('Yes')
+    checkRiskPage.form.continueButton.click()
+  }
 
   fillInRiskAtInstallationWith(installationAndRisk)
 

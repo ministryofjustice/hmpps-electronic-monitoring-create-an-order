@@ -5,12 +5,16 @@ import { Order } from '../../../models/Order'
 import { createAnswer, createDatePreview, Answer } from '../../../utils/views/checkYourAnswers'
 import paths from '../../../constants/paths'
 import { getError } from '../../../utils/validation/errorMessages'
+import getIneligibleMonitoringConditionsErrors from '../../../utils/order/ineligibleMonitoringConditions'
 
 type MonitoringTypeSummaryItem = Answer
 
 export type TypesOfMonitoringNeededModel = ViewModel<unknown> & {
   items: MonitoringTypeSummaryItem[]
   addAnother: { value: string; error?: { text: string } }
+  ineligibleErrors: string[]
+  continueDisabled: boolean
+  draftDisabled: boolean
 }
 
 const MONITORING_TYPE_NAMES = {
@@ -144,12 +148,16 @@ const getItems = (order: Order): Answer[] => {
 }
 
 const constructModel = (order: Order, errors: ValidationResult): TypesOfMonitoringNeededModel => {
+  const ineligibleErrors = getIneligibleMonitoringConditionsErrors(order)
   const model: TypesOfMonitoringNeededModel = {
     items: getItems(order),
     addAnother: {
       value: '',
     },
     errorSummary: null,
+    ineligibleErrors,
+    continueDisabled: ineligibleErrors.length > 0,
+    draftDisabled: ineligibleErrors.length > 0,
   }
 
   if (errors && errors.length) {

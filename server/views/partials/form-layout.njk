@@ -106,7 +106,8 @@
               {{ govukButton({
                   text: "Save and continue" if not continueButtonText else continueButtonText,
                   name: "action",
-                  value: "continue"
+                  value: "continue",
+                  disabled: continueDisabled
               }) }}
             {% endif %}
             {% if not hideCancelButton %}
@@ -114,7 +115,8 @@
                 text: "Save as draft" if not backButtonText else backButtonText,
                 classes: "govuk-button--secondary",
                 name: "action",
-                value: "back"
+                value: "back",
+                disabled: draftDisabled
             }) }}
             {% endif %}
           {% else %}

@@ -23,6 +23,7 @@ describe('RiskAtInstallationStoreService', () => {
         riskDetails: '',
         hasOtherRisks: null,
         genderRiskDetails: '',
+        riskCheck: null,
       })
     })
 
@@ -61,6 +62,7 @@ describe('RiskAtInstallationStoreService', () => {
         riskDetails: 'some details',
         hasOtherRisks: 'YES',
         genderRiskDetails: 'Women',
+        riskCheck: null,
       })
     })
   })
@@ -88,6 +90,7 @@ describe('RiskAtInstallationStoreService', () => {
         riskDetails: 'legacy details',
         hasOtherRisks: 'YES',
         genderRiskDetails: '',
+        riskCheck: null,
       })
     })
   })
@@ -109,6 +112,7 @@ describe('RiskAtInstallationStoreService', () => {
       await new RiskAtInstallationStoreService(store).update(order, {
         possibleRisk: ['RISK_TO_GENDER'],
         genderRiskDetails: 'Women',
+        riskCheck: null,
       })
 
       expect(setSpy).toHaveBeenCalledTimes(1)

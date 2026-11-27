@@ -5,6 +5,7 @@ import { TypesOfMonitoringNeededFormDataModel } from './formModel'
 import paths from '../../../constants/paths'
 import { validationErrors } from '../../../constants/validationErrors'
 import TaskListService from '../../../services/taskListService'
+import getIneligibleMonitoringConditionsErrors from '../../../utils/order/ineligibleMonitoringConditions'
 
 export default class TypesOfMonitoringNeededController {
   constructor(private readonly taskListService: TaskListService) {}
@@ -20,6 +21,12 @@ export default class TypesOfMonitoringNeededController {
   update: RequestHandler = async (req: Request, res: Response) => {
     const order = req.order!
     const formData = TypesOfMonitoringNeededFormDataModel.parse(req.body)
+
+    if (getIneligibleMonitoringConditionsErrors(order).length > 0) {
+      return res.redirect(
+        paths.MONITORING_CONDITIONS.ORDER_TYPE_DESCRIPTION.TYPES_OF_MONITORING_NEEDED.replace(':orderId', order.id),
+      )
+    }
 
     if (formData.addAnother === null || formData.addAnother === undefined) {
       req.flash('validationErrors', [

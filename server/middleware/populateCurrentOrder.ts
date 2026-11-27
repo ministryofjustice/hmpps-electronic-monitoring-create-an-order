@@ -6,9 +6,11 @@ import { OrderStatusEnum } from '../models/Order'
 import { OrderService } from '../services'
 import getContent from '../i18n'
 import { Locales } from '../types/i18n/locale'
+import RiskAtInstallationService from '../routes/installation-and-risk/riskAtInstallationService'
+import isVariationType from '../utils/order/isVariationType'
 
 const populateOrder =
-  (orderService: OrderService): RequestHandler =>
+  (orderService: OrderService, riskAtInstallationService: RiskAtInstallationService): RequestHandler =>
   async (req: Request, res: Response, next: NextFunction) => {
     const orderId = req.params.orderId as string
 
@@ -32,6 +34,10 @@ const populateOrder =
           res.locals.orderSummaryUri = paths.ORDER.SUMMARY.replace(':orderId', order.id)
         }
         req.order = order
+        if (isVariationType(order.type)) {
+          const { riskCheck } = await riskAtInstallationService.getRiskAtInstallation(order)
+          req.order = { ...order, riskCheck }
+        }
         res.locals.orderId = order.id
         res.locals.orderStatus = order.status
         res.locals.isOrderEditable = order.status === OrderStatusEnum.enum.IN_PROGRESS

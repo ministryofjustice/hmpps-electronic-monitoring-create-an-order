@@ -1,7 +1,14 @@
 import paths from '../../constants/paths'
 import { Order } from '../../models/Order'
-import { getRiskInformationFlow, RiskInformationPage, riskInformationPages } from '../../services/riskInformationFlow'
+import { Cohort } from '../../models/UserCohort'
+import {
+  getRiskAssessmentFlow,
+  getRiskInformationFlow,
+  RiskInformationPage,
+  riskInformationPages,
+} from '../../services/riskInformationFlow'
 import hasOptionalVariationSectionIsHOCourt from '../../utils/order/optionalVariationSections'
+import { isPastDatedVariation } from '../../utils/order/orderStartDate'
 
 type RiskInformationTaskState = 'REQUIRED' | 'NOT_REQUIRED' | 'OPTIONAL'
 
@@ -26,6 +33,11 @@ const task =
   })
 
 const riskInformationTaskDefinitions: Record<RiskInformationPage, RiskInformationTaskDefinition> = {
+  [riskInformationPages.riskAssessment]: task(
+    riskInformationPages.riskAssessment,
+    paths.INSTALLATION_AND_RISK.CHECK_RISK,
+    order => order.riskCheck != null,
+  ),
   [riskInformationPages.offence]: task(
     riskInformationPages.offence,
     paths.INSTALLATION_AND_RISK.OFFENCE_NEW_ITEM,
@@ -66,8 +78,13 @@ const riskInformationTaskDefinitions: Record<RiskInformationPage, RiskInformatio
   ),
 }
 
-export const getRiskInformationTasks = (order: Order): RiskInformationTask[] => {
+export const getRiskInformationTasks = (order: Order, userCohort?: Cohort): RiskInformationTask[] => {
   const flow = getRiskInformationFlow(order.interestedParties?.notifyingOrganisation)
 
-  return flow.pages.map(page => riskInformationTaskDefinitions[page](order))
+  const pages = flow.pages.map(page => riskInformationTaskDefinitions[page](order))
+  if (isPastDatedVariation(order) && order.status === 'IN_PROGRESS' && userCohort === 'PROBATION') {
+    pages.unshift(...getRiskAssessmentFlow().pages.map(page => riskInformationTaskDefinitions[page](order)))
+  }
+
+  return pages
 }

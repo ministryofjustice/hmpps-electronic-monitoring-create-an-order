@@ -42,6 +42,10 @@ export default class RiskAtInstallationService {
     await this.store.update(order, { hasOtherRisks, riskDetails: hasOtherRisks === 'YES' ? riskDetails : '' })
   }
 
+  async saveRiskCheck(order: Order, { riskCheck }: Pick<RiskAtInstallation, 'riskCheck'>) {
+    await this.store.update(order, { riskCheck })
+  }
+
   async submit({
     accessToken,
     order,

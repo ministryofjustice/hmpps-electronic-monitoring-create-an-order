@@ -11,6 +11,7 @@ import ConfirmVariationPage from '../../../pages/order/variation/confirmVariatio
 import ServiceRequestTypePage from '../../../e2e/order/variation/service-request-type/serviceRequestTypePage'
 import DeviceWearerCheckYourAnswersPage from '../../../pages/order/about-the-device-wearer/check-your-answers'
 import MonitoringConditionsCheckYourAnswersPage from '../../../pages/order/monitoring-conditions/check-your-answers'
+import InstallationAndRiskCheckRiskPage from '../../../pages/order/installation-and-risk/check-risk'
 import InstallationAndRiskCheckYourAnswersPage from '../../../pages/order/installation-and-risk/check-your-answers'
 import AttachmentSummaryPage from '../../../pages/order/attachments/summary'
 import VariationSubmitSuccessPage from '../../../pages/order/variation-submit-success'
@@ -152,6 +153,15 @@ context('Service-Request-Types', () => {
     orderSummaryPage.aboutTheDeviceWearerTask.click()
     Page.verifyOnPage(DeviceWearerCheckYourAnswersPage, 'Check your answers').saveAndReturnButton.click()
     orderSummaryPage.riskInformationTask.click()
+
+    if (
+      variationType === 'I need to change something else in the form' &&
+      interestedParties.notifyingOrganisation === 'PROBATION'
+    ) {
+      const checkRiskPage = Page.verifyOnPage(InstallationAndRiskCheckRiskPage)
+      checkRiskPage.form.fillInWith('No')
+      checkRiskPage.form.continueButton.click()
+    }
 
     Page.verifyOnPage(InstallationAndRiskCheckYourAnswersPage, 'Check your answers').saveAndReturnButton.click()
     orderSummaryPage.electronicMonitoringTask.click()

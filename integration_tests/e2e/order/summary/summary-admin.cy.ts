@@ -45,7 +45,7 @@ context('Order Summary', () => {
             lastName: 'Bloggs',
             alias: null,
             dateOfBirth: null,
-            adultAtTimeOfInstallation: false,
+            adultAtTimeOfInstallation: true,
             sex: null,
             gender: null,
             disabilities: '',

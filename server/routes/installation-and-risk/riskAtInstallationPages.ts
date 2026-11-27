@@ -8,7 +8,7 @@ import { RiskAtInstallation } from './riskAtInstallationModel'
 
 export type RiskAtInstallationPage = { path: string; errors: ValidationResult }
 
-const PAGES = [
+export const PAGES = [
   {
     path: paths.INSTALLATION_AND_RISK.RISK_BEHAVIOUR,
     fields: ['possibleRisk', 'genderRiskDetails'],

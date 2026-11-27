@@ -1,23 +1,32 @@
 {% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
 
-<div class="govuk-form-group{{ " govuk-form-group--error" if params.error }}">
+{% set errorMessage = params.errorMessage or params.error %}
+{% set describedBy = params.describedBy %}
+{% if params.hint %}
+  {% set hintId = params.id + '-hint' %}
+  {% set describedBy = describedBy + ' ' + hintId if describedBy else hintId %}
+{% endif %}
+{% if errorMessage %}
+  {% set errorId = params.id + '-error' %}
+  {% set describedBy = describedBy + ' ' + errorId if describedBy else errorId %}
+{% endif %}
+
+<div class="govuk-form-group{{ " govuk-form-group--error" if errorMessage }}">
   <label for="{{ params.id }}" class="govuk-label govuk-!-margin-top-4 {{params.labelClasses}}">{{ params.label }}</label>
   {% if params.hint %}
-    <p class="govuk-hint govuk-!-margin-top-2 govuk-!-margin-bottom-3">{{ params.hint }}</p>
+    <p id="{{ hintId }}" class="govuk-hint govuk-!-margin-top-2 govuk-!-margin-bottom-3">{{ params.hint }}</p>
   {% endif %}
-  {% if params.errorMessage %}
-    {% set errorId = id + '-error' %}
-    {% set describedBy = describedBy + ' ' + errorId if describedBy else errorId %}
+  {% if errorMessage %}
     {{ govukErrorMessage({
       id: errorId,
-      classes: params.errorMessage.classes,
-      attributes: params.errorMessage.attributes,
-      html: params.errorMessage.html,
-      text: params.errorMessage.text,
-      visuallyHiddenText: params.errorMessage.visuallyHiddenText
+      classes: errorMessage.classes,
+      attributes: errorMessage.attributes,
+      html: errorMessage.html,
+      text: errorMessage.text,
+      visuallyHiddenText: errorMessage.visuallyHiddenText
     }) | trim | indent(2) }}
   {% endif %}
-  <select id="{{ params.id }}" name="{{ params.name if params.name else params.id }}">
+  <select id="{{ params.id }}" name="{{ params.name if params.name else params.id }}" class="govuk-select{{ ' govuk-select--error' if errorMessage }}"{{ ' disabled' if params.disabled }}{% if describedBy %} aria-describedby="{{ describedBy }}"{% endif %}{% if errorMessage %} aria-invalid="true"{% endif %}>
     {% if params.instruction %}
       <option value="">{{ params.instruction }}</option>
     {% endif %}
@@ -27,13 +36,37 @@
   </select>
 </div>
 {% block js %}
+  {% if not params.disabled %}
   <script src="/assets/accessible-autocomplete.min.js"></script>
   <script nonce="{{ params.nonce }}">
-    accessibleAutocomplete.enhanceSelectElement({
-      defaultValue: "",
-      selectElement: document.querySelector('#{{ params.id }}'),
-      inputClasses: 'govuk-input{{" govuk-input--error" if params.error}}',
-      id: '{{ params.id }}'
-    })
+    (() => {
+      const select = document.getElementById('{{ params.id }}')
+      accessibleAutocomplete.enhanceSelectElement({
+        defaultValue: "",
+        selectElement: select,
+        inputClasses: 'govuk-input{{" govuk-input--error" if errorMessage}}',
+        id: '{{ params.id }}'
+      })
+      const input = document.getElementById('{{ params.id }}')
+      if (select.hasAttribute('aria-invalid')) {
+        input.setAttribute('aria-invalid', select.getAttribute('aria-invalid'))
+      }
+      const describedBy = select.getAttribute('aria-describedby')
+      if (describedBy) {
+        const updateDescription = () => {
+          const current = input.getAttribute('aria-describedby') || ''
+          const ids = new Set(current.split(/\s+/).filter(Boolean))
+          describedBy.split(/\s+/).forEach(id => ids.add(id))
+          const description = Array.from(ids).join(' ')
+          if (current !== description) input.setAttribute('aria-describedby', description)
+        }
+        new MutationObserver(updateDescription).observe(input, {
+          attributes: true,
+          attributeFilter: ['aria-describedby']
+        })
+        updateDescription()
+      }
+    })()
   </script>
+  {% endif %}
 {% endblock %}
